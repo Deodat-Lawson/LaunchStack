@@ -1,6 +1,6 @@
 {
   "programId": "dogpatch-labs",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://dogpatchlabs.com/",
     "https://dogpatchlabs.com/event-terms-conditions/",
@@ -16,9 +16,26 @@
     "https://dogpatchlabs.com/partners/alltech-accelerator/",
     "https://dogpatchlabs.com/partners/pre-accelerator-director/",
     "https://dogpatchlabs.com/partners/programme-associate-2/",
-    "https://dogpatchlabs.com/partners/programme-manager-2/"
+    "https://dogpatchlabs.com/partners/programme-manager-2/",
+    "https://dogpatchlabs.com/partners/programme-manager-ndrc/",
+    "https://dogpatchlabs.com/partners/jr-portfolio-data-analyst/",
+    "https://dogpatchlabs.com/tag/accelerator/"
   ],
   "evidence": [
+    {
+      "id": "check-duration-2753f7f4ba",
+      "url": "https://dogpatchlabs.com/partners/jr-portfolio-data-analyst/",
+      "title": "Dogpatch Labs — portfolio page",
+      "excerpt": "using their services. Maximum Storage Duration : 3 months Type : HTTP Cookie _gid Used to send data to",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-29dd80e859",
+      "url": "https://dogpatchlabs.com/partners/jr-portfolio-data-analyst/",
+      "title": "Dogpatch Labs — portfolio page",
+      "excerpt": "party advertisers. Maximum Storage Duration : 3 months Type : HTTP Cookie Google 7 Learn more about",
+      "page": "portfolio"
+    },
     {
       "id": "check-duration-7b3fb1fd31",
       "url": "https://dogpatchlabs.com/corporate-innovation/huawei-international-scaleup-programme/",
@@ -111,6 +128,13 @@
       "page": "details"
     },
     {
+      "id": "check-email-515556f87d",
+      "url": "https://dogpatchlabs.com/tag/accelerator/",
+      "title": "Dogpatch Labs — program page",
+      "excerpt": "Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources",
+      "page": "details"
+    },
+    {
       "id": "check-email-527b29b947",
       "url": "https://dogpatchlabs.com/corporate-innovation/",
       "title": "Dogpatch Labs — program page",
@@ -193,6 +217,13 @@
       "title": "Dogpatch Labs — terms page",
       "excerpt": "Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources",
       "page": "terms"
+    },
+    {
+      "id": "check-email-ecdc36ac8c",
+      "url": "https://dogpatchlabs.com/partners/programme-manager-ndrc/",
+      "title": "Dogpatch Labs — program page",
+      "excerpt": "Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources",
+      "page": "details"
     },
     {
       "id": "check-format-07bcc1dec4",
@@ -315,16 +346,130 @@
       "excerpt": "Dogpatch Labs | Startup Hub Membership Plans & Pricing Hotdesking Dedicated Desks Private Offices Community In Our Community Mentorship Diversity & Inclusion Members' Job Board Programmes Founders 2050accelerator ESB Irish Rail FCAT Fellowship Irish Tech Challenge South Africa Corporate Innovation Accelerators Incubators NDRC About Our Story Blog Subscribe Newsroom Careers at Dogpatch Join Us Join + A Startup State of Mind Dogpatch Labs is a startup hub, located in the heart of Dublin’s Digital Docklands. Our Mission By providing a platform for entrepreneurship and innovation, our mission is to accelerate the development of Ireland’s startup ecosystem. Community & Ecosystem A unique and thriving community of Irish startups, international companies and innovative social enterprises Corporate Innovation We work with corporates on their innovation journey to help them effectively engage with the startup ecosystem Accelerators & Programmes We work with founders at every stage of their entrepreneurial journey, providing coaching and mentoring from top founders Become a Member Join Ireland’s largest tech community where you can meet and learn from a diverse mix of entrepreneurs, founders and freelancers. We offer flexible space and many perks, helping to accelerate the growth of your startup or scale-up. Join Us 250+ Startups 500+ Members 30+ Nationalities News ESB Incubator idea at"
     },
     {
+      "id": "check-page-d0aabd244e",
+      "url": "https://dogpatchlabs.com/",
+      "page": "details",
+      "excerpt": "Join Us 250+ Startups 500+ Members 30+ Nationalities News ESB Incubator idea at Dogpatch to Trinity research collaboration ESB announces a new collaboration with SFI Research Centres at Trinity – ADAPT and CONNECT – with projects started on our ESB incubator, to advance the clean energy landscape and achieve NetZero."
+    },
+    {
+      "id": "check-page-95a22fbb0b",
+      "url": "https://dogpatchlabs.com/",
+      "page": "details",
+      "excerpt": "April 2024 Read more 2050 alum Bladebridge & ESB launch e-mobility hub Angie Nagle, BladeBridge founder who’s repurposing old wind turbines, has piloted with our 2050 Accelerator partner ESB to launch an e-mobility hub at Europe’s biggest transport research conference TRA."
+    },
+    {
+      "id": "check-page-d22b9d0fcf",
+      "url": "https://dogpatchlabs.com/",
+      "page": "details",
+      "excerpt": "Great to see the ESB eMobility Hub prototype on show in the RDS Dublin, an idea born from our ESB Incubator and scaled during the 2050Accelerator with startup BladeBridge."
+    },
+    {
+      "id": "check-page-1cd0668571",
+      "url": "https://dogpatchlabs.com/",
+      "page": "details",
+      "excerpt": "April 2024 Find Out More Iarnród Éireann partners with Dogpatch to launch ‘Future Track’ This latest innovation partnership focuses on the shared ambition to accelerate rail as the backbone of sustainable transport in Ireland."
+    },
+    {
+      "id": "check-page-b6344a8a37",
+      "url": "https://dogpatchlabs.com/",
+      "page": "details",
+      "excerpt": "March 2024 Read More in Silicon Republic 11 pitches, 300 attendees, 2050 Accelerator Showcase Day Having launched Ireland’s national sustainability accelerator in May, 11 startups underwent an intense 3-month programme, testing live pilots with and being supported by innovation partners Kerry Group, ESB and Coillte, pitched on stage to top industry guests."
+    },
+    {
+      "id": "check-page-7b97179de2",
+      "url": "https://dogpatchlabs.com/",
+      "page": "details",
+      "excerpt": "Read more OpenAI partners with Patch This July, we welcomed Open AI’s global leadership team to Dogpatch, delivering ‘Intro to the Irish Ecosystem’, and a roundtable with top AI developers & entrepreneurs in our community."
+    },
+    {
+      "id": "check-page-efa1db3d25",
+      "url": "https://dogpatchlabs.com/",
+      "page": "details",
+      "excerpt": "2 months later, it announces its first Dublin office, and offers mentorship to Patch as official backers of the youth accelerator."
+    },
+    {
+      "id": "check-page-7172c6303c",
+      "url": "https://dogpatchlabs.com/",
+      "page": "details",
+      "excerpt": "Read more Meet the 40+ in Ireland’s first ever talent accelerator cohort From hacking Reddit, to extracting ethanol from corn, to planning missions to Mars with NASA, the Founders cohort of over 40 talented individuals has been selected, and wow are they impressive."
+    },
+    {
+      "id": "check-page-1d82e410c2",
+      "url": "https://dogpatchlabs.com/",
+      "page": "details",
+      "excerpt": "We are host to a diverse range of startups – from early stage Irish startups to fast-growing international tech disruptors."
+    },
+    {
+      "id": "check-page-fcdf296a9b",
+      "url": "https://dogpatchlabs.com/",
+      "page": "details",
+      "excerpt": "Email * The CHQ Building, Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources Innovation Deck Press Kit FAQ Privacy Policy © 2022 Dogpatch Labs"
+    },
+    {
       "id": "check-page-6648e86b08",
       "url": "https://dogpatchlabs.com/event-terms-conditions/",
       "page": "terms",
       "excerpt": "Event Terms & Conditions | Dogpatch Labs Membership Plans & Pricing Hotdesking Dedicated Desks Private Offices Community In Our Community Mentorship Diversity & Inclusion Members' Job Board Programmes Founders 2050accelerator ESB Irish Rail FCAT Fellowship Irish Tech Challenge South Africa Corporate Innovation Accelerators Incubators NDRC About Our Story Blog Subscribe Newsroom Careers at Dogpatch Join Us Join + Event Terms & Conditions (Updated July, 2025) 1. Definitions 1.1 Event Any conference, workshop, meetup or other gathering organised or co-hosted by Dogpatch Labs, whether onsite (1 The CHQ Building, Custom House Quay, Dublin 1) or at a third-party venue. 1.2 Organiser Dogpatch Labs, its affiliates, employees, agents and representatives. 1.3 Attendee Any individual or entity that has registered for or attends an Event. 1.4 Partner Site Any third-party venue engaged by the Organiser to host part or all of an Event. 2. Registration & Attendance 2.1 Events are free of charge unless stated otherwise, but registration is required via the official registration portal. 2.2 Attendees must provide accurate contact details; changes must be emailed to info@dogpatchlabs.com. 2.3 Admission may be subject to capacity limits; registration does not guarantee entry. 2.4 Right of Admission: The Organiser reserves the right, at its sole discretion, to refuse admission to or remove from"
     },
     {
+      "id": "check-page-a41da44da7",
+      "url": "https://dogpatchlabs.com/event-terms-conditions/",
+      "page": "terms",
+      "excerpt": "4.3 Organisers and Attendees must comply with venue rules at all times (health & safety, security, etc.) 4.4 Breach of this Code of Conduct may result in removal without recourse."
+    },
+    {
+      "id": "check-page-c11d35e618",
+      "url": "https://dogpatchlabs.com/event-terms-conditions/",
+      "page": "terms",
+      "excerpt": "Health and Safety 5.1 Dogpatch Labs is committed to providing a safe and secure environment for all event attendees."
+    },
+    {
+      "id": "check-page-bee6fccda4",
+      "url": "https://dogpatchlabs.com/event-terms-conditions/",
+      "page": "terms",
+      "excerpt": "All organisers and attendees must comply with the venue’s health and safety protocols."
+    },
+    {
+      "id": "check-page-9db0502d6f",
+      "url": "https://dogpatchlabs.com/event-terms-conditions/",
+      "page": "terms",
+      "excerpt": "5.3 Organisers are responsible for ensuring that any external equipment or activity brought onto the premises complies with applicable health and safety regulations."
+    },
+    {
+      "id": "check-page-dd4cce4318",
+      "url": "https://dogpatchlabs.com/event-terms-conditions/",
+      "page": "terms",
+      "excerpt": "Force Majeure Neither party shall be liable for delays or failures to perform due to events beyond reasonable control (e.g., natural disasters, government restrictions, pandemics, strikes)."
+    },
+    {
+      "id": "check-page-9d8017f97c",
+      "url": "https://dogpatchlabs.com/event-terms-conditions/",
+      "page": "terms",
+      "excerpt": "Governing Law & Dispute Resolution These T&Cs are governed by the laws of Ireland."
+    },
+    {
+      "id": "check-page-31136d53d4",
+      "url": "https://dogpatchlabs.com/event-terms-conditions/",
+      "page": "terms",
+      "excerpt": "Email * The CHQ Building, Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources Innovation Deck Press Kit FAQ Privacy Policy © 2022 Dogpatch Labs"
+    },
+    {
       "id": "check-page-78321c56f4",
       "url": "https://dogpatchlabs.com/faq/",
       "page": "terms",
       "excerpt": "Frequently Asked Questions | Dogpatch Labs Membership Plans & Pricing Hotdesking Dedicated Desks Private Offices Community In Our Community Mentorship Diversity & Inclusion Members' Job Board Programmes Founders 2050accelerator ESB Irish Rail FCAT Fellowship Irish Tech Challenge South Africa Corporate Innovation Accelerators Incubators NDRC About Our Story Blog Subscribe Newsroom Careers at Dogpatch Join Us Join + Frequently Asked Questions Events - Facilities General Membership Where can I park? Parking is available in the IFSC car park at Hilton Garden Inn – see here for details. Is there somewhere safe to store luggage? Yes, we have a cloakroom available. However, please note all items are left at owners risk. Is Dogpatch Labs wheelchair accessible? Yes, we have a wheelchair accessible lift for users. Please inform the front desk on arrival. What time is Dogpatch Labs accessible? Dogpatch Labs is accessible during the following hours: Monday – Friday from 7am – 12am Saturdays from 9.30am – 11pm Sundays from 10am – 10pm Please note that 24 hour access can be arranged on request. How can I arrange to visit Dogpatch Labs? Do you want to learn more about the space and membership options? Our dedicated community team is happy to show you around, in person or virtually! You can book a tour by emailing community@dogpatchlabs.com Can I share a dedicated desk with someone else? A"
+    },
+    {
+      "id": "check-page-bd634a1bca",
+      "url": "https://dogpatchlabs.com/faq/",
+      "page": "terms",
+      "excerpt": "We also have a limited number of ‘high growth office space’ for fast-growing companies."
+    },
+    {
+      "id": "check-page-b11960c8fb",
+      "url": "https://dogpatchlabs.com/faq/",
+      "page": "terms",
+      "excerpt": "Email * The CHQ Building, Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources Innovation Deck Press Kit FAQ Privacy Policy © 2022 Dogpatch Labs"
     },
     {
       "id": "check-page-59777286ee",
@@ -339,10 +484,142 @@
       "excerpt": "About | Dogpatch Labs Membership Plans & Pricing Hotdesking Dedicated Desks Private Offices Community In Our Community Mentorship Diversity & Inclusion Members' Job Board Programmes Founders 2050accelerator ESB Irish Rail FCAT Fellowship Irish Tech Challenge South Africa Corporate Innovation Accelerators Incubators NDRC About Our Story Blog Subscribe Newsroom Careers at Dogpatch Join Us Join + Dogpatch Labs \"We believe that with the right platform, entrepreneurs can solve some of the world’s biggest problems.\" Patrick Walsh - CEO | Dogpatch Labs Our Story Dogpatch Labs is a startup hub, located in the historic chq Building and in the heart of Dublin’s Digital Docklands. Our mission is to accelerate the development of Ireland’s startup ecosystem by providing a valuable community from where you can grow, share knowledge and form connections. From Furniture Store... We’re home to over 250 startups and over 500 Members. Alumni include many of Ireland’s fastest growing tech companies such as Instagram, Intercom, Boxever, Voysis, Twilio, Logentries and Profitero. Through the global Google for Startups Network we’re connected to startup ecosystems around the world. ...To Startup Hub With the relocation to the chq Building and under the mentorship of Mervyn Greene and Neville Isdell, we entered a new phase with a distinct identity. Having expanded now to almost 40,000 sq. ft in size"
     },
     {
+      "id": "check-page-32df4f11de",
+      "url": "https://dogpatchlabs.com/about/",
+      "page": "details",
+      "excerpt": "Having expanded now to almost 40,000 sq. ft in size over 3 levels, we’re now better placed than ever to serve the tech community with the help of key partnerships with Ulster Bank, Google and more. ...To National Accelerator In 2021 Dogpatch entered another exciting phase, as we were chosen by the Government to run the NDRC, Ireland’s national accelerator programme."
+    },
+    {
+      "id": "check-page-9b758e7571",
+      "url": "https://dogpatchlabs.com/about/",
+      "page": "details",
+      "excerpt": "Now not only do we offer an environment and platform for entrepreneurs to solve global problems, we’re also delivering a mentorship-driven accelerator and early stage supports across Ireland alongside our regional partners Portershed, RDI Hub, and Republic of Work."
+    },
+    {
+      "id": "check-page-7579ccd2fb",
+      "url": "https://dogpatchlabs.com/about/",
+      "page": "details",
+      "excerpt": "A young and dynamic team was assembled and tasked with drawing up plans and designs for a unique coworking space."
+    },
+    {
+      "id": "check-page-b09f6a5659",
+      "url": "https://dogpatchlabs.com/about/",
+      "page": "details",
+      "excerpt": "The Urban Garden Partnerships with Pivotal Labs, Ulster Bank and Google enabled the development of the Mezzanine Floor, allowing Dogpatch Labs to become Ireland’s largest startup hub at 40,000 sq. ft."
+    },
+    {
+      "id": "check-page-24c1f0a45b",
+      "url": "https://dogpatchlabs.com/about/",
+      "page": "details",
+      "excerpt": "Half of the space serves as hotdesking space for entrepreneurs, while the other half is dedicated to office space for Cainthus and NDRC."
+    },
+    {
+      "id": "check-page-e94c142204",
+      "url": "https://dogpatchlabs.com/about/",
+      "page": "details",
+      "excerpt": "\"The expansion into the Mezzanine represents the third and newest development of Dogpatch Labs.' In just 18 months these developments allow us to become the centre of gravity for Ireland's tech ecosystem.\" Patrick Walsh | CEO Our Location Situated on the banks of the Liffey and within the historic chq Building, Dogpatch Labs is the heart of the tech and financial ecosystem."
+    },
+    {
+      "id": "check-page-6c6a6eddc0",
+      "url": "https://dogpatchlabs.com/about/",
+      "page": "details",
+      "excerpt": "The Digital Docklands We are at the heart of Ireland's tech and financial ecosystem."
+    },
+    {
+      "id": "check-page-a0e03cdd77",
+      "url": "https://dogpatchlabs.com/about/",
+      "page": "details",
+      "excerpt": "South of the River Liffey are the European HQs of some of the world's biggest tech companies; Google, Facebook, AirBnB and more."
+    },
+    {
+      "id": "check-page-80d2389ce3",
+      "url": "https://dogpatchlabs.com/about/",
+      "page": "details",
+      "excerpt": "To the North lies the IFSC - International Financial Services Centre - where a number of Fintech companies are innovating for the 21st century."
+    },
+    {
+      "id": "check-page-d50e282915",
+      "url": "https://dogpatchlabs.com/about/",
+      "page": "details",
+      "excerpt": "Email * The CHQ Building, Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources Innovation Deck Press Kit FAQ Privacy Policy © 2022 Dogpatch Labs"
+    },
+    {
       "id": "check-page-78026332fc",
       "url": "https://dogpatchlabs.com/corporate-innovation/",
       "page": "details",
       "excerpt": "Corporate Innovation | Dogpatch Labs Membership Plans & Pricing Hotdesking Dedicated Desks Private Offices Community In Our Community Mentorship Diversity & Inclusion Members' Job Board Programmes Founders 2050accelerator ESB Irish Rail FCAT Fellowship Irish Tech Challenge South Africa Corporate Innovation Accelerators Incubators NDRC About Our Story Blog Subscribe Newsroom Careers at Dogpatch Join Us Join + Innovate at Startup Speed We work with some of the world’s most innovative companies solving some of their biggest problems. We believe in meaningful impact and commercial success Contact Us From Idea to Impact Ideation & Strategy Where will your industry be in 10 years time? How are you going to get there? What startups are set to disrupt your industry? Work with leading entrepreneurs and startups to figure out what the future looks like, nail your innovation strategy and stay ahead of the curve. Exploring Solutions Once you’ve defined your strategy, incubators and accelerators are a great way to explore problems and find unobvious solutions in short time frames. Working with or like startups, teams are put through their paces to develop investment ready propositions. Implementation Dogpatch Labs help you bring your ideas to life. Using lessons learned from startups, we can help you build your team, design and develop products, validate them and get them launched. From"
+    },
+    {
+      "id": "check-page-6d984a9da9",
+      "url": "https://dogpatchlabs.com/corporate-innovation/",
+      "page": "details",
+      "excerpt": "“Dogpatch Labs has been excellent in enabling ESB to tap into the immense talent of the Irish innovation ecosystem, giving us the opportunity to work both with and like startups and understand how we can improve innovation within ESB” Ger Moloney | Head of New Business Incubation Why Dogpatch Labs?"
+    },
+    {
+      "id": "check-page-0956b83ca9",
+      "url": "https://dogpatchlabs.com/corporate-innovation/",
+      "page": "details",
+      "excerpt": "Founder-led team Our corporate innovation team is led by real entrepreneurs."
+    },
+    {
+      "id": "check-page-552f3b17c3",
+      "url": "https://dogpatchlabs.com/corporate-innovation/",
+      "page": "details",
+      "excerpt": "Trusted by Corporates Our award winning partners."
+    },
+    {
+      "id": "check-page-58dbdfc642",
+      "url": "https://dogpatchlabs.com/corporate-innovation/",
+      "page": "details",
+      "excerpt": "Watch our video Dogpatch Labs’ incubator won top prize at the Deloitte Financial Services Innovation Award in 2019."
+    },
+    {
+      "id": "check-page-13cc96e6b0",
+      "url": "https://dogpatchlabs.com/corporate-innovation/",
+      "page": "details",
+      "excerpt": "Dogpatch Labs was named as one of Crunchbase’s “15 Startup Incubators Around the World You Need to Know” Ideation & Strategy Case Study with Unilever Challenge Solution Impact Challenge Unilever wanted to better understand changing consumer behaviour and engage more effectively with retailers to solve their biggest problems."
+    },
+    {
+      "id": "check-page-9f23c7627c",
+      "url": "https://dogpatchlabs.com/corporate-innovation/",
+      "page": "details",
+      "excerpt": "Solution We built a first of its kind retail innovation lab in the CHQ building in Dublin in partnership with Unilever where they could spend time collaborating with their retail partners to identify their biggest pain points."
+    },
+    {
+      "id": "check-page-140ba3bb00",
+      "url": "https://dogpatchlabs.com/corporate-innovation/",
+      "page": "details",
+      "excerpt": "We then curated the most cutting edge technology solutions that could be tested and validated in the retail lab and then deployed in stores."
+    },
+    {
+      "id": "check-page-f11d04364a",
+      "url": "https://dogpatchlabs.com/corporate-innovation/",
+      "page": "details",
+      "excerpt": "Impact Unilever partnered with SeeChange, a subsidiary of ARM, one of the world’s leading IOT firms, to implement their computer vision software into a live retail environment."
+    },
+    {
+      "id": "check-page-10b94d4a6d",
+      "url": "https://dogpatchlabs.com/corporate-innovation/",
+      "page": "details",
+      "excerpt": "What Unilever say “Dogpatch Labs worked with us on our retail innovation strategy to develop a first of its kind retail innovation lab."
+    },
+    {
+      "id": "check-page-f5c1c7e0f5",
+      "url": "https://dogpatchlabs.com/corporate-innovation/",
+      "page": "details",
+      "excerpt": "We can’t wait to share it with the world.” Dessie Boyd Strategy & Business Development Director Exploring Solutions Case Study with ESB & X_Site Challenge Solution Impact Challenge ESB is leading the transition to a zero-carbon future in Ireland and its incubator is focused on helping achieve that goal."
+    },
+    {
+      "id": "check-page-93f8fb01fb",
+      "url": "https://dogpatchlabs.com/corporate-innovation/",
+      "page": "details",
+      "excerpt": "It aims to identify, test and validate new business ideas that could deliver new revenue streams to ESB Group to achieve its Brighter Future pledge of Net Zero by 2040."
+    },
+    {
+      "id": "check-page-381d40901b",
+      "url": "https://dogpatchlabs.com/corporate-innovation/",
+      "page": "details",
+      "excerpt": "Solution ESB and Dogpatch Labs developed a three-month incubator programme to bring staff ideas from concept to investable proposition."
     },
     {
       "id": "check-page-02a19f7725",
@@ -351,10 +628,94 @@
       "excerpt": "Accelerators | Dogpatch Labs Membership Plans & Pricing Hotdesking Dedicated Desks Private Offices Community In Our Community Mentorship Diversity & Inclusion Members' Job Board Programmes Founders 2050accelerator ESB Irish Rail FCAT Fellowship Irish Tech Challenge South Africa Corporate Innovation Accelerators Incubators NDRC About Our Story Blog Subscribe Newsroom Careers at Dogpatch Join Us Join + Accelerator Programmes Bridging the gap between the startup and corporate worlds to spark disruptive innovation Contact Us Creating Win-Wins Accelerators connect you, the corporate partner, with visionary entrepreneurs to develop breakthrough solutions, set up pilots and partnerships, and transform your company’s culture. Insights Spot innovation before it happens, separating hype from reality, with insights from 1000+ startups reviews Innovation Align with the best startups and mentors to find exciting new propositions and opportunities in your industry Brand Position your company as a champion of innovation in the world’s most reputable publications A Trusted Innovation Partner Across Industries Case Study : Pearse Lyons Accelerator For 3 years Dogpatch Labs partnered with Alltech to help establish and run the world’s leading non-equity, late-stage AgTech accelerator, named after their late founder Dr. Pearse Lyons. World-Class Agtech Startups With over 500 applications from 38"
     },
     {
+      "id": "check-page-845cb6e8d3",
+      "url": "https://dogpatchlabs.com/corporate-innovation/accelerators/",
+      "page": "details",
+      "excerpt": "World-Class Agtech Startups With over 500 applications from 38 countries, Dogpatch Labs worked alongside Alltech to identify and select the best startups from around the world for its global accelerator programme."
+    },
+    {
+      "id": "check-page-68cf20338c",
+      "url": "https://dogpatchlabs.com/corporate-innovation/accelerators/",
+      "page": "details",
+      "excerpt": "In the 2017 programme, six of the 10 startups participating in the accelerator were featured by CB Insights in “Agtech: 100+ Technology Companies Changing The Farm”, showing our success in driving growth and revenues."
+    },
+    {
+      "id": "check-page-20f6898b74",
+      "url": "https://dogpatchlabs.com/corporate-innovation/accelerators/",
+      "page": "details",
+      "excerpt": "See our Corporate Accelerator deck Learn more How Our Accelerators Work Strategic Alignment We work side-by-side with your innovation team to understand your needs and market position, setting KPIs to ensure your strategy ensures the right mix of innovation and disruption."
+    },
+    {
+      "id": "check-page-5e7675aaee",
+      "url": "https://dogpatchlabs.com/corporate-innovation/accelerators/",
+      "page": "details",
+      "excerpt": "Programme Development We collaborate on designing an inclusive accelerator programme – hosted both virtually and in-person – that helps to achieve all your strategic objectives."
+    },
+    {
+      "id": "check-page-b0d37641cb",
+      "url": "https://dogpatchlabs.com/corporate-innovation/accelerators/",
+      "page": "details",
+      "excerpt": "Demo Day The programme culminates with all the selected startups pitching at a ‘Demo Day’."
+    },
+    {
+      "id": "check-page-29394e10b0",
+      "url": "https://dogpatchlabs.com/corporate-innovation/accelerators/",
+      "page": "details",
+      "excerpt": "Email * The CHQ Building, Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources Innovation Deck Press Kit FAQ Privacy Policy © 2022 Dogpatch Labs"
+    },
+    {
       "id": "check-page-5c34781556",
       "url": "https://dogpatchlabs.com/corporate-innovation/huawei-international-scaleup-programme/",
       "page": "details",
       "excerpt": "Huawei Scale-Up Programme | Dogpatch Labs Membership Plans & Pricing Hotdesking Dedicated Desks Private Offices Community In Our Community Mentorship Diversity & Inclusion Members' Job Board Programmes Founders 2050accelerator ESB Irish Rail FCAT Fellowship Irish Tech Challenge South Africa Corporate Innovation Accelerators Incubators NDRC About Our Story Blog Subscribe Newsroom Careers at Dogpatch Join Us Join + Huawei International Scale-Up Programme Preparing founders for global expansion and financing international growth Watch Showcase What is it? A three-week programme with one intensive day of mentoring and workshops per week. About the programme The Huawei International Scale-Up programme, delivered by Dogpatch Labs, is designed to help founders prepare for international expansion, focusing on sales and growth in international markets with a particular focus on Asia. The programme will run for 3 weeks, with one intensive day of workshops each week, and culminates in a pitch to Huawei senior leadership, investors, fellow founders and the wider startup ecosystem. Work with Huawei Startups will have the opportunity to work with Huawei , who operate in over 170 countries and serve more than three billion people worldwide. Huawei is ranked as the 2nd highest private sector investor in research and the development in the world according to the European Commission Industrial"
+    },
+    {
+      "id": "check-page-fb1accdc6a",
+      "url": "https://dogpatchlabs.com/corporate-innovation/huawei-international-scaleup-programme/",
+      "page": "details",
+      "excerpt": "Huawei is ranked as the 2nd highest private sector investor in research and the development in the world according to the European Commission Industrial R&D Investment Scoreboard 2021."
+    },
+    {
+      "id": "check-page-3a590125fe",
+      "url": "https://dogpatchlabs.com/corporate-innovation/huawei-international-scaleup-programme/",
+      "page": "details",
+      "excerpt": "Working with Dogpatch Labs, Ireland's leading startup hub, we hope to bring together a new and exciting cloud-based platform for Irish startups to further push their limits in technologies , to accelerate digitalisation and innovation, and to expand their business footprint globally .\" Tim Tao | President @ Huawei Cloud West Europe What’s in it for startups?"
+    },
+    {
+      "id": "check-page-d3aa486b1a",
+      "url": "https://dogpatchlabs.com/corporate-innovation/huawei-international-scaleup-programme/",
+      "page": "details",
+      "excerpt": "Week 2 : Funding & Financing Learn how to make the transition from Seed – Series A, focusing on funding, growth, metrics and everything in between."
+    },
+    {
+      "id": "check-page-dfeddf7d29",
+      "url": "https://dogpatchlabs.com/corporate-innovation/huawei-international-scaleup-programme/",
+      "page": "details",
+      "excerpt": "Work on your pitch with mentors and advisors, ensuring your message is coherent and well positioned towards your target audience."
+    },
+    {
+      "id": "check-page-c23b399e80",
+      "url": "https://dogpatchlabs.com/corporate-innovation/huawei-international-scaleup-programme/",
+      "page": "details",
+      "excerpt": "Work with a pitch coach, and prepare for your presentation to Huawei senior leadership, investors, fellow founders and the wider startup ecosystem in the culminating Demo Day on 11th November. ."
+    },
+    {
+      "id": "check-page-eb839ad7fd",
+      "url": "https://dogpatchlabs.com/corporate-innovation/huawei-international-scaleup-programme/",
+      "page": "details",
+      "excerpt": "Contact emily@dogpatchlabs.com to learn more about the programme Huawei Startup Success Stories Scantist is an open source code security scanning startup based in Singapore."
+    },
+    {
+      "id": "check-page-c6fa99eca5",
+      "url": "https://dogpatchlabs.com/corporate-innovation/huawei-international-scaleup-programme/",
+      "page": "details",
+      "excerpt": "The cybersecurity startup has received $5M+ in Series A funds and was also listed in Gartner’s 2021 market guide."
+    },
+    {
+      "id": "check-page-c107638631",
+      "url": "https://dogpatchlabs.com/corporate-innovation/huawei-international-scaleup-programme/",
+      "page": "details",
+      "excerpt": "Email * The CHQ Building, Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources Innovation Deck Press Kit FAQ Privacy Policy © 2022 Dogpatch Labs"
     },
     {
       "id": "check-page-be036de0c4",
@@ -363,10 +724,82 @@
       "excerpt": "InsurTech Pre-Accelerator | Dogpatch Labs Membership Plans & Pricing Hotdesking Dedicated Desks Private Offices Community In Our Community Mentorship Diversity & Inclusion Members' Job Board Programmes Founders 2050accelerator ESB Irish Rail FCAT Fellowship Irish Tech Challenge South Africa Corporate Innovation Accelerators Incubators NDRC About Our Story Blog Subscribe Newsroom Careers at Dogpatch Join Us Join + InsurTech Pre-Accelerator Get the skills you need to bring your startup to the next level Programme dates: 3 November to 19 November Attend Showcase What is it? A three-week programme with one intensive day of mentoring and workshops per week. Supporting you on your startup journey A three-week structured programme for early-stage insurtech startups in Ireland. Virtually delivered. Giving you the skill you need to get ready for an accelerator and/or investment. How will it be delivered? 1:1 Mentorship From Industry Experts, helping you develop your idea and get investment ready Interactive Workshops Collaborate with a curated cohort of early-stage founders Fireside Chats Hear from top entrepreneurs and insurtech thought-leaders \"The programme at Dogpatch Labs is the perfect launchpad for early-stage startups, getting them ready for the next stage in their development.\" Nicky Opitz | Digital Engineer Learn from the Experts Get insights and feedback directly from some"
     },
     {
+      "id": "check-page-f20adfd5d0",
+      "url": "https://dogpatchlabs.com/corporate-innovation/insurtech-pre-accelerator/",
+      "page": "details",
+      "excerpt": "Stan Nazarenko CEO Piprate, Co-founder InsurTech Ireland Ex VP at Renaissance Re and Pioneer Investments."
+    },
+    {
+      "id": "check-page-524ad3c93b",
+      "url": "https://dogpatchlabs.com/corporate-innovation/insurtech-pre-accelerator/",
+      "page": "details",
+      "excerpt": "Co-founded Piprate, solving the insurance industry’s data sharing problems."
+    },
+    {
+      "id": "check-page-42a353ec00",
+      "url": "https://dogpatchlabs.com/corporate-innovation/insurtech-pre-accelerator/",
+      "page": "details",
+      "excerpt": "Ex Chief of Staff at Allianz Insurance."
+    },
+    {
+      "id": "check-page-3cf53b1002",
+      "url": "https://dogpatchlabs.com/corporate-innovation/insurtech-pre-accelerator/",
+      "page": "details",
+      "excerpt": "Lucy Coutts Transformational Propositions Consultant | Allianz Insurance Ex Senior Programme Manager at Lloyd’s Lab."
+    },
+    {
+      "id": "check-page-5a99bd1b6a",
+      "url": "https://dogpatchlabs.com/corporate-innovation/insurtech-pre-accelerator/",
+      "page": "details",
+      "excerpt": "This programme is designed for founders of designed for early stage insurtech startups or startups with an application to insurance Do you..."
+    },
+    {
+      "id": "check-page-66d989df11",
+      "url": "https://dogpatchlabs.com/corporate-innovation/insurtech-pre-accelerator/",
+      "page": "details",
+      "excerpt": "\"Working with Hannover Re has opened up the door for us to the insurance world and its top thinkers."
+    },
+    {
+      "id": "check-page-c4b2d913f5",
+      "url": "https://dogpatchlabs.com/corporate-innovation/insurtech-pre-accelerator/",
+      "page": "details",
+      "excerpt": "Insurtech is now one of our pillar verticals of focus and we’re so excited for the Pre-Accelerator.\" Dave Power | Innovation Director Showcase Day Pitch your startup on stage at IT Carlow One-of-a-Kind Showcase Day Experience The programme culminates in a virtual Showcase Day, broadcasted to viewers worldwide from IT Carlow."
+    },
+    {
+      "id": "check-page-2c1d050098",
+      "url": "https://dogpatchlabs.com/corporate-innovation/insurtech-pre-accelerator/",
+      "page": "details",
+      "excerpt": "Email * The CHQ Building, Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources Innovation Deck Press Kit FAQ Privacy Policy © 2022 Dogpatch Labs"
+    },
+    {
       "id": "check-page-fc7a6e92b2",
       "url": "https://dogpatchlabs.com/corporate-innovation/virtual-programmes/",
       "page": "details",
       "excerpt": "Virtual Programmes | Dogpatch Labs Membership Plans & Pricing Hotdesking Dedicated Desks Private Offices Community In Our Community Mentorship Diversity & Inclusion Members' Job Board Programmes Founders 2050accelerator ESB Irish Rail FCAT Fellowship Irish Tech Challenge South Africa Corporate Innovation Accelerators Incubators NDRC About Our Story Blog Subscribe Newsroom Careers at Dogpatch Join Us Join + Virtual Programmes We create and host virtual startup programmes, from incubators to meetups and hackathons. Contact Us Virtual Innovation As a response to the crisis caused by the COVID-19 pandemic, Dogpatch Labs has moved a number of its startup programmes online to best serve our clients and the Irish startup ecosystem. Fully Digital We provide the best digital platform available for your programme Online Collaboration We facilitate an end-to-end virtual platform where collaboration online has never been easier Facilitate Learning Our role as a facilitator is to boost your participants' learning experience and engagement Some of our virtual clients: Case Study : ESB Ignition From decarbonisation to digitalisation, in July 2020 we kicked-off our 1st virtual hackathon for graduates with our partners ESB. 65+ intrapreneurs, 20+ mentors from ESB & our wider Dogpatch community worked 48 hours on 16 incredible innovations. Delivered 100% Virtually Online Mentor Sessions"
+    },
+    {
+      "id": "check-page-325f0b717f",
+      "url": "https://dogpatchlabs.com/corporate-innovation/virtual-programmes/",
+      "page": "details",
+      "excerpt": "Delivered 100% Virtually Online Mentor Sessions Entrepreneurial Keynotes Delivered 100% Virtually The programme was delivered 100% virtually, with all 16 teams broken out in separate workshop rooms Online Mentor Sessions Throughout the 48-hour sprint workshops and support were provided by 20+ industry expert mentors."
+    },
+    {
+      "id": "check-page-5337681355",
+      "url": "https://dogpatchlabs.com/corporate-innovation/virtual-programmes/",
+      "page": "details",
+      "excerpt": "65 Intrapreneurs 20 Mentors 16 Startup Ideas 48 Hours “This years Ignition teams really impressed by demonstrating their ability to collaborate virtually on the key challenges facing utilities today."
+    },
+    {
+      "id": "check-page-1d5336a339",
+      "url": "https://dogpatchlabs.com/corporate-innovation/virtual-programmes/",
+      "page": "details",
+      "excerpt": "Learn More Host Your Meetup Online We are proud to support hundreds of micro-communities across Ireland by providing them with a platform for learning and collaboration."
+    },
+    {
+      "id": "check-page-8d8a43b90b",
+      "url": "https://dogpatchlabs.com/corporate-innovation/virtual-programmes/",
+      "page": "details",
+      "excerpt": "Email * The CHQ Building, Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources Innovation Deck Press Kit FAQ Privacy Policy © 2022 Dogpatch Labs"
     },
     {
       "id": "check-page-3bd860081c",
@@ -397,6 +830,24 @@
       "url": "https://dogpatchlabs.com/partners/programme-manager-2/",
       "page": "details",
       "excerpt": "Programme Manager | Dogpatch Labs Membership Plans & Pricing Hotdesking Dedicated Desks Private Offices Community In Our Community Mentorship Diversity & Inclusion Members' Job Board Programmes Founders 2050accelerator ESB Irish Rail FCAT Fellowship Irish Tech Challenge South Africa Corporate Innovation Accelerators Incubators NDRC About Our Story Blog Subscribe Newsroom Careers at Dogpatch Join Us Join + Sign Up to Dogpatch Newsletter and Events For News, Events and More. Email * The CHQ Building, Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources Innovation Deck Press Kit FAQ Privacy Policy © 2022 Dogpatch Labs"
+    },
+    {
+      "id": "check-page-4d96928a14",
+      "url": "https://dogpatchlabs.com/partners/programme-manager-ndrc/",
+      "page": "details",
+      "excerpt": "Programme Manager (NDRC) | Dogpatch Labs Membership Plans & Pricing Hotdesking Dedicated Desks Private Offices Community In Our Community Mentorship Diversity & Inclusion Members' Job Board Programmes Founders 2050accelerator ESB Irish Rail FCAT Fellowship Irish Tech Challenge South Africa Corporate Innovation Accelerators Incubators NDRC About Our Story Blog Subscribe Newsroom Careers at Dogpatch Join Us Join + Sign Up to Dogpatch Newsletter and Events For News, Events and More. Email * The CHQ Building, Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources Innovation Deck Press Kit FAQ Privacy Policy © 2022 Dogpatch Labs"
+    },
+    {
+      "id": "check-page-b8627b1584",
+      "url": "https://dogpatchlabs.com/partners/jr-portfolio-data-analyst/",
+      "page": "portfolio",
+      "excerpt": "Junior Portfolio & Data Analyst in Dublin | Dogpatch Labs Jobs Consent Details [#IABV2SETTINGS#] About This website uses cookies We use cookies to personalise content and ads, to provide social media features and to analyse our traffic. We also share information about your use of our site with our social media, advertising and analytics partners who may combine it with other information that you’ve provided to them or that they’ve collected from your use of their services. Show more [#GPC_BANNER_ICON#] [#GPC_TOAST_TEXT#] Consent Selection Necessary Preferences Statistics Marketing Show details Details Necessary 10 Necessary cookies help make a website usable by enabling basic functions like page navigation and access to secure areas of the website. The website cannot function properly without these cookies. Cloudflare 1 Learn more about this provider cf.turnstile.u This cookie is used to distinguish between humans and bots. Maximum Storage Duration : Persistent Type : HTML Local Storage Cookiebot 1 Learn more about this provider CookieConsent Stores the user's cookie consent state for the current domain Maximum Storage Duration : 1 year Type : HTTP Cookie Google 1 Learn more about this provider Some of the data collected by this provider is for the purposes of personalization and measuring advertising effectiveness. The provider may use the IP Addresses for ads measurement and"
+    },
+    {
+      "id": "check-page-16922274b8",
+      "url": "https://dogpatchlabs.com/tag/accelerator/",
+      "page": "details",
+      "excerpt": "accelerator Archives | Dogpatch Labs Membership Plans & Pricing Hotdesking Dedicated Desks Private Offices Community In Our Community Mentorship Diversity & Inclusion Members' Job Board Programmes Founders 2050accelerator ESB Irish Rail FCAT Fellowship Irish Tech Challenge South Africa Corporate Innovation Accelerators Incubators NDRC About Our Story Blog Subscribe Newsroom Careers at Dogpatch Join Us Join + Innovation ‘Agri’ meets ‘Tech’: A new chapter for Dogpatch Labs As we entered into this new phase of Dogpatch a unique opportunity presented itself to partner with one of the most successful agricultural innovators & entrepreneurs in the world — Dr. Pearse Lyons — to run a global agri-tech accelerator. read more All Community Events Innovation NDRC Patch All Community Events Innovation NDRC Patch Uncategorized Sign Up to Newsletter Innovation ‘Agri’ meets ‘Tech’: A new chapter for Dogpatch Labs As we entered into this new phase of Dogpatch a unique opportunity presented itself to partner with one of the most successful agricultural innovators & entrepreneurs in the world — Dr. Pearse Lyons — to run a global agri-tech accelerator. read more Featured Posts Innovation ‘Agri’ meets ‘Tech’: A new chapter for Dogpatch Labs Events Innovation 20 under 20 Community The Grassroots Developer Community Sign Up to Dogpatch Newsletter and Events For News, Events and More. Email * The"
     }
   ],
   "findings": {

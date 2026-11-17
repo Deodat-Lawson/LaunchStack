@@ -1,6 +1,6 @@
 {
   "programId": "mesh",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://meshcommunity.com/",
     "https://meshcommunity.com/copenhagen/club_application-form",
@@ -16,7 +16,12 @@
     "https://meshcommunity.com/trondheim/program",
     "https://meshcommunity.com/da/about",
     "https://meshcommunity.com/da/kobenhavn/program",
-    "https://meshcommunity.com/da/oslo/program"
+    "https://meshcommunity.com/da/oslo/program",
+    "https://meshcommunity.com/da/program",
+    "https://meshcommunity.com/da/program/oiw25",
+    "https://meshcommunity.com/da/program/techbbq",
+    "https://meshcommunity.com/da/program/vixencafe",
+    "https://meshcommunity.com/da/trondheim/program"
   ],
   "evidence": [
     {
@@ -179,7 +184,25 @@
       "id": "check-page-8931ba68be",
       "url": "https://meshcommunity.com/",
       "page": "details",
-      "excerpt": "Mesh Community - Mesh Community Skip to main content Home Copenhagen Oslo Trondheim Menu Membership Copenhagen Oslo Trondheim Meeting & Event Copenhagen Oslo Trondheim Eat & Drink Copenhagen Oslo Trondheim Program Community Member login Norway Denmark Get in touch Menu Press enter to begin your search Search Close Search Welcome to Mesh Community From Key Nordic cities, our community supports every stage of the entrepreneurial journey, from startups to international success. Our Nordic locations Explore program Copenhagen Matrikel1 Membership Meeting & Event Oslo Nationaltheatret & Youngstorget Membership Meeting & Event Trondheim Digs Membership Meeting & Event From key Nordic cities, our community supports every stage of the entrepreneurial journey, from startups to international success. The Community With more than 5.000 members and over 100.000 annual users, we are one of the largest startup communities in the Nordic region. Our goal is to create the best startup locations, valuable recruiting and funding services to accelerate the Nordic startup scene. Learn more Featured events – Oslo Innovation Week Learn more Explore our program Annually we curate and co-create hundreds of events designed for networking, collaboration and interaction across industries. All events 1 event found. Events Today Now Now Select date. List of events in Photo View Agent Meetup Oslo Vol. 8 Nov"
+      "excerpt": "Mesh Community - Mesh Community Skip to main content Home Copenhagen Oslo Trondheim Menu Membership Copenhagen Oslo Trondheim Meeting & Event Copenhagen Oslo Trondheim Eat & Drink Copenhagen Oslo Trondheim Program Community Member login Norway Denmark Get in touch Menu Press enter to begin your search Search Close Search Welcome to Mesh Community From Key Nordic cities, our community supports every stage of the entrepreneurial journey, from startups to international success. Our Nordic locations Explore program Copenhagen Matrikel1 Membership Meeting & Event Oslo Nationaltheatret & Youngstorget Membership Meeting & Event Trondheim Digs Membership Meeting & Event From key Nordic cities, our community supports every stage of the entrepreneurial journey, from startups to international success. The Community With more than 5.000 members and over 100.000 annual users, we are one of the largest startup communities in the Nordic region. Our goal is to create the best startup locations, valuable recruiting and funding services to accelerate the Nordic startup scene. Learn more Featured events – Oslo Innovation Week Learn more Explore our program Annually we curate and co-create hundreds of events designed for networking, collaboration and interaction across industries. All events 1 event found. Events Today Now Now Select date. List of events in Photo View Agentic GTM: Scale your"
+    },
+    {
+      "id": "check-page-3559e9c438",
+      "url": "https://meshcommunity.com/",
+      "page": "details",
+      "excerpt": "List of events in Photo View Agentic GTM: Scale your business with AI."
+    },
+    {
+      "id": "check-page-61b22393ff",
+      "url": "https://meshcommunity.com/",
+      "page": "details",
+      "excerpt": "Nov 19 Agentic GTM: Scale your business with AI."
+    },
+    {
+      "id": "check-page-2ecec09c6c",
+      "url": "https://meshcommunity.com/",
+      "page": "details",
+      "excerpt": "Digs Krambugata 2, 7011 Trondheim, Norway Matrikel1 Højbro Pl."
     },
     {
       "id": "check-page-1ca13e6d4e",
@@ -206,22 +229,124 @@
       "excerpt": "About - Mesh Community Skip to main content Home Copenhagen Oslo Trondheim Menu Membership Copenhagen Oslo Trondheim Meeting & Event Copenhagen Oslo Trondheim Eat & Drink Copenhagen Oslo Trondheim Program Community Member login Norway Denmark Get in touch Menu Press enter to begin your search Search Close Search About Us Our goal is to create the best startup HUBs and the most valuable network for the entrepreneurial community in the Nordics. Since our launch we have been creating positive noise to push the startup scene forward, and to modernice its dynamics. Our locations Oslo Trondheim Copenhagen Mesh Nationaltheatret Tordenskiolds gate 2, 0160 Oslo Open in Google Maps Mesh Youngstorget Møllergata 6, 0179 Oslo Open in Google Maps A place for creators, challengers, thinkers, and pioneers Mesh opened in 2012 and was the first coworking space in Oslo. It has become the leading independent initiative for Norwegian entrepreneurs and leads the way in bringing important, topical and relevant discussions, talks and conferences. Since our launch we have been creating positive noise to push the startup scene forward, and to modernize its dynamics. Digs Krambugata 2, 7011 Trondheim Open in Google Maps Taking Trondheim’s startup scene to new heights With a vibrant community, technology, and real estate, we create next-generation workspaces and meeting places. We gather individuals,"
     },
     {
+      "id": "check-page-3e2e5197e9",
+      "url": "https://meshcommunity.com/about/",
+      "page": "details",
+      "excerpt": "Matrikel1 Højbro Plads 10, 1200 Copenhagen Open in Google Maps A place for creators, challengers, thinkers, and pioneers Matrikel1 is a hub that gathers individuals with an entrepreneurial mindset."
+    },
+    {
+      "id": "check-page-cdeb11bcd7",
+      "url": "https://meshcommunity.com/about/",
+      "page": "details",
+      "excerpt": "Digs Krambugata 2, 7011 Trondheim, Norway Matrikel1 Højbro Pl."
+    },
+    {
       "id": "check-page-ddacd3a427",
       "url": "https://meshcommunity.com/copenhagen/program",
       "page": "details",
-      "excerpt": "Upcoming Copenhagen program | Mesh Community Skip to main content Home Copenhagen Oslo Trondheim Menu Membership Meeting & Event Eat & Drink Program Community Member login Norway Denmark Get in touch Menu Press enter to begin your search Search Close Search A curated program for the entrepreneurial community A curated program for our members and for the greater entrepreneurial community; with workshops, talks, meetups, skills share and pitch nights. Every year we host over 1750 events at our hubs and we also feature all the most important events happening in the startup scene to keep you up to speed. 3 events found. Events Events Search and Views Navigation Search Enter Keyword. Search for Events by Keyword. Find Events Hide filters Event Views Navigation Photo Month Photo Week Summary Filters Changing any of the form inputs will cause the list of events to refresh with the filtered results. Done Clear Hubs : Open filter Close filter Remove filters Hubs Close filter Digs Matrikel1 Oslo Mesh Nationaltheatret Mesh Youngstorget Organizers : Open filter Close filter Remove filters Organizers Close filter Country : Open filter Close filter Remove filters Country Close filter Hubs : Remove filters Organizers : Remove filters Country : Remove filters Today Upcoming Upcoming Select date. List of events in Photo View M1 Bouldering Nov 16 M1 Bouldering 4:00 pm - 6:00 pm M1 Badminton Nov"
+      "excerpt": "Upcoming Copenhagen program | Mesh Community Skip to main content Home Copenhagen Oslo Trondheim Menu Membership Meeting & Event Eat & Drink Program Community Member login Norway Denmark Get in touch Menu Press enter to begin your search Search Close Search A curated program for the entrepreneurial community A curated program for our members and for the greater entrepreneurial community; with workshops, talks, meetups, skills share and pitch nights. Every year we host over 1750 events at our hubs and we also feature all the most important events happening in the startup scene to keep you up to speed. 3 events found. Events Events Search and Views Navigation Search Enter Keyword. Search for Events by Keyword. Find Events Hide filters Event Views Navigation Photo Month Photo Week Summary Filters Changing any of the form inputs will cause the list of events to refresh with the filtered results. Done Clear Hubs : Open filter Close filter Remove filters Hubs Close filter Digs Matrikel1 Oslo Mesh Nationaltheatret Mesh Youngstorget Organizers : Open filter Close filter Remove filters Organizers Close filter Country : Open filter Close filter Remove filters Country Close filter Hubs : Remove filters Organizers : Remove filters Country : Remove filters Today Upcoming Upcoming Select date. List of events in Photo View M1 Badminton Nov 17 M1 Badminton 4:00 pm - 5:00 pm Members’ Breakfast"
+    },
+    {
+      "id": "check-page-24d08fbd94",
+      "url": "https://meshcommunity.com/copenhagen/program",
+      "page": "details",
+      "excerpt": "Our goal is to create the best startup locations, valuable recruiting and funding services to accelerate the Nordic startup scene."
+    },
+    {
+      "id": "check-page-c8a86c8a15",
+      "url": "https://meshcommunity.com/copenhagen/program",
+      "page": "details",
+      "excerpt": "Digs Krambugata 2, 7011 Trondheim, Norway Matrikel1 Højbro Pl."
+    },
+    {
+      "id": "check-page-ce29f898d3",
+      "url": "https://meshcommunity.com/copenhagen/program",
+      "page": "details",
+      "excerpt": "10, 1200 Copenhagen, Denmark Mesh Nationaltheatret Tordenskiolds gate 2, 0160 Oslo, Norway Mesh Youngstorget Møllergata 6 and 8, 0179 Oslo, Norway Privacy policy Cookie policy Transparency Act Whistleblowing policy Close Menu Membership Meeting & Event Eat & Drink Program Community Member login Norway Denmark Get in touch English Dansk Norsk"
     },
     {
       "id": "check-page-e93dc920e4",
       "url": "https://meshcommunity.com/oslo/program",
       "page": "details",
-      "excerpt": "Oslo Program - Mesh Community Skip to main content Home Copenhagen Oslo Trondheim Menu Membership Meeting & Event Eat & Drink Program Community Member login Norway Denmark Get in touch Menu Press enter to begin your search Search Close Search A curated program for the entrepreneurial community A curated program for our members and for the greater entrepreneurial community; with workshops, talks, meetups, skills share and pitch nights. Every year we host over 1750 events at our hubs and we also feature all the most important events happening in the startup scene to keep you up to speed. 7 events found. Events Events Search and Views Navigation Search Enter Keyword. Search for Events by Keyword. Find Events Hide filters Event Views Navigation Photo Month Photo Week Summary Filters Changing any of the form inputs will cause the list of events to refresh with the filtered results. Done Clear Hubs : Open filter Close filter Remove filters Hubs Close filter Digs Matrikel1 Oslo Mesh Nationaltheatret Mesh Youngstorget Organizers : Open filter Close filter Remove filters Organizers Close filter Country : Open filter Close filter Remove filters Country Close filter Hubs : Remove filters Organizers : Remove filters Country : Remove filters Today Upcoming Upcoming Select date. List of events in Photo View Agent Meetup Oslo Vol. 8 Nov 16 Agent Meetup Oslo Vol. 8 4:30 pm - 7:30 pm Agentic"
+      "excerpt": "Oslo Program - Mesh Community Skip to main content Home Copenhagen Oslo Trondheim Menu Membership Meeting & Event Eat & Drink Program Community Member login Norway Denmark Get in touch Menu Press enter to begin your search Search Close Search A curated program for the entrepreneurial community A curated program for our members and for the greater entrepreneurial community; with workshops, talks, meetups, skills share and pitch nights. Every year we host over 1750 events at our hubs and we also feature all the most important events happening in the startup scene to keep you up to speed. 10 events found. Events Events Search and Views Navigation Search Enter Keyword. Search for Events by Keyword. Find Events Hide filters Event Views Navigation Photo Month Photo Week Summary Filters Changing any of the form inputs will cause the list of events to refresh with the filtered results. Done Clear Hubs : Open filter Close filter Remove filters Hubs Close filter Digs Matrikel1 Oslo Mesh Nationaltheatret Mesh Youngstorget Organizers : Open filter Close filter Remove filters Organizers Close filter Country : Open filter Close filter Remove filters Country Close filter Hubs : Remove filters Organizers : Remove filters Country : Remove filters Today Upcoming Upcoming Select date. List of events in Photo View Agentic GTM: Scale your business with AI. Nov 19 Agentic GTM: Scale your business"
+    },
+    {
+      "id": "check-page-fddab73dc4",
+      "url": "https://meshcommunity.com/oslo/program",
+      "page": "details",
+      "excerpt": "Nov 19 Agentic GTM: Scale your business with AI."
+    },
+    {
+      "id": "check-page-04a5105e37",
+      "url": "https://meshcommunity.com/oslo/program",
+      "page": "details",
+      "excerpt": "9:00 am - 11:00 am The Pivot – Perfect Pitch Nov 19 The Pivot – Perfect Pitch 8:00 pm - 9:30 pm Step up to Scaling: How to Host Nov 24 Step up to Scaling: How to Host 3:00 pm - 5:00 pm Styret vil ha en AI-plan."
+    },
+    {
+      "id": "check-page-98f9edadfc",
+      "url": "https://meshcommunity.com/oslo/program",
+      "page": "details",
+      "excerpt": "Nov 25 Styret vil ha en AI-plan."
+    },
+    {
+      "id": "check-page-d8aed6f20f",
+      "url": "https://meshcommunity.com/oslo/program",
+      "page": "details",
+      "excerpt": "Digs Krambugata 2, 7011 Trondheim, Norway Matrikel1 Højbro Pl."
+    },
+    {
+      "id": "check-page-57fa86e3d6",
+      "url": "https://meshcommunity.com/oslo/program",
+      "page": "details",
+      "excerpt": "10, 1200 Copenhagen, Denmark Mesh Nationaltheatret Tordenskiolds gate 2, 0160 Oslo, Norway Mesh Youngstorget Møllergata 6 and 8, 0179 Oslo, Norway Privacy policy Cookie policy Transparency Act Whistleblowing policy Close Menu Membership Meeting & Event Eat & Drink Program Community Member login Norway Denmark Get in touch English Dansk Norsk"
     },
     {
       "id": "check-page-7b8f02a7d2",
       "url": "https://meshcommunity.com/program",
       "page": "details",
-      "excerpt": "Program - Mesh Community Skip to main content Home Copenhagen Oslo Trondheim Menu Membership Copenhagen Oslo Trondheim Meeting & Event Copenhagen Oslo Trondheim Eat & Drink Copenhagen Oslo Trondheim Program Community Member login Norway Denmark Get in touch Menu Press enter to begin your search Search Close Search A curated program for the entrepreneurial community A curated program for our members and for the greater entrepreneurial community; with workshops, talks, meetups, skills share and pitch nights. Every year we host over 1750 events at our hubs and we also feature all the most important events happening in the startup scene to keep you up to speed. 12 events found. Events Events Search and Views Navigation Search Enter Keyword. Search for Events by Keyword. Find Events Hide filters Event Views Navigation Photo Month Photo Week Summary Filters Changing any of the form inputs will cause the list of events to refresh with the filtered results. Done Clear Hubs : Open filter Close filter Remove filters Hubs Close filter Digs Matrikel1 Oslo Mesh Nationaltheatret Mesh Youngstorget Organizers : Open filter Close filter Remove filters Organizers Close filter Country : Open filter Close filter Remove filters Country Close filter Hubs : Remove filters Organizers : Remove filters Country : Remove filters Today Now Now - 25.11.2026 November 25 Select date. List of events in Photo"
+      "excerpt": "Program - Mesh Community Skip to main content Home Copenhagen Oslo Trondheim Menu Membership Copenhagen Oslo Trondheim Meeting & Event Copenhagen Oslo Trondheim Eat & Drink Copenhagen Oslo Trondheim Program Community Member login Norway Denmark Get in touch Menu Press enter to begin your search Search Close Search A curated program for the entrepreneurial community A curated program for our members and for the greater entrepreneurial community; with workshops, talks, meetups, skills share and pitch nights. Every year we host over 1750 events at our hubs and we also feature all the most important events happening in the startup scene to keep you up to speed. 12 events found. Events Events Search and Views Navigation Search Enter Keyword. Search for Events by Keyword. Find Events Hide filters Event Views Navigation Photo Month Photo Week Summary Filters Changing any of the form inputs will cause the list of events to refresh with the filtered results. Done Clear Hubs : Open filter Close filter Remove filters Hubs Close filter Digs Matrikel1 Oslo Mesh Nationaltheatret Mesh Youngstorget Organizers : Open filter Close filter Remove filters Organizers Close filter Country : Open filter Close filter Remove filters Country Close filter Hubs : Remove filters Organizers : Remove filters Country : Remove filters Today Now Now - 26.11.2026 November 26 Select date. List of events in Photo"
+    },
+    {
+      "id": "check-page-a1688b3cc6",
+      "url": "https://meshcommunity.com/program",
+      "page": "details",
+      "excerpt": "List of events in Photo View International meetup November: Meet the Partners Nov 17 International meetup November: Meet the Partners 3:00 pm - 5:00 pm M1 Badminton Nov 17 M1 Badminton 4:00 pm - 5:00 pm Members Breakfast Nov 18 Members Breakfast 8:30 am - 9:30 am Høstkonferansen 2026: HR + AI = ?"
+    },
+    {
+      "id": "check-page-2d9bb9e4fd",
+      "url": "https://meshcommunity.com/program",
+      "page": "details",
+      "excerpt": "Nov 19 Høstkonferansen 2026: HR + AI = ?"
+    },
+    {
+      "id": "check-page-a3ee1c7a62",
+      "url": "https://meshcommunity.com/program",
+      "page": "details",
+      "excerpt": "8:30 am - 3:00 pm Members’ Breakfast (1) Nov 19 Members’ Breakfast (1) 9:00 am - 9:45 am Agentic GTM: Scale your business with AI."
+    },
+    {
+      "id": "check-page-5d505558a5",
+      "url": "https://meshcommunity.com/program",
+      "page": "details",
+      "excerpt": "Nov 19 Agentic GTM: Scale your business with AI."
+    },
+    {
+      "id": "check-page-988b542f16",
+      "url": "https://meshcommunity.com/program",
+      "page": "details",
+      "excerpt": "9:00 am - 11:00 am The Pivot – Perfect Pitch Nov 19 The Pivot – Perfect Pitch 8:00 pm - 9:30 pm Step up to Scaling: How to Host Nov 24 Step up to Scaling: How to Host 3:00 pm - 5:00 pm Styret vil ha en AI-plan."
+    },
+    {
+      "id": "check-page-57f78e4777",
+      "url": "https://meshcommunity.com/program",
+      "page": "details",
+      "excerpt": "Nov 25 Styret vil ha en AI-plan."
+    },
+    {
+      "id": "check-page-abb23d9d87",
+      "url": "https://meshcommunity.com/program",
+      "page": "details",
+      "excerpt": "Digs Krambugata 2, 7011 Trondheim, Norway Matrikel1 Højbro Pl."
     },
     {
       "id": "check-page-a285e02f30",
@@ -230,10 +355,70 @@
       "excerpt": "Oslo Innovation Week HQ - Mesh Community Skip to main content Home Copenhagen Oslo Trondheim Menu Membership Copenhagen Oslo Trondheim Meeting & Event Copenhagen Oslo Trondheim Eat & Drink Copenhagen Oslo Trondheim Program Community Member login Norway Denmark Get in touch Menu Press enter to begin your search Search Close Search Mesh Youngstorget Oslo Innovation Week HQ Mesh Youngstorget 20 – 24 October 2025 Enjoy 20% off day passes, 50% discount on meeting room bookings, and a free cup of coffee in the workbar – when you use the promo code: OIWMESH ✨ Looking for a place to work, meet, or connect during OIW? At both Hubs, you’ll find workspaces, meeting rooms, and community areas designed to support collaboration throughout the week. In addition to hosting events, our Hubs provide the perfect environment to work between sessions, meet with partners, and connect with both the local and international ecosystem. Remember to use our promo code OIWMESH and enjoy: 20% off day passes. 50% off meeting room bookings. A free cup of coffee in the Workbar. Apply for Curious about membership? Join a free tour of Mesh Youngstorget and see how our spaces, people, and community can work for you! Apply for The Community Stage Interested in hosting a smaller, open session? A limited number of free community stage slots are available for curated content. Host your event at the HQ Looking to"
     },
     {
+      "id": "check-page-ee65e31e39",
+      "url": "https://meshcommunity.com/program/oiw25",
+      "page": "details",
+      "excerpt": "We’ve expanded availability at both of our central locations – 8 minutes walk between the two hubs: Mesh Youngstorget Mesh Nationaltheatret Work & Connect Need a workspace between events?"
+    },
+    {
+      "id": "check-page-bfc306fb59",
+      "url": "https://meshcommunity.com/program/oiw25",
+      "page": "details",
+      "excerpt": "Will there be people from OIW and Mesh Oslo on site to help?"
+    },
+    {
+      "id": "check-page-9fc383c960",
+      "url": "https://meshcommunity.com/program/oiw25",
+      "page": "details",
+      "excerpt": "Find all FAQs on OIW's website OIW official website Mesh Youngstorget Møllergata 6,8, 0179 Oslo, Norway Request your venue now!"
+    },
+    {
+      "id": "check-page-b78c98592f",
+      "url": "https://meshcommunity.com/program/oiw25",
+      "page": "details",
+      "excerpt": "Request your venue in Oslo at Mesh today and elevate your collaborative experiences!"
+    },
+    {
+      "id": "check-page-d2ab928f61",
+      "url": "https://meshcommunity.com/program/oiw25",
+      "page": "details",
+      "excerpt": "Digs Krambugata 2, 7011 Trondheim, Norway Matrikel1 Højbro Pl."
+    },
+    {
       "id": "check-page-fd13a214bd",
       "url": "https://meshcommunity.com/program/techbbq",
       "page": "details",
       "excerpt": "Mesh x TechBBQ 2024 Skip to main content Home Copenhagen Oslo Trondheim Menu Membership Copenhagen Oslo Trondheim Meeting & Event Copenhagen Oslo Trondheim Eat & Drink Copenhagen Oslo Trondheim Program Community Member login Norway Denmark Get in touch Menu Press enter to begin your search Search Close Search Mesh x TechBBQ 2024 Elevate Your Startup at TechBBQ The largest startup event in the Nordics, TechBBQ, and Matrikel1 share the same mission: to accelerate the Nordic startup community. This year, we have amped up our partnership to secure even better benefits for TechBBQ participants, a huge pre-party, and side-events at Matrikel1 – Join us! Join the Pre-party Uniting the Ecosystem Situated in the heart of Copenhagen, Matrikel1 is the central hub for startups, investors, and ecosystem players like TechBBQ. Founded by Mesh Community in 2018, Matrikel1 benefits from being one of four Nordic hubs with: 250,000 yearly visitors 100,000 social media followers 5,000 members 1,700 yearly events Busses, passes, & benefits for TechBBQ participants For this year’s TechBBQ we will have buses to and from the TechBBQ venue, badge pick-up, and special deals for ticket-holders at Matrikel1 both days. In other words, Matrikel1 will be the natural meeting point and perfect spot to host your meetups, receptions, dinners, and side-events during TechBBQ. Reach out to Aya at"
+    },
+    {
+      "id": "check-page-87e037eead",
+      "url": "https://meshcommunity.com/program/techbbq",
+      "page": "details",
+      "excerpt": "This time, we invite 150 founders and investors to explore the state of the Nordic VC scene to kick off TechBBQ in the best way possible."
+    },
+    {
+      "id": "check-page-5227968855",
+      "url": "https://meshcommunity.com/program/techbbq",
+      "page": "details",
+      "excerpt": "September 12 : Funding in Tough Times Location : TechBBQ, Garden Stage Time : 12:30 PM It’s not 2019 anymore and the funding in Europe – so how do you fundraise in this climate?"
+    },
+    {
+      "id": "check-page-fe0564189f",
+      "url": "https://meshcommunity.com/program/techbbq",
+      "page": "details",
+      "excerpt": "Get the latest data on fundraising in the Nordics, explore alternative loan opportunities, and hear how Hans Augusenborg, co-founder of Birdie, raised $500.000 on Kickstarter in 30 days."
+    },
+    {
+      "id": "check-page-07fe9e3baa",
+      "url": "https://meshcommunity.com/program/techbbq",
+      "page": "details",
+      "excerpt": "We are always looking for playmates to create awesome events and happenings for the startup community."
+    },
+    {
+      "id": "check-page-d56be70c10",
+      "url": "https://meshcommunity.com/program/techbbq",
+      "page": "details",
+      "excerpt": "Digs Krambugata 2, 7011 Trondheim, Norway Matrikel1 Højbro Pl."
     },
     {
       "id": "check-page-0868148b24",
@@ -242,10 +427,58 @@
       "excerpt": "Vixencafe - Mesh Community Skip to main content Home Copenhagen Oslo Trondheim Menu Membership Meeting & Event Eat & Drink Program Community Member login Norway Denmark Get in touch Menu Press enter to begin your search Search Close Search Mesh Vixen Café på Mesh Youngstorget 27 - 31. Januar 2025 Youngstorget Vixen Café på Mesh Youngstorget 27 - 31. Januar 2025 Mesh Youngstorget Mesh The Community Mesh Community - event meshh_JH_TT-2416 2018-05-29 Creators shift - Photos- Mads Oftedal Schwencke - (33 of 77) (1) Fra 27. til 31. januar inviterer Vixen og Mesh Community deg til Vixen Café – en unik møteplass for nettverksbygging, idéutveksling og profesjonell utvikling. Benytt anledningen til å styrke relasjoner, dele erfaringer og forberede deg til Vixen Awards. Nyt fersk frokost, lunsj, bakst og snacks, sammen med et utvalg drikkevarer, inkludert vin og øl. Kafeen er åpen fra 08:00–18:00. Jobb fra Vixen Lounge Under Vixen-uken får alle besøkende fri tilgang til vår eksklusive arbeidslounge – det perfekte stedet å jobbe fra. Som en del av Vixen-nettverket får du 50 % rabatt på møteromsbooking med kode VIXEN (gyldig ut 2025). Book her Eller send mail booking.oslo@meshcommunity.com Arrangementer og aktiviteter Gjennom uken kan du delta på åpne arrangementer, workshops og paneldiskusjoner. Følg med på programmet: meshcommunity.com/events . Kort om Mesh Community Mesh Community er"
     },
     {
+      "id": "check-page-0ef46a3093",
+      "url": "https://meshcommunity.com/program/vixencafe",
+      "page": "details",
+      "excerpt": "Mer informasjon: meshcommunity.com visit us at Møllergata 6, 0179 Oslo About Contact The Hub Press ."
+    },
+    {
+      "id": "check-page-5d67533d70",
+      "url": "https://meshcommunity.com/program/vixencafe",
+      "page": "details",
+      "excerpt": "Digs Krambugata 2, 7011 Trondheim, Norway Matrikel1 Højbro Pl."
+    },
+    {
+      "id": "check-page-afbfe810b1",
+      "url": "https://meshcommunity.com/program/vixencafe",
+      "page": "details",
+      "excerpt": "10, 1200 Copenhagen, Denmark Mesh Nationaltheatret Tordenskiolds gate 2, 0160 Oslo, Norway Mesh Youngstorget Møllergata 6 and 8, 0179 Oslo, Norway Privacy policy Cookie policy Transparency Act Whistleblowing policy Close Menu Membership Meeting & Event Eat & Drink Program Community Member login Norway Denmark Get in touch English Dansk Norsk"
+    },
+    {
       "id": "check-page-914a456448",
       "url": "https://meshcommunity.com/trondheim/program",
       "page": "details",
       "excerpt": "Trondheim Program - Mesh Community Skip to main content Home Copenhagen Oslo Trondheim Menu Membership Meeting & Event Eat & Drink Program Community Member login Norway Denmark Get in touch Menu Press enter to begin your search Search Close Search A curated program for the entrepreneurial community A curated program for our members and for the greater entrepreneurial community; with workshops, talks, meetups, skills share and pitch nights. Every year we host over 1750 events at our hubs and we also feature all the most important events happening in the startup scene to keep you up to speed. 5 events found. Events Events Search and Views Navigation Search Enter Keyword. Search for Events by Keyword. Find Events Hide filters Event Views Navigation Photo Month Photo Week Summary Filters Changing any of the form inputs will cause the list of events to refresh with the filtered results. Done Clear Hubs : Open filter Close filter Remove filters Hubs Close filter Digs Matrikel1 Oslo Mesh Nationaltheatret Mesh Youngstorget Organizers : Open filter Close filter Remove filters Organizers Close filter Country : Open filter Close filter Remove filters Country Close filter Hubs : Remove filters Organizers : Remove filters Country : Remove filters Today Upcoming Upcoming Select date. List of events in Photo View International meetup November: Meet the Partners Nov 17 International meetup"
+    },
+    {
+      "id": "check-page-9a1f6a7bae",
+      "url": "https://meshcommunity.com/trondheim/program",
+      "page": "details",
+      "excerpt": "List of events in Photo View International meetup November: Meet the Partners Nov 17 International meetup November: Meet the Partners 3:00 pm - 5:00 pm Members Breakfast Nov 18 Members Breakfast 8:30 am - 9:30 am Høstkonferansen 2026: HR + AI = ?"
+    },
+    {
+      "id": "check-page-74d7c53bbb",
+      "url": "https://meshcommunity.com/trondheim/program",
+      "page": "details",
+      "excerpt": "Nov 19 Høstkonferansen 2026: HR + AI = ?"
+    },
+    {
+      "id": "check-page-6d3a89ba7d",
+      "url": "https://meshcommunity.com/trondheim/program",
+      "page": "details",
+      "excerpt": "8:30 am - 3:00 pm TKAI Meetup #8 – Sosiale relasjoner til AI Nov 26 TKAI Meetup #8 – Sosiale relasjoner til AI 5:30 pm - 7:30 pm Digs Christmas Party Nov 27 Digs Christmas Party 6:00 pm - 11:59 pm Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file About Contact The Hub Press ."
+    },
+    {
+      "id": "check-page-637d5843a8",
+      "url": "https://meshcommunity.com/trondheim/program",
+      "page": "details",
+      "excerpt": "Digs Krambugata 2, 7011 Trondheim, Norway Matrikel1 Højbro Pl."
+    },
+    {
+      "id": "check-page-1495597e49",
+      "url": "https://meshcommunity.com/trondheim/program",
+      "page": "details",
+      "excerpt": "10, 1200 Copenhagen, Denmark Mesh Nationaltheatret Tordenskiolds gate 2, 0160 Oslo, Norway Mesh Youngstorget Møllergata 6 and 8, 0179 Oslo, Norway Privacy policy Cookie policy Transparency Act Whistleblowing policy Close Menu Membership Meeting & Event Eat & Drink Program Community Member login Norway Denmark Get in touch English Dansk Norsk"
     },
     {
       "id": "check-page-b3b7b530ea",
@@ -257,13 +490,181 @@
       "id": "check-page-f145954e63",
       "url": "https://meshcommunity.com/da/kobenhavn/program",
       "page": "details",
-      "excerpt": "Kommende program i København | Mesh Community Spring til hovedindhold Hjem København Oslo Trondheim Menu Medlemskab Møde og event Spis & drik Program Community Medlemslogin Norge Danmark Kontakt os Menu Tryk på enter for at starte din søgning Søg efter Luk søgning Et kurateret program for community Et kurateret program for vores medlemmer og for det større community; med workshops, foredrag, meetups, skills share og pitch nights. Hvert år er vi vært for over 1750 arrangementer i vores hubs, og vi præsenterer også alle de vigtigste arrangementer på startup-scenen for at holde dig opdateret. 3 begivenheder fundet. Begivenheder Søgning og visning af begivenheder Navigation Søg efter Indtast søgeord. Søg efter begivenheder med nøgleord. Find begivenheder Skjul filtre Navigation til begivenhedsvisninger Foto Måned Foto Uge Sammenfatning Filtre Hvis du ændrer et af formularens input, opdateres listen over begivenheder med de filtrerede resultater. Færdig Klar Hubs : Åbn filter Luk filteret Fjern filtre Nav Luk filteret Digs Matrikel1 Oslo Mesh Nationaltheatret Mesh Youngstorget Arrangører : Åbn filter Luk filteret Fjern filtre Arrangører Luk filteret Land : Åbn filter Luk filteret Fjern filtre Land Luk filteret Hubs : Fjern filtre Arrangører : Fjern filtre Land : Fjern filtre I dag På vej Kommende Vælg dato. Liste over begivenheder i Photo View M1 Bouldering nov 16 M1 Bouldering"
+      "excerpt": "Kommende program i København | Mesh Community Spring til hovedindhold Hjem København Oslo Trondheim Menu Medlemskab Møde og event Spis & drik Program Community Medlemslogin Norge Danmark Kontakt os Menu Tryk på enter for at starte din søgning Søg efter Luk søgning Et kurateret program for community Et kurateret program for vores medlemmer og for det større community; med workshops, foredrag, meetups, skills share og pitch nights. Hvert år er vi vært for over 1750 arrangementer i vores hubs, og vi præsenterer også alle de vigtigste arrangementer på startup-scenen for at holde dig opdateret. 3 begivenheder fundet. Begivenheder Søgning og visning af begivenheder Navigation Søg efter Indtast søgeord. Søg efter begivenheder med nøgleord. Find begivenheder Skjul filtre Navigation til begivenhedsvisninger Foto Måned Foto Uge Sammenfatning Filtre Hvis du ændrer et af formularens input, opdateres listen over begivenheder med de filtrerede resultater. Færdig Klar Hubs : Åbn filter Luk filteret Fjern filtre Nav Luk filteret Digs Matrikel1 Oslo Mesh Nationaltheatret Mesh Youngstorget Arrangører : Åbn filter Luk filteret Fjern filtre Arrangører Luk filteret Land : Åbn filter Luk filteret Fjern filtre Land Luk filteret Hubs : Fjern filtre Arrangører : Fjern filtre Land : Fjern filtre I dag På vej Kommende Vælg dato. Liste over begivenheder i Photo View M1 Badminton nov 17 M1 Badminton 4:00"
+    },
+    {
+      "id": "check-page-35ebc13d81",
+      "url": "https://meshcommunity.com/da/kobenhavn/program",
+      "page": "details",
+      "excerpt": "10, 1200 København, Danmark Mesh Nationaltheatret Tordenskiolds gate 2, 0160 Oslo, Norge Mesh Youngstorget Møllergata 6 og 8, 0179 Oslo, Norge Fortrolighedspolitik Cookie-politik Lov om gennemsigtighed Politik for whistleblowing Luk menu Medlemskab Møde og event Spis & drik Program Community Medlemslogin Norge Danmark Kontakt os Dansk English Norsk"
     },
     {
       "id": "check-page-57bb9401be",
       "url": "https://meshcommunity.com/da/oslo/program",
       "page": "details",
-      "excerpt": "Oslo-programmet -Community Spring til hovedindhold Hjem København Oslo Trondheim Menu Medlemskab Møde og event Spis & drik Program Community Medlemslogin Norge Danmark Kontakt os Menu Tryk på enter for at starte din søgning Søg efter Luk søgning Et kurateret program for community Et kurateret program for vores medlemmer og for det større community; med workshops, foredrag, meetups, skills share og pitch nights. Hvert år er vi vært for over 1750 arrangementer i vores hubs, og vi præsenterer også alle de vigtigste arrangementer på startup-scenen for at holde dig opdateret. 7 begivenheder fundet. Begivenheder Søgning og visning af begivenheder Navigation Søg efter Indtast søgeord. Søg efter begivenheder med nøgleord. Find begivenheder Skjul filtre Navigation til begivenhedsvisninger Foto Måned Foto Uge Sammenfatning Filtre Hvis du ændrer et af formularens input, opdateres listen over begivenheder med de filtrerede resultater. Færdig Klar Hubs : Åbn filter Luk filteret Fjern filtre Nav Luk filteret Digs Matrikel1 Oslo Mesh Nationaltheatret Mesh Youngstorget Arrangører : Åbn filter Luk filteret Fjern filtre Arrangører Luk filteret Land : Åbn filter Luk filteret Fjern filtre Land Luk filteret Hubs : Fjern filtre Arrangører : Fjern filtre Land : Fjern filtre I dag På vej Kommende Vælg dato. Liste over begivenheder i Photo View Agent Meetup , Oslo, bind 8 nov 16 Agent Meetup , Oslo,"
+      "excerpt": "Oslo-programmet -Community Spring til hovedindhold Hjem København Oslo Trondheim Menu Medlemskab Møde og event Spis & drik Program Community Medlemslogin Norge Danmark Kontakt os Menu Tryk på enter for at starte din søgning Søg efter Luk søgning Et kurateret program for community Et kurateret program for vores medlemmer og for det større community; med workshops, foredrag, meetups, skills share og pitch nights. Hvert år er vi vært for over 1750 arrangementer i vores hubs, og vi præsenterer også alle de vigtigste arrangementer på startup-scenen for at holde dig opdateret. 10 begivenheder fundet. Begivenheder Søgning og visning af begivenheder Navigation Søg efter Indtast søgeord. Søg efter begivenheder med nøgleord. Find begivenheder Skjul filtre Navigation til begivenhedsvisninger Foto Måned Foto Uge Sammenfatning Filtre Hvis du ændrer et af formularens input, opdateres listen over begivenheder med de filtrerede resultater. Færdig Klar Hubs : Åbn filter Luk filteret Fjern filtre Nav Luk filteret Digs Matrikel1 Oslo Mesh Nationaltheatret Mesh Youngstorget Arrangører : Åbn filter Luk filteret Fjern filtre Arrangører Luk filteret Land : Åbn filter Luk filteret Fjern filtre Land Luk filteret Hubs : Fjern filtre Arrangører : Fjern filtre Land : Fjern filtre I dag På vej Kommende Vælg dato. Liste over begivenheder i Photo View Agentic GTM: Udvid din virksomhed med AI. nov 19 Agentic"
+    },
+    {
+      "id": "check-page-08206a8226",
+      "url": "https://meshcommunity.com/da/oslo/program",
+      "page": "details",
+      "excerpt": "Liste over begivenheder i Photo View Agentic GTM: Udvid din virksomhed med AI. nov 19 Agentic GTM: Udvid din virksomhed med AI."
+    },
+    {
+      "id": "check-page-a0d8d4007e",
+      "url": "https://meshcommunity.com/da/oslo/program",
+      "page": "details",
+      "excerpt": "Tag skridtet videre til skalering: Sådan fungerer hosting 3:00 pm - 5:00 pm Bestyrelsen vil have en AI-plan."
+    },
+    {
+      "id": "check-page-f3d95c859e",
+      "url": "https://meshcommunity.com/da/oslo/program",
+      "page": "details",
+      "excerpt": "Start der, hvor det kan betale sig. nov 25 Bestyrelsen vil have en AI-plan."
+    },
+    {
+      "id": "check-page-7cbf2d5bf9",
+      "url": "https://meshcommunity.com/da/oslo/program",
+      "page": "details",
+      "excerpt": "23.55 Bygge-dag | Claude Code- Meetup , Oslo nov 30. november Bygge-dag | Claude Code- Meetup , Oslo 4:00 pm - 9:00 pm GROUND CONTROL — den månedlige puls i Norges rumfartsøkosystem dec."
+    },
+    {
+      "id": "check-page-4031f9062a",
+      "url": "https://meshcommunity.com/da/oslo/program",
+      "page": "details",
+      "excerpt": "10, 1200 København, Danmark Mesh Nationaltheatret Tordenskiolds gate 2, 0160 Oslo, Norge Mesh Youngstorget Møllergata 6 og 8, 0179 Oslo, Norge Fortrolighedspolitik Cookie-politik Lov om gennemsigtighed Politik for whistleblowing Luk menu Medlemskab Møde og event Spis & drik Program Community Medlemslogin Norge Danmark Kontakt os Dansk English Norsk"
+    },
+    {
+      "id": "check-page-46e846df10",
+      "url": "https://meshcommunity.com/da/program",
+      "page": "details",
+      "excerpt": "Program - Mesh Community Spring til hovedindhold Hjem København Oslo Trondheim Menu Medlemskab København Oslo Trondheim Møde og event København Oslo Trondheim Spis & drik København Oslo Trondheim Program Community Medlemslogin Norge Danmark Kontakt os Menu Tryk på enter for at starte din søgning Søg efter Luk søgning Et kurateret program for community Et kurateret program for vores medlemmer og for det større community; med workshops, foredrag, meetups, skills share og pitch nights. Hvert år er vi vært for over 1750 arrangementer i vores hubs, og vi præsenterer også alle de vigtigste arrangementer på startup-scenen for at holde dig opdateret. 12 begivenheder fundet. Begivenheder Søgning og visning af begivenheder Navigation Søg efter Indtast søgeord. Søg efter begivenheder med nøgleord. Find begivenheder Skjul filtre Navigation til begivenhedsvisninger Foto Måned Foto Uge Sammenfatning Filtre Hvis du ændrer et af formularens input, opdateres listen over begivenheder med de filtrerede resultater. Færdig Klar Hubs : Åbn filter Luk filteret Fjern filtre Nav Luk filteret Digs Matrikel1 Oslo Mesh Nationaltheatret Mesh Youngstorget Arrangører : Åbn filter Luk filteret Fjern filtre Arrangører Luk filteret Land : Åbn filter Luk filteret Fjern filtre Land Luk filteret Hubs : Fjern filtre Arrangører : Fjern filtre Land : Fjern filtre I dag Og nu Og nu - 26.11.2026 26. november Vælg"
+    },
+    {
+      "id": "check-page-1904855ad4",
+      "url": "https://meshcommunity.com/da/program",
+      "page": "details",
+      "excerpt": "Færdig Klar Hubs : Åbn filter Luk filteret Fjern filtre Nav Luk filteret Digs Matrikel1 Oslo Mesh Nationaltheatret Mesh Youngstorget Arrangører : Åbn filter Luk filteret Fjern filtre Arrangører Luk filteret Land : Åbn filter Luk filteret Fjern filtre Land Luk filteret Hubs : Fjern filtre Arrangører : Fjern filtre Land : Fjern filtre I dag Og nu Og nu - 26.11.2026 26. november Vælg dato."
+    },
+    {
+      "id": "check-page-053a61acdd",
+      "url": "https://meshcommunity.com/da/program",
+      "page": "details",
+      "excerpt": "Morgenmad for medlemmer 8:30 om morgenen - 9:30 om morgenen Høstkonferencen 2026: HR + AI = ? nov 19 Høstkonferencen 2026: HR + AI = ?"
+    },
+    {
+      "id": "check-page-750d3351ed",
+      "url": "https://meshcommunity.com/da/program",
+      "page": "details",
+      "excerpt": "8:30 om morgenen - 3:00 pm Medlemsmorgenmad (1) nov 19 Medlemsmorgenmad (1) 9:00 om morgenen - 9:45 om morgenen Agentic GTM: Udvid din virksomhed med AI. nov 19 Agentic GTM: Udvid din virksomhed med AI."
+    },
+    {
+      "id": "check-page-5492562ed1",
+      "url": "https://meshcommunity.com/da/program",
+      "page": "details",
+      "excerpt": "Tag skridtet videre til skalering: Sådan fungerer hosting 3:00 pm - 5:00 pm Bestyrelsen vil have en AI-plan."
+    },
+    {
+      "id": "check-page-665f248aec",
+      "url": "https://meshcommunity.com/da/program",
+      "page": "details",
+      "excerpt": "Start der, hvor det kan betale sig. nov 25 Bestyrelsen vil have en AI-plan."
+    },
+    {
+      "id": "check-page-96d84b96e2",
+      "url": "https://meshcommunity.com/da/program",
+      "page": "details",
+      "excerpt": "7:30 om morgenen - 9:30 om morgenen GROUND CONTROL — den månedlige puls i Norges rumfartsøkosystem nov 25 GROUND CONTROL — den månedlige puls i Norges rumfartsøkosystem 5:00 pm - 20:00 TKAI Meetup #8 – Sociale relationer til AI november 26."
+    },
+    {
+      "id": "check-page-0cd8a0fb6c",
+      "url": "https://meshcommunity.com/da/program",
+      "page": "details",
+      "excerpt": "TKAI Meetup #8 – Sociale relationer til AI 5:30 pm - 7:30 pm Mesh Julefrokost 🪩🎄 november 26."
+    },
+    {
+      "id": "check-page-f7d0187937",
+      "url": "https://meshcommunity.com/da/program/oiw25",
+      "page": "details",
+      "excerpt": "Oslo Innovation Week HQ - Mesh Community Spring til hovedindhold Hjem København Oslo Trondheim Menu Medlemskab København Oslo Trondheim Møde og event København Oslo Trondheim Spis & drik København Oslo Trondheim Program Community Medlemslogin Norge Danmark Kontakt os Menu Tryk på enter for at starte din søgning Søg efter Luk søgning Mesh Youngstorget Oslo Innovation Week HQ Mesh Youngstorget 20. - 24. oktober 2025 Få 20 % rabat på dagspas, 50 % rabat på booking af mødelokaler og en gratis kop kaffe i workbar - når du bruger kampagnekoden: OIWMESH ✨ Leder du efter et sted at arbejde, mødes eller connect under OIW? I begge hubs finder du arbejdsområder, mødelokaler og community , der er designet til at understøtte samarbejde hele ugen. Ud over at være vært for events er vores hubs det perfekte miljø til at arbejde mellem sessionerne, mødes med partnere og komme i connect med både det lokale og internationale økosystem. Husk at bruge vores kampagnekode OIWMESH og nyd det: 20% rabat på dagskort. 50% rabat på bookinger af mødelokaler. En gratis kop kaffe i Workbar. Ansøg om Nysgerrig på medlemskab? Tag med på en gratis rundvisning på Mesh Youngstorget og se, hvordan vores rum, mennesker og community kan fungere for dig! Ansøg om The Community Stage Er du interesseret i at være vært for en mindre, åben session? Der er et begrænset antal gratis scenepladser til rådighed for kurateret"
+    },
+    {
+      "id": "check-page-ca77da9c0b",
+      "url": "https://meshcommunity.com/da/program/oiw25",
+      "page": "details",
+      "excerpt": "Vi har udvidet tilgængeligheden på begge vores centrale steder - 8 minutters gang mellem de to hubs: Mesh Youngstorget Mesh Nationaltheatret Arbejde og Connect Har du brug for en workspace mellem arrangementerne?"
+    },
+    {
+      "id": "check-page-38d003d18a",
+      "url": "https://meshcommunity.com/da/program/oiw25",
+      "page": "details",
+      "excerpt": "Vil der være folk fra OIW og Mesh Oslo på stedet til at hjælpe?"
+    },
+    {
+      "id": "check-page-ba0fafe2d8",
+      "url": "https://meshcommunity.com/da/program/oiw25",
+      "page": "details",
+      "excerpt": "Find alle ofte stillede spørgsmål på OIW's hjemmeside OIW's officielle hjemmeside Mesh Youngstorget Møllergata 6,8, 0179 Oslo, Norge Send din forespørgsel nu Gå ikke glip af at sikre det ideelle sted til dit næste møde. forespørgsel på dit sted i Oslo hos Mesh i dag, og løft dine samarbejdsoplevelser!"
+    },
+    {
+      "id": "check-page-be42a1ceff",
+      "url": "https://meshcommunity.com/da/program/techbbq",
+      "page": "details",
+      "excerpt": "Mesh x TechBBQ 2024 Spring til hovedindhold Hjem København Oslo Trondheim Menu Medlemskab København Oslo Trondheim Møde og event København Oslo Trondheim Spis & drik København Oslo Trondheim Program Community Medlemslogin Norge Danmark Kontakt os Menu Tryk på enter for at starte din søgning Søg efter Luk søgning Mesh x TechBBQ 2024 Løft din startup på TechBBQ Nordens største startup-event, TechBBQ, og Matrikel1 deler den samme mission: at accelerere det nordiske community. I år har vi udvidet vores partnerskab for at sikre endnu bedre fordele for TechBBQ-deltagere, en stor forfest og sideevents på Matrikel1 - kom og vær med! Deltag i forfesten Forening af økosystemet Matrikel1 ligger i hjertet af København og er det centrale knudepunkt for startups, investorer og aktører i økosystemet som TechBBQ. Matrikel1 blev grundlagt af Mesh Community i 2018 og nyder godt af at være en af fire nordiske hubs med: 250.000 årlige besøgende 100.000 følgere på sociale medier 5.000 medlemmer 1.700 årlige begivenheder Busser, adgangskort og fordele for TechBBQ-deltagere Til dette års TechBBQ vil vi have busser til og fra TechBBQ-stedet, afhentning af badges og særlige tilbud til billetindehavere på Matrikel1 begge dage. Med andre ord vil Matrikel1 være det naturlige mødested og det perfekte sted at afholde dine møder, receptioner, middage og sideevents under TechBBQ. Kontakt Aya på"
+    },
+    {
+      "id": "check-page-2fc1dffb2d",
+      "url": "https://meshcommunity.com/da/program/techbbq",
+      "page": "details",
+      "excerpt": "Denne gang inviterer vi 150 stiftere og investorer til at udforske tilstanden på den nordiske VC-scene og skyde TechBBQ i gang på den bedst mulige måde."
+    },
+    {
+      "id": "check-page-72431bac18",
+      "url": "https://meshcommunity.com/da/program/vixencafe",
+      "page": "details",
+      "excerpt": "Vixencafe - Mesh Community Spring til hovedindhold Hjem København Oslo Trondheim Menu Medlemskab Møde og event Spis & drik Program Community Medlemslogin Norge Danmark Kontakt os Menu Tryk på enter for at starte din søgning Søg efter Luk søgning Mesh Vixen Café på Mesh Youngstorget 27. - 31. januar 2025 Youngstorget Vixen Café på Mesh Youngstorget 27. - 31. januar 2025 Mesh Youngstorget Mesh Community Mesh Community begivenhed meshh_JH_TT-2416 2018-05-29 Skift af skabere - Fotos - Mads Oftedal Schwencke - (33 af 77) (1) Fra 27. til 31. januar inviterer Vixen og Mesh Community til Vixen Café – et unikt mødested for netværksopbygning, idéudveksling og professionel udvikling. Benyt lejligheden til at styrke relationer, dele erfaringer og forberede dig til Vixen Awards. Nyt fersk frokost, lunsj, bakst og snacks, sammen med et udvalg drikkevarer, inkludert vin og øl. Kafeen er åben fra kl. 08.00 til 18.00. Job fra Vixen Lounge Under Vixen-uken får alle besøgende fri adgang til vores eksklusive arbejdslounge – det perfekte sted at arbejde fra. Som en del af Vixen-netværket får du 50 % rabat på mødelokale-booking med koden VIXEN ( gyldig ud 2025). Book her Eller send mail booking.oslo@meshcommunity.com Arrangementer og aktiviteter I løbet af ugen kan du deltage i åbne arrangementer, workshops og paneldiskussioner. Følg med på programmet: meshcommunity.com/events . Kort om Mesh"
+    },
+    {
+      "id": "check-page-2d2c9e608e",
+      "url": "https://meshcommunity.com/da/program/vixencafe",
+      "page": "details",
+      "excerpt": "Yderligere oplysninger: meshcommunity.com Besøg os på Møllergata 6, 0179 Oslo Omkring Kontakt The Hub Tryk på ."
+    },
+    {
+      "id": "check-page-88c6e1e8d0",
+      "url": "https://meshcommunity.com/da/program/vixencafe",
+      "page": "details",
+      "excerpt": "10, 1200 København, Danmark Mesh Nationaltheatret Tordenskiolds gate 2, 0160 Oslo, Norge Mesh Youngstorget Møllergata 6 og 8, 0179 Oslo, Norge Fortrolighedspolitik Cookie-politik Lov om gennemsigtighed Politik for whistleblowing Luk menu Medlemskab Møde og event Spis & drik Program Community Medlemslogin Norge Danmark Kontakt os Dansk English Norsk"
+    },
+    {
+      "id": "check-page-6b20c7ec14",
+      "url": "https://meshcommunity.com/da/trondheim/program",
+      "page": "details",
+      "excerpt": "Trondheim-programmet - Mesh Community Spring til hovedindhold Hjem København Oslo Trondheim Menu Medlemskab Møde og event Spis & drik Program Community Medlemslogin Norge Danmark Kontakt os Menu Tryk på enter for at starte din søgning Søg efter Luk søgning Et kurateret program for community Et kurateret program for vores medlemmer og for det større community; med workshops, foredrag, meetups, skills share og pitch nights. Hvert år er vi vært for over 1750 arrangementer i vores hubs, og vi præsenterer også alle de vigtigste arrangementer på startup-scenen for at holde dig opdateret. 5 begivenheder fundet. Begivenheder Søgning og visning af begivenheder Navigation Søg efter Indtast søgeord. Søg efter begivenheder med nøgleord. Find begivenheder Skjul filtre Navigation til begivenhedsvisninger Foto Måned Foto Uge Sammenfatning Filtre Hvis du ændrer et af formularens input, opdateres listen over begivenheder med de filtrerede resultater. Færdig Klar Hubs : Åbn filter Luk filteret Fjern filtre Nav Luk filteret Digs Matrikel1 Oslo Mesh Nationaltheatret Mesh Youngstorget Arrangører : Åbn filter Luk filteret Fjern filtre Arrangører Luk filteret Land : Åbn filter Luk filteret Fjern filtre Land Luk filteret Hubs : Fjern filtre Arrangører : Fjern filtre Land : Fjern filtre I dag På vej Kommende Vælg dato. Liste over begivenheder i Photo View International meetup . november: Mød partnerne"
+    },
+    {
+      "id": "check-page-c8856b81b6",
+      "url": "https://meshcommunity.com/da/trondheim/program",
+      "page": "details",
+      "excerpt": "Morgenmad for medlemmer 8:30 om morgenen - 9:30 om morgenen Høstkonferencen 2026: HR + AI = ? nov 19 Høstkonferencen 2026: HR + AI = ?"
+    },
+    {
+      "id": "check-page-292f3cb0f3",
+      "url": "https://meshcommunity.com/da/trondheim/program",
+      "page": "details",
+      "excerpt": "8:30 om morgenen - 3:00 pm TKAI Meetup #8 – Sociale relationer til AI november 26."
+    },
+    {
+      "id": "check-page-8e78168680",
+      "url": "https://meshcommunity.com/da/trondheim/program",
+      "page": "details",
+      "excerpt": "TKAI Meetup #8 – Sociale relationer til AI 5:30 pm - 7:30 pm Digs Julefrokost nov 27."
+    },
+    {
+      "id": "check-page-cc640ff049",
+      "url": "https://meshcommunity.com/da/trondheim/program",
+      "page": "details",
+      "excerpt": "10, 1200 København, Danmark Mesh Nationaltheatret Tordenskiolds gate 2, 0160 Oslo, Norge Mesh Youngstorget Møllergata 6 og 8, 0179 Oslo, Norge Fortrolighedspolitik Cookie-politik Lov om gennemsigtighed Politik for whistleblowing Luk menu Medlemskab Møde og event Spis & drik Program Community Medlemslogin Norge Danmark Kontakt os Dansk English Norsk"
     }
   ],
   "findings": {

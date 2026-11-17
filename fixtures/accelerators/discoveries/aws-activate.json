@@ -1,6 +1,6 @@
 {
   "programId": "aws-activate",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://aws.amazon.com/about-aws/global-infrastructure/?nc2=h_dsc_aa_gi",
@@ -22,7 +22,7 @@
       "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
       "page": "application",
       "anchor": "New AWS Startup Advisor Features Migrate vibe-coding apps, plan Azure-to-AWS moves, track costs, apply for credits, and discover discounts all from your IDE. Read the announcement",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -148,6 +148,54 @@
     },
     {
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
       "page": "application",
       "anchor": "",
       "fetched": true,

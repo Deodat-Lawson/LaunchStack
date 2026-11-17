@@ -1,6 +1,6 @@
 {
   "programId": "nku-inkubator",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "http://cob.nku.edu/inkubator.html"
   ],
@@ -8,16 +8,36 @@
     {
       "id": "check-phone-35ccefffb3",
       "url": "http://cob.nku.edu/inkubator.html",
-      "title": "NKU Inkubator — homepage checked by scrape.py",
+      "title": "NKU Inkubator — homepage",
       "excerpt": "(859) 572-5100",
       "page": "details"
     },
     {
       "id": "check-phone-b6a78e826c",
       "url": "http://cob.nku.edu/inkubator.html",
-      "title": "NKU Inkubator — homepage checked by scrape.py",
+      "title": "NKU Inkubator — homepage",
       "excerpt": "859-572-5165",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-b57146e07e",
+      "url": "http://cob.nku.edu/inkubator.html",
+      "page": "details",
+      "excerpt": "Haile College of Business: Northern Kentucky University, Greater Cincinnati Region Skip to main content About Academics Admissions & Aid Student Life Athletics Request Info Visit Apply Give Resources For Current Students Faculty & Staff Alumni Community & Business High School Students Home Haile College of Business About All Majors & Programs Vision, Mission & Values Haile Foundation Dean's Advisory Board Alumni Council Office of the Dean Honors Lists Contact Us Rankings Blog Departments Management Accounting, Economics & Finance Marketing, Sports Business & Construction Management Centers Center for Innovation and Entrepreneurship Center for Economic Analysis and Development Alternative Dispute Resolution Center BizAccessHub Center for Economic Education News & Events Blog Event Calendar Business Summit 2026 Haile Alumni Awards Supply Chain Geopolitics Forum 2027 Resources & Opportunities Center for Student Excellence View Available Scholarships Outreach and Development International Business - Study Abroad Haile Research Fellows Haile Ambassadors Esports Haile College of Business Sales Hub Eva G. & Oakley Farris Leadership Academy Haile College of Business Spark Your Inner Business Leader The business industry demands skilled professionals ready to take on the challenges of an evolving world. NKU’s Haile College of Business prepares you for rewarding jobs in the field: We’ll"
+    },
+    {
+      "id": "check-page-fc2ce5d391",
+      "url": "http://cob.nku.edu/inkubator.html",
+      "page": "details",
+      "excerpt": "NKU's Haile College of Business is home to NKU’s Construction Management program, which is accredited by the American Council for Construction Education (ACCE)."
+    },
+    {
+      "id": "check-page-99d9ab4586",
+      "url": "http://cob.nku.edu/inkubator.html",
+      "page": "details",
+      "excerpt": "ACCE is a leading global advocate of quality construction education that promotes, supports, and accredits quality construction education programs."
     }
   ],
   "findings": {
@@ -37,8 +57,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

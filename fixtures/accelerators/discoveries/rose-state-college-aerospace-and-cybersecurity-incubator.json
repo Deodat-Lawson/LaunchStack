@@ -1,7 +1,23 @@
 {
   "programId": "rose-state-college-aerospace-and-cybersecurity-incubator",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://www.workforce.rose.edu/about-us",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.workforce.rose.edu/ai-ml-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.workforce.rose.edu/aopa-program",
       "page": "details",
@@ -11,10 +27,10 @@
       "origin": "official"
     },
     {
-      "url": "https://www.workforce.rose.edu/sbdc",
-      "page": "details",
-      "anchor": "About SBDC",
-      "fetched": false,
+      "url": "https://www.workforce.rose.edu/faqs",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -22,7 +38,7 @@
       "url": "https://www.workforce.rose.edu/k12-programs",
       "page": "details",
       "anchor": "Folder: K-12 Programs",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -35,17 +51,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.workforce.rose.edu/about-us",
+      "url": "https://www.workforce.rose.edu/sbdc",
       "page": "details",
-      "anchor": "About Us",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.workforce.rose.edu/faqs",
-      "page": "terms",
-      "anchor": "FAQs",
+      "anchor": "About SBDC",
       "fetched": true,
       "blocked": null,
       "origin": "official"

@@ -1,11 +1,43 @@
 {
   "programId": "center-for-agricultural-development-and-entrepreneurship-cad",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.cadefarms.org/about",
       "page": "details",
       "anchor": "About CADE",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.cadefarms.org/event-details/wholesale-marketing-accelerator-3-part-series-2027-01-06-14-00",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.cadefarms.org/event-details/wholesale-marketing-accelerator-3-part-series-2027-01-13-14-00",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.cadefarms.org/event-details/wholesale-marketing-accelerator-3-part-series-2027-01-20-14-00",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.cadefarms.org/programs",
+      "page": "details",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

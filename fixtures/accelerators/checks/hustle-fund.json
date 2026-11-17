@@ -1,22 +1,22 @@
 {
   "programId": "hustle-fund",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.hustlefund.vc/",
     "https://www.hustlefund.vc/angel-squad-investments",
     "https://www.hustlefund.vc/blog-categories-investors/dealflow",
     "https://www.hustlefund.vc/deal-framework",
     "https://www.hustlefund.vc/faq",
+    "https://www.hustlefund.vc/blog-categories-investors/dealflow?26b02536_page=2",
+    "https://www.hustlefund.vc/squad/investments",
+    "https://www.hustlefund.vc/angel-squad-story",
+    "https://www.hustlefund.vc/event-recordings/portfolio-construction-for-early-stage-investors",
+    "https://www.hustlefund.vc/founders",
     "https://www.hustlefund.vc/post/3-ways-to-win-allocation-in-deals",
     "https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
     "https://www.hustlefund.vc/post/adding-value-101-how-to-support-founders-post-investment",
     "https://www.hustlefund.vc/squad",
-    "https://www.hustlefund.vc/post/alexis-ohanian-investments-from-reddit-co-founder-to-1b-venture-capital-disruptor",
-    "https://www.hustlefund.vc/post/an-angel-investors-blueprint-for-seeing-winning-the-best-deals",
-    "https://www.hustlefund.vc/post/angel-investment-tax-credit",
-    "https://www.hustlefund.vc/post/angel-squad--what-cyan-banister-investments-reveal-about-pattern-recognition-and-why-her-story-should-change-how-you-think-about-deal-evaluatio",
-    "https://www.hustlefund.vc/post/angel-squad-7-best-angel-investor-networks-for-your-first-10k-investment",
-    "https://www.hustlefund.vc/post/angel-squad-aaron-levie-investments-what-boxs-co-founder-looks-for-when-writing-checks"
+    "https://www.hustlefund.vc/post/alexis-ohanian-investments-from-reddit-co-founder-to-1b-venture-capital-disruptor"
   ],
   "evidence": [
     {
@@ -97,6 +97,13 @@
       "page": "application"
     },
     {
+      "id": "check-deal-878496e44a",
+      "url": "https://www.hustlefund.vc/angel-squad-story",
+      "title": "Hustle Fund — program page",
+      "excerpt": "investment opportunities, and who can’t afford to invest more than $5k per company. I pitched the idea of bringing access to this group of",
+      "page": "details"
+    },
+    {
       "id": "check-deal-8f14211dcc",
       "url": "https://www.hustlefund.vc/squad",
       "title": "Hustle Fund — application page",
@@ -153,17 +160,24 @@
       "page": "details"
     },
     {
-      "id": "check-duration-e2bbec804b",
-      "url": "https://www.hustlefund.vc/post/angel-squad-7-best-angel-investor-networks-for-your-first-10k-investment",
-      "title": "Hustle Fund — terms page",
-      "excerpt": "the first five deals you see. Spend the first 1-2 months just learning. Attend educational sessions, read",
-      "page": "terms"
+      "id": "check-duration-f8aca0726e",
+      "url": "https://www.hustlefund.vc/angel-squad-story",
+      "title": "Hustle Fund — program page",
+      "excerpt": "the squad - i've been a part of Angel Squad for ~9 months, and can't say enough good things about the",
+      "page": "details"
     },
     {
       "id": "check-format-17b01e34af",
       "url": "https://www.hustlefund.vc/angel-squad-investments",
       "title": "Hustle Fund — terms page",
       "excerpt": "the treatment of opioid use disorder with a comprehensive, virtual-first care model. Charter Space Building the first",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-65cc9990dd",
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "title": "Hustle Fund — terms page",
+      "excerpt": "relevant, timely paywalled content employees need. Paga Hybrid hardware-and-software payments and financial services",
       "page": "terms"
     },
     {
@@ -174,10 +188,10 @@
       "page": "terms"
     },
     {
-      "id": "check-format-e24c5461d7",
-      "url": "https://www.hustlefund.vc/post/angel-squad-7-best-angel-investor-networks-for-your-first-10k-investment",
+      "id": "check-format-d5ad64ceed",
+      "url": "https://www.hustlefund.vc/squad/investments",
       "title": "Hustle Fund — terms page",
-      "excerpt": "Many traditional angel groups are adapting to include virtual members and lower minimums, but the core model still",
+      "excerpt": "the treatment of opioid use disorder with a comprehensive, virtual-first care model. Charter Space Building the first",
       "page": "terms"
     },
     {
@@ -209,6 +223,13 @@
       "page": "terms"
     },
     {
+      "id": "check-location-9afc5b6766",
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "title": "Hustle Fund — terms page",
+      "excerpt": "real estate transaction platform based in Singapore. Punchup Digital growth engine for",
+      "page": "terms"
+    },
+    {
       "id": "check-name-67b2c8162a",
       "url": "https://www.hustlefund.vc/",
       "title": "Hustle Fund — homepage",
@@ -230,22 +251,8 @@
       "page": "terms"
     },
     {
-      "id": "check-route-8e297dca56",
-      "url": "https://www.hustlefund.vc/post/angel-investment-tax-credit",
-      "title": "Hustle Fund — terms page",
-      "excerpt": "apply to Angel Squad → https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
-      "page": "terms"
-    },
-    {
       "id": "check-route-a4e4ce3eb6",
       "url": "https://www.hustlefund.vc/post/3-ways-to-win-allocation-in-deals",
-      "title": "Hustle Fund — terms page",
-      "excerpt": "apply to Angel Squad → https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-abec7ec042",
-      "url": "https://www.hustlefund.vc/post/an-angel-investors-blueprint-for-seeing-winning-the-best-deals",
       "title": "Hustle Fund — terms page",
       "excerpt": "apply to Angel Squad → https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
       "page": "terms"
@@ -266,16 +273,94 @@
       "excerpt": "Hustle Fund | Pre-Seed Venture Capital Camp Hustle Asia is an investor event in Bali, Sep 18-19. GET YOUR TICKET! Pitch us Open navigation Pitch us Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad Resources Small Bets Hustle Commons About us Meet our Nerdy Team Hustle Drip (Merch) Sponsor Hustle Fund Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad Resources Small Bets Hustle Commons About Us Meet our Nerdy Team Hustle Drip (Merch) Sponsor Hustle Fund We invest in hilariously early startups. You don’t need perfect metrics, a famous network, or a 47-slide deck explaining your TAM. You need an ambitious idea, evidence of hustle, and the nerve to start. What are you hustling? Portfolio unlocked A few companies we’ve backed. Early believers. Serious builders. Webflow Gamma Contra Boom Flex NerdWallet Collective Niural AI Reap Webflow Gamma Contra Boom Flex NerdWallet Collective Niural AI Reap TAPE 01 MEET HUSTLE FUND ● SIGNAL LOCKED LEVEL 01 COMPLETE NEXT QUEST: WHY TAKE OUR MONEY? Why should I take money from Hustle Fund–really? Great question, and here's why: TAPE 02 Why should you work with Hustle Fund? ● FOUNDER SIGNAL 1–2 MEETINGS · <1 WEEK TO WIRE · NO SPREADSHEETS WERE HARMED We'll send you money, fast. We make a decision in 1–2 meetings and wire within the week. We don't wait for someone else to lead — that's BS. We'll teach"
     },
     {
+      "id": "check-page-b363ddc37d",
+      "url": "https://www.hustlefund.vc/",
+      "page": "details",
+      "excerpt": "Sharpen your sales and customer acquisition, and tap into knowledge and mentors to help your startup grow."
+    },
+    {
       "id": "check-page-76d79ba63d",
       "url": "https://www.hustlefund.vc/angel-squad-investments",
       "page": "terms",
       "excerpt": "Angel Squad | Investments Skip to content Hustle Fund Investments About Wall of Love Start Your Trial 01 Hustle Fund 02 Investments 03 About 04 Wall of Love Invest. Connect. Learn. Start Your Trial Vetted Deals. Every Month. Early-stage investments from Hustle Fund, breakout companies sourced by our Scouts, and pre-IPO allocations. Exclusive to Angel Squad members. 01 Angel Squad 02 Hustle Fund Scouts 03 Pre-IPO Angel Squad Hustle Fund invests in software companies worldwide and shares them with Angel Squad members. 3-5+ new investment opportunities each month Akiba Digital Alternative credit scoring that lets lenders extend credit to thin-filed small businesses and individuals across emerging markets. Alloy River Acquires small accounting firms and deploys proprietary AI and ERP to automate roughly half of all workflows, driving margins from ~20% to a target of 60%. Amara Transforming senior living with a housing-focused health intervention model that leverages certifications, programming, and reimbursement platforms to enhance outcomes and reduce costs. BetterBrain Personalized brain check-ups and expert coaching to help prevent dementia and Alzheimer's disease. Beyond Health Tailored daily care for chronic-aged patients - combining biometric sensors and telehealth so they never have to leave home, often at no cost. Bicycle Health Transforming the treatment of opioid use"
     },
     {
+      "id": "check-page-b53f20887a",
+      "url": "https://www.hustlefund.vc/angel-squad-investments",
+      "page": "terms",
+      "excerpt": "Bicycle Health Transforming the treatment of opioid use disorder with a comprehensive, virtual-first care model."
+    },
+    {
+      "id": "check-page-2bd2a8f1d9",
+      "url": "https://www.hustlefund.vc/angel-squad-investments",
+      "page": "terms",
+      "excerpt": "Charter Space Building the first comprehensive system of record for spacecraft manufacturing - fixing fragmented data and mismanagement that costs the space industry billions."
+    },
+    {
+      "id": "check-page-94439b58e5",
+      "url": "https://www.hustlefund.vc/angel-squad-investments",
+      "page": "terms",
+      "excerpt": "Clout Kitchen AI infrastructure for mass content distribution - automating the strategy and operations behind viral campaigns that drive millions of views at 10x lower cost than traditional marketing."
+    },
+    {
+      "id": "check-page-6b9564e62b",
+      "url": "https://www.hustlefund.vc/angel-squad-investments",
+      "page": "terms",
+      "excerpt": "CompScience AI-driven safety analytics integrated with workers' comp insurance - analyzing workplace environments to identify and mitigate hazards before they cause injuries."
+    },
+    {
+      "id": "check-page-7beeb419a6",
+      "url": "https://www.hustlefund.vc/angel-squad-investments",
+      "page": "terms",
+      "excerpt": "Daily Blends AI-powered vending machines that make fresh, healthy food broadly accessible."
+    },
+    {
+      "id": "check-page-5f6737db31",
+      "url": "https://www.hustlefund.vc/angel-squad-investments",
+      "page": "terms",
+      "excerpt": "Daydream Generative AI that automates organic growth marketing, helping startups scale content without expensive human resources."
+    },
+    {
+      "id": "check-page-a0538abf1e",
+      "url": "https://www.hustlefund.vc/angel-squad-investments",
+      "page": "terms",
+      "excerpt": "Ember AI The fastest path from idea to shipped software - combining AI-powered coding, a built-in expert marketplace, and done-for-me services in one platform."
+    },
+    {
+      "id": "check-page-ab95cce5de",
+      "url": "https://www.hustlefund.vc/angel-squad-investments",
+      "page": "terms",
+      "excerpt": "Flex Fintech superapp for SMBs, offering credit cards, banking, and more."
+    },
+    {
+      "id": "check-page-1017ed1b98",
+      "url": "https://www.hustlefund.vc/angel-squad-investments",
+      "page": "terms",
+      "excerpt": "G2Global Converting TikTok-native K-beauty demand into a global B2B distribution machine."
+    },
+    {
+      "id": "check-page-e8c732d72f",
+      "url": "https://www.hustlefund.vc/angel-squad-investments",
+      "page": "terms",
+      "excerpt": "Gentem Exited End-to-end revenue cycle management, patient billing, and payments for insurance-accepting healthcare providers."
+    },
+    {
+      "id": "check-page-962c02b1c6",
+      "url": "https://www.hustlefund.vc/angel-squad-investments",
+      "page": "terms",
+      "excerpt": "GroWrk Manages IT hardware for globally distributed teams - procurement, onboarding, MDM, off-boarding, repair, and collection for a monthly fee."
+    },
+    {
+      "id": "check-page-ddf213d566",
+      "url": "https://www.hustlefund.vc/angel-squad-investments",
+      "page": "terms",
+      "excerpt": "Haven The modern PwC - a tech-forward full-stack accounting firm that handles bookkeeping, taxes, and tax credits for businesses. i-50 AI-powered computer vision platform for manufacturing - deploys cameras to spot variances and reduce delays and defects on complex production lines."
+    },
+    {
       "id": "check-page-326067d97c",
       "url": "https://www.hustlefund.vc/blog-categories-investors/dealflow",
       "page": "terms",
-      "excerpt": "How to Build Deal Flow as an Angel Investor | Hustle Fund PITCH US! Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad Resources Small Bets Hustle Commons About Us Meet our Nerdy Team Hustle Drip (Merch) Hustle Drip (Merch) Sponsor Hustle Fund Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad Resources Small Bets Hustle Commons ABOUT US Meet our Nerdy Team Hustle Drip (Merch) Sponsor Hustle Fund SMALL BETS FEATURED DEALFLOW BUILDING RELATIONSHIPS INVESTOR STORIES Fundraising SMALL BETS FEATURED DEALFLOW BUILDING RELATIONSHIPS INVESTOR STORIES Fundraising SMALL BETS FEATURED DEALFLOW BUILDING RELATIONSHIPS INVESTOR STORIES Fundraising SMALL BETS FEATURED DEALFLOW BUILDING RELATIONSHIPS INVESTOR STORIES Fundraising SMALL BETS FEATURED DEALFLOW BUILDING RELATIONSHIPS INVESTOR STORIES Fundraising DEALFLOW BUILDING RELATIONSHIPS Small Bets INVESTOR STORIES Fundraising BUILDING RELATIONSHIPS Small Bets INVESTOR STORIES dealflow Fundraising Small bets BUILDING RELATIONSHIPS investor stories dealflow Fundraising INVESTOR STORIES BUILDING RELATIONSHIPS Small Bets dealflow Fundraising Fundraising BUILDING RELATIONSHIPS Small bets dealflow INVESTOR STORIES Choose category Fundraising Growth Founder Stories For the hippos Posts related to fundraising dealflow building relationships small bets investor stories Board member fiduciary duties for"
+      "excerpt": "How to Build Deal Flow as an Angel Investor | Hustle Fund PITCH US! Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad Resources Small Bets Hustle Commons About Us Meet our Nerdy Team Hustle Drip (Merch) Hustle Drip (Merch) Sponsor Hustle Fund Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad Resources Small Bets Hustle Commons ABOUT US Meet our Nerdy Team Hustle Drip (Merch) Sponsor Hustle Fund SMALL BETS FEATURED DEALFLOW BUILDING RELATIONSHIPS INVESTOR STORIES Fundraising SMALL BETS FEATURED DEALFLOW BUILDING RELATIONSHIPS INVESTOR STORIES Fundraising SMALL BETS FEATURED DEALFLOW BUILDING RELATIONSHIPS INVESTOR STORIES Fundraising SMALL BETS FEATURED DEALFLOW BUILDING RELATIONSHIPS INVESTOR STORIES Fundraising SMALL BETS FEATURED DEALFLOW BUILDING RELATIONSHIPS INVESTOR STORIES Fundraising DEALFLOW BUILDING RELATIONSHIPS Small Bets INVESTOR STORIES Fundraising BUILDING RELATIONSHIPS Small Bets INVESTOR STORIES dealflow Fundraising Small bets BUILDING RELATIONSHIPS investor stories dealflow Fundraising INVESTOR STORIES BUILDING RELATIONSHIPS Small Bets dealflow Fundraising Fundraising BUILDING RELATIONSHIPS Small bets dealflow INVESTOR STORIES Choose category Fundraising Growth Founder Stories For the hippos Posts related to fundraising dealflow building relationships small bets investor stories Hurdle rate: The fund terms that"
     },
     {
       "id": "check-page-b21c386616",
@@ -290,6 +375,138 @@
       "excerpt": "Hustle Fund FAQ: Check Size, Stage & Process Camp Hustle Asia is an investor event in Bali, Sep 18-19. GET YOUR TICKET! Pitch us Open navigation Pitch us Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad Resources Small Bets Hustle Commons About us Meet our Nerdy Team Hustle Drip (Merch) Sponsor Hustle Fund Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad Resources Small Bets Hustle Commons About Us Meet our Nerdy Team Hustle Drip (Merch) Sponsor Hustle Fund Hi, I'm Hustle Fund. Ask me anything. My how the turn tables: now it’s time for the founder to question the investor. Here are our most frequently asked questions. KNOWLEDGE BASE ONLINE SELECT A QUESTION / RECEIVE A REAL ANSWER FOUNDER_KNOWLEDGE_BASE.DAT 17 RECORDS Where do you invest? Mostly the United States, Canada, and Southeast Asia. What do you invest in? We are software generalists and don't favor particular verticals. As a small fund, we tend to shy from sectors that require a lot of capital raising to get going. As a result, there tends to be a lot of SaaS in our portfolio. How big is your fund? Fund I is $11.5M. Fund II is $34M. Fund III is $46M. Fund IV is $39M. What stage do you invest in? Do you invest in Series A rounds? We invest in pre-seed rounds. Not seed. Not post-seed / mango seed. Pre-seed. We may occasionally invest as a follow-on investment into a Series"
     },
     {
+      "id": "check-page-09603b1881",
+      "url": "https://www.hustlefund.vc/faq",
+      "page": "terms",
+      "excerpt": "However, our initial investments are at the pre-seed stage."
+    },
+    {
+      "id": "check-page-a60c4c1027",
+      "url": "https://www.hustlefund.vc/faq",
+      "page": "terms",
+      "excerpt": "Are you an accelerator?"
+    },
+    {
+      "id": "check-page-39e8c2398f",
+      "url": "https://www.hustlefund.vc/faq",
+      "page": "terms",
+      "excerpt": "We are not an accelerator program, in the traditional sense, but we like to work with our founders to add value where we can - especially by leveraging our network in the Silicon Valley and with the growth programs that we offer our portfolio companies."
+    },
+    {
+      "id": "check-page-6e8b1cec54",
+      "url": "https://www.hustlefund.vc/faq",
+      "page": "terms",
+      "excerpt": "We invest in companies based on a startup's business model / unit economics and the hustle of the founders who lead these companies."
+    },
+    {
+      "id": "check-page-1572d5765a",
+      "url": "https://www.hustlefund.vc/faq",
+      "page": "terms",
+      "excerpt": "We do not invest in pharmaceutical or medical device companies, art/film projects, land, restaurants / physical retail or traditional brick and mortar small businesses."
+    },
+    {
+      "id": "check-page-2086a88275",
+      "url": "https://www.hustlefund.vc/blog-categories-investors/dealflow?26b02536_page=2",
+      "page": "terms",
+      "excerpt": "How to Build Deal Flow as an Angel Investor | Hustle Fund PITCH US! Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad Resources Small Bets Hustle Commons About Us Meet our Nerdy Team Hustle Drip (Merch) Hustle Drip (Merch) Sponsor Hustle Fund Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad Resources Small Bets Hustle Commons ABOUT US Meet our Nerdy Team Hustle Drip (Merch) Sponsor Hustle Fund SMALL BETS FEATURED DEALFLOW BUILDING RELATIONSHIPS INVESTOR STORIES Fundraising SMALL BETS FEATURED DEALFLOW BUILDING RELATIONSHIPS INVESTOR STORIES Fundraising SMALL BETS FEATURED DEALFLOW BUILDING RELATIONSHIPS INVESTOR STORIES Fundraising SMALL BETS FEATURED DEALFLOW BUILDING RELATIONSHIPS INVESTOR STORIES Fundraising SMALL BETS FEATURED DEALFLOW BUILDING RELATIONSHIPS INVESTOR STORIES Fundraising DEALFLOW BUILDING RELATIONSHIPS Small Bets INVESTOR STORIES Fundraising BUILDING RELATIONSHIPS Small Bets INVESTOR STORIES dealflow Fundraising Small bets BUILDING RELATIONSHIPS investor stories dealflow Fundraising INVESTOR STORIES BUILDING RELATIONSHIPS Small Bets dealflow Fundraising Fundraising BUILDING RELATIONSHIPS Small bets dealflow INVESTOR STORIES Choose category Fundraising Growth Founder Stories For the hippos Posts related to fundraising dealflow building relationships small bets investor stories Emma Chamberlain’s Business: Inside"
+    },
+    {
+      "id": "check-page-693d638b99",
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "page": "terms",
+      "excerpt": "Angel Squad | Investments Skip to content Hustle Fund Investments About Wall of Love Start Your Trial 01 Hustle Fund 02 Investments 03 About 04 Wall of Love Invest. Connect. Learn. Start Your Trial Vetted Deals. Every Month. Early-stage investments from Hustle Fund, breakout companies sourced by our Scouts, and pre-IPO allocations. Exclusive to Angel Squad members. 01 Angel Squad 02 Hustle Fund Scouts 03 Pre-IPO Angel Squad Hustle Fund invests in software companies worldwide and shares them with Angel Squad members. 3-5+ new investment opportunities each month Akiba Digital Alternative credit scoring that lets lenders extend credit to thin-filed small businesses and individuals across emerging markets. Alloy River Acquires small accounting firms and deploys proprietary AI and ERP to automate roughly half of all workflows, driving margins from ~20% to a target of 60%. Amara Transforming senior living with a housing-focused health intervention model that leverages certifications, programming, and reimbursement platforms to enhance outcomes and reduce costs. BetterBrain Personalized brain check-ups and expert coaching to help prevent dementia and Alzheimer's disease. Beyond Health Tailored daily care for chronic-aged patients - combining biometric sensors and telehealth so they never have to leave home, often at no cost. Bicycle Health Transforming the treatment of opioid use"
+    },
+    {
+      "id": "check-page-dfe2bb1fa9",
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "page": "terms",
+      "excerpt": "Bicycle Health Transforming the treatment of opioid use disorder with a comprehensive, virtual-first care model."
+    },
+    {
+      "id": "check-page-930d0dee15",
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "page": "terms",
+      "excerpt": "Charter Space Building the first comprehensive system of record for spacecraft manufacturing - fixing fragmented data and mismanagement that costs the space industry billions."
+    },
+    {
+      "id": "check-page-e95f13ada6",
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "page": "terms",
+      "excerpt": "Clout Kitchen AI infrastructure for mass content distribution - automating the strategy and operations behind viral campaigns that drive millions of views at 10x lower cost than traditional marketing."
+    },
+    {
+      "id": "check-page-eb0ec84091",
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "page": "terms",
+      "excerpt": "CompScience AI-driven safety analytics integrated with workers' comp insurance - analyzing workplace environments to identify and mitigate hazards before they cause injuries."
+    },
+    {
+      "id": "check-page-7d4ce8a5c8",
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "page": "terms",
+      "excerpt": "Daily Blends AI-powered vending machines that make fresh, healthy food broadly accessible."
+    },
+    {
+      "id": "check-page-dca04648da",
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "page": "terms",
+      "excerpt": "Daydream Generative AI that automates organic growth marketing, helping startups scale content without expensive human resources."
+    },
+    {
+      "id": "check-page-105dbe9b93",
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "page": "terms",
+      "excerpt": "Ember AI The fastest path from idea to shipped software - combining AI-powered coding, a built-in expert marketplace, and done-for-me services in one platform."
+    },
+    {
+      "id": "check-page-d824c53329",
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "page": "terms",
+      "excerpt": "Flex Fintech superapp for SMBs, offering credit cards, banking, and more."
+    },
+    {
+      "id": "check-page-64b89bd443",
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "page": "terms",
+      "excerpt": "G2Global Converting TikTok-native K-beauty demand into a global B2B distribution machine."
+    },
+    {
+      "id": "check-page-e0245dd485",
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "page": "terms",
+      "excerpt": "Gentem Exited End-to-end revenue cycle management, patient billing, and payments for insurance-accepting healthcare providers."
+    },
+    {
+      "id": "check-page-1837b5d385",
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "page": "terms",
+      "excerpt": "GroWrk Manages IT hardware for globally distributed teams - procurement, onboarding, MDM, off-boarding, repair, and collection for a monthly fee."
+    },
+    {
+      "id": "check-page-b5f4ff4fb2",
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "page": "terms",
+      "excerpt": "Haven The modern PwC - a tech-forward full-stack accounting firm that handles bookkeeping, taxes, and tax credits for businesses. i-50 AI-powered computer vision platform for manufacturing - deploys cameras to spot variances and reduce delays and defects on complex production lines."
+    },
+    {
+      "id": "check-page-a372f4fd6e",
+      "url": "https://www.hustlefund.vc/angel-squad-story",
+      "page": "details",
+      "excerpt": "Angel Squad | Story Skip to content Hustle Fund Investments About Wall of Love Start Your Trial 01 Hustle Fund 02 Investments 03 About 04 Wall of Love Invest. Connect. Learn. Start Your Trial The Angel Squad Story Brian Nichols Angel Squad Founder In October 2020 as I started my angel investing journey, I realized that there was a huge opportunity to focus on an overlooked segment of the startup investing ecosystem – the people who don’t traditionally have access to high-quality startup investment opportunities, and who can’t afford to invest more than $5k per company. I pitched the idea of bringing access to this group of people to Elizabeth, Eric, and Shiyan – three friends from Stanford who started Hustle Fund together 20+ years after meeting in the dorms. Not only did they love it, but they also had been kicking around a similar idea. We joined forces to create Angel Squad with the aspiration of bringing 10k new angels into the ecosystem. We have conviction that this can change the world. Why? Because people are more likely to invest in problems that they can relate to. So if you can empower more people from different backgrounds to invest in startups, then more entrepreneurs from a wider range of backgrounds will be funded to solve different classes of problems. It's working. We have 2500+ members from all walks of life, all corners of the globe. It's gone better than any"
+    },
+    {
+      "id": "check-page-1128de73dd",
+      "url": "https://www.hustlefund.vc/event-recordings/portfolio-construction-for-early-stage-investors",
+      "page": "portfolio",
+      "excerpt": "Portfolio Construction for Early-Stage Investors Check out Hustle Fund Investor Blog Investor Blog Portfolio Construction for Early-Stage Investors Below are links to the speakers' resources and social profiles. If you found their sessions valuable, please show them some love! Elizabeth Yin Elizabeth's Twitter Hustle Fund ‍ Alright, now that you're in the Hustle Fund fam, we've got some stuff we think you'll love. Resources ‍ The Founder Playbook newsletter : Dive in to tactical, BS-free articles about fundraising and scaling your startup. ‍ Small Bets newsletter : Learn all our secrets on how we think about early-stage investing. Upcoming events : We host events online and IRL all the time. Join our community! Build the best pitch deck (eBook) : A pitch deck either opens doors, or closes doors. But most founders are doing it all wrong. This book will help you build a deck that wins. Uncapped Notes : Our Youtube series that helps first-time founders navigate the complicated world of venture capital and startups. 1180 San Carlos Ave Suite 337 San Carlos, CA 94070 Join our newsletters Boomshakalaka! Tell us about your awesome idea Pitch us! Subscribe to our newsletters Boomshakalaka! Get more great content from us on LinkedIn FOLLOW Founders Meet the Portfolio Prepare your Hustle Fund Pitch Founder FAQ EVENT: Founder Friends EVENT: Batter Up! Investors Join Angel Squad Listen to"
+    },
+    {
+      "id": "check-page-e6d8a07c94",
+      "url": "https://www.hustlefund.vc/founders",
+      "page": "portfolio",
+      "excerpt": "Our Founders: the fine humans who said YES to us! | Hustle Fund Camp Hustle Asia is an investor event in Bali, Sep 18-19. GET YOUR TICKET! Pitch us Open navigation Pitch us Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad Resources Small Bets Hustle Commons About us Meet our Nerdy Team Hustle Drip (Merch) Sponsor Hustle Fund Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad Resources Small Bets Hustle Commons About Us Meet our Nerdy Team Hustle Drip (Merch) Sponsor Hustle Fund Our founders don't hate us. Phew. Here's what a few of these very fine, very real humans actually say about taking our money. FOUNDER_SIGNAL.DAT LIVE ● 93 Founder NPS REAL FOUNDER RECEIPTS / NO BRIBES DISCLOSED FOUNDER RECEIPTS LOADED RUPA HEALTH / HEMSTER / WEBFLOW Receipts from real founders. Five founders. Five companies. Zero invented testimonials. FOUNDER_RECEIPTS.DAT VERIFIED ● Unlimited 01 Revive 02 Webflow 03 Boom 04 Gamma 05 “ As one of my earliest investors, Hustle Fund has proven to be a hugely strategic partner for me and the team! They are the real deal—putting in actual sweat equity to help me with growth, strategy, fundraising, and more. ” Tara Viswanathan Co-Founder of Unlimited AUTO · 01 / 05 FULL ROSTER ONLINE PREVIOUS FUNDS / LIVE DIRECTORY More founders in the Hustle Fund family. Note that we only list founders from previous funds that"
+    },
+    {
       "id": "check-page-15214513c2",
       "url": "https://www.hustlefund.vc/post/3-ways-to-win-allocation-in-deals",
       "page": "terms",
@@ -300,6 +517,78 @@
       "url": "https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
       "page": "application",
       "excerpt": "Angel Squad | Start angel investing with Hustle Fund. Invest . Connect . Learn . Skip to content Hustle Fund Investments About Wall of Love Start Your Trial 01 Hustle Fund 02 Investments 03 About 04 Wall of Love Invest. Connect. Learn. Start Your Trial × Start angel investing . With the experts from Hustle Fund. At Angel Squad, you’ll learn how to angel invest and get a chance to invest as little as $1k into Hustle Fund’s top-performing early-stage startups. Start Your Trial 01 / Big winners From pre-seed to pre-IPO Big winners. Invest into our top companies. Curated dealflow, shared only with the Squad. Vetted deals from pre-seed to pre-IPO, shared exclusively with Angel Squad. Explore Squad investments Artificial intelligence Anthropic Valuation $19B $1T+ The AI research company behind Claude. Squad members got in through a secondary in early 2024. Pre-IPO · Secondary Financial technology Valuation $30M $1.2B A fintech superapp for the mid market. Hustle Fund was the first institutional investor. Seed Website experience Valuation $7M $4B The visual website builder for designers and marketers. Hustle Fund invested at pre-seed, years before Angel Squad existed. Hustle Fund fund investment. Angel Squad members did not participate. Pre-seed · Hustle Fund 1,000 + Deals reviewed by Hustle Fund monthly 3 – 5 Shared with the Squad each month Start with $1,000. Invest on your terms."
+    },
+    {
+      "id": "check-page-eea91b85ca",
+      "url": "https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
+      "page": "application",
+      "excerpt": "Founder pitch Members only Pitch recording Unlock with Angel Squad Pitch recording Private access Health · B2B AI Closing in 6 days Wardline Illustrative example."
+    },
+    {
+      "id": "check-page-68105effeb",
+      "url": "https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
+      "page": "application",
+      "excerpt": "Stage Seed Valuation $20M post Minimum $1,000 Instrument SAFE Squad allocation $68k of $100k $32k remaining Illustrative allocation Why Hustle Fund invested We have known the founder for a decade."
+    },
+    {
+      "id": "check-page-54566e4cf9",
+      "url": "https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
+      "page": "application",
+      "excerpt": "New York London Singapore Amsterdam San Francisco Los Angeles New York London Singapore Amsterdam San Francisco Los Angeles Member meetups Every quarter."
+    },
+    {
+      "id": "check-page-c27949e0ab",
+      "url": "https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
+      "page": "application",
+      "excerpt": "25 + Cities with meetups 2,500 + Members to meet Members host and join local gatherings every quarter: rooftop drinks in London, a patio hangout in San Francisco, a member meetup in Austin."
+    },
+    {
+      "id": "check-page-7b6f0398a8",
+      "url": "https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
+      "page": "application",
+      "excerpt": "New York London San Francisco Singapore Amsterdam Los Angeles Austin +16 more New York San Diego San Francisco Atlanta East Bay Peninsula / South Bay Vancouver Berlin 01 / 08 Squad connections 01 Picks 02 Pals 03 Connect Picks."
+    },
+    {
+      "id": "check-page-69280493f2",
+      "url": "https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
+      "page": "application",
+      "excerpt": "Simone Marchand Regulatory consultant, medtech Boston Knowledge seeker Spent a decade inside hospital systems."
+    },
+    {
+      "id": "check-page-60a0454c53",
+      "url": "https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
+      "page": "application",
+      "excerpt": "Happy to explain what actually slows a health product down."
+    },
+    {
+      "id": "check-page-231afcf440",
+      "url": "https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
+      "page": "application",
+      "excerpt": "Say hello Profile Osman Adeyemi Check writer, 12 checks in New York Check writer Joined the same month you did."
+    },
+    {
+      "id": "check-page-46695ab0bb",
+      "url": "https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
+      "page": "application",
+      "excerpt": "Say hello Profile Alba Reig Ops lead, marketplace London Startup founder Hosts the London meetup, and usually knows who else is in town that week."
+    },
+    {
+      "id": "check-page-0b43d27756",
+      "url": "https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
+      "page": "application",
+      "excerpt": "Upcoming Both of you opted in Idris Faraj Former Stripe and Google product leader, now PM at a Series B startup · New York · Check writer Pick a time Message Idris How it works 01 On the 1st we pair everyone who has opted in."
+    },
+    {
+      "id": "check-page-4d36fb39a5",
+      "url": "https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
+      "page": "application",
+      "excerpt": "Los Angeles, CA · Bay Area / Northern California A fintech powerhouse based in LA, driving growth product at Coinbase after stints at Robinhood and Facebook, with roots in investment management at Goldman Sachs."
+    },
+    {
+      "id": "check-page-43b29732ed",
+      "url": "https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
+      "page": "application",
+      "excerpt": "She joined Hustle Fund as an investor full time in 2022, started Hustle Fund's Venture Fellowship in 2023 (100+ fellows, many now sourcing deals or starting funds), and made Partner in 2025."
     },
     {
       "id": "check-page-71861c3f60",
@@ -314,40 +603,82 @@
       "excerpt": "Angel Squad | Start angel investing with Hustle Fund. Invest . Connect . Learn . Skip to content Hustle Fund Investments About Wall of Love Start Your Trial 01 Hustle Fund 02 Investments 03 About 04 Wall of Love Invest. Connect. Learn. Start Your Trial × Start angel investing . With the experts from Hustle Fund. At Angel Squad, you’ll learn how to angel invest and get a chance to invest as little as $1k into Hustle Fund’s top-performing early-stage startups. Start Your Trial 01 / Big winners From pre-seed to pre-IPO Big winners. Invest into our top companies. Curated dealflow, shared only with the Squad. Vetted deals from pre-seed to pre-IPO, shared exclusively with Angel Squad. Explore Squad investments Artificial intelligence Anthropic Valuation $19B $1T+ The AI research company behind Claude. Squad members got in through a secondary in early 2024. Pre-IPO · Secondary Financial technology Valuation $30M $1.2B A fintech superapp for the mid market. Hustle Fund was the first institutional investor. Seed Website experience Valuation $7M $4B The visual website builder for designers and marketers. Hustle Fund invested at pre-seed, years before Angel Squad existed. Hustle Fund fund investment. Angel Squad members did not participate. Pre-seed · Hustle Fund 1,000 + Deals reviewed by Hustle Fund monthly 3 – 5 Shared with the Squad each month Start with $1,000. Invest on your terms."
     },
     {
+      "id": "check-page-524198050c",
+      "url": "https://www.hustlefund.vc/squad",
+      "page": "application",
+      "excerpt": "Founder pitch Members only Pitch recording Unlock with Angel Squad Pitch recording Private access Health · B2B AI Closing in 6 days Wardline Illustrative example."
+    },
+    {
+      "id": "check-page-137a107760",
+      "url": "https://www.hustlefund.vc/squad",
+      "page": "application",
+      "excerpt": "Stage Seed Valuation $20M post Minimum $1,000 Instrument SAFE Squad allocation $68k of $100k $32k remaining Illustrative allocation Why Hustle Fund invested We have known the founder for a decade."
+    },
+    {
+      "id": "check-page-faace56578",
+      "url": "https://www.hustlefund.vc/squad",
+      "page": "application",
+      "excerpt": "New York London Singapore Amsterdam San Francisco Los Angeles New York London Singapore Amsterdam San Francisco Los Angeles Member meetups Every quarter."
+    },
+    {
+      "id": "check-page-9546c5799d",
+      "url": "https://www.hustlefund.vc/squad",
+      "page": "application",
+      "excerpt": "25 + Cities with meetups 2,500 + Members to meet Members host and join local gatherings every quarter: rooftop drinks in London, a patio hangout in San Francisco, a member meetup in Austin."
+    },
+    {
+      "id": "check-page-bc60e62b43",
+      "url": "https://www.hustlefund.vc/squad",
+      "page": "application",
+      "excerpt": "New York London San Francisco Singapore Amsterdam Los Angeles Austin +16 more New York San Diego San Francisco Atlanta East Bay Peninsula / South Bay Vancouver Berlin 01 / 08 Squad connections 01 Picks 02 Pals 03 Connect Picks."
+    },
+    {
+      "id": "check-page-6550b382d5",
+      "url": "https://www.hustlefund.vc/squad",
+      "page": "application",
+      "excerpt": "Simone Marchand Regulatory consultant, medtech Boston Knowledge seeker Spent a decade inside hospital systems."
+    },
+    {
+      "id": "check-page-4219d5ab4f",
+      "url": "https://www.hustlefund.vc/squad",
+      "page": "application",
+      "excerpt": "Happy to explain what actually slows a health product down."
+    },
+    {
+      "id": "check-page-d76c1ea879",
+      "url": "https://www.hustlefund.vc/squad",
+      "page": "application",
+      "excerpt": "Say hello Profile Osman Adeyemi Check writer, 12 checks in New York Check writer Joined the same month you did."
+    },
+    {
+      "id": "check-page-f5e08d842d",
+      "url": "https://www.hustlefund.vc/squad",
+      "page": "application",
+      "excerpt": "Say hello Profile Alba Reig Ops lead, marketplace London Startup founder Hosts the London meetup, and usually knows who else is in town that week."
+    },
+    {
+      "id": "check-page-e856a7d960",
+      "url": "https://www.hustlefund.vc/squad",
+      "page": "application",
+      "excerpt": "Upcoming Both of you opted in Idris Faraj Former Stripe and Google product leader, now PM at a Series B startup · New York · Check writer Pick a time Message Idris How it works 01 On the 1st we pair everyone who has opted in."
+    },
+    {
+      "id": "check-page-016c037a09",
+      "url": "https://www.hustlefund.vc/squad",
+      "page": "application",
+      "excerpt": "Los Angeles, CA · Bay Area / Northern California A fintech powerhouse based in LA, driving growth product at Coinbase after stints at Robinhood and Facebook, with roots in investment management at Goldman Sachs."
+    },
+    {
+      "id": "check-page-38bb5a0a12",
+      "url": "https://www.hustlefund.vc/squad",
+      "page": "application",
+      "excerpt": "She joined Hustle Fund as an investor full time in 2022, started Hustle Fund's Venture Fellowship in 2023 (100+ fellows, many now sourcing deals or starting funds), and made Partner in 2025."
+    },
+    {
       "id": "check-page-f8da26fdc7",
       "url": "https://www.hustlefund.vc/post/alexis-ohanian-investments-from-reddit-co-founder-to-1b-venture-capital-disruptor",
       "page": "terms",
       "excerpt": "Alexis Ohanian Investments: From Reddit Co-Founder to $1B Venture Capital Disruptor | Hustle Fund CLOSE Learn what it takes to angel invest ‍ Ever wondered what goes into angel investing and how you can get started? This kit will help you understand key investment concepts and frameworks. Download the Kit dealflow Alexis Ohanian Investments: From Reddit Co-Founder to $1B Venture Capital Disruptor By Brian Nichols Brian Nichols is the co-founder of Angel Squad , a community where you’ll learn how to angel invest and get a chance to invest as little as $1k into Hustle Fund's top performing early-stage startups. Most venture capitalists follow the same playbook: raise money from wealthy individuals and institutions, then invest in companies that look like previous winners. Alexis Ohanian threw that playbook out the window. After co-founding Reddit and selling it 18 months later, Ohanian could have taken the traditional path into venture capital. Instead, he built something completely different: Seven Seven Six (776), a \"technology company that deploys venture capital\" with nearly $1 billion under management and an investor base that's 50% women and 15% Black and Indigenous people. Here's how the guy who helped create \"the front page of the internet\" is now rebuilding venture capital from the ground up. From Reddit to Venture Capital: The Unlikely Journey Let's start with the"
-    },
-    {
-      "id": "check-page-c940cf0818",
-      "url": "https://www.hustlefund.vc/post/an-angel-investors-blueprint-for-seeing-winning-the-best-deals",
-      "page": "terms",
-      "excerpt": "Venture capital value add: 3 ways to earn founder trust | Hustle Fund CLOSE Learn what it takes to angel invest ‍ Ever wondered what goes into angel investing and how you can get started? This kit will help you understand key investment concepts and frameworks. Download the Kit dealflow Venture capital value add: 3 ways to earn founder trust By Brian Nichols December 11, 2024 Brian Nichols is the co-founder of Angel Squad , an angel investing community where aspiring and active angels learn from Hustle Fund’s approach, review curated deal flow, and connect with peers. A founder can hear “we add value” from several investors considering their startup. You need to explain what help you can provide and why it fits the company. Venture capital (VC) value-add is the knowledge, networks, and practical support an investor provides beyond capital. It includes help after investing, but it also gives founders something concrete to assess when choosing investors. Allocation is the amount you're invited to invest in a fundraising round. For angels, the conversation about fit starts before the check. VCs are media companies now Our co-founder and general partner Elizabeth Yin wrote , “At the end of the day, money is a commodity.” Sharing relevant experience gives a founder something beyond your check to assess. A founder trying to hire their first salesperson comes across your guide to"
-    },
-    {
-      "id": "check-page-ecd8052aa2",
-      "url": "https://www.hustlefund.vc/post/angel-investment-tax-credit",
-      "page": "terms",
-      "excerpt": "Angel investment tax credit: state program guide | Hustle Fund CLOSE Learn what it takes to angel invest ‍ Ever wondered what goes into angel investing and how you can get started? This kit will help you understand key investment concepts and frameworks. Download the Kit small bets Angel investment tax credit: state program guide By Brian Nichols November 10, 2026 Brian Nichols is the co-founder of Angel Squad , an angel investing community where aspiring and active angels learn from Hustle Fund’s approach, review curated deal flow, and connect with peers. A startup's pitch deck might mention a state tax credit beside its valuation and fundraising target. That can make the investment look cheaper before you have read a single rule. Eligibility can depend on the company, investor, agreement, and order of paperwork and payment. State examples show how these rules affect the credit you can use and keep. What is an angel investment tax credit? An angel investment tax credit is a state tax benefit for an eligible investment in a qualifying business. States use these programs to encourage investment in local startups, jobs, or particular industries. A tax credit reduces tax dollar for dollar. A deduction reduces the income subject to tax. For example, a simplified hypothetical 25% credit on a $20,000 qualifying investment produces a $5,000 credit before any program limits. It"
-    },
-    {
-      "id": "check-page-b073f80e86",
-      "url": "https://www.hustlefund.vc/post/angel-squad--what-cyan-banister-investments-reveal-about-pattern-recognition-and-why-her-story-should-change-how-you-think-about-deal-evaluatio",
-      "page": "terms",
-      "excerpt": "What Cyan Banister Investments Reveal About Pattern Recognition (And Why Her Story Should Change How You Think About Deal Evaluation) | Hustle Fund CLOSE Learn what it takes to angel invest ‍ Ever wondered what goes into angel investing and how you can get started? This kit will help you understand key investment concepts and frameworks. Download the Kit dealflow What Cyan Banister Investments Reveal About Pattern Recognition (And Why Her Story Should Change How You Think About Deal Evaluation) By Brian Nichols Brian Nichols is the co-founder of Angel Squad , a community where you’ll learn how to angel invest and get a chance to invest as little as $1k into Hustle Fund's top performing early-stage startups. Most VCs have similar backgrounds. Stanford or Harvard. Goldman Sachs or McKinsey. Maybe a stint at a successful startup. Cyan Banister's path was completely different. And studying Cyan Banister investments reveals something crucial: the best pattern recognition often comes from the most unexpected places. Here's what makes her approach worth studying, even if you're just starting to write small angel checks. Who Is Cyan Banister? Let's get the backstory out of the way, because it actually matters for understanding her investment philosophy. Cyan didn't go to Stanford. She was homeless as a teenager. She taught herself to code. She co-founded IronPort (email security),"
-    },
-    {
-      "id": "check-page-647c9ab672",
-      "url": "https://www.hustlefund.vc/post/angel-squad-7-best-angel-investor-networks-for-your-first-10k-investment",
-      "page": "terms",
-      "excerpt": "7 Best Angel Investor Networks for Your First $10K Investment | Hustle Fund CLOSE Learn what it takes to angel invest ‍ Ever wondered what goes into angel investing and how you can get started? This kit will help you understand key investment concepts and frameworks. Download the Kit dealflow 7 Best Angel Investor Networks for Your First $10K Investment By Brian Nichols Brian Nichols is the co-founder of Angel Squad , a community where you’ll learn how to angel invest and get a chance to invest as little as $1k into Hustle Fund's top performing early-stage startups You've got $10,000 to start angel investing. Where should you put it? Not in one company. Your $10K needs to become a portfolio of 10-20 investments, not a concentrated bet on your buddy's startup or the \"next big thing\" you heard about on Twitter. The question isn't which single investment to make. It's which network gives you the best shot at building a real portfolio with that capital. Why Networks Matter Angel investing used to be a relationships game. You needed to know founders personally, have connections to other investors, and live in Silicon Valley. Most people with $10,000 couldn't participate at all. Angel investor networks changed this by aggregating deal flow, negotiating investment terms, and creating structures (like SPVs and rolling funds) that let smaller investors participate alongside larger"
-    },
-    {
-      "id": "check-page-08ccdf0f68",
-      "url": "https://www.hustlefund.vc/post/angel-squad-aaron-levie-investments-what-boxs-co-founder-looks-for-when-writing-checks",
-      "page": "terms",
-      "excerpt": "Aaron Levie Investments (What Box's Co-Founder Looks for When Writing Checks) | Hustle Fund CLOSE Learn what it takes to angel invest ‍ Ever wondered what goes into angel investing and how you can get started? This kit will help you understand key investment concepts and frameworks. Download the Kit dealflow Aaron Levie Investments (What Box's Co-Founder Looks for When Writing Checks) By Brian Nichols Brian Nichols is the co-founder of Angel Squad , a community where you’ll learn how to angel invest and get a chance to invest as little as $1k into Hustle Fund's top performing early-stage startups. Aaron Levie has spent nearly two decades building Box from a USC dorm room idea into a multi-billion dollar enterprise cloud company. But what most people don't know is that he's also been quietly making angel investments on the side. And his approach to investing is just as thoughtful as his approach to building products. Here's what studying Aaron Levie investments can teach us about early-stage investing. Who is Aaron Levie? Aaron co-founded Box in 2005 when he was just 19 years old. The company went public in 2015 and now serves over 100,000 businesses with cloud content management. But Aaron isn't just a one-hit wonder who got lucky with Box. He's been an active angel investor for years, writing checks into companies across enterprise software, developer tools, and"
     }
   ],
   "findings": {
@@ -385,12 +716,12 @@
         "evidenceId": "check-duration-72ad2dd3cf"
       },
       {
-        "value": "18 months",
-        "evidenceId": "check-duration-306bc78237"
+        "value": "9 months",
+        "evidenceId": "check-duration-f8aca0726e"
       },
       {
-        "value": "2 months",
-        "evidenceId": "check-duration-e2bbec804b"
+        "value": "18 months",
+        "evidenceId": "check-duration-306bc78237"
       }
     ],
     "format": [
@@ -420,6 +751,10 @@
         "evidenceId": "check-deal-46b34ecbf2"
       },
       {
+        "value": "investment opportunities, and who can’t afford to invest more than $5k per company. I pitched the idea of bringing access to this group of",
+        "evidenceId": "check-deal-878496e44a"
+      },
+      {
         "value": "Valuation $20M post Minimum $1,000 Instrument SAFE Squad allocation $68k of $100k $32k remaining Illustrative allocation Why Hustle Fund",
         "evidenceId": "check-deal-84ceb57090"
       },
@@ -434,10 +769,6 @@
       {
         "value": "private market in exchange for equity. Checks typically range from $1,000 to $100,000 per deal, and most angels spread their capital across",
         "evidenceId": "check-deal-73c8dee2f7"
-      },
-      {
-        "value": "market in exchange for equity. Checks typically range from $1,000 to $100,000 per deal, and most angels spread their capital across many startups",
-        "evidenceId": "check-deal-6d25ca1656"
       }
     ],
     "dealComponents": [
@@ -452,6 +783,18 @@
           "condition": null
         },
         "evidenceId": "check-deal-46b34ecbf2"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "5000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-878496e44a"
       },
       {
         "value": {
@@ -500,18 +843,6 @@
           "condition": null
         },
         "evidenceId": "check-deal-73c8dee2f7"
-      },
-      {
-        "value": {
-          "kind": "equity",
-          "amount": "100000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Equity",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-6d25ca1656"
       }
     ],
     "portfolioPages": [],

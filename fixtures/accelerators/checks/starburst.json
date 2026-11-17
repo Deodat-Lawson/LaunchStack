@@ -1,6 +1,6 @@
 {
   "programId": "starburst",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://starburst.aero/",
     "http://starburst.aero/terms-conditions/",
@@ -9,16 +9,33 @@
     "http://starburst.aero/about/",
     "https://starburst.aero/about/",
     "https://starburst.aero/accelerator-program/",
-    "https://starburst.aero/news/catalonia-space-accelerator-welcomes-its-new-cohort-of-space-innovators/",
     "https://starburst.aero/startup-programs/",
-    "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
     "http://starburst.aero/accelerator-program/",
     "http://starburst.aero/startup-programs/",
     "https://starburst.aero/contact/",
-    "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
-    "https://starburst.aero/newspace-catalonia-accelerator/"
+    "https://starburst.aero/newspace-catalonia-accelerator/",
+    "https://starburst.aero/scale-accelerator/",
+    "https://starburst.aero/singapore-aviation-accelerator/",
+    "https://starburst.aero/starburst-accelerator-programme",
+    "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+    "https://starburst.aero/news/catalonia-space-accelerator-welcomes-its-new-cohort-of-space-innovators/",
+    "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/"
   ],
   "evidence": [
+    {
+      "id": "check-deal-3baa6ff706",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "accelerator, have been awarded a 2020 Venture Challenge grant of $1.4 million by the U.S. Economic Development Administration — complemented by",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-a678955b96",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "by the U.S. Economic Development Administration — complemented by $1.4 million in private matching funds — to create an aerospace innovation hub in",
+      "page": "details"
+    },
     {
       "id": "check-duration-00b0a5285d",
       "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
@@ -193,6 +210,13 @@
       "title": "Starburst — application page",
       "excerpt": "with the HENSOLDT Business unit within 12 weeks. HENSOLDT selected the following 5 Technology",
       "page": "application"
+    },
+    {
+      "id": "check-duration-2f90716ba0",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "for pre-seed and seed stage companies, a 13 week program that serves as a platform for",
+      "page": "details"
     },
     {
       "id": "check-duration-31117dede8",
@@ -433,6 +457,13 @@
       "page": "details"
     },
     {
+      "id": "check-duration-7e0a4a54c7",
+      "url": "https://starburst.aero/singapore-aviation-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "stages. 12 Promising startups selected annually 13 Week intensive acceleration program 200+ Expert",
+      "page": "details"
+    },
+    {
       "id": "check-duration-7e164bf4ea",
       "url": "https://starburst.aero/startup-programs/",
       "title": "Starburst — program page",
@@ -487,6 +518,13 @@
       "title": "Starburst — terms page",
       "excerpt": "\"Necessary\". cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
       "page": "terms"
+    },
+    {
+      "id": "check-duration-83f8fdf874",
+      "url": "https://starburst.aero/starburst-accelerator-programme",
+      "title": "Starburst — program page",
+      "excerpt": "Starburst Accelerator is an intensive 10-week programme focused on accelerating the growth of",
+      "page": "details"
     },
     {
       "id": "check-duration-844735f9bd",
@@ -675,6 +713,13 @@
       "url": "http://starburst.aero/startup-programs/",
       "title": "Starburst — program page",
       "excerpt": "program for the CEA Paris France 12 weeks Future Combat Air Systems (FCAS) Accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-baf7855e27",
+      "url": "https://starburst.aero/starburst-accelerator-programme",
+      "title": "Starburst — program page",
+      "excerpt": "we encourage you to apply. Programme Highlights: 10 weeks of tailored mentoring and strategic advisory B2B",
       "page": "details"
     },
     {
@@ -944,6 +989,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-049f4bba2e",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "APPLY → https://starburst.aero/scale-accelerator/startups",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-0983589912",
       "url": "https://starburst.aero/accelerator-program/",
       "title": "Starburst — program page",
@@ -955,6 +1007,13 @@
       "url": "http://starburst.aero/startup-programs/",
       "title": "Starburst — program page",
       "excerpt": "Portfolio → https://starburst.aero/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1a73539990",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "LEARN MORE → https://starburst.aero/scale-accelerator/startups",
       "page": "details"
     },
     {
@@ -1147,6 +1206,34 @@
       "page": "details"
     },
     {
+      "id": "check-rolling-2e5f3542d4",
+      "url": "https://starburst.aero/singapore-aviation-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "& SUPPLY CHAIN Growing demand for logistic & e-commerce Schedule We accept rolling applications throughout the year. We will review your application and contact you if we",
+      "page": "details"
+    },
+    {
+      "id": "check-route-049f4bba2e",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "APPLY → https://starburst.aero/scale-accelerator/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-route-06c3b78ced",
+      "url": "https://starburst.aero/starburst-accelerator-programme",
+      "title": "Starburst — program page",
+      "excerpt": "Apply → https://tally.so/r/vGA6jX",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4737400979",
+      "url": "https://starburst.aero/singapore-aviation-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "APPLY → https://starburst.aero/singapore-aviation-accelerator/apply",
+      "page": "details"
+    },
+    {
       "id": "check-route-9e9dcea33c",
       "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
       "title": "Starburst — application page",
@@ -1183,6 +1270,48 @@
       "excerpt": "Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Driving Global Aerospace & Defense Innovation Join us as we build a greener, safer, and more connected world. Combining three complementary activities – startup accelerators, strategy consulting, & venture investments – we help aerospace and defense stakeholders innovate, navigate and invest in the dynamic ecosystem. Learn More Accelerators Define your strategy, refine your pitch, get mentorship from industry leaders and subject matter experts, raise venture capital, and bring your product to market faster. Connect with our network of startups, corporate, government, and academic partners. Learn More Strategy Consulting Tackle critical challenges and get actionable insights for technology development, go-to-market strategy, investment and acquisition ventures. Starburst is the trusted growth advisor and counselor to the world’s leading aerospace firms. Learn More Investments Partner with us to invest in proven and validated deep tech, in products that are changing electric flight, autonomous drones, urban air mobility, future travel, climate monitoring, communication, AI, energy, national security, new materials, and so much more. Learn More INDUSTRY EXPERIENCE, MARKET RESEARCH, DEEP TECH ACCELERATORS, AND INVESTMENT Starburst is uniquely"
     },
     {
+      "id": "check-page-810debe826",
+      "url": "https://starburst.aero/",
+      "page": "details",
+      "excerpt": "Learn More INDUSTRY EXPERIENCE, MARKET RESEARCH, DEEP TECH ACCELERATORS, AND INVESTMENT Starburst is uniquely positioned to drive innovation."
+    },
+    {
+      "id": "check-page-fcec0bf797",
+      "url": "https://starburst.aero/",
+      "page": "details",
+      "excerpt": "No one else has our comprehensive knowledge of the entrepreneurial landscape, emerging technology, industry trends, and global allied defense priorities."
+    },
+    {
+      "id": "check-page-8e3803f11c",
+      "url": "https://starburst.aero/",
+      "page": "details",
+      "excerpt": "We are committed to advancing the aerospace sector; we have been the innovation catalyst for the industry since 2012."
+    },
+    {
+      "id": "check-page-0494f3ce22",
+      "url": "https://starburst.aero/",
+      "page": "details",
+      "excerpt": "Our exceptional team helps companies, from startup to Fortune 500, meet their milestones and make the changes that matter to them."
+    },
+    {
+      "id": "check-page-83f9a094bb",
+      "url": "https://starburst.aero/",
+      "page": "details",
+      "excerpt": "150 Portfolio Startups 60 Corporate and Government Partners 60 Dedicated Team Members 8 Global Locations (and growing) SUPPORTING COMPANIES FROM FORMATION TO ACQUISITION Our startups are the decision-makers and leaders of tomorrow, advancing technologies that are changing the world today."
+    },
+    {
+      "id": "check-page-6c034713c9",
+      "url": "https://starburst.aero/",
+      "page": "details",
+      "excerpt": "From airport experience to supersonic flight, from edge communication to AI optimization, from eVTOL to UAV, meet the companies building the future of aerospace."
+    },
+    {
+      "id": "check-page-ee212fb6ea",
+      "url": "https://starburst.aero/",
+      "page": "details",
+      "excerpt": "About Us 01 Los Angeles 02 Paris 03 Tel Aviv 04 Munich 05 Madrid 06 Singapore 07 Seoul 08 Washington, DC 09 San Marcos, Texas Select Corporate & Government Partners Corporate & Government partners support innovation through mentorship, investment, and business ventures."
+    },
+    {
       "id": "check-page-e45681a3da",
       "url": "http://starburst.aero/terms-conditions/",
       "page": "terms",
@@ -1193,6 +1322,36 @@
       "url": "https://starburst.aero/investments/",
       "page": "terms",
       "excerpt": "Investing in the Future of Aerospace - Seed Investment | Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us INVEST IN THE FUTURE OF AEROSPACE The age of the aerospace unicorn is here. This is a rare opportunity, where barriers to entry have decreased, competition is thriving, and the industry is being disrupted – today. JOIN US IN INVESTING IN THE FUTURE Mobility New concept designs and future travel: hypersonic and supersonic aircraft, eVTOL, drones/UAV, electric flight, autonomy Infrastructure Building the future: energy generation and storage, new fuels, manufacturing, nanotechnology, man-machine teaming, digital twins Enabling Technology Driving global advancement: Industry 4.0, new materials, additive manufacturing, quantum computing, AR, AI/ML Connectivity From space to cyberspace: resilient/mesh networks, interoperability, edge computing, cybersecurity, sensors, IoT Space The new economy: satellites, launchers, navigation, communication, surveillance and reconnaissance, data processing and application INVEST SECURELY, WITH STARBURST’S 100+ YEARS OF CUMULATIVE AEROSPACE INDUSTRY EXPERIENCE. Our global team of industry veterans, entrepreneurs and engineers know aerospace innovation. Our startups are vetted for technology feasibility and uniqueness, product-market fit, corporate partner"
+    },
+    {
+      "id": "check-page-1f84fb9d5e",
+      "url": "https://starburst.aero/investments/",
+      "page": "terms",
+      "excerpt": "Aerospace investing can be complicated: the technology is cutting edge, government needs are often classified, and the industry is historically insular."
+    },
+    {
+      "id": "check-page-a4f3d9a5ef",
+      "url": "https://starburst.aero/investments/",
+      "page": "terms",
+      "excerpt": "Aerospace investing can be made easy: make Starburst your technology scout."
+    },
+    {
+      "id": "check-page-3ece291811",
+      "url": "https://starburst.aero/investments/",
+      "page": "terms",
+      "excerpt": "The commercial space industry is still nascent, climate change is forcing rapid change across the aviation sector, and governments are hungry to connect to innovators: even small startups can make a big impact."
+    },
+    {
+      "id": "check-page-d754473025",
+      "url": "https://starburst.aero/investments/",
+      "page": "terms",
+      "excerpt": "New aerospace technologies are emerging at an ever-increasing rate, and they will have a drastic and positive impact on quality of life."
+    },
+    {
+      "id": "check-page-1b8e51ecd5",
+      "url": "https://starburst.aero/investments/",
+      "page": "terms",
+      "excerpt": "Get In Touch © 2025 Starburst Services Accelerators Consulting Investments Explore Startup Programs Portfolio Starburst About Us News Careers Join our mailing list Follow © 2025 Starburst Privacy Policy Terms of Service Reach new heights Launch Me We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
     },
     {
       "id": "check-page-bbfcc08040",
@@ -1207,10 +1366,34 @@
       "excerpt": "About Us - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us STARBURST IS THE INNOVATION CATALYST FOR THE AEROSPACE & DEFENSE INDUSTRY Founded in 2012, Starburst is the leading global Aerospace and Defense (A&D) startup accelerator and strategic advisory practice. Combining three complementary activities – startup accelerators, strategy consulting, and venture investments – we help A&D stakeholders innovate, navigate, and invest in the dynamic ecosystem. Starburst is the first and only global aerospace accelerator, connecting startups with corporates, investors and government, while providing strategic growth and investment consulting services for all. Our leading Flagship Accelerator program helps startups scale their business in aviation, space, and defense, as well as enabling technologies, with access to one of the largest groups of corporate representatives, government stakeholders, and private investors in the world to help startups win their first contracts. Starburst has grown into a global team of 60 dedicated team members across 8 offices with a portfolio of 150+ startups, 20 accelerator programs, and 1 active venture fund, Starburst Ventures . We strive to provide enabling growth services for the relentless deep tech leaders disrupting the industry and working towards a safer,"
     },
     {
+      "id": "check-page-6183c9bf48",
+      "url": "http://starburst.aero/about/",
+      "page": "details",
+      "excerpt": "We strive to provide enabling growth services for the relentless deep tech leaders disrupting the industry and working towards a safer, greener, and more connected world."
+    },
+    {
+      "id": "check-page-8f7644b765",
+      "url": "http://starburst.aero/about/",
+      "page": "details",
+      "excerpt": "Open job positions © 2025 Starburst Services Accelerators Consulting Investments Explore Startup Programs Portfolio Starburst About Us News Careers Join our mailing list Follow © 2025 Starburst Privacy Policy Terms of Service Reach new heights Launch Me We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
+    },
+    {
       "id": "check-page-9ed6a72a29",
       "url": "https://starburst.aero/about/",
       "page": "details",
       "excerpt": "About Us - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us STARBURST IS THE INNOVATION CATALYST FOR THE AEROSPACE & DEFENSE INDUSTRY Founded in 2012, Starburst is the leading global Aerospace and Defense (A&D) startup accelerator and strategic advisory practice. Combining three complementary activities – startup accelerators, strategy consulting, and venture investments – we help A&D stakeholders innovate, navigate, and invest in the dynamic ecosystem. Starburst is the first and only global aerospace accelerator, connecting startups with corporates, investors and government, while providing strategic growth and investment consulting services for all. Our leading Flagship Accelerator program helps startups scale their business in aviation, space, and defense, as well as enabling technologies, with access to one of the largest groups of corporate representatives, government stakeholders, and private investors in the world to help startups win their first contracts. Starburst has grown into a global team of 60 dedicated team members across 8 offices with a portfolio of 150+ startups, 20 accelerator programs, and 1 active venture fund, Starburst Ventures . We strive to provide enabling growth services for the relentless deep tech leaders disrupting the industry and working towards a safer,"
+    },
+    {
+      "id": "check-page-2c08cb2a86",
+      "url": "https://starburst.aero/about/",
+      "page": "details",
+      "excerpt": "We strive to provide enabling growth services for the relentless deep tech leaders disrupting the industry and working towards a safer, greener, and more connected world."
+    },
+    {
+      "id": "check-page-23a4cc9bc5",
+      "url": "https://starburst.aero/about/",
+      "page": "details",
+      "excerpt": "Open job positions © 2025 Starburst Services Accelerators Consulting Investments Explore Startup Programs Portfolio Starburst About Us News Careers Join our mailing list Follow © 2025 Starburst Privacy Policy Terms of Service Reach new heights Launch Me We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
     },
     {
       "id": "check-page-449fbbd959",
@@ -1219,10 +1402,76 @@
       "excerpt": "Aviation Accelerators for Startups + Small Businesses | Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us REACH NEW HEIGHTS Accelerate your growth: as a builder, as a leader, as a business. No matter where you are in your startup journey, there is a Starburst program that is right for you. We have created unique aerospace accelerator programs that combine the best aspects of traditional startup accelerators and MBA programs with our unique industry knowledge and deep expertise. We leverage our network of corporate partners and hundreds of mentors to solve problems and open doors, to expedite contracts and fundraising. We are here to help with every step of your journey. Your success is our success. JOIN AN ACCELERATOR Build your network Join our global network of startups, corporates, academic institutes, government partners, and investors. Gain knowledge and resources Learn from industry and startup experts, get personalized guidance, and exclusive access to tools you need to build your business. Join our community Connect with other aerospace and tech entrepreneurs. Get the most out of (and contribute to) your local startup ecosystem. Develop brand equity Being a Starburst accelerator company validates your technology and business model for our corporate partners, investors, and others."
     },
     {
-      "id": "check-page-f26f0382b7",
-      "url": "https://starburst.aero/news/catalonia-space-accelerator-welcomes-its-new-cohort-of-space-innovators/",
-      "page": "batches",
-      "excerpt": "Catalonia Space Accelerator Welcomes Its New Cohort of Space Innovators - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Oct 13th 2026 Catalonia Space Accelerator Welcomes Its New Cohort of Space Innovators The next chapter of the Catalonia Space Accelerator is officially underway, with the launch of its second cohort dedicated to supporting high-potential space and space-enabled start-ups. Promoted by the Government of Catalonia , coordinated by the Institute of Space Studies of Catalonia (IEEC) , and delivered by Starburst, the programme aims to help selected companies accelerate their growth, strengthen their market positioning, and connect with key players across the global space ecosystem. Meet the 2026 Cohort The new cohort brings together four innovative companies developing solutions across a wide range of space and dual-use applications: EarthPulse – Developing an end-to-end operational decision layer for asset-intensive and regulated industries by combining satellite, climate, environmental, and customer data. Zenithal Blue Technologies – Providing RF emission detection, analysis, and geolocation capabilities for defence, coastal surveillance, and telecom applications. OSMIUM – Building a post-quantum-ready cybersecurity stack, including operating systems and VPN solutions, for"
+      "id": "check-page-118dd474ce",
+      "url": "https://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "CONNECT WITH INDUSTRY LEADERS ACROSS SPACE, AVIATION, AND DEFENSE Starburst has over 60 corporate partners spanning space, aviation, communication, mobility, and defense, all looking for novel technology that will advance their goals and provide a competitive edge."
+    },
+    {
+      "id": "check-page-470fba12fa",
+      "url": "https://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "For our aerospace startups, these corporate partnerships accelerate customer discovery, pilots, purchases, investments, and acquisitions."
+    },
+    {
+      "id": "check-page-d28e5dd7e4",
+      "url": "https://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Globally, we work with governments, academic institutes and research labs, investors, incubators, and other organizations supporting innovation so that you have the context you need to enter the market."
+    },
+    {
+      "id": "check-page-e426ae705e",
+      "url": "https://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "GET PERSONALIZED KNOWLEDGE AND MENTORSHIP Mentorship in our accelerators is tailored to the needs of founders and mentors alike."
+    },
+    {
+      "id": "check-page-52f6cda267",
+      "url": "https://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Our mentors are industry leaders, investors, and subject matter experts passionate about giving back and supporting entrepreneurship through their own knowledge and their networks."
+    },
+    {
+      "id": "check-page-9687aa7478",
+      "url": "https://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Mentors help founders to reframe problems and question assumptions, to refine strategy and product development roadmaps, to provide growth advisory and address critical problems, to open doors and create opportunity."
+    },
+    {
+      "id": "check-page-8dcc12f5dd",
+      "url": "https://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "BECOME A MENTOR COMPANIES SELECTED TO PARTICIPATE IN AN ACCELERATOR PROGRAM ALSO GET ACCESS TO Market Research Get to know your potential customers, understand the competitive landscape, identify opportunities, define your value proposition, focus resources, and refine go-to-market and pricing strategy."
+    },
+    {
+      "id": "check-page-470d15c27a",
+      "url": "https://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Government Resources Navigate government programs, find the right grant opportunities and get guidance on proposals, talk with key stakeholders and decision makers about their acquisition processes."
+    },
+    {
+      "id": "check-page-15677a547b",
+      "url": "https://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Meet your future customers, partners, technology scouts, fellow deep tech entrepreneurs and researchers, and venture capital investors with a proven track record in aerospace investment."
+    },
+    {
+      "id": "check-page-9ec7269f65",
+      "url": "https://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Speaking Engagements Present to Starburst’s network of corporates and investors, participate in private industry pitches, and have opportunities to speak at partner events on innovation, fundraising, frontier tech, smart cities and IoT, mobility, cybersecurity and more."
+    },
+    {
+      "id": "check-page-f2a6b13b14",
+      "url": "https://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "International Mobility Aerospace companies are global companies."
+    },
+    {
+      "id": "check-page-470d15c27a",
+      "url": "https://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Government Resources Navigate government programs, find the right grant opportunities and get guidance on proposals, talk with key stakeholders and decision makers about their acquisition processes."
     },
     {
       "id": "check-page-05f5c16c74",
@@ -1231,10 +1480,10 @@
       "excerpt": "Startup Programs - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Startup Accelerators 3 months ICDA San Marcos United States 3 months Starburst Accelerator Paris France 12 months Starburst Flagship Accelerator Global 7 Months ASTRA Tel Aviv Israel 5 Months IAI CATALYST Virginia USA 13 weeks IAI Innosphere Tel Aviv Israel 13 weeks NASA Space Health Accelerator USA 18 months BLAST Paris France 6 months Innovet Israel 3 months Starburst National Landing Launchpad Virginia USA 6 weeks SEISMIC MSI Defense Technology Accelerator USA 4 Months Safran Explore Flying Experience Global 4 Months NewSpace Catalonia Accelerator Catalonia Spain 13 weeks Singapore Aviation Accelerator Singapore Asia 16 weeks Sustainable Aviation Technologies & Energies (SATE) Accelerator Washington USA 3 Months Safran Explore Hydrogen Global 12 weeks FAST: the intrapreneurship program for the CEA Paris France 12 weeks Future Combat Air Systems (FCAS) Accelerator Munich Germany 3 Months SITA’s internal innovation accelerator Rotterdam Netherlands 13 weeks SCALE Los Angeles USA 13 Weeks Care In Space Challenge Global NASA Entrepreneurs Challenge USA Interested in expanding your potential? Starburst supports startups from ideation to growth, with dynamic accelerator programs tailored to maturity-based needs. Since 2012, we"
     },
     {
-      "id": "check-page-3c4fbdbcc7",
-      "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
-      "page": "application",
-      "excerpt": "FCAS Accelerator 2023 by HENSOLDT & Starburst – Call for Applications & Mentors - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Aug 22nd 2023 FCAS Accelerator 2023 by HENSOLDT & Starburst – Call for Applications & Mentors In collaboration with HENSOLDT , Starburst Aerospace launched the first ever iteration of the FCAS Accelerator in August 2023. HENSOLDT is a German champion in the defense electronics industry and a key partner of the Future Combat Air Systems (FCAS) project through the joint venture FCMS. Led by countries Germany, France, & Spain, the FCAS project is a revolutionary European program , dedicated to developing the Next Generation Weapon System (NWGS) by 2040. This system of systems program leverages the most disruptive technologies to incorporate artificial intelligence, disruptive sensors, and cutting-edge production materials into the 6 th generation fighter development program . The objective of the first ever FCAS Accelerator by HENSOLDT is to foster the dual-use ecosystem of civil technologies for European startups and to initiate a direct collaboration with HENSOLDT under the FCAS program. The program offers a time effective opportunity to a.) explore the dual-use ecosystem through various workshops in 3 module series (Business Accelerator, Ecosystem Discovery,"
+      "id": "check-page-2a82096285",
+      "url": "https://starburst.aero/startup-programs/",
+      "page": "details",
+      "excerpt": "Want to learn more? © 2025 Starburst Services Accelerators Consulting Investments Explore Startup Programs Portfolio Starburst About Us News Careers Join our mailing list Follow © 2025 Starburst Privacy Policy Terms of Service Reach new heights Launch Me We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
     },
     {
       "id": "check-page-798a07ccf4",
@@ -1243,10 +1492,88 @@
       "excerpt": "Aviation Accelerators for Startups + Small Businesses | Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us REACH NEW HEIGHTS Accelerate your growth: as a builder, as a leader, as a business. No matter where you are in your startup journey, there is a Starburst program that is right for you. We have created unique aerospace accelerator programs that combine the best aspects of traditional startup accelerators and MBA programs with our unique industry knowledge and deep expertise. We leverage our network of corporate partners and hundreds of mentors to solve problems and open doors, to expedite contracts and fundraising. We are here to help with every step of your journey. Your success is our success. JOIN AN ACCELERATOR Build your network Join our global network of startups, corporates, academic institutes, government partners, and investors. Gain knowledge and resources Learn from industry and startup experts, get personalized guidance, and exclusive access to tools you need to build your business. Join our community Connect with other aerospace and tech entrepreneurs. Get the most out of (and contribute to) your local startup ecosystem. Develop brand equity Being a Starburst accelerator company validates your technology and business model for our corporate partners, investors, and others."
     },
     {
+      "id": "check-page-face0efc07",
+      "url": "http://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "CONNECT WITH INDUSTRY LEADERS ACROSS SPACE, AVIATION, AND DEFENSE Starburst has over 60 corporate partners spanning space, aviation, communication, mobility, and defense, all looking for novel technology that will advance their goals and provide a competitive edge."
+    },
+    {
+      "id": "check-page-60f9b9a7e2",
+      "url": "http://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "For our aerospace startups, these corporate partnerships accelerate customer discovery, pilots, purchases, investments, and acquisitions."
+    },
+    {
+      "id": "check-page-46ecaade2a",
+      "url": "http://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Globally, we work with governments, academic institutes and research labs, investors, incubators, and other organizations supporting innovation so that you have the context you need to enter the market."
+    },
+    {
+      "id": "check-page-6bb2c433cd",
+      "url": "http://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "GET PERSONALIZED KNOWLEDGE AND MENTORSHIP Mentorship in our accelerators is tailored to the needs of founders and mentors alike."
+    },
+    {
+      "id": "check-page-7cb4d0be43",
+      "url": "http://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Our mentors are industry leaders, investors, and subject matter experts passionate about giving back and supporting entrepreneurship through their own knowledge and their networks."
+    },
+    {
+      "id": "check-page-eadb275563",
+      "url": "http://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Mentors help founders to reframe problems and question assumptions, to refine strategy and product development roadmaps, to provide growth advisory and address critical problems, to open doors and create opportunity."
+    },
+    {
+      "id": "check-page-c276f52d3c",
+      "url": "http://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "BECOME A MENTOR COMPANIES SELECTED TO PARTICIPATE IN AN ACCELERATOR PROGRAM ALSO GET ACCESS TO Market Research Get to know your potential customers, understand the competitive landscape, identify opportunities, define your value proposition, focus resources, and refine go-to-market and pricing strategy."
+    },
+    {
+      "id": "check-page-46db818004",
+      "url": "http://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Government Resources Navigate government programs, find the right grant opportunities and get guidance on proposals, talk with key stakeholders and decision makers about their acquisition processes."
+    },
+    {
+      "id": "check-page-e056da0ab7",
+      "url": "http://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Meet your future customers, partners, technology scouts, fellow deep tech entrepreneurs and researchers, and venture capital investors with a proven track record in aerospace investment."
+    },
+    {
+      "id": "check-page-742a55a353",
+      "url": "http://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Speaking Engagements Present to Starburst’s network of corporates and investors, participate in private industry pitches, and have opportunities to speak at partner events on innovation, fundraising, frontier tech, smart cities and IoT, mobility, cybersecurity and more."
+    },
+    {
+      "id": "check-page-b3695e5c49",
+      "url": "http://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "International Mobility Aerospace companies are global companies."
+    },
+    {
+      "id": "check-page-46db818004",
+      "url": "http://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Government Resources Navigate government programs, find the right grant opportunities and get guidance on proposals, talk with key stakeholders and decision makers about their acquisition processes."
+    },
+    {
       "id": "check-page-5eb3c4bb3f",
       "url": "http://starburst.aero/startup-programs/",
       "page": "details",
       "excerpt": "Startup Programs - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Startup Accelerators 3 months ICDA San Marcos United States 3 months Starburst Accelerator Paris France 12 months Starburst Flagship Accelerator Global 7 Months ASTRA Tel Aviv Israel 5 Months IAI CATALYST Virginia USA 13 weeks IAI Innosphere Tel Aviv Israel 13 weeks NASA Space Health Accelerator USA 18 months BLAST Paris France 6 months Innovet Israel 3 months Starburst National Landing Launchpad Virginia USA 6 weeks SEISMIC MSI Defense Technology Accelerator USA 4 Months Safran Explore Flying Experience Global 4 Months NewSpace Catalonia Accelerator Catalonia Spain 13 weeks Singapore Aviation Accelerator Singapore Asia 16 weeks Sustainable Aviation Technologies & Energies (SATE) Accelerator Washington USA 3 Months Safran Explore Hydrogen Global 12 weeks FAST: the intrapreneurship program for the CEA Paris France 12 weeks Future Combat Air Systems (FCAS) Accelerator Munich Germany 3 Months SITA’s internal innovation accelerator Rotterdam Netherlands 13 weeks SCALE Los Angeles USA 13 Weeks Care In Space Challenge Global NASA Entrepreneurs Challenge USA Interested in expanding your potential? Starburst supports startups from ideation to growth, with dynamic accelerator programs tailored to maturity-based needs. Since 2012, we"
+    },
+    {
+      "id": "check-page-6b7582c312",
+      "url": "http://starburst.aero/startup-programs/",
+      "page": "details",
+      "excerpt": "Want to learn more? © 2025 Starburst Services Accelerators Consulting Investments Explore Startup Programs Portfolio Starburst About Us News Careers Join our mailing list Follow © 2025 Starburst Privacy Policy Terms of Service Reach new heights Launch Me We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
     },
     {
       "id": "check-page-28c796b46d",
@@ -1255,16 +1582,214 @@
       "excerpt": "Contact - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Contact Us. Looking to get in touch? Fill out the information in the adjacent form, and a member of our team will be in contact with you as soon as possible. OFFICES AROUND THE WORLD Los Angeles Washington DC Paris Munich Tel-Aviv Seoul Singapore Madrid CONNECT WITH US First Name * Last Name * Your Email * What is your role in the ecosystem? * Corporate / Industry Major Government Startup Investor Academia Media Service Provider Other / Ecosystem Player Company Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso Burundi Cambodia Cameroon Canada Cape Verde Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos Islands Colombia Comoros Congo, Democratic Republic of the Congo, Republic of the Cook Islands Costa Rica Croatia Cuba Curaçao Cyprus Czech Republic Côte d'Ivoire Denmark Djibouti Dominica Dominican Republic Ecuador Egypt El Salvador Equatorial Guinea Eritrea"
     },
     {
-      "id": "check-page-72f9c64827",
-      "url": "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
-      "page": "details",
-      "excerpt": "Starburst Aerospace and Aerospace Futures Alliance (AFA) Launch the Sustainable Aviation Technologies and Energies (SATE) Accelerator - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Sep 13th 2023 Starburst Aerospace and Aerospace Futures Alliance (AFA) Launch the Sustainable Aviation Technologies and Energies (SATE) Accelerator Starburst Aerospace , the leading global Aerospace and Defense (A&D) startup accelerator and strategic advisory practice, and Aerospace Futures Alliance (AFA) , Washington state’s trade association for aerospace companies and communities, have joined in an official partnership to launch the Sustainable Aviation Technologies and Energies (SATE) Accelerator , as a part of the SATE Cluster . AFA was recently awarded EDA federal funds through a Department of Commerce Innovation Cluster Accelerator Program (ICAP) to form the SATE Cluster, with the mission of leading and encouraging the research, development, and deployment of sustainable aviation fuels (SAFs) and electrified and hydrogen-powered aviation. Powered by Starburst Aerospace, the SATE Accelerator is an early-stage startup accelerator program that is designed to identify and advance the development of innovative sustainable aviation and energy technologies, products, and solutions that will help advance the"
-    },
-    {
       "id": "check-page-9c1eacb102",
       "url": "https://starburst.aero/newspace-catalonia-accelerator/",
       "page": "details",
       "excerpt": "NewSpace Catalonia Accelerator Program Timeline About Contact us Language English NewSpace Catalonia Accelerator Entrepreneurial orbit, elevating space pioneers The first and only program for the Catalan NewSpace ecosystem with exposure to global markets and international investors. NewSpace Catalonia Accelerator Promoted by the Government of Catalonia in collaboration with the IEEC and operated by Starburst, the NewSpace Catalonia Accelerator leverages the expertise of the Catalan ecosystem in numerous disciplines, including satellite manufacturing, propulsion, telecommunications, navigation, earth observation and so on. First cohort of the NewSpace Catalonia Accelerator Program Content The NewSpace Catalonia Accelerator is a 4-month tailored NewSpace accelerator program for startups based out of Catalonia, serving as a platform for disruptive space entrepreneurs to expand their business on a global scale. The program is composed of one-on-one sessions with dedicated mentors, lectures from international experts and networking opportunities, creating a vibrant ecosystem for collaboration and growth where all stakeholders can converge and find synergies. The program will wrap up with a final Demo Day taking place in June, in the dynamic city of Barcelona. 4 startups Introductions to the global space industry Tailored strategic support Access to international events How do I"
+    },
+    {
+      "id": "check-page-d71947cff9",
+      "url": "https://starburst.aero/newspace-catalonia-accelerator/",
+      "page": "details",
+      "excerpt": "4 startups Introductions to the global space industry Tailored strategic support Access to international events How do I apply?"
+    },
+    {
+      "id": "check-page-f3423f2932",
+      "url": "https://starburst.aero/newspace-catalonia-accelerator/",
+      "page": "details",
+      "excerpt": "The NewSpace Catalonia Accelerator is an equity-free and free of charge program, open to startups based in Catalonia who look forward to expanding their horizons by engaging with international mentors, corporations and investors in the space industry. ‍ Applications are close!"
+    },
+    {
+      "id": "check-page-c91fd94ef4",
+      "url": "https://starburst.aero/newspace-catalonia-accelerator/",
+      "page": "details",
+      "excerpt": "Startups must demonstrate primary activity in the New Space industry Matured technology with a TRL 4+ and ready to at least start a Minimun Viable Product Demonstrated activity related to the space ecosystem of Catalonia The applying startup must authorize the IEEC and the Generalitat to disclose its participation in the program and its relevant outcomes."
+    },
+    {
+      "id": "check-page-072e62799c",
+      "url": "https://starburst.aero/newspace-catalonia-accelerator/",
+      "page": "details",
+      "excerpt": "Catalonia hosts prestigious universities and laboratories, and is backed by a very long tradition of venture capital presence, even for deeptech industries."
+    },
+    {
+      "id": "check-page-b1815919f1",
+      "url": "https://starburst.aero/newspace-catalonia-accelerator/",
+      "page": "details",
+      "excerpt": "Through the NewSpace Catalonia Accelerator, the region consolidates its position as a global hub for the development of NewSpace companies and the rest of the deeptech sectors that can greatly benefit from the synergies and value creation derived."
+    },
+    {
+      "id": "check-page-d6d602ff74",
+      "url": "https://starburst.aero/newspace-catalonia-accelerator/",
+      "page": "details",
+      "excerpt": "Founded in 2012, Starburst Aerospace is an innovation catalyst in the global Aerospace and Defense (A&D) industry."
+    },
+    {
+      "id": "check-page-75549af058",
+      "url": "https://starburst.aero/newspace-catalonia-accelerator/",
+      "page": "details",
+      "excerpt": "Starburst’s leading Flagship Accelerator program helps startups scale their business in aviation, space, and defense with access to one of the largest groups of corporate representatives, government stakeholders, and private venture investors in the world. ‍ Learn more about Starburst."
+    },
+    {
+      "id": "check-page-25c8e1d738",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "page": "details",
+      "excerpt": "SCALE LA Aerospace Accelerator APPLY PARTNERS NEWS EVENTS FAQ APPLY PARTNERS NEWS EVENTS FAQ Launching The Next Generation of Aerospace Ventures LEARN MORE Helping Aerospace Startups Reach New Heights LEARN MORE Advancing New Technologies LEARN MORE A COLLABORATION OF What is SCALE? SCALE is an aerospace accelerator for pre-seed and seed stage companies, a 13 week program that serves as a platform for entrepreneurs to launch and scale their businesses. The program is composed of lectures, workshops, pitch practice sessions, networking opportunities, and special events, culminating with a Demo Day. SCALE is designed to inspire a generation of students, entrepreneurs, and investors to pursue the development and advancement of novel technologies with aerospace applications, here in Southern California. Each team selected for the program will receive personalized instruction and engage with industry leaders, subject matter experts, potential partners and customers and investors. SCALE helps teams set milestones, advance Technology Readiness Level, define product-market fit, build customer relationships, and secure the next round of funding. Teams will have access to Starburst’s extensive global network and become part of an ecosystem that includes Starburst and UCLA alumni, established aerospace entrepreneurs, investors, corporate partners, customers, academic researchers, and"
+    },
+    {
+      "id": "check-page-96de82f512",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "page": "details",
+      "excerpt": "Teams will have access to Starburst’s extensive global network and become part of an ecosystem that includes Starburst and UCLA alumni, established aerospace entrepreneurs, investors, corporate partners, customers, academic researchers, and more."
+    },
+    {
+      "id": "check-page-c4ad069508",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "page": "details",
+      "excerpt": "UCLA’s Mechanical & Aerospace Engineering Department brings expertise in many disciplines, including dynamics, fluid mechanics, heat and mass transfer, manufacturing and design, micro- and nano-engineering, structural and solid mechanics, and systems and control."
+    },
+    {
+      "id": "check-page-b19f05e369",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "page": "details",
+      "excerpt": "Los Angeles has a deep-rooted aerospace heritage, local world-class universities graduating more engineers per year than anywhere else in the nation, and a leading venture capital presence; with SCALE, it reinforces the region as a global capital for aerospace startup development."
+    },
+    {
+      "id": "check-page-2272f3d384",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "page": "details",
+      "excerpt": "Cohort 1 Startups Cohort 2 Startups Cohort 3 Startups Cohort 4 Startups Cohort 5 Startups News September 29, 2020 UCLA, aerospace accelerator Starburst win federal grant to launch innovation hub UCLA and Starburst, a leading global aerospace and defense accelerator, have been awarded a 2020 Venture Challenge grant of $1.4 million by the U.S."
+    },
+    {
+      "id": "check-page-e51c5d87ca",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "page": "details",
+      "excerpt": "Economic Development Administration — complemented by $1.4 million in private matching funds — to create an aerospace innovation hub in Los Angeles."
+    },
+    {
+      "id": "check-page-37b0b7e02b",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "page": "details",
+      "excerpt": "READ MORE November 23, 2020 Aerospace Incubator Starburst Is Lifting Industry in LA In the five years since French space and defense technology accelerator Starburst Aerospace announced plans to open its first American office in El Segundo, the aerospace industry has grown rapidly in Los Angeles County."
+    },
+    {
+      "id": "check-page-e3771dc235",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "page": "details",
+      "excerpt": "READ MORE About Starburst: Founded in 2012, Starburst Aerospace is an innovation catalyst in the global Aerospace and Defense (A&D) industry."
+    },
+    {
+      "id": "check-page-dba5256787",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "page": "details",
+      "excerpt": "Combining three complementary activities–accelerators, consulting, and ventures–they help stakeholders innovate, navigate and invest in the dynamic ecosystem."
+    },
+    {
+      "id": "check-page-71f7e45f8d",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "page": "details",
+      "excerpt": "With offices in Los Angeles, Paris, Munich, Singapore, Seoul, Tel Aviv, Madrid, and Washington DC, the team has built a robust community with 60+ partners and a portfolio of 140+ startups."
+    },
+    {
+      "id": "check-page-c993066835",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "page": "details",
+      "excerpt": "We have created an ever growing ecosystem that includes academic, corporate, VC, and governmental partners, with a constant focus on new strategic opportunities and novel technological solutions."
+    },
+    {
+      "id": "check-page-4fcbc842dc",
+      "url": "https://starburst.aero/scale-accelerator/",
+      "page": "details",
+      "excerpt": "If you are interested in supporting aerospace innovation by mentoring a startup founder or working more directly with Starburst, please reach out at the link below."
+    },
+    {
+      "id": "check-page-a16dbfcc0c",
+      "url": "https://starburst.aero/singapore-aviation-accelerator/",
+      "page": "details",
+      "excerpt": "Singapore Aviation Accelerator HOME ABOUT PARTNERS NEWS FAQ APPLY HOME ABOUT PARTNERS NEWS FAQ APPLY A COLLABORATION OF OVERVIEW OF THE STARBURST IMPACT PROGRAM Focusing on Sustainability, Supply Chain & Digitalisation, with a sub-focus on Aviation What is the Starburst Impact Program The Starburst Impact program enables corporates and startups to collaborate on innovation with a focus on sustainability, supply chain & digitalization, with a sub-focus on aviation. The program supports overseas startups to establish presence in Singapore as they embark on an accelerated journey to start and grow with numerous potential opportunities including partnerships, fundraising, joint development, and even IPOs. Other than that, there will be downstream benefits and value creation for the local economy as there is strong support for sustainable ecosystem in Singapore. Participation in the program would enable startups to Raise funds more readily and with ease by leveraging on Starburst’s network of VC partners. One of Starburst’s portfolio startups has successfully turned unicorn status. Startups would be able to penetrate international and regional markets with our international network and global team’s support. Startups would gain exposure to global opportunities as startups scale their business internationally with Singapore as their base. What is the Singapore Aviation Accelerator?"
+    },
+    {
+      "id": "check-page-fa2beb18ce",
+      "url": "https://starburst.aero/singapore-aviation-accelerator/",
+      "page": "details",
+      "excerpt": "Under the Starburst Impact Program, Starburst has partnered with Enterprise Singapore, Singapore Airlines, SATS, AIRLAB, SIA Engineering and Changi Airports International to run the Singapore Aviation Accelerator."
+    },
+    {
+      "id": "check-page-7328887a25",
+      "url": "https://starburst.aero/singapore-aviation-accelerator/",
+      "page": "details",
+      "excerpt": "As Singapore is the aviation hub of Asia Pacific, this accelerator will strengthen the country’s opportunity for future innovation, disruption, and partnerships relating to new technologies."
+    },
+    {
+      "id": "check-page-29e6e8fc75",
+      "url": "https://starburst.aero/singapore-aviation-accelerator/",
+      "page": "details",
+      "excerpt": "Starburst’s renowned brand strength and reputation as a leader in the aerospace industry combined with Singapore’s innovative nature will contribute to the program’s success and lasting impact on the country’s next generation of aerospace and aviation technologies, talent pool of aviation and technology professionals, and accelerated startup ecosystem."
+    },
+    {
+      "id": "check-page-6e656f74a4",
+      "url": "https://starburst.aero/singapore-aviation-accelerator/",
+      "page": "details",
+      "excerpt": "Participating early-stage startups will have access to funding and strong financial structures, top-tier mentorship from experts in the aerospace sector, strong support from Singapore Government regulators, and access to work with Asian VC companies for the seed stage and a global VC network for later business stages."
+    },
+    {
+      "id": "check-page-e0444bd4f3",
+      "url": "https://starburst.aero/starburst-accelerator-programme",
+      "page": "details",
+      "excerpt": "Starburst Accelerator Programme Skip to content Keep your equity. Keep your cash. Accelerate your A&D growth. News Keep your equity. Keep your cash. Accelerate your A&D growth. News Keep your equity. Keep your cash. Accelerate your A&D growth. Apply What is Starburst Accelerator? Starburst Accelerator is an intensive 10-week programme focused on accelerating the growth of French aerospace and defence start-ups. Over the course of the programme, selected participants will benefit from a comprehensive range of support, including: Strategic mentoring tailored to the specific needs of the aerospace and defence industries. Go-to-market advisory to help start-ups navigate the complexities of the European market. B2B matchmaking opportunities , connecting start-ups with potential partners, customers, and investors. Enhanced visibility within the industry ecosystem, culminating in the chance to showcase solutions during Eurosatory (TBC), one of the world’s leading defence and security trade shows, through a Demo Day event. The programme aims to foster innovation by helping start-ups scale their operations, refine their market strategies, and forge meaningful connections in the aerospace and defence sectors. Why now? The aerospace and defence industries are undergoing significant transformation, with new technologies, market dynamics, and regulatory frameworks shaping the future. As"
+    },
+    {
+      "id": "check-page-2235c81ee3",
+      "url": "https://starburst.aero/starburst-accelerator-programme",
+      "page": "details",
+      "excerpt": "However, accessing the right expertise, networks, and opportunities for growth can be challenging, especially for early-stage companies."
+    },
+    {
+      "id": "check-page-68f0360954",
+      "url": "https://starburst.aero/starburst-accelerator-programme",
+      "page": "details",
+      "excerpt": "This is where Starburst Accelerator comes in."
+    },
+    {
+      "id": "check-page-cb019a3203",
+      "url": "https://starburst.aero/starburst-accelerator-programme",
+      "page": "details",
+      "excerpt": "By partnering with start-ups, we aim to break down the barriers to success, providing them with the resources and mentorship they need to succeed on a global scale."
+    },
+    {
+      "id": "check-page-630da9eab8",
+      "url": "https://starburst.aero/starburst-accelerator-programme",
+      "page": "details",
+      "excerpt": "We believe that by fostering a thriving ecosystem of aerospace and defence start-ups, we can contribute to the continued advancement of the sector."
+    },
+    {
+      "id": "check-page-32ccc19d98",
+      "url": "https://starburst.aero/starburst-accelerator-programme",
+      "page": "details",
+      "excerpt": "Starburst Accelerator is open to french TRL4+ start-ups in the aerospace and defence sectors, with a particular focus on companies based in Île-de-France or those aiming to enter the French and European markets."
+    },
+    {
+      "id": "check-page-5114202630",
+      "url": "https://starburst.aero/starburst-accelerator-programme",
+      "page": "details",
+      "excerpt": "Whether your start-up is already active in the aerospace or defence space, or you’re looking to penetrate these sectors, we encourage you to apply."
+    },
+    {
+      "id": "check-page-3c4fbdbcc7",
+      "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+      "page": "application",
+      "excerpt": "FCAS Accelerator 2023 by HENSOLDT & Starburst – Call for Applications & Mentors - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Aug 22nd 2023 FCAS Accelerator 2023 by HENSOLDT & Starburst – Call for Applications & Mentors In collaboration with HENSOLDT , Starburst Aerospace launched the first ever iteration of the FCAS Accelerator in August 2023. HENSOLDT is a German champion in the defense electronics industry and a key partner of the Future Combat Air Systems (FCAS) project through the joint venture FCMS. Led by countries Germany, France, & Spain, the FCAS project is a revolutionary European program , dedicated to developing the Next Generation Weapon System (NWGS) by 2040. This system of systems program leverages the most disruptive technologies to incorporate artificial intelligence, disruptive sensors, and cutting-edge production materials into the 6 th generation fighter development program . The objective of the first ever FCAS Accelerator by HENSOLDT is to foster the dual-use ecosystem of civil technologies for European startups and to initiate a direct collaboration with HENSOLDT under the FCAS program. The program offers a time effective opportunity to a.) explore the dual-use ecosystem through various workshops in 3 module series (Business Accelerator, Ecosystem Discovery,"
+    },
+    {
+      "id": "check-page-f26f0382b7",
+      "url": "https://starburst.aero/news/catalonia-space-accelerator-welcomes-its-new-cohort-of-space-innovators/",
+      "page": "batches",
+      "excerpt": "Catalonia Space Accelerator Welcomes Its New Cohort of Space Innovators - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Oct 13th 2026 Catalonia Space Accelerator Welcomes Its New Cohort of Space Innovators The next chapter of the Catalonia Space Accelerator is officially underway, with the launch of its second cohort dedicated to supporting high-potential space and space-enabled start-ups. Promoted by the Government of Catalonia , coordinated by the Institute of Space Studies of Catalonia (IEEC) , and delivered by Starburst, the programme aims to help selected companies accelerate their growth, strengthen their market positioning, and connect with key players across the global space ecosystem. Meet the 2026 Cohort The new cohort brings together four innovative companies developing solutions across a wide range of space and dual-use applications: EarthPulse – Developing an end-to-end operational decision layer for asset-intensive and regulated industries by combining satellite, climate, environmental, and customer data. Zenithal Blue Technologies – Providing RF emission detection, analysis, and geolocation capabilities for defence, coastal surveillance, and telecom applications. OSMIUM – Building a post-quantum-ready cybersecurity stack, including operating systems and VPN solutions, for"
+    },
+    {
+      "id": "check-page-72f9c64827",
+      "url": "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
+      "page": "details",
+      "excerpt": "Starburst Aerospace and Aerospace Futures Alliance (AFA) Launch the Sustainable Aviation Technologies and Energies (SATE) Accelerator - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Sep 13th 2023 Starburst Aerospace and Aerospace Futures Alliance (AFA) Launch the Sustainable Aviation Technologies and Energies (SATE) Accelerator Starburst Aerospace , the leading global Aerospace and Defense (A&D) startup accelerator and strategic advisory practice, and Aerospace Futures Alliance (AFA) , Washington state’s trade association for aerospace companies and communities, have joined in an official partnership to launch the Sustainable Aviation Technologies and Energies (SATE) Accelerator , as a part of the SATE Cluster . AFA was recently awarded EDA federal funds through a Department of Commerce Innovation Cluster Accelerator Program (ICAP) to form the SATE Cluster, with the mission of leading and encouraging the research, development, and deployment of sustainable aviation fuels (SAFs) and electrified and hydrogen-powered aviation. Powered by Starburst Aerospace, the SATE Accelerator is an early-stage startup accelerator program that is designed to identify and advance the development of innovative sustainable aviation and energy technologies, products, and solutions that will help advance the"
     }
   ],
   "findings": {
@@ -1274,6 +1799,18 @@
       {
         "value": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
         "evidenceId": "check-route-e46f1fd6ea"
+      },
+      {
+        "value": "https://starburst.aero/scale-accelerator/startups",
+        "evidenceId": "check-route-049f4bba2e"
+      },
+      {
+        "value": "https://starburst.aero/singapore-aviation-accelerator/apply",
+        "evidenceId": "check-route-4737400979"
+      },
+      {
+        "value": "https://tally.so/r/vGA6jX",
+        "evidenceId": "check-route-06c3b78ced"
       },
       {
         "value": "https://starburst.typeform.com/to/PdE4smLZ",
@@ -1289,7 +1826,12 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
-    "rolling": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-2e5f3542d4"
+      }
+    ],
     "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [
@@ -1326,8 +1868,30 @@
       }
     ],
     "selectivity": [],
-    "dealText": [],
-    "dealComponents": [],
+    "dealText": [
+      {
+        "value": "accelerator, have been awarded a 2020 Venture Challenge grant of $1.4 million by the U.S. Economic Development Administration — complemented by",
+        "evidenceId": "check-deal-3baa6ff706"
+      },
+      {
+        "value": "by the U.S. Economic Development Administration — complemented by $1.4 million in private matching funds — to create an aerospace innovation hub in",
+        "evidenceId": "check-deal-a678955b96"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "1400000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-3baa6ff706"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://starburst.aero/accelerator-program/",
@@ -1340,6 +1904,10 @@
       {
         "value": "http://starburst.aero/portfolio/",
         "evidenceId": "check-portfolio-d31f47ed0e"
+      },
+      {
+        "value": "https://starburst.aero/scale-accelerator/startups",
+        "evidenceId": "check-portfolio-049f4bba2e"
       }
     ],
     "name": [

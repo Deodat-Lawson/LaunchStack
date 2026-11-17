@@ -1,36 +1,12 @@
 {
   "programId": "lventure",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://zestgroup.vc/en/about-us",
       "page": "details",
       "anchor": "About us",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://zestgroup.vc/en/blog/exe-engineering-eni-cdp-venture-capital-investment",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://zestgroup.vc/en/blog/proptech-newarc-closes-800k-seed-investment-round",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://zestgroup.vc/en/blog/truescreen-secures-2-4-million-seed-round-investment",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -107,7 +83,7 @@
       "origin": "official"
     },
     {
-      "url": "https://zestgroup.vc/storage/files/2019/05/01072016-COMUNICAZIONE-INTERNAL-DEALING.pdf",
+      "url": "https://zestgroup.vc/storage/files/2d8fc303-33b4-49ce-9be9-4fd59dc9b58b/Internal-Dealing-_-Capello_-Aumento-di-Capitale_1info.pdf",
       "page": "terms",
       "anchor": "",
       "fetched": true,
@@ -115,7 +91,7 @@
       "origin": "official"
     },
     {
-      "url": "https://zestgroup.vc/storage/files/2019/05/02102015-COMUNICAZIONE-INTERNAL-DEALING.pdf",
+      "url": "https://zestgroup.vc/storage/files/32d1d007-ae16-4729-8de6-e7e2ca1edd3b/Internal-dealing-Gay-19072024.pdf",
       "page": "terms",
       "anchor": "",
       "fetched": true,
@@ -123,7 +99,71 @@
       "origin": "official"
     },
     {
-      "url": "https://zestgroup.vc/storage/files/2019/05/04032013-COMUNICAZIONE-INTERNAL-DEALING.pdf",
+      "url": "https://zestgroup.vc/storage/files/36e11fab-8ff5-4282-b6cb-3766cbf2d2f0/Internal-Dealing-_-LVEN_-Aumento-di-Capitale_1info.pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/storage/files/3c9e0977-e6b2-4540-ae51-235544fd40f8/Internal-dealing-Gay-01072024.pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/storage/files/4779cde6-0fc0-4fa4-948d-5cd50ad1aabb/Internal-Dealing-Gay-18-ottobre-2024.pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/storage/files/4e5a5367-69aa-4f68-803b-faa9d766c7eb/Internal-dealing-Gay-26-agosto-2024.pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/storage/files/4ed2d409-9286-40fa-852d-9e2a9712b311/Internal-dealing-Gay-26072024.pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/storage/files/507ebb1b-7661-4ad5-9d52-874f19cf43bf/Internal-dealing-Gay-12062024.pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/storage/files/5b7ff5ca-3237-4c7f-9235-2a1e20d75fa1/Zest---Procedura-internal-dealing.pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/storage/files/5d839de2-1c28-407e-9ff6-3f6161678295/Internal-Dealing-_-Levante_-Aumento-di-Capitale_1info-(1).pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/storage/files/64d7d4c4-9c37-413a-af19-4d1d7fb386c9/Internal-dealing-Gay-07102024.pdf",
       "page": "terms",
       "anchor": "",
       "fetched": true,

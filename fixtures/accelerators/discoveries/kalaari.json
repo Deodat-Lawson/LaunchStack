@@ -1,6 +1,6 @@
 {
   "programId": "kalaari",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://kalaari.com/about-us",
@@ -62,7 +62,7 @@
       "url": "https://kalaari.com/portfolio",
       "page": "portfolio",
       "anchor": "Portfolio",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -92,6 +92,54 @@
     },
     {
       "url": "https://kalaari.com/portfolio-program-company/amplitude",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://kalaari.com/portfolio-program-company/anthropic",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://kalaari.com/portfolio-program-company/apple-ads",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://kalaari.com/portfolio-program-company/atlassian-for-startups",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://kalaari.com/portfolio-program-company/cashfree",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://kalaari.com/portfolio-program-company/cbre",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://kalaari.com/portfolio-program-company/clevertap",
       "page": "portfolio",
       "anchor": "",
       "fetched": true,

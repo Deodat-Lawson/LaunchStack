@@ -1,6 +1,6 @@
 {
   "programId": "parallel18",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "http://parallel18.com/apply/",
@@ -75,10 +75,42 @@
       "origin": "official"
     },
     {
+      "url": "https://parallel18.com/keeping-up-with-parallel18-march-updates/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/our-partnerships-bloom-gen-7-gets-ready-for-demo-day-and-more-on-our-march-updates/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/p18-kickstarts-2021-with-amazing-updates/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://parallel18.com/p18/",
       "page": "details",
       "anchor": "Acceleration program for Puerto Rican and international startups. Discover",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/parallel18-announces-its-first-all-puerto-rican-p18-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -133,6 +165,14 @@
     {
       "url": "https://parallel18.com/the-1-2-3-of-investment-series/",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/the-first-36-parallel18-announces-first-cohort/",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,

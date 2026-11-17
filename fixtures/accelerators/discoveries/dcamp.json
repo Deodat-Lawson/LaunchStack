@@ -1,6 +1,6 @@
 {
   "programId": "dcamp",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://dcamp.kr/about/what-we-do",
@@ -94,7 +94,7 @@
       "url": "https://dcamp.kr/program/dday",
       "page": "details",
       "anchor": "d.day 성장을 넘어 도약을 위한 비즈니스 무대",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -102,7 +102,7 @@
       "url": "https://dcamp.kr/program/family-service",
       "page": "details",
       "anchor": "family service",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -110,7 +110,7 @@
       "url": "https://dcamp.kr/program/family-service?tab=benefit",
       "page": "details",
       "anchor": "복지∙제휴",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -118,7 +118,7 @@
       "url": "https://dcamp.kr/program/family-service?tab=consulting",
       "page": "details",
       "anchor": "전문자문",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -126,7 +126,7 @@
       "url": "https://dcamp.kr/program/global",
       "page": "details",
       "anchor": "global",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

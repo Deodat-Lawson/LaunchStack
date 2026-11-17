@@ -1,6 +1,6 @@
 {
   "programId": "la-french-tech",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://lafrenchtech.gouv.fr/",
     "https://lafrenchtech.gouv.fr/fr/faq/",
@@ -16,7 +16,12 @@
     "https://lafrenchtech.gouv.fr/fr/annonce-des-laureats-de-la-4eme-promotion-du-programme-french-tech-tremplin-incubation/",
     "https://lafrenchtech.gouv.fr/fr/annonce-des-laureats-de-la-phase-incubation-du-programme-french-tech-tremplin/",
     "https://lafrenchtech.gouv.fr/fr/evenement-oa/le-programme-willa-possible/",
-    "https://lafrenchtech.gouv.fr/fr/evenement-oa/le-programme-willa-start/"
+    "https://lafrenchtech.gouv.fr/fr/evenement-oa/le-programme-willa-start/",
+    "https://lafrenchtech.gouv.fr/fr/evenements/lancement-du-programme-dapi-directions-achats-pour-linnovation/",
+    "https://lafrenchtech.gouv.fr/fr/je-choisis-la-french-tech/",
+    "https://lafrenchtech.gouv.fr/fr/la-mission-french-tech-associe-son-programme-french-tech-rise-au-fundtruck-de-maddyness/",
+    "https://lafrenchtech.gouv.fr/fr/lancement-du-programme-daccompagnement-french-tech-2030/",
+    "https://lafrenchtech.gouv.fr/fr/les-criteres-du-programme-french-tech-next40-120-evoluent/"
   ],
   "evidence": [
     {
@@ -84,6 +89,18 @@
       "excerpt": "La mission French Tech Skip to content Menu Contenu Pied de page République Française Liberté Égalité Fraternité Rechercher Menu La mission French Tech Nous contacter Espace presse Changer de langue FR - Français Langue active FR - Français EN - English Fermer Rechercher Rechercher Fermer La Mission French Tech Fermer Qui sommes-nous? Présentation Notre équipe Nos actualités Qu'est-ce que la French Tech ? Présentation de l'écosystème start-up Les données sur l’écosystème start-up Nos actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin Les correspondants French Tech Consultation sur les exits Le réseau French Tech Découvrir le réseau L'annuaire Événements Je choisis la French Tech Découvrir le programme Les partenaires du programme Je choisis la French Tech Académie Rejoindre la French Tech Travailler à la Mission French Tech Venir travailler en France Rejoindre une capitale ou communauté Répertoire des start-up Accompagner et promouvoir l’écosystème des start-up et scale-up françaises La Mission French Tech est chargée de déployer les politiques publiques à destination des start-up et de fédérer l’écosystème des start-up françaises, en France et à l’international. Découvrir la Mission French Tech Nouvelle promotion du programme French Tech 2030 80 entreprises. 1,5 Md€ levés. 46 usines existantes ou en projet. Et une seule ambition : que la"
     },
     {
+      "id": "check-page-9b7d2a93f8",
+      "url": "https://lafrenchtech.gouv.fr/",
+      "page": "details",
+      "excerpt": "Et une seule ambition : que la France maîtrise les technologies dont dépend son avenir."
+    },
+    {
+      "id": "check-page-1989b773ad",
+      "url": "https://lafrenchtech.gouv.fr/",
+      "page": "details",
+      "excerpt": "28 Communautés en France Les Communautés French Tech en France sont des regroupements d’entrepreneuses et entrepreneurs bénévoles qui, en addition aux actions menées par les Capitales French Tech, animent l’écosystème d’acteurs de l’innovation de leur territoire et intensifient leur collaboration."
+    },
+    {
       "id": "check-page-4665854b4f",
       "url": "https://lafrenchtech.gouv.fr/fr/faq/",
       "page": "terms",
@@ -96,16 +113,124 @@
       "excerpt": "Launch of the French Tech 2030 support programme - La mission French Tech Skip to content Menu Content Footer République Française Liberté Égalité Fraternité Search Menu La mission French Tech Contact us Press area Change language EN - English Current language FR - Français EN - English Close Search Search Close French Tech Mission Close About us Introduction Our team News About the French Tech Ecosystem What is the French Tech ecosystem? Data on the start-up ecosystem Our actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin French Tech Correspondents Consultation on exits French Tech network Discover our Network The network directory Events Je choisis la French Tech I choose la French Tech Académie The partners of Je choisis la French Tech Join the French Tech Work at the French Tech Mission Come work in France Join a French Tech Capital and Community See breadcrumb Home News Launch of the French Tech 2030 support programme NEWS - Published on Wednesday 14 June 2023 Launch of the French Tech 2030 support programme On 14 June 2023, the 125 laureates of the new French Tech 2030 support programme will be unveiled at VivaTech, in the presence of ministers Jean-Noël Barrot and Roland Lescure, Clara Chappaz, Bruno Bonnell and Paul-François Fournier. Video of the announcement of the 2023 winners of the French Tech 2030 support programme. See detailed"
     },
     {
+      "id": "check-page-44ab69e174",
+      "url": "https://lafrenchtech.gouv.fr/en/launch-of-the-french-tech-2030-support-programme/",
+      "page": "details",
+      "excerpt": "I’m thinking, of course, of the ecological transition: 50% of the winners, but also the healthcare and digital infrastructure sectors."
+    },
+    {
+      "id": "check-page-0942a04ce4",
+      "url": "https://lafrenchtech.gouv.fr/en/launch-of-the-french-tech-2030-support-programme/",
+      "page": "details",
+      "excerpt": "It’s a guarantee of sovereignty, a guarantee of prosperity for France."
+    },
+    {
+      "id": "check-page-df7f550d92",
+      "url": "https://lafrenchtech.gouv.fr/en/launch-of-the-french-tech-2030-support-programme/",
+      "page": "details",
+      "excerpt": "Roland Lescure, Minister Delegate for Industry – The aim of French Tech 2030, of the 125 winners and of a good number of them who are industrialists, is to serve the strategic challenges of tomorrow’s industrial France."
+    },
+    {
+      "id": "check-page-22f3af10bf",
+      "url": "https://lafrenchtech.gouv.fr/en/launch-of-the-french-tech-2030-support-programme/",
+      "page": "details",
+      "excerpt": "Today, we have traditional industrial regions, beyond the Paris Region, that are attractive."
+    },
+    {
+      "id": "check-page-b3b9ef92c2",
+      "url": "https://lafrenchtech.gouv.fr/en/launch-of-the-french-tech-2030-support-programme/",
+      "page": "details",
+      "excerpt": "Bruno Bonnell, General Secretary for Investment in charge of the France 2030 Plan – The France 2030 Plan has different verticals and we can say that the 125 winners of French Tech 2030 represent all the verticals."
+    },
+    {
+      "id": "check-page-1dfa5d8745",
+      "url": "https://lafrenchtech.gouv.fr/en/launch-of-the-french-tech-2030-support-programme/",
+      "page": "details",
+      "excerpt": "We have 125 champions in France of excellence in both technology and industry."
+    },
+    {
+      "id": "check-page-1b30bc0e35",
+      "url": "https://lafrenchtech.gouv.fr/en/launch-of-the-french-tech-2030-support-programme/",
+      "page": "details",
+      "excerpt": "Paul-François Fournier, Executive Director of BpiFrance – What we’re going to do is set up an ad hoc organisation with correspondents for each of the start-ups to find the best funding and support them in the France 2030 calls for projects."
+    },
+    {
+      "id": "check-page-8c94955cb5",
+      "url": "https://lafrenchtech.gouv.fr/en/launch-of-the-french-tech-2030-support-programme/",
+      "page": "details",
+      "excerpt": "French Tech 2030, a unique support programme Launched in partnership with the General Secretariat for Investment and Bpifrance in April 2023, the aim of the French Tech 2030 programme is to support emerging players that respond to the major challenges facing society, in line with the strategic priorities of the France 2030 plan."
+    },
+    {
+      "id": "check-page-b23078ebf5",
+      "url": "https://lafrenchtech.gouv.fr/en/launch-of-the-french-tech-2030-support-programme/",
+      "page": "details",
+      "excerpt": "This promotion symbolises the major objectives of the French Tech ecosystem, not only in terms of technological and industrial sovereignty, but also in terms of accelerating the decarbonisation of our economies and achieving parity."
+    },
+    {
+      "id": "check-page-7b093de256",
+      "url": "https://lafrenchtech.gouv.fr/en/launch-of-the-french-tech-2030-support-programme/",
+      "page": "details",
+      "excerpt": "French Tech 2030 These contents might also interest you 10 Awards of La French Tech Berlin The project to celebrate 10 years of French Tech in Berlin is co-organised by La French Tech Berlin and La..."
+    },
+    {
+      "id": "check-page-302d75d987",
+      "url": "https://lafrenchtech.gouv.fr/en/launch-of-the-french-tech-2030-support-programme/",
+      "page": "details",
+      "excerpt": "Berlin Read more 26 OCTOBER 2023 The 102 laureates of the 5th cohort of the French Tech Tremplin Incubation programme announced at VivaTech At VivaTech, Anne Le Hénanff, Minister of State for Artificial Intelligence and Digital Affairs, announced the 102 winners of the..."
+    },
+    {
       "id": "check-page-4edf4e4cc1",
       "url": "https://lafrenchtech.gouv.fr/en/les-102-laureats-de-la-5e-promotion-du-french-tech-tremplin-incubation-devoiles-a-vivatech/",
       "page": "batches",
       "excerpt": "The 102 laureates of the 5th cohort of the French Tech Tremplin Incubation programme announced at VivaTech - La mission French Tech Skip to content Menu Content Footer République Française Liberté Égalité Fraternité Search Menu La mission French Tech Contact us Press area Change language EN - English Current language FR - Français EN - English Close Search Search Close French Tech Mission Close About us Introduction Our team News About the French Tech Ecosystem What is the French Tech ecosystem? Data on the start-up ecosystem Our actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin French Tech Correspondents Consultation on exits French Tech network Discover our Network The network directory Events Je choisis la French Tech I choose la French Tech Académie The partners of Je choisis la French Tech Join the French Tech Work at the French Tech Mission Come work in France Join a French Tech Capital and Community See breadcrumb Home News The 102 laureates of the 5th cohort of the French Tech Tremplin Incubation programme announced at VivaTech NEWS - Published on Friday 3 July 2026 The 102 laureates of the 5th cohort of the French Tech Tremplin Incubation programme announced at VivaTech French Tech Tremplin At VivaTech, Anne Le Hénanff, Minister of State for Artificial Intelligence and Digital Affairs, announced the 102 winners of the fifth cohort"
     },
     {
+      "id": "check-page-7a8947bb02",
+      "url": "https://lafrenchtech.gouv.fr/en/les-102-laureats-de-la-5e-promotion-du-french-tech-tremplin-incubation-devoiles-a-vivatech/",
+      "page": "batches",
+      "excerpt": "A new cohort that reaffirms the programme’s mission: to nurture entrepreneurial talent across France Launched by Mission French Tech in 2019, French Tech Tremplin supports entrepreneurs from backgrounds, regions or social circumstances that remain under-represented in the innovation ecosystem."
+    },
+    {
+      "id": "check-page-f4f88765c2",
+      "url": "https://lafrenchtech.gouv.fr/en/les-102-laureats-de-la-5e-promotion-du-french-tech-tremplin-incubation-devoiles-a-vivatech/",
+      "page": "batches",
+      "excerpt": "This new cohort once again illustrates the wealth of talent across the whole of France and reaffirms the programme’s ambition: to foster the future success stories of French Tech by giving opportunities to entrepreneurs who, without this scheme, would find it more difficult to access support networks, funding and entrepreneurial resources."
+    },
+    {
+      "id": "check-page-da7b8c3264",
+      "url": "https://lafrenchtech.gouv.fr/en/les-102-laureats-de-la-5e-promotion-du-french-tech-tremplin-incubation-devoiles-a-vivatech/",
+      "page": "batches",
+      "excerpt": "The laureates are spread across all French regions, both in mainland France and in the overseas territories."
+    },
+    {
+      "id": "check-page-ec148a2fbe",
+      "url": "https://lafrenchtech.gouv.fr/en/les-102-laureats-de-la-5e-promotion-du-french-tech-tremplin-incubation-devoiles-a-vivatech/",
+      "page": "batches",
+      "excerpt": "A French Tech network active throughout France This fifth cohort is also the result of the work carried out each year by the French Tech Capitals and Communities , which identify talent at the local level."
+    },
+    {
+      "id": "check-page-80db97483c",
+      "url": "https://lafrenchtech.gouv.fr/en/les-102-laureats-de-la-5e-promotion-du-french-tech-tremplin-incubation-devoiles-a-vivatech/",
+      "page": "batches",
+      "excerpt": "The 102 laureates will now receive support from partner incubators to consolidate their entrepreneurial projects, develop their businesses and join the French Tech community."
+    },
+    {
       "id": "check-page-7bea281f5b",
       "url": "https://lafrenchtech.gouv.fr/en/our-programs/",
       "page": "details",
       "excerpt": "Our support programmes - La mission French Tech Skip to content Menu Content Footer République Française Liberté Égalité Fraternité Search Menu La mission French Tech Contact us Press area Change language EN - English Current language FR - Français EN - English Close Search Search Close French Tech Mission Close About us Introduction Our team News About the French Tech Ecosystem What is the French Tech ecosystem? Data on the start-up ecosystem Our actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin French Tech Correspondents Consultation on exits French Tech network Discover our Network The network directory Events Je choisis la French Tech I choose la French Tech Académie The partners of Je choisis la French Tech Join the French Tech Work at the French Tech Mission Come work in France Join a French Tech Capital and Community See breadcrumb Home Our support programmes Our support programmes for start-ups The objective of Mission French Tech's support programs is twofold. Firstly, to support companies that meet the priorities of the French government's innovation strategy. Secondly, to offer them the most comprehensive range of services possible: combining all the levers of the State, in France and abroad, as well as the mobilization of the French Tech ecosystem, public and private buyers, and the deployment of promotional actions. French Tech"
+    },
+    {
+      "id": "check-page-329bdd4278",
+      "url": "https://lafrenchtech.gouv.fr/en/our-programs/",
+      "page": "details",
+      "excerpt": "Parité et diversité French Tech Next40/120 The French Tech Next40/120 brings together France’s most successful scale-ups and supports them as they scale up and expand internationally."
+    },
+    {
+      "id": "check-page-b3d3bff3c3",
+      "url": "https://lafrenchtech.gouv.fr/en/our-programs/",
+      "page": "details",
+      "excerpt": "French Tech Next 40/120 Other government support for start-ups On a daily basis, the French government supports and accompanies entrepreneurs, start-ups and young talent via public schemes and territorial programs that nurture and promote the French Tech ecosystem."
     },
     {
       "id": "check-page-6d0a2fc5ee",
@@ -120,10 +245,154 @@
       "excerpt": "French Tech 2030 - La mission French Tech Skip to content Menu Content Footer République Française Liberté Égalité Fraternité Search Menu La mission French Tech Contact us Press area Change language EN - English Current language FR - Français EN - English Close Search Search Close French Tech Mission Close About us Introduction Our team News About the French Tech Ecosystem What is the French Tech ecosystem? Data on the start-up ecosystem Our actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin French Tech Correspondents Consultation on exits French Tech network Discover our Network The network directory Events Je choisis la French Tech I choose la French Tech Académie The partners of Je choisis la French Tech Join the French Tech Work at the French Tech Mission Come work in France Join a French Tech Capital and Community See breadcrumb Home Our support programmes French Tech 2030 French Tech 2030 The French Tech Mission will announce shortly the third cohort of the French Tech 2030 programme. It is thus continuing to support startups developing highly strategic technologies. In this section Programme description The 2026 winners Introducing the 2026 winners Selection criteria Service offering 80 startups, 8 strategic technology sectors, one ambition: to invent and produce the technologies that matter, right here in France. French Tech 2030"
     },
     {
+      "id": "check-page-069d2f0560",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-2030/",
+      "page": "details",
+      "excerpt": "This third cohort is organized around 8 strategic sectors: artificial intelligence, space, quantum technology, cybersecurity, robotics, electronics, healthcare, energy and decarbonization."
+    },
+    {
+      "id": "check-page-a03ebb1c98",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-2030/",
+      "page": "details",
+      "excerpt": "Each sector addresses a strategic challenge – that is, a technology that France must master in order to shape its future."
+    },
+    {
+      "id": "check-page-169973f432",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-2030/",
+      "page": "details",
+      "excerpt": "Entalpic helps its industrial partners to accelerate the screening and discovery of materials used in atomic deposition and etching processes – which are essential for the development of new technologies – through a proprietary AI platform combining generative and predictive models, atomistic simulations and experimental data."
+    },
+    {
+      "id": "check-page-54d154462c",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-2030/",
+      "page": "details",
+      "excerpt": "NPco is developing AI capable of simulating the physical behaviour of complex industrial systems in a matter of seconds, where traditional methods require days or even weeks of computation."
+    },
+    {
+      "id": "check-page-5d5fa9e460",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-2030/",
+      "page": "details",
+      "excerpt": "This technology is aimed at strategic and complex industries (aerospace, defence, energy, automotive, data centres, etc.) to accelerate design and reduce simulation costs."
+    },
+    {
+      "id": "check-page-4f0c3d77de",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-2030/",
+      "page": "details",
+      "excerpt": "Orasio develops AI solutions that detect sensitive situations in video streams, both in real time and retrospectively, for internal security forces, local authorities, critical infrastructure and the defence sector."
+    },
+    {
+      "id": "check-page-265c72417e",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-2030/",
+      "page": "details",
+      "excerpt": "Outsight , through its physical AI, continuously digitises the movements, behaviours and interactions of people, vehicles and robots on a large scale, generating real-time Spatial Intelligence."
+    },
+    {
+      "id": "check-page-0f3d35513a",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-2030/",
+      "page": "details",
+      "excerpt": "PyannoteAI develops speech intelligence: its models identify who is speaking, when, and in what context within any audio recording, and provide organisations with the essential building block for understanding the speech signal needed to move from a prototype to a voice AI system that is actually deployed in production."
+    },
+    {
+      "id": "check-page-e61c387bbd",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-2030/",
+      "page": "details",
+      "excerpt": "Reeverse Systems provides the first comprehensive technology and solution for characterising, optimising, tracking and reusing strategic materials—both in planning and in real time—across the design and manufacturing chains of building equipment manufacturers (industrial joinery and metal fabricators), as well as in the aerospace, shipbuilding, rail, maritime and machinery sectors."
+    },
+    {
+      "id": "check-page-a5f4e5eb02",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-2030/",
+      "page": "details",
+      "excerpt": "ZML is an AI engineering laboratory designing the universal execution layer between models and hardware."
+    },
+    {
+      "id": "check-page-a1e8a04fa2",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-2030/",
+      "page": "details",
+      "excerpt": "Its technology decouples models from the underlying hardware, running any open-source model on any type of chip (GPU, TPU, CPU) at maximum performance, ensuring zero vendor lock-in and zero loss of quality."
+    },
+    {
+      "id": "check-page-7fb30a15c2",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-2030/",
+      "page": "details",
+      "excerpt": "Space Cailabs develops and manufactures photonic solutions for the space, defence, industrial and telecommunications sectors."
+    },
+    {
       "id": "check-page-39c0f8fdde",
       "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-next40-120/",
       "page": "details",
       "excerpt": "French Tech Next40/120 - La mission French Tech Skip to content Menu Content Footer République Française Liberté Égalité Fraternité Search Menu La mission French Tech Contact us Press area Change language EN - English Current language FR - Français EN - English Close Search Search Close French Tech Mission Close About us Introduction Our team News About the French Tech Ecosystem What is the French Tech ecosystem? Data on the start-up ecosystem Our actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin French Tech Correspondents Consultation on exits French Tech network Discover our Network The network directory Events Je choisis la French Tech I choose la French Tech Académie The partners of Je choisis la French Tech Join the French Tech Work at the French Tech Mission Come work in France Join a French Tech Capital and Community See breadcrumb Home Our support programmes French Tech Next40/120 French Tech Next40/120 The French Tech Next40/120 brings together France’s most successful scale-ups and supports them as they scale up and expand internationally. In this section The Class of 2026 Selection criteria Personalised support Winners 2026 This seventh cohort marks a turning point in the programme’s history The 120 winners selected in 2026 embody, more than ever, technological excellence and a contribution to major economic and societal"
+    },
+    {
+      "id": "check-page-166f786dfc",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-next40-120/",
+      "page": "details",
+      "excerpt": "Open to all sectors, the selection confirms the ability of French companies to develop innovations that transform everyday life: healthcare, learning, working, recruiting, invoicing or consuming in new ways."
+    },
+    {
+      "id": "check-page-fdcf116382",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-next40-120/",
+      "page": "details",
+      "excerpt": "These champions are active in the most strategic technologies: AI, quantum computing, biotechnology and aerospace."
+    },
+    {
+      "id": "check-page-d6b77c8cc4",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-next40-120/",
+      "page": "details",
+      "excerpt": "The French Tech Next40/120 supports these winners who are building the technological capabilities underpinning the industrial, energy and digital sovereignty of France and Europe."
+    },
+    {
+      "id": "check-page-2d14326a34",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-next40-120/",
+      "page": "details",
+      "excerpt": "Elicit Plant (FT 120) Optimises water use in agriculture through innovative solutions."
+    },
+    {
+      "id": "check-page-935a3a33fc",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-next40-120/",
+      "page": "details",
+      "excerpt": "Fintech – InsurTech Acheel (FT 120) Offers digital insurance for individuals and businesses."
+    },
+    {
+      "id": "check-page-1acb9d57ef",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-next40-120/",
+      "page": "details",
+      "excerpt": "Akur8 (FT 120) Modernises actuarial science with an AI platform."
+    },
+    {
+      "id": "check-page-0763c1c340",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-next40-120/",
+      "page": "details",
+      "excerpt": "Descartes Underwriting (Next40) Covers climate risks with innovative solutions."
+    },
+    {
+      "id": "check-page-40eaa75a99",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-next40-120/",
+      "page": "details",
+      "excerpt": "Ledger (Next40) Secures digital assets with hardware and software solutions."
+    },
+    {
+      "id": "check-page-b14ceea429",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-next40-120/",
+      "page": "details",
+      "excerpt": "Pennylane (Next40) Simplifies financial management for micro-enterprises and SMEs."
+    },
+    {
+      "id": "check-page-b2e4d93adb",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-next40-120/",
+      "page": "details",
+      "excerpt": "Seyna (FT 120) Assume the risk and develop insurance products for brokers."
+    },
+    {
+      "id": "check-page-2dffdcf3d3",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-next40-120/",
+      "page": "details",
+      "excerpt": "Shares (FT 120) Enables investment in shares, ETFs and crypto."
+    },
+    {
+      "id": "check-page-f6876cb51c",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-next40-120/",
+      "page": "details",
+      "excerpt": "Shift Technology (Next40) Optimises insurers’ processes using AI."
     },
     {
       "id": "check-page-74a8013e11",
@@ -132,10 +401,46 @@
       "excerpt": "French Tech Nova - La mission French Tech Skip to content Menu Content Footer République Française Liberté Égalité Fraternité Search Menu La mission French Tech Contact us Press area Change language EN - English Current language FR - Français EN - English Close Search Search Close French Tech Mission Close About us Introduction Our team News About the French Tech Ecosystem What is the French Tech ecosystem? Data on the start-up ecosystem Our actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin French Tech Correspondents Consultation on exits French Tech network Discover our Network The network directory Events Je choisis la French Tech I choose la French Tech Académie The partners of Je choisis la French Tech Join the French Tech Work at the French Tech Mission Come work in France Join a French Tech Capital and Community See breadcrumb Home Our support programmes French Tech Nova French Tech Nova The French Tech Mission is taking a new step forward in its commitment to diversity with the launch of French Tech Nova, the national programme dedicated to accelerating start-ups led by entrepreneurs from under-represented backgrounds. French Tech Nova aims to make diversity a driver of competitiveness, innovation and value creation for the French economy. The programme aims to identify, support and nurture a new generation of French tech champions ,"
     },
     {
+      "id": "check-page-a2825ec30a",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-nova/",
+      "page": "details",
+      "excerpt": "Resource Centre Règlement de l’appel à candidature PDF – 1.52 MB Guide pratique du candidat PDF – 569.66 KB Foire aux questions PDF – 528.33 KB Our other programs French Tech Next40/120 The French Tech Next40/120 brings together France’s most successful scale-ups and supports them as they scale up and expand internationally."
+    },
+    {
       "id": "check-page-197b1da679",
       "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-tremplin/",
       "page": "details",
       "excerpt": "French Tech Tremplin - La mission French Tech Skip to content Menu Content Footer République Française Liberté Égalité Fraternité Search Menu La mission French Tech Contact us Press area Change language EN - English Current language FR - Français EN - English Close Search Search Close French Tech Mission Close About us Introduction Our team News About the French Tech Ecosystem What is the French Tech ecosystem? Data on the start-up ecosystem Our actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin French Tech Correspondents Consultation on exits French Tech network Discover our Network The network directory Events Je choisis la French Tech I choose la French Tech Académie The partners of Je choisis la French Tech Join the French Tech Work at the French Tech Mission Come work in France Join a French Tech Capital and Community See breadcrumb Home Our support programmes French Tech Tremplin French Tech Tremplin Launched in 2019, French Tech Tremplin is a programme that promotes equal opportunities and supports entrepreneurs from under-represented backgrounds within the French tech ecosystem in developing their business ventures. In this section Support offered Words from the winners The programme over the years The 5th cohort reaffirms the programme’s mission: to nurture entrepreneurial talent across France Discover the 102 companies selected for"
+    },
+    {
+      "id": "check-page-4a0ec73dc4",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-tremplin/",
+      "page": "details",
+      "excerpt": "The laureates are spread across all regions of France, both in mainland France and in the overseas territories."
+    },
+    {
+      "id": "check-page-7463c489aa",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-tremplin/",
+      "page": "details",
+      "excerpt": "Candidates benefit from: Support within a partner incubator Support from a partner incubator, as well as meetings and events organised by their French Tech Capital or Community to connect the laureates with the local entrepreneurial ecosystem."
+    },
+    {
+      "id": "check-page-15e2f0df01",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-tremplin/",
+      "page": "details",
+      "excerpt": "Thanks to the programme, we gained access to our first incubation programme, which enabled us to launch our initial R&D activities, test the project against the market quickly, establish client contacts, sign partnerships and secure our very first round of funding."
+    },
+    {
+      "id": "check-page-897b9445de",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-tremplin/",
+      "page": "details",
+      "excerpt": "Cécile Amiah Founder and CEO, Class of 1 Izypaper Even before the financial support – which was crucial to the launch of our first product version – the French Tech Tremplin programme enabled us, above all, to be part of a specialised and competent incubation programme for several months."
+    },
+    {
+      "id": "check-page-85a104fa2a",
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-tremplin/",
+      "page": "details",
+      "excerpt": "French Tech Nova French Tech Next40/120 The French Tech Next40/120 brings together France’s most successful scale-ups and supports them as they scale up and expand internationally."
     },
     {
       "id": "check-page-df7cb38052",
@@ -144,16 +449,82 @@
       "excerpt": "The criteria for the French Tech Next40/120 programme are changing! - La mission French Tech Skip to content Menu Content Footer République Française Liberté Égalité Fraternité Search Menu La mission French Tech Contact us Press area Change language EN - English Current language FR - Français EN - English Close Search Search Close French Tech Mission Close About us Introduction Our team News About the French Tech Ecosystem What is the French Tech ecosystem? Data on the start-up ecosystem Our actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin French Tech Correspondents Consultation on exits French Tech network Discover our Network The network directory Events Je choisis la French Tech I choose la French Tech Académie The partners of Je choisis la French Tech Join the French Tech Work at the French Tech Mission Come work in France Join a French Tech Capital and Community See breadcrumb Home News The criteria for the French Tech Next40/120 programme are changing! NEWS - Published on Wednesday 8 November 2023 The criteria for the French Tech Next40/120 programme are changing! To mark the 10th anniversary of French Tech, Jean-Noël Barrot, Minister Delegate for the Digital Economy, announced that the criteria for the French Tech Next40/120 programme would be revised to take greater account of changes in the start-up ecosystem. What is French Tech"
     },
     {
+      "id": "check-page-53447f8c67",
+      "url": "https://lafrenchtech.gouv.fr/en/the-criteria-for-the-french-tech-next40-120-programme-are-changing/",
+      "page": "details",
+      "excerpt": "French Tech Next40/120 is the French Tech Mission programme which supports the 120 most successful French scale-ups with the potential to become international leaders."
+    },
+    {
+      "id": "check-page-e6597f757e",
+      "url": "https://lafrenchtech.gouv.fr/en/the-criteria-for-the-french-tech-next40-120-programme-are-changing/",
+      "page": "details",
+      "excerpt": "These companies receive support linked to their development challenges for one year, promoting them in France and internationally."
+    },
+    {
+      "id": "check-page-d587315464",
+      "url": "https://lafrenchtech.gouv.fr/en/the-criteria-for-the-french-tech-next40-120-programme-are-changing/",
+      "page": "details",
+      "excerpt": "Changes proposed by French Tech Finance Partners to meet a threefold objective The French Tech Finance Partners body was launched in January 2023 by Jean-Noël Barrot , Minister Delegate in charge of the Digital Economy, to work on three priority areas: the financing of start-ups in the regions; the financing of DeepTech; and the selection criteria for French Tech programmes."
+    },
+    {
+      "id": "check-page-15151c9786",
+      "url": "https://lafrenchtech.gouv.fr/en/the-criteria-for-the-french-tech-next40-120-programme-are-changing/",
+      "page": "details",
+      "excerpt": "The programme’s cross-cutting criteria Constant generic criteria: As has been the case since the programme was created, companies must have their head office in France and must not be listed on the stock exchange."
+    },
+    {
+      "id": "check-page-0187ad6eda",
+      "url": "https://lafrenchtech.gouv.fr/en/the-criteria-for-the-french-tech-next40-120-programme-are-changing/",
+      "page": "details",
+      "excerpt": "These contents might also interest you 10 Awards of La French Tech Berlin The project to celebrate 10 years of French Tech in Berlin is co-organised by La French Tech Berlin and La..."
+    },
+    {
+      "id": "check-page-5f806709e1",
+      "url": "https://lafrenchtech.gouv.fr/en/the-criteria-for-the-french-tech-next40-120-programme-are-changing/",
+      "page": "details",
+      "excerpt": "Berlin Read more 26 OCTOBER 2023 The 102 laureates of the 5th cohort of the French Tech Tremplin Incubation programme announced at VivaTech At VivaTech, Anne Le Hénanff, Minister of State for Artificial Intelligence and Digital Affairs, announced the 102 winners of the..."
+    },
+    {
       "id": "check-page-7800d93cc5",
       "url": "https://lafrenchtech.gouv.fr/fr/annonce-des-laureats-de-la-4eme-promotion-du-programme-french-tech-tremplin-incubation/",
       "page": "details",
       "excerpt": "Annonce des lauréats de la 4ème promotion du programme French Tech Tremplin Incubation - La mission French Tech Skip to content Menu Contenu Pied de page République Française Liberté Égalité Fraternité Rechercher Menu La mission French Tech Nous contacter Espace presse Changer de langue FR - Français Langue active FR - Français EN - English Fermer Rechercher Rechercher Fermer La Mission French Tech Fermer Qui sommes-nous? Présentation Notre équipe Nos actualités Qu'est-ce que la French Tech ? Présentation de l'écosystème start-up Les données sur l’écosystème start-up Nos actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin Les correspondants French Tech Consultation sur les exits Le réseau French Tech Découvrir le réseau L'annuaire Événements Je choisis la French Tech Découvrir le programme Les partenaires du programme Je choisis la French Tech Académie Rejoindre la French Tech Travailler à la Mission French Tech Venir travailler en France Rejoindre une capitale ou communauté Répertoire des start-up Voir le fil d’Ariane Accueil Actualités Annonce des lauréats de la 4ème promotion du programme French Tech Tremplin Incubation ACTUALITÉ - Publiée le Jeudi 3 octobre 2024 Annonce des lauréats de la 4ème promotion du programme French Tech Tremplin Incubation Parité et diversité A l’occasion du Tech Flow au cœur de la French Tech Val de Loire, les"
     },
     {
+      "id": "check-page-aaea214496",
+      "url": "https://lafrenchtech.gouv.fr/fr/annonce-des-laureats-de-la-4eme-promotion-du-programme-french-tech-tremplin-incubation/",
+      "page": "details",
+      "excerpt": "Cette nouvelle promotion rassemble des talents venus de toutes les régions de France, des zones rurales aux quartiers prioritaires. Âgés de 19 à 67 ans, avec des parcours de vie divers, ils sont tous unis par la même ambition : apporter des solutions innovantes, qui feront rayonner les couleurs de la French Tech !"
+    },
+    {
+      "id": "check-page-28f0800274",
+      "url": "https://lafrenchtech.gouv.fr/fr/annonce-des-laureats-de-la-4eme-promotion-du-programme-french-tech-tremplin-incubation/",
+      "page": "details",
+      "excerpt": "Data, Intelligence artificielle, cybersécurité, cloud, mais aussi santé, finance, agriculture, culture… la nouvelle promotion French Tech Tremplin Incubation est riche de la diversité des secteurs qu’elle couvre."
+    },
+    {
+      "id": "check-page-c67505d763",
+      "url": "https://lafrenchtech.gouv.fr/fr/annonce-des-laureats-de-la-4eme-promotion-du-programme-french-tech-tremplin-incubation/",
+      "page": "details",
+      "excerpt": "Félicitations aux entrepreneuses et entrepreneurs sélectionnés, et on se retrouve pour le début de l’incubation en janvier 2025 !"
+    },
+    {
       "id": "check-page-e267e9e094",
       "url": "https://lafrenchtech.gouv.fr/fr/annonce-des-laureats-de-la-phase-incubation-du-programme-french-tech-tremplin/",
       "page": "details",
       "excerpt": "Annonce des lauréats de la phase « Incubation » du programme French Tech Tremplin - La mission French Tech Skip to content Menu Contenu Pied de page République Française Liberté Égalité Fraternité Rechercher Menu La mission French Tech Nous contacter Espace presse Changer de langue FR - Français Langue active FR - Français EN - English Fermer Rechercher Rechercher Fermer La Mission French Tech Fermer Qui sommes-nous? Présentation Notre équipe Nos actualités Qu'est-ce que la French Tech ? Présentation de l'écosystème start-up Les données sur l’écosystème start-up Nos actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin Les correspondants French Tech Consultation sur les exits Le réseau French Tech Découvrir le réseau L'annuaire Événements Je choisis la French Tech Découvrir le programme Les partenaires du programme Je choisis la French Tech Académie Rejoindre la French Tech Travailler à la Mission French Tech Venir travailler en France Rejoindre une capitale ou communauté Répertoire des start-up Voir le fil d’Ariane Accueil Actualités Annonce des lauréats de la phase « Incubation » du programme French Tech Tremplin ACTUALITÉ - Publiée le Vendredi 15 décembre 2023 Annonce des lauréats de la phase « Incubation » du programme French Tech Tremplin French Tech Tremplin Le Ministre délégué chargé du Numérique, Jean-Noël BARROT, a annoncé le 15"
+    },
+    {
+      "id": "check-page-310d7cd442",
+      "url": "https://lafrenchtech.gouv.fr/fr/annonce-des-laureats-de-la-phase-incubation-du-programme-french-tech-tremplin/",
+      "page": "details",
+      "excerpt": "Pour permettre un soutien adapté aux différents stades de développement des projets sélectionnés, le programme s’articule autour de deux volets distincts : La phase « Prépa », qui accompagne les porteurs de projet à l’étape de lancement de leur start-up ; la phase « Incubation », qui s’adresse à des entrepreneurs ayant déjà lancé leur start-up et souhaitant accélérer leur développement."
+    },
+    {
+      "id": "check-page-992ada660e",
+      "url": "https://lafrenchtech.gouv.fr/fr/annonce-des-laureats-de-la-phase-incubation-du-programme-french-tech-tremplin/",
+      "page": "details",
+      "excerpt": "Londres En savoir plus S’inscrire à l’événement 25 JANVIER 2023 Les 102 lauréats de la 5e promotion du French Tech Tremplin Incubation dévoilés à VivaTech À l'occasion de VivaTech, la Ministre déléguée chargée de l'Intelligence artificielle et du Numérique, Anne Le Hénanff, a annoncé les..."
     },
     {
       "id": "check-page-323d727233",
@@ -166,6 +537,132 @@
       "url": "https://lafrenchtech.gouv.fr/fr/evenement-oa/le-programme-willa-start/",
       "page": "details",
       "excerpt": "LE PROGRAMME : WILLA START - La mission French Tech Skip to content Menu Contenu Pied de page République Française Liberté Égalité Fraternité Rechercher Menu La mission French Tech Nous contacter Espace presse Changer de langue FR - Français Langue active FR - Français EN - English Fermer Rechercher Rechercher Fermer La Mission French Tech Fermer Qui sommes-nous? Présentation Notre équipe Nos actualités Qu'est-ce que la French Tech ? Présentation de l'écosystème start-up Les données sur l’écosystème start-up Nos actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin Les correspondants French Tech Consultation sur les exits Le réseau French Tech Découvrir le réseau L'annuaire Événements Je choisis la French Tech Découvrir le programme Les partenaires du programme Je choisis la French Tech Académie Rejoindre la French Tech Travailler à la Mission French Tech Venir travailler en France Rejoindre une capitale ou communauté Répertoire des start-up Voir le fil d’Ariane Accueil LE PROGRAMME : WILLA START LE PROGRAMME : WILLA START 8 août 2024 Par Abonnez-vous à notre newsletter Suivez notre actualité et les dernières informations sur la tech française en vous abonnant à notre newsletter mensuelle S’abonner Suivez-nous sur les réseaux sociaux Twitter LinkedIn Facebook Instagram La Mission French Tech Qui sommes-nous ? Nos actions Le réseau French Tech"
+    },
+    {
+      "id": "check-page-97add0b1f6",
+      "url": "https://lafrenchtech.gouv.fr/fr/evenements/lancement-du-programme-dapi-directions-achats-pour-linnovation/",
+      "page": "details",
+      "excerpt": "Lancement du programme DAPI - Directions Achats Pour l'Innovation - La mission French Tech Skip to content Menu Contenu Pied de page République Française Liberté Égalité Fraternité Rechercher Menu La mission French Tech Nous contacter Espace presse Changer de langue FR - Français Langue active FR - Français EN - English Fermer Rechercher Rechercher Fermer La Mission French Tech Fermer Qui sommes-nous? Présentation Notre équipe Nos actualités Qu'est-ce que la French Tech ? Présentation de l'écosystème start-up Les données sur l’écosystème start-up Nos actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin Les correspondants French Tech Consultation sur les exits Le réseau French Tech Découvrir le réseau L'annuaire Événements Je choisis la French Tech Découvrir le programme Les partenaires du programme Je choisis la French Tech Académie Rejoindre la French Tech Travailler à la Mission French Tech Venir travailler en France Rejoindre une capitale ou communauté Répertoire des start-up Voir le fil d’Ariane Accueil Lancement du programme DAPI - Directions Achats Pour l'Innovation Lancement du programme DAPI - Directions Achats Pour l'Innovation ÉVÉNEMENT Publié le Mardi 9 janvier 2024 Organisé par : Hub de Bpifrance Lancement du programme DAPI – Directions Achats Pour l’Innovation Je choisis la French Tech Début Mardi 16 janvier 2024 Horaire : De 08h00"
+    },
+    {
+      "id": "check-page-9fb39214cc",
+      "url": "https://lafrenchtech.gouv.fr/fr/je-choisis-la-french-tech/",
+      "page": "details",
+      "excerpt": "Je choisis la French Tech - La mission French Tech Skip to content Menu Contenu Pied de page République Française Liberté Égalité Fraternité Rechercher Menu La mission French Tech Nous contacter Espace presse Changer de langue FR - Français Langue active FR - Français EN - English Fermer Rechercher Rechercher Fermer La Mission French Tech Fermer Qui sommes-nous? Présentation Notre équipe Nos actualités Qu'est-ce que la French Tech ? Présentation de l'écosystème start-up Les données sur l’écosystème start-up Nos actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin Les correspondants French Tech Consultation sur les exits Le réseau French Tech Découvrir le réseau L'annuaire Événements Je choisis la French Tech Découvrir le programme Les partenaires du programme Je choisis la French Tech Académie Rejoindre la French Tech Travailler à la Mission French Tech Venir travailler en France Rejoindre une capitale ou communauté Répertoire des start-up Voir le fil d’Ariane Accueil Je choisis la French Tech Je choisis la French Tech Description du programme Le programme « Je choisis la French Tech » vise à renforcer l’utilisation des technologies des start-up françaises par le secteur privé et le secteur public, dans un double objectif : répondre aux besoins de transformation numérique, technologique et écologique des acteurs publics et privés ; augmenter"
+    },
+    {
+      "id": "check-page-aa833b8d55",
+      "url": "https://lafrenchtech.gouv.fr/fr/je-choisis-la-french-tech/",
+      "page": "details",
+      "excerpt": "Un cap a été franchi : ces 23 entreprises s’engagent collectivement à consacrer 2 milliards d’euros à l’achat de solutions portées par des start-up et scale-up de la French Tech."
+    },
+    {
+      "id": "check-page-56233eee67",
+      "url": "https://lafrenchtech.gouv.fr/fr/la-mission-french-tech-associe-son-programme-french-tech-rise-au-fundtruck-de-maddyness/",
+      "page": "details",
+      "excerpt": "La Mission French Tech associe son programme French Tech Rise au Fundtruck de Maddyness ! - La mission French Tech Skip to content Menu Contenu Pied de page République Française Liberté Égalité Fraternité Rechercher Menu La mission French Tech Nous contacter Espace presse Changer de langue FR - Français Langue active FR - Français EN - English Fermer Rechercher Rechercher Fermer La Mission French Tech Fermer Qui sommes-nous? Présentation Notre équipe Nos actualités Qu'est-ce que la French Tech ? Présentation de l'écosystème start-up Les données sur l’écosystème start-up Nos actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin Les correspondants French Tech Consultation sur les exits Le réseau French Tech Découvrir le réseau L'annuaire Événements Je choisis la French Tech Découvrir le programme Les partenaires du programme Je choisis la French Tech Académie Rejoindre la French Tech Travailler à la Mission French Tech Venir travailler en France Rejoindre une capitale ou communauté Répertoire des start-up Voir le fil d’Ariane Accueil Actualités La Mission French Tech associe son programme French Tech Rise au Fundtruck de Maddyness ! ACTUALITÉ - Publiée le Jeudi 18 juillet 2024 La Mission French Tech associe son programme French Tech Rise au Fundtruck de Maddyness ! Parité et diversité Avec ce partenariat stratégique, Maddyness et la Mission French"
+    },
+    {
+      "id": "check-page-28ef52f75c",
+      "url": "https://lafrenchtech.gouv.fr/fr/la-mission-french-tech-associe-son-programme-french-tech-rise-au-fundtruck-de-maddyness/",
+      "page": "details",
+      "excerpt": "French Tech Rise, lancé en 2021, vise à réduire les inégalités d’accès au financement des start-up des territoires et à valoriser le dynamisme des écosystèmes French Tech partout en France."
+    },
+    {
+      "id": "check-page-64c362b96f",
+      "url": "https://lafrenchtech.gouv.fr/fr/la-mission-french-tech-associe-son-programme-french-tech-rise-au-fundtruck-de-maddyness/",
+      "page": "details",
+      "excerpt": "Déployé grâce au soutien de notre réseau de Capitales et Communautés French Tech, le programme permet à toutes les startups de l’écosystème French Tech de rencontrer des fonds de capital-risque nationaux à travers des événements et des rendez-vous réguliers : 70 en 2023, qui ont réunis près de 700 start-up et plus de 450 investisseurs dans toute la France."
+    },
+    {
+      "id": "check-page-b78a576b87",
+      "url": "https://lafrenchtech.gouv.fr/fr/la-mission-french-tech-associe-son-programme-french-tech-rise-au-fundtruck-de-maddyness/",
+      "page": "details",
+      "excerpt": "Cette année, le Fundtruck sillonne les routes de France pour aller à la rencontre des entrepreneurs dans les 17 Capitales French Tech."
+    },
+    {
+      "id": "check-page-2276d19b8f",
+      "url": "https://lafrenchtech.gouv.fr/fr/la-mission-french-tech-associe-son-programme-french-tech-rise-au-fundtruck-de-maddyness/",
+      "page": "details",
+      "excerpt": "Les lauréats des différentes régionales seront invités à participer à la grande finale nationale qui aura lieu en fin d’année, à Paris."
+    },
+    {
+      "id": "check-page-2c7b9c02d8",
+      "url": "https://lafrenchtech.gouv.fr/fr/lancement-du-programme-daccompagnement-french-tech-2030/",
+      "page": "details",
+      "excerpt": "Lancement du programme d’accompagnement French Tech 2030 - La mission French Tech Skip to content Menu Contenu Pied de page République Française Liberté Égalité Fraternité Rechercher Menu La mission French Tech Nous contacter Espace presse Changer de langue FR - Français Langue active FR - Français EN - English Fermer Rechercher Rechercher Fermer La Mission French Tech Fermer Qui sommes-nous? Présentation Notre équipe Nos actualités Qu'est-ce que la French Tech ? Présentation de l'écosystème start-up Les données sur l’écosystème start-up Nos actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin Les correspondants French Tech Consultation sur les exits Le réseau French Tech Découvrir le réseau L'annuaire Événements Je choisis la French Tech Découvrir le programme Les partenaires du programme Je choisis la French Tech Académie Rejoindre la French Tech Travailler à la Mission French Tech Venir travailler en France Rejoindre une capitale ou communauté Répertoire des start-up Voir le fil d’Ariane Accueil Actualités Lancement du programme d’accompagnement French Tech 2030 ACTUALITÉ - Publiée le Mercredi 14 juin 2023 Lancement du programme d’accompagnement French Tech 2030 French Tech 2030 Transition écologique Le 14 juin 2023, les 125 lauréats du nouveau programme d’accompagnement French Tech 2030 sont dévoilés à l’occasion de VivaTech, en présence"
+    },
+    {
+      "id": "check-page-0ab770639e",
+      "url": "https://lafrenchtech.gouv.fr/fr/lancement-du-programme-daccompagnement-french-tech-2030/",
+      "page": "details",
+      "excerpt": "C’est un gage de souveraineté, c’est un gage de prospérité pour la France."
+    },
+    {
+      "id": "check-page-fec8b889db",
+      "url": "https://lafrenchtech.gouv.fr/fr/lancement-du-programme-daccompagnement-french-tech-2030/",
+      "page": "details",
+      "excerpt": "Roland Lescure, Ministre délégué chargé de l’Industrie – L’objectif de French Tech 2030, des 125 lauréats et d’un bon paquet d’entre eux qui sont des industriels, c’est d’être au service des enjeux stratégiques de la France industrielle de demain."
+    },
+    {
+      "id": "check-page-fda270261b",
+      "url": "https://lafrenchtech.gouv.fr/fr/lancement-du-programme-daccompagnement-french-tech-2030/",
+      "page": "details",
+      "excerpt": "Bruno Bonnell, Secrétaire général pour l’investissement en charge du plan France 2030 – Le plan France 2030 a différentes verticales et on peut dire que les 125 lauréats de French Tech 2030 représentent toutes les verticales."
+    },
+    {
+      "id": "check-page-515ee80e92",
+      "url": "https://lafrenchtech.gouv.fr/fr/lancement-du-programme-daccompagnement-french-tech-2030/",
+      "page": "details",
+      "excerpt": "Nous avons bien 125 champions en France de l’excellence à la fois de la technologie et de l’industrie."
+    },
+    {
+      "id": "check-page-a569dfce6d",
+      "url": "https://lafrenchtech.gouv.fr/fr/lancement-du-programme-daccompagnement-french-tech-2030/",
+      "page": "details",
+      "excerpt": "Paul-François Fournier, Directeur exécutif de BpiFrance – Ce que nous allons faire, c’est que nous allons mettre en place une organisation ad hoc avec des correspondants pour chacune des start-up pour trouver les meilleurs financements, pour les accompagner dans les appels à projets de France 2030."
+    },
+    {
+      "id": "check-page-df73772c81",
+      "url": "https://lafrenchtech.gouv.fr/fr/les-criteres-du-programme-french-tech-next40-120-evoluent/",
+      "page": "details",
+      "excerpt": "Les critères du programme French Tech Next40/120 évoluent ! - La mission French Tech Skip to content Menu Contenu Pied de page République Française Liberté Égalité Fraternité Rechercher Menu La mission French Tech Nous contacter Espace presse Changer de langue FR - Français Langue active FR - Français EN - English Fermer Rechercher Rechercher Fermer La Mission French Tech Fermer Qui sommes-nous? Présentation Notre équipe Nos actualités Qu'est-ce que la French Tech ? Présentation de l'écosystème start-up Les données sur l’écosystème start-up Nos actions French Tech Next40/120 French Tech 2030 French Tech Nova French Tech Tremplin Les correspondants French Tech Consultation sur les exits Le réseau French Tech Découvrir le réseau L'annuaire Événements Je choisis la French Tech Découvrir le programme Les partenaires du programme Je choisis la French Tech Académie Rejoindre la French Tech Travailler à la Mission French Tech Venir travailler en France Rejoindre une capitale ou communauté Répertoire des start-up Voir le fil d’Ariane Accueil Actualités Les critères du programme French Tech Next40/120 évoluent ! ACTUALITÉ - Publiée le Mercredi 8 novembre 2023 Les critères du programme French Tech Next40/120 évoluent ! A l’occasion de la Semaine des 10 ans de la French Tech, Jean-Noël Barrot, ministre délégué chargé du Numérique, a notamment annoncé la révision des critères du programme"
+    },
+    {
+      "id": "check-page-a43cebec6b",
+      "url": "https://lafrenchtech.gouv.fr/fr/les-criteres-du-programme-french-tech-next40-120-evoluent/",
+      "page": "details",
+      "excerpt": "Le French Tech Next40/120 est le programme de la Mission French Tech qui accompagne les 120 scale-up françaises les plus performantes et en capacité de devenir des leaders au niveau international ."
+    },
+    {
+      "id": "check-page-d07f2d5374",
+      "url": "https://lafrenchtech.gouv.fr/fr/les-criteres-du-programme-french-tech-next40-120-evoluent/",
+      "page": "details",
+      "excerpt": "Ces entreprises bénéficient d’un accompagnement lié à leurs enjeux de développement pendant un an, les valorisant en France et à l’international."
+    },
+    {
+      "id": "check-page-6e89eb450a",
+      "url": "https://lafrenchtech.gouv.fr/fr/les-criteres-du-programme-french-tech-next40-120-evoluent/",
+      "page": "details",
+      "excerpt": "Des évolutions proposées par le French Tech Finance Partners, répondant à un triple objectif L’instance French Tech Finance Partners , a été lancée en janvier 2023 par Jean-Noël Barrot , ministre délégué chargé du Numérique, pour trois chantiers prioritaires : le financement des start-up en région ; le financement de la DeepTech ; et les critères de sélection des programmes French Tech."
+    },
+    {
+      "id": "check-page-09e20aaa1d",
+      "url": "https://lafrenchtech.gouv.fr/fr/les-criteres-du-programme-french-tech-next40-120-evoluent/",
+      "page": "details",
+      "excerpt": "Les critères transversaux du programme Des critères génériques constants : Comme depuis la création du programme, il est nécessaire d’avoir un siège social en France et de ne pas être coté en bourse ."
+    },
+    {
+      "id": "check-page-272d607646",
+      "url": "https://lafrenchtech.gouv.fr/fr/les-criteres-du-programme-french-tech-next40-120-evoluent/",
+      "page": "details",
+      "excerpt": "Ces contenus pourraient également vous intéresser French Tech London Annual Gala - Gen AI & Quantum Le gala annuel French Tech London rassemblera la communauté Tech londonienne, britannique et française autour des sujets indéniablement brûlants de..."
+    },
+    {
+      "id": "check-page-3ee505cdc7",
+      "url": "https://lafrenchtech.gouv.fr/fr/les-criteres-du-programme-french-tech-next40-120-evoluent/",
+      "page": "details",
+      "excerpt": "Londres En savoir plus S’inscrire à l’événement 25 JANVIER 2023 Les 102 lauréats de la 5e promotion du French Tech Tremplin Incubation dévoilés à VivaTech À l'occasion de VivaTech, la Ministre déléguée chargée de l'Intelligence artificielle et du Numérique, Anne Le Hénanff, a annoncé les..."
     }
   ],
   "findings": {

@@ -1,6 +1,6 @@
 {
   "programId": "startup-health",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "http://www.startuphealth.com/apply",
@@ -22,7 +22,7 @@
       "url": "https://www.startuphealth.com/community",
       "page": "portfolio",
       "anchor": "Community Companies",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -30,14 +30,6 @@
       "url": "https://www.startuphealth.com/contact",
       "page": "details",
       "anchor": "Talk to us about a campaign",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.startuphealth.com/founders",
-      "page": "other",
-      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -54,7 +46,7 @@
       "url": "https://www.startuphealth.com/portfolio-dropdown",
       "page": "portfolio",
       "anchor": "Folder: Community",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -123,8 +115,40 @@
       "origin": "official"
     },
     {
+      "url": "https://www.startuphealth.com/startup-health-blog/dozens-of-innovative-companies-secure-capital-for-tech-driven-amp-ai-powered-solutions-around-the-globe-startup-health-insights-week-of-sep-9-2025",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.startuphealth.com/startup-health-blog/dreamed-secures-3m-amp-strategic-deals-startup-health-insights-week-of-aug-20-2024",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/startup-health-blog/inside-the-impact-board-why-dr-craig-ritchie-is-optimistic-about-startup-healths-alzheimers-moonshot-community",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/startup-health-blog/mindahead-offers-digital-alzheimers-therapy-through-a-clinical-trial-backed-behavior-activation-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/startup-health-blog/startup-health-announces-first-companies-to-join-alzheimers-moonshot-community",
+      "page": "portfolio",
       "anchor": "",
       "fetched": true,
       "blocked": null,

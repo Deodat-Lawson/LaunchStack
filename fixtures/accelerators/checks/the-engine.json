@@ -1,22 +1,21 @@
 {
   "programId": "the-engine",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://engine.xyz/",
     "https://engine.xyz/ignition-pass-shell",
     "https://engine.xyz/landing/apply-for-residency",
     "https://engine.xyz/about/board",
     "https://engine.xyz/about/our-mission",
-    "https://engine.xyz/about/team",
-    "https://engine.xyz/accelerator/news/external-content",
-    "https://engine.xyz/accelerator/news/news-stories",
-    "https://engine.xyz/accelerator/news/the-engine-blog",
-    "https://engine.xyz/accelerator/news/tough-tech-fundamentals",
-    "https://engine.xyz/news/ge-vernova-plugs-in-to-the-tough-tech-ecosystem-with-the-engine-accelerator",
     "https://engine.xyz/programs",
     "https://engine.xyz/spaces/residency/resident-programs",
     "https://engine.xyz/about",
-    "https://engine.xyz/ignition-pass"
+    "https://engine.xyz/ignition-pass",
+    "https://engine.xyz/whiteboard",
+    "https://engine.xyz/resident-companies",
+    "https://engine.xyz/about/team",
+    "https://engine.xyz/accelerator/news/external-content",
+    "https://engine.xyz/accelerator/news/news-stories"
   ],
   "evidence": [
     {
@@ -27,15 +26,15 @@
       "page": "details"
     },
     {
-      "id": "check-announced-137495d02f",
-      "url": "https://engine.xyz/accelerator/news/news-stories",
+      "id": "check-announced-10587f9a6a",
+      "url": "https://engine.xyz/whiteboard",
       "title": "The Engine — program page",
       "excerpt": "Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site",
       "page": "details"
     },
     {
-      "id": "check-announced-148ff01cf6",
-      "url": "https://engine.xyz/accelerator/news/the-engine-blog",
+      "id": "check-announced-137495d02f",
+      "url": "https://engine.xyz/accelerator/news/news-stories",
       "title": "The Engine — program page",
       "excerpt": "Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site",
       "page": "details"
@@ -57,13 +56,6 @@
     {
       "id": "check-announced-454e2c2875",
       "url": "https://engine.xyz/about",
-      "title": "The Engine — program page",
-      "excerpt": "Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site",
-      "page": "details"
-    },
-    {
-      "id": "check-announced-52555e7360",
-      "url": "https://engine.xyz/news/ge-vernova-plugs-in-to-the-tough-tech-ecosystem-with-the-engine-accelerator",
       "title": "The Engine — program page",
       "excerpt": "Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site",
       "page": "details"
@@ -104,6 +96,13 @@
       "page": "application"
     },
     {
+      "id": "check-announced-ca7f7029fd",
+      "url": "https://engine.xyz/resident-companies",
+      "title": "The Engine — portfolio page",
+      "excerpt": "Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site",
+      "page": "portfolio"
+    },
+    {
       "id": "check-announced-d07c782d66",
       "url": "https://engine.xyz/ignition-pass",
       "title": "The Engine — program page",
@@ -120,13 +119,6 @@
     {
       "id": "check-announced-eca2613a8a",
       "url": "https://engine.xyz/about/board",
-      "title": "The Engine — program page",
-      "excerpt": "Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site",
-      "page": "details"
-    },
-    {
-      "id": "check-announced-fba50b4489",
-      "url": "https://engine.xyz/accelerator/news/tough-tech-fundamentals",
       "title": "The Engine — program page",
       "excerpt": "Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site",
       "page": "details"
@@ -181,22 +173,8 @@
       "page": "details"
     },
     {
-      "id": "check-email-2b23560ce7",
-      "url": "https://engine.xyz/accelerator/news/tough-tech-fundamentals",
-      "title": "The Engine — program page",
-      "excerpt": "\"email\": \"hello@engine.xyz\"",
-      "page": "details"
-    },
-    {
       "id": "check-email-37dd91e75a",
       "url": "https://engine.xyz/about/team",
-      "title": "The Engine — program page",
-      "excerpt": "\"email\": \"hello@engine.xyz\"",
-      "page": "details"
-    },
-    {
-      "id": "check-email-454d062fab",
-      "url": "https://engine.xyz/news/ge-vernova-plugs-in-to-the-tough-tech-ecosystem-with-the-engine-accelerator",
       "title": "The Engine — program page",
       "excerpt": "\"email\": \"hello@engine.xyz\"",
       "page": "details"
@@ -211,6 +189,13 @@
     {
       "id": "check-email-4f98e2eb35",
       "url": "https://engine.xyz/ignition-pass",
+      "title": "The Engine — program page",
+      "excerpt": "\"email\": \"hello@engine.xyz\"",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5bb18a61df",
+      "url": "https://engine.xyz/whiteboard",
       "title": "The Engine — program page",
       "excerpt": "\"email\": \"hello@engine.xyz\"",
       "page": "details"
@@ -251,10 +236,17 @@
       "page": "details"
     },
     {
-      "id": "check-email-e41d89be2e",
-      "url": "https://engine.xyz/accelerator/news/the-engine-blog",
-      "title": "The Engine — program page",
+      "id": "check-email-fce69bc00e",
+      "url": "https://engine.xyz/resident-companies",
+      "title": "The Engine — portfolio page",
       "excerpt": "\"email\": \"hello@engine.xyz\"",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-047f0262a2",
+      "url": "https://engine.xyz/whiteboard",
+      "title": "The Engine — program page",
+      "excerpt": "to our next cohort, but this program will be run entirely in-person. Ready to bring Whiteboard to your world? Indicate",
       "page": "details"
     },
     {
@@ -262,6 +254,13 @@
       "url": "https://engine.xyz/spaces/residency/resident-programs",
       "title": "The Engine — program page",
       "excerpt": "take part in The Engine’s Resident programs? Yes. While in-person participation is encouraged, some Resident program",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3a2b290bfb",
+      "url": "https://engine.xyz/whiteboard",
+      "title": "The Engine — program page",
+      "excerpt": "as long as they can attend all of the Whiteboard sessions in person. Is this an in-person program? Yes, Whiteboard is an",
       "page": "details"
     },
     {
@@ -279,10 +278,38 @@
       "page": "details"
     },
     {
+      "id": "check-format-46a53be8b0",
+      "url": "https://engine.xyz/whiteboard",
+      "title": "The Engine — program page",
+      "excerpt": "Is this an in-person program? Yes, Whiteboard is an in-person only program aimed at facilitating networking and sharing",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5098f012f0",
+      "url": "https://engine.xyz/whiteboard",
+      "title": "The Engine — program page",
+      "excerpt": "research institution that are able to attend the session in-person at The Engine (750 Main St., Cambridge, MA). Are there",
+      "page": "details"
+    },
+    {
+      "id": "check-format-64470de797",
+      "url": "https://engine.xyz/whiteboard",
+      "title": "The Engine — program page",
+      "excerpt": "between faculty members. What if I can’t make the in-person sessions? We are happy to welcome you to our next cohort,",
+      "page": "details"
+    },
+    {
       "id": "check-format-6a163075a5",
       "url": "https://engine.xyz/spaces/residency/resident-programs",
       "title": "The Engine — program page",
       "excerpt": "is encouraged, some Resident program activities offer hybrid or virtual options so remote team members can still",
+      "page": "details"
+    },
+    {
+      "id": "check-format-72c84b9c92",
+      "url": "https://engine.xyz/whiteboard",
+      "title": "The Engine — program page",
+      "excerpt": "all of the Whiteboard sessions in person. Is this an in-person program? Yes, Whiteboard is an in-person only program",
       "page": "details"
     },
     {
@@ -314,8 +341,8 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-471276d743",
-      "url": "https://engine.xyz/accelerator/news/tough-tech-fundamentals",
+      "id": "check-portfolio-1e37258983",
+      "url": "https://engine.xyz/whiteboard",
       "title": "The Engine — program page",
       "excerpt": "Companies → https://engine.xyz/resident-companies",
       "page": "details"
@@ -370,22 +397,8 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-9fc7760a71",
-      "url": "https://engine.xyz/accelerator/news/the-engine-blog",
-      "title": "The Engine — program page",
-      "excerpt": "Companies → https://engine.xyz/resident-companies",
-      "page": "details"
-    },
-    {
       "id": "check-portfolio-b8b66eedca",
       "url": "https://engine.xyz/accelerator/news/external-content",
-      "title": "The Engine — program page",
-      "excerpt": "Companies → https://engine.xyz/resident-companies",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-b8c90e23e9",
-      "url": "https://engine.xyz/news/ge-vernova-plugs-in-to-the-tough-tech-ecosystem-with-the-engine-accelerator",
       "title": "The Engine — program page",
       "excerpt": "Companies → https://engine.xyz/resident-companies",
       "page": "details"
@@ -426,13 +439,6 @@
       "page": "details"
     },
     {
-      "id": "check-route-14dcc54e5a",
-      "url": "https://engine.xyz/accelerator/news/the-engine-blog",
-      "title": "The Engine — program page",
-      "excerpt": "Apply for Residency → https://engine.xyz/landing/apply-for-residency",
-      "page": "details"
-    },
-    {
       "id": "check-route-179abc6941",
       "url": "https://engine.xyz/spaces/residency/resident-programs",
       "title": "The Engine — program page",
@@ -454,17 +460,10 @@
       "page": "application"
     },
     {
-      "id": "check-route-22d00d178b",
-      "url": "https://engine.xyz/accelerator/news/tough-tech-fundamentals",
+      "id": "check-route-2ab555f2a7",
+      "url": "https://engine.xyz/whiteboard",
       "title": "The Engine — program page",
       "excerpt": "Apply for Residency → https://engine.xyz/landing/apply-for-residency",
-      "page": "details"
-    },
-    {
-      "id": "check-route-2b67402092",
-      "url": "https://engine.xyz/accelerator/news/the-engine-blog",
-      "title": "The Engine — program page",
-      "excerpt": "Contact Us → https://engine.xyz/landing/apply-for-residency",
       "page": "details"
     },
     {
@@ -503,6 +502,20 @@
       "page": "details"
     },
     {
+      "id": "check-route-4ed551ec46",
+      "url": "https://engine.xyz/resident-companies",
+      "title": "The Engine — portfolio page",
+      "excerpt": "Apply for Residency → https://engine.xyz/landing/apply-for-residency",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-5073aec512",
+      "url": "https://engine.xyz/resident-companies",
+      "title": "The Engine — portfolio page",
+      "excerpt": "Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● → https://engine.xyz/ignition-pass-shell",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-52bc4ad41e",
       "url": "https://engine.xyz/programs",
       "title": "The Engine — program page",
@@ -524,10 +537,10 @@
       "page": "details"
     },
     {
-      "id": "check-route-66d7d8d3a1",
-      "url": "https://engine.xyz/news/ge-vernova-plugs-in-to-the-tough-tech-ecosystem-with-the-engine-accelerator",
+      "id": "check-route-655c592312",
+      "url": "https://engine.xyz/whiteboard",
       "title": "The Engine — program page",
-      "excerpt": "Contact Us → https://engine.xyz/landing/apply-for-residency",
+      "excerpt": "Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● → https://engine.xyz/ignition-pass-shell",
       "page": "details"
     },
     {
@@ -573,10 +586,10 @@
       "page": "details"
     },
     {
-      "id": "check-route-7b07f9b357",
-      "url": "https://engine.xyz/news/ge-vernova-plugs-in-to-the-tough-tech-ecosystem-with-the-engine-accelerator",
+      "id": "check-route-80db591bcb",
+      "url": "https://engine.xyz/whiteboard",
       "title": "The Engine — program page",
-      "excerpt": "Apply for Residency → https://engine.xyz/landing/apply-for-residency",
+      "excerpt": "Contact Us → https://engine.xyz/landing/apply-for-residency",
       "page": "details"
     },
     {
@@ -622,11 +635,11 @@
       "page": "details"
     },
     {
-      "id": "check-route-a8b664a84e",
-      "url": "https://engine.xyz/accelerator/news/the-engine-blog",
-      "title": "The Engine — program page",
-      "excerpt": "Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● → https://engine.xyz/ignition-pass-shell",
-      "page": "details"
+      "id": "check-route-b5f0ad49d7",
+      "url": "https://engine.xyz/resident-companies",
+      "title": "The Engine — portfolio page",
+      "excerpt": "Contact Us → https://engine.xyz/landing/apply-for-residency",
+      "page": "portfolio"
     },
     {
       "id": "check-route-b7b296f933",
@@ -647,13 +660,6 @@
       "url": "https://engine.xyz/about/team",
       "title": "The Engine — program page",
       "excerpt": "Contact Us → https://engine.xyz/landing/apply-for-residency",
-      "page": "details"
-    },
-    {
-      "id": "check-route-c17ec2171d",
-      "url": "https://engine.xyz/news/ge-vernova-plugs-in-to-the-tough-tech-ecosystem-with-the-engine-accelerator",
-      "title": "The Engine — program page",
-      "excerpt": "Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● → https://engine.xyz/ignition-pass-shell",
       "page": "details"
     },
     {
@@ -720,20 +726,6 @@
       "page": "application"
     },
     {
-      "id": "check-route-ee424cf659",
-      "url": "https://engine.xyz/accelerator/news/tough-tech-fundamentals",
-      "title": "The Engine — program page",
-      "excerpt": "Contact Us → https://engine.xyz/landing/apply-for-residency",
-      "page": "details"
-    },
-    {
-      "id": "check-route-f936f9865e",
-      "url": "https://engine.xyz/accelerator/news/tough-tech-fundamentals",
-      "title": "The Engine — program page",
-      "excerpt": "Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● → https://engine.xyz/ignition-pass-shell",
-      "page": "details"
-    },
-    {
       "id": "check-status-c9f9cd0d6d",
       "url": "https://engine.xyz/ignition-pass",
       "title": "The Engine — program page",
@@ -749,10 +741,130 @@
       "excerpt": "The Home for Tough Tech | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space Resident Programs External Facilities Residency Options Programs ↓ Open menu for Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Resident Programs Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission Team Board Careers Host an Event Contact Support Apply for Residency The home for Tough Tech The Engine supports Tough Tech Tough Tech Tough Tech is transformational science and engineering that solves the world’s most important challenges. companies building solutions for a healthier, more productive, and more sustainable world. MacroCycle's pilot plant, poised to upcycle up to 200,000 plastic bottles annually. Fabrication space at 750 Main Street. The ElastrodeTM by Axoft: A soft and high-bandwidth neural interface. Hyfé: Understanding impacts of feed"
     },
     {
+      "id": "check-page-afe3005011",
+      "url": "https://engine.xyz/",
+      "page": "details",
+      "excerpt": "One of Atlantic Quantum's test and measurement laboratories located in Cambridge."
+    },
+    {
+      "id": "check-page-9c29d6c8b9",
+      "url": "https://engine.xyz/",
+      "page": "details",
+      "excerpt": "Cellbricks Therapeutics and Mayor of Berlin cut the ribbon for a transatlantic launch at The Engine."
+    },
+    {
+      "id": "check-page-b6494d3e7a",
+      "url": "https://engine.xyz/",
+      "page": "details",
+      "excerpt": "Tough Tech Week 2024 brought Activate Demo Day to The Engine."
+    },
+    {
+      "id": "check-page-bef24dcfda",
+      "url": "https://engine.xyz/",
+      "page": "details",
+      "excerpt": "Build Here Access 220,000ft² of convergent wet lab, engineering, and office space with the equipment to build Tough Tech — fully managed by our expert team."
+    },
+    {
+      "id": "check-page-0aabedcf53",
+      "url": "https://engine.xyz/",
+      "page": "details",
+      "excerpt": "Explore Residency Options Explore Residency Options Learn Here Our programming addresses the complex challenges of commercializing disruptive technologies, making Tough Tech entrepreneurship more accessible."
+    },
+    {
+      "id": "check-page-14972804c7",
+      "url": "https://engine.xyz/",
+      "page": "details",
+      "excerpt": "Access Our Programs Access Our Programs Connect Here Our thriving ecosystem brings together essential Tough Tech stakeholders: entrepreneurs, academia, government, corporates, and capital providers."
+    },
+    {
+      "id": "check-page-69d2204543",
+      "url": "https://engine.xyz/",
+      "page": "details",
+      "excerpt": "Get in Touch Explore Open Jobs at The Engine and Resident Companies The Engine We support Tough Tech teams The Engine is a non-profit incubator and accelerator that supports Tough Tech teams working to solve the world’s toughest challenges through the convergence of science, engineering and entrepreneurship."
+    },
+    {
+      "id": "check-page-9dbf319e7e",
+      "url": "https://engine.xyz/",
+      "page": "details",
+      "excerpt": "Follow us on linkedin Companies Residency Programs Resources Ecosystem Support News About Team Careers with The Engine Host an Event at The Engine Contact Privacy Policy Interested in joining our ecosystem?"
+    },
+    {
       "id": "check-page-cf4db84b7a",
       "url": "https://engine.xyz/ignition-pass-shell",
       "page": "application",
       "excerpt": "The Shell Ignition Pass | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency The Engine Ignition Pass Sponsored by Shell Apply Now Learn More Read the Press Release Applications for the Ignition Pass with Shell are now open. Apply by Monday, December 21, 2026. Built for the earliest stages of Tough Tech Tough Tech Tough Tech is transformational technology that solves the world’s most important challenges through the convergence of breakthrough science, engineering, and entrepreneurship. The Ignition Pass is a"
+    },
+    {
+      "id": "check-page-3515fb06ea",
+      "url": "https://engine.xyz/ignition-pass-shell",
+      "page": "application",
+      "excerpt": "The Ignition Pass is a Residency grant for early-stage Tough Tech startups."
+    },
+    {
+      "id": "check-page-bbbbf74197",
+      "url": "https://engine.xyz/ignition-pass-shell",
+      "page": "application",
+      "excerpt": "In collaboration with Shell, a leader in the future of energy, The Engine will jointly select up to five startups whose technologies align with strategic energy priorities."
+    },
+    {
+      "id": "check-page-6bb1c5cc79",
+      "url": "https://engine.xyz/ignition-pass-shell",
+      "page": "application",
+      "excerpt": "Selected startups will receive business support, expert mentorship, and funding for up to one year of Residency at The Engine."
+    },
+    {
+      "id": "check-page-868c982ad4",
+      "url": "https://engine.xyz/ignition-pass-shell",
+      "page": "application",
+      "excerpt": "While startups are not required to be founded in the Boston area, they must be registered in the United States."
+    },
+    {
+      "id": "check-page-9b67bb55cf",
+      "url": "https://engine.xyz/ignition-pass-shell",
+      "page": "application",
+      "excerpt": "Must not have raised more than $10 million of capital (excluding non-dilutive funding) or have trailing 12-month revenue of more than $3 million."
+    },
+    {
+      "id": "check-page-a36fd3f6de",
+      "url": "https://engine.xyz/ignition-pass-shell",
+      "page": "application",
+      "excerpt": "Early-stage Tough Tech companies developing physical technologies in the technology areas mentioned above."
+    },
+    {
+      "id": "check-page-c17214d826",
+      "url": "https://engine.xyz/ignition-pass-shell",
+      "page": "application",
+      "excerpt": "“This Shell-sponsored Ignition Pass is designed to surface high-potential energy technologies at the earliest stages of development."
+    },
+    {
+      "id": "check-page-cd4e51698e",
+      "url": "https://engine.xyz/ignition-pass-shell",
+      "page": "application",
+      "excerpt": "Ready to Accelerate Your Tough Tech Startup?"
+    },
+    {
+      "id": "check-page-a01de41466",
+      "url": "https://engine.xyz/ignition-pass-shell",
+      "page": "application",
+      "excerpt": "Apply for the second Ignition Pass to access up to one year of funded Residency, specialized lab and engineering facilities, and Shell’s technical experts."
+    },
+    {
+      "id": "check-page-a90e615ba3",
+      "url": "https://engine.xyz/ignition-pass-shell",
+      "page": "application",
+      "excerpt": "What is the award value of The Ignition Pass?"
+    },
+    {
+      "id": "check-page-19a8e992b3",
+      "url": "https://engine.xyz/ignition-pass-shell",
+      "page": "application",
+      "excerpt": "The Ignition Pass award value varies based on team size and is designed to cover the cost of access to BSL2 lab benches, engineering benches, high bay fabrication floor space, more than 1,880 pieces of shared lab equipment, and customized infrastructure support at The Engine."
+    },
+    {
+      "id": "check-page-c40b2ab464",
+      "url": "https://engine.xyz/ignition-pass-shell",
+      "page": "application",
+      "excerpt": "The Ignition Pass is for early-stage startup teams with an immediate need to develop or commercialize their technology that require specialized facilities."
     },
     {
       "id": "check-page-ad5cdb8739",
@@ -761,16 +873,508 @@
       "excerpt": "HubSpot Request a Tour Form | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency The Engine We support Tough Tech teams The Engine is a non-profit incubator and accelerator that supports Tough Tech teams working to solve the world’s toughest challenges through the convergence of science, engineering and entrepreneurship. We provide access to comprehensive programming, specialized spaces and equipment, and the ecosystem to support transformative technologies on their journey from idea to impact. Follow us on"
     },
     {
+      "id": "check-page-d10e73e8bc",
+      "url": "https://engine.xyz/landing/apply-for-residency",
+      "page": "application",
+      "excerpt": "Follow us on linkedin Companies Residency Programs Resources Ecosystem Support News About Team Careers with The Engine Host an Event at The Engine Contact Privacy Policy Interested in joining our ecosystem?"
+    },
+    {
       "id": "check-page-d31471a403",
       "url": "https://engine.xyz/about/board",
       "page": "details",
       "excerpt": "Board | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency About Related pages navigation Mission Team Board Anantha Chandrakasan, Chair Anantha Chandrakasan is the Board Chair of The Engine and MIT’s provost and Vannevar Bush Professor of Electrical Engineering and Computer Science. As MIT’s chief academic and budget officer, he oversees the Institute’s academic priorities and the Office of Innovation and Strategy, including major initiatives in health and life sciences, generative AI, new manufacturing,"
     },
     {
+      "id": "check-page-07ac4eb1ea",
+      "url": "https://engine.xyz/about/board",
+      "page": "details",
+      "excerpt": "As MIT’s chief academic and budget officer, he oversees the Institute’s academic priorities and the Office of Innovation and Strategy, including major initiatives in health and life sciences, generative AI, new manufacturing, quantum, energy, and climate."
+    },
+    {
+      "id": "check-page-b018e13490",
+      "url": "https://engine.xyz/about/board",
+      "page": "details",
+      "excerpt": "During his tenure as dean, he advanced interdisciplinary programs and new models for academia-industry collaboration, and helped establish initiatives including the MIT Schwarzman College of Computing, the MIT Climate and Sustainability Consortium, and the MIT AI Hardware Program."
+    },
+    {
+      "id": "check-page-d749907ab6",
+      "url": "https://engine.xyz/about/board",
+      "page": "details",
+      "excerpt": "He joined the MIT faculty in 1994 and has served as director of the Microsystems Technology Laboratories and head of MIT’s Department of Electrical Engineering and Computer Science."
+    },
+    {
+      "id": "check-page-f6e1b854a5",
+      "url": "https://engine.xyz/about/board",
+      "page": "details",
+      "excerpt": "Chandrakasan also leads MIT’s Energy-Efficient Circuits and Systems Group, whose research spans ultra-low-power electronics, security hardware, energy harvesting, wireless charging, and biomedical devices."
+    },
+    {
+      "id": "check-page-b6d8b8cb2b",
+      "url": "https://engine.xyz/about/board",
+      "page": "details",
+      "excerpt": "She is the Vice Provost for Faculty at MIT as of January 2024."
+    },
+    {
+      "id": "check-page-3f7a912a3c",
+      "url": "https://engine.xyz/about/board",
+      "page": "details",
+      "excerpt": "Rousseau Pioneer Award for Lifetime Achievement by a Woman Chemical Engineer in 2019 and gave the Materials Research Society (MRS) David Turnbull Lectureship, 2019."
+    },
+    {
+      "id": "check-page-8add58a6c9",
+      "url": "https://engine.xyz/about/board",
+      "page": "details",
+      "excerpt": "She is the co-founder and member of the Scientific Advisory Board of LayerBio, Inc., a member of the Scientific Advisory Board of Moderna Therapeutics and a member of the Board of Alector Therapeutics and the Board of Sail Biomedicines, a Flagship company."
+    },
+    {
+      "id": "check-page-2f95f4be81",
+      "url": "https://engine.xyz/about/board",
+      "page": "details",
+      "excerpt": "She held the Ford Foundation Dissertation Fellowship, and on completing her PhD, was an NSF Postdoctoral Fellow at the Harvard University Chemistry Department before returning to MIT as a faculty member."
+    },
+    {
+      "id": "check-page-df4c78de54",
+      "url": "https://engine.xyz/about/board",
+      "page": "details",
+      "excerpt": "Linda Pizzuti Henry Linda Henry is the co-owner of Boston Globe Media where she serves as Chief Executive Officer of the thriving 152-year-old multimedia company that includes The Boston Globe, Boston.com, Boston Magazine, Harvard Book Store, and Stat – a national life sciences publication."
+    },
+    {
+      "id": "check-page-1da09e7438",
+      "url": "https://engine.xyz/about/board",
+      "page": "details",
+      "excerpt": "He is currently incubating startups in biotech, AI and computational science, education, medicine and space."
+    },
+    {
+      "id": "check-page-4b62bd72d8",
+      "url": "https://engine.xyz/about/board",
+      "page": "details",
+      "excerpt": "He received a BE in Electrical Engineering from Cooper Union; and a Masters in Computer Science, and a PhD in Artificial Intelligence, from MIT."
+    },
+    {
+      "id": "check-page-98db3e22a0",
+      "url": "https://engine.xyz/about/board",
+      "page": "details",
+      "excerpt": "Prior to that, he served as Secretary of Administration and Finance for the Commonwealth of Massachusetts under former Governor Deval Patrick, and was the Executive Director of the Massachusetts Health Connector."
+    },
+    {
       "id": "check-page-4c4696dfa3",
       "url": "https://engine.xyz/about/our-mission",
       "page": "details",
       "excerpt": "Mission | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency About Related pages navigation Mission Team Board Making it easier for Tough Tech to change the world. We believe a healthier population, a more accessible and adaptive society, and a more resilient world are all possible through science, engineering, and visionary leadership. Solving these challenges will require insights from across disciplines, whether it’s biology and material science; nanoscale manufacturing and robotics; or AI and"
+    },
+    {
+      "id": "check-page-94a5a3edd1",
+      "url": "https://engine.xyz/about/our-mission",
+      "page": "details",
+      "excerpt": "Solving these challenges will require insights from across disciplines, whether it’s biology and material science; nanoscale manufacturing and robotics; or AI and transportation."
+    },
+    {
+      "id": "check-page-35efb224b1",
+      "url": "https://engine.xyz/about/our-mission",
+      "page": "details",
+      "excerpt": "Get Involved What is Tough Tech?"
+    },
+    {
+      "id": "check-page-edbd42fcce",
+      "url": "https://engine.xyz/about/our-mission",
+      "page": "details",
+      "excerpt": "Tough Tech has the potential to change the world — but only if it makes it out of the lab."
+    },
+    {
+      "id": "check-page-f4a8bd8250",
+      "url": "https://engine.xyz/about/our-mission",
+      "page": "details",
+      "excerpt": "Our Approach: We provide innovative founders with the necessary resources, infrastructure, and access to the Tough Tech ecosystem to fuel their growth."
+    },
+    {
+      "id": "check-page-5c7aa199f9",
+      "url": "https://engine.xyz/about/our-mission",
+      "page": "details",
+      "excerpt": "By convening policymakers, investors, and founders, we align the Tough Tech ecosystem to drive progress towards solving the world’s most important challenges."
+    },
+    {
+      "id": "check-page-9f50a496bb",
+      "url": "https://engine.xyz/about/our-mission",
+      "page": "details",
+      "excerpt": "Our Story MIT created The Engine in 2016 to support Tough Tech startups poised to deliver meaningful, positive impact on society and the environment."
+    },
+    {
+      "id": "check-page-811a2994b7",
+      "url": "https://engine.xyz/about/our-mission",
+      "page": "details",
+      "excerpt": "Initially combining an incubator with a venture capital fund, The Engine provided early-stage companies with capital, infrastructure, and operational support."
+    },
+    {
+      "id": "check-page-b3dad0ea09",
+      "url": "https://engine.xyz/about/our-mission",
+      "page": "details",
+      "excerpt": "In 2023, Engine Ventures spun out as a separate investment firm focused on Tough Tech companies."
+    },
+    {
+      "id": "check-page-4d467706b2",
+      "url": "https://engine.xyz/about/our-mission",
+      "page": "details",
+      "excerpt": "In 2025, The Engine formally became a 501(c)(3) nonprofit, expanding its commitment to supporting Tough Tech companies and ecosystems nationwide through specialized programming, shared lab and engineering infrastructure, and a network designed to help companies move from scientific breakthroughs to commercial impact."
+    },
+    {
+      "id": "check-page-eb5418d397",
+      "url": "https://engine.xyz/about/our-mission",
+      "page": "details",
+      "excerpt": "We believe success in this mission is achieved through humility in the face of the unknown and dedication in championing the Tough Tech community."
+    },
+    {
+      "id": "check-page-53b0079731",
+      "url": "https://engine.xyz/about/our-mission",
+      "page": "details",
+      "excerpt": "We share our wins and our learnings to accelerate the path of the Tough Tech community we support."
+    },
+    {
+      "id": "check-page-821b2c8d15",
+      "url": "https://engine.xyz/about/our-mission",
+      "page": "details",
+      "excerpt": "Anyone with the technical chops and ambition to drive change could be a Tough Tech founder or funder."
+    },
+    {
+      "id": "check-page-5a519df3e8",
+      "url": "https://engine.xyz/programs",
+      "page": "details",
+      "excerpt": "Incubator and Accelerator Programs | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency Programs From Idea to Impact. The Engine offers programs for each stage of the startup journey to accelerate the transition from ideas in a lab to viable commercial solutions. Through a range of tech translation programs, workshops, and custom trainings, we help innovators explore Tough Tech entrepreneurship, de-risk their technologies, secure investment, and scale their impact. Blueprint by The Engine™ Download official"
+    },
+    {
+      "id": "check-page-c8bb23e54b",
+      "url": "https://engine.xyz/programs",
+      "page": "details",
+      "excerpt": "Whiteboard A program for faculty and principal investigators exploring entrepreneurship in Tough Tech."
+    },
+    {
+      "id": "check-page-809b31de71",
+      "url": "https://engine.xyz/programs",
+      "page": "details",
+      "excerpt": "Get Involved The Engine We support Tough Tech teams The Engine is a non-profit incubator and accelerator that supports Tough Tech teams working to solve the world’s toughest challenges through the convergence of science, engineering and entrepreneurship."
+    },
+    {
+      "id": "check-page-60fb724cb7",
+      "url": "https://engine.xyz/programs",
+      "page": "details",
+      "excerpt": "Follow us on linkedin Companies Residency Programs Resources Ecosystem Support News About Team Careers with The Engine Host an Event at The Engine Contact Privacy Policy Interested in joining our ecosystem?"
+    },
+    {
+      "id": "check-page-82541d16ff",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "page": "details",
+      "excerpt": "Resident Programs | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency Residency Related pages navigation Welcome Wet Labs Engineering Spaces Office Space Resident Programs External Facilities Residency Options Request a Tour 750 Main Street Cambridge, MA 02139 Resident Programs The Engine offers comprehensive educational programming and ecosystem connections to help Residents attract capital, manage their business, and scale their technology. World-class Tough Tech education to help fund and grow your"
+    },
+    {
+      "id": "check-page-8cb0c90d45",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "page": "details",
+      "excerpt": "World-class Tough Tech education to help fund and grow your business."
+    },
+    {
+      "id": "check-page-bafdb76573",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "page": "details",
+      "excerpt": "The Tough Tech Learning Model Our comprehensive educational programming covers nine critical learning areas that Tough Tech founders need to master to transform groundbreaking ideas into scalable ventures with lasting impact."
+    },
+    {
+      "id": "check-page-1182114a53",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "page": "details",
+      "excerpt": "Learn More Fundraising Support Grow your business with curated connections to The Engine’s Tough Tech investor network, pitch practice, storytelling workshops, and invitations to investor events and demo days."
+    },
+    {
+      "id": "check-page-a6bed7272a",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "page": "details",
+      "excerpt": "Networking Events Connect with fellow Tough Tech entrepreneurs, vendors, investors, public officials, and other constituents in the Tough Tech ecosystem."
+    },
+    {
+      "id": "check-page-03fa39e6ea",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "page": "details",
+      "excerpt": "Monthly Workshops Highly engaging monthly workshops dedicated to each aspect of the Tough Tech Learning Model, led by CXOs in residence and key constituents in the Tough Tech ecosystem."
+    },
+    {
+      "id": "check-page-7830997689",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "page": "details",
+      "excerpt": "Experts in Residence Program Experts in Residence (CXOs) are available for weekly virtual office hours to provide founders with guidance for building their Tough Tech organizations, covering everything including talent, finance, HR, legal, strategy and public affairs."
+    },
+    {
+      "id": "check-page-ad71cd74c3",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "page": "details",
+      "excerpt": "Tough Tech Week 2026 Tough Tech Week (Oct 26–30, 2026) is a weeklong celebration in Boston and Cambridge of breakthrough science, engineering, and the people building it into real-world impact."
+    },
+    {
+      "id": "check-page-36807a74d1",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "page": "details",
+      "excerpt": "Frequently Asked Questions What are The Engine’s programs for Resident Tough Tech companies?"
+    },
+    {
+      "id": "check-page-0b5df24620",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "page": "details",
+      "excerpt": "Does The Engine provide mentorship to companies in the Residency program?"
+    },
+    {
+      "id": "check-page-c97a3a0190",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "page": "details",
+      "excerpt": "The Engine connects Resident companies with a network of mentors, including investors, veteran Tough Tech entrepreneurs, and The Engine’s experts in residence."
+    },
+    {
+      "id": "check-page-f61b855310",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "page": "details",
+      "excerpt": "These mentors offer expertise across talent, public affairs, legal guidance, finance, communication, and leadership, tailored to each company’s technical and commercial goals."
+    },
+    {
+      "id": "check-page-6bc1feb7aa",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "page": "details",
+      "excerpt": "These programs provide both technical and business insight needed to support Tough Tech commercialization."
+    },
+    {
+      "id": "check-page-e80c7d461e",
+      "url": "https://engine.xyz/about",
+      "page": "details",
+      "excerpt": "Mission | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency About Related pages navigation Mission Team Board Making it easier for Tough Tech to change the world. We believe a healthier population, a more accessible and adaptive society, and a more resilient world are all possible through science, engineering, and visionary leadership. Solving these challenges will require insights from across disciplines, whether it’s biology and material science; nanoscale manufacturing and robotics; or AI and"
+    },
+    {
+      "id": "check-page-1f315637e6",
+      "url": "https://engine.xyz/about",
+      "page": "details",
+      "excerpt": "Solving these challenges will require insights from across disciplines, whether it’s biology and material science; nanoscale manufacturing and robotics; or AI and transportation."
+    },
+    {
+      "id": "check-page-879fcf9522",
+      "url": "https://engine.xyz/about",
+      "page": "details",
+      "excerpt": "Get Involved What is Tough Tech?"
+    },
+    {
+      "id": "check-page-53301c4615",
+      "url": "https://engine.xyz/about",
+      "page": "details",
+      "excerpt": "Tough Tech has the potential to change the world — but only if it makes it out of the lab."
+    },
+    {
+      "id": "check-page-12ee3be90c",
+      "url": "https://engine.xyz/about",
+      "page": "details",
+      "excerpt": "Our Approach: We provide innovative founders with the necessary resources, infrastructure, and access to the Tough Tech ecosystem to fuel their growth."
+    },
+    {
+      "id": "check-page-e2df11fa1e",
+      "url": "https://engine.xyz/about",
+      "page": "details",
+      "excerpt": "By convening policymakers, investors, and founders, we align the Tough Tech ecosystem to drive progress towards solving the world’s most important challenges."
+    },
+    {
+      "id": "check-page-8a17639b16",
+      "url": "https://engine.xyz/about",
+      "page": "details",
+      "excerpt": "Our Story MIT created The Engine in 2016 to support Tough Tech startups poised to deliver meaningful, positive impact on society and the environment."
+    },
+    {
+      "id": "check-page-0ad450a1b8",
+      "url": "https://engine.xyz/about",
+      "page": "details",
+      "excerpt": "Initially combining an incubator with a venture capital fund, The Engine provided early-stage companies with capital, infrastructure, and operational support."
+    },
+    {
+      "id": "check-page-5faf16caa9",
+      "url": "https://engine.xyz/about",
+      "page": "details",
+      "excerpt": "In 2023, Engine Ventures spun out as a separate investment firm focused on Tough Tech companies."
+    },
+    {
+      "id": "check-page-9064d30609",
+      "url": "https://engine.xyz/about",
+      "page": "details",
+      "excerpt": "In 2025, The Engine formally became a 501(c)(3) nonprofit, expanding its commitment to supporting Tough Tech companies and ecosystems nationwide through specialized programming, shared lab and engineering infrastructure, and a network designed to help companies move from scientific breakthroughs to commercial impact."
+    },
+    {
+      "id": "check-page-c2bf09b2d0",
+      "url": "https://engine.xyz/about",
+      "page": "details",
+      "excerpt": "We believe success in this mission is achieved through humility in the face of the unknown and dedication in championing the Tough Tech community."
+    },
+    {
+      "id": "check-page-65344ec1f7",
+      "url": "https://engine.xyz/about",
+      "page": "details",
+      "excerpt": "We share our wins and our learnings to accelerate the path of the Tough Tech community we support."
+    },
+    {
+      "id": "check-page-b357c7cfc4",
+      "url": "https://engine.xyz/about",
+      "page": "details",
+      "excerpt": "Anyone with the technical chops and ambition to drive change could be a Tough Tech founder or funder."
+    },
+    {
+      "id": "check-page-267ec460ce",
+      "url": "https://engine.xyz/ignition-pass",
+      "page": "details",
+      "excerpt": "The Engine Ignition Pass | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency The Ignition Pass A Residency Grant for Tough Tech Startups to Bridge the Pre-Funding Gap Startups: Apply by December 21 Partners: Fund an Ignition Pass The Ignition Pass is a Residency grant by The Engine designed to address a critical gap faced by early-stage Tough Tech startups: accessing essential resources before securing significant funding. Through this program, selected startups gain subsidized access to The Engine’s"
+    },
+    {
+      "id": "check-page-73e7c0ebb6",
+      "url": "https://engine.xyz/ignition-pass",
+      "page": "details",
+      "excerpt": "The program also provides the programming, mentorship, and network access needed to de-risk and accelerate the commercialization of groundbreaking technologies."
+    },
+    {
+      "id": "check-page-22aa88c1e5",
+      "url": "https://engine.xyz/ignition-pass",
+      "page": "details",
+      "excerpt": "Tough Tech startups are tackling some of the world’s most pressing challenges, from decarbonization to biotechnology breakthroughs, but their journey is uniquely difficult."
+    },
+    {
+      "id": "check-page-de72a37f90",
+      "url": "https://engine.xyz/ignition-pass",
+      "page": "details",
+      "excerpt": "Unlike software startups, Tough Tech ventures require costly physical infrastructure and significant capital investment just to get started."
+    },
+    {
+      "id": "check-page-643863ca89",
+      "url": "https://engine.xyz/ignition-pass",
+      "page": "details",
+      "excerpt": "The Ignition Pass fills this gap by providing Residency for early-stage teams when our infrastructure, resources, and programs can most impact their chances of success."
+    },
+    {
+      "id": "check-page-f3381bd59d",
+      "url": "https://engine.xyz/ignition-pass",
+      "page": "details",
+      "excerpt": "Ignition Pass Applications Are Open Through December 21 Backed by Shell, the Ignition Pass provides up to five early-stage Tough Tech startups with up to one year of Residency at The Engine, plus direct access to Shell’s technical experts, to de-risk their technology and accelerate their path to market."
+    },
+    {
+      "id": "check-page-ff1c4bcdcd",
+      "url": "https://engine.xyz/ignition-pass",
+      "page": "details",
+      "excerpt": "Apply Now “Tough Tech startups need more than capital to succeed."
+    },
+    {
+      "id": "check-page-81b72f3f66",
+      "url": "https://engine.xyz/ignition-pass",
+      "page": "details",
+      "excerpt": "Selected teams receive funded Residency at The Engine, with access to our facilities, programming, and network, while working directly with a strategic industry partner and dedicated technical and commercial experts."
+    },
+    {
+      "id": "check-page-1a00094017",
+      "url": "https://engine.xyz/ignition-pass",
+      "page": "details",
+      "excerpt": "Programming & Mentorship Access to The Engine’s educational programs and network of experts, peers, and advisors."
+    },
+    {
+      "id": "check-page-0d6d1a86a2",
+      "url": "https://engine.xyz/ignition-pass",
+      "page": "details",
+      "excerpt": "Tough Tech Community Tap into a network that includes investors, corporates, policymakers, academia, and more."
+    },
+    {
+      "id": "check-page-99a102f5c1",
+      "url": "https://engine.xyz/ignition-pass",
+      "page": "details",
+      "excerpt": "Residency Kickoff Selected teams will begin their Residency at The Engine and gain immediate access to facilities, programs, and support."
+    },
+    {
+      "id": "check-page-001e716b84",
+      "url": "https://engine.xyz/ignition-pass",
+      "page": "details",
+      "excerpt": "Support Our Mission The Ignition Pass and other Residency Grants are made possible through philanthropic support and partnerships with mission-aligned organizations."
+    },
+    {
+      "id": "check-page-e481070321",
+      "url": "https://engine.xyz/ignition-pass",
+      "page": "details",
+      "excerpt": "Get Involved The Engine We support Tough Tech teams The Engine is a non-profit incubator and accelerator that supports Tough Tech teams working to solve the world’s toughest challenges through the convergence of science, engineering and entrepreneurship."
+    },
+    {
+      "id": "check-page-c2e64de15f",
+      "url": "https://engine.xyz/whiteboard",
+      "page": "details",
+      "excerpt": "Whiteboard by The Engine™ | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency Whiteboard by The Engine™ What is Whiteboard? A program for faculty and principal investigators exploring entrepreneurship in Tough Tech. Move breakthrough ideas from the lab toward company formation with clarity, confidence, and community. For PIs and Researchers For Institutions Is your lab’s breakthrough the foundation for a Tough Tech company? Whiteboard helps faculty evaluate whether their research is ready to move toward"
+    },
+    {
+      "id": "check-page-beaf331858",
+      "url": "https://engine.xyz/whiteboard",
+      "page": "details",
+      "excerpt": "Whiteboard helps faculty evaluate whether their research is ready to move toward company formation."
+    },
+    {
+      "id": "check-page-1f1c31b652",
+      "url": "https://engine.xyz/whiteboard",
+      "page": "details",
+      "excerpt": "Through a structured framework and candid discussions, the seminar surfaces key risks, potential milestones, and the roles faculty may play in building a Tough Tech startup."
+    },
+    {
+      "id": "check-page-52b82a550c",
+      "url": "https://engine.xyz/whiteboard",
+      "page": "details",
+      "excerpt": "Three Whiteboard Pillars Whiteboard focuses on activating the three pillars essential to Tough Tech company formation: Human, Intellectual, and Financial Capital."
+    },
+    {
+      "id": "check-page-d0df2f8265",
+      "url": "https://engine.xyz/whiteboard",
+      "page": "details",
+      "excerpt": "Since 2023, we’ve spun out three Tough Tech startups with focuses on sustainable agriculture and chemical production.” Ariel L."
+    },
+    {
+      "id": "check-page-ee40568247",
+      "url": "https://engine.xyz/whiteboard",
+      "page": "details",
+      "excerpt": "Bring a customized Whiteboard program to your campus, tailored to your institution’s faculty, research focus, and Tough Tech ecosystem."
+    },
+    {
+      "id": "check-page-9f422e9805",
+      "url": "https://engine.xyz/whiteboard",
+      "page": "details",
+      "excerpt": "T ailored to your institution’s research community, ecosystem, and Tough Tech sectors."
+    },
+    {
+      "id": "check-page-9e8a6624a6",
+      "url": "https://engine.xyz/whiteboard",
+      "page": "details",
+      "excerpt": "Built by MIT Developed by The Engine, a nonprofit incubator and accelerator built by MIT, Whiteboard has helped PIs from over 25 institutions explore Tough Tech research translation."
+    },
+    {
+      "id": "check-page-67088423eb",
+      "url": "https://engine.xyz/whiteboard",
+      "page": "details",
+      "excerpt": "Frameworks, case studies, and data drawn from real Tough Tech company formation."
+    },
+    {
+      "id": "check-page-45cb1f7255",
+      "url": "https://engine.xyz/whiteboard",
+      "page": "details",
+      "excerpt": "Option to Tailor Content Content customized to your institution’s research domains and sectors, spinout history, and faculty community (For Whiteboard Custom only)."
+    },
+    {
+      "id": "check-page-9f401f3cc9",
+      "url": "https://engine.xyz/whiteboard",
+      "page": "details",
+      "excerpt": "01 Ongoing Webinars Bimonthly sessions with PI-founders and venture experts, covering key topics in Tough Tech translation."
+    },
+    {
+      "id": "check-page-bdde9f864d",
+      "url": "https://engine.xyz/whiteboard",
+      "page": "details",
+      "excerpt": "02 Whiteboard Portal Webinar recordings, case studies, tools, and resources, all in one place for ongoing Tough Tech translation."
+    },
+    {
+      "id": "check-page-3239b051b7",
+      "url": "https://engine.xyz/whiteboard",
+      "page": "details",
+      "excerpt": "US-based faculty members or principal investigators employed at a university or research institution that are able to attend the session in-person at The Engine (750 Main St., Cambridge, MA)."
+    },
+    {
+      "id": "check-page-4ff3d50184",
+      "url": "https://engine.xyz/resident-companies",
+      "page": "portfolio",
+      "excerpt": "Resident Companies | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency Resident Companies Meet the companies defining the future of Tough Tech Explore Open Jobs The Engine We support Tough Tech teams The Engine is a non-profit incubator and accelerator that supports Tough Tech teams working to solve the world’s toughest challenges through the convergence of science, engineering and entrepreneurship. We provide access to comprehensive programming, specialized spaces and equipment, and the ecosystem to support"
     },
     {
       "id": "check-page-4349878364",
@@ -789,48 +1393,6 @@
       "url": "https://engine.xyz/accelerator/news/news-stories",
       "page": "details",
       "excerpt": "News & Stories | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency News & Stories Schmidt Family Foundation Supports New Climate Decelerator Initiative as The Engine Expands Philanthropic Partnerships EIN Presswire Sep 08, 2026 The Engine Opens New Headquarters in Cambridge BusinessWire Sep 29, 2022 The Tough Tech Road Ahead The Harvard Crimson Nov 15, 2020 New MIT Innovation Hub Takes On World’s Biggest Challenges Boston Globe Oct 26, 2016 The Engine We support Tough Tech teams The Engine is a non-profit"
-    },
-    {
-      "id": "check-page-003cf6b3dc",
-      "url": "https://engine.xyz/accelerator/news/the-engine-blog",
-      "page": "details",
-      "excerpt": "From The Engine | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency From The Engine Tough Tech Week 2026 Returns to Boston October 26–30 EIN Presswire Sep 15, 2026 The Engine We support Tough Tech teams The Engine is a non-profit incubator and accelerator that supports Tough Tech teams working to solve the world’s toughest challenges through the convergence of science, engineering and entrepreneurship. We provide access to comprehensive programming, specialized spaces and equipment, and the ecosystem to"
-    },
-    {
-      "id": "check-page-82a7177dc1",
-      "url": "https://engine.xyz/accelerator/news/tough-tech-fundamentals",
-      "page": "details",
-      "excerpt": "Tough Tech Fundamentals | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency Tough Tech Fundamentals The Engine We support Tough Tech teams The Engine is a non-profit incubator and accelerator that supports Tough Tech teams working to solve the world’s toughest challenges through the convergence of science, engineering and entrepreneurship. We provide access to comprehensive programming, specialized spaces and equipment, and the ecosystem to support transformative technologies on their journey from idea to"
-    },
-    {
-      "id": "check-page-e8995c7c2e",
-      "url": "https://engine.xyz/news/ge-vernova-plugs-in-to-the-tough-tech-ecosystem-with-the-engine-accelerator",
-      "page": "details",
-      "excerpt": "GE Vernova Plugs Into The Tough Tech Ecosystem with The Engine… Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency Nov 16, 2023 GE Vernova Plugs Into The Tough Tech Ecosystem with The Engine Accelerator Following the grand opening of their new global headquarters just down the street from us here in Cambridge, MA, The Engine Accelerator is proud to announce GE Vernova as our newest network member in bridging the gap from idea to impact for Tough Tech startups. The addition of GE Vernova to the Cambridge ecosystem is a"
-    },
-    {
-      "id": "check-page-5a519df3e8",
-      "url": "https://engine.xyz/programs",
-      "page": "details",
-      "excerpt": "Incubator and Accelerator Programs | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency Programs From Idea to Impact. The Engine offers programs for each stage of the startup journey to accelerate the transition from ideas in a lab to viable commercial solutions. Through a range of tech translation programs, workshops, and custom trainings, we help innovators explore Tough Tech entrepreneurship, de-risk their technologies, secure investment, and scale their impact. Blueprint by The Engine™ Download official"
-    },
-    {
-      "id": "check-page-82541d16ff",
-      "url": "https://engine.xyz/spaces/residency/resident-programs",
-      "page": "details",
-      "excerpt": "Resident Programs | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency Residency Related pages navigation Welcome Wet Labs Engineering Spaces Office Space Resident Programs External Facilities Residency Options Request a Tour 750 Main Street Cambridge, MA 02139 Resident Programs The Engine offers comprehensive educational programming and ecosystem connections to help Residents attract capital, manage their business, and scale their technology. World-class Tough Tech education to help fund and grow your"
-    },
-    {
-      "id": "check-page-e80c7d461e",
-      "url": "https://engine.xyz/about",
-      "page": "details",
-      "excerpt": "Mission | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency About Related pages navigation Mission Team Board Making it easier for Tough Tech to change the world. We believe a healthier population, a more accessible and adaptive society, and a more resilient world are all possible through science, engineering, and visionary leadership. Solving these challenges will require insights from across disciplines, whether it’s biology and material science; nanoscale manufacturing and robotics; or AI and"
-    },
-    {
-      "id": "check-page-267ec460ce",
-      "url": "https://engine.xyz/ignition-pass",
-      "page": "details",
-      "excerpt": "The Engine Ignition Pass | The Engine Skip to content Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ● Global navigation DONATE Home Explore The Engine Search Site navigation for The Engine Search The Engine Companies ↓ Open menu for Companies Resident Companies Case Studies Tough Tech Careers Board Residency ↓ Open menu for Residency Wet Labs Engineering Spaces Office Space External Facilities Resident Programs Residency Options Residency Grants Programs ↓ Open menu for Programs Resident Programs Blueprint by The Engine™ Whiteboard by The Engine™ Tough Tech Week Tough Tech Summit Ecosystem ↓ Open menu for Ecosystem Investors Corporate Partners Philanthropy Government The Builder Platform Resources ↓ Open menu for Resources Resource Library The Tough Tech Map Tough Tech Fundamentals About ↓ Open menu for About Mission News Team Board Host an Event Contact Support Apply for Residency The Ignition Pass A Residency Grant for Tough Tech Startups to Bridge the Pre-Funding Gap Startups: Apply by December 21 Partners: Fund an Ignition Pass The Ignition Pass is a Residency grant by The Engine designed to address a critical gap faced by early-stage Tough Tech startups: accessing essential resources before securing significant funding. Through this program, selected startups gain subsidized access to The Engine’s"
     }
   ],
   "findings": {

@@ -1,6 +1,6 @@
 {
   "programId": "imec-istart",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
@@ -131,10 +131,50 @@
       "origin": "official"
     },
     {
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.imec-int.com/en/gtcsale-purchase",
       "page": "terms",
       "anchor": "terms and conditions of sale/purchase",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

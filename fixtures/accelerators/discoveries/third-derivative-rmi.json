@@ -1,6 +1,6 @@
 {
   "programId": "third-derivative-rmi",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://rmi.org/about/",
@@ -31,14 +31,6 @@
       "page": "details",
       "anchor": "Benefits",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://rmi.org/about/careers/faqs/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -163,10 +155,26 @@
       "origin": "official"
     },
     {
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable-london/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://rmi.org/our-solutions/driving-investment/",
       "page": "terms",
       "anchor": "Driving Investment",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -174,7 +182,7 @@
       "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
       "page": "terms",
       "anchor": "Climate Finance",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -182,7 +190,7 @@
       "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
       "page": "terms",
       "anchor": "Market Creation",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -190,7 +198,7 @@
       "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
       "page": "terms",
       "anchor": "Technology and Innovation",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

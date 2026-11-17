@@ -1,6 +1,6 @@
 {
   "programId": "eit-health",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://eithealth.eu/",
     "https://eithealth.eu/get-involved/new-call-opportunities/",
@@ -16,7 +16,12 @@
     "https://eithealth.eu/news-article/towards-a-european-harmonisation-for-digital-health-report-accelerating-the-adoption-of-digital-health-applications-in-spain-current-panorama-and-roadmap/",
     "https://eithealth.eu/news-article/wild-card-applications-open/",
     "https://eithealth.eu/opportunity/biotech-certified-innovation-path/",
-    "https://eithealth.eu/opportunity/bootcamps-providers/"
+    "https://eithealth.eu/opportunity/bootcamps-providers/",
+    "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+    "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+    "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+    "https://eithealth.eu/opportunity/innovation-microcredentials-call/",
+    "https://eithealth.eu/opportunity/innovation-uptake/"
   ],
   "evidence": [
     {
@@ -52,6 +57,20 @@
       "url": "https://eithealth.eu/news-article/apply-by-15-march-for-innovation-game-gamification-based-summer-school/",
       "title": "EIT Health — application page",
       "excerpt": "Apply by 15 March for Innovation Game, gamification-based summer school - EIT Health",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-5dc30291d4",
+      "url": "https://eithealth.eu/opportunity/innovation-uptake/",
+      "title": "EIT Health — application page",
+      "excerpt": "project costs (co-funding required) SMEs leading projects receive €400,000–€500,000 within the grant What we fund The call funds projects",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-e4fb1b2b26",
+      "url": "https://eithealth.eu/opportunity/innovation-uptake/",
+      "title": "EIT Health — application page",
+      "excerpt": "costs (co-funding required) SMEs leading projects receive €400,000–€500,000 within the grant What we fund The call funds projects focused on:",
       "page": "application"
     },
     {
@@ -97,10 +116,24 @@
       "page": "application"
     },
     {
+      "id": "check-route-19571c38d9",
+      "url": "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "title": "EIT Health — application page",
+      "excerpt": "Apply For Funding → https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application"
+    },
+    {
       "id": "check-route-25bb4ddbbb",
       "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
       "title": "EIT Health — application page",
       "excerpt": "New Models to Deliver Healthcare Call Closed for applications Access funding for market-ready health solutions to drive real-world adoption and scale value-based healthcare models across health systems. → https://eithealth.eu/opportunity/nmdh-call/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-26bd9c0a94",
+      "url": "https://eithealth.eu/opportunity/innovation-microcredentials-call/",
+      "title": "EIT Health — application page",
+      "excerpt": "Apply now → https://apply.eithealth.eu/s_Login.jsp",
       "page": "application"
     },
     {
@@ -202,6 +235,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-a0a35ae4c6",
+      "url": "https://eithealth.eu/opportunity/innovation-uptake/",
+      "title": "EIT Health — application page",
+      "excerpt": "Apply For Funding → https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application"
+    },
+    {
       "id": "check-route-a27cd36fb0",
       "url": "https://eithealth.eu/news-article/f3t-initiative-to-accelerate-the-adoption-of-digital-health-applications-in-spain/",
       "title": "EIT Health — application page",
@@ -220,6 +260,13 @@
       "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
       "title": "EIT Health — application page",
       "excerpt": "EIT Health RIS Country Representatives Closed for applications Become an EIT Health Country Representative and help shape the future of healthcare innovation in your country. → https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b5c99a682a",
+      "url": "https://eithealth.eu/opportunity/innovation-microcredentials-call/",
+      "title": "EIT Health — application page",
+      "excerpt": "Apply For Funding → https://eithealth.eu/get-involved/new-call-opportunities/",
       "page": "application"
     },
     {
@@ -258,8 +305,29 @@
       "page": "details"
     },
     {
+      "id": "check-route-c50be6c5bf",
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "title": "EIT Health — application page",
+      "excerpt": "Apply now → https://apply.eithealth.eu/s_Login.jsp",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cd47ddc046",
+      "url": "https://eithealth.eu/opportunity/innovation-uptake/",
+      "title": "EIT Health — application page",
+      "excerpt": "Apply now → https://apply.eithealth.eu/s_Login.jsp",
+      "page": "application"
+    },
+    {
       "id": "check-route-cee4c2dd82",
       "url": "https://eithealth.eu/news-article/starship-innovation-fellowship-programme-accepting-applications-until-16-march/",
+      "title": "EIT Health — application page",
+      "excerpt": "Apply For Funding → https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d1e9bf68a8",
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
       "title": "EIT Health — application page",
       "excerpt": "Apply For Funding → https://eithealth.eu/get-involved/new-call-opportunities/",
       "page": "application"
@@ -286,10 +354,31 @@
       "page": "application"
     },
     {
+      "id": "check-route-def6157e4c",
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "title": "EIT Health — application page",
+      "excerpt": "Apply For Funding → https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application"
+    },
+    {
       "id": "check-route-e4f1f03a55",
       "url": "https://eithealth.eu/news-article/call-for-ris-hubs-in-slovenia-and-estonia-apply-by-29-january/",
       "title": "EIT Health — application page",
       "excerpt": "Apply here → https://eithealth.wufoo.com/forms/mlkce3r0pqdflh/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f3d374680f",
+      "url": "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "title": "EIT Health — application page",
+      "excerpt": "Apply now → https://apply.eithealth.eu/s_Login.jsp",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f4663fdcf4",
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "title": "EIT Health — application page",
+      "excerpt": "Apply now → https://apply.eithealth.eu/s_Login.jsp",
       "page": "application"
     },
     {
@@ -305,6 +394,13 @@
       "title": "EIT Health — application page",
       "excerpt": "15th July 2019 €4 million in funding available for ideas aimed at transformative innovation EIT Health is now accepting applications for €4 million in funding through its new Wild Card initiative, to support entrepreneurs, data/IT experts,",
       "page": "application"
+    },
+    {
+      "id": "check-status-566826e738",
+      "url": "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "title": "EIT Health — application page",
+      "excerpt": "this is your opportunity to become part of Europe’s largest health innovation community. Who can apply? Applications are open to registered legal entities established in one of the eligible countries: Croatia Czechia Estonia Greece",
+      "page": "application"
     }
   ],
   "pageQuotes": [
@@ -315,10 +411,154 @@
       "excerpt": "EIT Health | Promoting innovation in health EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board The Supervisory Board France Transformative"
     },
     {
+      "id": "check-page-f94b432509",
+      "url": "https://eithealth.eu/",
+      "page": "details",
+      "excerpt": "Join our Register of Experts Our Supported Start-ups Innovators Community Premio Jaime Prat 2021 Think Tank España Think Tank Spain Value Catalyst SEARCH OUR SITE Search for: EIT HEALTH ON SOCIAL LinkedIn Instagram YouTube EIT HEALTH SUMMIT 2026 Register now Our Story The Challenge The Approach The Ambition Life-changing ideas become reality right here."
+    },
+    {
+      "id": "check-page-9e20933814",
+      "url": "https://eithealth.eu/",
+      "page": "details",
+      "excerpt": "We bring together the brightest minds from the worlds of business, research, education and healthcare delivery to answer some of the biggest health challenges facing Europe."
+    },
+    {
+      "id": "check-page-6e9c8cfb25",
+      "url": "https://eithealth.eu/",
+      "page": "details",
+      "excerpt": "Watch our story Europe faces a turning point in health."
+    },
+    {
+      "id": "check-page-19a246f9af",
+      "url": "https://eithealth.eu/",
+      "page": "details",
+      "excerpt": "An ageing population, the rising burden of chronic disease, and growing multi-morbidity are all placing pressure on health systems across Europe."
+    },
+    {
+      "id": "check-page-3d1d3053dd",
+      "url": "https://eithealth.eu/",
+      "page": "details",
+      "excerpt": "Find out more Our vast community, including approximately 100 world-class member organisations, works across borders to connect the three worlds of business, research and education."
+    },
+    {
+      "id": "check-page-129f72afc6",
+      "url": "https://eithealth.eu/",
+      "page": "details",
+      "excerpt": "Find out more Our ambition is to enable people in Europe to live longer, healthier lives."
+    },
+    {
+      "id": "check-page-2b0b18b304",
+      "url": "https://eithealth.eu/",
+      "page": "details",
+      "excerpt": "We are building and growing businesses to create products and services that progress healthcare in Europe, while strengthening our economy."
+    },
+    {
+      "id": "check-page-85782914f6",
+      "url": "https://eithealth.eu/",
+      "page": "details",
+      "excerpt": "We’re activating a network of trailblazers to break down barriers, challenge convention and put healthcare solutions in people’s hands."
+    },
+    {
+      "id": "check-page-f96edda652",
+      "url": "https://eithealth.eu/",
+      "page": "details",
+      "excerpt": "Programmes Our programmes are designed to strengthen the healthcare innovation ecosystem so that we can be truly transformational as a collective."
+    },
+    {
+      "id": "check-page-3c17393455",
+      "url": "https://eithealth.eu/",
+      "page": "details",
+      "excerpt": "We provide continuous learning opportunities for healthcare stakeholders, and support businesses to build, grow and expand."
+    },
+    {
+      "id": "check-page-f1d4ae5f94",
+      "url": "https://eithealth.eu/",
+      "page": "details",
+      "excerpt": "Find out more Events and opportunities We have a packed schedule of regional and international events and opportunities for you to meet, engage, and collaborate with the vast and vibrant EIT Health community."
+    },
+    {
+      "id": "check-page-3fcf41eb5d",
+      "url": "https://eithealth.eu/",
+      "page": "details",
+      "excerpt": "Find out more Think Tank Our EIT Health Think Tank engages healthcare thought-leaders across regions and disciplines in the latest debates and decisions to help clear the pathway to innovation and facilitate a more sustainable healthcare future."
+    },
+    {
       "id": "check-page-ac667fd32e",
       "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
       "page": "application",
       "excerpt": "New call opportunities - EIT Health EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board The Supervisory Board France Transformative Health"
+    },
+    {
+      "id": "check-page-6c97692bf2",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application",
+      "excerpt": "Explore our latest programmes and funding opportunities to find the offer that best supports your next steps in healthcare innovation."
+    },
+    {
+      "id": "check-page-ff9cddf2d6",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application",
+      "excerpt": "Funding opportunities organisations can take part in Education Co-create educational programmes that shape the future healthcare workforce."
+    },
+    {
+      "id": "check-page-8cdd953ee2",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application",
+      "excerpt": "These funding opportunities support the design and delivery of learning activities for students and healthcare professionals."
+    },
+    {
+      "id": "check-page-62e09cba84",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application",
+      "excerpt": "Business Creation Access tailored funding to design and deliver entrepreneurship programmes, support high-potential start-ups, and strengthen Europe’s health innovation ecosystem."
+    },
+    {
+      "id": "check-page-97427853c2",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application",
+      "excerpt": "Innovation Funding Access funding to support collaborative innovation projects across Europe."
+    },
+    {
+      "id": "check-page-f222bda6d4",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application",
+      "excerpt": "These calls are designed for consortia bringing together industry, academia, healthcare providers, and other key stakeholders to develop, validate, and scale impactful healthcare solutions."
+    },
+    {
+      "id": "check-page-da4cb76e19",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application",
+      "excerpt": "Innovation Validation Call 2027 Open for applications Deadline: 13 Jan Access funding to accelerate clinical validation, regulatory approval, and market launch for late-stage digital, data and AI-driven healthcare innovations."
+    },
+    {
+      "id": "check-page-5308bdb1f8",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application",
+      "excerpt": "Transformative Healthcare Instrument Closed for applications Access funding to accelerate the development and commercialisation of high-potential biotech, medtech, digital health and AI innovations."
+    },
+    {
+      "id": "check-page-7a8e6e1767",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application",
+      "excerpt": "Innovation Uptake Call Closed for applications Access funding to accelerate market adoption and scale-up of clinically validated digital, data and AI-driven healthcare solutions."
+    },
+    {
+      "id": "check-page-f62ec03acc",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application",
+      "excerpt": "Biotech Certified Innovation Path Closed for applications Access funding to create a new EIT Label-certified Biotech learning pathway."
+    },
+    {
+      "id": "check-page-3a5b872203",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application",
+      "excerpt": "Entrepreneurship & Innovation Micro-Credentials Call Closed for applications Access funding to develop a new EIT Label-certified micro-credentials programme in healthcare entrepreneurship and innovation."
+    },
+    {
+      "id": "check-page-759e48f6c1",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "application",
+      "excerpt": "New Models to Deliver Healthcare Call Closed for applications Access funding for market-ready health solutions to drive real-world adoption and scale value-based healthcare models across health systems."
     },
     {
       "id": "check-page-71780b2e9a",
@@ -327,10 +567,100 @@
       "excerpt": "163 applications received in the 1st call for Food4Health Expressions of Interest - EIT Health EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory"
     },
     {
+      "id": "check-page-090c9e064b",
+      "url": "https://eithealth.eu/news-article/163-applications-received-in-the-1st-call-for-food4health-expressions-of-interest/",
+      "page": "application",
+      "excerpt": "An overwhelming 163 Expressions of Interest applications were submitted by 48 partners who are ready to start work in 2019 on the first two projects of Food4Health, a collaboration between EIT Health and EIT Food to help bring innovations for healthy eating to the market."
+    },
+    {
+      "id": "check-page-e5be190964",
+      "url": "https://eithealth.eu/news-article/163-applications-received-in-the-1st-call-for-food4health-expressions-of-interest/",
+      "page": "application",
+      "excerpt": "BRIGHTskills- EU Health Industry Skills Strategy New EU Health Industry Skills Strategy Find out more EIT Health Catapult celebrates a decade of supporting European healthcare start-ups as seven finalists prepare to take the stage at the EIT Health Summit in Madrid."
+    },
+    {
+      "id": "check-page-1728fff71f",
+      "url": "https://eithealth.eu/news-article/163-applications-received-in-the-1st-call-for-food4health-expressions-of-interest/",
+      "page": "application",
+      "excerpt": "Learn more about this project Find out more EIT Health-supported FAITHFUL project selected for WHO Europe’s Global Expo 2027 Learn more about this project Find out more News Who We Are What We Do Our Achievements Intranet Contact Us Careers Newsletter Signup Privacy Policy Cookie Policy Impressum Appeals Procedure Whistleblowing Channel Call for Tenders LinkedIn Instagram YouTube BACK TO TOP"
+    },
+    {
       "id": "check-page-9bbda72fa3",
       "url": "https://eithealth.eu/news-article/accelerator-calls-apply-now-for-activities-assisting-start-ups-and-smes/",
       "page": "application",
       "excerpt": "Accelerator Calls: Apply now for activities assisting start-ups and SMEs - EIT Health EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board The"
+    },
+    {
+      "id": "check-page-848ffd5c57",
+      "url": "https://eithealth.eu/news-article/accelerator-calls-apply-now-for-activities-assisting-start-ups-and-smes/",
+      "page": "application",
+      "excerpt": "Follow these links to find out about the opportunity to apply to these programmes: The GoGlobal programmes: Support new health and life-sciences companies in expanding into international markets."
+    },
+    {
+      "id": "check-page-62a0a04925",
+      "url": "https://eithealth.eu/news-article/accelerator-calls-apply-now-for-activities-assisting-start-ups-and-smes/",
+      "page": "application",
+      "excerpt": "CRAASH Barcelona: Bootcamp helps European research teams launch successful device, diagnostic and e-/m-/digital health innovations to improve health and patient care."
+    },
+    {
+      "id": "check-page-699d5bbebd",
+      "url": "https://eithealth.eu/news-article/accelerator-calls-apply-now-for-activities-assisting-start-ups-and-smes/",
+      "page": "application",
+      "excerpt": "Product/Market Fit: Supports European digital health and medtech start-ups that are ready to launch their solutions in European countries outside of their home market."
+    },
+    {
+      "id": "check-page-4eb320fce3",
+      "url": "https://eithealth.eu/news-article/accelerator-calls-apply-now-for-activities-assisting-start-ups-and-smes/",
+      "page": "application",
+      "excerpt": "Smart Ageing Camp: A Bootcamp for teams developing solutions for the ageing population."
+    },
+    {
+      "id": "check-page-1092e35744",
+      "url": "https://eithealth.eu/news-article/accelerator-calls-apply-now-for-activities-assisting-start-ups-and-smes/",
+      "page": "application",
+      "excerpt": "Validator: A Bootcamp for digital health start-ups, and those with related health and health-tech ideas."
+    },
+    {
+      "id": "check-page-608c473807",
+      "url": "https://eithealth.eu/news-article/accelerator-calls-apply-now-for-activities-assisting-start-ups-and-smes/",
+      "page": "application",
+      "excerpt": "EIT Health Bioentrepreneur Bootcamp: Supports biomedical founding teams in the pre-seed or seed phase of obtaining investment."
+    },
+    {
+      "id": "check-page-cf8f8f6166",
+      "url": "https://eithealth.eu/news-article/accelerator-calls-apply-now-for-activities-assisting-start-ups-and-smes/",
+      "page": "application",
+      "excerpt": "European Health Catapult: Start-ups receive mentoring and make useful contacts while they engage in a series of pitch competitions."
+    },
+    {
+      "id": "check-page-130a0a1ff6",
+      "url": "https://eithealth.eu/news-article/accelerator-calls-apply-now-for-activities-assisting-start-ups-and-smes/",
+      "page": "application",
+      "excerpt": "Headstart Funding: Provides grants of up to €50 000 to support emerging companies and SMEs in developing new products and services, and shortening time-to-market."
+    },
+    {
+      "id": "check-page-6fb46b3837",
+      "url": "https://eithealth.eu/news-article/accelerator-calls-apply-now-for-activities-assisting-start-ups-and-smes/",
+      "page": "application",
+      "excerpt": "MedTech Bootcamp: Support for teams developing medtech concepts, especially those in the incubation phase."
+    },
+    {
+      "id": "check-page-1a7c6a6171",
+      "url": "https://eithealth.eu/news-article/accelerator-calls-apply-now-for-activities-assisting-start-ups-and-smes/",
+      "page": "application",
+      "excerpt": "ValidationLab: A unique two-month pressure cooker allows aspiring entrepreneurs to discover the business potential of their health-tech ideas."
+    },
+    {
+      "id": "check-page-3e67d6fe70",
+      "url": "https://eithealth.eu/news-article/accelerator-calls-apply-now-for-activities-assisting-start-ups-and-smes/",
+      "page": "application",
+      "excerpt": "Investors’ Network: Matches EIT Health start-ups with investors, particularly for a first financing round but also follow-up investments."
+    },
+    {
+      "id": "check-page-022c5f22ab",
+      "url": "https://eithealth.eu/news-article/accelerator-calls-apply-now-for-activities-assisting-start-ups-and-smes/",
+      "page": "application",
+      "excerpt": "Complete details on all Accelerator activities and calls can be found in the Accelerator Catalogue ."
     },
     {
       "id": "check-page-1d5b81d3bc",
@@ -339,10 +669,112 @@
       "excerpt": "Apply by 15 March for Innovation Game, gamification-based summer school - EIT Health EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board The"
     },
     {
+      "id": "check-page-7c2e292bb2",
+      "url": "https://eithealth.eu/news-article/apply-by-15-march-for-innovation-game-gamification-based-summer-school/",
+      "page": "application",
+      "excerpt": "Innovation Game: A Summer School Applying Serious Game Design in Health Care and Education (iGame) is an EIT Health summer school at Uppsala University in Sweden that uses gamification as a tool to address real-life healthcare challenges to produce results that are beneficial to society."
+    },
+    {
+      "id": "check-page-c338d865e1",
+      "url": "https://eithealth.eu/news-article/apply-by-15-march-for-innovation-game-gamification-based-summer-school/",
+      "page": "application",
+      "excerpt": "Participants will gain skills in working in multidisciplinary teams and in cooperating with serious gaming experts and professionals from the business and public healthcare sector."
+    },
+    {
+      "id": "check-page-4373eb317b",
+      "url": "https://eithealth.eu/news-article/apply-by-15-march-for-innovation-game-gamification-based-summer-school/",
+      "page": "application",
+      "excerpt": "Solutions will be shared through outreach activities encouraging professionals to adopt an innovative mind-set to address health issues for children and adolescents."
+    },
+    {
+      "id": "check-page-ae278997e6",
+      "url": "https://eithealth.eu/news-article/apply-by-15-march-for-innovation-game-gamification-based-summer-school/",
+      "page": "application",
+      "excerpt": "BRIGHTskills- EU Health Industry Skills Strategy New EU Health Industry Skills Strategy Find out more EIT Health Catapult celebrates a decade of supporting European healthcare start-ups as seven finalists prepare to take the stage at the EIT Health Summit in Madrid."
+    },
+    {
+      "id": "check-page-31731ee3b0",
+      "url": "https://eithealth.eu/news-article/apply-by-15-march-for-innovation-game-gamification-based-summer-school/",
+      "page": "application",
+      "excerpt": "Learn more about this project Find out more EIT Health-supported FAITHFUL project selected for WHO Europe’s Global Expo 2027 Learn more about this project Find out more News Who We Are What We Do Our Achievements Intranet Contact Us Careers Newsletter Signup Privacy Policy Cookie Policy Impressum Appeals Procedure Whistleblowing Channel Call for Tenders LinkedIn Instagram YouTube BACK TO TOP"
+    },
+    {
       "id": "check-page-c5bf642be6",
       "url": "https://eithealth.eu/news-article/call-for-ris-hubs-in-slovenia-and-estonia-apply-by-29-january/",
       "page": "application",
       "excerpt": "Call for EIT Health RIS Hubs in Slovenia and Estonia: Apply by 29 January - EIT Health EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board The"
+    },
+    {
+      "id": "check-page-fd19a62a9d",
+      "url": "https://eithealth.eu/news-article/call-for-ris-hubs-in-slovenia-and-estonia-apply-by-29-january/",
+      "page": "application",
+      "excerpt": "Support innovative SMEs to create new economic activity and new jobs locally."
+    },
+    {
+      "id": "check-page-77c24b6fc0",
+      "url": "https://eithealth.eu/news-article/call-for-ris-hubs-in-slovenia-and-estonia-apply-by-29-january/",
+      "page": "application",
+      "excerpt": "Team up with one of the biggest healthcare initiatives worldwide."
+    },
+    {
+      "id": "check-page-07437e1db3",
+      "url": "https://eithealth.eu/news-article/call-for-ris-hubs-in-slovenia-and-estonia-apply-by-29-january/",
+      "page": "application",
+      "excerpt": "Learn and adopt best in class business creation and education programmes."
+    },
+    {
+      "id": "check-page-944eb98073",
+      "url": "https://eithealth.eu/news-article/call-for-ris-hubs-in-slovenia-and-estonia-apply-by-29-january/",
+      "page": "application",
+      "excerpt": "EIT Health RIS activities focus on the following strategic areas of action in 2019: Mapping local innovation ecosystem in EIT RIS regions, identifying key players, unique assets and selling points as well as focus areas and investment needs."
+    },
+    {
+      "id": "check-page-377c53f11b",
+      "url": "https://eithealth.eu/news-article/call-for-ris-hubs-in-slovenia-and-estonia-apply-by-29-january/",
+      "page": "application",
+      "excerpt": "Identifying connection points and synergies between regional capabilities and EIT Health strategic goals."
+    },
+    {
+      "id": "check-page-be95cf44ed",
+      "url": "https://eithealth.eu/news-article/call-for-ris-hubs-in-slovenia-and-estonia-apply-by-29-january/",
+      "page": "application",
+      "excerpt": "Providing opportunities for key stakeholders in RIS regions to get engaged with EIT Health activities and participate in certain EIT Health programs."
+    },
+    {
+      "id": "check-page-b6eabc2849",
+      "url": "https://eithealth.eu/news-article/call-for-ris-hubs-in-slovenia-and-estonia-apply-by-29-january/",
+      "page": "application",
+      "excerpt": "Organizing outreach events where EIT Health representatives can meet with RIS stakeholders, such as start-ups, regulators, policy decision makers, hospitals, researchers, industrial representatives to introduce EIT Health, present its programs and opportunities as well as to present achievements and success stories."
+    },
+    {
+      "id": "check-page-6391e50f54",
+      "url": "https://eithealth.eu/news-article/call-for-ris-hubs-in-slovenia-and-estonia-apply-by-29-january/",
+      "page": "application",
+      "excerpt": "Provide comprehensive support and mentoring services for RIS regions how they can develop regional innovation ecosystems by mobilizing local KTI actors, working out joint development strategies and implement join local projects."
+    },
+    {
+      "id": "check-page-a6fcd6ac9c",
+      "url": "https://eithealth.eu/news-article/call-for-ris-hubs-in-slovenia-and-estonia-apply-by-29-january/",
+      "page": "application",
+      "excerpt": "Engaging key national and regional policy makers within the activities of EIT Health in order to support fund interconnectivity and the set-up of local ESIF projects which can be directly linked with EIT Health programs."
+    },
+    {
+      "id": "check-page-7547a148c7",
+      "url": "https://eithealth.eu/news-article/call-for-ris-hubs-in-slovenia-and-estonia-apply-by-29-january/",
+      "page": "application",
+      "excerpt": "Supporting the participation of local institutions in KIC activities and finance the adaptation and integration of best in-class programs of EIT Health into the local innovation ecosystem, if possible."
+    },
+    {
+      "id": "check-page-1d5e7ea2ab",
+      "url": "https://eithealth.eu/news-article/call-for-ris-hubs-in-slovenia-and-estonia-apply-by-29-january/",
+      "page": "application",
+      "excerpt": "Convincing local stakeholders is essential to utilize synergies between available ESIF and EIT Health programs."
+    },
+    {
+      "id": "check-page-2f571aeacf",
+      "url": "https://eithealth.eu/news-article/call-for-ris-hubs-in-slovenia-and-estonia-apply-by-29-january/",
+      "page": "application",
+      "excerpt": "EIT Health has the significant potential to shape national grant management systems in a way that could lead to a better rollout of its activities across the continent."
     },
     {
       "id": "check-page-df9bc991b4",
@@ -351,10 +783,112 @@
       "excerpt": "[Communiqué de presse] Amgen, AstraZeneca, MSD, Pfizer, Servier et EIT Health s’allient au sein de la Coalition Innovation Santé pour soutenir « Bulle » : la 1ère application de soins de support à distance qui améliore le quotidien des patients atteints de cancer - EIT Health EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning"
     },
     {
+      "id": "check-page-82304f3d4e",
+      "url": "https://eithealth.eu/news-article/communique-de-presse-amgen-astrazeneca-msd-pfizer-servier-et-eit-health-sallient-au-sein-de-la-coalition-innovation-sante-pour-soutenir-bulle-la-1ere-application-de-soin/",
+      "page": "application",
+      "excerpt": "Bulle est une application web de soins de support à distance, unique en France, qui permet de réunir une équipe coordonnée autour de chaque patient atteint de cancer, de lui organiser un parcours personnalisé d’activités physiques et psycho-corporelles, et de consulter des professionnels à distance."
+    },
+    {
+      "id": "check-page-23a4d0f01e",
+      "url": "https://eithealth.eu/news-article/communique-de-presse-amgen-astrazeneca-msd-pfizer-servier-et-eit-health-sallient-au-sein-de-la-coalition-innovation-sante-pour-soutenir-bulle-la-1ere-application-de-soin/",
+      "page": "application",
+      "excerpt": "Le concept de Bulle est inédit en France : c’est un accompagnement humain qui s’appuie sur le digital afin que les patients puissent acquérir de l’autonomie dans la gestion de leur qualité de vie."
+    },
+    {
+      "id": "check-page-3d0419fa22",
+      "url": "https://eithealth.eu/news-article/communique-de-presse-amgen-astrazeneca-msd-pfizer-servier-et-eit-health-sallient-au-sein-de-la-coalition-innovation-sante-pour-soutenir-bulle-la-1ere-application-de-soin/",
+      "page": "application",
+      "excerpt": "La plateforme est mise en oeuvre par Digital Pharma Lab, premier accélérateur PharmaTech indépendant en Europe."
+    },
+    {
+      "id": "check-page-b4326646d9",
+      "url": "https://eithealth.eu/news-article/communique-de-presse-amgen-astrazeneca-msd-pfizer-servier-et-eit-health-sallient-au-sein-de-la-coalition-innovation-sante-pour-soutenir-bulle-la-1ere-application-de-soin/",
+      "page": "application",
+      "excerpt": "Pas moins de six partenaires (Amgen, AstraZeneca, MSD, Pfizer, Servier et EIT Health) se sont donc alliés pour aider Bulle à accélérer son développement, suite à la première sélection de projets innovants de la Coalition Innovation Santé, le 10 avril 2020."
+    },
+    {
+      "id": "check-page-e95612d95a",
+      "url": "https://eithealth.eu/news-article/communique-de-presse-amgen-astrazeneca-msd-pfizer-servier-et-eit-health-sallient-au-sein-de-la-coalition-innovation-sante-pour-soutenir-bulle-la-1ere-application-de-soin/",
+      "page": "application",
+      "excerpt": "Bulle est soutenue par les plus grands Centres de Lutte Contre le Cancer : Gustave Roussy et l’Institut Curie à Paris, l’Institut Godinot à Reims, l’ICM à Montpellier, le Centre Antoine Lacassagne à Nice, le Centre Jean Perrin à Clermont-Ferrand, le Centre Léon Bérard à Lyon, le Centre Eugène Marquis à Rennes, l’Institut de Cancérologie de Lorraine et les Hôpitaux de Chartres."
+    },
+    {
+      "id": "check-page-05bfbcf45b",
+      "url": "https://eithealth.eu/news-article/communique-de-presse-amgen-astrazeneca-msd-pfizer-servier-et-eit-health-sallient-au-sein-de-la-coalition-innovation-sante-pour-soutenir-bulle-la-1ere-application-de-soin/",
+      "page": "application",
+      "excerpt": "Pour en savoir plus, rendez-vous sur https://bulle.health À propos de la Coalition Innovation Santé La “Coalition Innovation Santé – Crise Sanitaire” a été créée sous l’impulsion de France Biotech, France Digitale, MedTech in France et l’entreprise biopharmaceutique AstraZeneca, avec les soutiens de l’AP-HP, Bpifrance, EIT Health."
+    },
+    {
+      "id": "check-page-75c0889202",
+      "url": "https://eithealth.eu/news-article/communique-de-presse-amgen-astrazeneca-msd-pfizer-servier-et-eit-health-sallient-au-sein-de-la-coalition-innovation-sante-pour-soutenir-bulle-la-1ere-application-de-soin/",
+      "page": "application",
+      "excerpt": "En France, Amgen se consacre à faire progresser la prise en charge du cancer, des maladies cardiovasculaires, inflammatoires et rénales."
+    },
+    {
+      "id": "check-page-c0b9eb0303",
+      "url": "https://eithealth.eu/news-article/communique-de-presse-amgen-astrazeneca-msd-pfizer-servier-et-eit-health-sallient-au-sein-de-la-coalition-innovation-sante-pour-soutenir-bulle-la-1ere-application-de-soin/",
+      "page": "application",
+      "excerpt": "Ce dispositif, lancé à l’aube des 30 ans d’Amgen en France, s’inscrit dans un contexte politique en faveur du soutien à l’innovation et aux sciences de la vie."
+    },
+    {
+      "id": "check-page-d4799f17bc",
+      "url": "https://eithealth.eu/news-article/communique-de-presse-amgen-astrazeneca-msd-pfizer-servier-et-eit-health-sallient-au-sein-de-la-coalition-innovation-sante-pour-soutenir-bulle-la-1ere-application-de-soin/",
+      "page": "application",
+      "excerpt": "En France, AstraZeneca rassemble plus de 1000 collaborateurs sur l’ensemble du territoire, notamment à son siège de Paris La Défense, son site industriel de Dunkerque et son site de conditionnement et de distribution de Reims."
+    },
+    {
+      "id": "check-page-72a08138b6",
+      "url": "https://eithealth.eu/news-article/communique-de-presse-amgen-astrazeneca-msd-pfizer-servier-et-eit-health-sallient-au-sein-de-la-coalition-innovation-sante-pour-soutenir-bulle-la-1ere-application-de-soin/",
+      "page": "application",
+      "excerpt": "EIT Health est un instrument Horizon 2020."
+    },
+    {
+      "id": "check-page-305136cc4b",
+      "url": "https://eithealth.eu/news-article/communique-de-presse-amgen-astrazeneca-msd-pfizer-servier-et-eit-health-sallient-au-sein-de-la-coalition-innovation-sante-pour-soutenir-bulle-la-1ere-application-de-soin/",
+      "page": "application",
+      "excerpt": "EIT Health est composé de 7 noeuds géographiques répartis sur toute l’Europe."
+    },
+    {
+      "id": "check-page-fb1e594c1f",
+      "url": "https://eithealth.eu/news-article/communique-de-presse-amgen-astrazeneca-msd-pfizer-servier-et-eit-health-sallient-au-sein-de-la-coalition-innovation-sante-pour-soutenir-bulle-la-1ere-application-de-soin/",
+      "page": "application",
+      "excerpt": "Cette communauté regroupe plus de 210 partenaires, industriels, académiques, clusters dans le domaine des MedTech, BioTech ou DigiTech."
+    },
+    {
       "id": "check-page-05cb3b19bc",
       "url": "https://eithealth.eu/news-article/eit-health-bioentrepreneur-bootcamp-apply-now/",
       "page": "application",
       "excerpt": "EIT Health BioEntrepreneur Bootcamp - apply now - EIT Health EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board The Supervisory Board France"
+    },
+    {
+      "id": "check-page-48e6bd2755",
+      "url": "https://eithealth.eu/news-article/eit-health-bioentrepreneur-bootcamp-apply-now/",
+      "page": "application",
+      "excerpt": "Biomedical teams located in Europe can develop and validate their business concept in an eight-week programme that takes place in Munich, Paris, London and Delft."
+    },
+    {
+      "id": "check-page-dc5a103369",
+      "url": "https://eithealth.eu/news-article/eit-health-bioentrepreneur-bootcamp-apply-now/",
+      "page": "application",
+      "excerpt": "You learn on-site from team coaching sessions, case studies, expert talks and mentoring."
+    },
+    {
+      "id": "check-page-6ce6db1926",
+      "url": "https://eithealth.eu/news-article/eit-health-bioentrepreneur-bootcamp-apply-now/",
+      "page": "application",
+      "excerpt": "After four weeks in Munich at BioM, teams travel to partner organisations in London, Paris and Delft to learn from the experts in these networks and refine their business concept in other European markets."
+    },
+    {
+      "id": "check-page-d69f46d42a",
+      "url": "https://eithealth.eu/news-article/eit-health-bioentrepreneur-bootcamp-apply-now/",
+      "page": "application",
+      "excerpt": "BRIGHTskills- EU Health Industry Skills Strategy New EU Health Industry Skills Strategy Find out more EIT Health Catapult celebrates a decade of supporting European healthcare start-ups as seven finalists prepare to take the stage at the EIT Health Summit in Madrid."
+    },
+    {
+      "id": "check-page-10331ef79d",
+      "url": "https://eithealth.eu/news-article/eit-health-bioentrepreneur-bootcamp-apply-now/",
+      "page": "application",
+      "excerpt": "Learn more about this project Find out more EIT Health-supported FAITHFUL project selected for WHO Europe’s Global Expo 2027 Learn more about this project Find out more News Who We Are What We Do Our Achievements Intranet Contact Us Careers Newsletter Signup Privacy Policy Cookie Policy Impressum Appeals Procedure Whistleblowing Channel Call for Tenders LinkedIn Instagram YouTube BACK TO TOP"
     },
     {
       "id": "check-page-6ec50916dc",
@@ -363,10 +897,154 @@
       "excerpt": "EIT Health Investor Network open for applications from start-ups - EIT Health EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board The"
     },
     {
+      "id": "check-page-cb2229c655",
+      "url": "https://eithealth.eu/news-article/eit-health-investor-network-open-for-applications-from-start-ups/",
+      "page": "application",
+      "excerpt": "Part of EIT Health Accelerator, Investor Network aims to connect European health-oriented investors with promising, pre-screened start-ups, so that ideas for improving healthcare can get into the market."
+    },
+    {
+      "id": "check-page-24bb8bff30",
+      "url": "https://eithealth.eu/news-article/eit-health-investor-network-open-for-applications-from-start-ups/",
+      "page": "application",
+      "excerpt": "EIT Health Investor Network encourages cross-border financing and co-investment to facilitate fundraising that will help late-development-stage European start-ups conquer health markets faster and better."
+    },
+    {
+      "id": "check-page-abc11975be",
+      "url": "https://eithealth.eu/news-article/eit-health-investor-network-open-for-applications-from-start-ups/",
+      "page": "application",
+      "excerpt": "It offers high-potential start-ups connections to a wide variety of private-equity investors, as well as coaching by seasoned investors and serial entrepreneurs and potential access to the EIT Health Living Labs network."
+    },
+    {
+      "id": "check-page-845284601f",
+      "url": "https://eithealth.eu/news-article/eit-health-investor-network-open-for-applications-from-start-ups/",
+      "page": "application",
+      "excerpt": "For private investors, business angel associations and representatives of venture capital or corporate venture funds, EIT Health Investor Network offers a great opportunity to review and select pre-screened innovative companies according to the properties of their portfolio – and to join a select network of investors."
+    },
+    {
+      "id": "check-page-2c4ce0c636",
+      "url": "https://eithealth.eu/news-article/eit-health-investor-network-open-for-applications-from-start-ups/",
+      "page": "application",
+      "excerpt": "How it works The ambitions of the Investor Network are to: Allow start-ups to access funding faster Foster earlier internationalization with cross-border investors Leverage local funding with international co-investments Investor Network will create a qualified deal-flow around a common platform, international gatherings, face-to-face meetings and online pitches."
+    },
+    {
+      "id": "check-page-2ae3a5e4ee",
+      "url": "https://eithealth.eu/news-article/eit-health-investor-network-open-for-applications-from-start-ups/",
+      "page": "application",
+      "excerpt": "Angels Santé, the largest Business Angels Association dedicated to healthcare, is leading a partnership with BIO Clustermanagement NRW GmbH and Imperial College Health Partners to build this unique cross-border investor community."
+    },
+    {
+      "id": "check-page-47d530991d",
+      "url": "https://eithealth.eu/news-article/eit-health-investor-network-open-for-applications-from-start-ups/",
+      "page": "application",
+      "excerpt": "After an official 3 May 2018 kick-off in London, during the Global Investor Forum, the Network has held investors’ meetings in Milan, Lisbon, and Rotterdam."
+    },
+    {
+      "id": "check-page-d41dda5e9e",
+      "url": "https://eithealth.eu/news-article/eit-health-investor-network-open-for-applications-from-start-ups/",
+      "page": "application",
+      "excerpt": "Investors who wish to join the Investor Network are encouraged to contact operations@angelssante.fr or any of EIT Health’s Business Development Specialists located in various regional offices around Europe."
+    },
+    {
+      "id": "check-page-6431f39cae",
+      "url": "https://eithealth.eu/news-article/eit-health-investor-network-open-for-applications-from-start-ups/",
+      "page": "application",
+      "excerpt": "Start-ups interested in joining the Investor Network should click here."
+    },
+    {
+      "id": "check-page-ba638d51db",
+      "url": "https://eithealth.eu/news-article/eit-health-investor-network-open-for-applications-from-start-ups/",
+      "page": "application",
+      "excerpt": "Find out more on this page, or by contacting any of EIT Health’s Business Development Specialists."
+    },
+    {
+      "id": "check-page-47daa7bb87",
+      "url": "https://eithealth.eu/news-article/eit-health-investor-network-open-for-applications-from-start-ups/",
+      "page": "application",
+      "excerpt": "BRIGHTskills- EU Health Industry Skills Strategy New EU Health Industry Skills Strategy Find out more EIT Health Catapult celebrates a decade of supporting European healthcare start-ups as seven finalists prepare to take the stage at the EIT Health Summit in Madrid."
+    },
+    {
+      "id": "check-page-03cb43989a",
+      "url": "https://eithealth.eu/news-article/eit-health-investor-network-open-for-applications-from-start-ups/",
+      "page": "application",
+      "excerpt": "Learn more about this project Find out more EIT Health-supported FAITHFUL project selected for WHO Europe’s Global Expo 2027 Learn more about this project Find out more News Who We Are What We Do Our Achievements Intranet Contact Us Careers Newsletter Signup Privacy Policy Cookie Policy Impressum Appeals Procedure Whistleblowing Channel Call for Tenders LinkedIn Instagram YouTube BACK TO TOP"
+    },
+    {
       "id": "check-page-25e870a918",
       "url": "https://eithealth.eu/news-article/f3t-initiative-to-accelerate-the-adoption-of-digital-health-applications-in-spain/",
       "page": "application",
       "excerpt": "F3T: an initiative to speed up the adoption of digital health applications in Spain - EIT Health EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory"
+    },
+    {
+      "id": "check-page-b300fe864a",
+      "url": "https://eithealth.eu/news-article/f3t-initiative-to-accelerate-the-adoption-of-digital-health-applications-in-spain/",
+      "page": "application",
+      "excerpt": "EIT Health Spain has launched in Barcelona the F 3 T – Framework for Fast Fast-Track of Digital Health Solutions project."
+    },
+    {
+      "id": "check-page-7aed2c813f",
+      "url": "https://eithealth.eu/news-article/f3t-initiative-to-accelerate-the-adoption-of-digital-health-applications-in-spain/",
+      "page": "application",
+      "excerpt": "The initiative brings together experts and players in the health innovation value chain to define a framework to speed up the adoption of digital health applications in Spain, with implementable recommendations for decision-makers."
+    },
+    {
+      "id": "check-page-c7443c6998",
+      "url": "https://eithealth.eu/news-article/f3t-initiative-to-accelerate-the-adoption-of-digital-health-applications-in-spain/",
+      "page": "application",
+      "excerpt": "The ultimate goal is to reach a minimum consensus for harmonisation in the processes of evaluation, adoption and financing of digital health applications in Spain, as well as to facilitate the scalability of solutions ."
+    },
+    {
+      "id": "check-page-d2b35dfbed",
+      "url": "https://eithealth.eu/news-article/f3t-initiative-to-accelerate-the-adoption-of-digital-health-applications-in-spain/",
+      "page": "application",
+      "excerpt": "The F 3 T is the result of consultations and meetings that EIT Health held in 2022 which are included in the report ‘Accelerating the adoption of digital health applications in Spain’ ."
+    },
+    {
+      "id": "check-page-40d4d7ac92",
+      "url": "https://eithealth.eu/news-article/f3t-initiative-to-accelerate-the-adoption-of-digital-health-applications-in-spain/",
+      "page": "application",
+      "excerpt": "The report identifies the obstacles in the way of innovation in digital health apps and the areas where is key to intervene as a priority."
+    },
+    {
+      "id": "check-page-27c38b73c2",
+      "url": "https://eithealth.eu/news-article/f3t-initiative-to-accelerate-the-adoption-of-digital-health-applications-in-spain/",
+      "page": "application",
+      "excerpt": "“In the future, high-quality and clinically validated mobile health apps will help to fill some gaps in healthcare, improve or even replace some conventional treatments, and help make healthcare systems more resilient and financially viable."
+    },
+    {
+      "id": "check-page-ab2ebd9715",
+      "url": "https://eithealth.eu/news-article/f3t-initiative-to-accelerate-the-adoption-of-digital-health-applications-in-spain/",
+      "page": "application",
+      "excerpt": "“But if we are not able to ensure that the best innovations in this field reach the patient and the system quickly, equitably and safely, we will be missing the opportunity provided by European and national transformation funds and plans,” says Izabel Alfany, Director of Operations at EIT Health Spain."
+    },
+    {
+      "id": "check-page-92bba55be1",
+      "url": "https://eithealth.eu/news-article/f3t-initiative-to-accelerate-the-adoption-of-digital-health-applications-in-spain/",
+      "page": "application",
+      "excerpt": "In this sense, the Core Group aspires to a common minimum harmonisation framework for all Autonomous Regions and healthcare organisations , avoiding ineffective repetition of pilots, which reduces the scalability of applications and equity in patient access to innovation."
+    },
+    {
+      "id": "check-page-4fd5a64af7",
+      "url": "https://eithealth.eu/news-article/f3t-initiative-to-accelerate-the-adoption-of-digital-health-applications-in-spain/",
+      "page": "application",
+      "excerpt": "Germany took the lead by launching a novel process for the fast-track approval of digital, prescribable and reimbursable apps (popularly known as DiGA fast-track )."
+    },
+    {
+      "id": "check-page-9c32603609",
+      "url": "https://eithealth.eu/news-article/f3t-initiative-to-accelerate-the-adoption-of-digital-health-applications-in-spain/",
+      "page": "application",
+      "excerpt": "France, Belgium and Luxembourg are also moving in this direction."
+    },
+    {
+      "id": "check-page-8e2a11e4a0",
+      "url": "https://eithealth.eu/news-article/f3t-initiative-to-accelerate-the-adoption-of-digital-health-applications-in-spain/",
+      "page": "application",
+      "excerpt": "“Spain cannot be left behind and needs a consensus of all the stakeholders so that the solutions that bring value for patients reach them as soon as possible and in a safe way."
+    },
+    {
+      "id": "check-page-69496b233f",
+      "url": "https://eithealth.eu/news-article/f3t-initiative-to-accelerate-the-adoption-of-digital-health-applications-in-spain/",
+      "page": "application",
+      "excerpt": "As the main driving force in the health innovation ecosystem, at EIT Health we believe we have the responsibility and the capacity to facilitate this process,” said Ángeles Barrios, Public Affairs Lead at EIT Health Spain , who is responsible for coordinating the project."
     },
     {
       "id": "check-page-932dbad851",
@@ -375,10 +1053,112 @@
       "excerpt": "StarShip Innovation Fellowship programme accepting applications until 16 March - EIT Health EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board"
     },
     {
+      "id": "check-page-0b3e3e53d4",
+      "url": "https://eithealth.eu/news-article/starship-innovation-fellowship-programme-accepting-applications-until-16-march/",
+      "page": "application",
+      "excerpt": "Starship is an EIT Health Innovation Fellowship programme in which participants will become familiar with a proven, action-based approach, in order to find solutions to industry challenges."
+    },
+    {
+      "id": "check-page-2d329db345",
+      "url": "https://eithealth.eu/news-article/starship-innovation-fellowship-programme-accepting-applications-until-16-march/",
+      "page": "application",
+      "excerpt": "The programme is based on four single-week modules for students and professionals that develop business plans based on challenges provided by medtech industry."
+    },
+    {
+      "id": "check-page-ab40eaeb31",
+      "url": "https://eithealth.eu/news-article/starship-innovation-fellowship-programme-accepting-applications-until-16-march/",
+      "page": "application",
+      "excerpt": "Participants should have a high interest in the health sector, and bring in relevant backgrounds which include, but are not limited to biomedicine, technical fields, engineering, economy, business, and design."
+    },
+    {
+      "id": "check-page-0196bd7638",
+      "url": "https://eithealth.eu/news-article/starship-innovation-fellowship-programme-accepting-applications-until-16-march/",
+      "page": "application",
+      "excerpt": "BRIGHTskills- EU Health Industry Skills Strategy New EU Health Industry Skills Strategy Find out more EIT Health Catapult celebrates a decade of supporting European healthcare start-ups as seven finalists prepare to take the stage at the EIT Health Summit in Madrid."
+    },
+    {
+      "id": "check-page-86f1d44291",
+      "url": "https://eithealth.eu/news-article/starship-innovation-fellowship-programme-accepting-applications-until-16-march/",
+      "page": "application",
+      "excerpt": "Learn more about this project Find out more EIT Health-supported FAITHFUL project selected for WHO Europe’s Global Expo 2027 Learn more about this project Find out more News Who We Are What We Do Our Achievements Intranet Contact Us Careers Newsletter Signup Privacy Policy Cookie Policy Impressum Appeals Procedure Whistleblowing Channel Call for Tenders LinkedIn Instagram YouTube BACK TO TOP"
+    },
+    {
       "id": "check-page-ece97ecfa0",
       "url": "https://eithealth.eu/news-article/towards-a-european-harmonisation-for-digital-health-report-accelerating-the-adoption-of-digital-health-applications-in-spain-current-panorama-and-roadmap/",
       "page": "application",
       "excerpt": "Towards a European harmonisation for digital health: report “Accelerating the adoption of digital health applications in Spain. Current landscape and roadmap” - EIT Health EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open"
+    },
+    {
+      "id": "check-page-74e707c9eb",
+      "url": "https://eithealth.eu/news-article/towards-a-european-harmonisation-for-digital-health-report-accelerating-the-adoption-of-digital-health-applications-in-spain-current-panorama-and-roadmap/",
+      "page": "application",
+      "excerpt": "Join our Register of Experts Our Supported Start-ups Innovators Community Premio Jaime Prat 2021 Think Tank España Think Tank Spain Value Catalyst SEARCH OUR SITE Search for: EIT HEALTH ON SOCIAL LinkedIn Instagram YouTube Home | News | Towards a European harmonisation for digital health: report “Accelerating the adoption of digital health applications in Spain."
+    },
+    {
+      "id": "check-page-875587674b",
+      "url": "https://eithealth.eu/news-article/towards-a-european-harmonisation-for-digital-health-report-accelerating-the-adoption-of-digital-health-applications-in-spain-current-panorama-and-roadmap/",
+      "page": "application",
+      "excerpt": "Current landscape and roadmap” SHARE fb tw in Spain Towards a European harmonisation for digital health: report “Accelerating the adoption of digital health applications in Spain."
+    },
+    {
+      "id": "check-page-3e19721117",
+      "url": "https://eithealth.eu/news-article/towards-a-european-harmonisation-for-digital-health-report-accelerating-the-adoption-of-digital-health-applications-in-spain-current-panorama-and-roadmap/",
+      "page": "application",
+      "excerpt": "Current landscape and roadmap” 19th April 2023 During 2022, EIT Health launched a series of roundtables in different European countries, with the aim of raising awareness and initiating a dialogue on the state of regulation of digital health applications and the changes needed to ensure that the best innovation reaches patients and citizens as soon as possible."
+    },
+    {
+      "id": "check-page-35a419a180",
+      "url": "https://eithealth.eu/news-article/towards-a-european-harmonisation-for-digital-health-report-accelerating-the-adoption-of-digital-health-applications-in-spain-current-panorama-and-roadmap/",
+      "page": "application",
+      "excerpt": "EIT Health Spain organised several debates on this topic and participated in different activities on a regional level."
+    },
+    {
+      "id": "check-page-53687780cc",
+      "url": "https://eithealth.eu/news-article/towards-a-european-harmonisation-for-digital-health-report-accelerating-the-adoption-of-digital-health-applications-in-spain-current-panorama-and-roadmap/",
+      "page": "application",
+      "excerpt": "The Spanish report The report ‘A ccelerating the adoption of digital health applications in Spain."
+    },
+    {
+      "id": "check-page-4004c72002",
+      "url": "https://eithealth.eu/news-article/towards-a-european-harmonisation-for-digital-health-report-accelerating-the-adoption-of-digital-health-applications-in-spain-current-panorama-and-roadmap/",
+      "page": "application",
+      "excerpt": "The different perspectives and inputs from the experts resulted in a 20-point roadmap to accelerate the adoption of innovative digital health applications that are truly transformative for the healthcare system, generate a thriving business network and, most importantly, deliver value to patients."
+    },
+    {
+      "id": "check-page-88c15973b1",
+      "url": "https://eithealth.eu/news-article/towards-a-european-harmonisation-for-digital-health-report-accelerating-the-adoption-of-digital-health-applications-in-spain-current-panorama-and-roadmap/",
+      "page": "application",
+      "excerpt": "However, accelerating the adoption of transformative digital health applications and solutions requires a collaborative approach, with all players in the value chain at key points in the innovation process: Develop support tools for innovators in stages before CE certification."
+    },
+    {
+      "id": "check-page-594408ed93",
+      "url": "https://eithealth.eu/news-article/towards-a-european-harmonisation-for-digital-health-report-accelerating-the-adoption-of-digital-health-applications-in-spain-current-panorama-and-roadmap/",
+      "page": "application",
+      "excerpt": "Develop an appropriate regulatory process that balances the reality and regulations of health systems, the nature of digital solutions, protection, patient needs and the success of innovators."
+    },
+    {
+      "id": "check-page-a5ca32b342",
+      "url": "https://eithealth.eu/news-article/towards-a-european-harmonisation-for-digital-health-report-accelerating-the-adoption-of-digital-health-applications-in-spain-current-panorama-and-roadmap/",
+      "page": "application",
+      "excerpt": "Develop a set of clinical validation criteria – based on value – for digital applications and seek their harmonisation within Europe to support a true European health space and market."
+    },
+    {
+      "id": "check-page-cd38079ea2",
+      "url": "https://eithealth.eu/news-article/towards-a-european-harmonisation-for-digital-health-report-accelerating-the-adoption-of-digital-health-applications-in-spain-current-panorama-and-roadmap/",
+      "page": "application",
+      "excerpt": "Develop and pilot public procurement and funding models that enable startups and SMEs to develop beneficial digital health applications and access the service portfolio of public health systems."
+    },
+    {
+      "id": "check-page-b34e359018",
+      "url": "https://eithealth.eu/news-article/towards-a-european-harmonisation-for-digital-health-report-accelerating-the-adoption-of-digital-health-applications-in-spain-current-panorama-and-roadmap/",
+      "page": "application",
+      "excerpt": "The European report In the coming days, EIT Health will launch a report that addresses the state of play of the adoption of digital health devices and applications and the potential harmonisation of evaluation and access processes at the European level."
+    },
+    {
+      "id": "check-page-69df42c8b7",
+      "url": "https://eithealth.eu/news-article/towards-a-european-harmonisation-for-digital-health-report-accelerating-the-adoption-of-digital-health-applications-in-spain-current-panorama-and-roadmap/",
+      "page": "application",
+      "excerpt": "Learn more about this project Find out more EIT Health-supported FAITHFUL project selected for WHO Europe’s Global Expo 2027 Learn more about this project Find out more News Who We Are What We Do Our Achievements Intranet Contact Us Careers Newsletter Signup Privacy Policy Cookie Policy Impressum Appeals Procedure Whistleblowing Channel Call for Tenders LinkedIn Instagram YouTube BACK TO TOP"
     },
     {
       "id": "check-page-980a559dcf",
@@ -387,16 +1167,496 @@
       "excerpt": "Wild Card applications open - EIT Health EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board The Supervisory Board France Transformative Health"
     },
     {
+      "id": "check-page-ed4b409e27",
+      "url": "https://eithealth.eu/news-article/wild-card-applications-open/",
+      "page": "application",
+      "excerpt": "Part of the Innovation Projects pillar, EIT Health Wild Card Projects are high-risk, innovative projects with transformative potential."
+    },
+    {
+      "id": "check-page-538772511a",
+      "url": "https://eithealth.eu/news-article/wild-card-applications-open/",
+      "page": "application",
+      "excerpt": "The projects are targeted at challenges provided by EIT Health Partners, where the “solution” of the challenge would be a major breakthrough."
+    },
+    {
+      "id": "check-page-3e3ab47b06",
+      "url": "https://eithealth.eu/news-article/wild-card-applications-open/",
+      "page": "application",
+      "excerpt": "The challenges set by the partners are: Smart Health: Entrepreneurs are tasked with building new solutions that use Artificial Intelligence to quickly interpret large, unstructured data sets within existing regulatory frame works, allowing healthcare professionals across the EU to improve patient care."
+    },
+    {
+      "id": "check-page-fa9b1f2248",
+      "url": "https://eithealth.eu/news-article/wild-card-applications-open/",
+      "page": "application",
+      "excerpt": "The most effective solution must raise awareness of the problem, while also enabling new processes and methodologies to manage it across the EU healthcare landscape."
+    },
+    {
+      "id": "check-page-55aaf1b97b",
+      "url": "https://eithealth.eu/news-article/wild-card-applications-open/",
+      "page": "application",
+      "excerpt": "Wild Card is open to academics, researchers, engineers, entrepreneurs, scientists, data analysts, business analysts and advisors, or simply motivated, creative and inventive people."
+    },
+    {
+      "id": "check-page-5ea8f18f4c",
+      "url": "https://eithealth.eu/news-article/wild-card-applications-open/",
+      "page": "application",
+      "excerpt": "To find out more see: Wild Cards activity page Application page Call Document BRIGHTskills- EU Health Industry Skills Strategy New EU Health Industry Skills Strategy Find out more EIT Health Catapult celebrates a decade of supporting European healthcare start-ups as seven finalists prepare to take the stage at the EIT Health Summit in Madrid."
+    },
+    {
+      "id": "check-page-cd38e764bb",
+      "url": "https://eithealth.eu/news-article/wild-card-applications-open/",
+      "page": "application",
+      "excerpt": "Learn more about this project Find out more EIT Health-supported FAITHFUL project selected for WHO Europe’s Global Expo 2027 Learn more about this project Find out more News Who We Are What We Do Our Achievements Intranet Contact Us Careers Newsletter Signup Privacy Policy Cookie Policy Impressum Appeals Procedure Whistleblowing Channel Call for Tenders LinkedIn Instagram YouTube BACK TO TOP"
+    },
+    {
       "id": "check-page-f27a1a580e",
       "url": "https://eithealth.eu/opportunity/biotech-certified-innovation-path/",
       "page": "application",
       "excerpt": "Biotech Certified Innovation Path EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board The Supervisory Board France Transformative Health"
     },
     {
+      "id": "check-page-4df0ea9ca8",
+      "url": "https://eithealth.eu/opportunity/biotech-certified-innovation-path/",
+      "page": "application",
+      "excerpt": "Join our Register of Experts Our Supported Start-ups Innovators Community Premio Jaime Prat 2021 Think Tank España Think Tank Spain Value Catalyst SEARCH OUR SITE Search for: EIT HEALTH ON SOCIAL LinkedIn Instagram YouTube Home | Events & Opportunities | Biotech Certified Innovation Path Apply now Apply now!"
+    },
+    {
+      "id": "check-page-66eb1a5a01",
+      "url": "https://eithealth.eu/opportunity/biotech-certified-innovation-path/",
+      "page": "application",
+      "excerpt": "Call open Biotech Certified Innovation Path EIT Health invites organisations from industry, education and research to submit proposals for the development of a new EIT Label-certified Biotech pathway within the Certified Innovation Path (CIP) portfolio, complementing the existing Health Data, Digital Medical Devices and High Value Care pathways."
+    },
+    {
+      "id": "check-page-eb0c3bb03c",
+      "url": "https://eithealth.eu/opportunity/biotech-certified-innovation-path/",
+      "page": "application",
+      "excerpt": "Funded projects will design and deliver personalised learning courses for graduates and professionals across the health biotechnology value chain."
+    },
+    {
+      "id": "check-page-76ccda7a58",
+      "url": "https://eithealth.eu/opportunity/biotech-certified-innovation-path/",
+      "page": "application",
+      "excerpt": "The pathway will equip participants with the innovation, entrepreneurship and biotech expertise needed to translate scientific advances into scalable, market-ready healthcare solutions across Europe."
+    },
+    {
+      "id": "check-page-2ad602e1e7",
+      "url": "https://eithealth.eu/opportunity/biotech-certified-innovation-path/",
+      "page": "application",
+      "excerpt": "A consortium of minimum two Higher Education Institutions (HEIs) established in two different eligible Member States, of which: At least one HEI must be established in an EIT RIS region; and At least one of the participating Higher Education Institutions must be authorised to award ECTS credits for the repurposed courses."
+    },
+    {
+      "id": "check-page-89a04b0eed",
+      "url": "https://eithealth.eu/opportunity/biotech-certified-innovation-path/",
+      "page": "application",
+      "excerpt": "Active and substantive involvement of non-academic or industry partners is essential, as a highly integrated, innovative learning by doing approach is a core principle of EIT Labelled Fellowships."
+    },
+    {
+      "id": "check-page-c576a83e09",
+      "url": "https://eithealth.eu/opportunity/biotech-certified-innovation-path/",
+      "page": "application",
+      "excerpt": "About the course Proposed courses must aim to: Equip participants to navigate and apply Europe’s evolving regulatory and policy landscape, including the EU Biotech Act, Clinical Trials Regulation and MDR/IVDR, with a focus on translation and early scaleup."
+    },
+    {
+      "id": "check-page-7535e4b015",
+      "url": "https://eithealth.eu/opportunity/biotech-certified-innovation-path/",
+      "page": "application",
+      "excerpt": "Integrate advanced biotech and translational expertise with EIT Labelled innovation, entrepreneurship and leadership competencies, enabling real-world implementation of biotech innovation."
+    },
+    {
+      "id": "check-page-5adc6e2826",
+      "url": "https://eithealth.eu/opportunity/biotech-certified-innovation-path/",
+      "page": "application",
+      "excerpt": "Strengthen cross border collaboration, mobility and industry engagement, connecting European research, clinical, manufacturing and investment ecosystems through applied learning and capstone projects."
+    },
+    {
+      "id": "check-page-0d1c2a1649",
+      "url": "https://eithealth.eu/opportunity/biotech-certified-innovation-path/",
+      "page": "application",
+      "excerpt": "Step 2: Apply to the call via EIT Health’s application platform."
+    },
+    {
       "id": "check-page-63374ab3bd",
       "url": "https://eithealth.eu/opportunity/bootcamps-providers/",
       "page": "application",
       "excerpt": "Design and Deliver the Next EIT Health Bootcamps EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board The Supervisory Board France Transformative"
+    },
+    {
+      "id": "check-page-e0a1e17f2e",
+      "url": "https://eithealth.eu/opportunity/bootcamps-providers/",
+      "page": "application",
+      "excerpt": "Join our Register of Experts Our Supported Start-ups Innovators Community Premio Jaime Prat 2021 Think Tank España Think Tank Spain Value Catalyst SEARCH OUR SITE Search for: EIT HEALTH ON SOCIAL LinkedIn Instagram YouTube Home | Events & Opportunities | Design and Deliver the Next EIT Health Bootcamps Apply now Apply now!"
+    },
+    {
+      "id": "check-page-d1d103a317",
+      "url": "https://eithealth.eu/opportunity/bootcamps-providers/",
+      "page": "application",
+      "excerpt": "Call open Design and Deliver the Next EIT Health Bootcamps Help shape the next generation of EIT Health Bootcamps and unlock the market potential of Europe’s most promising health innovations."
+    },
+    {
+      "id": "check-page-0e07b78e75",
+      "url": "https://eithealth.eu/opportunity/bootcamps-providers/",
+      "page": "application",
+      "excerpt": "We are looking for experienced consortia from across industry, education and research to design and deliver intensive, hands-on learning paths for health start-ups ready to advance their innovations towards market adoption and scale."
+    },
+    {
+      "id": "check-page-076adf07bf",
+      "url": "https://eithealth.eu/opportunity/bootcamps-providers/",
+      "page": "application",
+      "excerpt": "This opportunity is designed for organisations with expertise in healthcare innovation, entrepreneurship, commercialisation, education and venture support, and strong connections across the European health innovation ecosystem."
+    },
+    {
+      "id": "check-page-d06c171af0",
+      "url": "https://eithealth.eu/opportunity/bootcamps-providers/",
+      "page": "application",
+      "excerpt": "Bring your expertise to one or more of five learning paths covering foundational health innovation skills, digital health validation and evidence, deep tech and AI commercialisation, cross-border investment and scaling, and patient access and adoption."
+    },
+    {
+      "id": "check-page-69aa1a7118",
+      "url": "https://eithealth.eu/opportunity/bootcamps-providers/",
+      "page": "application",
+      "excerpt": "Working alongside EIT Health, selected consortia will develop engaging learning experiences that combine practical training, expert-led masterclasses, tailored mentoring, real-world case studies, ecosystem engagement and pitch opportunities."
+    },
+    {
+      "id": "check-page-39c8b035d8",
+      "url": "https://eithealth.eu/opportunity/bootcamps-providers/",
+      "page": "application",
+      "excerpt": "Equip participating start-ups with the knowledge, tools and connections to strengthen validation and evidence generation, navigate regulatory and market access pathways, build investment readiness, engage healthcare stakeholders and develop actionable strategies for market entry and scale."
+    },
+    {
+      "id": "check-page-cd0c88b9aa",
+      "url": "https://eithealth.eu/opportunity/bootcamps-providers/",
+      "page": "application",
+      "excerpt": "Through expert guidance and connections with investors, healthcare providers, industry, regulators and patient communities, the Bootcamps will help ventures identify and overcome the barriers standing between promising innovation and real-world adoption."
+    },
+    {
+      "id": "check-page-7e883abb8e",
+      "url": "https://eithealth.eu/opportunity/bootcamps-providers/",
+      "page": "application",
+      "excerpt": "Join EIT Health in building scalable learning programmes that strengthen Europe’s health innovation ecosystem and give health start-ups the capabilities, connections and confidence to take the next step towards commercialisation and impact."
+    },
+    {
+      "id": "check-page-ceafc0bd45",
+      "url": "https://eithealth.eu/opportunity/bootcamps-providers/",
+      "page": "application",
+      "excerpt": "This call is open to consortia with the expertise and capacity to design and deliver high-quality learning experiences for health start-ups."
+    },
+    {
+      "id": "check-page-be372fea39",
+      "url": "https://eithealth.eu/opportunity/bootcamps-providers/",
+      "page": "application",
+      "excerpt": "Consortia must comprise a minimum of two and a maximum of five independent legal entities, with at least two entities legally established in different Horizon Europe countries."
+    },
+    {
+      "id": "check-page-0dfcdb9bd1",
+      "url": "https://eithealth.eu/opportunity/bootcamps-providers/",
+      "page": "application",
+      "excerpt": "Each consortium must bring together partners from at least two sides of the Knowledge Triangle – industry, education and research, including at least one industry organisation."
+    },
+    {
+      "id": "check-page-7e99e83016",
+      "url": "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "page": "application",
+      "excerpt": "EIT Health RIS Country Representatives EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board The Supervisory Board France Transformative Health"
+    },
+    {
+      "id": "check-page-6b79f021f8",
+      "url": "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "page": "application",
+      "excerpt": "Join our Register of Experts Our Supported Start-ups Innovators Community Premio Jaime Prat 2021 Think Tank España Think Tank Spain Value Catalyst SEARCH OUR SITE Search for: EIT HEALTH ON SOCIAL LinkedIn Instagram YouTube Home | Events & Opportunities | EIT Health RIS Country Representatives Apply now Apply now!"
+    },
+    {
+      "id": "check-page-bcc2ec4bcc",
+      "url": "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "page": "application",
+      "excerpt": "Call open EIT Health RIS Country Representatives Become the driving force behind healthcare innovation in your country."
+    },
+    {
+      "id": "check-page-4240833f0b",
+      "url": "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "page": "application",
+      "excerpt": "EIT Health is looking for ambitious organisations to become Country Representatives in selected EIT Regional Innovation Scheme (RIS) countries for 2027–2028."
+    },
+    {
+      "id": "check-page-17093ebfb8",
+      "url": "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "page": "application",
+      "excerpt": "As EIT Health’s national representative, you’ll play a central role in shaping the future of healthcare innovation by connecting the people, organisations and ideas that drive meaningful change."
+    },
+    {
+      "id": "check-page-044cfd3352",
+      "url": "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "page": "application",
+      "excerpt": "Working across academia, research, healthcare, industry, start-ups, investors and public authorities, you’ll strengthen your country’s health innovation ecosystem and create new opportunities for collaboration through EIT Health’s innovation, education and business creation programmes."
+    },
+    {
+      "id": "check-page-f62dd1f18f",
+      "url": "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "page": "application",
+      "excerpt": "As a Country Representative, you’ll identify and support promising innovators and entrepreneurs, build regional innovation capacity, promote EIT Health funding and programme opportunities, and help local organisations connect with one of Europe’s leading health innovation networks."
+    },
+    {
+      "id": "check-page-07e9db686a",
+      "url": "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "page": "application",
+      "excerpt": "If your organisation has a strong regional network, proven experience in innovation ecosystem development, entrepreneurship support, technology transfer or healthcare innovation, and the ambition to make a lasting impact, this is your opportunity to become part of Europe’s largest health innovation community."
+    },
+    {
+      "id": "check-page-c1bc6d9646",
+      "url": "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "page": "application",
+      "excerpt": "Funding Total call budget: up to €1,274,500 Maximum funding per project: €182,000 Up to 7 EIT Health Country Representatives will be selected EIT Health funding covers up to 60% of total eligible project costs."
+    },
+    {
+      "id": "check-page-8b3bf76182",
+      "url": "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "page": "application",
+      "excerpt": "Applicants must provide the remaining 40% co-funding from non-EIT Health sources."
+    },
+    {
+      "id": "check-page-ffacbbad8f",
+      "url": "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "page": "application",
+      "excerpt": "Step 2: Apply to the call via EIT Health’s application platform."
+    },
+    {
+      "id": "check-page-026478ff0f",
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "page": "application",
+      "excerpt": "Fostering Opportunity in Regional Growth Across Europe (FORGE) EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board The Supervisory Board France"
+    },
+    {
+      "id": "check-page-1ae5a45f7b",
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "page": "application",
+      "excerpt": "Join our Register of Experts Our Supported Start-ups Innovators Community Premio Jaime Prat 2021 Think Tank España Think Tank Spain Value Catalyst SEARCH OUR SITE Search for: EIT HEALTH ON SOCIAL LinkedIn Instagram YouTube Home | Events & Opportunities | Fostering Opportunity in Regional Growth Across Europe (FORGE) Apply now Apply now!"
+    },
+    {
+      "id": "check-page-dd2b655513",
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "page": "application",
+      "excerpt": "Call open Fostering Opportunities in Regional Growth Across Europe We’re looking for experienced organisations to design and deliver the Fostering Oportunities in Regional Growth Across Europe programme, a flagship capacity-building initiative that empowers regional health innovation ecosystem actors to become drivers of sustainable innovation across Europe."
+    },
+    {
+      "id": "check-page-0e7a46d083",
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "page": "application",
+      "excerpt": "This call is open to consortia with proven expertise in ecosystem building, innovation support, education, and entrepreneurship."
+    },
+    {
+      "id": "check-page-5289ea976e",
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "page": "application",
+      "excerpt": "Universities, technology transfer offices (TTOs), accelerators, innovation agencies, clusters, and other organisations experienced in designing and delivering capacity-building programmes are encouraged to apply."
+    },
+    {
+      "id": "check-page-7e5a4780f7",
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "page": "application",
+      "excerpt": "The selected subgrantee will develop and deliver a blended learning programme combining online learning, interactive workshops, mentoring, study visits, and peer learning."
+    },
+    {
+      "id": "check-page-517bf27cea",
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "page": "application",
+      "excerpt": "Participants in the designed programme will strengthen their capabilities in ecosystem development, stakeholder engagement, innovation support, and strategic planning, while building stronger connections across the European health innovation landscape."
+    },
+    {
+      "id": "check-page-5b6ffdd275",
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "page": "application",
+      "excerpt": "Join us in shaping the future of health innovation across Europe."
+    },
+    {
+      "id": "check-page-8554095e7f",
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "page": "application",
+      "excerpt": "This call is open to consortia comprising a minimum of two and a maximum of four eligible organisations with complementary expertise in health innovation ecosystem development, capacity building, and learning programme delivery."
+    },
+    {
+      "id": "check-page-72cc6422ac",
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "page": "application",
+      "excerpt": "The consortium is expected to bring together complementary capabilities and may include, but is not limited to: Universities and higher education institutions."
+    },
+    {
+      "id": "check-page-29885ad4b3",
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "page": "application",
+      "excerpt": "Accelerators and incubators."
+    },
+    {
+      "id": "check-page-f4fe24208f",
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "page": "application",
+      "excerpt": "Other organisations with demonstrated expertise in health innovation and ecosystem capacity building."
+    },
+    {
+      "id": "check-page-52dc872d49",
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "page": "application",
+      "excerpt": "Step 2: Apply to the call via EIT Health’s application platform."
+    },
+    {
+      "id": "check-page-156a57202e",
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "page": "application",
+      "excerpt": "Healthcare Entrepreneurship Levelling Online Course EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board The Supervisory Board France"
+    },
+    {
+      "id": "check-page-3c8ea6e4ae",
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "page": "application",
+      "excerpt": "Join our Register of Experts Our Supported Start-ups Innovators Community Premio Jaime Prat 2021 Think Tank España Think Tank Spain Value Catalyst SEARCH OUR SITE Search for: EIT HEALTH ON SOCIAL LinkedIn Instagram YouTube Home | Events & Opportunities | Healthcare Entrepreneurship Levelling Online Course Apply now Apply now!"
+    },
+    {
+      "id": "check-page-feca3030cb",
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "page": "application",
+      "excerpt": "Call open Healthcare Entrepreneurship Levelling Online Course Help build the foundation for the next generation of healthcare innovators."
+    },
+    {
+      "id": "check-page-717b18257f",
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "page": "application",
+      "excerpt": "EIT Health is launching a call to develop a new Levelling Online Course on Entrepreneurship in Healthcare."
+    },
+    {
+      "id": "check-page-df9bc060b0",
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "page": "application",
+      "excerpt": "The course will provide a common baseline of innovation and entrepreneurship knowledge across the EIT Health education portfolio, supporting learners as they progress from foundational to advanced innovation concepts."
+    },
+    {
+      "id": "check-page-ed2d4c7864",
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "page": "application",
+      "excerpt": "We invite multidisciplinary consortia from across the Knowledge Triangle (Industry, Education and Research) to design and develop this EIT-labelled learning experience."
+    },
+    {
+      "id": "check-page-e3b1bddcc1",
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "page": "application",
+      "excerpt": "Applicants should bring expertise in healthcare innovation, entrepreneurship education, digital learning, and ensure industry engagement."
+    },
+    {
+      "id": "check-page-9bfcb5e7f5",
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "page": "application",
+      "excerpt": "The selected consortium will create a scalable, self-paced online course covering topics such as healthcare entrepreneurship, design thinking, business models, stakeholder engagement, intellectual property, and venture creation."
+    },
+    {
+      "id": "check-page-3843287ff6",
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "page": "application",
+      "excerpt": "As a stand-alone course or as part of other programmes, it will support Master’s students, PhD candidates, researchers, and young professionals in developing the skills needed to transform ideas and research into real-world healthcare innovation, contributing to the advancement of the healthcare sector."
+    },
+    {
+      "id": "check-page-d80419eab5",
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "page": "application",
+      "excerpt": "Join EIT Health in building the learning foundation that will empower the next generation of healthcare entrepreneurs and innovators."
+    },
+    {
+      "id": "check-page-fcc3911a1f",
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "page": "application",
+      "excerpt": "Consortia must contain at least two and a maximum of three legal entities independent from each other and have at least two entities legally established in different Horizon Europe countries."
+    },
+    {
+      "id": "check-page-a7e473609b",
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "page": "application",
+      "excerpt": "Consortia must involve partners from at least two sides of the Knowledge Triangle (Industry, Education, Research)."
+    },
+    {
+      "id": "check-page-74d43c16d7",
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "page": "application",
+      "excerpt": "Step 2: Apply to the call via EIT Health’s application platform."
+    },
+    {
+      "id": "check-page-a81602e151",
+      "url": "https://eithealth.eu/opportunity/innovation-microcredentials-call/",
+      "page": "application",
+      "excerpt": "Entrepreneurship & Innovation Micro-Credentials Call EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board The Supervisory Board France"
+    },
+    {
+      "id": "check-page-f2e1c2c575",
+      "url": "https://eithealth.eu/opportunity/innovation-microcredentials-call/",
+      "page": "application",
+      "excerpt": "Join our Register of Experts Our Supported Start-ups Innovators Community Premio Jaime Prat 2021 Think Tank España Think Tank Spain Value Catalyst SEARCH OUR SITE Search for: EIT HEALTH ON SOCIAL LinkedIn Instagram YouTube Home | Events & Opportunities | Entrepreneurship & Innovation Micro-Credentials Call Apply now Apply now!"
+    },
+    {
+      "id": "check-page-f3c7372574",
+      "url": "https://eithealth.eu/opportunity/innovation-microcredentials-call/",
+      "page": "application",
+      "excerpt": "Call open Entrepreneurship & Innovation Micro-Credentials Call Help shape the next generation of healthcare innovators and entrepreneurs."
+    },
+    {
+      "id": "check-page-f59a49af1f",
+      "url": "https://eithealth.eu/opportunity/innovation-microcredentials-call/",
+      "page": "application",
+      "excerpt": "EIT Health is inviting consortia to apply for funding to develop a new EIT Label-certified micro-credentials programme for advanced Master’s students and PhD candidates in life sciences, medical technologies, biotechnology, and related fields."
+    },
+    {
+      "id": "check-page-d5cb9f1786",
+      "url": "https://eithealth.eu/opportunity/innovation-microcredentials-call/",
+      "page": "application",
+      "excerpt": "The programme will provide flexible, practice-oriented learning focused on entrepreneurship, innovation, and project management in healthcare."
+    },
+    {
+      "id": "check-page-8a937d2afe",
+      "url": "https://eithealth.eu/opportunity/innovation-microcredentials-call/",
+      "page": "application",
+      "excerpt": "Delivered by EIT Health, it will combine online learning, masterclasses, mentorship, and industry engagement to equip participants with the skills needed to turn scientific knowledge into real-world healthcare impact."
+    },
+    {
+      "id": "check-page-1bbd35fa58",
+      "url": "https://eithealth.eu/opportunity/innovation-microcredentials-call/",
+      "page": "application",
+      "excerpt": "Call open to Members and Non-Members of EIT Health ."
+    },
+    {
+      "id": "check-page-50e8bf3273",
+      "url": "https://eithealth.eu/opportunity/innovation-microcredentials-call/",
+      "page": "application",
+      "excerpt": "Of special interest for Universities, Incubators, Accelerators, Business Schools, I ndustry and Start-up s Funding Up to 150,000 EUR in 2027 Up to 60,000 EUR in 2028."
+    },
+    {
+      "id": "check-page-b9b15c4820",
+      "url": "https://eithealth.eu/opportunity/innovation-microcredentials-call/",
+      "page": "application",
+      "excerpt": "Step 2: Apply to the call via EIT Health’s application platform."
+    },
+    {
+      "id": "check-page-ef2e5ea619",
+      "url": "https://eithealth.eu/opportunity/innovation-uptake/",
+      "page": "application",
+      "excerpt": "Innovation Uptake Call EIT Health Members Hub News Events Menu Learn About Us Access Our Programmes Apply For Funding Join Us Learn About Us Who We Are How EIT Health Works Our Achievements External Collaborations Think Tank Business Plan Annual Reports Programmes Education Programmes Acceleration Programmes Apply For Funding Open Opportunities Our impact Our Achievements Spotlight Think Tank Our Reports Join Us Become a Member Join the Innovators Community A Framework for Innovation in Healthcare Annual Report Annual Report – 2021 Appeals procedure AutoCast Call for Tenders Deep Tech Venture Builder Programme Call 2025 FAQs DIGIVITALITY DMD taskforce external advisory board DMD Taskforce members EIT Health Annual Report 2022 EIT Health Annual Report 2023 EIT Health Annual Report 2024 EIT Health homepage EIT Health Spain y COVID-19 El Equipo español European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Executive Summary HealthGateway.Austria High Value Care Forum Advisory Board Impressum Industry Consultation InnoStars Podcast series Library of Call Appendices Luminate Medical Management board Morning Health Talks News Open Innovation challenges: Breast cancer Open Innovation challenges: EGPA Open Innovation programme co-creator hub Our Flagships Our Regions Search Supervisory Board The Supervisory Board France Transformative Health Instrument Call"
+    },
+    {
+      "id": "check-page-805a972387",
+      "url": "https://eithealth.eu/opportunity/innovation-uptake/",
+      "page": "application",
+      "excerpt": "Join our Register of Experts Our Supported Start-ups Innovators Community Premio Jaime Prat 2021 Think Tank España Think Tank Spain Value Catalyst SEARCH OUR SITE Search for: EIT HEALTH ON SOCIAL LinkedIn Instagram YouTube Home | Events & Opportunities | Innovation Uptake Call Apply now Apply now!"
+    },
+    {
+      "id": "check-page-60d0cf4bb5",
+      "url": "https://eithealth.eu/opportunity/innovation-uptake/",
+      "page": "application",
+      "excerpt": "Call open Innovation Uptake Call EIT Health is calling for mature digital, data-driven and AI-powered healthcare solutions ready to scale across European markets."
+    },
+    {
+      "id": "check-page-28ae2c7712",
+      "url": "https://eithealth.eu/opportunity/innovation-uptake/",
+      "page": "application",
+      "excerpt": "Selected projects will receive funding to accelerate market entry, generate real-world evidence, strengthen market access, and support the adoption of clinically validated innovations across healthcare systems."
+    },
+    {
+      "id": "check-page-2039068244",
+      "url": "https://eithealth.eu/opportunity/innovation-uptake/",
+      "page": "application",
+      "excerpt": "Step 2: Apply to the call via EIT Health’s application platform."
     }
   ],
   "findings": {
@@ -467,8 +1727,42 @@
       }
     ],
     "selectivity": [],
-    "dealText": [],
-    "dealComponents": [],
+    "dealText": [
+      {
+        "value": "project costs (co-funding required) SMEs leading projects receive €400,000–€500,000 within the grant What we fund The call funds projects",
+        "evidenceId": "check-deal-5dc30291d4"
+      },
+      {
+        "value": "costs (co-funding required) SMEs leading projects receive €400,000–€500,000 within the grant What we fund The call funds projects focused on:",
+        "evidenceId": "check-deal-e4fb1b2b26"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "400000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-5dc30291d4"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "500000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-e4fb1b2b26"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

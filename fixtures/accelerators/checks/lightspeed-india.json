@@ -1,22 +1,23 @@
 {
   "programId": "lightspeed-india",
-  "checkedAt": "2026-11-14T20:59:02.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://lsip.com/",
     "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
     "https://lsip.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
-    "https://lsip.com/feeds/lightspeed-india-on-asias-tech-investment-opportunities/",
     "https://lsip.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
     "https://lsip.com/feeds/lightspeed-ventures-on-the-startup-ecosystem-more-investment-to-trickle-into/",
     "https://lsip.com/feeds/lightspeed-ventures-to-ramp-up-investments-in-climate-change-and-ai/",
     "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
+    "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
     "https://lsip.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
+    "https://lsip.com/about/",
+    "https://lsip.com/feeds/lightspeed-india-singapore-is-the-most-under-talked-about-market-in-the-region/",
+    "https://lsip.com/feeds/ai-will-enable-indian-companies-to-be-more-efficient-scale-faster-harsha-kumar/",
+    "https://lsip.com/feeds/good-companies-always-on-the-right-side-of-regulations-lightspeed-md/",
     "https://lsip.com/stories/lightspeed-eyes-investments-in-climate-tech-startups-in-india-se-asia/",
     "https://lsip.com/stories/lightspeeds-investment-in-airbound/",
-    "https://lsip.com/stories/lightspeeds-investment-in-cosmart/",
-    "https://lsip.com/stories/lightspeeds-investment-in-exponent-energy/",
-    "https://lsip.com/stories/lightspeeds-investment-in-globalbees/",
-    "https://lsip.com/stories/lightspeeds-investment-in-marqo-ai/"
+    "https://lsip.com/stories/lightspeeds-investment-in-cosmart/"
   ],
   "evidence": [
     {
@@ -83,6 +84,13 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-91caf45854",
+      "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "title": "Lightspeed India — terms page",
+      "excerpt": "over the past 5 yrs, much of them in the last 18 months. My partner Mercedes Bent has written a great",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-9476f33f6a",
       "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
       "title": "Lightspeed India — terms page",
@@ -104,6 +112,13 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-f9000ed5ff",
+      "url": "https://lsip.com/feeds/good-companies-always-on-the-right-side-of-regulations-lightspeed-md/",
+      "title": "Lightspeed India — portfolio page",
+      "excerpt": "have corrected significantly over the past 18-24 months to reach pre-covid levels. With he valuations",
+      "page": "portfolio"
+    },
+    {
       "id": "check-format-0dcb7d2a53",
       "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
       "title": "Lightspeed India — terms page",
@@ -118,45 +133,10 @@
       "page": "terms"
     },
     {
-      "id": "check-format-6416f9cdc3",
-      "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
-      "title": "Lightspeed India — terms page",
-      "excerpt": "Mark Baker 6y PIVOTING YOUR LIVE EVENTS TO VIRTUAL OR HYBRID EXPERIENCES Darren Chuckry 6y How to Create Special Events",
-      "page": "terms"
-    },
-    {
       "id": "check-format-72d2331e2b",
       "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
       "title": "Lightspeed India — terms page",
       "excerpt": "offer to a “VIP attendee” just as she enters a virtual booth to maximize engagement or trigger a sale? Being at",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-87dc41d355",
-      "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
-      "title": "Lightspeed India — terms page",
-      "excerpt": "Virtual Events Mark Baker 6y PIVOTING YOUR LIVE EVENTS TO VIRTUAL OR HYBRID EXPERIENCES Darren Chuckry 6y How to Create",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-9e4d53e7d1",
-      "url": "https://lsip.com/feeds/lightspeed-india-on-asias-tech-investment-opportunities/",
-      "title": "Lightspeed India — terms page",
-      "excerpt": "Bloomberg Terminal Demo Request Bloomberg Anywhere Remote Login Bloomberg Anywhere Login Bloomberg Customer Support",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-bb56f7017e",
-      "url": "https://lsip.com/feeds/lightspeed-india-on-asias-tech-investment-opportunities/",
-      "title": "Lightspeed India — terms page",
-      "excerpt": "insight around the world For Customers Bloomberg Anywhere Remote Login Software Updates Manage Products and Account",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-db0f37962d",
-      "url": "https://lsip.com/feeds/lightspeed-india-on-asias-tech-investment-opportunities/",
-      "title": "Lightspeed India — terms page",
-      "excerpt": "insight around the world For Customers Bloomberg Anywhere Remote Login Software Updates Manage Contracts and Orders Support",
       "page": "terms"
     },
     {
@@ -188,25 +168,11 @@
       "page": "terms"
     },
     {
-      "id": "check-location-e3abe4816d",
-      "url": "https://lsip.com/stories/lightspeeds-investment-in-globalbees/",
-      "title": "Lightspeed India — terms page",
-      "excerpt": "40% of the top sellers on Amazon are based in China, while other potential targets have",
-      "page": "terms"
-    },
-    {
       "id": "check-name-508a6ef3a6",
       "url": "https://lsip.com/",
       "title": "Lightspeed India — homepage",
       "excerpt": "Lift-Off An energizing two days and a packed house at Lightspeed India's inaugural #liftoff portfolio-investor event in Mumbai.",
       "page": "details"
-    },
-    {
-      "id": "check-portfolio-1e35ace926",
-      "url": "https://lsip.com/stories/lightspeeds-investment-in-exponent-energy/",
-      "title": "Lightspeed India — terms page",
-      "excerpt": "Companies → https://lsip.com/companies/",
-      "page": "terms"
     },
     {
       "id": "check-portfolio-2a09a66a9c",
@@ -216,18 +182,11 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-431c27b865",
-      "url": "https://lsip.com/stories/lightspeeds-investment-in-globalbees/",
-      "title": "Lightspeed India — terms page",
+      "id": "check-portfolio-5d8becf3dc",
+      "url": "https://lsip.com/about/",
+      "title": "Lightspeed India — program page",
       "excerpt": "Companies → https://lsip.com/companies/",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-5bb0b9c512",
-      "url": "https://lsip.com/stories/lightspeeds-investment-in-marqo-ai/",
-      "title": "Lightspeed India — terms page",
-      "excerpt": "Companies → https://lsip.com/companies/",
-      "page": "terms"
+      "page": "details"
     },
     {
       "id": "check-portfolio-6883afb74e",
@@ -273,10 +232,154 @@
       "excerpt": "Home - Lightspeed Venture Partners menu menu About Team Companies Founder Experience Stories Launch Faction Jobs LP login Events Lighthouse Contact POSSIBILITY GROWS THE DEEPER YOU GO Too often VC only scratches the surface. Continually consuming until there’s a basic understanding of everything, and expertise in nothing. Lightspeed takes a different approach. Depth is our center of gravity. It’s how we build and maintain a mastery that enables unwavering conviction in the companies we back. Our depth of commitment means rolling up our sleeves to earn our seat at the table. Depth of relationships means authenticity, transparency and trust. And depth of belief means navigating the peaks and valleys together, regardless of how the terrain unfolds. Complete immersion is the heart of our philosophy on investing and what separates us from speculators and opportunists. Creating together instead of funding from afar. Forging enduring companies with the power of one global team. Because possibility grows the deeper you go. SERVING BOLD BUILDERS OF THE FUTURE. For over twenty years Lightspeed has been the first investor and an early backer of some of the most innovative companies in the world. In service of bold founders with big ideas, we stand behind our companies with high conviction from Seed to Series F and beyond. OYO Ritesh Agarwal Founder & CEO OYO operates a global"
     },
     {
+      "id": "check-page-884695c41c",
+      "url": "https://lsip.com/",
+      "page": "details",
+      "excerpt": "Dive Deeper Hammered by AI Introducing Hammered by AI, a new series dedicated to sharing our views on all things AI."
+    },
+    {
+      "id": "check-page-2b63be67e1",
+      "url": "https://lsip.com/",
+      "page": "details",
+      "excerpt": "If you are interested in this transformative technology, we invite you to join our community as we discuss the latest innovations, advancements, ethical considerations, and practical applications of AI."
+    },
+    {
+      "id": "check-page-4489e6a98d",
+      "url": "https://lsip.com/",
+      "page": "details",
+      "excerpt": "Subscribe to Hammered by AI today, and embark on a journey of exploration and discovery with us. dive deeper Warpspeed Hackathon An energizing two days at our Warpspeed GEN AI Hackathon featuring 107 builders and developers and partners from Microsoft, Google, AWS, Devfolio and Replit!"
+    },
+    {
+      "id": "check-page-8bc64ed941",
+      "url": "https://lsip.com/",
+      "page": "details",
+      "excerpt": "With workshops, bounties and the best of AI innovation on display."
+    },
+    {
+      "id": "check-page-f39aa16f56",
+      "url": "https://lsip.com/",
+      "page": "details",
+      "excerpt": "Dive Deeper Masters of SaaS Insightful sessions of #MastersofSaaS with experts from the ecosystem where they share the journey, advice for founders, the future of SaaS and more for the enterprise."
+    },
+    {
+      "id": "check-page-b4a949bad9",
+      "url": "https://lsip.com/",
+      "page": "details",
+      "excerpt": "Dive Deeper Lightspeed raises $500 million to invest in startups across India, Southeast Asia Keep following #MastersofSaas for insightful sessions from SaaS builders and leaders as they share their journeys and advice for founders!"
+    },
+    {
+      "id": "check-page-9750f97f93",
+      "url": "https://lsip.com/",
+      "page": "details",
+      "excerpt": "Dive Deeper Come Home and Build For operators and executives thinking about returning to India to build - a deep-dive on all things you need to consider and prepare for!"
+    },
+    {
+      "id": "check-page-653912bc7c",
+      "url": "https://lsip.com/",
+      "page": "details",
+      "excerpt": "Dive Deeper Bengaluru Delhi Mumbai Singapore LSIP ® LIGHTSPEED INDIA ® LIGHTSPEED INDIA PARTNERS ® Sign up for our email list Thank you for subscribing!"
+    },
+    {
+      "id": "check-page-5c0e78c7c4",
+      "url": "https://lsip.com/",
+      "page": "details",
+      "excerpt": "Faction is a registered investment adviser under the United States Investment Advisers Act of 1940, as amended."
+    },
+    {
+      "id": "check-page-2fc036e992",
+      "url": "https://lsip.com/",
+      "page": "details",
+      "excerpt": "(\"LSVP\") and Lightspeed India Partners, L.L.P."
+    },
+    {
+      "id": "check-page-034b369616",
+      "url": "https://lsip.com/",
+      "page": "details",
+      "excerpt": "(\"LSIP\") are distinct investment advisory entities, are not a unitary enterprise and operate independently of one another."
+    },
+    {
+      "id": "check-page-1eea35ef35",
+      "url": "https://lsip.com/",
+      "page": "details",
+      "excerpt": "(\"LSVP\") and LSIP are distinct investment advisory entities, are not a unitary enterprise and operate independently of one another."
+    },
+    {
       "id": "check-page-4b0e4fbc17",
       "url": "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
       "page": "terms",
       "excerpt": "Early-stage investing remains energetic with plenty of dry powder for investment: Lightspeed’s Rahul Taneja - CNBC TV18 Market Data English आवाज़ Stocks / Latest News Market Stocks IPOs Commodities Personal Finance Mutual Funds Business Economy India World Technology Photos More Lifestyle Culture Food & Drinks Healthcare Travel Videos Sports Entertainment Upcoming Events IPs & Events IPs & Events LIVE TV CNBC TV18 CNBC TV18 Prime CNBC Awaaz CNBC Bajar Login / Signup × Language English आवाज़ LIVE TV Language English हिन्दी Latest news Live Updates CNBC-TV18 Prime Markets Markets Data Stocks IPOs Business Personal Finance CNBC-TV18 ACCESS Impact Shorts Economy India World Upcoming Events Engage with CNBC-TV18 Photos Videos Minis Web Stories Polls Quiz Healthcare Politics Travel Education & Careers Sports Views Auto Entertainment Technology Startups Lifestyle Retail Real Estate Minis Special Coverage India Business Leader Awards Branded Content HealthX Elevate India Retirement Insights Summit The Growth Summit Ceo awards Accelerate Your Cloud Journey Accelerating to a Connected Future Financial Services Cloud Symposium Crypto Education Next Ey Entrepreneur Of The Year IRMA Wizards of finance The Thought League Discover CNBCTV18 About Contact Advertise Disclaimer Terms of Use Privacy Policy Shows Anchors Polls 11:11 Newsletter Life Advertise with us Download App Join Us On"
+    },
+    {
+      "id": "check-page-9ffc265153",
+      "url": "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "page": "terms",
+      "excerpt": "The venture capital pipeline did freeze over and funding slumped to a five-year-low in 2023."
+    },
+    {
+      "id": "check-page-c9785623a5",
+      "url": "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "page": "terms",
+      "excerpt": "While the value of investments collapsed across stages, deal-making for seed to early-stage startups remained energetic, with 1,014 term sheets signed, which represented 92% of the total 1,096 deals signed in the year gone by."
+    },
+    {
+      "id": "check-page-c08784e905",
+      "url": "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "page": "terms",
+      "excerpt": "Rahul Taneja, Partner at Lightspeed, believes early-stage investing will continue to be active, with plenty of capital available to be deployed."
+    },
+    {
+      "id": "check-page-68292eb0c2",
+      "url": "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "page": "terms",
+      "excerpt": "In 2023, Lightspeed backed one of India's key Generative AI startups—Sarvam AI—which aims to build a ChatGPT-like large language model (LLM) to bring the power of artificial intelligence by leveraging the country's linguistic diversity."
+    },
+    {
+      "id": "check-page-7dad68d978",
+      "url": "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "page": "terms",
+      "excerpt": "Since 2000, Lightspeed has invested over $1.8 billion in more than 100 startups in India and Southeast Asia."
+    },
+    {
+      "id": "check-page-f44965f46a",
+      "url": "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "page": "terms",
+      "excerpt": "Unicorns in Lightspeed India's portfolio include Byjus, Udaan, OYO, Sharechat, Darwinbox, Innovaccer, Globalbees, Yubi (CredAvenue), Razorpay, Acko & Zetwerk."
+    },
+    {
+      "id": "check-page-348c967708",
+      "url": "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "page": "terms",
+      "excerpt": "Early-stage investing continues to be active in India - there is plenty of capital available to be deployed and will continue to come."
+    },
+    {
+      "id": "check-page-97c3f0ad6a",
+      "url": "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "page": "terms",
+      "excerpt": "Rahul Taneja, Lightspeed Startup Spotlight: Building In India, For The World Q : Are any 3-5 startups and sectors catching your attention in 2024?"
+    },
+    {
+      "id": "check-page-2fa5a96c8a",
+      "url": "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "page": "terms",
+      "excerpt": "Rahul Taneja, Lightspeed: We continue to invest in 4 core themes — a) Enterprise SaaS and infrastructure (especially AI-driven), b) Fintech, c) Consumer products & services, and d) Commerce."
+    },
+    {
+      "id": "check-page-44f4b86b7b",
+      "url": "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "page": "terms",
+      "excerpt": "What we’ve particularly focused on is the now-well-established India to the world movement especially in manufacturing and continue to double down on that."
+    },
+    {
+      "id": "check-page-a5fbf4665a",
+      "url": "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "page": "terms",
+      "excerpt": "In addition, we are actively investing in emerging themes such as Climate and Mobility."
+    },
+    {
+      "id": "check-page-704fef7033",
+      "url": "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "page": "terms",
+      "excerpt": "Rahul Taneja, Lightspeed : India has become and remains the global investment destination of choice, with the government ably managing interest rates, inflation and growth together."
     },
     {
       "id": "check-page-78de87b95c",
@@ -285,10 +388,76 @@
       "excerpt": "Lightspeed India is leading the way in AI, EV and climate-tech investments. Here's why Advertisement Subscribe Ask AI home leadership billionaires startups Business Economy Automobile Aviation Pharma Markets Tech Banking & Finance Space Geopolitics Life Sports Entertainment Lists India Rich List 2026 Showstoppers 2026 30 Under 30 W-Power 2026 AI Special 2025 W-Power 2025 All Lists Multimedia Videos Podcasts Photo Galleries Photo Features Newsletters More News by Numbers Thought Leadership Newsmakers Cover Stories Magazine Ask AI Lightspeed India is leading the way in AI, EV and climate-tech investments. Here ... Lightspeed has doubled down on its focus on generative AI and AI-backed startups, investing $1.1 billion across 61 AI companies globally By Salil Panchal Last Updated: Sep 26, 2024, 12:40 IST 12 min intent Reding Mode Disclaimer: Comments reflect users’ views, not forbesindia. Please keep discussions respectful and constructive. Abusive, defamatory, or illegal comments will be removed. News18 may disable any comment at its discretion. By posting, you agree to our Terms of Use and Privacy Policy . Loading comments... Join Us Prefer us on Google Team Lightspeed: (standing, from left) Dev Khare, India partner, Bejul Somaia, global partner, Rahul Taneja and Shuvi Shrivastava, India partners (sitting) Harsha Kumar and Hemant Mohapatra, India partners Image: Mexy Xavier"
     },
     {
-      "id": "check-page-c7c7092bef",
-      "url": "https://lsip.com/feeds/lightspeed-india-on-asias-tech-investment-opportunities/",
+      "id": "check-page-6b0e8a536e",
+      "url": "https://lsip.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
       "page": "terms",
-      "excerpt": "Watch Lightspeed India on Asia's Tech Investment Opportunities - Bloomberg Skip to content Bloomberg the Company & Its Products The Company & its Products Bloomberg Terminal Demo Request Bloomberg Anywhere Remote Login Bloomberg Anywhere Login Bloomberg Customer Support Customer Support Bloomberg Connecting decision makers to a dynamic network of information, people and ideas, Bloomberg quickly and accurately delivers business and financial information, news and insight around the world For Customers Bloomberg Anywhere Remote Login Software Updates Manage Products and Account Information Support Americas +1 212 318 2000 EMEA +44 20 7330 7500 Asia Pacific +65 6212 1000 Company About Careers Inclusion at Bloomberg Tech at Bloomberg Philanthropy Sustainability Bloomberg Beta Communications Press Announcements Press Contacts Follow Facebook Instagram LinkedIn YouTube Products Bloomberg Professional Services Bloomberg Terminal Data Trading Risk Compliance Indices Industry Products Bloomberg Law Bloomberg Tax Bloomberg Government BloombergNEF Media Bloomberg Markets Bloomberg Technology Bloomberg Pursuits Bloomberg Politics Bloomberg Opinion Bloomberg Businessweek Bloomberg Live Conferences Bloomberg Radio Bloomberg Television News Bureaus Media Services Bloomberg Media Distribution Advertising Company About Careers Inclusion at Bloomberg Tech at Bloomberg Philanthropy"
+      "excerpt": "Conversations continued for a year, leading to a meeting with Lightspeed India’s partner Dev Khare and the team."
+    },
+    {
+      "id": "check-page-c25eb68c95",
+      "url": "https://lsip.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "page": "terms",
+      "excerpt": "AI solutions for quicker diagnosis After completion of rigorous due diligence, Lightspeed India and 360ONE Asset have led a $65 million Series D fundraise for Qure.ai."
+    },
+    {
+      "id": "check-page-89cc39fae8",
+      "url": "https://lsip.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "page": "terms",
+      "excerpt": "Merck Global Health Innovation Fund, Kae Capital, Novo Holdings, Health Quad and TeamFund also participated in the fund raise."
+    },
+    {
+      "id": "check-page-dc220ec36d",
+      "url": "https://lsip.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "page": "terms",
+      "excerpt": "Investors are betting on Qure.ai’s multimodal AI to help improve early detections in diseases such as lung cancer and tuberculosis (TB)."
+    },
+    {
+      "id": "check-page-b6081bde7a",
+      "url": "https://lsip.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "page": "terms",
+      "excerpt": "“The fresh investment tells us that we have a really solid story around AI,\" Warier tells Forbes India."
+    },
+    {
+      "id": "check-page-acee2dce50",
+      "url": "https://lsip.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "page": "terms",
+      "excerpt": "It has a hub-and-spoke model where, through a mobile app, the patient comes to the spoke hospital, gets a scan done and after AI processes the CT scan in less than a minute, the hub hospital is alerted about the diagnosis."
+    },
+    {
+      "id": "check-page-75a7dadcfd",
+      "url": "https://lsip.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "page": "terms",
+      "excerpt": "Warier is now excited about building up their AI foundation model and investing into becoming a digital health product portfolio for lung cancer and TB."
+    },
+    {
+      "id": "check-page-705de46f49",
+      "url": "https://lsip.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "page": "terms",
+      "excerpt": "Qure.ai is headquartered in Mumbai, with regional offices in New York, London and Dubai."
+    },
+    {
+      "id": "check-page-d28de53a10",
+      "url": "https://lsip.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "page": "terms",
+      "excerpt": "Read More Reflective of the trend, Lightspeed has, globally and in India, doubled down in a major way focusing on generative AI and AI-backed startups."
+    },
+    {
+      "id": "check-page-b30379d775",
+      "url": "https://lsip.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "page": "terms",
+      "excerpt": "In the last 18 months, Lightspeed, globally, has invested $1.1 billion across 72 deals and 61 AI companies through all its funds."
+    },
+    {
+      "id": "check-page-f5e8431964",
+      "url": "https://lsip.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "page": "terms",
+      "excerpt": "Around 35 percent of Lightspeed India’s latest local fund (Fund IV) investments have been deployed in AI-native companies (see box)."
+    },
+    {
+      "id": "check-page-8561ecace7",
+      "url": "https://lsip.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "page": "terms",
+      "excerpt": "Sarvam.ai has launched a full-stack generative AI platform, with multi-lingual, voice-enabled bots, which helps enterprises interact with customers better, in 10 local languages."
     },
     {
       "id": "check-page-2888e93813",
@@ -297,10 +466,94 @@
       "excerpt": "lightspeed venture: Lightspeed Venture Partners to increase its focus on growth deals - The Economic Times Benchmarks CLOSED Nifty 25,144.30 -155.05 Benchmarks CLOSED Sensex 81,592.45 -318.56 FEATURED FUNDS ★★★★ ★ Motilal Oswal Midcap Fund Direct-Growth 5Y Return 19.35 % Invest Now FEATURED FUNDS ★★★★ ★ UTI Aggressive Hybrid Fund Regular Plan-Growth 5Y Return 9.79 % Invest Now Enter Stock Quotes, News, Mutual Funds and more to search English Edition | ePaper | ET TV Loading... Home ETPrime Markets Market Data Masterclass News Industry SME Politics Wealth MF Tech AI World Opinion NRI Panache AI IT Tech & Internet Funding Startups Tech Bytes Newsletters Full Stack Tech Top 5 Morning Dispatch Unwrapped ET AI Awards 2027 Blogs & Opinion ET AI-Ready Business News Tech Funding Lightspeed Venture Partners to increase its focus on growth deals Lightspeed Venture Partners to increase its focus on growth deals By Apoorva Mittal & Sneha Shah Last Updated: Jul 12, 2022, 06:21:04 PM IST Follow us Share Font Size Abc Small Abc Medium Abc Large Save Print Comment Synopsis Lightspeed’s other investments in India include Darwinbox, Yellow Messenger, OK Credit, Apna, Dukaan, and Teachmint. ETtech Lightspeed partners Bejul Somaia and Aditya Sharma. Mumbai: Early-stage investor Lightspeed Venture Partners, which has backed startups including Byju’s, Oyo , Udaan and ShareChat, will focus more on"
     },
     {
+      "id": "check-page-718e0c6cb5",
+      "url": "https://lsip.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "excerpt": "Mumbai: Early-stage investor Lightspeed Venture Partners, which has backed startups including Byju’s, Oyo , Udaan and ShareChat, will focus more on growth deals and has put in place a dedicated team to scout for such opportunities, senior executives at the venture capital fund said."
+    },
+    {
+      "id": "check-page-a18eff54e9",
+      "url": "https://lsip.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "excerpt": "Growth-stage investments typically come after a startup’s first few rounds of funding."
+    },
+    {
+      "id": "check-page-bda096754b",
+      "url": "https://lsip.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "excerpt": "“At the early stage, it is somewhat inevitable that we will miss investing in compelling founders and companies, either because we didn't see those opportunities at the seed or Series A stage, or because we failed to appreciate them fully."
+    },
+    {
+      "id": "check-page-1cc80b1759",
+      "url": "https://lsip.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "excerpt": "“This isn't new for the firm globally or in India."
+    },
+    {
+      "id": "check-page-a411d212f5",
+      "url": "https://lsip.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "excerpt": "ETtech Graphic: Rahul Awasthi In 2020, Lightspeed India mopped up $275 million from limited partners (LPs) or sponsors, for its third fund to invest in the country."
+    },
+    {
+      "id": "check-page-818803ec80",
+      "url": "https://lsip.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "excerpt": "Before that, it raised $180 million for Fund II and $135 million in its maiden India-dedicated fund in 2015."
+    },
+    {
+      "id": "check-page-06addfe80a",
+      "url": "https://lsip.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "excerpt": "Having been active in India since 2007, Lightspeed has invested $1.5 billion here while clocking returns from companies such as IEX (IPO), Oyo, Tutorvista, among others."
+    },
+    {
+      "id": "check-page-719e38b1db",
+      "url": "https://lsip.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "excerpt": "Lightspeed is eyeing a larger global growth fund to invest in companies across markets including India and Southeast Asia."
+    },
+    {
+      "id": "check-page-d0fa68f70d",
+      "url": "https://lsip.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "excerpt": "It is likely to hire more people in its India office to execute this strategy."
+    },
+    {
+      "id": "check-page-7b1d035e16",
+      "url": "https://lsip.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "excerpt": "“We are going to grow our team size this year and expect to have a full-fledged team of eight people focused on India and Southeast Asia by the end of the year,” said Aditya Sharma, partner and head-growth investments in India, at Lightspeed, who joined the firm in May last year after a 12-year stint at global private equity firm TA Associates."
+    },
+    {
+      "id": "check-page-9fa2105884",
+      "url": "https://lsip.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "excerpt": "Blue-chip VC funds like Sequoia Capital also have separate growth teams in India, which focus on more mature startups."
+    },
+    {
+      "id": "check-page-a823f49587",
+      "url": "https://lsip.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "excerpt": "In 2021 alone, the firm utilised around $300-$350 million to back growth stage new-age companies in the country such as Zetwerk, Hubilio, ShareChat, CredAvenue and Acko Insurance."
+    },
+    {
       "id": "check-page-6db4b3d325",
       "url": "https://lsip.com/feeds/lightspeed-ventures-on-the-startup-ecosystem-more-investment-to-trickle-into/",
       "page": "terms",
-      "excerpt": "Lightspeed Ventures On The Startup Ecosystem | More Investment To Trickle Into India? | Rahul Taneja | Videos | ET Now Live Videos Shows News & Current Affairs Latest News Education News Business & Finance Corporates Money Videos Shows Market & Investment Market Overview Market News Stocks Indices Crypto Currency GMP IPO Mutual Funds Economy Income Tax Lifestyle & Culture Luxe Entertainment Sports & Leisure Sports TRENDING : Ask From Experts Deer Headlights Inside Q2 Results Today Microsoft Global Outage Breaking Paytm Rbi Anthropic IPO HDFC Bank Shares Lightspeed Ventures On The Startup Ecosystem | More Investment To Trickle Into India? | Rahul Taneja Updated Dec 7, 2023 13:25 IST ET Now Exclusive: Lightspeed Ventures On The Startup Ecosystem. More Investment To Trickle Into India? Lightspeed Ventures' Investments In India. Invested IN Unicorns Like Udaan, Razorpay, Sharechat. Watch Rahul Taneja, Lightspeed on ET Now. #lightspeedventures #startup #etnowexclusive Up Next Autoplay US 10-Year Yield At 5.12%: Why Bond Markets Are Worried About More Than Inflation | James Knightley 09:54 Buy Now Sell Now | Share & Stock Market Tips | Viewer Stock Queries Answered | ET Now 32:13 Decoding Talbros Automotive Components' Global Auto Opportunity, EV Play & More | Navin Juneja 23:31 Nifty's 14% Recovery: Can The Bull Run Sustain? Expert Breakdown! | Business News | ET Now 01:10:26"
+      "excerpt": "Lightspeed Ventures On The Startup Ecosystem | More Investment To Trickle Into India? | Rahul Taneja | Videos | ET Now Live Videos Shows News & Current Affairs Latest News Education News Business & Finance Corporates Money Videos Shows Market & Investment Market Overview Market News Stocks Indices Crypto Currency GMP IPO Mutual Funds Economy Income Tax Lifestyle & Culture Luxe Entertainment Sports & Leisure Sports TRENDING : Ask From Experts Sensex, Nifty LIVE Stocks to Buy or Sell Delhi AQI Today PFC Dividend 2026 Nvidia Leadership Shake-Up OpenAI Google Chips Lightspeed Ventures On The Startup Ecosystem | More Investment To Trickle Into India? | Rahul Taneja Updated Dec 7, 2023 13:25 IST ET Now Exclusive: Lightspeed Ventures On The Startup Ecosystem. More Investment To Trickle Into India? Lightspeed Ventures' Investments In India. Invested IN Unicorns Like Udaan, Razorpay, Sharechat. Watch Rahul Taneja, Lightspeed on ET Now. #lightspeedventures #startup #etnowexclusive Up Next Autoplay LTCG Relief Only In Budget? What The Delay Means For Stock Market Investors | Business News 01:12:03 Nvidia Controversy, Trump-Xi-Putin Summit & India's Market Movers | India Tonight | ET Now 50:09 NVIDIA Without Jensen Huang: Can The AI Giant Survive Its Biggest Leadership Test? | Business News 02:28 ShareChat Turns EBITDA Positive! Ankush Sachdeva Reveals Growth Strategy | Business News | ET"
+    },
+    {
+      "id": "check-page-a9dac39583",
+      "url": "https://lsip.com/feeds/lightspeed-ventures-on-the-startup-ecosystem-more-investment-to-trickle-into/",
+      "page": "terms",
+      "excerpt": "Karan Bajwa On AI Boom, Demand & Supply Crunch | Business News | ET Now 14:35 Short Videos MS Dhoni Backed Garuda Aerospace Launches DRONI | #shorts Tata Motors Becomes Most Valuable Auto Company By Market Cap | #shorts What Is Loud Budgeting? | Watch Stop Eating Fried Toothpicks!"
+    },
+    {
+      "id": "check-page-2ae2dca61c",
+      "url": "https://lsip.com/feeds/lightspeed-ventures-on-the-startup-ecosystem-more-investment-to-trickle-into/",
+      "page": "terms",
+      "excerpt": "South Korea Warns Mark Zuckerberg To Sell World's Most Expensive Beef Soon? | Watch Chana Dal At Rs 60/Kg, Rice At Rs 25/Kg: Govt Is Selling These At Affordable Prices, How To Get? | Watch Business News videos subscribe to newsletter Get the latest financial news and personalised updates to stay ahead ofthe rest!"
     },
     {
       "id": "check-page-dfd5b4a0ae",
@@ -309,16 +562,352 @@
       "excerpt": "Lightspeed Ventures to ramp up investments in climate change and AI | Today News Subscribe Sign in View Market Dashboard Home Markets Market News Stock Markets IPO Mint Portfolio US Markets Mark to Market Bonds Commodities Cryptocurrency Market Data Stock Pages Index pages Commodities Gold Price Today Silver Price Today Fuel Petrol price today Diesel price today News India World WSJ Economist US News Trends Mint Portfolio Money Personal Finance Insurance Ask Mint Money Mutual Funds MyMint Latest news Premium e-paper Global Partners WSJ Economist Barron's Mint Specials Mint Explainers Mark to Market Long Story Plain Facts Snapview Sections Companies Technology Markets Personal Finance Mutual Funds Insurance Auto Industry Lounge Opinion IPO Companies Start-ups Company Results People Technology Mint Hindi More Technology Gadgets Tech Reviews Sports Cricket News Football News Science Health Entertainment Tools IFSC Code Finder Income Tax Calculator Gold Rate Today Gold Rate in Delhi Gold Rate Hyderabad Silver Rate Today Silver Rate in Delhi Silver Rate in Bangalore US US Trending Hollywood Business US Stock Market Explore Mint About us Print subscription Subscriber terms of use Privacy Policy Terms of Use Disclaimer Mint code Cookie Policy Code of ethics Sitemap Contact Us Hindustan Times Live Hindustan HT US News Nifty 50 Auto News Seasoned Views 2026 Lightspeed Ventures to ramp"
     },
     {
+      "id": "check-page-d608e27042",
+      "url": "https://lsip.com/feeds/lightspeed-ventures-to-ramp-up-investments-in-climate-change-and-ai/",
+      "page": "terms",
+      "excerpt": "Photo: Lightspeed Bengaluru: Lightspeed Venture Partners, which has backed prominent Indian startups such as Sharechat, Udaan and Razorpay, will invest in emerging areas such as climate change and artificial intelligence, and companies with cross-border operations, a top executive at the firm told Mint in an interview."
+    },
+    {
+      "id": "check-page-6e95bdbf00",
+      "url": "https://lsip.com/feeds/lightspeed-ventures-to-ramp-up-investments-in-climate-change-and-ai/",
+      "page": "terms",
+      "excerpt": "\"We will continue to invest in emerging themes in addition to the core streams of enterprise SaaS, fintech, consumer and commerce,\" said Rahul Taneja, partner at Lightspeed India."
+    },
+    {
+      "id": "check-page-92dab2f1ec",
+      "url": "https://lsip.com/feeds/lightspeed-ventures-to-ramp-up-investments-in-climate-change-and-ai/",
+      "page": "terms",
+      "excerpt": "The venture capital (VC) firm has invested in companies such as AI-based Sarvam, Marqo AI, and Exponent Energy, which provides fast charging networks for electric vehicles."
+    },
+    {
+      "id": "check-page-222d57386f",
+      "url": "https://lsip.com/feeds/lightspeed-ventures-to-ramp-up-investments-in-climate-change-and-ai/",
+      "page": "terms",
+      "excerpt": "In the cross-border segment, Lightspeed has invested in startups such as Pocket FM, which built its product in India but receives a significant portion of its revenue from the US."
+    },
+    {
+      "id": "check-page-556cb33b38",
+      "url": "https://lsip.com/feeds/lightspeed-ventures-to-ramp-up-investments-in-climate-change-and-ai/",
+      "page": "terms",
+      "excerpt": "The VC firm, which is currently investing from its $500-million fourth fund, has conducted about 18 deals in the past year and deployed over $250 million across stages in India, including follow-up investments in 8-10 existing portfolio companies."
+    },
+    {
+      "id": "check-page-2a92f0ae5e",
+      "url": "https://lsip.com/feeds/lightspeed-ventures-to-ramp-up-investments-in-climate-change-and-ai/",
+      "page": "terms",
+      "excerpt": "Taneja explained Lightspeed's India journey, which began in 2007, by splitting it into three phases."
+    },
+    {
+      "id": "check-page-a04044cc51",
+      "url": "https://lsip.com/feeds/lightspeed-ventures-to-ramp-up-investments-in-climate-change-and-ai/",
+      "page": "terms",
+      "excerpt": "In the first phase, between 2007 and 2015, the VC firm invested in India from its global fund."
+    },
+    {
+      "id": "check-page-364c051c87",
+      "url": "https://lsip.com/feeds/lightspeed-ventures-to-ramp-up-investments-in-climate-change-and-ai/",
+      "page": "terms",
+      "excerpt": "With successful bets in companies such as Indian Energy Exchange, Tutorvista and Oyo, Lightspeed raised $135 million for its India-specific fund in 2015."
+    },
+    {
+      "id": "check-page-55c4e5aafa",
+      "url": "https://lsip.com/feeds/lightspeed-ventures-to-ramp-up-investments-in-climate-change-and-ai/",
+      "page": "terms",
+      "excerpt": "In the second phase, between 2015 and 2020, \"enterprise SaaS started becoming prominent and we invested in companies such as Darwinbox, Acceldata and Yellow.AI,\" he said."
+    },
+    {
+      "id": "check-page-96aa523392",
+      "url": "https://lsip.com/feeds/lightspeed-ventures-to-ramp-up-investments-in-climate-change-and-ai/",
+      "page": "terms",
+      "excerpt": "Firstly, the VC firm became a multi-stage fund."
+    },
+    {
+      "id": "check-page-f70916a2aa",
+      "url": "https://lsip.com/feeds/lightspeed-ventures-to-ramp-up-investments-in-climate-change-and-ai/",
+      "page": "terms",
+      "excerpt": "While Lightspeed was initially focused on early-stage startups, it now has the firepower to invest in successive growth stages with cheque sizes ranging from $1 million to $100 million, Taneja said."
+    },
+    {
+      "id": "check-page-1d676883c9",
+      "url": "https://lsip.com/feeds/lightspeed-ventures-to-ramp-up-investments-in-climate-change-and-ai/",
+      "page": "terms",
+      "excerpt": "Second, it has ventured into more geographies and extended its India fund to also include Southeast Asia."
+    },
+    {
       "id": "check-page-4a0cfecb9e",
       "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
       "page": "terms",
       "excerpt": "Our investment in Hubilo: bringing the $1T events industry online Agree & Join LinkedIn By clicking Continue to join or sign in, you agree to LinkedIn’s User Agreement , Privacy Policy , and Cookie Policy . Sign in to view more content Create your free account or sign in to continue your search Email or phone Password Show Forgot password? Sign in Sign in with Email or New to LinkedIn? Join now By clicking Continue to join or sign in, you agree to LinkedIn’s User Agreement , Privacy Policy , and Cookie Policy . Skip to main content LinkedIn Top Content People Learning Jobs Games Join now Sign in Our investment in Hubilo: bringing the $1T events industry online Report this article Hemant Mohapatra Hemant Mohapatra Published Oct 26, 2020 + Follow Today we are proud to lead a $4.5M seed investment in Hubilo — a company based in SF & India, building the “system of record / enterprise intelligence hub” for the events industry. Hubilo is poised to become just as critical to the fast emerging events stack as Salesforce and Hubspot are to sales and marketing. In many ways, for us, this investment meets the perfect “VC Ikigai” : A massive $1T market getting disrupted overnight due to Covid-19 An ambitious, passionate, fast moving founder who has spent his entire career deep in the sector Incredible 40X+ revenue ramp since Apr’20, almost all organic, and still accelerating We, at"
     },
     {
+      "id": "check-page-c55dabc181",
+      "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
+      "page": "terms",
+      "excerpt": "In many ways, for us, this investment meets the perfect “VC Ikigai” : A massive $1T market getting disrupted overnight due to Covid-19 An ambitious, passionate, fast moving founder who has spent his entire career deep in the sector Incredible 40X+ revenue ramp since Apr’20, almost all organic, and still accelerating We, at Lightspeed, had been looking to invest in this space for quite a while."
+    },
+    {
+      "id": "check-page-0471195124",
+      "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
+      "page": "terms",
+      "excerpt": "We’ll still go to CES in Las Vegas, Mobile World Congress in Barcelona, and so on."
+    },
+    {
+      "id": "check-page-1397a81bc6",
+      "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
+      "page": "terms",
+      "excerpt": "As for attendees, imagine if an AI algorithm could uncover the most important people with whom to network, instead of relying on chance?"
+    },
+    {
+      "id": "check-page-2de1072524",
+      "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
+      "page": "terms",
+      "excerpt": "On the other end, Hubilo connects this data to enterprise backends to truly become the “system of record” for events for enterprises."
+    },
+    {
+      "id": "check-page-321b27ad7b",
+      "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
+      "page": "terms",
+      "excerpt": "Gives a perspective of Lightspeed India thinks."
+    },
+    {
+      "id": "check-page-ce5ad9bfde",
+      "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
+      "page": "terms",
+      "excerpt": "I guess the following is the internal checklist for a VC while making an investment decision."
+    },
+    {
+      "id": "check-page-3ad220b758",
+      "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
+      "page": "terms",
+      "excerpt": "Reverse Engineering this will be a fun exercise i.e Why won't the VC invest in your journey?"
+    },
+    {
+      "id": "check-page-a3cf62f05d",
+      "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
+      "page": "terms",
+      "excerpt": "Like Reply 1 Reaction 2 Reactions See more comments To view or add a comment, sign in More articles by Hemant Mohapatra The Sarvam Manifesto Feb 19, 2026 The Sarvam Manifesto Today is an important milestone for Indian AI."
+    },
+    {
+      "id": "check-page-8ed4af8e08",
+      "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
+      "page": "terms",
+      "excerpt": "Sarvam is launching the country's first sovereign AI foundation model."
+    },
+    {
+      "id": "check-page-559b1805b0",
+      "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "page": "terms",
+      "excerpt": "Medium The future of Ed is Metaverse, and Kalam Labs is building it! | by Hemant Mohapatra | Lightspeed India | Medium Sitemap Open in app Sign up Sign in Get app Write Search Sign up Sign in Lightspeed India · Possibility grows the deeper you go. Hemant Mohapatra 5 min read · Aug 13, 2021 -- 2 Listen Share Press enter or click to view image in full size L → R: Ahmad Faraaz | Saksham Tripathi | Harshit Awasthi “I never let my schooling interfere with my education” — Mark Twain There are two defining characteristics of the human species. One, we are genuinely curious about the world. Not only do we love to learn things, we often spend time learning things that aren’t even necessary for survival. Two, we are the only species that spends vast amounts of energy in the pursuit of fun. We write elaborate stories, we play adventure sports, go on long drives, and build complex instruments that make music. Learning and play are not just core to the human experience, they are intricately related. Learning through play is as old as humanity itself — a behavior so primal and genetic that we even see it in animals. Learning in the ancient times was primarily experiential, social, and interactive, and imparted through gurukuls, monastic cathedrals, or madrasas. However, during the mid 19th-century, a movement to bring young students closer to their national identity started in erstwhile"
+    },
+    {
+      "id": "check-page-7567894bb7",
+      "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "page": "terms",
+      "excerpt": "Uniforms for everyone, a hierarchical grading system that forces talent through a pass/fail filter, standardized national curriculum: all of this emanated from what is the Prussian model of education ."
+    },
+    {
+      "id": "check-page-f7e868d440",
+      "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "page": "terms",
+      "excerpt": "This outdated education system is no longer relevant to serve today’s post-industrial, automation-based society where the need of the hour is unlock creativity, innovation and experimentation to solve for existential challenges such as climate change, space travel, or human longevity."
+    },
+    {
+      "id": "check-page-128c6f185b",
+      "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "page": "terms",
+      "excerpt": "In the last few years, advances in sophisticated gaming engines, GPUs and consumer hardware devices has finally allowed for a re-imagining of education from the ground up closer to how it was perhaps always meant to be: the junction of learning and fun."
+    },
+    {
+      "id": "check-page-ba5230992d",
+      "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "page": "terms",
+      "excerpt": "Press enter or click to view image in full size A Minecfraft chemistry lab Gaming and education are fast merging."
+    },
+    {
+      "id": "check-page-3cf33a8acf",
+      "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "page": "terms",
+      "excerpt": "Well known games such as Minecraft and Roblox are already seeing “education economies” organically emerging within the games."
+    },
+    {
+      "id": "check-page-a9232d6a5d",
+      "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "page": "terms",
+      "excerpt": "Recognizing the trend, Minecraft has released a dedicated Minecraft for Education which helps schools and educators migrate from Zoom classes to active game-based learning."
+    },
+    {
+      "id": "check-page-37aa0d4a4a",
+      "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "page": "terms",
+      "excerpt": "Roblox has released Roblox Education which offers a free curriculum to educators."
+    },
+    {
+      "id": "check-page-9180dc5d86",
+      "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "page": "terms",
+      "excerpt": "They sit at the intersection of three of the most important pedagogical trends in education today: the digitization of educational content and delivery, the rise of community-supported learning, and the growing relevance of targeted cohort-based courses as opposed to degree-based formal classrooms."
+    },
+    {
+      "id": "check-page-8182691f59",
+      "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "page": "terms",
+      "excerpt": "Our investment thesis behind Kalam Labs derives from our years of global experience in both education ( Byju ’s, Teachmint) and gaming ( Hidden Leaf , Epic Games )."
+    },
+    {
+      "id": "check-page-33256aa914",
+      "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "page": "terms",
+      "excerpt": "Second, India’s strong home-field advantage in creating high-quality game-content. ​India is emerging as a global game development hub."
+    },
+    {
+      "id": "check-page-c057bfef0a",
+      "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "page": "terms",
+      "excerpt": "Today we have over 300+ game-dev agencies in India companies compared to under 25 in 2010."
+    },
+    {
+      "id": "check-page-d271e538b9",
+      "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "page": "terms",
+      "excerpt": "Kalam Labs can create cost-efficient and high quality gaming content at speeds others cannot match."
+    },
+    {
       "id": "check-page-36358fdd92",
       "url": "https://lsip.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
       "page": "terms",
       "excerpt": "State of venture investments in India | TechCrunch TechCrunch Desktop Logo TechCrunch Mobile Logo Latest Startups Venture Apple Security AI Apps Disrupt 2026 Events Podcasts Newsletters Search Submit Site Search Toggle Mega Menu Toggle Topics Latest AI Amazon Apps Biotech & Health Climate Cloud Computing Commerce Crypto Enterprise EVs Fintech Fundraising Gadgets Gaming Google Government & Policy Hardware Instagram Layoffs Media & Entertainment Meta Microsoft Privacy Robotics Security Social Space Startups TikTok Transportation Venture More from TechCrunch Staff Events Startup Battlefield StrictlyVC Newsletters Podcasts Videos Partner Content TechCrunch Brand Studio Contact Us Image Credits: Getty Images Venture State of venture investments in India, according to Lightspeed Lightspeed partners examine right-sizing VC funds in India, spectrum of startup investing and the country’s prospects in the global AI race Manish Singh 12:01 AM PST · February 19, 2024 Over 150 investors, including Singapore’s sovereign fund Temasek and Malaysia’s Khazanah, gathered at Mumbai’s five-star Trident Oberoi hotel on a recent Friday for venture firm Lightspeed India Partners’ “Lift Off” summit. The two-day event aims to spark partnerships by enabling “in a short window, many views, ideas and investments to be shared between nC2 connections (every permutation and combination),” described Karthik"
+    },
+    {
+      "id": "check-page-8912263786",
+      "url": "https://lsip.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
+      "page": "terms",
+      "excerpt": "The event builds on the success of last year’s inaugural Lift Off, which helped spur deals and networking, including paving the way for Singapore sovereign fund GIC’s investment in business-to-business marketplace Vegrow later in the year."
+    },
+    {
+      "id": "check-page-fec73b94b6",
+      "url": "https://lsip.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
+      "page": "terms",
+      "excerpt": "The upbeat atmosphere this year reflected India’s rebound in startup funding over the past three to four months."
+    },
+    {
+      "id": "check-page-4c53b79c75",
+      "url": "https://lsip.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
+      "page": "terms",
+      "excerpt": "Byju’s, once India’s most valuable startup at a $22 billion valuation, is seeking new capital through a rights issue that would slash its valuation by a whopping 99% ."
+    },
+    {
+      "id": "check-page-bd1f20885a",
+      "url": "https://lsip.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
+      "page": "terms",
+      "excerpt": "Paytm, once the poster child of India’s startup dreams that went public at a $20 billion valuation in 2021, has seen its market cap shrivel below $3 billion amid the tech market carnage and regulatory upset."
+    },
+    {
+      "id": "check-page-5e28c05974",
+      "url": "https://lsip.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
+      "page": "terms",
+      "excerpt": "And many highly valued 2021 seed deals are floundering without follow-on funding."
+    },
+    {
+      "id": "check-page-6cf752dddc",
+      "url": "https://lsip.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
+      "page": "terms",
+      "excerpt": "On VC fund size “Sitting here in early 2024, with the benefit of observing 2023 investment activity levels as well as the pace of startup creation, I think the answer is yes,” responded Lightspeed partner Bejul Somaia when asked whether Indian VC firms have over-raised, amassing more funds than they can responsibly deploy."
+    },
+    {
+      "id": "check-page-1127bfc72c",
+      "url": "https://lsip.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
+      "page": "terms",
+      "excerpt": "In 2021, $33 billion of venture capital (early and late stage) was invested in India."
+    },
+    {
+      "id": "check-page-75c0120ba8",
+      "url": "https://lsip.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
+      "page": "terms",
+      "excerpt": "So 2023 is also not necessarily reflective of the venture market opportunity in India,” he added."
+    },
+    {
+      "id": "check-page-eec84369e4",
+      "url": "https://lsip.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
+      "page": "terms",
+      "excerpt": "Lightspeed Venture Partners India — which had returned over $1 billion to LPs by mid-year in 2023 — was unusually restrained during 2021’s period of hyper-exuberance when deals closed in days with inflated valuations and unreasonable founder-friendly terms — a frenzy Somaia hopes the market never revisits."
+    },
+    {
+      "id": "check-page-ca5ef67158",
+      "url": "https://lsip.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
+      "page": "terms",
+      "excerpt": "Image Credits: Lightspeed Over the past three years, many India-focused venture capital firms have raised substantial new funds that dwarf their previous vehicles — Peak XV has amassed $2.5 billion for the region across recent closes, while Nexus Venture Partners pulled in $700 million, Elevation raised $670 million, and Accel garnered $650 million ."
+    },
+    {
+      "id": "check-page-09048659d6",
+      "url": "https://lsip.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
+      "page": "terms",
+      "excerpt": "Lightspeed, which began investing in India more than 15 years ago, and later formed dedicated funds for the country, unveiled a $500 million fund , its fourth for India, in 2022."
+    },
+    {
+      "id": "check-page-61e49d37e3",
+      "url": "https://lsip.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
+      "page": "terms",
+      "excerpt": "“With respect to Lightspeed India’s most recent fund, I believe that is sized at the lower end of our peers."
+    },
+    {
+      "id": "check-page-2e441ff44f",
+      "url": "https://lsip.com/about/",
+      "page": "details",
+      "excerpt": "About - Lightspeed Venture Partners menu menu About Team Companies Founder Experience Stories Launch Faction Jobs LP login Events Lighthouse Contact About Serving bold builders of the future. For over twenty years, Lightspeed has been the first investor and an early backer of some of the most innovative companies in the world. In service of bold founders with big ideas, we stand behind our companies with high conviction from Seed to Series F and beyond. Lightspeed About Us Companies We Invested In Global Presence We believe in investing behind bold ideas and the founders brave enough to build them. We pursue those opportunities based on their merits regardless of where the founder resides. The future is global and so are we. The U.S., Europe and Israel locations are offices of Lightspeed Management Company, L.L.C. (“LSVP”); the India and Southeast Asia locations are offices of Lightspeed India Partners, L.L.P. (“LSIP”). LSVP and LSIP are distinct investment advisory entities, are not a unitary enterprise and operate independently of one another. From time to time LSVP may draw on its relationship with LSIP, and vice versa, but only to the extent consistent with its status as a separate investment adviser. INDIA SOUTHEAST ASIA EUROPE UNITED STATES ISRAEL Newsfeed Insights What’s next on the frontiers of crypto, AI, and blockchain How Anthropic is building better, safer AI"
+    },
+    {
+      "id": "check-page-fc7bbc5b32",
+      "url": "https://lsip.com/about/",
+      "page": "details",
+      "excerpt": "Faction is a registered investment adviser under the United States Investment Advisers Act of 1940, as amended."
+    },
+    {
+      "id": "check-page-ba051b3318",
+      "url": "https://lsip.com/about/",
+      "page": "details",
+      "excerpt": "(\"LSVP\") and Lightspeed India Partners, L.L.P."
+    },
+    {
+      "id": "check-page-def45a6758",
+      "url": "https://lsip.com/about/",
+      "page": "details",
+      "excerpt": "(\"LSIP\") are distinct investment advisory entities, are not a unitary enterprise and operate independently of one another."
+    },
+    {
+      "id": "check-page-4de184948e",
+      "url": "https://lsip.com/about/",
+      "page": "details",
+      "excerpt": "(\"LSVP\") and LSIP are distinct investment advisory entities, are not a unitary enterprise and operate independently of one another."
+    },
+    {
+      "id": "check-page-f58f7d3ddc",
+      "url": "https://lsip.com/about/",
+      "page": "details",
+      "excerpt": "Proceed to LSVP.com Don't show this again LSVP and Lightspeed India Partners, L.L.P."
+    },
+    {
+      "id": "check-page-b31ece7995",
+      "url": "https://lsip.com/about/",
+      "page": "details",
+      "excerpt": "(“LSIP”) are distinct investment advisory entities, are not a unitary enterprise and operate independently of one another."
+    },
+    {
+      "id": "check-page-a9a22b4b32",
+      "url": "https://lsip.com/feeds/lightspeed-india-singapore-is-the-most-under-talked-about-market-in-the-region/",
+      "page": "details",
+      "excerpt": "Lightspeed India discusses Asia's venture capital environment Skip Navigation Markets Pre-Markets U.S. Markets Currencies Prediction Markets Cryptocurrency Futures & Commodities Bonds Funds & ETFs Business Economy Finance Health & Science Media Real Estate Energy Climate Transportation Investigations Industrials Retail Wealth Sports Life Small Business Investing Personal Finance Fintech Financial Advisors Options Action ETF Street Buffett Archive Earnings Trader Talk Tech Cybersecurity AI Enterprise Internet Media Mobile Social Media CNBC Disruptor 50 Tech Guide Politics & Policy White House Policy Defense Congress Expanding Opportunity Video Latest Video Full Episodes Livestream Live Audio Live TV Schedule CNBC Podcasts CEO Interviews CNBC Documentaries Digital Originals Watchlist Investing Club Trust Portfolio Analysis Trade Alerts Meeting Videos Homestretch Jim's Columns Education Subscribe PRO Pro News Josh Brown Mike Santoli Calls of the Day My Portfolio Livestream Full Episodes Stock Screener Market Forecast Options Investing Chart Investing Subscribe Livestream Menu Make It select USA INTL Livestream Search quotes, news & videos Livestream Watchlist SIGN IN Create free account Markets Business Investing Tech Politics & Policy Video Watchlist Investing Club PRO Livestream Menu watch now Share Share Article via Facebook Share Article via Twitter Share Article via LinkedIn"
+    },
+    {
+      "id": "check-page-38af3de6b4",
+      "url": "https://lsip.com/feeds/ai-will-enable-indian-companies-to-be-more-efficient-scale-faster-harsha-kumar/",
+      "page": "portfolio",
+      "excerpt": "AI Will Enable Indian Companies to be More Efficient, Scale Faster: Harsha Kumar Skip to main content Starting a Business Growth Strategies Leadership Business News Sign in My Account Submit Article Sign Out Edition United States Spanish Georgia India Asia Pacific Middle East United Kingdom Europe Search Search My Account Submit Article Sign Out Starting a Business Growth Strategies Leadership Business News Sign in My Account Submit Article Sign Out Starting a Business Growth Strategies Leadership Business News AI Will Enable Indian Companies to be More Efficient, Scale Faster: Harsha Kumar Drawing on lessons from Ola, where funds in the early days dismissed the notion of a ‘cab company’ as a billion-dollar opportunity, Harsha emphasized that insights as an operator sharpen one’s ability to identify potential and empathize deeply. By Prince Kariappa | Jun 11, 2025 Share Harsha Kumar, Partner and Advisor, India and Southeast Asia, Lightspeed Partners. You're reading Entrepreneur India, an international franchise of Entrepreneur Media. Harsha’s passion for technology dates back to her early teens. “When I was 14 years old and naive, I told my mom that I was going to be a computer engineer, and so I wanted to learn how to code,” she recalls. “To date, I think my best memories are sort of with headphones on, debugging all night, fixing a bug was like the ultimate high of my life.”"
+    },
+    {
+      "id": "check-page-19a0c3b6e2",
+      "url": "https://lsip.com/feeds/good-companies-always-on-the-right-side-of-regulations-lightspeed-md/",
+      "page": "portfolio",
+      "excerpt": "Good companies always on the right side of regulations: Lightspeed MD | Company Business News Subscribe Sign in View Market Dashboard Home Markets Market News Stock Markets IPO Mint Portfolio US Markets Mark to Market Bonds Commodities Cryptocurrency Market Data Stock Pages Index pages Commodities Gold Price Today Silver Price Today Fuel Petrol price today Diesel price today News India World WSJ Economist US News Trends Mint Portfolio Money Personal Finance Insurance Ask Mint Money Mutual Funds MyMint Latest news Premium e-paper Global Partners WSJ Economist Barron's Mint Specials Mint Explainers Mark to Market Long Story Plain Facts Snapview Sections Companies Technology Markets Personal Finance Mutual Funds Insurance Auto Industry Lounge Opinion IPO Companies Start-ups Company Results People Technology Mint Hindi More Technology Gadgets Tech Reviews Sports Cricket News Football News Science Health Entertainment Tools IFSC Code Finder Income Tax Calculator Gold Rate Today Gold Rate in Delhi Gold Rate Hyderabad Silver Rate Today Silver Rate in Delhi Silver Rate in Bangalore US US Trending Hollywood Business US Stock Market Explore Mint About us Print subscription Subscriber terms of use Privacy Policy Terms of Use Disclaimer Mint code Cookie Policy Code of ethics Sitemap Contact Us Hindustan Times Live Hindustan HT US News Nifty 50 Auto News Seasoned Views 2026 News Good"
     },
     {
       "id": "check-page-b853fe2bd7",
@@ -337,24 +926,6 @@
       "url": "https://lsip.com/stories/lightspeeds-investment-in-cosmart/",
       "page": "terms",
       "excerpt": "Lightspeed’s Investment in Cosmart - Lightspeed Venture Partners menu menu About Team Companies Founder Experience Stories Launch Faction Jobs LP login Events Lighthouse Contact 10/13/2022 Share on twitter Share on facebook Share on linkedin Copy link Lightspeed’s Investment in Cosmart At Lightspeed, we want to work with founders who are, through their vision and execution, building companies of the future. We also understand that it takes a lot more than just a revolutionary idea to scale a business. When we met Cosmart ’s co-founders, Alvin Kumarga and Robert Tan , it was hard to miss their infectious energy and passion for building a product that is truly meaningful for Indonesia. Both of them were well aware of the gaps in the e-commerce experience today and built Cosmart to serve a very real need that is already finding many takers. Robert and Alvin have a deep understanding of the Indonesian market. Alvin has built payments and technology infrastructure in the past, along with a stint at the Boston Consulting Group. Earlier, he co-founded a hospitality startup and is no stranger to the challenges of building for the Indonesian market. What is truly inspiring is his focus on first principles and ambitious outlook. Robert helped build investing platform Pluang and travel tech unicorn Traveloka in the past. His can-do attitude is compelling. A passion to learn and the"
-    },
-    {
-      "id": "check-page-054e9e6f2f",
-      "url": "https://lsip.com/stories/lightspeeds-investment-in-exponent-energy/",
-      "page": "terms",
-      "excerpt": "Lightspeed’s Investment in Exponent Energy - Lightspeed Venture Partners menu menu About Team Companies Founder Experience Stories Launch Faction Jobs LP login Events Lighthouse Contact 09/08/2022 Share on twitter Share on facebook Share on linkedin Copy link Lightspeed’s Investment in Exponent Energy By Harsha Kumar & Romit Mehta EVs in India are poised for a take-off. The market is expected to grow at 90% annually to reach over $150B by 2030 . Consider the growth. ~400,000 EVs were sold in India in FY22 which was a 200% jump compared to FY21 (~134,000 units). Even taking away the impact of COVID, this was a 150%+ jump coated to EV sales in FY20 (~170,000 units). The 2W and 3W segments led the sales with over ~220,000 and ~175,000 units sold respectively. The industry is reaching a tipping point →50% of 3W now sold in India are electric. However, these sales are led by e-rickshaws with e-commercial vehicle (e-CVs) sales lagging significantly. For context, while over ~750k ICE commercial vehicles are sold annually in India ($5–7B market), only 2,200 e-CVs were sold in FY21. This despite, the clear TCO advantage for e-CVs which makes them an attractive option for fleet operators and aggregators. Simply put, the demand has been lukewarm. Let’s delve into that deeper by understanding the current structure of the market. Current Market Structure CVs is a largely fragmented market."
-    },
-    {
-      "id": "check-page-f66a008fab",
-      "url": "https://lsip.com/stories/lightspeeds-investment-in-globalbees/",
-      "page": "terms",
-      "excerpt": "Lightspeed’s Investment in Globalbees - Lightspeed Venture Partners menu menu About Team Companies Founder Experience Stories Launch Faction Jobs LP login Events Lighthouse Contact 01/27/2022 Share on twitter Share on facebook Share on linkedin Copy link Lightspeed’s Investment in Globalbees Lightspeed is thrilled to partner with Nitin Agarwal and Supam Maheshwari as they seek to build a tech-powered, new-age multi-brand powerhouse at Globalbees. Why Now? A question that we always answer for our investments is “Why now?” Why should this opportunity exist today? The India e-comm story is exciting ($120B+ by 2025–30% annual growth) but it has several layers to it. First, the erstwhile ‘sleepy categories’ are growing rapidly. Electronics and apparel have traditionally dominated GMV, however COVID-19 has given a fillip to categories like home and kitchen, health — among others — which are growing 2–3x of overall growth rate of the e-comm industry. 4,000+ sellers are doing revenues of INR 1cr+. While that funnel narrows rapidly as you move up the revenue scale, a few sub-segments are doubling YoY which will increase this pool over the next few years. Second, there is a rapid growth of brands in a traditionally brand starved market. This phenomenon has played out across both marketplaces and direct consumer channels. Quality products fashioned either after global trends or"
-    },
-    {
-      "id": "check-page-335b7e9245",
-      "url": "https://lsip.com/stories/lightspeeds-investment-in-marqo-ai/",
-      "page": "terms",
-      "excerpt": "Lightspeed’s investment in Marqo.ai - Lightspeed Venture Partners menu menu About Team Companies Founder Experience Stories Launch Faction Jobs LP login Events Lighthouse Contact 02/13/2024 Enterprise Share on twitter Share on facebook Share on linkedin Copy link Lightspeed’s investment in Marqo.ai Search the way you think Today, we are excited to announce our series A investment in Marqo — a platform that allows everyone to search the way they think . The manner in which humans search for information or things online has remained non intuitive for decades. For example, to allow consumers to search for a single t-shirt on an e-com website requires the platform to tag that SKU with attributes such as ‘color’, ‘fit’, ‘material’, ‘size’, ‘brand’, ‘price’, ‘reviews’, ‘year of manufacturing’, and more, in a dedicated data catalog. Creating, labeling, and maintaining this catalog can be highly manual and cumbersome, especially for companies that have 10s of thousands of SKUs, with frequent additions and replacements. Moreover, edge cases such as spelling errors in catalogs, or mis-attributing a blue shirt as a green shirt, occur often and lead to poor recommendations and loss of revenue. Over the last year or so, a new, natural way of searching for information has become popular globally thanks to platforms such as ChatGPT. Within months, over 100 million users got a taste of what"
     }
   ],
   "findings": {
@@ -397,16 +968,16 @@
     ],
     "format": [
       {
-        "value": "remote",
-        "evidenceId": "check-format-9e4d53e7d1"
-      },
-      {
         "value": "hybrid",
         "evidenceId": "check-format-dc705b26be"
       },
       {
         "value": "in-person",
         "evidenceId": "check-format-0dcb7d2a53"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-72d2331e2b"
       }
     ],
     "location": [
@@ -421,10 +992,6 @@
       {
         "value": "India",
         "evidenceId": "check-location-2de4ba6736"
-      },
-      {
-        "value": "China",
-        "evidenceId": "check-location-e3abe4816d"
       }
     ],
     "selectivity": [],

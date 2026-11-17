@@ -1,6 +1,6 @@
 {
   "programId": "imperial-enterprise",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.imperialenterpriselab.com/about/",
@@ -107,6 +107,14 @@
       "origin": "official"
     },
     {
+      "url": "https://www.imperialenterpriselab.com/programmes/global-challenge-lab/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.imperialenterpriselab.com/programmes/imperial-be/",
       "page": "details",
       "anchor": "Imperial BE",
@@ -118,7 +126,7 @@
       "url": "https://www.imperialenterpriselab.com/programmes/vcc/",
       "page": "details",
       "anchor": "Venture Catalyst Challenge",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -126,7 +134,7 @@
       "url": "https://www.imperialenterpriselab.com/programmes/we-innovate/",
       "page": "details",
       "anchor": "WE Innovate",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -134,7 +142,7 @@
       "url": "https://www.imperialenterpriselab.com/resource-finder/?_startup_area=startup-accelerators",
       "page": "details",
       "anchor": "Find other startup accelerators & networks",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -142,7 +150,7 @@
       "url": "https://www.imperialenterpriselab.com/services/idea-surgeries/",
       "page": "details",
       "anchor": "Talk to someone about my idea",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

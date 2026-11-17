@@ -1,101 +1,1393 @@
 {
   "programId": "meridian-technology-center-peak",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.meridiantech.edu",
-    "https://www.meridiantech.edu/full-time-programs"
+    "https://www.meridiantech.edu/about-meridian",
+    "https://www.meridiantech.edu/about-meridian/board-of-education",
+    "https://www.meridiantech.edu/about-meridian/contact-us",
+    "https://www.meridiantech.edu/about-meridian/leadership",
+    "https://www.meridiantech.edu/about-meridian/staff-directory",
+    "https://www.meridiantech.edu/about-meridian/the-meridian-district",
+    "https://www.meridiantech.edu/about-meridian/work-at-meridian",
+    "https://www.meridiantech.edu/bes/classes",
+    "https://www.meridiantech.edu/full-time-programs",
+    "http://meridiantech.edu/full-time-programs/air-conditioning-and-refrigeration",
+    "http://meridiantech.edu/full-time-programs/automotive-technology",
+    "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+    "http://meridiantech.edu/full-time-programs/business-technology",
+    "http://meridiantech.edu/full-time-programs/carpentry",
+    "http://meridiantech.edu/full-time-programs/cnc-machining",
+    "http://meridiantech.edu/full-time-programs/collision-repair-technology",
+    "http://meridiantech.edu/full-time-programs/computer-aided-drafting",
+    "http://meridiantech.edu/full-time-programs/cosmetology",
+    "http://meridiantech.edu/full-time-programs/cosmetology-evening"
   ],
   "evidence": [
     {
+      "id": "check-duration-be1eaf0c7c",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology-evening",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "The year-round program takes approximately 18 months to complete. After completing the program,",
+      "page": "details"
+    },
+    {
+      "id": "check-email-0043bf3696",
+      "url": "https://www.meridiantech.edu/about-meridian/the-meridian-district",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-030969240e",
+      "url": "https://www.meridiantech.edu/about-meridian/the-meridian-district",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-05ea18843a",
+      "url": "http://meridiantech.edu/full-time-programs/carpentry",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-117623be6e",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
       "id": "check-email-155e8e1d87",
       "url": "https://www.meridiantech.edu/full-time-programs",
-      "title": "Meridian Technology Center – The Peak — details page checked by scrape.py",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-1b3fff9ceb",
+      "url": "https://www.meridiantech.edu/bes/classes",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-1cfaabaee8",
+      "url": "http://meridiantech.edu/full-time-programs/computer-aided-drafting",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-1d83c76129",
+      "url": "https://www.meridiantech.edu/about-meridian/work-at-meridian",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-23fcb7c830",
+      "url": "https://www.meridiantech.edu/about-meridian/leadership",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2906c73ef5",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "title": "Meridian Technology Center – The Peak — program page",
       "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
       "page": "details"
     },
     {
       "id": "check-email-29bc1d8ace",
       "url": "https://www.meridiantech.edu/full-time-programs",
-      "title": "Meridian Technology Center – The Peak — details page checked by scrape.py",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2f8d8f68db",
+      "url": "http://meridiantech.edu/full-time-programs/air-conditioning-and-refrigeration",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-3008990365",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "title": "Meridian Technology Center – The Peak — program page",
       "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
       "page": "details"
     },
     {
       "id": "check-email-3b58ba22a4",
       "url": "https://www.meridiantech.edu",
-      "title": "Meridian Technology Center – The Peak — homepage checked by scrape.py",
+      "title": "Meridian Technology Center – The Peak — homepage",
       "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-3f99892f42",
+      "url": "https://www.meridiantech.edu/about-meridian/the-meridian-district",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-463bdecbc2",
+      "url": "https://www.meridiantech.edu/about-meridian/work-at-meridian",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
       "page": "details"
     },
     {
       "id": "check-email-4681c78a14",
       "url": "https://www.meridiantech.edu",
-      "title": "Meridian Technology Center – The Peak — homepage checked by scrape.py",
+      "title": "Meridian Technology Center – The Peak — homepage",
       "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-4bad2c59cc",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology-evening",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5ac4b672e6",
+      "url": "http://meridiantech.edu/full-time-programs/cnc-machining",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5c06cffd87",
+      "url": "https://www.meridiantech.edu/bes/classes",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5db8314a0c",
+      "url": "https://www.meridiantech.edu/about-meridian",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5dc2bba671",
+      "url": "https://www.meridiantech.edu/about-meridian",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-642119bd8c",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-71d769c51e",
+      "url": "https://www.meridiantech.edu/about-meridian/contact-us",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-71f741e9ae",
+      "url": "https://www.meridiantech.edu/about-meridian/leadership",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-73da1c25c8",
+      "url": "http://meridiantech.edu/full-time-programs/air-conditioning-and-refrigeration",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7b873573f8",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7ddc1ea5a8",
+      "url": "http://meridiantech.edu/full-time-programs/automotive-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7f88c2509c",
+      "url": "http://meridiantech.edu/full-time-programs/cnc-machining",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-818181cdb5",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology-evening",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-81905e3288",
+      "url": "http://meridiantech.edu/full-time-programs/computer-aided-drafting",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-821422c716",
+      "url": "http://meridiantech.edu/full-time-programs/automotive-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-87f0ac8837",
+      "url": "http://meridiantech.edu/full-time-programs/business-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8bc4549677",
+      "url": "https://www.meridiantech.edu/about-meridian/board-of-education",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8c65bee0da",
+      "url": "http://meridiantech.edu/full-time-programs/carpentry",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8e7f1f843d",
+      "url": "https://www.meridiantech.edu/about-meridian",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
       "page": "details"
     },
     {
       "id": "check-email-8eadc343f1",
       "url": "https://www.meridiantech.edu",
-      "title": "Meridian Technology Center – The Peak — homepage checked by scrape.py",
+      "title": "Meridian Technology Center – The Peak — homepage",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-97914082c5",
+      "url": "http://meridiantech.edu/full-time-programs/collision-repair-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-9aaf868185",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ac2abdc0ea",
+      "url": "https://www.meridiantech.edu/bes/classes",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-af7456ceac",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b2563e1015",
+      "url": "http://meridiantech.edu/full-time-programs/cnc-machining",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b37f6761ac",
+      "url": "http://meridiantech.edu/full-time-programs/collision-repair-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b44ac24e17",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b8c9565b9d",
+      "url": "https://www.meridiantech.edu/about-meridian/leadership",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-bb960ce0f0",
+      "url": "http://meridiantech.edu/full-time-programs/automotive-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-bc0d3e3ac7",
+      "url": "https://www.meridiantech.edu/about-meridian/board-of-education",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-bd5bf409e3",
+      "url": "http://meridiantech.edu/full-time-programs/carpentry",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c1325d8c8a",
+      "url": "http://meridiantech.edu/full-time-programs/air-conditioning-and-refrigeration",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c2843c10e2",
+      "url": "http://meridiantech.edu/full-time-programs/collision-repair-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c89ddbd65a",
+      "url": "https://www.meridiantech.edu/about-meridian/board-of-education",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c918ff6aa7",
+      "url": "https://www.meridiantech.edu/about-meridian/work-at-meridian",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-cb30465fae",
+      "url": "https://www.meridiantech.edu/about-meridian/contact-us",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "a comment below: 1312 S. Sangre Road Stillwater, OK 74074 info@meridiantech.edu 405.377.3333 Contact Us * Required Name * required First",
+      "page": "details"
+    },
+    {
+      "id": "check-email-cb31db4f30",
+      "url": "http://meridiantech.edu/full-time-programs/business-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d00d5a583b",
+      "url": "https://www.meridiantech.edu/about-meridian/contact-us",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d5e8200f4a",
+      "url": "https://www.meridiantech.edu/about-meridian/contact-us",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e0557d44e1",
+      "url": "http://meridiantech.edu/full-time-programs/computer-aided-drafting",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e46c981484",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e67d045cb1",
+      "url": "http://meridiantech.edu/full-time-programs/business-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e98e88566f",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology-evening",
+      "title": "Meridian Technology Center – The Peak — program page",
       "excerpt": "info@meridiantech.edu",
       "page": "details"
     },
     {
       "id": "check-email-f65dca3a3a",
       "url": "https://www.meridiantech.edu/full-time-programs",
-      "title": "Meridian Technology Center – The Peak — details page checked by scrape.py",
+      "title": "Meridian Technology Center – The Peak — program page",
       "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0093f8a29d",
+      "url": "https://www.meridiantech.edu/about-meridian/contact-us",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
       "page": "details"
     },
     {
       "id": "check-phone-0c383c72e8",
       "url": "https://www.meridiantech.edu",
-      "title": "Meridian Technology Center – The Peak — homepage checked by scrape.py",
+      "title": "Meridian Technology Center – The Peak — homepage",
       "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0fd374378c",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-1524fff046",
+      "url": "https://www.meridiantech.edu/about-meridian/board-of-education",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-15fe9de593",
+      "url": "https://www.meridiantech.edu/bes/classes",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-17104d4b18",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-175880ee12",
+      "url": "http://meridiantech.edu/full-time-programs/air-conditioning-and-refrigeration",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-1cf0d02d7a",
+      "url": "http://meridiantech.edu/full-time-programs/business-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-206f40a65b",
+      "url": "https://www.meridiantech.edu/about-meridian/the-meridian-district",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-217e2049b3",
+      "url": "https://www.meridiantech.edu/about-meridian/contact-us",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-28c0b7619f",
+      "url": "http://meridiantech.edu/full-time-programs/cnc-machining",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-2d465a9bc2",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "4053773333 ext. 0304",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-366800660e",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-3c6fffe90f",
+      "url": "https://www.meridiantech.edu/about-meridian/the-meridian-district",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-4010285ec5",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-45aa5f53b6",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "405.377.3334 ext. 1007",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-4700322ab3",
+      "url": "https://www.meridiantech.edu/about-meridian/leadership",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-4d3fc06526",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "405.377.3333 ext. 0332",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-4fed2c40ca",
+      "url": "https://www.meridiantech.edu/about-meridian/the-meridian-district",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-53b09184ae",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology-evening",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-598dd59b88",
+      "url": "http://meridiantech.edu/full-time-programs/business-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-5dddf516d8",
+      "url": "http://meridiantech.edu/full-time-programs/air-conditioning-and-refrigeration",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-5f7a96ee39",
+      "url": "http://meridiantech.edu/full-time-programs/air-conditioning-and-refrigeration",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-630eaf1800",
+      "url": "http://meridiantech.edu/full-time-programs/carpentry",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-63644a357f",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "405.377.3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-665b25021a",
+      "url": "http://meridiantech.edu/full-time-programs/carpentry",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
       "page": "details"
     },
     {
       "id": "check-phone-683f50f0fe",
       "url": "https://www.meridiantech.edu/full-time-programs",
-      "title": "Meridian Technology Center – The Peak — details page checked by scrape.py",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-69aeb5891c",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-711159d897",
+      "url": "http://meridiantech.edu/full-time-programs/carpentry",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-735eaa7521",
+      "url": "http://meridiantech.edu/full-time-programs/collision-repair-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
       "excerpt": "(405) 377-3333",
       "page": "details"
     },
     {
       "id": "check-phone-7b83a89b08",
       "url": "https://www.meridiantech.edu/full-time-programs",
-      "title": "Meridian Technology Center – The Peak — details page checked by scrape.py",
+      "title": "Meridian Technology Center – The Peak — program page",
       "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-811e75ebc4",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "405-377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-88364bf48d",
+      "url": "http://meridiantech.edu/full-time-programs/computer-aided-drafting",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-903e3218ec",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology-evening",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
       "page": "details"
     },
     {
       "id": "check-phone-98c05831d8",
       "url": "https://www.meridiantech.edu/full-time-programs",
-      "title": "Meridian Technology Center – The Peak — details page checked by scrape.py",
+      "title": "Meridian Technology Center – The Peak — program page",
       "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-9fac5c55d6",
+      "url": "http://meridiantech.edu/full-time-programs/automotive-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-a5819f9c79",
+      "url": "https://www.meridiantech.edu/about-meridian/contact-us",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-a710e03c52",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "405.377.3333 ext. 0295",
       "page": "details"
     },
     {
       "id": "check-phone-a8f4c839ca",
       "url": "https://www.meridiantech.edu",
-      "title": "Meridian Technology Center – The Peak — homepage checked by scrape.py",
+      "title": "Meridian Technology Center – The Peak — homepage",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-aad43e71c8",
+      "url": "https://www.meridiantech.edu/about-meridian/work-at-meridian",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-ac5e60969b",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "405.377.3333 ext. 0235",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-ae0273cf0b",
+      "url": "http://meridiantech.edu/full-time-programs/business-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-ae239ff2cb",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "405.377.3333 ext. 0395",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b326866da1",
+      "url": "https://www.meridiantech.edu/about-meridian",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b687ed4173",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "405.377.3333 ext. 0258",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b76714b35f",
+      "url": "http://meridiantech.edu/full-time-programs/cnc-machining",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b8237a255f",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b8f12fdcf0",
+      "url": "https://www.meridiantech.edu/about-meridian/work-at-meridian",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b9b00893cd",
+      "url": "http://meridiantech.edu/full-time-programs/collision-repair-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-ba738be7d7",
+      "url": "http://meridiantech.edu/full-time-programs/computer-aided-drafting",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-bb08b0efbb",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-bb3075a4d5",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "405.377.3333 ext. 0327",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-bc3de442de",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "4053773333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c014d53368",
+      "url": "https://www.meridiantech.edu/about-meridian/contact-us",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "405.377.3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c22253b166",
+      "url": "https://www.meridiantech.edu/about-meridian",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c375f8a891",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "405.377.3333 ext. 0283",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c9deff1ad0",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology-evening",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-cadc11de5e",
+      "url": "https://www.meridiantech.edu/about-meridian/board-of-education",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-cecee9f5fd",
+      "url": "https://www.meridiantech.edu/about-meridian/leadership",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-cf7da36b6b",
+      "url": "https://www.meridiantech.edu/bes/classes",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-d16a070985",
+      "url": "http://meridiantech.edu/full-time-programs/automotive-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-d24e3568be",
+      "url": "https://www.meridiantech.edu/about-meridian/work-at-meridian",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-d37eb9d8b5",
+      "url": "https://www.meridiantech.edu/about-meridian",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-d49fb5cf19",
+      "url": "http://meridiantech.edu/full-time-programs/cnc-machining",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-da399e7a57",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-dcded93377",
+      "url": "https://www.meridiantech.edu/about-meridian/leadership",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-e0384e4bf6",
+      "url": "https://www.meridiantech.edu/bes/classes",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-e86afbb54a",
+      "url": "http://meridiantech.edu/full-time-programs/collision-repair-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-ed27d6d3ec",
+      "url": "https://www.meridiantech.edu/about-meridian/board-of-education",
+      "title": "Meridian Technology Center – The Peak — program page",
       "excerpt": "(405) 377-3334",
       "page": "details"
     },
     {
       "id": "check-phone-f036890d34",
       "url": "https://www.meridiantech.edu",
-      "title": "Meridian Technology Center – The Peak — homepage checked by scrape.py",
+      "title": "Meridian Technology Center – The Peak — homepage",
       "excerpt": "(405) 377-3333",
       "page": "details"
     },
     {
-      "id": "check-route-bba73f0613",
-      "url": "https://www.meridiantech.edu/full-time-programs",
-      "title": "Meridian Technology Center – The Peak — details page checked by scrape.py",
+      "id": "check-phone-f729b59319",
+      "url": "http://meridiantech.edu/full-time-programs/computer-aided-drafting",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-fb32af9e15",
+      "url": "http://meridiantech.edu/full-time-programs/automotive-technology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-fcfb5ca768",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-route-143674b785",
+      "url": "https://www.meridiantech.edu/about-meridian",
+      "title": "Meridian Technology Center – The Peak — program page",
       "excerpt": "Home → https://www.meridiantech.edu/",
       "page": "details"
+    },
+    {
+      "id": "check-route-4285b930db",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "High School Application → https://www.meridiantech.edu/fs/resource-manager/view/f65f56c7-8b99-476d-8a24-0ec720bb1bdf",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c38131aa59",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology-evening",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "Evening Cosmetologist Information and Application → https://www.meridiantech.edu/fs/resource-manager/view/fdccb6f5-5bb8-4298-bdc5-0d7dc23beba0",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f2c585f333",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology-evening",
+      "title": "Meridian Technology Center – The Peak — program page",
+      "excerpt": "Master Instructor Information and Application → https://www.meridiantech.edu/fs/resource-manager/view/bbde4850-5306-47d4-8b51-4e4d1ad21de3",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-93b1fc3965",
+      "url": "https://www.meridiantech.edu",
+      "page": "details",
+      "excerpt": "Home - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses"
+    },
+    {
+      "id": "check-page-4a2b2e6a86",
+      "url": "https://www.meridiantech.edu",
+      "page": "details",
+      "excerpt": "Opportunities at Meridian Tech What We Offer Full-Time Programs Hands-on, industry-focused education designed to prepare you for high-demand careers."
+    },
+    {
+      "id": "check-page-274ecd691a",
+      "url": "https://www.meridiantech.edu",
+      "page": "details",
+      "excerpt": "Learn more Entrepreneurial Services Personalized support through business coaching, incubator spaces, and resources to help startups and existing businesses grow, innovate, and thrive."
+    },
+    {
+      "id": "check-page-bf0a46115e",
+      "url": "https://www.meridiantech.edu",
+      "page": "details",
+      "excerpt": "Learn more Apprenticeships Pair on-the-job customized training with the expert-led education offered at Tech."
+    },
+    {
+      "id": "check-page-bb3839b5b0",
+      "url": "https://www.meridiantech.edu",
+      "page": "details",
+      "excerpt": "Learn more Adult Education and Family Literacy Build essential English language skills or earn your high school equivalency."
+    },
+    {
+      "id": "check-page-8dc50059b3",
+      "url": "https://www.meridiantech.edu",
+      "page": "details",
+      "excerpt": "Jonathan Burgess Burgess Aerospace Innovations, tenant in the Center for Business Development I'm learning so much in class."
+    },
+    {
+      "id": "check-page-9cc7bef74c",
+      "url": "https://www.meridiantech.edu/about-meridian",
+      "page": "details",
+      "excerpt": "About Meridian - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online"
+    },
+    {
+      "id": "check-page-ead8443f35",
+      "url": "https://www.meridiantech.edu/about-meridian",
+      "page": "details",
+      "excerpt": "Contact Us Teams Faculty/Staff Directory Board of Education MTC Leadership Join our team South Campus Explore what courses we offer at our South Campus location."
+    },
+    {
+      "id": "check-page-038b7e2a68",
+      "url": "https://www.meridiantech.edu/about-meridian/board-of-education",
+      "page": "details",
+      "excerpt": "Board of Education - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online"
+    },
+    {
+      "id": "check-page-b34a59c5c9",
+      "url": "https://www.meridiantech.edu/about-meridian/board-of-education",
+      "page": "details",
+      "excerpt": "The following are the 2026 dates: January 8, 2026 February 5, 2026 March 5, 2026 April 9, 2026 May 7, 2026 June 4, 2026 June 25, 2026 (July Meeting) July 30, 2026 (August Meeting) September 3, 2026 October 8, 2026 November 5, 2026 December 10, 2026 Learn more about the Rules for Career and Technology Education, Open Meeting Act and Open Records Act ."
+    },
+    {
+      "id": "check-page-1a166c1d20",
+      "url": "https://www.meridiantech.edu/about-meridian/board-of-education",
+      "page": "details",
+      "excerpt": "If you would like to have the agenda for the Board of Education emailed to you each month, please fill out the form below. * Required Name * required First Name Last Name Email Address Phone Number Must contain only numbers Please complete the security verification below."
+    },
+    {
+      "id": "check-page-6dc02e2507",
+      "url": "https://www.meridiantech.edu/about-meridian/contact-us",
+      "page": "details",
+      "excerpt": "Contact Us - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short"
+    },
+    {
+      "id": "check-page-60bfb522dd",
+      "url": "https://www.meridiantech.edu/about-meridian/leadership",
+      "page": "details",
+      "excerpt": "MTC Leadership - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online"
+    },
+    {
+      "id": "check-page-46ca8e1429",
+      "url": "https://www.meridiantech.edu/about-meridian/leadership",
+      "page": "details",
+      "excerpt": "Douglas Major began his career as an agriculture education student in Kingfisher, Oklahoma."
+    },
+    {
+      "id": "check-page-b0be8281b3",
+      "url": "https://www.meridiantech.edu/about-meridian/leadership",
+      "page": "details",
+      "excerpt": "After earning his bachelor’s in agriculture education at Oklahoma State University, he taught for two years at Anadarko High School."
+    },
+    {
+      "id": "check-page-d15fc6a1d8",
+      "url": "https://www.meridiantech.edu/about-meridian/leadership",
+      "page": "details",
+      "excerpt": "He has held offices in the Oklahoma Technology Center Superintendents’ Association, the Oklahoma Council of Local Administrators, the Oklahoma Association of Career and Technical Education and the National Council of Local Administrators for Career and Technical Education."
+    },
+    {
+      "id": "check-page-2e99c43bb4",
+      "url": "https://www.meridiantech.edu/about-meridian/leadership",
+      "page": "details",
+      "excerpt": "Major was selected to participate in the first National Leadership Institute sponsored by the National Centers for Career and Technical Education and is a past president of the Association for Career and Technical Education."
+    },
+    {
+      "id": "check-page-dc24dc98e7",
+      "url": "https://www.meridiantech.edu/about-meridian/leadership",
+      "page": "details",
+      "excerpt": "In 2017, he received the Francis Tuttle Career Excellence Award recognizing a career devoted to the development of excellence in people through career and technology education."
+    },
+    {
+      "id": "check-page-0786abce75",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "page": "details",
+      "excerpt": "Staff Directory - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online"
+    },
+    {
+      "id": "check-page-017e28bd12",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "page": "details",
+      "excerpt": "0258 Sara Ahmed Instructor, Adult Education and Family Literacy School: 405.377.3333 Kristi Akehurst Career Counselor/Special Services Coordinator School: 405.377.3333 ext."
+    },
+    {
+      "id": "check-page-b5075a21b3",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "page": "details",
+      "excerpt": "0395 Mona Autry Adult Education and Family Literacy Instructor/Coordinator School: 405.377.3333 ext."
+    },
+    {
+      "id": "check-page-3376311f58",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "page": "details",
+      "excerpt": "1007 Amber Bales Instructor, Adult Education and Family Literacy School: 4053773333 Susan Bastion Culinary Arts Assistant School: 405.377.3333 ext."
+    },
+    {
+      "id": "check-page-acf1ac6c6e",
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "page": "details",
+      "excerpt": "0332 Jeana Bateson Instructor, Health Careers School: 405.377.3333 ext."
+    },
+    {
+      "id": "check-page-b9c02514d4",
+      "url": "https://www.meridiantech.edu/about-meridian/the-meridian-district",
+      "page": "details",
+      "excerpt": "Meridian District - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online"
+    },
+    {
+      "id": "check-page-069d66b8c6",
+      "url": "https://www.meridiantech.edu/about-meridian/work-at-meridian",
+      "page": "details",
+      "excerpt": "Work at Meridian - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online"
+    },
+    {
+      "id": "check-page-f3b8920cb8",
+      "url": "https://www.meridiantech.edu/about-meridian/work-at-meridian",
+      "page": "details",
+      "excerpt": "Our workforce and economic development team spends time at our Main Campus in Stillwater and our South Campus in Guthrie consulting with businesses to provide training, entrepreneurial support, as well as personal and professional development programming, including an on-site business incubator where startups gain a solid foundation surrounded by like-minded individuals."
+    },
+    {
+      "id": "check-page-0ef63f76a4",
+      "url": "https://www.meridiantech.edu/about-meridian/work-at-meridian",
+      "page": "details",
+      "excerpt": "Department of Education Office for Civil Rights at One Petticoat Lane, 1010 Walnut Street, Suite 320, Kansas City, MO 64106, or by phone at (816) 268-0550, fax at (816) 268-0599 or email at OCR.KansasCity@ed.gov."
+    },
+    {
+      "id": "check-page-b01961de2f",
+      "url": "https://www.meridiantech.edu/about-meridian/work-at-meridian",
+      "page": "details",
+      "excerpt": "All technology center employees and students will be provided with age appropriate education regarding types of discrimination, harassment and bullying."
+    },
+    {
+      "id": "check-page-86f14a518b",
+      "url": "https://www.meridiantech.edu/about-meridian/work-at-meridian",
+      "page": "details",
+      "excerpt": "Any student who is experiencing difficulty fully accessing the technology center’s education programs should contact the coordinator so a success plan can be developed for the student."
+    },
+    {
+      "id": "check-page-c86bf26992",
+      "url": "https://www.meridiantech.edu/bes/classes",
+      "page": "details",
+      "excerpt": "Programs and Classes - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing"
+    },
+    {
+      "id": "check-page-b8dee37c7a",
+      "url": "https://www.meridiantech.edu/full-time-programs",
+      "page": "details",
+      "excerpt": "Full-Time Programs - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online"
+    },
+    {
+      "id": "check-page-29b8212834",
+      "url": "http://meridiantech.edu/full-time-programs/air-conditioning-and-refrigeration",
+      "page": "details",
+      "excerpt": "Air Conditioning and Refrigeration - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab)"
+    },
+    {
+      "id": "check-page-9ad735a2d5",
+      "url": "http://meridiantech.edu/full-time-programs/air-conditioning-and-refrigeration",
+      "page": "details",
+      "excerpt": "Possibilities include: HVAC Service Technician Manufacturing Technician Sales Executive HVAC R Entrepreneur Documents Cost Sheet Residential HVAC Technician Cool Career, Hot Demand: Build a Future in Residential HVAC."
+    },
+    {
+      "id": "check-page-14fa91eed2",
+      "url": "http://meridiantech.edu/full-time-programs/air-conditioning-and-refrigeration",
+      "page": "details",
+      "excerpt": "Technicians are also tasked with monitoring compliance with local government regulations to ensure that the system is installed in a way that provides for the most effective climate control in the building or space."
+    },
+    {
+      "id": "check-page-06ea5163fa",
+      "url": "http://meridiantech.edu/full-time-programs/automotive-technology",
+      "page": "details",
+      "excerpt": "Automotive Technology - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing"
+    },
+    {
+      "id": "check-page-cc7ea28b9d",
+      "url": "http://meridiantech.edu/full-time-programs/automotive-technology",
+      "page": "details",
+      "excerpt": "Help auto owners get their rides back on the road as an Automotive Service Technician."
+    },
+    {
+      "id": "check-page-bc7a599ec4",
+      "url": "http://meridiantech.edu/full-time-programs/automotive-technology",
+      "page": "details",
+      "excerpt": "Possibilities include: Automotive Service Technician ASE Certified Automotive Service Technician Transportation Supervisor Entrepreneur Documents Cost Sheet Maintenance Light Repair Technician Illuminate your future as a Maintenance Light Repair Technician!"
+    },
+    {
+      "id": "check-page-6e266dd306",
+      "url": "http://meridiantech.edu/full-time-programs/automotive-technology",
+      "page": "details",
+      "excerpt": "This program is accredited by the National Automotive Technicians Education Foundation."
+    },
+    {
+      "id": "check-page-96e4a1ff12",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "page": "details",
+      "excerpt": "Biomedical Sciences – STEM Academy - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab)"
+    },
+    {
+      "id": "check-page-2bd078f9ff",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "page": "details",
+      "excerpt": "Whether you’re investigating a potential crime scene, offering medical advice to a fictitious family, monitoring muscle movement or evaluating cancer treatment options this program brings science to life through human medicine, physiology, genetics, microbiology and public health."
+    },
+    {
+      "id": "check-page-79349fb76c",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "page": "details",
+      "excerpt": "Students in this program will work collaboratively to understand the most pressing health challenges of today and the future."
+    },
+    {
+      "id": "check-page-7a0bc25d96",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "page": "details",
+      "excerpt": "Healthcare Provider and CPR certifications are built into this program."
+    },
+    {
+      "id": "check-page-78c78299c0",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "page": "details",
+      "excerpt": "Want to compare the Biomedical Sciences STEM Academy with some of our other health-related programs?"
+    },
+    {
+      "id": "check-page-6ba09e9f5d",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "page": "details",
+      "excerpt": "Career Majors Project Lead the Way Biomedical Sciences (960) Project Lead the Way Biomedical Sciences (1440) Project Lead the Way Biomedical Sciences (960) Step Into the World of Biomedical Innovation Play the role of biomedical professionals as they investigate and study the concepts of human medicine, physiology, genetics, microbiology and public health!"
+    },
+    {
+      "id": "check-page-0028da325c",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "page": "details",
+      "excerpt": "In this program, you’ll examine the structures and interactions of human body systems and explore the prevention, diagnosis and treatment of disease, all while working collaboratively to understand and design solutions to the most pressing health challenges of today and the future."
+    },
+    {
+      "id": "check-page-ef98bce961",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "page": "details",
+      "excerpt": "The program prepares you for postsecondary education and training necessary for success in a wide variety of positions including as a physician, nurse, pharmaceutical researcher, technician and more."
+    },
+    {
+      "id": "check-page-db38194d00",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "page": "details",
+      "excerpt": "For the Biomedical sciences program students must be at or above grade level in reading and mathematics and demonstrate a high interest and/or aptitude in math, science and the health fields."
+    },
+    {
+      "id": "check-page-ef98bce961",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "page": "details",
+      "excerpt": "The program prepares you for postsecondary education and training necessary for success in a wide variety of positions including as a physician, nurse, pharmaceutical researcher, technician and more."
+    },
+    {
+      "id": "check-page-f06aaf6c75",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "page": "details",
+      "excerpt": "Learn the role of biomedical professionals as you investigate and study the concepts of human medicine, physiology, genetics, microbiology and public health!"
+    },
+    {
+      "id": "check-page-bdfb519de4",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "page": "details",
+      "excerpt": "In this program you’ll examine the structures and interactions of human body systems and explore the prevention, diagnosis and treatment of disease, all while working collaboratively to understand and design solutions to the most pressing health challenges of today and the future."
+    },
+    {
+      "id": "check-page-db38194d00",
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "page": "details",
+      "excerpt": "For the Biomedical sciences program students must be at or above grade level in reading and mathematics and demonstrate a high interest and/or aptitude in math, science and the health fields."
+    },
+    {
+      "id": "check-page-8ddc96b64a",
+      "url": "http://meridiantech.edu/full-time-programs/business-technology",
+      "page": "details",
+      "excerpt": "Business Technology - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing"
+    },
+    {
+      "id": "check-page-3565210916",
+      "url": "http://meridiantech.edu/full-time-programs/carpentry",
+      "page": "details",
+      "excerpt": "Carpentry - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short"
+    },
+    {
+      "id": "check-page-bda7f80a34",
+      "url": "http://meridiantech.edu/full-time-programs/cnc-machining",
+      "page": "details",
+      "excerpt": "CNC Machining - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online"
+    },
+    {
+      "id": "check-page-8656f43ae2",
+      "url": "http://meridiantech.edu/full-time-programs/cnc-machining",
+      "page": "details",
+      "excerpt": "As a CNC Machinist you’ll learn how to input code on machining tools such as lathes, multi-axis spindles, milling machines and plasma cutters to cut and shape precision products, such as automobile, aviation and machine parts."
+    },
+    {
+      "id": "check-page-c53b66442c",
+      "url": "http://meridiantech.edu/full-time-programs/cnc-machining",
+      "page": "details",
+      "excerpt": "The Manual Machinist 600-Hour Training Program is designed to equip students with the foundational knowledge and hands-on skills necessary to begin a career in precision machining."
+    },
+    {
+      "id": "check-page-a17cb924b4",
+      "url": "http://meridiantech.edu/full-time-programs/cnc-machining",
+      "page": "details",
+      "excerpt": "This comprehensive program emphasizes safety, accuracy and craftsmanship, preparing students for entry-level positions in manufacturing, maintenance and fabrication industries."
+    },
+    {
+      "id": "check-page-7ea6a6095a",
+      "url": "http://meridiantech.edu/full-time-programs/collision-repair-technology",
+      "page": "details",
+      "excerpt": "Collision Repair Technology - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification"
+    },
+    {
+      "id": "check-page-6cd367aab4",
+      "url": "http://meridiantech.edu/full-time-programs/collision-repair-technology",
+      "page": "details",
+      "excerpt": "Possibilities include: Automotive Detailer Collision Repair Technician Body Shop Supervisor Entrepreneur Documents Cost Sheet Getting Started Apply for admissions today as a high school student or as an adult."
+    },
+    {
+      "id": "check-page-198ef6a537",
+      "url": "http://meridiantech.edu/full-time-programs/computer-aided-drafting",
+      "page": "details",
+      "excerpt": "Computer Aided Drafting - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing"
+    },
+    {
+      "id": "check-page-b68615cb66",
+      "url": "http://meridiantech.edu/full-time-programs/computer-aided-drafting",
+      "page": "details",
+      "excerpt": "From analyzing specifications and interpreting engineering data to identifying potential design flaws before prototyping, students will gain the expertise needed to thrive in a variety of industries."
+    },
+    {
+      "id": "check-page-518f755487",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology",
+      "page": "details",
+      "excerpt": "Cosmetology - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short"
+    },
+    {
+      "id": "check-page-39b9a57bb3",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology-evening",
+      "page": "details",
+      "excerpt": "Cosmetology - Evening - Meridian Technology Center Skip To Main Content Close Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing Online Short Courses Email Subscriptions Workforce Training Workforce & Economic Development Apprenticeships Leadership and Staff Development Safety Training Film Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian Contact Us Staff Directory Meridian District MTC Leadership Board of Education Work at Meridian Foundation Campus Life Dine at Meridian Living Our Values Salon Summer Camp Apparel Store Student Handbook Campuses Live Events Calendar Foundation Dining Contact News Canvas Campuses Live Events Calendar Menu Close Menu Search Clear Search Full-Time Programs Admissions High School Students Adult Enrollment Adult Education and Family Literacy Scholarships and Waivers CareerTech Student Organizations Financial Aid Consumer Information College Credit Short Courses (opens in new window/tab) Courses Offered (opens in new window/tab) Certification Testing"
+    },
+    {
+      "id": "check-page-6f0fe1c344",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology-evening",
+      "page": "details",
+      "excerpt": "Points are earned for test scores, letters of recommendation, interview, education, career plans, career interest, and work/hobby experience in the field."
+    },
+    {
+      "id": "check-page-6f0fe1c344",
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology-evening",
+      "page": "details",
+      "excerpt": "Points are earned for test scores, letters of recommendation, interview, education, career plans, career interest, and work/hobby experience in the field."
     }
   ],
   "findings": {
@@ -117,20 +1409,57 @@
       {
         "value": "405-377-3334",
         "evidenceId": "check-phone-a8f4c839ca"
+      },
+      {
+        "value": "405.377.3333",
+        "evidenceId": "check-phone-c014d53368"
+      },
+      {
+        "value": "405.377.3333,0235",
+        "evidenceId": "check-phone-ac5e60969b"
+      },
+      {
+        "value": "405.377.3333,0258",
+        "evidenceId": "check-phone-b687ed4173"
       }
     ],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://www.meridiantech.edu/fs/resource-manager/view/f65f56c7-8b99-476d-8a24-0ec720bb1bdf",
+        "evidenceId": "check-route-4285b930db"
+      },
+      {
+        "value": "https://www.meridiantech.edu/fs/resource-manager/view/fdccb6f5-5bb8-4298-bdc5-0d7dc23beba0",
+        "evidenceId": "check-route-c38131aa59"
+      },
+      {
+        "value": "https://www.meridiantech.edu/fs/resource-manager/view/bbde4850-5306-47d4-8b51-4e4d1ad21de3",
+        "evidenceId": "check-route-f2c585f333"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.meridiantech.edu/",
-        "evidenceId": "check-route-bba73f0613"
+        "evidenceId": "check-route-143674b785"
       }
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-be1eaf0c7c"
+      }
+    ],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

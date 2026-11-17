@@ -1,6 +1,6 @@
 {
   "programId": "new-energy-nexus-usa",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://apply.workable.com/newenergynexus/",
@@ -43,82 +43,122 @@
       "origin": "official"
     },
     {
-      "url": "https://www.newenergynexus.com/news/100-climate-solutions-selected-for-nex-cop28-climate-tech-startup-accelerator/",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.newenergynexus.com/news/2023-climate-fintech-accelerator-opens-to-startups-around-the-world/",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.newenergynexus.com/news/californias-pioneering-clean-energy-testing-program-lands-in-australia/",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.newenergynexus.com/news/calseed-cohort-7-prototype-awards-announcement/",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.newenergynexus.com/news/climate-tech-startups-to-be-showcased-at-cop28-in-new-program-from-cop28-and-new-energy-nexus/",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.newenergynexus.com/news/ifc-and-new-energy-nexus-launch-accelerator-for-women-led-climate-startups-in-southeast-asia/",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.newenergynexus.com/news/new-energy-nexus-response-to-white-houses-15-5-billion-ev-investment-announcement/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.newenergynexus.com/news/six-women-led-agricultural-enterprises-secure-investment-to-tackle-climate-adaptation-in-the-mekong-delta/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.newenergynexus.com/news/supercharge-australia-innovation-challenge-announces-australias-first-cohort-of-11-battery-startups/",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.newenergynexus.com/portfolio/",
       "page": "portfolio",
       "anchor": "Portfolio",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/program/building-energy-challenge/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/program/calcef-catalyst/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/program/calcef-ventures/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/program/calcharge/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/program/ee100-introduction-to-energy-entrepreneurship/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/program/energy-entrepreneurship-series-for-student-and-faculty-members-train-the-trainers-equipping-faculty-members/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/program/energy-storage/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/program/green-building-initiative/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/program/new-energy-academy/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/program/nexgen-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/program/ready-spark-charge/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/program/residency/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

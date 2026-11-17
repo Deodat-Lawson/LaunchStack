@@ -1,11 +1,19 @@
 {
   "programId": "accelerateh2o",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.accelerateh2o.org/about/",
       "page": "details",
       "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.accelerateh2o.org/terms-and-conditions/",
+      "page": "terms",
+      "anchor": "Terms and Conditions",
       "fetched": true,
       "blocked": null,
       "origin": "official"

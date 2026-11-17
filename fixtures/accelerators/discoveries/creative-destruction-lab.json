@@ -1,12 +1,12 @@
 {
   "programId": "creative-destruction-lab",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://creativedestructionlab.com/about/",
       "page": "details",
       "anchor": "About",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -20,30 +20,6 @@
     },
     {
       "url": "https://creativedestructionlab.com/blockchain-application/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://creativedestructionlab.com/blog/applications-launch-2023-24/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://creativedestructionlab.com/blog/applications-open-2022/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://creativedestructionlab.com/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
       "page": "application",
       "anchor": "",
       "fetched": true,
@@ -67,30 +43,6 @@
       "origin": "official"
     },
     {
-      "url": "https://creativedestructionlab.com/blog/founders-find-practical-applications-for-quantum-computing-at-cdls-2021-quantum-hackathon/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://creativedestructionlab.com/blog/quantum-applications-2023-24/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://creativedestructionlab.com/blog/thinking-about-applying-to-the-creative-destruction-labs-2018-19-program-read-this-first/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://creativedestructionlab.com/companies/",
       "page": "portfolio",
       "anchor": "Companies",
@@ -102,7 +54,15 @@
       "url": "https://creativedestructionlab.com/faq/",
       "page": "terms",
       "anchor": "FAQs",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/fr/about/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -123,23 +83,39 @@
       "origin": "official"
     },
     {
-      "url": "https://creativedestructionlab.com/fr/blog/applications-launch-2023-24/",
-      "page": "application",
+      "url": "https://creativedestructionlab.com/fr/faq/",
+      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://creativedestructionlab.com/fr/blog/applications-open-2022/",
-      "page": "application",
+      "url": "https://creativedestructionlab.com/fr/partners-program/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://creativedestructionlab.com/fr/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
+      "url": "https://creativedestructionlab.com/fr/program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/fr/program/cdl-reading-group/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/fr/quantum-application/",
       "page": "application",
       "anchor": "",
       "fetched": true,
@@ -150,7 +126,7 @@
       "url": "https://creativedestructionlab.com/partners-program/",
       "page": "details",
       "anchor": "Partners",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -158,7 +134,23 @@
       "url": "https://creativedestructionlab.com/program/",
       "page": "details",
       "anchor": "Program",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/program/cdl-reading-group/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/program/pedagogy/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -166,7 +158,15 @@
       "url": "https://creativedestructionlab.com/program/putting-ai-to-work/",
       "page": "details",
       "anchor": "Putting AI to Work",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/program/recovery/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

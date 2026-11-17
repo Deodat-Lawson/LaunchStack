@@ -1,6 +1,6 @@
 {
   "programId": "how-to-web",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.howtoweb.co/3-reasons-why-you-should-apply-for-speaking-at-how-to-web-conference/",
@@ -107,8 +107,32 @@
       "origin": "official"
     },
     {
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.howtoweb.co/how-to-web-2023/apply-for-speaking/",
       "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/over-half-a-million-euros-is-the-investment-prize-for-the-winning-startup-of-the-spotlight-competition/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/partner/fortech-investment/",
+      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -126,7 +150,7 @@
       "url": "https://www.howtoweb.co/speaker/alina-georgescu",
       "page": "terms",
       "anchor": "Alina Georgescu Investment Director Catalyst Romania",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -134,7 +158,7 @@
       "url": "https://www.howtoweb.co/speaker/andrii-degeler",
       "page": "terms",
       "anchor": "Andrii Degeler Head of News Dealroom",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

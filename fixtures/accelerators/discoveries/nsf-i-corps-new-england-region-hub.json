@@ -1,6 +1,6 @@
 {
   "programId": "nsf-i-corps-new-england-region-hub",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://neicorps.org/about/",
@@ -11,17 +11,17 @@
       "origin": "official"
     },
     {
-      "url": "https://neicorps.org/programs/",
-      "page": "details",
-      "anchor": "Programs",
-      "fetched": false,
+      "url": "https://neicorps.org/apply-now/",
+      "page": "application",
+      "anchor": "Apply Now",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://neicorps.org/apply-now/",
-      "page": "application",
-      "anchor": "Apply Now",
+      "url": "https://neicorps.org/calendar/",
+      "page": "batches",
+      "anchor": "SEe upcoming Dates",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -35,10 +35,26 @@
       "origin": "official"
     },
     {
-      "url": "https://neicorps.org/calendar/",
-      "page": "batches",
-      "anchor": "SEe upcoming Dates",
-      "fetched": false,
+      "url": "https://neicorps.org/calendar_event/spark-program-info-session-2/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://neicorps.org/programs/",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://neicorps.org/programs/tufts",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

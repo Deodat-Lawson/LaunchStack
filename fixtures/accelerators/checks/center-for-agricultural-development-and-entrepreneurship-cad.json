@@ -1,17 +1,71 @@
 {
   "programId": "center-for-agricultural-development-and-entrepreneurship-cad",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://cadefarms.org/",
-    "https://www.cadefarms.org/about"
+    "https://www.cadefarms.org/about",
+    "https://www.cadefarms.org/event-details/wholesale-marketing-accelerator-3-part-series-2027-01-06-14-00",
+    "https://www.cadefarms.org/event-details/wholesale-marketing-accelerator-3-part-series-2027-01-13-14-00",
+    "https://www.cadefarms.org/event-details/wholesale-marketing-accelerator-3-part-series-2027-01-20-14-00",
+    "https://www.cadefarms.org/programs"
   ],
   "evidence": [
     {
       "id": "check-phone-a7082032bf",
       "url": "https://cadefarms.org/",
-      "title": "Center for Agricultural Development and Entrepreneurship, Inc (CADE) — homepage checked by scrape.py",
+      "title": "Center for Agricultural Development and Entrepreneurship, Inc (CADE) — homepage",
       "excerpt": "\"telephone\": \"607-433-2545​​​\"",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-869a496e1e",
+      "url": "https://cadefarms.org/",
+      "page": "details",
+      "excerpt": "CADE | Center for Agricultural Development & Entrepreneurship top of page Who We Are About CADE Staff and Board Vision 2050 Reports & Publications What We Do Education 1:1 Support Upcoming Events Fiscal Sponsorship Newsletters Resources Business Development Beginning Farmers Business Planning Funding 101 Product Development Land Find Farmland Land Management Land Owners ​ Sales & Marketing Certifications Farm to Institution Sales Readiness Marketing Additional Resources Antibiotic Stewardship Legal Resources Video Library Get Involved Request 1:1 Support Join Our Team Contact Donate Growing New York Farms & Food Businesses \"I am convinced that CADE is the reason that we still exist as a farm business.\" Livestock Farm, Madison County Est. 1991 The Center for Agricultural Development & Entrepreneurship Growing NY Farms and Food Businesses Learn More Help secure a resilient food future for New York. Support our work. Donate © 2023 - 2025 CADE Farms | All rights reserved. Privacy Policy The Center for Agricultural Development and Entrepreneurship is a 501(c)3, non-profit organization . Newsletters Resources Careers Donate SHOP bottom of page"
+    },
+    {
+      "id": "check-page-a419481ba1",
+      "url": "https://www.cadefarms.org/about",
+      "page": "details",
+      "excerpt": "About Us | CADE top of page Who We Are About CADE Staff and Board Vision 2050 Reports & Publications What We Do Education 1:1 Support Upcoming Events Fiscal Sponsorship Newsletters Resources Business Development Beginning Farmers Business Planning Funding 101 Product Development Land Find Farmland Land Management Land Owners ​ Sales & Marketing Certifications Farm to Institution Sales Readiness Marketing Additional Resources Antibiotic Stewardship Legal Resources Video Library Get Involved Request 1:1 Support Join Our Team Contact Donate Acerca de About CADE Our Vision​ Our Mission CADE's mission is to increase the number and diversity of viable farm enterprises and related businesses across the supply chain in New York through technical assistance, education, mentoring, network-weaving, partnerships, advocacy, and research. Established in 1991, CADE envisions a vibrant, regenerative, and equitable food system in which locally owned agricultural businesses thrive and communities are nourished by healthy, sustainably produced food. Our Work CADE takes a personalized approach to meet the unique needs of each client. We believe success isn’t just about profits—it’s also about sustainability and community impact. ​ That's why CADE works to increase the “Triple Bottom Line” of agricultural development by: Increasing profit margins through efficient production systems, effective"
+    },
+    {
+      "id": "check-page-64cbffb00b",
+      "url": "https://www.cadefarms.org/about",
+      "page": "details",
+      "excerpt": "Promoting sound environmental practices such as grass-based livestock production, watershed runoff protection, and use of renewable energy."
+    },
+    {
+      "id": "check-page-1336cd4b4c",
+      "url": "https://www.cadefarms.org/about",
+      "page": "details",
+      "excerpt": "Engendering positive social outcomes such as job creation, generational farm transition, positive connections between farmers and consumers, health benefits of local foods, and locally circulating dollars. ​ ​ ​ Watch the video below to learn more about CADE's work with local farms and food businesses."
+    },
+    {
+      "id": "check-page-dea2e65f96",
+      "url": "https://www.cadefarms.org/event-details/wholesale-marketing-accelerator-3-part-series-2027-01-06-14-00",
+      "page": "details",
+      "excerpt": "Wholesale Marketing Accelerator | 3-Part Series | CADE top of page Who We Are About CADE Staff and Board Vision 2050 Reports & Publications What We Do Education 1:1 Support Upcoming Events Fiscal Sponsorship Newsletters Resources Business Development Beginning Farmers Business Planning Funding 101 Product Development Land Find Farmland Land Management Land Owners ​ Sales & Marketing Certifications Farm to Institution Sales Readiness Marketing Additional Resources Antibiotic Stewardship Legal Resources Video Library Get Involved Request 1:1 Support Join Our Team Contact Donate Wholesale Marketing Accelerator | 3-Part Series Wed, Jan 06 | Webinar series Build the marketing strategies and systems to make wholesale work for your farm or food business in this no-cost online short course. Time & Location Jan 06, 2027, 2:00 PM – 3:30 PM Webinar series Other dates Wed, Jan 13, 2:00 PM Wed, Jan 20, 2:00 PM About the event Ready to level up your farm or food business into wholesale? This three-part webinar series will help you build the marketing strategies and systems to make wholesale work for your business. For those just getting started or looking to strengthen existing sales, we'll cover practical tools for finding the right buyers, managing bulk orders, and promoting your products at scale across New York and beyond. January 6, 2027 | Sales Channel & Pricing Strategy 2 PM EST."
+    },
+    {
+      "id": "check-page-e276ba2585",
+      "url": "https://www.cadefarms.org/event-details/wholesale-marketing-accelerator-3-part-series-2027-01-13-14-00",
+      "page": "details",
+      "excerpt": "Wholesale Marketing Accelerator | 3-Part Series | CADE top of page Who We Are About CADE Staff and Board Vision 2050 Reports & Publications What We Do Education 1:1 Support Upcoming Events Fiscal Sponsorship Newsletters Resources Business Development Beginning Farmers Business Planning Funding 101 Product Development Land Find Farmland Land Management Land Owners ​ Sales & Marketing Certifications Farm to Institution Sales Readiness Marketing Additional Resources Antibiotic Stewardship Legal Resources Video Library Get Involved Request 1:1 Support Join Our Team Contact Donate Wholesale Marketing Accelerator | 3-Part Series Wed, Jan 13 | Webinar series Build the marketing strategies and systems to make wholesale work for your farm or food business in this no-cost online short course. Time & Location Jan 13, 2027, 2:00 PM – 3:30 PM Webinar series Other dates Wed, Jan 06, 2:00 PM Wed, Jan 20, 2:00 PM About the event Ready to level up your farm or food business into wholesale? This three-part webinar series will help you build the marketing strategies and systems to make wholesale work for your business. For those just getting started or looking to strengthen existing sales, we'll cover practical tools for finding the right buyers, managing bulk orders, and promoting your products at scale across New York and beyond. January 6, 2027 | Sales Channel & Pricing Strategy 2 PM EST."
+    },
+    {
+      "id": "check-page-484c273baf",
+      "url": "https://www.cadefarms.org/event-details/wholesale-marketing-accelerator-3-part-series-2027-01-20-14-00",
+      "page": "details",
+      "excerpt": "Wholesale Marketing Accelerator | 3-Part Series | CADE top of page Who We Are About CADE Staff and Board Vision 2050 Reports & Publications What We Do Education 1:1 Support Upcoming Events Fiscal Sponsorship Newsletters Resources Business Development Beginning Farmers Business Planning Funding 101 Product Development Land Find Farmland Land Management Land Owners ​ Sales & Marketing Certifications Farm to Institution Sales Readiness Marketing Additional Resources Antibiotic Stewardship Legal Resources Video Library Get Involved Request 1:1 Support Join Our Team Contact Donate Wholesale Marketing Accelerator | 3-Part Series Wed, Jan 20 | Webinar series Build the marketing strategies and systems to make wholesale work for your farm or food business in this no-cost online short course. Time & Location Jan 20, 2027, 2:00 PM – 3:30 PM Webinar series Other dates Wed, Jan 06, 2:00 PM Wed, Jan 13, 2:00 PM About the event Ready to level up your farm or food business into wholesale? This three-part webinar series will help you build the marketing strategies and systems to make wholesale work for your business. For those just getting started or looking to strengthen existing sales, we'll cover practical tools for finding the right buyers, managing bulk orders, and promoting your products at scale across New York and beyond. January 6, 2027 | Sales Channel & Pricing Strategy 2 PM EST."
+    },
+    {
+      "id": "check-page-29cee0f52f",
+      "url": "https://www.cadefarms.org/programs",
+      "page": "details",
+      "excerpt": "Past Programs | CADE top of page Who We Are About CADE Staff and Board Vision 2050 Reports & Publications What We Do Education 1:1 Support Upcoming Events Fiscal Sponsorship Newsletters Resources Business Development Beginning Farmers Business Planning Funding 101 Product Development Land Find Farmland Land Management Land Owners ​ Sales & Marketing Certifications Farm to Institution Sales Readiness Marketing Additional Resources Antibiotic Stewardship Legal Resources Video Library Get Involved Request 1:1 Support Join Our Team Contact Donate Past Programs Coming Soon! © 2023 - 2025 CADE Farms | All rights reserved. Privacy Policy The Center for Agricultural Development and Entrepreneurship is a 501(c)3, non-profit organization . Newsletters Resources Careers Donate SHOP bottom of page"
     }
   ],
   "findings": {
@@ -27,8 +81,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

@@ -1,12 +1,164 @@
 {
   "programId": "pioneer-technology-center-business-incubator",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://www.pioneertech.edu/documents/about/655648",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/about/by-the-numbers/655653",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/about/foundation/655693",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/about/legal-and-consumer/655736",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/about/legal-and-consumer/title-ix-coordinator-training/655769",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/about/meeting-space/658920",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/adult/career-programs/656708",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/adult/career-programs/basic-peace-officer-certification/656709",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/651500",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/automotive-service-technology/651509",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/biomedical-sciences-academy/651537",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/construction-technology/651546",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/cosmetology/651566",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/criminal-justice/651577",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/culinary-arts/651583",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/firefighter/emt/651588",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/health-careers-certification/651627",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/information-technology/651637",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/mechatronics/651657",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.pioneertech.edu/page/about",
       "page": "details",
       "anchor": "About",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },

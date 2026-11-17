@@ -1,6 +1,6 @@
 {
   "programId": "cchub",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://cchub.africa/",
     "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/",
@@ -16,7 +16,12 @@
     "https://cchub.africa/fbstart-accelerator-by-facebook-and-cchub-opens-applications-for-season-2-and-extends-to-ghana/2019-fbstart-accelerator-website/",
     "https://cchub.africa/global-cleantech-innovation-programme-gcip-nigeria-cycle-2-applications-are-open/",
     "https://cchub.africa/global-cleantech-innovation-programme-gcip-nigeria-cycle-2-applications-are-open/artboard-3-1/",
-    "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/"
+    "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+    "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/bffafrica-banner-08/",
+    "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/ig-a/",
+    "https://cchub.africa/govote-champions-call-for-application/",
+    "https://cchub.africa/govote-champions-call-for-application/govote-champs-opt-2-v2-1/",
+    "https://cchub.africa/govote-champions-call-for-application/govote-champs-opt-2-v2/"
   ],
   "evidence": [
     {
@@ -69,8 +74,22 @@
       "page": "application"
     },
     {
+      "id": "check-email-279138e3ab",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/ig-a/",
+      "title": "CcHUB — application page",
+      "excerpt": "Incubation Innovation Support Design Lab Contact Us info@cchub.africa 294 Herbert Macaulay Way, Sabo Yaba, Lagos, Nigeria",
+      "page": "application"
+    },
+    {
       "id": "check-email-33bde7a92f",
       "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/twitter/",
+      "title": "CcHUB — application page",
+      "excerpt": "Incubation Innovation Support Design Lab Contact Us info@cchub.africa 294 Herbert Macaulay Way, Sabo Yaba, Lagos, Nigeria",
+      "page": "application"
+    },
+    {
+      "id": "check-email-33c4d5a227",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/bffafrica-banner-08/",
       "title": "CcHUB — application page",
       "excerpt": "Incubation Innovation Support Design Lab Contact Us info@cchub.africa 294 Herbert Macaulay Way, Sabo Yaba, Lagos, Nigeria",
       "page": "application"
@@ -90,8 +109,22 @@
       "page": "application"
     },
     {
+      "id": "check-email-3d4c0f99c7",
+      "url": "https://cchub.africa/govote-champions-call-for-application/govote-champs-opt-2-v2/",
+      "title": "CcHUB — application page",
+      "excerpt": "Incubation Innovation Support Design Lab Contact Us info@cchub.africa 294 Herbert Macaulay Way, Sabo Yaba, Lagos, Nigeria",
+      "page": "application"
+    },
+    {
       "id": "check-email-4d443838c1",
       "url": "https://cchub.africa/cchub-cybersecurity-academy-call-for-application/",
+      "title": "CcHUB — application page",
+      "excerpt": "Incubation Innovation Support Design Lab Contact Us info@cchub.africa 294 Herbert Macaulay Way, Sabo Yaba, Lagos, Nigeria",
+      "page": "application"
+    },
+    {
+      "id": "check-email-6767247d29",
+      "url": "https://cchub.africa/govote-champions-call-for-application/govote-champs-opt-2-v2-1/",
       "title": "CcHUB — application page",
       "excerpt": "Incubation Innovation Support Design Lab Contact Us info@cchub.africa 294 Herbert Macaulay Way, Sabo Yaba, Lagos, Nigeria",
       "page": "application"
@@ -106,6 +139,13 @@
     {
       "id": "check-email-69c526e495",
       "url": "https://cchub.africa/fbstart-accelerator-by-facebook-and-cchub-opens-applications-for-season-2-and-extends-to-ghana/",
+      "title": "CcHUB — application page",
+      "excerpt": "Incubation Innovation Support Design Lab Contact Us info@cchub.africa 294 Herbert Macaulay Way, Sabo Yaba, Lagos, Nigeria",
+      "page": "application"
+    },
+    {
+      "id": "check-email-6b313cb89f",
+      "url": "https://cchub.africa/govote-champions-call-for-application/",
       "title": "CcHUB — application page",
       "excerpt": "Incubation Innovation Support Design Lab Contact Us info@cchub.africa 294 Herbert Macaulay Way, Sabo Yaba, Lagos, Nigeria",
       "page": "application"
@@ -237,6 +277,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-1b4ca022d7",
+      "url": "https://cchub.africa/govote-champions-call-for-application/govote-champs-opt-2-v2/",
+      "title": "CcHUB — application page",
+      "excerpt": "Incubation → https://cchub.africa/startups/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-1f4d851989",
       "url": "https://cchub.africa/fbstart-accelerator-by-facebook-and-cchub-opens-applications-for-season-2-and-extends-to-ghana/2019-fbstart-accelerator-website/",
       "title": "CcHUB — application page",
@@ -258,6 +305,20 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-2feb53228f",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/ig-a/",
+      "title": "CcHUB — application page",
+      "excerpt": "Incubation → https://cchub.africa/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-307e2d66b3",
+      "url": "https://cchub.africa/govote-champions-call-for-application/govote-champs-opt-2-v2-1/",
+      "title": "CcHUB — application page",
+      "excerpt": "Startups → https://cchub.africa/startups/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-372eee0ddc",
       "url": "https://cchub.africa/",
       "title": "CcHUB — homepage",
@@ -269,6 +330,13 @@
       "url": "https://cchub.africa/global-cleantech-innovation-programme-gcip-nigeria-cycle-2-applications-are-open/artboard-3-1/",
       "title": "CcHUB — application page",
       "excerpt": "Incubation → https://cchub.africa/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4f24023a2d",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/bffafrica-banner-08/",
+      "title": "CcHUB — application page",
+      "excerpt": "Startups → https://cchub.africa/startups/",
       "page": "application"
     },
     {
@@ -302,6 +370,13 @@
     {
       "id": "check-portfolio-5c5b0c9f6d",
       "url": "https://cchub.africa/cchub-cybersecurity-academy-call-for-application/cyber-security/",
+      "title": "CcHUB — application page",
+      "excerpt": "Incubation → https://cchub.africa/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5cb4c490d6",
+      "url": "https://cchub.africa/govote-champions-call-for-application/govote-champs-opt-2-v2-1/",
       "title": "CcHUB — application page",
       "excerpt": "Incubation → https://cchub.africa/startups/",
       "page": "application"
@@ -363,6 +438,20 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-b7647a0ca7",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/ig-a/",
+      "title": "CcHUB — application page",
+      "excerpt": "Startups → https://cchub.africa/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b8f6c416bf",
+      "url": "https://cchub.africa/govote-champions-call-for-application/",
+      "title": "CcHUB — application page",
+      "excerpt": "Incubation → https://cchub.africa/startups/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-c804f87d39",
       "url": "https://cchub.africa/call-for-applications-lets-build-africa/",
       "title": "CcHUB — application page",
@@ -379,6 +468,13 @@
     {
       "id": "check-portfolio-cfaa3b4b7c",
       "url": "https://cchub.africa/cchub-cybersecurity-academy-call-for-application/cyber-security/",
+      "title": "CcHUB — application page",
+      "excerpt": "Startups → https://cchub.africa/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d0f534086f",
+      "url": "https://cchub.africa/govote-champions-call-for-application/",
       "title": "CcHUB — application page",
       "excerpt": "Startups → https://cchub.africa/startups/",
       "page": "application"
@@ -433,10 +529,38 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-f6780bebdf",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/bffafrica-banner-08/",
+      "title": "CcHUB — application page",
+      "excerpt": "Incubation → https://cchub.africa/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f78bc47160",
+      "url": "https://cchub.africa/govote-champions-call-for-application/govote-champs-opt-2-v2/",
+      "title": "CcHUB — application page",
+      "excerpt": "Startups → https://cchub.africa/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-122e1642c1",
+      "url": "https://cchub.africa/govote-champions-call-for-application/govote-champs-opt-2-v2-1/",
+      "title": "CcHUB — application page",
+      "excerpt": "Previous → https://cchub.africa/govote-champions-call-for-application/",
+      "page": "application"
+    },
+    {
       "id": "check-route-17bb10174c",
       "url": "https://cchub.africa/cchub-cybersecurity-academy-call-for-application/cyber-security/",
       "title": "CcHUB — application page",
       "excerpt": "Previous → https://cchub.africa/cchub-cybersecurity-academy-call-for-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-222ee51100",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/ig-a/",
+      "title": "CcHUB — application page",
+      "excerpt": "Previous → https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
       "page": "application"
     },
     {
@@ -482,10 +606,31 @@
       "page": "application"
     },
     {
+      "id": "check-route-ed1ee9fa79",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/bffafrica-banner-08/",
+      "title": "CcHUB — application page",
+      "excerpt": "Previous → https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+      "page": "application"
+    },
+    {
       "id": "check-route-f19fb276c0",
       "url": "https://cchub.africa/co-creation-hub-launches-efiko-mobile-application-for-personalized-learning-in-secondary-schools/",
       "title": "CcHUB — application page",
       "excerpt": "www.cchubnigeria.com → https://cchub.africa/co-creation-hub-launches-efiko-mobile-application-for-personalized-learning-in-secondary-schools/www.cchubnigeria.com",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f3218c1096",
+      "url": "https://cchub.africa/govote-champions-call-for-application/govote-champs-opt-2-v2/",
+      "title": "CcHUB — application page",
+      "excerpt": "Previous → https://cchub.africa/govote-champions-call-for-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f6dfaaec16",
+      "url": "https://cchub.africa/govote-champions-call-for-application/",
+      "title": "CcHUB — application page",
+      "excerpt": "Next → https://cchub.africa/cchub-cybersecurity-academy-call-for-application/",
       "page": "application"
     },
     {
@@ -500,6 +645,13 @@
       "url": "https://cchub.africa/cchub-cybersecurity-academy-call-for-application/",
       "title": "CcHUB — application page",
       "excerpt": "either of the following: Corporate employees Renowned freelancers/contractors Cybersecurity startup founders Applications are now open in Nigeria and Kenya for our very first cohort. What are the perks? Get trained by both top corporate",
+      "page": "application"
+    },
+    {
+      "id": "check-status-440da7ce22",
+      "url": "https://cchub.africa/govote-champions-call-for-application/",
+      "title": "CcHUB — application page",
+      "excerpt": "and leaders in the governance space across Nigeria Stipends, per diems and compensations for work done Applications are open until September 10, 2021 . Previous Next Segun Olamide Samuel Share on Twitter Facebook LinkedIn Stay",
       "page": "application"
     },
     {
@@ -525,10 +677,130 @@
       "excerpt": "Home - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently About us Meet the team Board Members Areas of Focus Startups Innovation Support Home About Us Board Members Areas of Focus COVID-19 Support News & Updates Future of Learning Careers Our Locations Who we are We are the leading pan-African creative and innovation ecosystem enabler. Our mission is to accelerate the application of social capital and technology for economic prosperity across Africa. Our Work Areas Of Focus Creative Economy Higher Education Institution (HEI) Innovation Design for Health Design Lab Education Green and Sustainable Tech iHUB Innovation Support Startup Funding Technology and Society From our Blog Updates Africa Internet Rights Alliance CcHUB at AIRA Convening and Forum on Internet Freedom in Africa United for an Open Africa: Reclaiming Rights and Inclusion in Digital Spaces Technology is advancing exponentially, therefore we must be a part of how it is governed, shape our... 3 weeks ago GCIP Nigeria Meet the Women Behind Solar-Powered Solutions in Nigeria Of the 75 founders in the Global Cleantech Innovation Programme (GCIP) Nigeria, 27 are women. Across Africa, under 10% of all the venture funding raised in 2025 was"
     },
     {
+      "id": "check-page-a1f9d89a34",
+      "url": "https://cchub.africa/",
+      "page": "details",
+      "excerpt": "Across Africa, under 10% of all the venture funding raised in 2025 was invested..."
+    },
+    {
+      "id": "check-page-b577b766f8",
+      "url": "https://cchub.africa/",
+      "page": "details",
+      "excerpt": "3 weeks ago Nigeria GATEWAY Program Expression of interest (EOI): pre-qualification of device vendors for the gateway program About the Program The Nigeria GATEWAY Program is a five-year initiative providing young Nigerians with the skills, tools and infrastructure needed to access meaningful and dignified gig work, with..."
+    },
+    {
+      "id": "check-page-e3c31d52cc",
+      "url": "https://cchub.africa/",
+      "page": "details",
+      "excerpt": "October 13, 2026 Innovation Hubs CcHUB x SAIL Innovation Lab Receives Award of Excellence for Contribution to Youth Job Creation in Nigeria Lagos, Nigeria — September 2026 CcHUB x SAIL Innovation Lab has received an Award of Excellence for its contribution to youth job creation in Nigeria, recognizing its work in..."
+    },
+    {
+      "id": "check-page-d66b9597cb",
+      "url": "https://cchub.africa/",
+      "page": "details",
+      "excerpt": "September 30, 2026 Nigeria GATEWAY Program Call for Expressions of Interest: Short-Term Data Analysis & Data Systems Consultant, GATEWAY Program Duration: 6 weeksDeadline: 9th October 2026, 5:00 PM WAT Co-creation HUB (CcHUB) is looking for an experienced consultant to help GATEWAY make better use of its program data."
+    },
+    {
+      "id": "check-page-b2b7ff0848",
+      "url": "https://cchub.africa/",
+      "page": "details",
+      "excerpt": "September 24, 2026 Innovation Ecosystem From learning to building: a look back at Q2 across Africa’s innovation ecosystem Photo Caption: CcHUB Management welcomes representatives from the Danish delegation during the Danish Tech Ambassador Tour in Q2 2026 Ninety-eight people joined Dev Junction to learn how to build..."
+    },
+    {
+      "id": "check-page-a6d92e7f34",
+      "url": "https://cchub.africa/",
+      "page": "details",
+      "excerpt": "August 11, 2026 AI Trust Shaping the Nigeria AI Trust: Key Conversations from London, Lagos and Abuja Photo Caption: Government leaders, researchers, legal experts, and AI practitioners came together across three convenings to help shape the mandate, governance, and long-term direction of the Nigeria AI Trust. ..."
+    },
+    {
+      "id": "check-page-f33c78e456",
+      "url": "https://cchub.africa/",
+      "page": "details",
+      "excerpt": "August 6, 2026 Mastercard Foundation The Mastercard Foundation EdTech Fellowship Backs 12 Early-Stage Nigerian Startups Advancing Inclusive Education Through Innovation and Evidence Lagos, Nigeria – Thursday, 30 July 2026 Co-creation HUB, in partnership with the Mastercard Foundation, has selected 12 startups for Cohort 4 of the Mastercard Foundation EdTech Fellowship in..."
+    },
+    {
+      "id": "check-page-d732774203",
+      "url": "https://cchub.africa/",
+      "page": "details",
+      "excerpt": "At CcHUB we constantly seek out individuals or teams with good ideas that can potentially solve social challenges in Africa and beyond."
+    },
+    {
       "id": "check-page-6205a3573d",
       "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/",
       "page": "application",
       "excerpt": "Applications are Open for the Africa4Future Aerospace Acceleration Programme powered by Airbus BizLab and GIZ - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently About us Meet the team Board Members Areas of Focus Startups Innovation Support Home About Us Board Members Areas of Focus COVID-19 Support News & Updates Future of Learning Careers Our Locations News | February 10, 2020 Applications are Open for the Africa4Future Aerospace Acceleration Programme powered by Airbus BizLab and GIZ Introducing the launch of the third edition of #Africa4Future, a joint accelerator program between Airbus’ global aerospace accelerator, BizLab and Make-IT in Africa , a programme by the Deutsche Gesellschaft für Internationale Zusammenarbeit German (GIZ), the German agency for International Cooperation. First launched in 2017, the Africa4Future initiative was created by Airbus BizLab with the objective to encourage and support entrepreneurship in Africa. Through Africa4future, Airbus seeks to build bridges between the aerospace industry and the different players in Africa. For this third edition, the accelerator is open to African start-ups, service providers, software companies that are actively working on solutions"
+    },
+    {
+      "id": "check-page-245ceb593c",
+      "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/",
+      "page": "application",
+      "excerpt": "For this third edition, the accelerator is open to African start-ups, service providers, software companies that are actively working on solutions in Agriculture and infrastructure sectors that are related to remote-sensing technology."
+    },
+    {
+      "id": "check-page-3438b1daaa",
+      "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/",
+      "page": "application",
+      "excerpt": "This includes automation, blockchain, artificial intelligence, data analytics, material composites, manufacturing and more."
+    },
+    {
+      "id": "check-page-0aa70ae01a",
+      "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/",
+      "page": "application",
+      "excerpt": "Infrastructure refers to transportation/logistics mapping, water monitoring, waste management, real estate, urban development and other related areas."
+    },
+    {
+      "id": "check-page-b6b18d0e5e",
+      "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/",
+      "page": "application",
+      "excerpt": "To foster and promote the inclusion of sustainable Industry innovation and infrastructure (SDG 9); and Food security, nutrition and agriculture (SDG 2); Airbus BizLab together with its partners will consolidate and make their resources available to the startups to support economic development across Africa (SDG 17)."
+    },
+    {
+      "id": "check-page-a21e56b80e",
+      "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/",
+      "page": "application",
+      "excerpt": "The 3-month programme will include virtual coaching sessions, expert sessions with Airbus experts in Europe, connection to industry experts locally, access to Airbus technologies, 250,000 up42 credit, showcase events in Africa and Europe."
+    },
+    {
+      "id": "check-page-816305328a",
+      "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/",
+      "page": "application",
+      "excerpt": "The program is implemented by Co-Creation Hub (CcHUB) , a Pan-African innovation center with a track record of accelerating the application of social capital and technology for economic prosperity."
+    },
+    {
+      "id": "check-page-d75119218a",
+      "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/",
+      "page": "application",
+      "excerpt": "See more information and apply – http://bit.ly/africa4future Eligibility Criteria We are looking for startups/solution providers/companies that: Create value in Agriculture and Infrastructure sectors Have the ability to leverage remote sensing technologies Have been running operations for at least 1 year."
+    },
+    {
+      "id": "check-page-79f3763b46",
+      "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/",
+      "page": "application",
+      "excerpt": "Have an existing product with traction (customers and/or revenue) Have a strong management team Have experience leveraging partnerships to create impact In addition to the above, companies must be registered in Africa and the founder must be a Citizen of any country on the continent."
+    },
+    {
+      "id": "check-page-efb41ab6f0",
+      "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/",
+      "page": "application",
+      "excerpt": "We will also host information sessions in 5 countries namely :- Nigeria, Kenya, South Africa, Senegal and Morocco; If you are in any of these cities, we look forward to meeting with you."
+    },
+    {
+      "id": "check-page-86a3ff4b12",
+      "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/",
+      "page": "application",
+      "excerpt": "About Partners Airbus BizLab is a global aerospace accelerator, where startups and Airbus intrapreneurs speed up the transformation of innovative ideas into valuable businesses."
+    },
+    {
+      "id": "check-page-b5fed5e084",
+      "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/",
+      "page": "application",
+      "excerpt": "GIZ Make-IT Accelerator offers tech start-ups a program to help them strengthen their growth, cooperation and investment readiness."
+    },
+    {
+      "id": "check-page-b92a7e605e",
+      "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/",
+      "page": "application",
+      "excerpt": "Implementation Partners About CcHUB Co-creation Hub ( CcHUB ) is an innovation centre dedicated to accelerating the application of social capital and technology for economic prosperity."
     },
     {
       "id": "check-page-43acca5f1c",
@@ -543,10 +815,88 @@
       "excerpt": "Artisans and Makers Access to Market Program: Now Open for Applications! - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently About us Meet the team Board Members Areas of Focus Startups Innovation Support Home About Us Board Members Areas of Focus COVID-19 Support News & Updates Future of Learning Careers Our Locations Creative Economy | March 7, 2023 Artisans and Makers Access to Market Program: Now Open for Applications! Artisans and makers in Africa face a significant challenge in reaching their full potential due to limited access to market facilities. This obstacle hinders their ability to reach the critical mass of their target market, leading to poor sales, low revenue, and stunted business growth that can ultimately result in the closure or collapse of the business. One of the key ways to help artisans and makers gain visibility is by supporting them with platforms and digital solutions that create a visibility channel to enhance their sales. By providing an avenue for these creative minds to showcase their skills and reach a broader audience, they can significantly improve their sales and revenue potential. With this in mind, the Creative Economy Practice at CcHUB has teamed up with Taeillo"
     },
     {
+      "id": "check-page-8767ddef3a",
+      "url": "https://cchub.africa/artisans-and-makers-access-to-market-program-now-open-for-applications/",
+      "page": "application",
+      "excerpt": "The program aims to facilitate new market opportunities for artisans and makers by providing them with an E-commerce platform where they can sell their products, expand their visibility, boost sales and grow their businesses."
+    },
+    {
+      "id": "check-page-e8c0d4f759",
+      "url": "https://cchub.africa/artisans-and-makers-access-to-market-program-now-open-for-applications/",
+      "page": "application",
+      "excerpt": "Increased sales and distribution through wider customer visibility and patronage via the Taeillo E-commerce platform."
+    },
+    {
+      "id": "check-page-bad7ce075b",
+      "url": "https://cchub.africa/artisans-and-makers-access-to-market-program-now-open-for-applications/",
+      "page": "application",
+      "excerpt": "Artisans and Makers of the following products: Lamps, Carpets, Mirror, Planters and Plants(Natural and Artificial), Wall Art / Minimalist Art Frames, Candles Diffusers and Home Fragrances, Kitchen Wares, Baskets and Fabrics The artisan/ maker should be based in Lagos, Nigeria or Nairobi, Kenya."
+    },
+    {
+      "id": "check-page-d0f051ebdf",
+      "url": "https://cchub.africa/artisans-and-makers-access-to-market-program-now-open-for-applications/",
+      "page": "application",
+      "excerpt": "Please access the application form here: http://bit.ly/C-AProgram For more information, reach out to us at info@cchubcreativeeconomy.africa Previous Next CcHUB Admin Share on Twitter Facebook LinkedIn Stay connected Join our mailing list to receive updates about our work, including the regular CcHUB newsletter and tailored information."
+    },
+    {
       "id": "check-page-2fc149ee16",
       "url": "https://cchub.africa/call-for-applications-lets-build-africa/",
       "page": "application",
       "excerpt": "Call for Applications: Let’s Build, Africa! - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently About us Meet the team Board Members Areas of Focus Startups Innovation Support Home About Us Board Members Areas of Focus COVID-19 Support News & Updates Future of Learning Careers Our Locations General | May 29, 2024 Call for Applications: Let’s Build, Africa! Are you an African startup ready to expand your horizons and tap into new markets across the continent? Co-creation Hub is excited to announce the launch of “Let’s Build, Africa!” – an innovative market entry program designed to empower African startups for cross-border growth. Program Overview “Let’s Build, Africa!” aims to provide strategic support and insights to startups poised for expansion into new African markets. This program offers a unique opportunity for startups to navigate diverse ecosystems, form strategic partnerships, and scale their businesses across the continent. Objectives Facilitate Cross-Border Expansion: Gain insights and access to new markets across Africa. Strengthen Intercontinental Ties: Collaborate and build investment opportunities with local stakeholders in target markets. Boost Economic Integration: Contribute to the"
+    },
+    {
+      "id": "check-page-673f1e4aef",
+      "url": "https://cchub.africa/call-for-applications-lets-build-africa/",
+      "page": "application",
+      "excerpt": "Boost Economic Integration: Contribute to the economic integration of Africa by facilitating easier market access for innovative businesses."
+    },
+    {
+      "id": "check-page-804bb0e69d",
+      "url": "https://cchub.africa/call-for-applications-lets-build-africa/",
+      "page": "application",
+      "excerpt": "Eligibility Criteria The startup must be registered in an African country."
+    },
+    {
+      "id": "check-page-0aba751f88",
+      "url": "https://cchub.africa/call-for-applications-lets-build-africa/",
+      "page": "application",
+      "excerpt": "At least one of the founders must be an African national."
+    },
+    {
+      "id": "check-page-39ef4f3fa2",
+      "url": "https://cchub.africa/call-for-applications-lets-build-africa/",
+      "page": "application",
+      "excerpt": "The startup should be at the scale-up stage."
+    },
+    {
+      "id": "check-page-7889365300",
+      "url": "https://cchub.africa/call-for-applications-lets-build-africa/",
+      "page": "application",
+      "excerpt": "Experience tailored ecosystem tours in one of the focus countries: Nigeria, Kenya, Rwanda, or Namibia."
+    },
+    {
+      "id": "check-page-60863d7901",
+      "url": "https://cchub.africa/call-for-applications-lets-build-africa/",
+      "page": "application",
+      "excerpt": "If you are ready to take your startup to new heights and explore exciting markets across Africa, apply now for the “Let’s Build, Africa!” program."
+    },
+    {
+      "id": "check-page-c56243b30b",
+      "url": "https://cchub.africa/call-for-applications-lets-build-africa/",
+      "page": "application",
+      "excerpt": "Don’t miss this chance to be part of Africa’s economic growth and innovation landscape."
+    },
+    {
+      "id": "check-page-df799eb47d",
+      "url": "https://cchub.africa/call-for-applications-lets-build-africa/",
+      "page": "application",
+      "excerpt": "Apply here: http://bit.ly/LetsBuildAfrica For more information, contact us at startups@cchub.africa."
+    },
+    {
+      "id": "check-page-a5df93e25d",
+      "url": "https://cchub.africa/call-for-applications-lets-build-africa/",
+      "page": "application",
+      "excerpt": "Let’s build a thriving African startup ecosystem together!"
     },
     {
       "id": "check-page-aba83cb3a8",
@@ -555,10 +905,58 @@
       "excerpt": "Call for Applications: Mastercard Foundation EdTech Fellowship in Nigeria - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently About us Meet the team Board Members Areas of Focus Startups Innovation Support Home About Us Board Members Areas of Focus COVID-19 Support News & Updates Future of Learning Careers Our Locations Applications | December 14, 2023 Call for Applications: Mastercard Foundation EdTech Fellowship in Nigeria If you are an African focused EdTech startup incorporated in Nigeria who is building solutions that address challenges across K-12, tertiary education and vocational skills training, then this call for application is tailored just for you! CcHub and Mastercard Foundation are partnering to empower EdTech startups who are building tools that enhance learning outcomes and accelerate access to equitable and quality education for Africa’s next generation. Startups that make it into our accelerator programme enjoy the following benefits; Exposure to a vibrant network of investors Coaching and mentoring by successful founders and experts Expert advisory from experts across Learning Science, Product development, Marketing, Sales, and Talent Management Access to community of practice to"
     },
     {
+      "id": "check-page-cfb6a9cc5c",
+      "url": "https://cchub.africa/call-for-applications-mastercard-foundation-edtech-fellowship-in-nigeria/",
+      "page": "application",
+      "excerpt": "For those passionate about leveraging technology to transform education and create a more inclusive and equitable learning environment, this fellowship is a pathway to bring your ideas to life and contribute to shaping the future of education in Nigeria."
+    },
+    {
+      "id": "check-page-5e6a132bb2",
+      "url": "https://cchub.africa/call-for-applications-mastercard-foundation-edtech-fellowship-in-nigeria/",
+      "page": "application",
+      "excerpt": "For more information please feel free to email us at edtech@cchub.africa Previous CcHUB Admin Share on Twitter Facebook LinkedIn Stay connected Join our mailing list to receive updates about our work, including the regular CcHUB newsletter and tailored information."
+    },
+    {
       "id": "check-page-41ab462023",
       "url": "https://cchub.africa/cchub-cybersecurity-academy-call-for-application/",
       "page": "application",
       "excerpt": "CcHUB Cybersecurity Academy: Call for Application - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently About us Meet the team Board Members Areas of Focus Startups Innovation Support Home About Us Board Members Areas of Focus COVID-19 Support News & Updates Future of Learning Careers Our Locations Digital Security | September 3, 2021 CcHUB Cybersecurity Academy: Call for Application As more Africans and African businesses participate in the digital economy, the threat and attack risks increase, leaving more room for bad actors and cybercriminals to get involved. Africa already loses $3.5 billion annually to cybercrime, which is projected to reach $5 billion by 2022. Despite this vast market for cybercriminals and the current technology talent explosion across the continent spearheaded by countries like Nigeria, Kenya, and Egypt, there is still a large employability gap in the cybersecurity sector. However, this is not due to a scarcity of cybersecurity talents. The African market is in more demand for skilled cybersecurity talents than certified professionals can fill. This gap is one of the primary reasons for the increased and successful rates of cyberattacks on the continent. This is where the CcHUB"
+    },
+    {
+      "id": "check-page-2b44a90d85",
+      "url": "https://cchub.africa/cchub-cybersecurity-academy-call-for-application/",
+      "page": "application",
+      "excerpt": "This is where the CcHUB Cybersecurity Academy comes in."
+    },
+    {
+      "id": "check-page-e122187055",
+      "url": "https://cchub.africa/cchub-cybersecurity-academy-call-for-application/",
+      "page": "application",
+      "excerpt": "The CcHUB Cybersecurity Academy is an institute focused on refining raw, technical talents in cybersecurity."
+    },
+    {
+      "id": "check-page-39dd7c9cc7",
+      "url": "https://cchub.africa/cchub-cybersecurity-academy-call-for-application/",
+      "page": "application",
+      "excerpt": "The goal is to hatch professionals ready for the business world either as engineers or technical founders, help them get jobs with our clients in and out of the continent, or support them in starting their own cybersecurity companies."
+    },
+    {
+      "id": "check-page-f8eb343ab7",
+      "url": "https://cchub.africa/cchub-cybersecurity-academy-call-for-application/",
+      "page": "application",
+      "excerpt": "Who is the CcHUB Cybersecurity Academy for: Freelance technical talents who have learnt cybersecurity on their own by sheer will and are interested in becoming either of the following: Corporate employees Renowned freelancers/contractors Cybersecurity startup founders Applications are now open in Nigeria and Kenya for our very first cohort."
+    },
+    {
+      "id": "check-page-ce3dd3fe70",
+      "url": "https://cchub.africa/cchub-cybersecurity-academy-call-for-application/",
+      "page": "application",
+      "excerpt": "Get trained by both top corporate Business and Cybersecurity professionals on the continent in the following domains : Cloud Security Threat Intelligence Pentesting and Vulnerability Management Communication and Personal Branding Startup and Innovation Ecosystem Get a 1-3 month paid placement within a core cybersecurity/business environment to corroborate their technical/theoretical knowledge."
+    },
+    {
+      "id": "check-page-0ce4483b9e",
+      "url": "https://cchub.africa/cchub-cybersecurity-academy-call-for-application/",
+      "page": "application",
+      "excerpt": "Gain entry into a pipeline where they will be recommended and work with the partners, clients, and subsidiaries of Co-Creation Hub across Africa."
     },
     {
       "id": "check-page-481f51c7c3",
@@ -579,10 +977,76 @@
       "excerpt": "Co-Creation Hub Launches EFIKO Mobile Application for Secondary Schools - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently About us Meet the team Board Members Areas of Focus Startups Innovation Support Home About Us Board Members Areas of Focus COVID-19 Support News & Updates Future of Learning Careers Our Locations General | January 23, 2013 Co-Creation Hub Launches EFIKO Mobile Application for Secondary Schools Friday January 18, 2013 Co-Creation Hub, Nigeria’s foremost social innovation centre in Nigeria, launched the EFIKO Mobile Application. The launch took place at the Co-Creation Hub in Yaba, Lagos and included an award ceremony for students who excelled using the platform during its pilot test in Lagos. With sponsorship support from Samsung Electronics West Africa, each winner from the pilot test received a Samsung Chief Hero E1500 mobile phone which they can use to download the EFIKO Mobile Application. EFIKO is a mobile social quiz platform designed to enhance learning through self-assessment with topical quizzes tied to the National School Curriculum. EFIKO is available on multiple platforms such as Android, Nokia S40 and mobile web for other mobile devices ( www.efiko.com.ng ) and for"
     },
     {
+      "id": "check-page-1309265460",
+      "url": "https://cchub.africa/co-creation-hub-launches-efiko-mobile-application-for-personalized-learning-in-secondary-schools/",
+      "page": "application",
+      "excerpt": "EFIKO was conceptualized and developed at Tech-In-Education ( www . tech – in . org ), a 48-hour gathering of ideas, people and digital tools aimed at creating novel web & mobile solutions to improve learning at primary and secondary school levels in Nigeria run by the Co-Creation Hub ( www . cchubnigeria . com ) in February 2012."
+    },
+    {
+      "id": "check-page-d990f2a49c",
+      "url": "https://cchub.africa/co-creation-hub-launches-efiko-mobile-application-for-personalized-learning-in-secondary-schools/",
+      "page": "application",
+      "excerpt": "Oyekanmi Bolade who is in charge of Digital, Mobile Content and Services, Samsung Electronics West Africa, “We will always support creativity and innovation this is why we have partnered with the Co-Creation Hub, to support the Efiko project."
+    },
+    {
+      "id": "check-page-c1e29a376e",
+      "url": "https://cchub.africa/co-creation-hub-launches-efiko-mobile-application-for-personalized-learning-in-secondary-schools/",
+      "page": "application",
+      "excerpt": "Our technology hub which is the first in Nigeria serves as an Open Living Lab in which user-driven innovation is fully integrated in the co-creative process of new services, products and societal infrastructures."
+    },
+    {
+      "id": "check-page-b566ac4792",
+      "url": "https://cchub.africa/co-creation-hub-launches-efiko-mobile-application-for-personalized-learning-in-secondary-schools/",
+      "page": "application",
+      "excerpt": "CcHUB’s methodology is hinged on engaging a community of progressive stakeholders (end-users, subject matter experts, government agencies, businesses, academics, civil societies etc.) who bring their creativity and knowledge to play in co-creating solutions to social challenges faced by the average Nigerian through our open living labs ."
+    },
+    {
+      "id": "check-page-e1ca6808aa",
+      "url": "https://cchub.africa/co-creation-hub-launches-efiko-mobile-application-for-personalized-learning-in-secondary-schools/",
+      "page": "application",
+      "excerpt": "The resulting innovations are then supported to become sustainable market solutions by providing proactive business support, advice, mentorship and funding through our pre-incubation & research unit ."
+    },
+    {
+      "id": "check-page-a473f409f1",
+      "url": "https://cchub.africa/co-creation-hub-launches-efiko-mobile-application-for-personalized-learning-in-secondary-schools/",
+      "page": "application",
+      "excerpt": "For more information, visit www.cchubnigeria.com Previous Next Admin @Cc_HUB We are an innovation centre dedicated to accelerating the application of social capital and technology for economic prosperity Share on Twitter Facebook LinkedIn Stay connected Join our mailing list to receive updates about our work, including the regular CcHUB newsletter and tailored information."
+    },
+    {
       "id": "check-page-e1e2c4b990",
       "url": "https://cchub.africa/fbstart-accelerator-by-facebook-and-cchub-opens-applications-for-season-2-and-extends-to-ghana/",
       "page": "application",
       "excerpt": "FbStart Accelerator, by Facebook and CcHUB, opens applications for Season 2 and extends to Ghana. - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently About us Meet the team Board Members Areas of Focus Startups Innovation Support Home About Us Board Members Areas of Focus COVID-19 Support News & Updates Future of Learning Careers Our Locations Uncategorized | May 14, 2019 FbStart Accelerator, by Facebook and CcHUB, opens applications for Season 2 and extends to Ghana. Tuesday 14th May 2019 Lagos, Nigeria. Facebook and Co-Creation Hub (CcHUB) have started accepting applications for Season 2 of the FbStart Accelerator and have opened the program to Ghanian innovators as well. If you’re building a solution that leverages advanced technologies (AI, IoT, Data Science & Extended Reality) in Nigeria and Ghana, the accelerator is designed to help you grow. As a renewal of its commitment in supporting young innovators and entrepreneurs across Africa, Facebook announced Season 2 following the successful launch of the programme in 2018, which saw 15 startup and student teams graduate on April 12th 2019. As at April 2019, the graduating teams had cumulatively raised $400,000+ in investments and grants. FbStart"
+    },
+    {
+      "id": "check-page-06b186b2dd",
+      "url": "https://cchub.africa/fbstart-accelerator-by-facebook-and-cchub-opens-applications-for-season-2-and-extends-to-ghana/",
+      "page": "application",
+      "excerpt": "FbStart Accelerator Season 2 will be made up of 12 student and startup teams receiving up to $20,000 in equity-funding, one-on-one mentorship from Facebook & CcHUB, access to corporates, industry experts, $16,000 in product credits and more."
+    },
+    {
+      "id": "check-page-6b26b02d64",
+      "url": "https://cchub.africa/fbstart-accelerator-by-facebook-and-cchub-opens-applications-for-season-2-and-extends-to-ghana/",
+      "page": "application",
+      "excerpt": "Kendra Nnachi, Startups and Developer Programs Manager at Facebook, said: “We’re delighted to be bringing back the FbStart Accelerator programme to Nigeria for the second year, and now expanding this to applicants from Ghana."
+    },
+    {
+      "id": "check-page-2f1e9f2919",
+      "url": "https://cchub.africa/fbstart-accelerator-by-facebook-and-cchub-opens-applications-for-season-2-and-extends-to-ghana/",
+      "page": "application",
+      "excerpt": "Our team had the best possible support from some of the most diligent tech facilitators in addition to the immense financial and infrastructural support we got” “We are thrilled to be renewing our support to innovators who are building the future of Africa today."
+    },
+    {
+      "id": "check-page-4c6e291ed7",
+      "url": "https://cchub.africa/fbstart-accelerator-by-facebook-and-cchub-opens-applications-for-season-2-and-extends-to-ghana/",
+      "page": "application",
+      "excerpt": "By renewing our partnership with Facebook, we would continue to deepen adoption of advanced technologies across Africa and inspire the next generation of innovators to compete globally” – Bosun Tijani, Chief Executive Officer/Co-founder, CcHUB."
+    },
+    {
+      "id": "check-page-24afca4cc4",
+      "url": "https://cchub.africa/fbstart-accelerator-by-facebook-and-cchub-opens-applications-for-season-2-and-extends-to-ghana/",
+      "page": "application",
+      "excerpt": "Like in 2018, Facebook, CcHUB and partner hubs will also hold roadshow events in 10 states across the country, aimed at enlightening students and entrepreneurs about deep-tech, whilst encouraging them to build solutions with advanced technologies and promote the program."
     },
     {
       "id": "check-page-d3a6d86a69",
@@ -597,6 +1061,54 @@
       "excerpt": "Global Cleantech Innovation Programme (GCIP-Nigeria), Cycle 2: Applications are open! - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently About us Meet the team Board Members Areas of Focus Startups Innovation Support Home About Us Board Members Areas of Focus COVID-19 Support News & Updates Future of Learning Careers Our Locations Applications | April 24, 2023 Global Cleantech Innovation Programme (GCIP-Nigeria), Cycle 2: Applications are open! Co-creation Hub , in partnership with the Government of Nigeria, represented by the Federal Ministry of Science, Technology, and Innovation (FMSTI ) and the Rural Electrification Agency (REA) , is excited to introduce the second cycle of the Global Cleantech Innovation Programme (GCIP-Nigeria) . The GCIP is being implemented in collaboration with the United Nations Industrial Development Organization (UNIDO) and funded by the Global Environment Facility (GEF) . The application deadline is May 5, 2023. The GCIP is seeking innovative, scalable, and market-driven solutions from entrepreneurs, start-ups, and researchers across Nigeria that are promoting cleantech innovation and entrepreneurship to address the most pressing climate and environmental challenges."
     },
     {
+      "id": "check-page-bb6af97bd1",
+      "url": "https://cchub.africa/global-cleantech-innovation-programme-gcip-nigeria-cycle-2-applications-are-open/",
+      "page": "application",
+      "excerpt": "Climate change is a global challenge requiring urgent action."
+    },
+    {
+      "id": "check-page-8117a5ac57",
+      "url": "https://cchub.africa/global-cleantech-innovation-programme-gcip-nigeria-cycle-2-applications-are-open/",
+      "page": "application",
+      "excerpt": "At the same time, the demand for energy and resources keeps increasing, especially in emerging markets and developing economies."
+    },
+    {
+      "id": "check-page-d4aaa5832f",
+      "url": "https://cchub.africa/global-cleantech-innovation-programme-gcip-nigeria-cycle-2-applications-are-open/",
+      "page": "application",
+      "excerpt": "Innovative cleantech entrepreneurship plays a key role in climate action by supporting the transition towards sustainable economies while also creating green jobs."
+    },
+    {
+      "id": "check-page-48178931c9",
+      "url": "https://cchub.africa/global-cleantech-innovation-programme-gcip-nigeria-cycle-2-applications-are-open/",
+      "page": "application",
+      "excerpt": "Being the engines for growth and innovation, small and medium-sized enterprises (SMEs) can lead this transition by developing cutting-edge technologies, products and services."
+    },
+    {
+      "id": "check-page-0d97ee8995",
+      "url": "https://cchub.africa/global-cleantech-innovation-programme-gcip-nigeria-cycle-2-applications-are-open/",
+      "page": "application",
+      "excerpt": "The GCIP will address the difficulties faced by Cleantech Innovators, such as lack of technical support, limited access to funding, a weak cleantech ecosystem, weak policy and regulatory environment, and institutional barriers, among others."
+    },
+    {
+      "id": "check-page-277fdbf009",
+      "url": "https://cchub.africa/global-cleantech-innovation-programme-gcip-nigeria-cycle-2-applications-are-open/",
+      "page": "application",
+      "excerpt": "The programme will provide selected participants with comprehensive training, mentorship, and networking opportunities, as well as the chance to compete for financial and in-kind support."
+    },
+    {
+      "id": "check-page-ae0aa61a42",
+      "url": "https://cchub.africa/global-cleantech-innovation-programme-gcip-nigeria-cycle-2-applications-are-open/",
+      "page": "application",
+      "excerpt": "Apply here gcip.tech Application Deadline: May 12th, 2023 Call for Mentors!"
+    },
+    {
+      "id": "check-page-091ec8b3af",
+      "url": "https://cchub.africa/global-cleantech-innovation-programme-gcip-nigeria-cycle-2-applications-are-open/",
+      "page": "application",
+      "excerpt": "We are on a quest to accelerate the growth of the Cleantech community in Nigeria and are looking for mentors, coaches and experts to support this."
+    },
+    {
       "id": "check-page-639a3d0b5e",
       "url": "https://cchub.africa/global-cleantech-innovation-programme-gcip-nigeria-cycle-2-applications-are-open/artboard-3-1/",
       "page": "application",
@@ -607,6 +1119,114 @@
       "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
       "page": "application",
       "excerpt": "Google for Startups Black Founders Fund Africa: Apply Now! - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently About us Meet the team Board Members Areas of Focus Startups Innovation Support Home About Us Board Members Areas of Focus COVID-19 Support News & Updates Future of Learning Careers Our Locations Applications | June 29, 2021 Google for Startups Black Founders Fund Africa: Apply Now! We are excited to announce that Google for Startups has launched the Black Founders Fund in Africa and we have partnered with the team to lead the disbursement of the fund. This fund will provide grants, Google platform credits and technical support to early-stage startups in Africa to grow their companies and create meaningful impact in their communities. The aim of the fund is to bridge the existing fundraising gap for startup founders in Africa’s fast-growing technology landscape. At CcHUB, we are proud to be working with the Google team as Fund Disbursement partner. Our team will be actively involved in the process providing insight and technical support from the selection process through to the final deployment of the capital. We would also monitor and evaluate the performance of the companies that benefit"
+    },
+    {
+      "id": "check-page-1ae90b84d4",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+      "page": "application",
+      "excerpt": "Speaking on the launch of the Google For Startups Black Founders Fund programme, Bosun Tijani, CEO Co-Creation Hub (CcHUB) and iHub, says, It is heartwarming to see Google’s continued commitment to strengthening and elevating the start-up ecosystem in Africa."
+    },
+    {
+      "id": "check-page-936fdc993d",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+      "page": "application",
+      "excerpt": "Google was one of the early believers in tech entrepreneurs across Africa and the evolution of the support over the last 10 years reflect a thoughtful and contextualized commitment."
+    },
+    {
+      "id": "check-page-2f45447f46",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+      "page": "application",
+      "excerpt": "What are the benefits of the Black Founders Fund Africa?"
+    },
+    {
+      "id": "check-page-5ded6d96ce",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+      "page": "application",
+      "excerpt": "The fund, which is a $3M non-dilutive (equity-free) fund, will be allocated across a pipeline of 50 investable early-stage startups in Africa."
+    },
+    {
+      "id": "check-page-36ab7d5442",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+      "page": "application",
+      "excerpt": "Selected companies will receive the following: Up to $100,000 in cash awards."
+    },
+    {
+      "id": "check-page-de7ee9daef",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+      "page": "application",
+      "excerpt": "Funding varies according to each startup’s product development stage, current needs, and how much they’ve already raised. $220,000 in Google Cloud Credits and Ad Grants."
+    },
+    {
+      "id": "check-page-5d657c2ff1",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+      "page": "application",
+      "excerpt": "Mentoring, technical and scaling assistance from the best of Google and its resources."
+    },
+    {
+      "id": "check-page-362baf1368",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+      "page": "application",
+      "excerpt": "What is the eligibility criteria for the Black Founders Fund Africa?"
+    },
+    {
+      "id": "check-page-f27490dbee",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+      "page": "application",
+      "excerpt": "A startup that is headquartered in Africa or has a legal presence on the continent."
+    },
+    {
+      "id": "check-page-c684c3eadd",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+      "page": "application",
+      "excerpt": "Eligible countries: Botswana, Cameroon, Côte d’Ivoire, Ethiopia, Ghana, Kenya, Mozambique, Nigeria, Rwanda, South Africa, Tanzania, Uganda, and Zimbabwe."
+    },
+    {
+      "id": "check-page-c2500b8d4a",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+      "page": "application",
+      "excerpt": "How to apply for the Google for Startups Black Founders Fund Africa To learn more about the fund and apply: APPLY NOW We will also be having an info session aimed at helping prospective applicants get a deeper dive into the fund- the application process including the form, eligibility criteria, benefits, and other relevant information."
+    },
+    {
+      "id": "check-page-68c639b4cc",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+      "page": "application",
+      "excerpt": "Black Founders Fund Africa Info Session Details: Date: Thursday, 1st of July, 2021 Time: 10.00 am GMT Venue: goo.gle/BFFAfricaTownhall Duration: 1 hour Previous Next Segun Olamide Samuel Share on Twitter Facebook LinkedIn Stay connected Join our mailing list to receive updates about our work, including the regular CcHUB newsletter and tailored information."
+    },
+    {
+      "id": "check-page-74fc02f03f",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/bffafrica-banner-08/",
+      "page": "application",
+      "excerpt": "BFFAfrica-banner-08 - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently About us Meet the team Board Members Areas of Focus Startups Innovation Support Home About Us Board Members Areas of Focus COVID-19 Support News & Updates Future of Learning Careers Our Locations | June 29, 2021 BFFAfrica-banner-08 Previous Segun Olamide Samuel Share on Twitter Facebook LinkedIn Stay connected Join our mailing list to receive updates about our work, including the regular CcHUB newsletter and tailored information. First name Last name Your email address Subscribe! Useful Links Our Blog Careers Design Lab Student Community Our Locations Privacy Policy ESMS Policy Environmental and Social Management Plan Policy DSAR Form CcHUB’s Child Protection, Safeguarding & Digital Security Charter Whistleblowing Policy Areas Of Focus Smart Infrastructure Governance Health & Well-being FinTech Education Digital Security Startup Support Growth Capital Fund PitchDrive COVID-19 Support Units re:learn Incubation Innovation Support Design Lab Contact Us info@cchub.africa 294 Herbert Macaulay Way, Sabo Yaba, Lagos, Nigeria Co-creation HUB Limited is a company registered in Nigeria (RC 918335). All Rights Reserved."
+    },
+    {
+      "id": "check-page-580d902335",
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/ig-a/",
+      "page": "application",
+      "excerpt": "Google for Startups Black Founders Fund - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently About us Meet the team Board Members Areas of Focus Startups Innovation Support Home About Us Board Members Areas of Focus COVID-19 Support News & Updates Future of Learning Careers Our Locations | June 29, 2021 Google for Startups Black Founders Fund Previous Segun Olamide Samuel Share on Twitter Facebook LinkedIn Stay connected Join our mailing list to receive updates about our work, including the regular CcHUB newsletter and tailored information. First name Last name Your email address Subscribe! Useful Links Our Blog Careers Design Lab Student Community Our Locations Privacy Policy ESMS Policy Environmental and Social Management Plan Policy DSAR Form CcHUB’s Child Protection, Safeguarding & Digital Security Charter Whistleblowing Policy Areas Of Focus Smart Infrastructure Governance Health & Well-being FinTech Education Digital Security Startup Support Growth Capital Fund PitchDrive COVID-19 Support Units re:learn Incubation Innovation Support Design Lab Contact Us info@cchub.africa 294 Herbert Macaulay Way, Sabo Yaba, Lagos, Nigeria Co-creation HUB Limited is a company registered in Nigeria (RC 918335)."
+    },
+    {
+      "id": "check-page-3942045b01",
+      "url": "https://cchub.africa/govote-champions-call-for-application/",
+      "page": "application",
+      "excerpt": "GoVote Champions: Call for Application - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently About us Meet the team Board Members Areas of Focus Startups Innovation Support Home About Us Board Members Areas of Focus COVID-19 Support News & Updates Future of Learning Careers Our Locations Technology and Society | August 18, 2021 GoVote Champions: Call for Application Elections are a critical determinant of how our society is run, as such everyone needs to be involved as we all are affected by their outcomes. In 2019 only 34.75% of registered voters in Nigeria went to the polls to cast their ballots. This means that for every 10 eligible voters, less than four voted in the 2019 presidential elections. Over the years, Co-Creation Hub in partnership with Enough is Enough Nigeria has supported voter education in Nigerian to simplify the voter registration process and encourage people to go to the polls. Using www.govote.ng , we have reached over 200,000 people using offline and online mechanisms. As we expand into more communities and states across Nigeria, we are inviting you to become one of our champions and community leaders to drive voter education and election awareness campaigns in your community of"
+    },
+    {
+      "id": "check-page-a9e8d1f5ce",
+      "url": "https://cchub.africa/govote-champions-call-for-application/",
+      "page": "application",
+      "excerpt": "As we expand into more communities and states across Nigeria, we are inviting you to become one of our champions and community leaders to drive voter education and election awareness campaigns in your community of influence – whether offline or online."
+    },
+    {
+      "id": "check-page-b203d48716",
+      "url": "https://cchub.africa/govote-champions-call-for-application/govote-champs-opt-2-v2-1/",
+      "page": "application",
+      "excerpt": "Govote-Champs-Opt.2-v2-1 - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently About us Meet the team Board Members Areas of Focus Startups Innovation Support Home About Us Board Members Areas of Focus COVID-19 Support News & Updates Future of Learning Careers Our Locations | August 19, 2021 Govote-Champs-Opt.2-v2-1 Previous Segun Olamide Samuel Share on Twitter Facebook LinkedIn Stay connected Join our mailing list to receive updates about our work, including the regular CcHUB newsletter and tailored information. First name Last name Your email address Subscribe! Useful Links Our Blog Careers Design Lab Student Community Our Locations Privacy Policy ESMS Policy Environmental and Social Management Plan Policy DSAR Form CcHUB’s Child Protection, Safeguarding & Digital Security Charter Whistleblowing Policy Areas Of Focus Smart Infrastructure Governance Health & Well-being FinTech Education Digital Security Startup Support Growth Capital Fund PitchDrive COVID-19 Support Units re:learn Incubation Innovation Support Design Lab Contact Us info@cchub.africa 294 Herbert Macaulay Way, Sabo Yaba, Lagos, Nigeria Co-creation HUB Limited is a company registered in Nigeria (RC 918335). All Rights Reserved."
+    },
+    {
+      "id": "check-page-27c4d6f8fc",
+      "url": "https://cchub.africa/govote-champions-call-for-application/govote-champs-opt-2-v2/",
+      "page": "application",
+      "excerpt": "GoVote Champions - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently About us Meet the team Board Members Areas of Focus Startups Innovation Support Home About Us Board Members Areas of Focus COVID-19 Support News & Updates Future of Learning Careers Our Locations | August 18, 2021 GoVote Champions Previous Segun Olamide Samuel Share on Twitter Facebook LinkedIn Stay connected Join our mailing list to receive updates about our work, including the regular CcHUB newsletter and tailored information. First name Last name Your email address Subscribe! Useful Links Our Blog Careers Design Lab Student Community Our Locations Privacy Policy ESMS Policy Environmental and Social Management Plan Policy DSAR Form CcHUB’s Child Protection, Safeguarding & Digital Security Charter Whistleblowing Policy Areas Of Focus Smart Infrastructure Governance Health & Well-being FinTech Education Digital Security Startup Support Growth Capital Fund PitchDrive COVID-19 Support Units re:learn Incubation Innovation Support Design Lab Contact Us info@cchub.africa 294 Herbert Macaulay Way, Sabo Yaba, Lagos, Nigeria Co-creation HUB Limited is a company registered in Nigeria (RC 918335). All Rights Reserved."
     }
   ],
   "findings": {

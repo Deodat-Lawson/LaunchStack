@@ -1,6 +1,6 @@
 {
   "programId": "backstage-capital",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://backstagecapital.com/accelerator/",
@@ -16,6 +16,22 @@
       "anchor": "",
       "fetched": true,
       "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://backstagecapital.com/accelerator/5yr/”https:/tpinsights.com/”",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://backstagecapital.com/accelerator/5yr/”https:/www.backstagecrowd.com/”",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -75,6 +91,22 @@
       "origin": "official"
     },
     {
+      "url": "https://backstagecapital.com/accelerator/cities/philadelphia/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://backstagecapital.com/apply",
       "page": "application",
       "anchor": "",
@@ -99,10 +131,26 @@
       "origin": "official"
     },
     {
+      "url": "https://backstagecapital.com/crew/alumni/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://backstagecapital.com/headliners/",
       "page": "portfolio",
       "anchor": "Portfolio",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://backstagecapital.com/headliners/a-kids-company-about/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

@@ -1,6 +1,6 @@
 {
   "programId": "openspace",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.openspacecapital.com/companies",
@@ -30,7 +30,7 @@
       "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-cheak",
       "page": "portfolio",
       "anchor": "",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -38,7 +38,7 @@
       "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-janji-jiwa",
       "page": "portfolio",
       "anchor": "",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -46,7 +46,7 @@
       "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-love-bonito",
       "page": "portfolio",
       "anchor": "",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -54,63 +54,7 @@
       "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-sarisuki",
       "page": "portfolio",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.openspacecapital.com/portfolio/amp",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.openspacecapital.com/portfolio/ampd",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.openspacecapital.com/portfolio/beleaf",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.openspacecapital.com/portfolio/briohr",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.openspacecapital.com/portfolio/broom",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.openspacecapital.com/portfolio/chope",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.openspacecapital.com/portfolio/copilotiq",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     }

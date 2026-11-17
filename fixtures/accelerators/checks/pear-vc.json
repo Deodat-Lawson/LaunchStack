@@ -1,10 +1,9 @@
 {
   "programId": "pear-vc",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://pear.vc/",
     "https://pear.vc/apply-to-pear-founder-circles-for-female-engineers/",
-    "https://pear.vc/events/ai-for-climate-todays-machine-learning-applications-with-pachama-floodbase-streamline-and-climatechangeai/",
     "https://pear.vc/pearx-application/",
     "https://pear.vc/pearx-s25-applications-are-now-open/",
     "https://pear.vc/pearx-s26-applications/",
@@ -15,8 +14,14 @@
     "https://pear.vc/pear-fellows-2022-cohort/",
     "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
     "https://pear.vc/debunking-common-myths-what-technical-founders-need-to-know-about-sales/",
+    "https://pear.vc/introducing-pearx-a-new-era-of-the-pear-accelerator/",
+    "https://pear.vc/celebrating-100-hires-for-pear-companies-%f0%9f%a5%b3/",
+    "https://pear.vc/pear-portfolio-company-bioage-labs-announces-oversubscribed-170m-series-d-financing-to-drive-development-of-obesity-and-metabolic-disease-therapeutics/",
+    "https://pear.vc/pearx-alumni-company-via-acquired-by-justworks/",
+    "https://pear.vc/pearx-s20-alumni-company-sequel-receives-fda-approval/",
+    "https://pear.vc/events/ai-for-climate-todays-machine-learning-applications-with-pachama-floodbase-streamline-and-climatechangeai/",
     "https://pear.vc/events/everything-you-need-to-know-about-making-your-first-hire/",
-    "https://pear.vc/introducing-pearx-a-new-era-of-the-pear-accelerator/"
+    "https://pear.vc/companies/"
   ],
   "evidence": [
     {
@@ -181,6 +186,20 @@
       "page": "application"
     },
     {
+      "id": "check-format-008ec22ea9",
+      "url": "https://pear.vc/companies/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "editing video Seed link Rely Health Healthcare Rely Health Hybrid human-AI care navigation for health systems Series A link",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-15b5095b7f",
+      "url": "https://pear.vc/companies/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "Seed Series B link Neura Health Healthcare Neura Health Virtual clinic for neurological conditions like migraine and",
+      "page": "portfolio"
+    },
+    {
       "id": "check-format-1d54f744c1",
       "url": "https://pear.vc/events/everything-you-need-to-know-about-making-your-first-hire/",
       "title": "Pear VC — program page",
@@ -200,6 +219,13 @@
       "title": "Pear VC — program page",
       "excerpt": "VC: PearX S24 Virtual Demo Day link September 18, 2024 Virtual · 10:00 AM - 10:45 AM Winning Wednesdays with Pear VC:",
       "page": "details"
+    },
+    {
+      "id": "check-format-2393ba1b38",
+      "url": "https://pear.vc/celebrating-100-hires-for-pear-companies-%f0%9f%a5%b3/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "or hybrid roles, with only 25% of positions being remote. If you’re a founder interested in learning more about our",
+      "page": "portfolio"
     },
     {
       "id": "check-format-266d7edd44",
@@ -265,6 +291,13 @@
       "page": "details"
     },
     {
+      "id": "check-format-4eb87304eb",
+      "url": "https://pear.vc/celebrating-100-hires-for-pear-companies-%f0%9f%a5%b3/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "Stanford, CMU or Berkeley. Hiring has shifted back to in-person or hybrid roles, with only 25% of positions being remote.",
+      "page": "portfolio"
+    },
+    {
       "id": "check-format-51d8f1dd14",
       "url": "https://pear.vc/events/ai-for-climate-todays-machine-learning-applications-with-pachama-floodbase-streamline-and-climatechangeai/",
       "title": "Pear VC — application page",
@@ -286,11 +319,25 @@
       "page": "details"
     },
     {
+      "id": "check-format-66f0073a40",
+      "url": "https://pear.vc/pearx-s20-alumni-company-sequel-receives-fda-approval/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "still called Tempo. And even though it was unexpectedly a virtual cohort, it was an outstanding PearX class, with many other",
+      "page": "portfolio"
+    },
+    {
       "id": "check-format-6c82a2c31e",
       "url": "https://pear.vc/events/everything-you-need-to-know-about-making-your-first-hire/",
       "title": "Pear VC — program page",
       "excerpt": "Speaking and Selling with Confidence link July 11, 2024 Virtual · 10:00 AM - 11:00 AM Founder Immigration 101 link",
       "page": "details"
+    },
+    {
+      "id": "check-format-71d58caf1c",
+      "url": "https://pear.vc/companies/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "and design Pre-seed Series D link Aviary Healthcare Aviary Virtual cardiac and pulmonary rehab platform for health systems",
+      "page": "portfolio"
     },
     {
       "id": "check-format-7c250d30ce",
@@ -342,6 +389,20 @@
       "page": "application"
     },
     {
+      "id": "check-format-96dbe138e3",
+      "url": "https://pear.vc/companies/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "Series A link Greatly Health Healthcare Greatly Health Virtual integrative oncology care for cancer patients Seed link",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-9ce9d4c569",
+      "url": "https://pear.vc/companies/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "A link Counsel Health Healthcare Counsel Health AI-powered virtual care with physician oversight Seed Acquired link Covalent",
+      "page": "portfolio"
+    },
+    {
       "id": "check-format-9d8f5cb7ed",
       "url": "https://pear.vc/events/everything-you-need-to-know-about-making-your-first-hire/",
       "title": "Pear VC — program page",
@@ -368,6 +429,13 @@
       "title": "Pear VC — application page",
       "excerpt": "The Next Frontier in AI with Edward Hu link May 25, 2023 Virtual - Zoom · 10:30 AM Virtual PearX W23 Demo Day link May 31,",
       "page": "application"
+    },
+    {
+      "id": "check-format-b46412b6ca",
+      "url": "https://pear.vc/companies/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "Pre-Seed link Seven Starling Healthcare Seven Starling Virtual mental health care for mothers and women Pre-seed Series A",
+      "page": "portfolio"
     },
     {
       "id": "check-format-b74ac105f1",
@@ -452,6 +520,13 @@
       "title": "Pear VC — program page",
       "excerpt": "Pear Studio SF MIT Founder Happy Hour link April 30, 2025 Virtual Winning Wednesdays: Partnership Selling 101 link April 24,",
       "page": "details"
+    },
+    {
+      "id": "check-format-e406d91b36",
+      "url": "https://pear.vc/celebrating-100-hires-for-pear-companies-%f0%9f%a5%b3/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "CMU or Berkeley. Hiring has shifted back to in-person or hybrid roles, with only 25% of positions being remote. If you’re",
+      "page": "portfolio"
     },
     {
       "id": "check-format-f61b88afae",
@@ -566,6 +641,13 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-3a99dbdf92",
+      "url": "https://pear.vc/celebrating-100-hires-for-pear-companies-%f0%9f%a5%b3/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "Companies → https://pear.vc/companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-41660c39ed",
       "url": "https://pear.vc/events/everything-you-need-to-know-about-making-your-first-hire/",
       "title": "Pear VC — program page",
@@ -643,11 +725,25 @@
       "page": "batches"
     },
     {
+      "id": "check-portfolio-769ca829ed",
+      "url": "https://pear.vc/pearx-alumni-company-via-acquired-by-justworks/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "Companies → https://pear.vc/companies/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-7fee73fe04",
       "url": "https://pear.vc/events/ai-for-climate-todays-machine-learning-applications-with-pachama-floodbase-streamline-and-climatechangeai/",
       "title": "Pear VC — application page",
       "excerpt": "Companies → https://pear.vc/companies/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-8ba1f79d3c",
+      "url": "https://pear.vc/pearx-alumni-company-via-acquired-by-justworks/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "Companies → https://pear.vc/companies",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-9e55170e71",
@@ -664,11 +760,32 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-b23463810f",
+      "url": "https://pear.vc/pear-portfolio-company-bioage-labs-announces-oversubscribed-170m-series-d-financing-to-drive-development-of-obesity-and-metabolic-disease-therapeutics/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "Companies → https://pear.vc/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-c36358bbd8",
+      "url": "https://pear.vc/pearx-s20-alumni-company-sequel-receives-fda-approval/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "Companies → https://pear.vc/companies/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-c9c22d243f",
       "url": "https://pear.vc/pearx-s25-applications-are-now-open/",
       "title": "Pear VC — application page",
       "excerpt": "Companies → https://pear.vc/companies/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-ccd84695f8",
+      "url": "https://pear.vc/celebrating-100-hires-for-pear-companies-%f0%9f%a5%b3/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "Companies → https://pear.vc/companies/",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-d2e9b70254",
@@ -699,11 +816,25 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-ed1d822e8f",
+      "url": "https://pear.vc/pear-portfolio-company-bioage-labs-announces-oversubscribed-170m-series-d-financing-to-drive-development-of-obesity-and-metabolic-disease-therapeutics/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "Companies → https://pear.vc/companies/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-f27e5f45e9",
       "url": "http://pear.vc/pearx-application",
       "title": "Pear VC — application page",
       "excerpt": "Companies → https://pear.vc/companies/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-f2c569f166",
+      "url": "https://pear.vc/pearx-s20-alumni-company-sequel-receives-fda-approval/",
+      "title": "Pear VC — portfolio page",
+      "excerpt": "Companies → https://pear.vc/companies",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-f52d1132e7",
@@ -910,16 +1041,28 @@
       "excerpt": "Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX We first backed Alfred & Florian at seed. Listen Labs is the AI research partner for hundreds of brands. We partnered with Tony Stanley & Andy in 2013. DoorDash is now an $83B public company (DASH). We invested in Sonya & Aadi when they joined PearX S25. Phinity is building the future of autonomous chip design. We backed Behnam Harsh Shayan & Tara at seed. Mirendil is democratizing AI. We partnered with Rayan during PearX S23. Vals AI raised a $40M Series A to revolutionize AI benchmarking. We invested in Laureen at seed. Hertha Metals is forging the future of steel. We met Aryo before he joined PearX S24. Andera is building the first AI-native GRC and testing platform. We backed Michael when he joined PearX S23. Bobyard raised $35M to build AI infrastructure for construction trades. We partnered with Josh Tomer & Eddie in 2012. gusto is now over $1B in revenue. Your first investor team We’re early believers and long-term partners even when all you have is an idea. Partner with former founders and operators Get dedicated support from investors who’ve started, built, and scaled companies themselves. Team Close your first hires and first customers Our talent and GTM teams operate as an extension of your team. Founder Services Fundraise with"
     },
     {
+      "id": "check-page-c52199fa45",
+      "url": "https://pear.vc/",
+      "page": "details",
+      "excerpt": "Founder Services Fundraise with confidence From pitch prep to investor introductions, we work closely with you to position your company for success."
+    },
+    {
+      "id": "check-page-5e5fea7176",
+      "url": "https://pear.vc/",
+      "page": "details",
+      "excerpt": "Company Let’s PARTNER Why Pear Why Pear Discover PearX PearX Subscribe to our newsletter (Required) ABOUT pear How We Invest PearX Companies Team Founder Services News & Events Our Story Contact Us Programs Female Founders Circle Persian Founders Circle Pear Fellows Offices in San Francisco & Menlo Park © 2026 pear ventures"
+    },
+    {
       "id": "check-page-bbce23905f",
       "url": "https://pear.vc/apply-to-pear-founder-circles-for-female-engineers/",
       "page": "application",
       "excerpt": "Apply to Pear Founder Circles for Female Engineers - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Pear Team July 15, 2021 Announcement Apply to Pear Founder Circles for Female Engineers Share Apply here , or be referred and nominated here by Aug 1 2023 for Fall 2023 cohort We are excited to announce Pear Founder Circles for Female Engineers, a three-month long curated community for female and non-binary engineer entrepreneurs. At Pear VC, we believe founders make category defining companies, and we want to create communities that support these founders through our program of inspirational founders, tactical company building workshops, executive coaches, and community bonding. Supporting female engineer founders is in our DNA . Pear VC is co-founded by our Managing Partner, Mar Hershenson , a 3X founder who earned her Stanford PhD in Electrical Engineering and is a supporter for women founders as one of the founding members of AllRaise, Equity Summit and other programs. Mar was named on the Forbes Midas’s 2021 list of top investors. Mar is also a lecturer at Stanford for Lean Launchpad where she helped increase diversity of enrollment to 50% female. <15% of VC-backed startups have at least 1 female founder and we want to change this. Female engineers are underrepresented, even when we"
     },
     {
-      "id": "check-page-3e9b6f0f6f",
-      "url": "https://pear.vc/events/ai-for-climate-todays-machine-learning-applications-with-pachama-floodbase-streamline-and-climatechangeai/",
+      "id": "check-page-7eb409d7cc",
+      "url": "https://pear.vc/apply-to-pear-founder-circles-for-female-engineers/",
       "page": "application",
-      "excerpt": "AI For Climate: Today's Machine Learning Applications with Pachama, Floodbase, Streamline and ClimateChangeAI - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Pear Team April 11, 2024 April 25, 2024 Pear Studio - SF · 5:00 PM - 8:00 PM PT AI For Climate: Today’s Machine Learning Applications with Pachama, Floodbase, Streamline and ClimateChangeAI Share Request to join Share Related Articles October 8, 2025 VIRTUAL Pear VC: PearX S25 Virtual Demo Day link September 24, 2025 Virtual Winning Wednesdays with Pear VC: How to Price, Discount and Win as an Early-Stage Startup (Part Two!) link October 16, 2025 Pear Studio SF Pear Studio Speaker Series: Lisa Su, Chair & CEO of AMD link August 14, 2025 Pear Studio SF PearX Speaker Series: Josh Reeves, Co-Founder & CEO of Gusto link August 27, 2025 Virtual Winning Wednesdays with Pear VC: How to Price, Discount and Win as an Early-Stage Startup link July 31, 2025 Pear Studio SF PearX Speaker Series: Dimitri Dadiomov, CEO of Modern Treasury link July 24, 2025 Pear Studio SF PearX Speaker Series: Guillermo Rauch, CEO of Vercel link July 17, 2025 Pear Studio SF PearX Speaker Series: Adam Evans, EVP + GM of Salesforce AI link July 16, 2025 Virtual Winning Wednesdays: Breakthrough Positioning link June 5, 2025 Pear Studio SF MIT Founder Happy Hour"
+      "excerpt": "Eight Wednesday sessions happening every other week in our SF Office in South Park and virtually, sponsored by Pear VC!"
     },
     {
       "id": "check-page-28a8c9a7e3",
@@ -934,16 +1077,142 @@
       "excerpt": "PearX S25 applications are now open - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Ajay Kamat March 26, 2025 Announcement PearX PearX S25 applications are now open Share Today, we’re opening applications for our S25 cohort and encourage all teams from idea stage to companies with growing traction to apply. Apply here now . About PearX: Learn more about PearX in this video. Key Dates: Application Opens: March 26th, 2025 Application Closes: 11:59PM, April 28th, 2025 PearX is a hands on, small-batch 12-week accelerator which counts top performing companies like Viz.ai, Affinity, Xilis, Capella Space, Cardless, Nova Credit, Federato, Valar Labs among its alumni. Pear has also backed DoorDash, Dropbox, Vanta, Aurora Solar, Gusto, Guardant Health at the seed stage. At PearX, we provide custom services and support for each company. From capital, hiring, GTM support, to follow-on financing support, everything we do is tailored to the founder needs and fostering community amongst the cohort. We know the start-up journey is difficult and we’re here to partner and support you every step of the way. This batch is particularly special because we’ve brought on Payam Banazadeh , formerly CEO of Capella Space (PearX S16) as a Visiting Partner. Payam has raised over $280m in capital and has launched"
     },
     {
+      "id": "check-page-94abe39ac8",
+      "url": "https://pear.vc/pearx-s25-applications-are-now-open/",
+      "page": "application",
+      "excerpt": "He’ll help us expand into deep tech, defense, hardware and robotics."
+    },
+    {
+      "id": "check-page-ec39ec973b",
+      "url": "https://pear.vc/pearx-s25-applications-are-now-open/",
+      "page": "application",
+      "excerpt": "Here is what you get with PearX: Capital to build your company : We invest between $250k and $2M in every PearX company."
+    },
+    {
+      "id": "check-page-16c5aab442",
+      "url": "https://pear.vc/pearx-s25-applications-are-now-open/",
+      "page": "application",
+      "excerpt": "Access Pear Studio : Everyone in PearX receives dedicated office space in Pear Studio SF, our stunning 30,000 square foot office space with standing desks, conference rooms, phone booths, and more."
+    },
+    {
+      "id": "check-page-1581f2fedf",
+      "url": "https://pear.vc/pearx-s25-applications-are-now-open/",
+      "page": "application",
+      "excerpt": "This is an unprecedented level of support for an accelerator, but that’s how much we believe that hiring impacts company building."
+    },
+    {
+      "id": "check-page-4f61a0b316",
+      "url": "https://pear.vc/pearx-s25-applications-are-now-open/",
+      "page": "application",
+      "excerpt": "Raise more capital : Our Demo Day is attended by hundreds of the top General Partners from the venture capital industry."
+    },
+    {
+      "id": "check-page-efb19c2ca5",
+      "url": "https://pear.vc/pearx-s25-applications-are-now-open/",
+      "page": "application",
+      "excerpt": "Share Subscribe to our newsletter (Required) ABOUT pear How We Invest PearX Companies Team Founder Services News & Events Our Story Contact Us Programs Female Founders Circle Persian Founders Circle Pear Fellows Offices in San Francisco & Menlo Park © 2026 pear ventures"
+    },
+    {
       "id": "check-page-bc94c2ffec",
       "url": "https://pear.vc/pearx-s26-applications/",
       "page": "application",
       "excerpt": "Now open: PearX S26 applications - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Pear Team February 10, 2026 AI Now open: PearX S26 applications Share We are now accepting applications for PearX, our exclusive, small batch program for pre-seed companies. Apply to join our S26 cohort here . AI didn’t make it easier to start a company. It’s made it easier to start a company that fails. The cost of building has collapsed. A two-person team can ship in weeks what used to take a funded startup a year. But that’s the problem—so can everyone else. We see dozens of pitches every month targeting the same markets with near-identical products. When everyone can build, building isn’t the advantage. Learning is. The speed at which you discover real demand, and the unique insight you extract from customers that no competitor has, is the only edge that compounds. At the same time, the platform is swallowing the obvious plays. OpenAI is introducing forward-deployed engineers into the enterprise. Codex and Claude Code are commoditizing the act of writing software itself. If your moat is “we built an AI app,” you’re already competing with the labs. So where does defensibility actually live? Deeper. In a first-principles understanding of customer pain and the actual workflows that shape daily behavior."
     },
     {
+      "id": "check-page-2341eabc45",
+      "url": "https://pear.vc/pearx-s26-applications/",
+      "page": "application",
+      "excerpt": "Piston replaced all of it with QR code payments tied to vehicle, location, time, and fuel type, with AI models running against transaction history to flag fraud in real time."
+    },
+    {
+      "id": "check-page-a341ed3330",
+      "url": "https://pear.vc/pearx-s26-applications/",
+      "page": "application",
+      "excerpt": "Not because they built faster than anyone else, but because two former fleet operators understood a workflow Silicon Valley wasn’t paying attention to and used AI to make it radically better."
+    },
+    {
+      "id": "check-page-91bb354d91",
+      "url": "https://pear.vc/pearx-s26-applications/",
+      "page": "application",
+      "excerpt": "The best companies right now aren’t just building AI products."
+    },
+    {
+      "id": "check-page-97ba5f8f5a",
+      "url": "https://pear.vc/pearx-s26-applications/",
+      "page": "application",
+      "excerpt": "They’re embedding AI directly into the day-to-day workflows of industries that still operate with minimal and outdated software."
+    },
+    {
+      "id": "check-page-92137917fc",
+      "url": "https://pear.vc/pearx-s26-applications/",
+      "page": "application",
+      "excerpt": "That’s why PearX exists: to help founders learn faster in the real world and turn early insight into durable advantage Today, we’re opening applications for PearX S26, our 12-week pre-seed program kicking off in July 2026."
+    },
+    {
+      "id": "check-page-6a1206a897",
+      "url": "https://pear.vc/pearx-s26-applications/",
+      "page": "application",
+      "excerpt": "We encourage companies at the idea stage as well as teams already showing early traction to apply ."
+    },
+    {
+      "id": "check-page-52b0ad4854",
+      "url": "https://pear.vc/pearx-s26-applications/",
+      "page": "application",
+      "excerpt": "That hands-on partnership helps founders learn faster, avoid costly detours, and build real momentum through the drunken walk of early stage company building."
+    },
+    {
+      "id": "check-page-884758fe19",
+      "url": "https://pear.vc/pearx-s26-applications/",
+      "page": "application",
+      "excerpt": "We’ve invested in companies like Doordash , Affinity , Cardless , Federato , Nova Credit , Piston , Valar Labs , Viz.ai , Listen Labs , and many others—and we’re excited to partner with the next generation of founders building AI companies."
+    },
+    {
+      "id": "check-page-963f40bea1",
+      "url": "https://pear.vc/pearx-s26-applications/",
+      "page": "application",
+      "excerpt": "When you’re ready to raise, we’ll help you craft your story, meet top investors, and continue to support you beyond demo day."
+    },
+    {
       "id": "check-page-0e729316a7",
       "url": "https://pear.vc/pearx-w25-applications-are-now-open/",
       "page": "application",
       "excerpt": "PearX W25 applications are now open - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Ajay Kamat August 20, 2024 PearX PearX W25 applications are now open Share The S24 batch of PearX is underway and the founders have been pushing hard to launch products, grow customers, and get their products to scale. This year we have seen a surge in AI companies with over 95% of S24 companies focusing on AI. Our AI team is ready and looking for companies in AI infrastructure and vertical applications. Read more about our AI thesis . We couldn’t be more excited about the S24 batch of companies, which we will share more about publicly in the fall. Simultaneously, we have been hard at work preparing for the W25 batch kicking off in January. Today, we’re opening applications for our W25 cohort and encourage all teams from idea stage to companies with traction to apply. Apply here now . Key Dates: Early applications and interviews : Early application deadline on August 30th. If you apply by this deadline, you will hear from us by mid-September. Regular Applications: Applications close on October 1st. You will hear from us by November 25th at the latest. PearX is an immersive small-batch 14-week accelerator which counts top performing companies like Viz.ai, Affinity, Xilis, Capella Space, Cardless, Nova"
+    },
+    {
+      "id": "check-page-9d6b6828cd",
+      "url": "https://pear.vc/pearx-w25-applications-are-now-open/",
+      "page": "application",
+      "excerpt": "PearX is an immersive small-batch 14-week accelerator which counts top performing companies like Viz.ai, Affinity, Xilis, Capella Space, Cardless, Nova Credit, Federato, Valar Labs among its alumni."
+    },
+    {
+      "id": "check-page-68c65eeb67",
+      "url": "https://pear.vc/pearx-w25-applications-are-now-open/",
+      "page": "application",
+      "excerpt": "Pear has also backed DoorDash, Dropbox, Vanta, Aurora Solar, Gusto, Guardant Health at the seed stage."
+    },
+    {
+      "id": "check-page-f113c3f4e7",
+      "url": "https://pear.vc/pearx-w25-applications-are-now-open/",
+      "page": "application",
+      "excerpt": "Here is what you get with PearX: Capital to build your company, your way : We invest between $250k and $2M in all PearX companies."
+    },
+    {
+      "id": "check-page-89f2dc2a58",
+      "url": "https://pear.vc/pearx-w25-applications-are-now-open/",
+      "page": "application",
+      "excerpt": "Access Pear Studio: Everyone in PearX receives dedicated office space in Pear Studio SF, our 30,000 square foot state-of-the-art office space with standing desks, conference rooms, phone booths, and more."
+    },
+    {
+      "id": "check-page-1102c1e669",
+      "url": "https://pear.vc/pearx-w25-applications-are-now-open/",
+      "page": "application",
+      "excerpt": "This is an unprecedented level of support for an accelerator, but that’s how much we believe that hiring impacts company building."
+    },
+    {
+      "id": "check-page-cd9e9a7af0",
+      "url": "https://pear.vc/pearx-w25-applications-are-now-open/",
+      "page": "application",
+      "excerpt": "Share Subscribe to our newsletter (Required) ABOUT pear How We Invest PearX Companies Team Founder Services News & Events Our Story Contact Us Programs Female Founders Circle Persian Founders Circle Pear Fellows Offices in San Francisco & Menlo Park © 2026 pear ventures"
     },
     {
       "id": "check-page-96d21501b3",
@@ -958,10 +1227,70 @@
       "excerpt": "Announcing Pear’s investment in Dealops: The GTM finance platform reimagining deal execution - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Pear Team August 12, 2025 AI Announcement Announcing Pear’s investment in Dealops : The GTM finance platform reimagining deal execution Share We’re thrilled to share that Pear VC has led the $5.2 million seed round for Dealops. We couldn’t be more excited to partner with Spyri Karasavva, founder & CEO, and the entire Dealops team. I first met Spyri shortly after I joined Pear last summer and was immediately struck by her ambition, clarity of thought, and deep domain expertise. We spent a few months getting to know each other as she continued to land more and more AI-native customers, such as Airwallex and Harvey. A few months into spending time together, they hadn’t formally initiated a fundraising process, but their customer adoption and market traction convinced us that this was a team and a category we had to support, so we moved quickly to pre-empt the seed round. Why we invested A massive and growing opportunity in the GTM stack I’ve long viewed pricing as one of the most strategic levers for a business. However, too often it is treated as an afterthought. The way you price your product signals to customers the value you are delivering to"
     },
     {
+      "id": "check-page-d82e77cee7",
+      "url": "https://pear.vc/announcing-pears-investment-in-dealops-the-gtm-finance-platform-reimagining-deal-execution/",
+      "page": "terms",
+      "excerpt": "Layer on top of that the massive changes happening in this AI era, and the old way of pricing & packaging products, structuring deals and incentivizing the sales team is ripe for change."
+    },
+    {
+      "id": "check-page-c5584c08a7",
+      "url": "https://pear.vc/announcing-pears-investment-in-dealops-the-gtm-finance-platform-reimagining-deal-execution/",
+      "page": "terms",
+      "excerpt": "And yet, the tools supporting this motion are outdated, brittle, and fundamentally not built for the AI-powered, usage-based world we’re now in."
+    },
+    {
+      "id": "check-page-fe4ed816e9",
+      "url": "https://pear.vc/announcing-pears-investment-in-dealops-the-gtm-finance-platform-reimagining-deal-execution/",
+      "page": "terms",
+      "excerpt": "Share Subscribe to our newsletter (Required) ABOUT pear How We Invest PearX Companies Team Founder Services News & Events Our Story Contact Us Programs Female Founders Circle Persian Founders Circle Pear Fellows Offices in San Francisco & Menlo Park © 2026 pear ventures"
+    },
+    {
       "id": "check-page-7aca487015",
       "url": "https://pear.vc/using-ai-to-spot-investment-trends-how-chatgpt-surprised-me-and-why-im-on-the-hunt-for-the-next-big-ai-startup/",
       "page": "terms",
       "excerpt": "Using AI to spot investment trends: how ChatGPT surprised me and why I'm on the hunt for the next big AI startup - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Aparna Sinha January 12, 2023 Product & Engineering Using AI to spot investment trends: how ChatGPT surprised me and why I'm on the hunt for the next big AI startup Share I recently joined Pear as a Visiting Partner focused on early-stage investments in Machine Learning / Artificial Intelligence and Developer Tools. As I kicked off this new chapter, I sought advice on how to find the next billion dollar startup. The natural place to start: ChatGPT. Every time I asked ChatGPT which areas in technology are likely to cause the greatest disruption in the next 5 years?”, it gave me different lists, everything from quantum computing to 5G to Biotech and medicine. But AI/ML was always on top of its list . So to get some detail on the potential of AI/ML, I asked “which problems should AI-based startups solve to maximize growth and ROI?” Results from ChatGPT question: “which problems should AI-based startups solve to maximize growth and ROI?” I noticed that ChatGPT picked up acronyms like ROI and expanded them correctly, and correctly interpreted queries with misspelled words (e.g., ‘distributed’ was corrected to ‘disruptive’ based on"
+    },
+    {
+      "id": "check-page-ea261cc246",
+      "url": "https://pear.vc/using-ai-to-spot-investment-trends-how-chatgpt-surprised-me-and-why-im-on-the-hunt-for-the-next-big-ai-startup/",
+      "page": "terms",
+      "excerpt": "And, “how would we differentiate it relative to competition?” Results from ChatGPT question: “How would we differentiate it relative to competition?” These were surprisingly good answers: multimodal chatbots that are personalized and integrated with enterprise systems could be quite useful."
+    },
+    {
+      "id": "check-page-206d6a8576",
+      "url": "https://pear.vc/using-ai-to-spot-investment-trends-how-chatgpt-surprised-me-and-why-im-on-the-hunt-for-the-next-big-ai-startup/",
+      "page": "terms",
+      "excerpt": "I shared this business plan with Pear’s healthcare investors and it even passed a few checks."
+    },
+    {
+      "id": "check-page-d163d11b87",
+      "url": "https://pear.vc/using-ai-to-spot-investment-trends-how-chatgpt-surprised-me-and-why-im-on-the-hunt-for-the-next-big-ai-startup/",
+      "page": "terms",
+      "excerpt": "First of all they are using AI to solve real problems, such as automating an existing workflow."
+    },
+    {
+      "id": "check-page-acb41fc980",
+      "url": "https://pear.vc/using-ai-to-spot-investment-trends-how-chatgpt-surprised-me-and-why-im-on-the-hunt-for-the-next-big-ai-startup/",
+      "page": "terms",
+      "excerpt": "For example, Osmos.io uses a form of generative AI to create data transformations in a no-code data ingestion platform that’s replacing fragile, hard to maintain hand-coded ETLs."
+    },
+    {
+      "id": "check-page-79b0a1fd90",
+      "url": "https://pear.vc/using-ai-to-spot-investment-trends-how-chatgpt-surprised-me-and-why-im-on-the-hunt-for-the-next-big-ai-startup/",
+      "page": "terms",
+      "excerpt": "Sellscale uses generative AI to create better marketing emails."
+    },
+    {
+      "id": "check-page-c83871eb44",
+      "url": "https://pear.vc/using-ai-to-spot-investment-trends-how-chatgpt-surprised-me-and-why-im-on-the-hunt-for-the-next-big-ai-startup/",
+      "page": "terms",
+      "excerpt": "And CausalLabs.io is creating the infrastructure layer for UI that is increasingly generated, optimized and personalized by AI."
+    },
+    {
+      "id": "check-page-e5c5013dc0",
+      "url": "https://pear.vc/using-ai-to-spot-investment-trends-how-chatgpt-surprised-me-and-why-im-on-the-hunt-for-the-next-big-ai-startup/",
+      "page": "terms",
+      "excerpt": "We believe AI in 2023 is what PC’s were in 1983 or the internet was in 1995 – it will power enterprises and consumers to do things they couldn’t before and generate enormous value in the next five years."
     },
     {
       "id": "check-page-4ab5e6c08c",
@@ -970,10 +1299,154 @@
       "excerpt": "Pear Fellows 2022 Cohort - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Pear Team February 15, 2022 Announcement Pear Fellows 2022 Cohort Share Alumni of the Pear Fellows program are shaping the venture capital and tech industries, including 37 VCs, 22 startup founders, and 18 product managers. Read on to meet the next generation of Fellows! This year, 14 new Fellows were selected from hundreds of student applications. We select our team of Fellows optimizing for diversity of thought and a shared passion for supporting early-stage founders. Fellows work directly with our investment team to discover founders, make investment decisions, and support startups. If you’re a student working on a startup, we encourage you to reach out to a Fellow and/or explore the following Pear opportunities: Pear Competition : $100K uncapped , for exceptional people determined to solve big problems. Pear Accelerator : $500-750K @ $10M , when you have clarity on a big vision and the right team to go after it. Pear Seed : up to $3M , when you have a compelling evidence of customer love. 37 Fellows alumni are now VCs, including Nicole Quinn (GP Lightspeed) and many more at top funds including a16z, General Catalysts, Pear, Khosla, General Atlantic, DFJ Growth, DST Global, DCM, Industry, and Bessemer. We"
     },
     {
+      "id": "check-page-6f314ebe3b",
+      "url": "https://pear.vc/pear-fellows-2022-cohort/",
+      "page": "batches",
+      "excerpt": "As an acquisitions officer, Greg procured communications equipment and software licenses at an enterprise-level, awarded non-dilutive funding to startups via the SBIR and STTR programs, and served as a Defense Ventures Fellow."
+    },
+    {
+      "id": "check-page-080f88075d",
+      "url": "https://pear.vc/pear-fellows-2022-cohort/",
+      "page": "batches",
+      "excerpt": "Prior to enrolling at Stanford, Greg received his BA in Economics from DePauw University, and his MA in Public Management from Johns Hopkins University. shaneez@stanford.edu Shaneez Mohinani was an Executive Director at Goldman Sachs, raising capital from and providing investment advice to governments, central banks and endowments across Southeast Asia."
+    },
+    {
+      "id": "check-page-408ec3f77b",
+      "url": "https://pear.vc/pear-fellows-2022-cohort/",
+      "page": "batches",
+      "excerpt": "Prior to that, while in undergrad, she had run a seed funding program for underserved entrepreneurs across emerging Asia."
+    },
+    {
+      "id": "check-page-c33e5027a4",
+      "url": "https://pear.vc/pear-fellows-2022-cohort/",
+      "page": "batches",
+      "excerpt": "Linda enjoys reading, sharing book recommendations with friends, learning new languages (coding, living, or dead), and playing golf. jenkinsa@stanford.edu Alexandra Jenkins is a Stanford MBA candidate who invested in healthcare, edtech, and HR in Latin America at ALLVP, a Mexican VC."
+    },
+    {
+      "id": "check-page-efdf1ac402",
+      "url": "https://pear.vc/pear-fellows-2022-cohort/",
+      "page": "batches",
+      "excerpt": "Prior to that, she worked at McKinsey for 3 years in various LatAm countries and Spain."
+    },
+    {
+      "id": "check-page-a714260d95",
+      "url": "https://pear.vc/pear-fellows-2022-cohort/",
+      "page": "batches",
+      "excerpt": "She’s interested in healthcare and mental health, especially in the LatAm region."
+    },
+    {
+      "id": "check-page-365ee35a4b",
+      "url": "https://pear.vc/pear-fellows-2022-cohort/",
+      "page": "batches",
+      "excerpt": "She has worked on edtech and consumer tech projects and has worked in software engineering at Facebook, Microsoft, and Figma."
+    },
+    {
+      "id": "check-page-5e115cd0e7",
+      "url": "https://pear.vc/pear-fellows-2022-cohort/",
+      "page": "batches",
+      "excerpt": "On campus, she leads the undergraduate entrepreneurship club, StartLabs, and she is passionate about social impact and urban planning."
+    },
+    {
+      "id": "check-page-8d19e66010",
+      "url": "https://pear.vc/pear-fellows-2022-cohort/",
+      "page": "batches",
+      "excerpt": "He previously led marketplace operations at Wonolo, an on-demand staffing platform, and worked as an engagement manager at McKinsey."
+    },
+    {
+      "id": "check-page-25a072a3f2",
+      "url": "https://pear.vc/pear-fellows-2022-cohort/",
+      "page": "batches",
+      "excerpt": "Alex is passionate about the future of work, marketplaces, e-commerce, and finance, and will often share gummies from Pink Panda, his side-hustle, better-for-you candy company."
+    },
+    {
+      "id": "check-page-272d7add16",
+      "url": "https://pear.vc/pear-fellows-2022-cohort/",
+      "page": "batches",
+      "excerpt": "Originally from the suburbs of Los Angeles, Joy has previously worked in a coffee shop and Greek restaurant where she became interested in food and restaurant technology."
+    },
+    {
+      "id": "check-page-f39915d047",
+      "url": "https://pear.vc/pear-fellows-2022-cohort/",
+      "page": "batches",
+      "excerpt": "This past summer, she worked for Yum China and now writes about kitchen robotics for the Spoon."
+    },
+    {
       "id": "check-page-56e14ca7b3",
       "url": "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
       "page": "details",
       "excerpt": "Come join Pear as our Director of Accelerator Operations! - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Pear Team November 9, 2021 Announcement Come join Pear as our Director of Accelerator Operations! Share We’re looking for a Director of Accelerator Operations to grow our renowned early-stage Accelerator . As the Director of Accelerator Operations, you’ll oversee the program from company selection to Demo Day. We’re looking to onboard a full-time Director before our upcoming Winter Accelerator in 2022. In order to cultivate a more inclusive venture ecosystem, it’s important that funds like us continue to post open roles publicly. We are committed to building a diverse team internally, across our portfolio, and within the other Pear programs. Pear Accelerator guides early-stage founders towards building category-defining companies Pear VC is a leading early stage fund based in Palo Alto and San Francisco. We’ve partnered at the seed stage with world changing startups now worth over $100 billion, including Doordash, Gusto, Branch, Vanta, and Guardant Health. The Pear Accelerator is a three-month long bootcamp culminating in a demo day to thousands of top investors. It includes a tailored curriculum and program across finding product-market fit, hiring your first employees, closing"
+    },
+    {
+      "id": "check-page-77b2467e0b",
+      "url": "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
+      "page": "details",
+      "excerpt": "During the 2021 Summer Accelerator, we worked closely with 15 teams over 17 weeks, culminating in a Demo Day with over 700 investors in attendance."
+    },
+    {
+      "id": "check-page-a2b3287b12",
+      "url": "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
+      "page": "details",
+      "excerpt": "Pear Accelerator has been the birthplace of category-defining companies Affinity , Xilis , Capella Space , Nova Credit , Cardless , Viz.ai , and more, with 69 alumni companies overall having a cumulative valuation of $1.5B."
+    },
+    {
+      "id": "check-page-c0c623c765",
+      "url": "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
+      "page": "details",
+      "excerpt": "We intentionally accept a small cohort to foster a tight community, allowing our partners to spend quality time with each Accelerator team."
+    },
+    {
+      "id": "check-page-3d2d0e0211",
+      "url": "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
+      "page": "details",
+      "excerpt": "Director of Accelerator Operations Role As Director of Accelerator Operations, you’ll have a major impact on the long term success of Pear by improving the program with each cohort."
+    },
+    {
+      "id": "check-page-030da7c85a",
+      "url": "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
+      "page": "details",
+      "excerpt": "Working hand-in-hand with Pear Investment Partners, you’ll source and support our Accelerator companies, guide them through the program, and make sure operations run smoothly."
+    },
+    {
+      "id": "check-page-8675b7f162",
+      "url": "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
+      "page": "details",
+      "excerpt": "You’ll support key players including founders, mentors, and sponsors to get the best outcomes possible for our Accelerator companies."
+    },
+    {
+      "id": "check-page-7f92fec4a9",
+      "url": "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
+      "page": "details",
+      "excerpt": "Responsibilities include: In conjunction with the Investment Partners, plan, improve and implement the full execution of Pear Accelerator from sourcing companies through Demo Day."
+    },
+    {
+      "id": "check-page-65e0350437",
+      "url": "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
+      "page": "details",
+      "excerpt": "Lead promotion and marketing of Accelerator program and managing design resources Improve and augment Pear resources for companies, including but not limited to content, preferred vendors, mentors and business partners."
+    },
+    {
+      "id": "check-page-a3d2b5e8bf",
+      "url": "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
+      "page": "details",
+      "excerpt": "Manage program logistics like operations, budgeting, scheduling, calendar management, event planning, mentor coordination, office coordination, and founder community."
+    },
+    {
+      "id": "check-page-90e3e80381",
+      "url": "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
+      "page": "details",
+      "excerpt": "Manage the Accelerator community by making sure that founders, investors, mentors and partners build strong relationships."
+    },
+    {
+      "id": "check-page-d92e19be5d",
+      "url": "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
+      "page": "details",
+      "excerpt": "Recruit, onboard, and match mentors and teams."
+    },
+    {
+      "id": "check-page-fc65234514",
+      "url": "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
+      "page": "details",
+      "excerpt": "Manage program events like Accelerator Kickoff, Demo Day, speaker events, treks to companies, and social events Gather and analyze data of previous cohorts including details on investment rounds post Demo Day and key statistics of companies."
     },
     {
       "id": "check-page-a5eb1486d1",
@@ -982,16 +1455,100 @@
       "excerpt": "Debunking common myths: what technical founders need to know about sales - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Pear Team April 16, 2024 Go-to-market Debunking common myths: what technical founders know about sales Share As a technical founder, you’re no stranger to challenging assumptions and pushing boundaries. Yet, when it comes to sales, many technical founders fall prey to common myths and misconceptions about sales that can hinder their startup’s growth. Let’s debunk these myths and uncover the truth about sales: 1. Myth: A Good Product Will Sell Itself, so I don’t need to worry about sales: Especially from a technical point of view, it’s easy to believe that if you’ve built a great product, customers will come flocking. While a strong product is undoubtedly essential, it’s not enough to guarantee success. In reality, ideas are cheap, and execution is critical. Competitors will inevitably emerge, and without a solid sales strategy, your product will get lost in the noise– even if it’s better than the alternatives. Early sales are crucial for validating your idea, learning how to talk about it and gaining traction in the market. 2. Myth: I Can’t Sell Because I’m Not “Salesy” : Many technical founders shy away from sales, believing it’s a skill reserved for natural-born"
     },
     {
-      "id": "check-page-ae5b53fe80",
-      "url": "https://pear.vc/events/everything-you-need-to-know-about-making-your-first-hire/",
+      "id": "check-page-0f1d6e7477",
+      "url": "https://pear.vc/debunking-common-myths-what-technical-founders-need-to-know-about-sales/",
       "page": "details",
-      "excerpt": "Everything you need to know about making your first hire - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Pear Team February 1, 2023 February 6, 2023 GSB · 6:15 pm-7:30 pm Everything you need to know about making your first hire Share Share Related Articles October 8, 2025 VIRTUAL Pear VC: PearX S25 Virtual Demo Day link September 24, 2025 Virtual Winning Wednesdays with Pear VC: How to Price, Discount and Win as an Early-Stage Startup (Part Two!) link October 16, 2025 Pear Studio SF Pear Studio Speaker Series: Lisa Su, Chair & CEO of AMD link August 14, 2025 Pear Studio SF PearX Speaker Series: Josh Reeves, Co-Founder & CEO of Gusto link August 27, 2025 Virtual Winning Wednesdays with Pear VC: How to Price, Discount and Win as an Early-Stage Startup link July 31, 2025 Pear Studio SF PearX Speaker Series: Dimitri Dadiomov, CEO of Modern Treasury link July 24, 2025 Pear Studio SF PearX Speaker Series: Guillermo Rauch, CEO of Vercel link July 17, 2025 Pear Studio SF PearX Speaker Series: Adam Evans, EVP + GM of Salesforce AI link July 16, 2025 Virtual Winning Wednesdays: Breakthrough Positioning link June 5, 2025 Pear Studio SF MIT Founder Happy Hour link April 30, 2025 Virtual Winning Wednesdays: Partnership Selling 101 link April 24, 2025 Pear Studio SF Consumer Founder Growth Workshop"
+      "excerpt": "Share Subscribe to our newsletter (Required) ABOUT pear How We Invest PearX Companies Team Founder Services News & Events Our Story Contact Us Programs Female Founders Circle Persian Founders Circle Pear Fellows Offices in San Francisco & Menlo Park © 2026 pear ventures"
     },
     {
       "id": "check-page-49dca324e8",
       "url": "https://pear.vc/introducing-pearx-a-new-era-of-the-pear-accelerator/",
       "page": "details",
       "excerpt": "Introducing PearX: a new era of the Pear Accelerator - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Ajay Kamat November 18, 2022 Announcement Introducing PearX: a new era of the Pear Accelerator Share At Pear, we have been leading pre-seed rounds in very early stage companies for the last 9 years. These pre-seed companies have typically participated in our Accelerator program, which was developed as a bootcamp for ambitious founders with high potential ideas. Through this program, we help founders pick the best idea, build the highest potential product, find the right market, and lay the foundations for a venture backable company. Pear Accelerator has been the birthplace of category-defining companies like Affinity, Xilis, Capella Space, Nova Credit, Cardless, Viz.ai, and more. To date, we’ve invested in 120 companies at the pre-seed stage including Branch and Aurora Solar. In total, our pre-seed investments are now valued at nearly $10B. Today, we’re excited to announce that Pear Accelerator will now be known as PearX, an early-stage bootcamp. In addition to the name change, we’re expanding our pre-seed offering by investing up to $2M in companies that apply to the program. By expanding check sizes up to $2M, we’re now able to accept a wider range of founders into PearX. Some"
+    },
+    {
+      "id": "check-page-42dbc26694",
+      "url": "https://pear.vc/introducing-pearx-a-new-era-of-the-pear-accelerator/",
+      "page": "details",
+      "excerpt": "We wrote them a $25k uncapped note, and by the next year, we had an Accelerator program with a Demo Day that made headlines ."
+    },
+    {
+      "id": "check-page-ac6c8e8703",
+      "url": "https://pear.vc/introducing-pearx-a-new-era-of-the-pear-accelerator/",
+      "page": "details",
+      "excerpt": "Affinity Co-founders Ray Zhou and Shubham Goel started the company through Pear Garage and Pear Accelerator."
+    },
+    {
+      "id": "check-page-d1cc9ac2c5",
+      "url": "https://pear.vc/introducing-pearx-a-new-era-of-the-pear-accelerator/",
+      "page": "details",
+      "excerpt": "We invest in people, and the name “Accelerator” didn’t quite capture our high-touch, hands-on approach to what that means."
+    },
+    {
+      "id": "check-page-f8da4600e3",
+      "url": "https://pear.vc/introducing-pearx-a-new-era-of-the-pear-accelerator/",
+      "page": "details",
+      "excerpt": "We invest across the board from AI/ML to consumer to healthcare and more, and we accept teams in various stages of progress."
+    },
+    {
+      "id": "check-page-2838d2c391",
+      "url": "https://pear.vc/introducing-pearx-a-new-era-of-the-pear-accelerator/",
+      "page": "details",
+      "excerpt": "Our program employs an all-star cast of mentors and culminates in a Demo Day to thousands of investors where 85% of our companies end up raising from tier 1 institutional investors."
+    },
+    {
+      "id": "check-page-9161625dc3",
+      "url": "https://pear.vc/introducing-pearx-a-new-era-of-the-pear-accelerator/",
+      "page": "details",
+      "excerpt": "Eight years ago, we couldn’t have imagined what PearX would become, but no program exists that has a higher conversion rate from pre-seed to seed ."
+    },
+    {
+      "id": "check-page-afb83f4cd9",
+      "url": "https://pear.vc/introducing-pearx-a-new-era-of-the-pear-accelerator/",
+      "page": "details",
+      "excerpt": "We’ve developed an intimate, high-touch bootcamp to help the most ambitious founders build the next generation of groundbreaking companies – and the best is yet to come."
+    },
+    {
+      "id": "check-page-6c54236b2b",
+      "url": "https://pear.vc/celebrating-100-hires-for-pear-companies-%f0%9f%a5%b3/",
+      "page": "portfolio",
+      "excerpt": "Celebrating 100 hires for Pear companies - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Pear Team May 22, 2024 Announcement Celebrating 100 hires for Pear companies Share Last February, we introduced Pear Talent Services to the public. At the core of our announcement was our promise to directly hire the most crucial talent for our founders—a commitment we extend to every company we invest in. Today, we’re thrilled to announce that we’ve made 100 hires for our founders, marking a significant milestone in our journey. To mark this occasion, we wanted to share a few trends that emerged from our initial 100 hires. We specialize in supporting early stage companies and the distribution of hires reflects just that. The vast majority of hires made were technical, particularly founding or early Engineers. 75% of hires came directly from other tech companies. 21% of hires attended either Stanford, CMU or Berkeley. Hiring has shifted back to in-person or hybrid roles, with only 25% of positions being remote. If you’re a founder interested in learning more about our Talent Service offering, click here . Share Subscribe to our newsletter (Required) ABOUT pear How We Invest PearX Companies Team Founder Services News & Events Our Story Contact Us Programs Female Founders Circle Persian Founders"
+    },
+    {
+      "id": "check-page-460ea69ee2",
+      "url": "https://pear.vc/pear-portfolio-company-bioage-labs-announces-oversubscribed-170m-series-d-financing-to-drive-development-of-obesity-and-metabolic-disease-therapeutics/",
+      "page": "portfolio",
+      "excerpt": "Pear portfolio company BioAge Labs announces oversubscribed $170M Series D financing - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Eddie Eltoukhy February 20, 2024 Founder Stories Perspectives Pear portfolio company BioAge Labs announces oversubscribed $170M Series D financing Share Last week, Pear portfolio company BioAge Labs announced its $170M Series D round led by Sofinnova Investments, with participation from a strong syndicate of new investors including Longitude Capital, RA Capital, OrbiMed Advisors, RTW Investments, Eli Lilly, and Amgen, among others, in addition to many existing investors. To mark this occasion, we wanted to share more about Pear’s partnership with BioAge Labs and its co-founders, Kristen Fortney (CEO) and Eric Morgen (COO). Pear’s founders, Pejman and Mar, first met Kristen in 2015 through an introduction by another company founder associated with the Stanford Genome Technology Center. At that time, Kristen was a postdoc at Stanford in Professor Stuart Kim ’s lab, where she studied the genetics of extreme human longevity. At the time, Kristen had published extensively in the space of genetics and longevity, but the company was merely an idea. She was pondering the question: could we use genetic information and new machine learning techniques to develop a"
+    },
+    {
+      "id": "check-page-624c6b0ce4",
+      "url": "https://pear.vc/pearx-alumni-company-via-acquired-by-justworks/",
+      "page": "portfolio",
+      "excerpt": "PearX alumni company Via acquired by Justworks! - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Ajay Kamat September 26, 2023 Founder Stories PearX alumni company Via acquired by Justworks! Share PearX alumni company, Via , just announced that they’ve been acquired by Justworks . To mark this occasion, we wanted to share a look back on how we met and worked with the Via team over the years. Mar first met sisters and Via co-founders Maite and Itziar when they were students at Stanford’s Graduate School of Business. They were enrolled in the Launchpad d.school course where Mar was a guest lecturer. Through the class, they developed an idea to build a marketplace to connect top professionals to short-term project work at different companies around the world. They built strong conviction through the course and we thought they were the perfect fit for as founders of these companies. We invited them to join PearX , our early-stage bootcamp for founders, and partnered with them from then on to build Via. We decided to partner with Maite and Itziar for a few major reasons: We saw a big market opportunity: The Via co-founders discovered that there was a massive multi-billion dollar need for hyper local employer of record (EOR) and native payroll services for companies in international tech"
+    },
+    {
+      "id": "check-page-5c75bcf21b",
+      "url": "https://pear.vc/pearx-s20-alumni-company-sequel-receives-fda-approval/",
+      "page": "portfolio",
+      "excerpt": "PearX S20 alumni company Sequel receives FDA approval - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Mar Hershenson September 26, 2023 Founder Stories PearX S20 alumni company Sequel receives FDA approval Share On August 3rd, PearX S20 alum Sequel , received FDA approval. Sequel’s co-founders, Greta Meyer and Amanda Calabrese, worked hard to develop their product and work through the FDA clearance process. This can be a grueling process, so it’s truly a huge milestone for Sequel to be able to launch their FDA-approved tampons. We wanted to mark the occasion by looking back on our journey working with the Sequel team. Founders, Greta Meyer and Amanda Calabrese We met Sequel co-founders, Greta Meyer and Amanda Calabrese, when they were still students at Stanford. They were both undergraduate engineering students, where they participated in the LaunchPad d-school course in 2018 to design and launch a product. They were both professional athletes that had lived first hand, menstruation leaks during practice or worse an athletic tournament. Mar was tasked with helping them refine their fundraising pitch and this is how our partnership with Sequel got started. Sequel joined our PearX S20 cohort, right at the start of the pandemic, when they were still called Tempo. And even though it was"
+    },
+    {
+      "id": "check-page-3e9b6f0f6f",
+      "url": "https://pear.vc/events/ai-for-climate-todays-machine-learning-applications-with-pachama-floodbase-streamline-and-climatechangeai/",
+      "page": "application",
+      "excerpt": "AI For Climate: Today's Machine Learning Applications with Pachama, Floodbase, Streamline and ClimateChangeAI - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Pear Team April 11, 2024 April 25, 2024 Pear Studio - SF · 5:00 PM - 8:00 PM PT AI For Climate: Today’s Machine Learning Applications with Pachama, Floodbase, Streamline and ClimateChangeAI Share Request to join Share Related Articles October 8, 2025 VIRTUAL Pear VC: PearX S25 Virtual Demo Day link September 24, 2025 Virtual Winning Wednesdays with Pear VC: How to Price, Discount and Win as an Early-Stage Startup (Part Two!) link October 16, 2025 Pear Studio SF Pear Studio Speaker Series: Lisa Su, Chair & CEO of AMD link August 14, 2025 Pear Studio SF PearX Speaker Series: Josh Reeves, Co-Founder & CEO of Gusto link August 27, 2025 Virtual Winning Wednesdays with Pear VC: How to Price, Discount and Win as an Early-Stage Startup link July 31, 2025 Pear Studio SF PearX Speaker Series: Dimitri Dadiomov, CEO of Modern Treasury link July 24, 2025 Pear Studio SF PearX Speaker Series: Guillermo Rauch, CEO of Vercel link July 17, 2025 Pear Studio SF PearX Speaker Series: Adam Evans, EVP + GM of Salesforce AI link July 16, 2025 Virtual Winning Wednesdays: Breakthrough Positioning link June 5, 2025 Pear Studio SF MIT Founder Happy Hour"
+    },
+    {
+      "id": "check-page-ae5b53fe80",
+      "url": "https://pear.vc/events/everything-you-need-to-know-about-making-your-first-hire/",
+      "page": "details",
+      "excerpt": "Everything you need to know about making your first hire - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Pear Team February 1, 2023 February 6, 2023 GSB · 6:15 pm-7:30 pm Everything you need to know about making your first hire Share Share Related Articles October 8, 2025 VIRTUAL Pear VC: PearX S25 Virtual Demo Day link September 24, 2025 Virtual Winning Wednesdays with Pear VC: How to Price, Discount and Win as an Early-Stage Startup (Part Two!) link October 16, 2025 Pear Studio SF Pear Studio Speaker Series: Lisa Su, Chair & CEO of AMD link August 14, 2025 Pear Studio SF PearX Speaker Series: Josh Reeves, Co-Founder & CEO of Gusto link August 27, 2025 Virtual Winning Wednesdays with Pear VC: How to Price, Discount and Win as an Early-Stage Startup link July 31, 2025 Pear Studio SF PearX Speaker Series: Dimitri Dadiomov, CEO of Modern Treasury link July 24, 2025 Pear Studio SF PearX Speaker Series: Guillermo Rauch, CEO of Vercel link July 17, 2025 Pear Studio SF PearX Speaker Series: Adam Evans, EVP + GM of Salesforce AI link July 16, 2025 Virtual Winning Wednesdays: Breakthrough Positioning link June 5, 2025 Pear Studio SF MIT Founder Happy Hour link April 30, 2025 Virtual Winning Wednesdays: Partnership Selling 101 link April 24, 2025 Pear Studio SF Consumer Founder Growth Workshop"
+    },
+    {
+      "id": "check-page-728aa0d01b",
+      "url": "https://pear.vc/companies/",
+      "page": "portfolio",
+      "excerpt": "Companies - Pear VC How We Invest Companies Team Founder Services News & Events PearX How We Invest Companies Team Founder Services News & Events PearX Where early ideas turn into Enduring companies Spotlight All Verticals AI Applications AI Infrastructure B2B Biotech Consumer Deep Tech FinTech Healthcare DoorDash Consumer On-demand food, grocery, and retail delivery platform link Gusto B2B Payroll, benefits, and HR for small businesses link Cognition AI Applications Autonomous AI software engineer for coding workflows link Vanta AI Applications Automated security compliance and trust management platform link Listen Labs AI Applications AI platform for customer understanding at scale link Affinity B2B The CRM for private capital link Cardless FinTech The embedded credit card platform link Guardant Health Biotech Conquering cancer with data link Federato FinTech AI platform for insurance underwriting and risk management link Convey AI Applications All-in-one platform to train and manage autonomous digital teammates link Forus Healthcare AI that automates prescription workflows for providers and patients link Hertha Metals Deep Tech Advanced steel solutions to accelerate the growth of the U.S. steel industry link Vals AI AI Infrastructure Independent benchmarks and evaluation infrastructure for artificial intelligence link Bobyard AI Applications AI takeoff and estimating"
     }
   ],
   "findings": {
@@ -1090,8 +1647,16 @@
     ],
     "format": [
       {
+        "value": "in-person",
+        "evidenceId": "check-format-4eb87304eb"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-e406d91b36"
+      },
+      {
         "value": "remote",
-        "evidenceId": "check-format-51d8f1dd14"
+        "evidenceId": "check-format-2393ba1b38"
       }
     ],
     "location": [

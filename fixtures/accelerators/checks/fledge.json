@@ -1,11 +1,8 @@
 {
   "programId": "fledge",
-  "checkedAt": "2026-11-14T20:59:02.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.fledge.co/",
-    "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
-    "https://www.fledge.co/2012/applications-are-in/",
-    "https://www.fledge.co/2014/spring2014-applications/",
     "https://www.fledge.co/500x90-fledge-tag-line-apply-today-fledge6/",
     "https://www.fledge.co/800x550-applications-via-gust/",
     "https://www.fledge.co/about/annotated-application/",
@@ -16,16 +13,17 @@
     "https://www.fledge.co/banner_apply_14s/",
     "https://www.fledge.co/banner_apply_1day/",
     "https://www.fledge.co/banner_apply_2days/",
-    "https://www.fledge.co/banner_apply_3days/"
+    "https://www.fledge.co/banner_apply_3days/",
+    "https://www.fledge.co/banner_apply_4days/",
+    "https://www.fledge.co/banner_apply_5days/",
+    "https://www.fledge.co/banner_apply_a/",
+    "https://www.fledge.co/banner_apply_and_demo_day/",
+    "https://www.fledge.co/banner_apply_dec_15_b_corp/",
+    "https://www.fledge.co/banner_apply_demo_day_b_corp-2/",
+    "https://www.fledge.co/banner_apply_demo_day_b_corp/",
+    "https://www.fledge.co/banner_apply_left/"
   ],
   "evidence": [
-    {
-      "id": "check-announced-0e42425bd2",
-      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
-      "title": "Fledge — application page",
-      "excerpt": "Min read A Dozens of applications arrived by the June 30th midnight deadline, including one 22 seconds into July 1st. Thank you to all who applied! The collection of teams and ideas",
-      "page": "application"
-    },
     {
       "id": "check-deal-470cbe1232",
       "url": "https://www.fledge.co/",
@@ -69,8 +67,22 @@
       "page": "application"
     },
     {
+      "id": "check-format-08246abc84",
+      "url": "https://www.fledge.co/banner_apply_a/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
+    },
+    {
       "id": "check-format-10a6b37215",
       "url": "https://www.fledge.co/banner_apply_1day/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
+    },
+    {
+      "id": "check-format-25fa5931c5",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp/",
       "title": "Fledge — application page",
       "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
       "page": "application"
@@ -83,8 +95,29 @@
       "page": "application"
     },
     {
+      "id": "check-format-55432ad77e",
+      "url": "https://www.fledge.co/banner_apply_4days/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
+    },
+    {
       "id": "check-format-56b1ae6a49",
       "url": "https://www.fledge.co/banner_apply/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
+    },
+    {
+      "id": "check-format-5a2d854cd8",
+      "url": "https://www.fledge.co/banner_apply_5days/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
+    },
+    {
+      "id": "check-format-5bb7f5ade2",
+      "url": "https://www.fledge.co/banner_apply_left/",
       "title": "Fledge — application page",
       "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
       "page": "application"
@@ -104,8 +137,22 @@
       "page": "application"
     },
     {
+      "id": "check-format-6a4fdb5524",
+      "url": "https://www.fledge.co/banner_apply_and_demo_day/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
+    },
+    {
       "id": "check-format-74507a2590",
       "url": "https://www.fledge.co/apply-via-gust/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
+    },
+    {
+      "id": "check-format-994c43e37a",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp-2/",
       "title": "Fledge — application page",
       "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
       "page": "application"
@@ -118,10 +165,10 @@
       "page": "details"
     },
     {
-      "id": "check-format-bd44033985",
-      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "id": "check-format-bc610cadef",
+      "url": "https://www.fledge.co/banner_apply_dec_15_b_corp/",
       "title": "Fledge — application page",
-      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... January 12, 2023",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
       "page": "application"
     },
     {
@@ -129,13 +176,6 @@
       "url": "https://www.fledge.co/800x550-applications-via-gust/",
       "title": "Fledge — application page",
       "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
-      "page": "application"
-    },
-    {
-      "id": "check-format-d109b6bbfc",
-      "url": "https://www.fledge.co/2012/applications-are-in/",
-      "title": "Fledge — application page",
-      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... January 12, 2023",
       "page": "application"
     },
     {
@@ -181,6 +221,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-2b89e543d9",
+      "url": "https://www.fledge.co/banner_apply_4days/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-327fec0705",
       "url": "https://www.fledge.co/",
       "title": "Fledge — homepage",
@@ -188,8 +235,15 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-3c64713306",
-      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "id": "check-portfolio-40a9d72618",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp-2/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-44cf1baced",
+      "url": "https://www.fledge.co/banner_apply_and_demo_day/",
       "title": "Fledge — application page",
       "excerpt": "Startups → https://www.fledge.co/apply/",
       "page": "application"
@@ -202,15 +256,29 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-49bc830d9f",
-      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "id": "check-portfolio-724f53f4e0",
+      "url": "https://www.fledge.co/banner_apply_14s/",
       "title": "Fledge — application page",
       "excerpt": "Startups → https://www.fledge.co/apply/",
       "page": "application"
     },
     {
-      "id": "check-portfolio-724f53f4e0",
-      "url": "https://www.fledge.co/banner_apply_14s/",
+      "id": "check-portfolio-755f8b3f73",
+      "url": "https://www.fledge.co/banner_apply_left/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7759283163",
+      "url": "https://www.fledge.co/banner_apply_5days/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-90fd456f84",
+      "url": "https://www.fledge.co/banner_apply_a/",
       "title": "Fledge — application page",
       "excerpt": "Startups → https://www.fledge.co/apply/",
       "page": "application"
@@ -244,8 +312,15 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-d956d9110c",
-      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "id": "check-portfolio-d15202cd25",
+      "url": "https://www.fledge.co/banner_apply_dec_15_b_corp/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-db67ee4501",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp/",
       "title": "Fledge — application page",
       "excerpt": "Startups → https://www.fledge.co/apply/",
       "page": "application"
@@ -279,6 +354,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-0294a5127d",
+      "url": "https://www.fledge.co/banner_apply_5days/",
+      "title": "Fledge — application page",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2012/06/banner_apply_5days.png",
+      "page": "application"
+    },
+    {
       "id": "check-route-042342f720",
       "url": "https://www.fledge.co/apply/",
       "title": "Fledge — application page",
@@ -300,6 +382,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-0a4d69ade1",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp/",
+      "title": "Fledge — application page",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
       "id": "check-route-0a81713f84",
       "url": "https://www.fledge.co/apply/",
       "title": "Fledge — application page",
@@ -307,17 +396,31 @@
       "page": "application"
     },
     {
-      "id": "check-route-1245133527",
-      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "id": "check-route-0c0336593a",
+      "url": "https://www.fledge.co/banner_apply_and_demo_day/",
       "title": "Fledge — application page",
-      "excerpt": "Share on WhatsApp (Opens in new window) WhatsApp → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=jetpack-whatsapp",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
       "page": "application"
     },
     {
-      "id": "check-route-15ce43002a",
-      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "id": "check-route-11dd2fd74e",
+      "url": "https://www.fledge.co/banner_apply_left/",
       "title": "Fledge — application page",
-      "excerpt": "Share on Tumblr (Opens in new window) Tumblr → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=tumblr",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-16eb55cd72",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp-2/",
+      "title": "Fledge — application page",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-19e8c03c46",
+      "url": "https://www.fledge.co/banner_apply_dec_15_b_corp/",
+      "title": "Fledge — application page",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
       "page": "application"
     },
     {
@@ -328,24 +431,10 @@
       "page": "application"
     },
     {
-      "id": "check-route-1d105d7f48",
-      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "id": "check-route-204b2a4c40",
+      "url": "https://www.fledge.co/banner_apply_a/",
       "title": "Fledge — application page",
-      "excerpt": "Share on LinkedIn (Opens in new window) LinkedIn → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=linkedin",
-      "page": "application"
-    },
-    {
-      "id": "check-route-1e396dde19",
-      "url": "https://www.fledge.co/2012/applications-are-in/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on X (Opens in new window) X → https://www.fledge.co/2012/applications-are-in/?share=twitter",
-      "page": "application"
-    },
-    {
-      "id": "check-route-24c8ffe3e2",
-      "url": "https://www.fledge.co/2014/spring2014-applications/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on LinkedIn (Opens in new window) LinkedIn → https://www.fledge.co/2014/spring2014-applications/?share=linkedin",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2012/06/banner_apply_a.png",
       "page": "application"
     },
     {
@@ -356,15 +445,8 @@
       "page": "application"
     },
     {
-      "id": "check-route-3addf8e778",
-      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on Reddit (Opens in new window) Reddit → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=reddit",
-      "page": "application"
-    },
-    {
-      "id": "check-route-3c64713306",
-      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "id": "check-route-2b89e543d9",
+      "url": "https://www.fledge.co/banner_apply_4days/",
       "title": "Fledge — application page",
       "excerpt": "Startups → https://www.fledge.co/apply/",
       "page": "application"
@@ -377,29 +459,29 @@
       "page": "application"
     },
     {
-      "id": "check-route-45395f056d",
-      "url": "https://www.fledge.co/about/annotated-application/",
+      "id": "check-route-40a9d72618",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp-2/",
       "title": "Fledge — application page",
       "excerpt": "Startups → https://www.fledge.co/apply/",
       "page": "application"
     },
     {
-      "id": "check-route-45594af2ac",
-      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "id": "check-route-41f9d8395c",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp-2/",
       "title": "Fledge — application page",
-      "excerpt": "Share on Pinterest (Opens in new window) Pinterest → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=pinterest",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2012/11/banner_apply_demo_day_B_Corp.png",
       "page": "application"
     },
     {
-      "id": "check-route-49197b243d",
-      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "id": "check-route-44cf1baced",
+      "url": "https://www.fledge.co/banner_apply_and_demo_day/",
       "title": "Fledge — application page",
-      "excerpt": "Share on Pinterest (Opens in new window) Pinterest → https://www.fledge.co/2012/applications-are-in/?share=pinterest",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
       "page": "application"
     },
     {
-      "id": "check-route-49bc830d9f",
-      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "id": "check-route-45395f056d",
+      "url": "https://www.fledge.co/about/annotated-application/",
       "title": "Fledge — application page",
       "excerpt": "Startups → https://www.fledge.co/apply/",
       "page": "application"
@@ -419,6 +501,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-4cab552b4c",
+      "url": "https://www.fledge.co/banner_apply_5days/",
+      "title": "Fledge — application page",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
       "id": "check-route-4d436f41cf",
       "url": "https://www.fledge.co/about/annotated-application/",
       "title": "Fledge — application page",
@@ -433,31 +522,10 @@
       "page": "application"
     },
     {
-      "id": "check-route-4e6788a792",
-      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "id": "check-route-56cc25574c",
+      "url": "https://www.fledge.co/banner_apply_4days/",
       "title": "Fledge — application page",
-      "excerpt": "Share on X (Opens in new window) X → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=twitter",
-      "page": "application"
-    },
-    {
-      "id": "check-route-512b9b1161",
-      "url": "https://www.fledge.co/2012/applications-are-in/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on Tumblr (Opens in new window) Tumblr → https://www.fledge.co/2012/applications-are-in/?share=tumblr",
-      "page": "application"
-    },
-    {
-      "id": "check-route-5651a0f25b",
-      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on Telegram (Opens in new window) Telegram → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=telegram",
-      "page": "application"
-    },
-    {
-      "id": "check-route-56c403a5c0",
-      "url": "https://www.fledge.co/2014/spring2014-applications/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on Pinterest (Opens in new window) Pinterest → https://www.fledge.co/2014/spring2014-applications/?share=pinterest",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
       "page": "application"
     },
     {
@@ -482,17 +550,17 @@
       "page": "details"
     },
     {
+      "id": "check-route-66a5ab7628",
+      "url": "https://www.fledge.co/banner_apply_left/",
+      "title": "Fledge — application page",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2012/10/banner_apply_LEFT.png",
+      "page": "application"
+    },
+    {
       "id": "check-route-6818a13744",
       "url": "https://www.fledge.co/banner_apply_1day/",
       "title": "Fledge — application page",
       "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
-      "page": "application"
-    },
-    {
-      "id": "check-route-6d8db15a45",
-      "url": "https://www.fledge.co/2012/applications-are-in/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on Facebook (Opens in new window) Facebook → https://www.fledge.co/2012/applications-are-in/?share=facebook",
       "page": "application"
     },
     {
@@ -503,10 +571,24 @@
       "page": "application"
     },
     {
-      "id": "check-route-805706c0d2",
-      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "id": "check-route-755f8b3f73",
+      "url": "https://www.fledge.co/banner_apply_left/",
       "title": "Fledge — application page",
-      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7759283163",
+      "url": "https://www.fledge.co/banner_apply_5days/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-806b94f028",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp/",
+      "title": "Fledge — application page",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2012/10/banner_apply_demo_day_B_Corp.png",
       "page": "application"
     },
     {
@@ -531,31 +613,17 @@
       "page": "application"
     },
     {
-      "id": "check-route-8c0aab7c39",
-      "url": "https://www.fledge.co/2012/applications-are-in/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on WhatsApp (Opens in new window) WhatsApp → https://www.fledge.co/2012/applications-are-in/?share=jetpack-whatsapp",
-      "page": "application"
-    },
-    {
-      "id": "check-route-8d5e1472f0",
-      "url": "https://www.fledge.co/2014/spring2014-applications/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on Tumblr (Opens in new window) Tumblr → https://www.fledge.co/2014/spring2014-applications/?share=tumblr",
-      "page": "application"
-    },
-    {
-      "id": "check-route-8e7ced7081",
-      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on Facebook (Opens in new window) Facebook → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=facebook",
-      "page": "application"
-    },
-    {
       "id": "check-route-8f0970e8b1",
       "url": "https://www.fledge.co/about/annotated-application/",
       "title": "Fledge — application page",
       "excerpt": "Share on Pinterest (Opens in new window) Pinterest → https://www.fledge.co/about/annotated-application/?share=pinterest",
+      "page": "application"
+    },
+    {
+      "id": "check-route-90fd456f84",
+      "url": "https://www.fledge.co/banner_apply_a/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
       "page": "application"
     },
     {
@@ -566,17 +634,17 @@
       "page": "application"
     },
     {
-      "id": "check-route-9dd06f28b3",
-      "url": "https://www.fledge.co/2012/applications-are-in/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on Reddit (Opens in new window) Reddit → https://www.fledge.co/2012/applications-are-in/?share=reddit",
-      "page": "application"
-    },
-    {
       "id": "check-route-9f3a17fc98",
       "url": "https://www.fledge.co/apply/",
       "title": "Fledge — application page",
       "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a2628300b8",
+      "url": "https://www.fledge.co/banner_apply_4days/",
+      "title": "Fledge — application page",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2012/06/banner_apply_4days.png",
       "page": "application"
     },
     {
@@ -657,24 +725,10 @@
       "page": "application"
     },
     {
-      "id": "check-route-b8bb62eedd",
-      "url": "https://www.fledge.co/2014/spring2014-applications/",
-      "title": "Fledge — application page",
-      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
-      "page": "application"
-    },
-    {
       "id": "check-route-bb5eb44d4a",
       "url": "https://www.fledge.co/about/annotated-application/",
       "title": "Fledge — application page",
       "excerpt": "Share on WhatsApp (Opens in new window) WhatsApp → https://www.fledge.co/about/annotated-application/?share=jetpack-whatsapp",
-      "page": "application"
-    },
-    {
-      "id": "check-route-bdbf84bb8a",
-      "url": "https://www.fledge.co/2014/spring2014-applications/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on Facebook (Opens in new window) Facebook → https://www.fledge.co/2014/spring2014-applications/?share=facebook",
       "page": "application"
     },
     {
@@ -685,10 +739,10 @@
       "page": "application"
     },
     {
-      "id": "check-route-bfded519ef",
-      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "id": "check-route-c40470dda8",
+      "url": "https://www.fledge.co/banner_apply_dec_15_b_corp/",
       "title": "Fledge — application page",
-      "excerpt": "Share on WhatsApp (Opens in new window) WhatsApp → https://www.fledge.co/2014/spring2014-applications/?share=jetpack-whatsapp",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2012/11/banner_apply_dec_15_B_Corp.png",
       "page": "application"
     },
     {
@@ -706,10 +760,24 @@
       "page": "application"
     },
     {
+      "id": "check-route-ca1820fe41",
+      "url": "https://www.fledge.co/banner_apply_a/",
+      "title": "Fledge — application page",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
       "id": "check-route-cde10a0524",
       "url": "https://www.fledge.co/apply-via-gust/",
       "title": "Fledge — application page",
       "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d15202cd25",
+      "url": "https://www.fledge.co/banner_apply_dec_15_b_corp/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
       "page": "application"
     },
     {
@@ -720,17 +788,17 @@
       "page": "application"
     },
     {
-      "id": "check-route-d7bc5d1b09",
-      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "id": "check-route-db67ee4501",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp/",
       "title": "Fledge — application page",
-      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
       "page": "application"
     },
     {
-      "id": "check-route-d956d9110c",
-      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "id": "check-route-db8c736251",
+      "url": "https://www.fledge.co/banner_apply_and_demo_day/",
       "title": "Fledge — application page",
-      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2014/05/banner_apply_and_demo_day.png",
       "page": "application"
     },
     {
@@ -741,24 +809,10 @@
       "page": "application"
     },
     {
-      "id": "check-route-e1a0969bb1",
-      "url": "https://www.fledge.co/2014/spring2014-applications/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on Telegram (Opens in new window) Telegram → https://www.fledge.co/2014/spring2014-applications/?share=telegram",
-      "page": "application"
-    },
-    {
       "id": "check-route-e25cf361b3",
       "url": "https://www.fledge.co/apply-via-gust/",
       "title": "Fledge — application page",
       "excerpt": "https://www.fledge.co/wp-content/uploads/2012/04/Apply-via-Gust.png",
-      "page": "application"
-    },
-    {
-      "id": "check-route-edb95b5a7b",
-      "url": "https://www.fledge.co/2012/applications-are-in/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on LinkedIn (Opens in new window) LinkedIn → https://www.fledge.co/2012/applications-are-in/?share=linkedin",
       "page": "application"
     },
     {
@@ -769,24 +823,10 @@
       "page": "application"
     },
     {
-      "id": "check-route-f2e82efa34",
-      "url": "https://www.fledge.co/2014/spring2014-applications/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on Reddit (Opens in new window) Reddit → https://www.fledge.co/2014/spring2014-applications/?share=reddit",
-      "page": "application"
-    },
-    {
       "id": "check-route-f599703e91",
       "url": "https://www.fledge.co/apply/",
       "title": "Fledge — application page",
       "excerpt": "Share on Facebook (Opens in new window) Facebook → https://www.fledge.co/apply/?share=facebook",
-      "page": "application"
-    },
-    {
-      "id": "check-route-f5f3ded972",
-      "url": "https://www.fledge.co/2014/spring2014-applications/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on X (Opens in new window) X → https://www.fledge.co/2014/spring2014-applications/?share=twitter",
       "page": "application"
     },
     {
@@ -818,13 +858,6 @@
       "page": "application"
     },
     {
-      "id": "check-route-fe95b1de89",
-      "url": "https://www.fledge.co/2012/applications-are-in/",
-      "title": "Fledge — application page",
-      "excerpt": "Share on Telegram (Opens in new window) Telegram → https://www.fledge.co/2012/applications-are-in/?share=telegram",
-      "page": "application"
-    },
-    {
       "id": "check-status-21b87ae53c",
       "url": "https://www.fledge.co/apply/",
       "title": "Fledge — application page",
@@ -840,34 +873,148 @@
       "excerpt": "Fledge – Impact accelerators About Startups Trainers Locations Demo Day Blog Contact Us Angel Accelerator Read About the Fledge Accelerators Read Startup Accelerator Read Locations Read Africa Eats Read Fledglings Read Demo Day Read Fledge Impact Accelerators Fledge is a global network of impact accelerators and investment funds , helping entrepreneurs create impactful companies and co-ops at scale through intense, short programs filled with education , guidance , and a massive amount of mentorship . The program runs in many different cities, not all under the Fledge brand. Each city’s program is a bit different from the others’, but all are focused on mission-driven for-profit companies. Th educational curriculum is based on The Next Step books and online classes, taught to fill in any gaps in the key skills entrepreneurs need to know to succeed: strategy, financials, marketing, sales, funding, etc. All our cities share a global network of hundreds of mentors , who share their experiences, advice, and connections in 1-on-1 meetings with participants. Every day, week after week, we push the participants forward, iterating business strategy, financial models, marketing and sales plans, funding options, and investor and sales pitches, plus we put a special focus on storytelling. The result is intense and creates lasting value for years after the companies return home. We have"
     },
     {
-      "id": "check-page-3f695e8ac4",
-      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
-      "page": "application",
-      "excerpt": "Applications are in.. Invitations are out.. – Fledge About Startups Trainers Locations Demo Day Blog Contact Us Applications are in.. Invitations are out.. In Conscious , Fledglings , Seattle July 3, 2012 1 Min read A Dozens of applications arrived by the June 30th midnight deadline, including one 22 seconds into July 1st. Thank you to all who applied! The collection of teams and ideas is inspiring. The potential impact across these companies, once launched, could reach across billions of people, spanning the less fortunate billion living on $1 or $2 per day to small business owners and other neighbors in all of our local communities. Picking just seven of these applications to go forward was not easy, but for this first cohort, our resources are limited. Seven teams have received invitations, and are busy reviewing the final details of the program. If you’ve not received an invitation, hold tight, as life is complex and some teams may change their plans. The kick-off date and list of teams will be announced shortly. Share this: Share on X (Opens in new window) X Share on Facebook (Opens in new window) Facebook Share on LinkedIn (Opens in new window) LinkedIn Share on WhatsApp (Opens in new window) WhatsApp Share on Telegram (Opens in new window) Telegram Share on Pinterest (Opens in new window) Pinterest Share on Tumblr (Opens in new window) Tumblr Share on Reddit (Opens in"
+      "id": "check-page-a2e2818e85",
+      "url": "https://www.fledge.co/",
+      "page": "details",
+      "excerpt": "We invest $15,000 (Peru) , €15,000 (Europe) , or $20,000 (U.S.) into each company we invite to participate, using revenue-based equity , which aligns our interests with the founders, avoids any pressure to “sell out”, and lets us invest in just about any market segment and most any country in the world."
     },
     {
-      "id": "check-page-5caaac38db",
-      "url": "https://www.fledge.co/2012/applications-are-in/",
-      "page": "application",
-      "excerpt": "Applications are in… – Fledge About Startups Trainers Locations Demo Day Blog Contact Us Applications are in… In Conscious , Fledglings December 17, 2012 1 Min read A A big THANK YOU to all the applicants for the Winter 2013 program. It is amazing the breadth of “conscious” ideas that exist around the world. That breadth was augmented by applications from over a dozen countries worldwide, plus a similar number of US states and Canadian provinces. In fact, what is quite nice to see in this latest round of applications are the number of applicants from outside of Seattle. While we think Seattle could very well be the center of excellence for conscious companies, there is talent worldwide, and Fledge expects to work with companies from far and wide. Now comes the hard part… picking just seven of these teams to invite as the next fledglings. Over the coming month, we’ll be interviewing the top teams, digging into their ideas, and determining which mix we can help the most, and which can potentially best help each other. Meanwhile… we continue working with our Summer 2012 fledglings, helping them take flight with their new companies. Share this: Share on X (Opens in new window) X Share on Facebook (Opens in new window) Facebook Share on LinkedIn (Opens in new window) LinkedIn Share on WhatsApp (Opens in new window) WhatsApp Share on Telegram (Opens in new window) Telegram Share on"
+      "id": "check-page-3e76a0b3df",
+      "url": "https://www.fledge.co/",
+      "page": "details",
+      "excerpt": "Plus, we make introductions to impact investors and make follow-on investments from our family of seed funds."
     },
     {
-      "id": "check-page-6688152d29",
-      "url": "https://www.fledge.co/2014/spring2014-applications/",
-      "page": "application",
-      "excerpt": "114 applications from 88 cities – Fledge About Startups Trainers Locations Demo Day Blog Contact Us 114 applications from 88 cities In Fledglings , Seattle January 3, 2014 1 Min read 1 “Wow!” sums it up nicely. 114 applicants want to be fledglings. That is a new record for Fledge, up from 99 for the Autumn session, almost double the 65 from last year’s Spring session. What is even more exciting is that these applications are now coming from around the world. 88 cities in 32 countries. For the first time, most of the applications are from outside the USA. We are busy interviewing these teams, with a goal of picking seven invitees before the end of January. That is always been a difficult process, and getting harder each time as not only do we receive more applications, but the quality goes up each and every session as well. This means that less than 7% of the applicants will be invited as fledglings. For the rest, we’re about to launch some online educational materials which should provide some advice and guidance. More details on that, and the list of fledglings soon. Share this: Share on X (Opens in new window) X Share on Facebook (Opens in new window) Facebook Share on LinkedIn (Opens in new window) LinkedIn Share on WhatsApp (Opens in new window) WhatsApp Share on Telegram (Opens in new window) Telegram Share on Pinterest (Opens in new window) Pinterest Share on Tumblr"
+      "id": "check-page-f3d2c2b5c3",
+      "url": "https://www.fledge.co/",
+      "page": "details",
+      "excerpt": "This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission."
+    },
+    {
+      "id": "check-page-948884321b",
+      "url": "https://www.fledge.co/",
+      "page": "details",
+      "excerpt": "Fledge Africa started in-person in Nairobi, Kenya in February 2026..."
+    },
+    {
+      "id": "check-page-8d17fa4878",
+      "url": "https://www.fledge.co/",
+      "page": "details",
+      "excerpt": "In Investment July 25, 2023 2 Min read S Venture capital and angel investing are realms filled with unspoken assumptions."
+    },
+    {
+      "id": "check-page-a552491569",
+      "url": "https://www.fledge.co/",
+      "page": "details",
+      "excerpt": "EGA Farms In LatAm June 16, 2023 1 Min read E From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-ec4ef6da46",
+      "url": "https://www.fledge.co/",
+      "page": "details",
+      "excerpt": "The Land Accelerator and TerraFund In Africa April 9, 2023 1 Min read T The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-68f5d8efc9",
+      "url": "https://www.fledge.co/",
+      "page": "details",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-c3dd6ddc69",
+      "url": "https://www.fledge.co/",
+      "page": "details",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-e4203403e0",
+      "url": "https://www.fledge.co/",
+      "page": "details",
+      "excerpt": "Filling in the Missing Middle In Advice , Africa , Startup Ecoystem December 7, 2022 1 Min read F “The Missing Middle” is what we call the gap in finance the majority of entrepreneurs face in getting from a viable prototype or early customers to a full-scale proven business."
+    },
+    {
+      "id": "check-page-511d1a61a7",
+      "url": "https://www.fledge.co/",
+      "page": "details",
+      "excerpt": "In Part 2, Luni jumps back to the history of venture capital to explain the pervasive paradigm that leads to..."
+    },
+    {
+      "id": "check-page-8808d4b020",
+      "url": "https://www.fledge.co/",
+      "page": "details",
+      "excerpt": "To see what that means in practice, below is a site visit video shot this month in Kigali, Rwanda."
     },
     {
       "id": "check-page-7b9a02f96b",
       "url": "https://www.fledge.co/500x90-fledge-tag-line-apply-today-fledge6/",
       "page": "application",
-      "excerpt": "500×90 Fledge + Tag line + Apply Today Fledge6 – Fledge About Startups Trainers Locations Demo Day Blog Contact Us 500×90 Fledge + Tag line + Apply Today Fledge6 December 3, 2014 1 Min read Add comment 5 Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. − two = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially"
+      "excerpt": "500×90 Fledge + Tag line + Apply Today Fledge6 – Fledge About Startups Trainers Locations Demo Day Blog Contact Us 500×90 Fledge + Tag line + Apply Today Fledge6 December 3, 2014 1 Min read Add comment 5 Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. three × = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially"
+    },
+    {
+      "id": "check-page-f52b5efe8b",
+      "url": "https://www.fledge.co/500x90-fledge-tag-line-apply-today-fledge6/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-7ae2ab8af6",
+      "url": "https://www.fledge.co/500x90-fledge-tag-line-apply-today-fledge6/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-7a9937d455",
+      "url": "https://www.fledge.co/500x90-fledge-tag-line-apply-today-fledge6/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-2b7ce43421",
+      "url": "https://www.fledge.co/500x90-fledge-tag-line-apply-today-fledge6/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-d67cc69593",
+      "url": "https://www.fledge.co/500x90-fledge-tag-line-apply-today-fledge6/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
     },
     {
       "id": "check-page-43b5eb1fd9",
       "url": "https://www.fledge.co/800x550-applications-via-gust/",
       "page": "application",
-      "excerpt": "800×550 Applications via Gust – Fledge About Startups Trainers Locations Demo Day Blog Contact Us 800×550 Applications via Gust October 25, 2012 1 Min read Add comment 8 Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. + two = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms"
+      "excerpt": "800×550 Applications via Gust – Fledge About Startups Trainers Locations Demo Day Blog Contact Us 800×550 Applications via Gust October 25, 2012 1 Min read Add comment 8 Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. 4 − = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms"
+    },
+    {
+      "id": "check-page-d2a9ac9d8e",
+      "url": "https://www.fledge.co/800x550-applications-via-gust/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-945cf92aa0",
+      "url": "https://www.fledge.co/800x550-applications-via-gust/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-12a59c91e5",
+      "url": "https://www.fledge.co/800x550-applications-via-gust/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-a1e5874f67",
+      "url": "https://www.fledge.co/800x550-applications-via-gust/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-f2cdcd9660",
+      "url": "https://www.fledge.co/800x550-applications-via-gust/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
     },
     {
       "id": "check-page-70d29bfe2a",
@@ -876,16 +1023,148 @@
       "excerpt": "Annotated Application – Fledge About Startups Trainers Locations Demo Day Blog Contact Us Annotated Application A What does a great application look like? Unfortunately we can’t just share a selection of great and poor applications for everyone to review, as that would not be fair to those applicants. Instead, below is an annotated version of the Fledge application, explaining why each question is asked, and providing some guidance and samples of how to best answer the question: Basic Information Fledge uses F6s.com to host our application. This website hosts applications for thousands of other accelerators too. To save you time, F6S asks every applicant a set of basic questions about your business. Video The application asks for a videos. The application says this is optional, but here in the 21st Century is it expected, even if just a quick video shot on a mobile phone. The videos these days are often quite polished, produced from some online tool, or from the Adobe Creative suite of tools, or it is a video from a television interview, or a video from a business plan competition or even another Demo Day from another incubator or accelerator. If you don’t have such a video and can’t create one, then explaining the product in a minute or two using a webcam or phone is fine. Back we Fledge first started, nearly all the videos were that simple. The video should be no more than"
     },
     {
+      "id": "check-page-414bd3c9df",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "page": "application",
+      "excerpt": "The description of this question online says: How much money has been invested to-date, including your own cash, friends & family, grants, prizes, and any other cash."
+    },
+    {
+      "id": "check-page-0f87c31d1e",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "page": "application",
+      "excerpt": "Example : Climate change."
+    },
+    {
+      "id": "check-page-522a9a73bd",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "page": "application",
+      "excerpt": "Fledge is the network of conscious company accelerators."
+    },
+    {
+      "id": "check-page-2ca49c8bf9",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "page": "application",
+      "excerpt": "East Africa Fruit , Geossy , Ziweto Enterprise , Brent Oils , AYNI , and Agua Piedra ."
+    },
+    {
+      "id": "check-page-c96479d73e",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "page": "application",
+      "excerpt": "“Customers pay us for X” or “Customers subscribe to our service” or “We use a pay-go model” or or “We sell on Amazon and through our e-commerce website” or sometimes “Customers can’t afford our solution thus we find NGOs to buy it from us who then give it to the people in need.” If you don’t know yet how you’ll get paid, then tell us that."
+    },
+    {
+      "id": "check-page-8b1fc17258",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "page": "application",
+      "excerpt": "(How many customers are there with this problem?) Fledge invests in every fledgling and thus we need to worry about whether we’ll ever get repaid."
+    },
+    {
+      "id": "check-page-a60ff2890e",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "page": "application",
+      "excerpt": "We invest using an uncommon model, revenue-based equity, and with that what we care about is whether the business can earn millions in revenues; we don’t worry about exits or unicorns."
+    },
+    {
+      "id": "check-page-ebef271176",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "page": "application",
+      "excerpt": "Great answer : There are 36 Million Filipinos working in agriculture sector."
+    },
+    {
+      "id": "check-page-08d2b4dc13",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "page": "application",
+      "excerpt": "South East Asia together with other agricultural developing countries has millions and even billions of farmers who are experiencing the problem we’re addressing."
+    },
+    {
+      "id": "check-page-2a0fb64dcc",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "page": "application",
+      "excerpt": "The most recent national charcoal survey estimates that charcoal consumption amounts to approximately 1.6 million tonnes per year, generating over $360 million in annual revenues in Kenya."
+    },
+    {
+      "id": "check-page-ee98e6b4b5",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "page": "application",
+      "excerpt": "In the neighboring Uganda, Tanzania and Uganda, the situation is not different providing opportunity for scale up within East Africa."
+    },
+    {
+      "id": "check-page-441a40906c",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "page": "application",
+      "excerpt": "There are hundreds of impact accelerators in the world."
+    },
+    {
       "id": "check-page-e9f607c2d5",
       "url": "https://www.fledge.co/apply-2/",
       "page": "application",
-      "excerpt": "Apply – Fledge About Startups Trainers Locations Demo Day Blog Contact Us Apply November 12, 2012 1 Min read Add comment A Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. two + two = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and"
+      "excerpt": "Apply – Fledge About Startups Trainers Locations Demo Day Blog Contact Us Apply November 12, 2012 1 Min read Add comment A Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. − = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive"
+    },
+    {
+      "id": "check-page-0f7b63a6fe",
+      "url": "https://www.fledge.co/apply-2/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-d73d440021",
+      "url": "https://www.fledge.co/apply-2/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-326c56a2e7",
+      "url": "https://www.fledge.co/apply-2/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-c9526d3b2d",
+      "url": "https://www.fledge.co/apply-2/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-1b6150e025",
+      "url": "https://www.fledge.co/apply-2/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
     },
     {
       "id": "check-page-b332c33c7d",
       "url": "https://www.fledge.co/apply-via-gust/",
       "page": "application",
-      "excerpt": "Apply via Gust – Fledge About Startups Trainers Locations Demo Day Blog Contact Us Apply via Gust October 25, 2012 1 Min read Add comment A Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. + 5 = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability"
+      "excerpt": "Apply via Gust – Fledge About Startups Trainers Locations Demo Day Blog Contact Us Apply via Gust October 25, 2012 1 Min read Add comment A Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. seven − 3 = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+    },
+    {
+      "id": "check-page-27ec9e84d7",
+      "url": "https://www.fledge.co/apply-via-gust/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-f790d0f203",
+      "url": "https://www.fledge.co/apply-via-gust/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-92ba029849",
+      "url": "https://www.fledge.co/apply-via-gust/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-d0a756d539",
+      "url": "https://www.fledge.co/apply-via-gust/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-fff75d82be",
+      "url": "https://www.fledge.co/apply-via-gust/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
     },
     {
       "id": "check-page-59c12ea0fb",
@@ -897,31 +1176,469 @@
       "id": "check-page-9310fb9053",
       "url": "https://www.fledge.co/banner_apply/",
       "page": "application",
-      "excerpt": "banner_apply – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply April 25, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. − three = 1 Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability"
+      "excerpt": "banner_apply – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply April 25, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. + 6 = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and"
+    },
+    {
+      "id": "check-page-4da68e7a0b",
+      "url": "https://www.fledge.co/banner_apply/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-2c548c81e9",
+      "url": "https://www.fledge.co/banner_apply/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-c47fd8414c",
+      "url": "https://www.fledge.co/banner_apply/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-cd8539949e",
+      "url": "https://www.fledge.co/banner_apply/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-e287fca850",
+      "url": "https://www.fledge.co/banner_apply/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
     },
     {
       "id": "check-page-fd6ac548ba",
       "url": "https://www.fledge.co/banner_apply_14s/",
       "page": "application",
-      "excerpt": "banner_apply_14S – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_14S November 27, 2013 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. × 8 = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+      "excerpt": "banner_apply_14S – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_14S November 27, 2013 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. + four = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+    },
+    {
+      "id": "check-page-76e7c54185",
+      "url": "https://www.fledge.co/banner_apply_14s/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-a5159298b5",
+      "url": "https://www.fledge.co/banner_apply_14s/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-0929655872",
+      "url": "https://www.fledge.co/banner_apply_14s/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-6ef4c78be7",
+      "url": "https://www.fledge.co/banner_apply_14s/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-e92c5385d7",
+      "url": "https://www.fledge.co/banner_apply_14s/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
     },
     {
       "id": "check-page-b4982d25f8",
       "url": "https://www.fledge.co/banner_apply_1day/",
       "page": "application",
-      "excerpt": "banner_apply_1day – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_1day June 26, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. − three = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+      "excerpt": "banner_apply_1day – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_1day June 26, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. one × = five Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+    },
+    {
+      "id": "check-page-53a8849554",
+      "url": "https://www.fledge.co/banner_apply_1day/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-bea0650fe7",
+      "url": "https://www.fledge.co/banner_apply_1day/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-cb2d06ddb7",
+      "url": "https://www.fledge.co/banner_apply_1day/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-10a31b01c9",
+      "url": "https://www.fledge.co/banner_apply_1day/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-10b32d11a6",
+      "url": "https://www.fledge.co/banner_apply_1day/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
     },
     {
       "id": "check-page-d2cf1e09db",
       "url": "https://www.fledge.co/banner_apply_2days/",
       "page": "application",
-      "excerpt": "banner_apply_2days – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_2days June 26, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. − = 2 Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+      "excerpt": "banner_apply_2days – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_2days June 26, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. + 7 = 13 Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+    },
+    {
+      "id": "check-page-fa83ada833",
+      "url": "https://www.fledge.co/banner_apply_2days/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-7db87eab00",
+      "url": "https://www.fledge.co/banner_apply_2days/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-00d59e4bc5",
+      "url": "https://www.fledge.co/banner_apply_2days/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-99cfcfaae8",
+      "url": "https://www.fledge.co/banner_apply_2days/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-790afb59b3",
+      "url": "https://www.fledge.co/banner_apply_2days/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
     },
     {
       "id": "check-page-eff5b92a5c",
       "url": "https://www.fledge.co/banner_apply_3days/",
       "page": "application",
-      "excerpt": "banner_apply_3days – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_3days June 26, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. + eight = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+      "excerpt": "banner_apply_3days – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_3days June 26, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. eight × = 48 Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+    },
+    {
+      "id": "check-page-43a9dd9ed3",
+      "url": "https://www.fledge.co/banner_apply_3days/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-c120123cb6",
+      "url": "https://www.fledge.co/banner_apply_3days/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-e2b25e7e7d",
+      "url": "https://www.fledge.co/banner_apply_3days/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-abf672a4c2",
+      "url": "https://www.fledge.co/banner_apply_3days/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-fed754cb90",
+      "url": "https://www.fledge.co/banner_apply_3days/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
+    },
+    {
+      "id": "check-page-d7dfda749a",
+      "url": "https://www.fledge.co/banner_apply_4days/",
+      "page": "application",
+      "excerpt": "banner_apply_4days – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_4days June 26, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. nine + = 12 Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+    },
+    {
+      "id": "check-page-251384fdcd",
+      "url": "https://www.fledge.co/banner_apply_4days/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-9b1890e4fd",
+      "url": "https://www.fledge.co/banner_apply_4days/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-2115b2da0e",
+      "url": "https://www.fledge.co/banner_apply_4days/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-328da2d1f1",
+      "url": "https://www.fledge.co/banner_apply_4days/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-037a1099ed",
+      "url": "https://www.fledge.co/banner_apply_4days/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
+    },
+    {
+      "id": "check-page-3e8c338222",
+      "url": "https://www.fledge.co/banner_apply_5days/",
+      "page": "application",
+      "excerpt": "banner_apply_5days – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_5days June 26, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. one + = five Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+    },
+    {
+      "id": "check-page-c09ca500e2",
+      "url": "https://www.fledge.co/banner_apply_5days/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-c86d568f18",
+      "url": "https://www.fledge.co/banner_apply_5days/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-357cf88bbd",
+      "url": "https://www.fledge.co/banner_apply_5days/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-8b4eb1af68",
+      "url": "https://www.fledge.co/banner_apply_5days/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-424625c277",
+      "url": "https://www.fledge.co/banner_apply_5days/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
+    },
+    {
+      "id": "check-page-fb8fb9a372",
+      "url": "https://www.fledge.co/banner_apply_a/",
+      "page": "application",
+      "excerpt": "banner_apply_a – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_a June 30, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. − 1 = five Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability"
+    },
+    {
+      "id": "check-page-f42fd3b975",
+      "url": "https://www.fledge.co/banner_apply_a/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-4bc62aa90e",
+      "url": "https://www.fledge.co/banner_apply_a/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-42e3b9e6b1",
+      "url": "https://www.fledge.co/banner_apply_a/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-7f966d9652",
+      "url": "https://www.fledge.co/banner_apply_a/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-df241a15b9",
+      "url": "https://www.fledge.co/banner_apply_a/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
+    },
+    {
+      "id": "check-page-a8256ae1bf",
+      "url": "https://www.fledge.co/banner_apply_and_demo_day/",
+      "page": "application",
+      "excerpt": "banner_apply_and_demo_day – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_and_demo_day May 21, 2014 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. − = 4 Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+    },
+    {
+      "id": "check-page-0bb9383111",
+      "url": "https://www.fledge.co/banner_apply_and_demo_day/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-d2b447d5c5",
+      "url": "https://www.fledge.co/banner_apply_and_demo_day/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-5100e2edbf",
+      "url": "https://www.fledge.co/banner_apply_and_demo_day/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-33f487d4bc",
+      "url": "https://www.fledge.co/banner_apply_and_demo_day/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-fca1f226b2",
+      "url": "https://www.fledge.co/banner_apply_and_demo_day/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
+    },
+    {
+      "id": "check-page-571352e178",
+      "url": "https://www.fledge.co/banner_apply_dec_15_b_corp/",
+      "page": "application",
+      "excerpt": "banner_apply_dec_15_B_Corp – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_dec_15_B_Corp November 28, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. five × 5 = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms"
+    },
+    {
+      "id": "check-page-4dd61c71fa",
+      "url": "https://www.fledge.co/banner_apply_dec_15_b_corp/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-c12fd28355",
+      "url": "https://www.fledge.co/banner_apply_dec_15_b_corp/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-d25d072e6a",
+      "url": "https://www.fledge.co/banner_apply_dec_15_b_corp/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-8c982c3168",
+      "url": "https://www.fledge.co/banner_apply_dec_15_b_corp/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-629e82186b",
+      "url": "https://www.fledge.co/banner_apply_dec_15_b_corp/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
+    },
+    {
+      "id": "check-page-578deadcf0",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp-2/",
+      "page": "application",
+      "excerpt": "banner_apply_demo_day_B_Corp – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_demo_day_B_Corp November 28, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. six + = fifteen Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA"
+    },
+    {
+      "id": "check-page-714bdff792",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp-2/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-a709e1ce86",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp-2/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-a242f21187",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp-2/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-16a0d60660",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp-2/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-0be740744a",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp-2/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
+    },
+    {
+      "id": "check-page-1eedbec387",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp/",
+      "page": "application",
+      "excerpt": "banner_apply_demo_day_B_Corp – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_demo_day_B_Corp October 24, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. − four = 5 Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms"
+    },
+    {
+      "id": "check-page-606d63a814",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-994e650451",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-654edd149d",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-597b40c336",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-5190a36a05",
+      "url": "https://www.fledge.co/banner_apply_demo_day_b_corp/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
+    },
+    {
+      "id": "check-page-43eabaf413",
+      "url": "https://www.fledge.co/banner_apply_left/",
+      "page": "application",
+      "excerpt": "banner_apply_LEFT – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_LEFT October 14, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. two + = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+    },
+    {
+      "id": "check-page-70ebb74822",
+      "url": "https://www.fledge.co/banner_apply_left/",
+      "page": "application",
+      "excerpt": "June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and competitive development while undertaking a commitment to support the farmers and families that makeup the agro-industrial sector of the Tacna Region of Peru."
+    },
+    {
+      "id": "check-page-e421c152b0",
+      "url": "https://www.fledge.co/banner_apply_left/",
+      "page": "application",
+      "excerpt": "April 9, 2023 The Land Accelerator and TerraFund In Africa April 9, 2023 09 April The Land Accelerator celebrates half a decade of programming in 2023, all focused on for-profit companies working on land restoration."
+    },
+    {
+      "id": "check-page-19feaa3e2e",
+      "url": "https://www.fledge.co/banner_apply_left/",
+      "page": "application",
+      "excerpt": "Over 1,000 applications arrived yet-again for the original Africa program."
+    },
+    {
+      "id": "check-page-874f914ab1",
+      "url": "https://www.fledge.co/banner_apply_left/",
+      "page": "application",
+      "excerpt": "From boosting agricultural yields to creating jobs and fighting climate change, there are multiple benefits to making degraded land healthy again."
+    },
+    {
+      "id": "check-page-5293c83cf6",
+      "url": "https://www.fledge.co/banner_apply_left/",
+      "page": "application",
+      "excerpt": "About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits?"
     }
   ],
   "findings": {
@@ -937,20 +1654,20 @@
         "evidenceId": "check-route-60b47b0894"
       },
       {
-        "value": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=twitter",
-        "evidenceId": "check-route-4e6788a792"
+        "value": "https://www.fledge.co/wp-content/uploads/2014/12/500x90-Fledge-Tag-line-Apply-Today-Fledge6.png",
+        "evidenceId": "check-route-5963703c4b"
       },
       {
-        "value": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=facebook",
-        "evidenceId": "check-route-8e7ced7081"
+        "value": "https://www.fledge.co/wp-content/uploads/2012/04/800x550-Applications-via-Gust.png",
+        "evidenceId": "check-route-ad43ca09c1"
       },
       {
-        "value": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=linkedin",
-        "evidenceId": "check-route-1d105d7f48"
+        "value": "https://www.fledge.co/about/annotated-application/?share=twitter",
+        "evidenceId": "check-route-4b7495b21f"
       },
       {
-        "value": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=jetpack-whatsapp",
-        "evidenceId": "check-route-1245133527"
+        "value": "https://www.fledge.co/about/annotated-application/?share=facebook",
+        "evidenceId": "check-route-4d436f41cf"
       }
     ],
     "applicationUrl": [
@@ -968,12 +1685,7 @@
     "operatingStatus": [],
     "deadlines": [],
     "rolling": [],
-    "announcedIntake": [
-      {
-        "value": "July",
-        "evidenceId": "check-announced-0e42425bd2"
-      }
-    ],
+    "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [
       {

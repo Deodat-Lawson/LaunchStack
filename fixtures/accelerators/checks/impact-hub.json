@@ -1,6 +1,6 @@
 {
   "programId": "impact-hub",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-17T00:20:40.000Z",
   "pagesRead": [
     "https://impacthub.net/",
     "https://impacthub.net/?elementor_library=cp-application-form-container",
@@ -16,7 +16,12 @@
     "https://impacthub.net/?elementor_library=about_storyline",
     "https://impacthub.net/?elementor_library=features_overview",
     "https://impacthub.net/?elementor_library=features_overview-2",
-    "https://impacthub.net/?elementor_library=number_overview"
+    "https://impacthub.net/?elementor_library=number_overview",
+    "https://impacthub.net/?elementor_library=programme_numbers",
+    "https://impacthub.net/carbonxprogram/",
+    "https://impacthub.net/how-nepal-is-turning-circular-with-the-roots-of-circularity-programme/",
+    "https://impacthub.net/impact_library/accelerators-as-drivers-of-gender-equality/",
+    "https://impacthub.net/impact_library/collection-of-best-practices-in-inclusive-entrepreneurship-support-programmes/"
   ],
   "evidence": [
     {
@@ -49,10 +54,34 @@
       "excerpt": "Home | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Building from the ground up How we build partnerships that find, fund and scale solutions to the world’s social and environmental challenges. The report brings together stories, examples of collaboration and founder perspectives to show both the work itself and the relationships that make it possible. Read our new Impact Report Turning ideas into lasting impact We inspire, connect, and enable Impact Makers worldwide. Together, our mission is to build a just and sustainable world where business and profit serve people and the planet. Whether you’re an entrepreneur shaping ideas, a"
     },
     {
+      "id": "check-page-a9eb823adc",
+      "url": "https://impacthub.net/",
+      "page": "details",
+      "excerpt": "Here's our story Our work Our work focuses mainly, though not exclusively, on Climate Action and Diversity, Equity & Inclusion - and the nexus between them."
+    },
+    {
+      "id": "check-page-4a87fe4693",
+      "url": "https://impacthub.net/",
+      "page": "details",
+      "excerpt": "Start making an impact today Partner with us Partner with us Discover how you can collaborate on impactful programmes and drive innovation in Climate Action and Diversity, Equity, and Inclusion."
+    },
+    {
       "id": "check-page-b0aa159424",
       "url": "https://impacthub.net/?elementor_library=cp-application-form-container",
       "page": "application",
       "excerpt": "Home | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Building from the ground up How we build partnerships that find, fund and scale solutions to the world’s social and environmental challenges. The report brings together stories, examples of collaboration and founder perspectives to show both the work itself and the relationships that make it possible. Read our new Impact Report Turning ideas into lasting impact We inspire, connect, and enable Impact Makers worldwide. Together, our mission is to build a just and sustainable world where business and profit serve people and the planet. Whether you’re an entrepreneur shaping ideas, a"
+    },
+    {
+      "id": "check-page-7c67c2002b",
+      "url": "https://impacthub.net/?elementor_library=cp-application-form-container",
+      "page": "application",
+      "excerpt": "Here's our story Our work Our work focuses mainly, though not exclusively, on Climate Action and Diversity, Equity & Inclusion - and the nexus between them."
+    },
+    {
+      "id": "check-page-ed573fc5e3",
+      "url": "https://impacthub.net/?elementor_library=cp-application-form-container",
+      "page": "application",
+      "excerpt": "Start making an impact today Partner with us Partner with us Discover how you can collaborate on impactful programmes and drive innovation in Climate Action and Diversity, Equity, and Inclusion."
     },
     {
       "id": "check-page-1d96a8ece7",
@@ -61,10 +90,34 @@
       "excerpt": "Community Partner Application Form | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Community Partner Application Form 1 Let’s get to know each other! 2 Requirements 3 Key information about your organisation 4 Why do you want to become a Community Partner? 5 Terms & Fees First Name (Required) Last Name (Required) Email (Required) Name of organization (Required) Your role at the organization (Required) City or region where your organization is based (Required) Country where your organisation operates (Required) If you have multiple locations, please explain Website (Required) What describes your organization the best? (single choice, with"
     },
     {
+      "id": "check-page-adbbddbb6a",
+      "url": "https://impacthub.net/community-partner-application-form/",
+      "page": "application",
+      "excerpt": "(single choice, with other as an opportunity for self-definition) (Required) Academic/Research Institution Accelerator Corporation or Corporate Foundation Co-working Space Foundation Incubator Innovation Center Other How have you heard about the Community Partnership?"
+    },
+    {
+      "id": "check-page-9b9a0a779a",
+      "url": "https://impacthub.net/community-partner-application-form/",
+      "page": "application",
+      "excerpt": "(Required) Community Building Consultancy Co-working Entrepreneurial support programs Events Impact investing Policy Research Other Other (Required) Who’s your community (your primary customers & beneficiaries)?"
+    },
+    {
       "id": "check-page-01e80a1ef6",
       "url": "https://impacthub.net/?elementor_library=faq",
       "page": "terms",
       "excerpt": "Home | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Building from the ground up How we build partnerships that find, fund and scale solutions to the world’s social and environmental challenges. The report brings together stories, examples of collaboration and founder perspectives to show both the work itself and the relationships that make it possible. Read our new Impact Report Turning ideas into lasting impact We inspire, connect, and enable Impact Makers worldwide. Together, our mission is to build a just and sustainable world where business and profit serve people and the planet. Whether you’re an entrepreneur shaping ideas, a"
+    },
+    {
+      "id": "check-page-10318df67f",
+      "url": "https://impacthub.net/?elementor_library=faq",
+      "page": "terms",
+      "excerpt": "Here's our story Our work Our work focuses mainly, though not exclusively, on Climate Action and Diversity, Equity & Inclusion - and the nexus between them."
+    },
+    {
+      "id": "check-page-50fad3a717",
+      "url": "https://impacthub.net/?elementor_library=faq",
+      "page": "terms",
+      "excerpt": "Start making an impact today Partner with us Partner with us Discover how you can collaborate on impactful programmes and drive innovation in Climate Action and Diversity, Equity, and Inclusion."
     },
     {
       "id": "check-page-eaa15e07c8",
@@ -73,10 +126,34 @@
       "excerpt": "Home | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Building from the ground up How we build partnerships that find, fund and scale solutions to the world’s social and environmental challenges. The report brings together stories, examples of collaboration and founder perspectives to show both the work itself and the relationships that make it possible. Read our new Impact Report Turning ideas into lasting impact We inspire, connect, and enable Impact Makers worldwide. Together, our mission is to build a just and sustainable world where business and profit serve people and the planet. Whether you’re an entrepreneur shaping ideas, a"
     },
     {
+      "id": "check-page-89c49a3374",
+      "url": "https://impacthub.net/?elementor_library=faq_dropdown",
+      "page": "terms",
+      "excerpt": "Here's our story Our work Our work focuses mainly, though not exclusively, on Climate Action and Diversity, Equity & Inclusion - and the nexus between them."
+    },
+    {
+      "id": "check-page-597864c072",
+      "url": "https://impacthub.net/?elementor_library=faq_dropdown",
+      "page": "terms",
+      "excerpt": "Start making an impact today Partner with us Partner with us Discover how you can collaborate on impactful programmes and drive innovation in Climate Action and Diversity, Equity, and Inclusion."
+    },
+    {
       "id": "check-page-9c22964cfe",
       "url": "https://impacthub.net/?elementor_library=timeline-main-3-final",
       "page": "batches",
       "excerpt": "Home | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Building from the ground up How we build partnerships that find, fund and scale solutions to the world’s social and environmental challenges. The report brings together stories, examples of collaboration and founder perspectives to show both the work itself and the relationships that make it possible. Read our new Impact Report Turning ideas into lasting impact We inspire, connect, and enable Impact Makers worldwide. Together, our mission is to build a just and sustainable world where business and profit serve people and the planet. Whether you’re an entrepreneur shaping ideas, a"
+    },
+    {
+      "id": "check-page-14639d2b83",
+      "url": "https://impacthub.net/?elementor_library=timeline-main-3-final",
+      "page": "batches",
+      "excerpt": "Here's our story Our work Our work focuses mainly, though not exclusively, on Climate Action and Diversity, Equity & Inclusion - and the nexus between them."
+    },
+    {
+      "id": "check-page-56c63cc3bc",
+      "url": "https://impacthub.net/?elementor_library=timeline-main-3-final",
+      "page": "batches",
+      "excerpt": "Start making an impact today Partner with us Partner with us Discover how you can collaborate on impactful programmes and drive innovation in Climate Action and Diversity, Equity, and Inclusion."
     },
     {
       "id": "check-page-99f23959ab",
@@ -85,10 +162,34 @@
       "excerpt": "Home | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Building from the ground up How we build partnerships that find, fund and scale solutions to the world’s social and environmental challenges. The report brings together stories, examples of collaboration and founder perspectives to show both the work itself and the relationships that make it possible. Read our new Impact Report Turning ideas into lasting impact We inspire, connect, and enable Impact Makers worldwide. Together, our mission is to build a just and sustainable world where business and profit serve people and the planet. Whether you’re an entrepreneur shaping ideas, a"
     },
     {
+      "id": "check-page-d05ea7516f",
+      "url": "https://impacthub.net/?elementor_library=timeline-main-container",
+      "page": "batches",
+      "excerpt": "Here's our story Our work Our work focuses mainly, though not exclusively, on Climate Action and Diversity, Equity & Inclusion - and the nexus between them."
+    },
+    {
+      "id": "check-page-b0bd6e2664",
+      "url": "https://impacthub.net/?elementor_library=timeline-main-container",
+      "page": "batches",
+      "excerpt": "Start making an impact today Partner with us Partner with us Discover how you can collaborate on impactful programmes and drive innovation in Climate Action and Diversity, Equity, and Inclusion."
+    },
+    {
       "id": "check-page-eb4895e221",
       "url": "https://impacthub.net/?elementor_library=timeline-new-timeline-template",
       "page": "batches",
       "excerpt": "Home | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Building from the ground up How we build partnerships that find, fund and scale solutions to the world’s social and environmental challenges. The report brings together stories, examples of collaboration and founder perspectives to show both the work itself and the relationships that make it possible. Read our new Impact Report Turning ideas into lasting impact We inspire, connect, and enable Impact Makers worldwide. Together, our mission is to build a just and sustainable world where business and profit serve people and the planet. Whether you’re an entrepreneur shaping ideas, a"
+    },
+    {
+      "id": "check-page-6f449aae8e",
+      "url": "https://impacthub.net/?elementor_library=timeline-new-timeline-template",
+      "page": "batches",
+      "excerpt": "Here's our story Our work Our work focuses mainly, though not exclusively, on Climate Action and Diversity, Equity & Inclusion - and the nexus between them."
+    },
+    {
+      "id": "check-page-56ad90d246",
+      "url": "https://impacthub.net/?elementor_library=timeline-new-timeline-template",
+      "page": "batches",
+      "excerpt": "Start making an impact today Partner with us Partner with us Discover how you can collaborate on impactful programmes and drive innovation in Climate Action and Diversity, Equity, and Inclusion."
     },
     {
       "id": "check-page-3d63e532f3",
@@ -97,10 +198,34 @@
       "excerpt": "Home | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Building from the ground up How we build partnerships that find, fund and scale solutions to the world’s social and environmental challenges. The report brings together stories, examples of collaboration and founder perspectives to show both the work itself and the relationships that make it possible. Read our new Impact Report Turning ideas into lasting impact We inspire, connect, and enable Impact Makers worldwide. Together, our mission is to build a just and sustainable world where business and profit serve people and the planet. Whether you’re an entrepreneur shaping ideas, a"
     },
     {
+      "id": "check-page-07c9c85a26",
+      "url": "https://impacthub.net/?elementor_library=timeline-new-title-template",
+      "page": "batches",
+      "excerpt": "Here's our story Our work Our work focuses mainly, though not exclusively, on Climate Action and Diversity, Equity & Inclusion - and the nexus between them."
+    },
+    {
+      "id": "check-page-bd7f0e4574",
+      "url": "https://impacthub.net/?elementor_library=timeline-new-title-template",
+      "page": "batches",
+      "excerpt": "Start making an impact today Partner with us Partner with us Discover how you can collaborate on impactful programmes and drive innovation in Climate Action and Diversity, Equity, and Inclusion."
+    },
+    {
       "id": "check-page-b57ad94313",
       "url": "https://impacthub.net/?elementor_library=timeline-title",
       "page": "batches",
       "excerpt": "Home | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Building from the ground up How we build partnerships that find, fund and scale solutions to the world’s social and environmental challenges. The report brings together stories, examples of collaboration and founder perspectives to show both the work itself and the relationships that make it possible. Read our new Impact Report Turning ideas into lasting impact We inspire, connect, and enable Impact Makers worldwide. Together, our mission is to build a just and sustainable world where business and profit serve people and the planet. Whether you’re an entrepreneur shaping ideas, a"
+    },
+    {
+      "id": "check-page-477b20ac21",
+      "url": "https://impacthub.net/?elementor_library=timeline-title",
+      "page": "batches",
+      "excerpt": "Here's our story Our work Our work focuses mainly, though not exclusively, on Climate Action and Diversity, Equity & Inclusion - and the nexus between them."
+    },
+    {
+      "id": "check-page-bdf8fa782c",
+      "url": "https://impacthub.net/?elementor_library=timeline-title",
+      "page": "batches",
+      "excerpt": "Start making an impact today Partner with us Partner with us Discover how you can collaborate on impactful programmes and drive innovation in Climate Action and Diversity, Equity, and Inclusion."
     },
     {
       "id": "check-page-4ca5acd9a8",
@@ -109,10 +234,94 @@
       "excerpt": "adidas Community Lab graduates new cohort of social entrepreneurs advancing equitable access to sports across the U.S. and Canada | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 adidas Community Lab graduates new cohort of social entrepreneurs advancing equitable access to sports across the U.S. and Canada adidas Community Lab graduates 2024-2025 cohort of social entrepreneurs advancing equitable access to sports across five key cities: Los Angeles, Houston, Atlanta, New York City, and Toronto. All ten participating organizations received $75,000 in funding, a $10,000 public relations grant, and competed for additional funding in the"
     },
     {
+      "id": "check-page-e3d2dc9076",
+      "url": "https://impacthub.net/adidas-community-lab-celebrates-new-cohort-of-social-entrepreneurs-advancing-equity-in-sport/",
+      "page": "batches",
+      "excerpt": "All ten participating organizations received $75,000 in funding, a $10,000 public relations grant, and competed for additional funding in the program’s final pitch competition."
+    },
+    {
+      "id": "check-page-9e29693c68",
+      "url": "https://impacthub.net/adidas-community-lab-celebrates-new-cohort-of-social-entrepreneurs-advancing-equity-in-sport/",
+      "page": "batches",
+      "excerpt": "Industry Education, and Black Ambition, supports Black and Latino/a/e social entrepreneurs by providing resources, funding, and education."
+    },
+    {
+      "id": "check-page-5df2d086d6",
+      "url": "https://impacthub.net/adidas-community-lab-celebrates-new-cohort-of-social-entrepreneurs-advancing-equity-in-sport/",
+      "page": "batches",
+      "excerpt": "The program concluded with a pitch competition, awarding additional funding to three winners: $25,000 for first place, $15,000 for second, and $10,000 for third."
+    },
+    {
+      "id": "check-page-952de10ae4",
+      "url": "https://impacthub.net/adidas-community-lab-celebrates-new-cohort-of-social-entrepreneurs-advancing-equity-in-sport/",
+      "page": "batches",
+      "excerpt": "Each group received comprehensive support, including: Weekly entrepreneurship workshops Special meetups for community building Pitch support to refine their business presentations Mentorship from industry leaders Numerous networking opportunities to amplify their work Beyond these resources, each organization was awarded $75,000 in non dilutive funding to further their initiatives."
+    },
+    {
+      "id": "check-page-909040f604",
+      "url": "https://impacthub.net/adidas-community-lab-celebrates-new-cohort-of-social-entrepreneurs-advancing-equity-in-sport/",
+      "page": "batches",
+      "excerpt": "The eight-month curriculum culminated into a pitch competition where participants presented their projects to adidas’ Senior Leadership Team, key business partners, and other community leaders."
+    },
+    {
+      "id": "check-page-3df7037a61",
+      "url": "https://impacthub.net/adidas-community-lab-celebrates-new-cohort-of-social-entrepreneurs-advancing-equity-in-sport/",
+      "page": "batches",
+      "excerpt": "The program sets out to offer underserved communities free programming through their partnerships that teach different skills and tools that these disciplines have to offer, while also providing resources, support, and partnerships with mental health practitioners."
+    },
+    {
+      "id": "check-page-8fe742b124",
+      "url": "https://impacthub.net/adidas-community-lab-celebrates-new-cohort-of-social-entrepreneurs-advancing-equity-in-sport/",
+      "page": "batches",
+      "excerpt": "The foundation creates and shares inspiring stories, mentorship programs, and educational resources tailored for underserved communities."
+    },
+    {
+      "id": "check-page-8f80bdb9a2",
+      "url": "https://impacthub.net/adidas-community-lab-celebrates-new-cohort-of-social-entrepreneurs-advancing-equity-in-sport/",
+      "page": "batches",
+      "excerpt": "It leverages the power of media and community as tools for social impact and empowerment."
+    },
+    {
+      "id": "check-page-eed8150f96",
+      "url": "https://impacthub.net/adidas-community-lab-celebrates-new-cohort-of-social-entrepreneurs-advancing-equity-in-sport/",
+      "page": "batches",
+      "excerpt": "The mission is to break down barriers for underserved youth, using sports, arts, and education to help them reimagine their future and become change makers in their communities."
+    },
+    {
+      "id": "check-page-f35558f1e3",
+      "url": "https://impacthub.net/adidas-community-lab-celebrates-new-cohort-of-social-entrepreneurs-advancing-equity-in-sport/",
+      "page": "batches",
+      "excerpt": "It has shifted how I see adidas and community work, and it inspires me to think about how I can make impact globally and follow in the footsteps of this innovative program.” Jamal Burger, adidas Community Lab alumni and 3rd place Pitch Competition Winners, Founder at The Kickback Foundation Congratulations to the 2024-2025 adidas Community Lab graduates!"
+    },
+    {
+      "id": "check-page-a806bca2b9",
+      "url": "https://impacthub.net/adidas-community-lab-celebrates-new-cohort-of-social-entrepreneurs-advancing-equity-in-sport/",
+      "page": "batches",
+      "excerpt": "Toronto, ON Heather Alonzo (she/her) – Ball Her Way (BHW) : Ball Her Way aims to break barriers, foster inclusivity, and promote gender equality in basketball by providing visibility, spaces, and support for women and girls, encouraging their participation and empowerment both on and off the court."
+    },
+    {
+      "id": "check-page-eed8150f96",
+      "url": "https://impacthub.net/adidas-community-lab-celebrates-new-cohort-of-social-entrepreneurs-advancing-equity-in-sport/",
+      "page": "batches",
+      "excerpt": "The mission is to break down barriers for underserved youth, using sports, arts, and education to help them reimagine their future and become change makers in their communities."
+    },
+    {
       "id": "check-page-9ec2189cb1",
       "url": "https://impacthub.net/?elementor_library=about_storyline",
       "page": "details",
       "excerpt": "Home | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Building from the ground up How we build partnerships that find, fund and scale solutions to the world’s social and environmental challenges. The report brings together stories, examples of collaboration and founder perspectives to show both the work itself and the relationships that make it possible. Read our new Impact Report Turning ideas into lasting impact We inspire, connect, and enable Impact Makers worldwide. Together, our mission is to build a just and sustainable world where business and profit serve people and the planet. Whether you’re an entrepreneur shaping ideas, a"
+    },
+    {
+      "id": "check-page-6da1a244cb",
+      "url": "https://impacthub.net/?elementor_library=about_storyline",
+      "page": "details",
+      "excerpt": "Here's our story Our work Our work focuses mainly, though not exclusively, on Climate Action and Diversity, Equity & Inclusion - and the nexus between them."
+    },
+    {
+      "id": "check-page-dda4d7e0c7",
+      "url": "https://impacthub.net/?elementor_library=about_storyline",
+      "page": "details",
+      "excerpt": "Start making an impact today Partner with us Partner with us Discover how you can collaborate on impactful programmes and drive innovation in Climate Action and Diversity, Equity, and Inclusion."
     },
     {
       "id": "check-page-b837fa7ea3",
@@ -121,16 +330,160 @@
       "excerpt": "Home | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Building from the ground up How we build partnerships that find, fund and scale solutions to the world’s social and environmental challenges. The report brings together stories, examples of collaboration and founder perspectives to show both the work itself and the relationships that make it possible. Read our new Impact Report Turning ideas into lasting impact We inspire, connect, and enable Impact Makers worldwide. Together, our mission is to build a just and sustainable world where business and profit serve people and the planet. Whether you’re an entrepreneur shaping ideas, a"
     },
     {
+      "id": "check-page-076d9a188b",
+      "url": "https://impacthub.net/?elementor_library=features_overview",
+      "page": "details",
+      "excerpt": "Here's our story Our work Our work focuses mainly, though not exclusively, on Climate Action and Diversity, Equity & Inclusion - and the nexus between them."
+    },
+    {
+      "id": "check-page-6a02454ec9",
+      "url": "https://impacthub.net/?elementor_library=features_overview",
+      "page": "details",
+      "excerpt": "Start making an impact today Partner with us Partner with us Discover how you can collaborate on impactful programmes and drive innovation in Climate Action and Diversity, Equity, and Inclusion."
+    },
+    {
       "id": "check-page-24791f5e24",
       "url": "https://impacthub.net/?elementor_library=features_overview-2",
       "page": "details",
       "excerpt": "Home | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Building from the ground up How we build partnerships that find, fund and scale solutions to the world’s social and environmental challenges. The report brings together stories, examples of collaboration and founder perspectives to show both the work itself and the relationships that make it possible. Read our new Impact Report Turning ideas into lasting impact We inspire, connect, and enable Impact Makers worldwide. Together, our mission is to build a just and sustainable world where business and profit serve people and the planet. Whether you’re an entrepreneur shaping ideas, a"
     },
     {
+      "id": "check-page-c446b37d61",
+      "url": "https://impacthub.net/?elementor_library=features_overview-2",
+      "page": "details",
+      "excerpt": "Here's our story Our work Our work focuses mainly, though not exclusively, on Climate Action and Diversity, Equity & Inclusion - and the nexus between them."
+    },
+    {
+      "id": "check-page-134ec75b4a",
+      "url": "https://impacthub.net/?elementor_library=features_overview-2",
+      "page": "details",
+      "excerpt": "Start making an impact today Partner with us Partner with us Discover how you can collaborate on impactful programmes and drive innovation in Climate Action and Diversity, Equity, and Inclusion."
+    },
+    {
       "id": "check-page-aee6d3bd88",
       "url": "https://impacthub.net/?elementor_library=number_overview",
       "page": "details",
       "excerpt": "Home | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Building from the ground up How we build partnerships that find, fund and scale solutions to the world’s social and environmental challenges. The report brings together stories, examples of collaboration and founder perspectives to show both the work itself and the relationships that make it possible. Read our new Impact Report Turning ideas into lasting impact We inspire, connect, and enable Impact Makers worldwide. Together, our mission is to build a just and sustainable world where business and profit serve people and the planet. Whether you’re an entrepreneur shaping ideas, a"
+    },
+    {
+      "id": "check-page-ce3414e8eb",
+      "url": "https://impacthub.net/?elementor_library=number_overview",
+      "page": "details",
+      "excerpt": "Here's our story Our work Our work focuses mainly, though not exclusively, on Climate Action and Diversity, Equity & Inclusion - and the nexus between them."
+    },
+    {
+      "id": "check-page-27eee69a3e",
+      "url": "https://impacthub.net/?elementor_library=number_overview",
+      "page": "details",
+      "excerpt": "Start making an impact today Partner with us Partner with us Discover how you can collaborate on impactful programmes and drive innovation in Climate Action and Diversity, Equity, and Inclusion."
+    },
+    {
+      "id": "check-page-ed3f77e001",
+      "url": "https://impacthub.net/?elementor_library=programme_numbers",
+      "page": "details",
+      "excerpt": "Home | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Building from the ground up How we build partnerships that find, fund and scale solutions to the world’s social and environmental challenges. The report brings together stories, examples of collaboration and founder perspectives to show both the work itself and the relationships that make it possible. Read our new Impact Report Turning ideas into lasting impact We inspire, connect, and enable Impact Makers worldwide. Together, our mission is to build a just and sustainable world where business and profit serve people and the planet. Whether you’re an entrepreneur shaping ideas, a"
+    },
+    {
+      "id": "check-page-9be33f034a",
+      "url": "https://impacthub.net/?elementor_library=programme_numbers",
+      "page": "details",
+      "excerpt": "Here's our story Our work Our work focuses mainly, though not exclusively, on Climate Action and Diversity, Equity & Inclusion - and the nexus between them."
+    },
+    {
+      "id": "check-page-81d88611b1",
+      "url": "https://impacthub.net/?elementor_library=programme_numbers",
+      "page": "details",
+      "excerpt": "Start making an impact today Partner with us Partner with us Discover how you can collaborate on impactful programmes and drive innovation in Climate Action and Diversity, Equity, and Inclusion."
+    },
+    {
+      "id": "check-page-75f407ae62",
+      "url": "https://impacthub.net/carbonxprogram/",
+      "page": "details",
+      "excerpt": "CarbonX Program 2.0: Learn how to unlock millions in climate funding at our global Q&A | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 CarbonX Program 2.0: Learn how to unlock millions in climate funding at our global Q&A CarbonX 2.0, launched by Tencent and its global partners, seeks proposals from startups, research institutes, and universities working on advanced carbon capture, removal, and long-duration energy storage. The program supports innovative pilot projects across four key industrial application tracks, offering real-world testing environments and resources for capacity building. Impact Hub Network Facebook Twitter LinkedIn"
+    },
+    {
+      "id": "check-page-26a6194874",
+      "url": "https://impacthub.net/carbonxprogram/",
+      "page": "details",
+      "excerpt": "Whether you’re solving climate challenges through carbon dioxide removal (CDR), carbon capture, utilisation and storage (CCUS), low-duration energy storage (LDES), or new approaches to carbon innovation — this is your call to action."
+    },
+    {
+      "id": "check-page-352b3effcb",
+      "url": "https://impacthub.net/carbonxprogram/",
+      "page": "details",
+      "excerpt": "Play Introducing the CarbonX Program 2.0 Launched by Tencent, Impact Hub Network, and its global partners, the CarbonX Program 2.0 is a global program that provides tens of millions of USD in catalytic grants, plus mentorship, resources, and real-world pilot opportunities — all to help innovators like you scale and deploy next-gen carbon solutions where it matters most."
+    },
+    {
+      "id": "check-page-5d3365dce8",
+      "url": "https://impacthub.net/carbonxprogram/",
+      "page": "details",
+      "excerpt": "Receive: ✅ Up to several million USD per pilot project ✅ Real-world pilot opportunities in industrial settings ✅ Expert mentorship and global partnerships The world needs carbon innovation that can scale rapidly and create tangible, lasting impact on the climate."
+    },
+    {
+      "id": "check-page-0d2ec0e05b",
+      "url": "https://impacthub.net/carbonxprogram/",
+      "page": "details",
+      "excerpt": "We’ll kick off with a panel discussion featuring voices from across the investment landscape, followed by an exclusive look into Tencent’s CarbonX Program 2.0 for climate tech ventures."
+    },
+    {
+      "id": "check-page-5830981003",
+      "url": "https://impacthub.net/carbonxprogram/",
+      "page": "details",
+      "excerpt": "The event will close with a Q&A session featuring a Tencent representative and a past participant from their programme, offering real-world insights into what it takes to unlock capital and scale climate innovation. 🗓️ 16 May 2025 🕒 12PM – 1:30PM CET 👉 Join here Choose a session, join us, and take the first step toward transforming your innovation into global impact."
+    },
+    {
+      "id": "check-page-29b48227f4",
+      "url": "https://impacthub.net/how-nepal-is-turning-circular-with-the-roots-of-circularity-programme/",
+      "page": "details",
+      "excerpt": "How Nepal is turning circular with the Roots of Circularity programme | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 How Nepal is turning circular with the Roots of Circularity programme Nepal is embracing a regenerative future and the Roots of Circularity programme is leading the way. From empowering small businesses to embedding sustainable practices, to integrating circular economy thinking into national education and policy, this transformative initiative is building a more resilient, inclusive, and sustainable Nepal, one system shift at a time. Impact Hub Network Global team Facebook Twitter LinkedIn WhatsApp In a world facing"
+    },
+    {
+      "id": "check-page-0b1eee1f94",
+      "url": "https://impacthub.net/how-nepal-is-turning-circular-with-the-roots-of-circularity-programme/",
+      "page": "details",
+      "excerpt": "As a country rich in natural beauty but vulnerable to climate change and resource scarcity, Nepal has much to gain by embracing systems that conserve resources, reduce environmental pressure, and empower communities."
+    },
+    {
+      "id": "check-page-705f48bf06",
+      "url": "https://impacthub.net/how-nepal-is-turning-circular-with-the-roots-of-circularity-programme/",
+      "page": "details",
+      "excerpt": "The programme is being implemented across Bagmati and Lumbini Provinces, working with local stakeholders to catalyse change across education, enterprise, civil society, and government."
+    },
+    {
+      "id": "check-page-5884813957",
+      "url": "https://impacthub.net/how-nepal-is-turning-circular-with-the-roots-of-circularity-programme/",
+      "page": "details",
+      "excerpt": "To date, the programme has supported 30 MSMEs across three incubation cohorts in Bagmati and Lumbini, offering training, mentorship, and resources tailored to help businesses adopt circular models."
+    },
+    {
+      "id": "check-page-a38d619851",
+      "url": "https://impacthub.net/how-nepal-is-turning-circular-with-the-roots-of-circularity-programme/",
+      "page": "details",
+      "excerpt": "Mainstreaming circularity in education To secure long-term change, RoC is embedding circular economy thinking into Nepal’s formal education system, from secondary schools to higher education."
+    },
+    {
+      "id": "check-page-94de7c5b6f",
+      "url": "https://impacthub.net/how-nepal-is-turning-circular-with-the-roots-of-circularity-programme/",
+      "page": "details",
+      "excerpt": "That’s why RoC is focused on strengthening partnerships across government, civil society, and the private sector."
+    },
+    {
+      "id": "check-page-aafdb220a2",
+      "url": "https://impacthub.net/how-nepal-is-turning-circular-with-the-roots-of-circularity-programme/",
+      "page": "details",
+      "excerpt": "The road ahead Nepal’s journey toward a circular economy is just beginning but it is already gaining ground through entrepreneurship, education, public engagement, and policy reform."
+    },
+    {
+      "id": "check-page-c7a97fa728",
+      "url": "https://impacthub.net/impact_library/accelerators-as-drivers-of-gender-equality/",
+      "page": "details",
+      "excerpt": "Accelerators as Drivers of Gender Equality | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Accelerators as Drivers of Gender Equality Discover our guide addressing the gender gap in accelerator programmes. With just 13% of applicants being women-led teams, we tackle challenges hindering women entrepreneurs. From low-growth industries to limited capital, find practical solutions to make support more accessible and promote gender equality. Inclusive and sustainable innovation - at scale. About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work"
+    },
+    {
+      "id": "check-page-a7c435d0ae",
+      "url": "https://impacthub.net/impact_library/collection-of-best-practices-in-inclusive-entrepreneurship-support-programmes/",
+      "page": "details",
+      "excerpt": "Collection of Best Practices in Inclusive Entrepreneurship Support Programmes | Impact Hub Skip to content About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact Impact stories Impact resources Media & PR Join us Start an Impact Hub Impact Maker Membership Impact Report Impact Report 2025-26 Impact Report 2024-25 Impact Report 2023-24 Impact Report 2022-23 Impact Report 2021-22 Collection of Best Practices in Inclusive Entrepreneurship Support Programmes Better Incubation, a 2-year EU-funded programme, led by Impact Hub and assisted by EBN, promotes inclusive entrepreneurship. This tool features best practices and case studies supporting underrepresented groups in business. Inclusive and sustainable innovation - at scale. About us Our story Our methodology Meet the team Impact Hub locations Work with us Our services For Corporates For Public Sector For Entrepreneurs Our work Our Impact"
     }
   ],
   "findings": {

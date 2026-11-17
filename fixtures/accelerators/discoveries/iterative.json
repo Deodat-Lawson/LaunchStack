@@ -1,6 +1,6 @@
 {
   "programId": "iterative",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://cofoundermatching.iterative.vc?utm_source=faq",
@@ -22,7 +22,7 @@
       "url": "https://www.iterative.vc/about",
       "page": "details",
       "anchor": "Our Story",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -75,6 +75,14 @@
       "origin": "official"
     },
     {
+      "url": "https://www.iterative.vc/getting-into-iterative",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.iterative.vc/notification-bar/application-countdown",
       "page": "application",
       "anchor": "",
@@ -101,22 +109,6 @@
     {
       "url": "https://www.iterative.vc/post/answering-your-top-5-questions-on-iteratives-deal-terms",
       "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.iterative.vc/post/deal-terms",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.iterative.vc/post/early-admission-and-pre-batch-office-hours-for-summer-2024",
-      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -166,7 +158,7 @@
       "url": "https://www.iterative.vc/what-happens-at-iterative",
       "page": "details",
       "anchor": "About our program",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

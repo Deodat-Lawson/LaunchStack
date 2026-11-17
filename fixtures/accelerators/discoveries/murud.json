@@ -1,6 +1,6 @@
 {
   "programId": "murud",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications",
@@ -67,16 +67,56 @@
       "origin": "official"
     },
     {
-      "url": "https://www.telstra.com.au/careers/how-we-hire",
-      "page": "other",
+      "url": "https://www.telstra.com.au/connected/deals",
+      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
-      "page": "application",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-black-friday-deals",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.telstra.com.au/customer-terms",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,

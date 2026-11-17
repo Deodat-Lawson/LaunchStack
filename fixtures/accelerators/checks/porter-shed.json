@@ -1,6 +1,6 @@
 {
   "programId": "porter-shed",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://portershed.com/",
     "https://portershed.com/membership/membership-application-form/",
@@ -16,7 +16,12 @@
     "https://portershed.com/meet-the-cohort-aima-opex/",
     "https://portershed.com/meet-the-cohort-colata/",
     "https://portershed.com/meet-the-cohort-devopness/",
-    "https://portershed.com/meet-the-cohort-dwello/"
+    "https://portershed.com/meet-the-cohort-dwello/",
+    "https://portershed.com/meet-the-cohort-farmbiddy/",
+    "https://portershed.com/meet-the-cohort-forge-robotics/",
+    "https://portershed.com/meet-the-cohort-shoden-ai/",
+    "https://portershed.com/meet-the-cohort-timbi/",
+    "https://portershed.com/meet-the-cohort-timbi/%20"
   ],
   "evidence": [
     {
@@ -27,6 +32,20 @@
       "page": "batches"
     },
     {
+      "id": "check-duration-132319fd32",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "title": "Portershed — batches page",
+      "excerpt": "your ultimate vision for Shoden AI in the next 18 months? Over the next 18 months, our vision for Shoden",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-1b58599921",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "title": "Portershed — batches page",
+      "excerpt": "but we’ve got big plans. In the next 12–18 months, we’re aiming to raise a seed or scale round,",
+      "page": "batches"
+    },
+    {
       "id": "check-duration-2c2ef4c0b2",
       "url": "https://portershed.com/meet-the-cohort-colata/",
       "title": "Portershed — batches page",
@@ -34,10 +53,45 @@
       "page": "batches"
     },
     {
+      "id": "check-duration-2c88b4d85e",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "title": "Portershed — batches page",
+      "excerpt": "culture. Meet the Cohort 10 Companies | 12 Weeks Visit Companies Newsletter Signup Email Address",
+      "page": "batches"
+    },
+    {
       "id": "check-duration-31f9330fc7",
       "url": "https://portershed.com/meet-the-cohort-colata/",
       "title": "Portershed — batches page",
       "excerpt": "and Leagues. What will you prioritise during the 12 weeks at AI Venture Forge? At Colata, we’ll leverage",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-35dbd7b40d",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "title": "Portershed — batches page",
+      "excerpt": "methods. Meet the Cohort 10 Companies | 12 Weeks Visit Companies Newsletter Signup Email Address",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-45320b7c5a",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "title": "Portershed — batches page",
+      "excerpt": "platform. Meet the Cohort 10 Companies | 12 Weeks Visit Companies Newsletter Signup Email Address",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-4ee5ef6fb7",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "title": "Portershed — batches page",
+      "excerpt": "What is your long-term vision for FarmBiddy 12–18 months from now? In 12-18 months, I want FarmBiddy to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-6b81911fe3",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "title": "Portershed — batches page",
+      "excerpt": "Where do you want Timbi to be positioned in 12–18 months? “Right now, we’re bootstrapping, but we’ve got",
       "page": "batches"
     },
     {
@@ -104,6 +158,13 @@
       "page": "batches"
     },
     {
+      "id": "check-duration-9a47e144e7",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "title": "Portershed — batches page",
+      "excerpt": "Shoden AI in the next 18 months? Over the next 18 months, our vision for Shoden AI is to become the",
+      "page": "batches"
+    },
+    {
       "id": "check-duration-a654f7088e",
       "url": "https://portershed.com/ai-venture-forge-cohort/",
       "title": "Portershed — batches page",
@@ -115,6 +176,34 @@
       "url": "https://portershed.com/meet-the-cohort-ailtire/",
       "title": "Portershed — batches page",
       "excerpt": "secure software. Meet the Cohort 10 Companies | 12 Weeks Visit Companies Newsletter Signup Email Address",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-cad293ed5f",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "title": "Portershed — batches page",
+      "excerpt": "but we’ve got big plans. In the next 12–18 months, we’re aiming to raise a seed or scale round,",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-cb978a31e6",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "title": "Portershed — batches page",
+      "excerpt": "base in Ireland.” Meet the Cohort 10 Companies | 12 Weeks Visit Companies Newsletter Signup Email Address",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-d2bd9d2e8a",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "title": "Portershed — batches page",
+      "excerpt": "would you like to see Forge Robotics after the 12-week programme? By the end of the program, we want a",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-df5f6e9355",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "title": "Portershed — batches page",
+      "excerpt": "for FarmBiddy 12–18 months from now? In 12-18 months, I want FarmBiddy to be as natural to Irish",
       "page": "batches"
     },
     {
@@ -132,6 +221,13 @@
       "page": "batches"
     },
     {
+      "id": "check-duration-f40a94dbdc",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "title": "Portershed — batches page",
+      "excerpt": "base in Ireland.” Meet the Cohort 10 Companies | 12 Weeks Visit Companies Newsletter Signup Email Address",
+      "page": "batches"
+    },
+    {
       "id": "check-duration-f75df0f938",
       "url": "https://portershed.com/meet-the-cohort-dwello/",
       "title": "Portershed — batches page",
@@ -146,6 +242,13 @@
       "page": "batches"
     },
     {
+      "id": "check-duration-f905271777",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "title": "Portershed — batches page",
+      "excerpt": "Where do you want Timbi to be positioned in 12–18 months? “Right now, we’re bootstrapping, but we’ve got",
+      "page": "batches"
+    },
+    {
       "id": "check-format-00842c1419",
       "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
       "title": "Portershed — terms page",
@@ -153,11 +256,25 @@
       "page": "terms"
     },
     {
+      "id": "check-format-02555eb49f",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "title": "Portershed — batches page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "batches"
+    },
+    {
       "id": "check-format-09fc3bff64",
       "url": "https://portershed.com/siorghlas-investment-summit/",
       "title": "Portershed — terms page",
       "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
       "page": "terms"
+    },
+    {
+      "id": "check-format-0bce004f05",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "title": "Portershed — batches page",
+      "excerpt": "Company | Farming AI What motivated you to create a virtual farming advisor? The idea came from watching my brother",
+      "page": "batches"
     },
     {
       "id": "check-format-12818888ab",
@@ -183,6 +300,13 @@
     {
       "id": "check-format-1e7117c46e",
       "url": "https://portershed.com/meet-the-cohort-colata/",
+      "title": "Portershed — batches page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-2155754b95",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
       "title": "Portershed — batches page",
       "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
       "page": "batches"
@@ -216,10 +340,24 @@
       "page": "batches"
     },
     {
+      "id": "check-format-37bff94d35",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "title": "Portershed — batches page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "batches"
+    },
+    {
       "id": "check-format-3bd5fb8540",
       "url": "https://portershed.com/meet-the-cohort-ailtir/",
       "title": "Portershed — batches page",
       "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-43d77c0977",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "title": "Portershed — batches page",
+      "excerpt": "momentum. Timbi helps SMEs navigate EU funding with a virtual AI assistant that simplifies and speeds up the pre-award",
       "page": "batches"
     },
     {
@@ -251,6 +389,13 @@
       "page": "batches"
     },
     {
+      "id": "check-format-50e8c27061",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "title": "Portershed — batches page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "batches"
+    },
+    {
       "id": "check-format-52206030c8",
       "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
       "title": "Portershed — terms page",
@@ -279,11 +424,39 @@
       "page": "terms"
     },
     {
+      "id": "check-format-5b09cf6906",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "title": "Portershed — batches page",
+      "excerpt": "seamlessly with human input, not replace it entirely. This hybrid approach allows for the personal touch of a human while",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-5dc4039fea",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "title": "Portershed — batches page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "batches"
+    },
+    {
       "id": "check-format-60b5adc1aa",
       "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
       "title": "Portershed — terms page",
       "excerpt": "Galway the Ideal Destination for Remote Workers | PorterShed Skip to content About Our Team Our",
       "page": "terms"
+    },
+    {
+      "id": "check-format-63652489d4",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "title": "Portershed — batches page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-692013cb15",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "title": "Portershed — batches page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "batches"
     },
     {
       "id": "check-format-6a89def087",
@@ -307,11 +480,25 @@
       "page": "terms"
     },
     {
+      "id": "check-format-72ba136c40",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "title": "Portershed — batches page",
+      "excerpt": "momentum. Timbi helps SMEs navigate EU funding with a virtual AI assistant that simplifies and speeds up the pre-award",
+      "page": "batches"
+    },
+    {
       "id": "check-format-73d0209095",
       "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
       "title": "Portershed — terms page",
       "excerpt": "Connected Hubs scheme underlines just how crucial remote and hybrid working will be to the economy. The government",
       "page": "terms"
+    },
+    {
+      "id": "check-format-7f431986f9",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "title": "Portershed — batches page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "batches"
     },
     {
       "id": "check-format-88ff4dad09",
@@ -363,6 +550,13 @@
       "page": "terms"
     },
     {
+      "id": "check-format-aa91f45672",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "title": "Portershed — batches page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "batches"
+    },
+    {
       "id": "check-format-afb4c7738f",
       "url": "https://portershed.com/membership/membership-application-form/",
       "title": "Portershed — application page",
@@ -396,6 +590,13 @@
       "title": "Portershed — terms page",
       "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
       "page": "terms"
+    },
+    {
+      "id": "check-format-e451057f26",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "title": "Portershed — batches page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "batches"
     },
     {
       "id": "check-format-e90a3f5898",
@@ -455,10 +656,58 @@
       "excerpt": "PorterShed | #supporteddbyAIB Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions Community"
     },
     {
+      "id": "check-page-460f7372bd",
+      "url": "https://portershed.com/",
+      "page": "details",
+      "excerpt": "Our Full-Time packages are ideal for the start-up entrepreneur who wants to make every moment count, our Virtual options would suit those who want to dip back into office life, and our Corporate membership is ideal for members of the wider startup community who want to connect with and support tech talent."
+    },
+    {
+      "id": "check-page-a0369e3201",
+      "url": "https://portershed.com/",
+      "page": "details",
+      "excerpt": "Connect with us and elevate your workspace game today!"
+    },
+    {
+      "id": "check-page-c59dbc7058",
+      "url": "https://portershed.com/",
+      "page": "details",
+      "excerpt": "I would like to Ask a Quick Question Book a Tour​ Discuss Membership Options Enquire about holding an Event Book a Production or Meeting Room Irish Tech Hub Network The PorterShed is a proud member of this interconnected community of tech hubs around the island of Ireland whose collective goal is to catalyse innovation in their regions."
+    },
+    {
+      "id": "check-page-2d06b7d91e",
+      "url": "https://portershed.com/",
+      "page": "details",
+      "excerpt": "NDRC We are a regional delivery partner for the NDRC, the national startup accelerator programme for globally ambitious tech entrepreneurs in Ireland."
+    },
+    {
+      "id": "check-page-6c48947be8",
+      "url": "https://portershed.com/",
+      "page": "details",
+      "excerpt": "Apply Now Latest Portershed News No Shortcuts: Stuart Lancaster on Building High-Performing Teams at PorterShed September 18, 2026 No Shortcuts Stuart Lancaster on Building High-Performing Teams at PorterShed “Get the right people on the bus and drive it somewhere great.” That was one Student-led Galway hackathon puts Ireland’s next generation of innovators to work on real city challenges."
+    },
+    {
+      "id": "check-page-4a2087cc7e",
+      "url": "https://portershed.com/",
+      "page": "details",
+      "excerpt": "August 25, 2026 Student-led Galway hackathon puts Ireland’s next generation of innovators to work on real city challenges."
+    },
+    {
       "id": "check-page-ee6d6fdbaf",
       "url": "https://portershed.com/membership/membership-application-form/",
       "page": "application",
       "excerpt": "Membership Application Form | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-a3ed166185",
+      "url": "https://portershed.com/membership/membership-application-form/",
+      "page": "application",
+      "excerpt": "Reasons to join: Access to a vibrant community of tech entrepreneurs and mentors."
+    },
+    {
+      "id": "check-page-1fc0dd48a4",
+      "url": "https://portershed.com/membership/membership-application-form/",
+      "page": "application",
+      "excerpt": "A prime location in the heart of Galway city, with easy access to public transportation, local amenities and entertainment."
     },
     {
       "id": "check-page-4181ce3856",
@@ -467,10 +716,70 @@
       "excerpt": "We're Hiring a Community Associate...Apply Now! | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market"
     },
     {
+      "id": "check-page-5ef197a4b9",
+      "url": "https://portershed.com/were-hiring-a-community-associate-apply-now/",
+      "page": "application",
+      "excerpt": "The primary focus of GCID is to create high-value sustainable jobs in the West of Ireland."
+    },
+    {
+      "id": "check-page-a0f21c2004",
+      "url": "https://portershed.com/were-hiring-a-community-associate-apply-now/",
+      "page": "application",
+      "excerpt": "August 25, 2026 Student-led Galway hackathon puts Ireland’s next generation of innovators to work on real city challenges."
+    },
+    {
       "id": "check-page-eac378009e",
       "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
       "page": "terms",
       "excerpt": "Galway the Ideal Destination for Remote Workers | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market"
+    },
+    {
+      "id": "check-page-e01ed6fa9d",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "page": "terms",
+      "excerpt": "According to the National Remote Working Survey with the National University of Ireland Galway and the Whitaker Institute, a significant percentage of those who took part in the study said that Galway was their number one destination to live and work in Ireland, and that goes to show just how big the appetite is for people to make the move they’ve been wanting to for some time."
+    },
+    {
+      "id": "check-page-b119136d35",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "page": "terms",
+      "excerpt": "The government are backing the push by people to ditch the everyday commute – or at the very least make it shorter – by supporting the establishment and growth of hubs across the country."
+    },
+    {
+      "id": "check-page-a84d6be8aa",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "page": "terms",
+      "excerpt": "Rural Ireland, in particular, is sure to feel the positive impact of hubs’ presence."
+    },
+    {
+      "id": "check-page-4fa4d341dc",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "page": "terms",
+      "excerpt": "And hubs in the West of Ireland are sure to experience an influx of new users if this poll is anything to go by."
+    },
+    {
+      "id": "check-page-f6f437ec56",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "page": "terms",
+      "excerpt": "As PorterShed member Ross Kinsella explains, there is something special about a co-working space that just needs to be experienced to be appreciated."
+    },
+    {
+      "id": "check-page-3988e639a7",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "page": "terms",
+      "excerpt": "“I was living in Dublin at the time, and while I was there I didn’t think there were any programmers in Galway – at least start-upy ones."
+    },
+    {
+      "id": "check-page-06308298bf",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "page": "terms",
+      "excerpt": "And all of a sudden, there was a place in my hometown where I could go and do what I want to do which is class because I was thinking ‘I need to go and live in Berlin or Dublin, or San Francisco’ or something, but no I can just walk 10 minutes from my mam’s house and be somewhere I think I should be."
+    },
+    {
+      "id": "check-page-6ee57afa2e",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "page": "terms",
+      "excerpt": "August 25, 2026 Student-led Galway hackathon puts Ireland’s next generation of innovators to work on real city challenges."
     },
     {
       "id": "check-page-03d0d9ac69",
@@ -479,10 +788,64 @@
       "excerpt": "Is your business ‘Investment Ready?’ Ollie Walsh PipIT Global | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling"
     },
     {
+      "id": "check-page-3fc534dbb7",
+      "url": "https://portershed.com/is-your-business-investment-ready-ollie-walsh-pipit-global/",
+      "page": "terms",
+      "excerpt": "It can achieved by working with mentors or coaches, participating in incubators or accelerators."
+    },
+    {
+      "id": "check-page-141a3457e9",
+      "url": "https://portershed.com/is-your-business-investment-ready-ollie-walsh-pipit-global/",
+      "page": "terms",
+      "excerpt": "Funding is an Intensive Process When we started the Seed Round with PiP iT, I was well warned that it would take up most of my time for at least three months."
+    },
+    {
+      "id": "check-page-aa6993e053",
+      "url": "https://portershed.com/is-your-business-investment-ready-ollie-walsh-pipit-global/",
+      "page": "terms",
+      "excerpt": "Funding Never Ends When we closed our Seed Round, I was relieved that we had funds in the bank but also that the process was over."
+    },
+    {
+      "id": "check-page-9464036380",
+      "url": "https://portershed.com/is-your-business-investment-ready-ollie-walsh-pipit-global/",
+      "page": "terms",
+      "excerpt": "Our first board meeting with our VC attending, the first question was ‘What is the plan for Series A funding?’ The second question was ‘What is the plan for Series B funding?’ In the Start Up/Scale Up world, funding never stops."
+    },
+    {
+      "id": "check-page-10248587a3",
+      "url": "https://portershed.com/is-your-business-investment-ready-ollie-walsh-pipit-global/",
+      "page": "terms",
+      "excerpt": "August 25, 2026 Student-led Galway hackathon puts Ireland’s next generation of innovators to work on real city challenges."
+    },
+    {
       "id": "check-page-069bf68751",
       "url": "https://portershed.com/siorghlas-investment-summit/",
       "page": "terms",
       "excerpt": "Síorghlas Investment Summit | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-8a7522024d",
+      "url": "https://portershed.com/siorghlas-investment-summit/",
+      "page": "terms",
+      "excerpt": "The event was held at Dexcom Stadium, with an overarching view of the West of Ireland through the windows, demonstrating the potential it has to offer."
+    },
+    {
+      "id": "check-page-c4d1917ffe",
+      "url": "https://portershed.com/siorghlas-investment-summit/",
+      "page": "terms",
+      "excerpt": "Ireland is a country that is growing, and everyone at the summit wants to see it reach its fullest potential."
+    },
+    {
+      "id": "check-page-56c9176b2b",
+      "url": "https://portershed.com/siorghlas-investment-summit/",
+      "page": "terms",
+      "excerpt": "It is a family-run health food company focused on keeping things transparent and simple for the customer."
+    },
+    {
+      "id": "check-page-a559805c12",
+      "url": "https://portershed.com/siorghlas-investment-summit/",
+      "page": "terms",
+      "excerpt": "The West of Ireland is unique because it has its own identity, the WDC and has continuously shown its support in the community."
     },
     {
       "id": "check-page-dffb89feed",
@@ -491,10 +854,34 @@
       "excerpt": "Terms & Conditions | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
     },
     {
+      "id": "check-page-d7eaab9d65",
+      "url": "https://portershed.com/terms-conditions/",
+      "page": "terms",
+      "excerpt": "Our registered offices are: Eyre Square Galway Ireland ACCESSING OUR SITE Access to our site is permitted on a temporary basis, and we reserve the right to withdraw or amend the service we provide on our site without notice."
+    },
+    {
       "id": "check-page-178851009c",
       "url": "https://portershed.com/two-deals-by-bob-rosenberg/",
       "page": "terms",
       "excerpt": "Two Deals by Bob Rosenberg | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-d2e965fb3a",
+      "url": "https://portershed.com/two-deals-by-bob-rosenberg/",
+      "page": "terms",
+      "excerpt": "Most of them are in Ireland and the USA for practical reasons."
+    },
+    {
+      "id": "check-page-ae4af52a3e",
+      "url": "https://portershed.com/two-deals-by-bob-rosenberg/",
+      "page": "terms",
+      "excerpt": "For an investor, hearing that a company is Starbucks for bubble tea is more comforting than hearing that the company is blazing a trail, or doing something altogether new in the marketplace."
+    },
+    {
+      "id": "check-page-073c05db8e",
+      "url": "https://portershed.com/two-deals-by-bob-rosenberg/",
+      "page": "terms",
+      "excerpt": "August 25, 2026 Student-led Galway hackathon puts Ireland’s next generation of innovators to work on real city challenges."
     },
     {
       "id": "check-page-7ba77ab725",
@@ -503,10 +890,148 @@
       "excerpt": "AI Venture Forge Cohort | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
     },
     {
+      "id": "check-page-7d0253608d",
+      "url": "https://portershed.com/ai-venture-forge-cohort/",
+      "page": "batches",
+      "excerpt": "News Meet the Cohort AI Venture Forge is a 12-week accelerator designed to equip AI-firststartups with the mentorship, tools, and market access needed to achieve commercial success and investor readiness."
+    },
+    {
+      "id": "check-page-f80051223c",
+      "url": "https://portershed.com/ai-venture-forge-cohort/",
+      "page": "batches",
+      "excerpt": "The selected companies are building cutting-edge AI solutions across industries such as precision agriculture, enterprise DevOps, robotics and more – showcasing the innovation across Ireland."
+    },
+    {
+      "id": "check-page-89bd3e08d0",
+      "url": "https://portershed.com/ai-venture-forge-cohort/",
+      "page": "batches",
+      "excerpt": "Forge Robotics Manufacturing is Broken."
+    },
+    {
+      "id": "check-page-953e2236ab",
+      "url": "https://portershed.com/ai-venture-forge-cohort/",
+      "page": "batches",
+      "excerpt": "We’re Fixing It with AI."
+    },
+    {
+      "id": "check-page-efc289d22e",
+      "url": "https://portershed.com/ai-venture-forge-cohort/",
+      "page": "batches",
+      "excerpt": "Website Company | Robotics AI Deep Dive Timbi At Timbi Ltd. we’re a team of passionate experts who eat, sleep, and breathe creativity, strategy, and technology."
+    },
+    {
+      "id": "check-page-c668a0e454",
+      "url": "https://portershed.com/ai-venture-forge-cohort/",
+      "page": "batches",
+      "excerpt": "Website Company | Funding support through AI Deep Dive Colata Colata is the bridge between raw data and actionable insights, transforming how Sports Organisations engage with their data."
+    },
+    {
+      "id": "check-page-0a8f8f5e92",
+      "url": "https://portershed.com/ai-venture-forge-cohort/",
+      "page": "batches",
+      "excerpt": "Website Company | Sales Intelligence AI Deep Dive Ailtir Ailtir turns construction tendering from costly bottleneck into growth engine – AI automates compliance, accelerates decisions, boosts wins."
+    },
+    {
+      "id": "check-page-0290f1ef2f",
+      "url": "https://portershed.com/ai-venture-forge-cohort/",
+      "page": "batches",
+      "excerpt": "Website Company | Construction AI Deep Dive AIMA Opex AIMA leverages artificial intelligence to detect and correct errors during the manufacturing process, effectively preventing problems at the source, much like an autocorrect system, but for factory production lines."
+    },
+    {
+      "id": "check-page-69acab0cbe",
+      "url": "https://portershed.com/ai-venture-forge-cohort/",
+      "page": "batches",
+      "excerpt": "Website Company | Manufacturing AI Deep Dive Farm Biddy FarmBiddy is your intelligent, always-available farming companion designed to take the hassle out of paperwork and daily farm management."
+    },
+    {
+      "id": "check-page-2929eae35d",
+      "url": "https://portershed.com/ai-venture-forge-cohort/",
+      "page": "batches",
+      "excerpt": "Linkedin Company | Farming AI Deep Dive Devopness Devopness automates DevOps workflows and custom pipelines to manage infrastructure environments in any major cloud provider, so developers don’t waste time on multiple tools and repetitive tasks."
+    },
+    {
+      "id": "check-page-5b8be2958f",
+      "url": "https://portershed.com/ai-venture-forge-cohort/",
+      "page": "batches",
+      "excerpt": "Website Company | DevOps Deep Dive Dwello Dwello is building a full-stack AI residential leasing end-to-end platform, replacing the need for traditional brokers and fragmented property management systems."
+    },
+    {
       "id": "check-page-72ba62fb6a",
       "url": "https://portershed.com/meet-the-cohort-ailtir/",
       "page": "batches",
       "excerpt": "Meet the Cohort: Ailtir | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-dc31d4941b",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "page": "batches",
+      "excerpt": "News Meet The Cohort Ailtir Ailtir As part of our AI Venture Forge “Meet the Cohort” series, we’re thrilled to feature Ailtir, a company bringing much-needed transformation to one of the world’s most complex and high-stakes industries: construction."
+    },
+    {
+      "id": "check-page-30f7e08d27",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "page": "batches",
+      "excerpt": "Ailtir helps construction firms win more tenders by using AI to streamline critical workflows, ensure regulatory compliance, and reduce costs across the bidding process."
+    },
+    {
+      "id": "check-page-0c2a399e0e",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "page": "batches",
+      "excerpt": "Website Company | Construction AI How does your solution integrate with existing robotic systems?"
+    },
+    {
+      "id": "check-page-8bced87996",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "page": "batches",
+      "excerpt": "The construction industry deserved an AI solution purpose-built for their unique workflows, compliance requirements, and terminology – not generic tools that don’t understand construction."
+    },
+    {
+      "id": "check-page-625a953f7d",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "page": "batches",
+      "excerpt": "We deliver complete AI automation of the tender lifecycle."
+    },
+    {
+      "id": "check-page-860588ecd8",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "page": "batches",
+      "excerpt": "For proposals, AI trained on previous responses delivers first drafts 80% faster while maintaining each company’s voice."
+    },
+    {
+      "id": "check-page-9fed07371a",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "page": "batches",
+      "excerpt": "What are some of the most time-consuming or error-prone parts of tendering that your AI tools eliminate?"
+    },
+    {
+      "id": "check-page-ec4e607a75",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "page": "batches",
+      "excerpt": "Second, manual document processing of 1,000+ pages – our AI parses these in minutes."
+    },
+    {
+      "id": "check-page-af847f930a",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "page": "batches",
+      "excerpt": "Fourth, repetitive SAQ/PQQ responses – our AI generates contextually appropriate answers 80% faster."
+    },
+    {
+      "id": "check-page-d9fdce5da1",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "page": "batches",
+      "excerpt": "Our AI generates proposal drafts maintaining each company’s voice, but preserves their competitive advantages."
+    },
+    {
+      "id": "check-page-469c3f8716",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "page": "batches",
+      "excerpt": "What challenges have you faced in getting traditional construction companies to adopt AI-driven tools like Ailtir?"
+    },
+    {
+      "id": "check-page-7e754b86bf",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "page": "batches",
+      "excerpt": "What are you hoping to gain from your time on the AI Venture Forge programme?"
     },
     {
       "id": "check-page-1d63c283a1",
@@ -515,10 +1040,154 @@
       "excerpt": "Meet the Cohort: Ailtire | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
     },
     {
+      "id": "check-page-30c2ff613f",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "page": "batches",
+      "excerpt": "News Meet The Cohort Ailtire Ailtire As part of our AI Venture Forge “Meet the Cohort” series, we’re thrilled to feature one of the most forward-thinking startups transforming how we secure digital infrastructure: Ailtire."
+    },
+    {
+      "id": "check-page-41a5a3fc7b",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "page": "batches",
+      "excerpt": "They’re not just improving cybersecurity – they’re redefining how we design secure systems from the ground up, with an AI-first approach to threat modeling and resilience."
+    },
+    {
+      "id": "check-page-5e9fc3357c",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "page": "batches",
+      "excerpt": "Ailtire is the AI-powered platform redefining cybersecurity threat modeling to deliver faster, smarter, secure-by-design systems."
+    },
+    {
+      "id": "check-page-bcfdabf834",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "page": "batches",
+      "excerpt": "Website Company | Cyber Security What drove you to build an AI-powered cybersecurity platform?"
+    },
+    {
+      "id": "check-page-cec642073c",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "page": "batches",
+      "excerpt": "By applying AI to automate the heavy lifting, identifying threats, mapping them to frameworks, and suggesting mitigations, we empower project teams to design securely from day one."
+    },
+    {
+      "id": "check-page-95b8fd1e81",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "page": "batches",
+      "excerpt": "Designed as an AI-native platform, it can analyse a wide range of inputs—system designs, documentation, infrastructure configurations—and combine them with organisational context such as risk appetite, internal frameworks, and compliance obligations."
+    },
+    {
+      "id": "check-page-0660e6ce04",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "page": "batches",
+      "excerpt": "The access to experienced mentors is a big draw for us."
+    },
+    {
+      "id": "check-page-ebc0c1ace7",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "page": "batches",
+      "excerpt": "We’re also using the time to refine the AI core of our product—making sure it delivers real, usable outputs that fit into fast-moving project workflows."
+    },
+    {
+      "id": "check-page-44319407fd",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "page": "batches",
+      "excerpt": "We’re excited about both international trips—San Francisco and Paris—because they give us the chance to explore two very different but globally significant AI ecosystems and test our approach in new markets."
+    },
+    {
+      "id": "check-page-1011799218",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "page": "batches",
+      "excerpt": "San Francisco is the global epicentre of AI innovation and enterprise tech adoption."
+    },
+    {
+      "id": "check-page-88cdbe0871",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "page": "batches",
+      "excerpt": "It’s the perfect environment to put Ailtire in front of experienced buyers, fast-moving product teams, and investors who are actively backing AI-first platforms."
+    },
+    {
+      "id": "check-page-769ede6d44",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "page": "batches",
+      "excerpt": "Paris is emerging as a leading AI hub in Europe, with strong momentum around regulation, responsible innovation, and public-private collaboration."
+    },
+    {
       "id": "check-page-906ed9fb0b",
       "url": "https://portershed.com/meet-the-cohort-aima-opex/",
       "page": "batches",
       "excerpt": "Meet The Cohort: AIMA Opex | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-1cbd0ced9b",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "page": "batches",
+      "excerpt": "News Meet The Cohort AIMA Opex AIMA Opex As part of our AI Venture Forge “Meet the Cohort” series, we’re excited to introduce AIMA Opex, a company bringing intelligence to the heart of factory operations, without requiring a digital overhaul."
+    },
+    {
+      "id": "check-page-15848eb29c",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "page": "batches",
+      "excerpt": "With over 60% of SMEs still relying on checklists, and whiteboards, AIMA’s AI-powered platform layers smart guidance and quality control onto existing workflows."
+    },
+    {
+      "id": "check-page-cf433f1c19",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "page": "batches",
+      "excerpt": "Website Company | Manufacturing AI What inspired you to build an Industrial AI for manufacturers?"
+    },
+    {
+      "id": "check-page-64d8ce94f5",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "page": "batches",
+      "excerpt": "At AIMA OPEX, we’re a team of engineers, scientists, and builders who’ve spent our careers both on the factory floor and in advanced AI research."
+    },
+    {
+      "id": "check-page-edc1d91167",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "page": "batches",
+      "excerpt": "I’m Asem Mohammad, Founder of AIMA, a Chartered Engineer with 15 years of experience in the manufacturing sector."
+    },
+    {
+      "id": "check-page-3c78ce4733",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "page": "batches",
+      "excerpt": "AIMA was born from the belief that AI-driven intelligence should be accessible, scalable, and deeply integrated into the manufacturing process, not to replace human expertise but to augment and empower the workforce."
+    },
+    {
+      "id": "check-page-1624941a48",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "page": "batches",
+      "excerpt": "AIMA addresses a global, high-value problem: quality failures in manual manufacturing."
+    },
+    {
+      "id": "check-page-8e0c9cef87",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "page": "batches",
+      "excerpt": "This is a $1.3 trillion annual loss globally – manufacturers are losing up to 30% revenue per year due to quality failures, with the average SMEs bleeding 300K annually."
+    },
+    {
+      "id": "check-page-bcb3c9c709",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "page": "batches",
+      "excerpt": "AIMA is an AI-powered software that helps manufacturers reduce mistakes during production as they happen, not after – avoiding rework & downstream issues by up to 50%."
+    },
+    {
+      "id": "check-page-b59151c7e6",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "page": "batches",
+      "excerpt": "We believe the Venture Forge programme will accelerate our progress toward key milestones by providing structured mentorship, expert feedback, and valuable peer discussions."
+    },
+    {
+      "id": "check-page-9d9b00ac82",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "page": "batches",
+      "excerpt": "The extensive network offered by Venture Forge is opening doors to key decision-makers within our ideal customer profile, notably innovation-focused manufacturing leaders within the region."
+    },
+    {
+      "id": "check-page-19fc6f6818",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "page": "batches",
+      "excerpt": "Over 60% of SMEs still rely on paper-based SOPs, checklists, and whiteboards."
     },
     {
       "id": "check-page-cf322d59a5",
@@ -527,16 +1196,580 @@
       "excerpt": "Meet the Cohort: Colata | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
     },
     {
+      "id": "check-page-b2fbb66e8e",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "page": "batches",
+      "excerpt": "News Meet The Cohort Colata Colata As part of our AI Venture Forge “Meet the Cohort” series, we’re thrilled to feature one of the most forward-thinking startups transforming how industries interact with data: Colata."
+    },
+    {
+      "id": "check-page-58895500e1",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "page": "batches",
+      "excerpt": "They’re not just processing information – they’re redefining how sports organisations turn raw data into strategic advantage, with an AI-first approach to performance and intelligence."
+    },
+    {
+      "id": "check-page-b0331b9bfc",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "page": "batches",
+      "excerpt": "Website Company | Sports Tech AI What inspired you to apply AI to the sports sector with Colata?"
+    },
+    {
+      "id": "check-page-c979e02e9a",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "page": "batches",
+      "excerpt": "When we founded Colata, we saw AI as the game-changing force that could redefine sports both for athletes, organisations and fans."
+    },
+    {
+      "id": "check-page-8bfb6c8072",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "page": "batches",
+      "excerpt": "But turning that vision into reality required more than just ambition, it needed the right ecosystem, mentorship, and global perspective."
+    },
+    {
+      "id": "check-page-10bf4084fc",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "page": "batches",
+      "excerpt": "That’s exactly what we found in PorterShed’s AI Venture Forge Accelerator."
+    },
+    {
+      "id": "check-page-e45c348fe9",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "page": "batches",
+      "excerpt": "The accelerator’s structured 12-week sprint, backed by industry-leading mentors from AWS, Microsoft, and Enterprise Ireland, pushed us to refine Colata’s AI models for scalability."
+    },
+    {
+      "id": "check-page-d4777f0ad0",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "page": "batches",
+      "excerpt": "Key elements that are accelerating our growth through the programme include expert-led workshops with AI specialists, Global market access through international programme facilitated trips connecting us with Leaders and Investors."
+    },
+    {
+      "id": "check-page-a3fc3d1ed2",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "page": "batches",
+      "excerpt": "There is immense value in being part of a co hort of 10 who are developing AI native solutions, the ability to learn from one another is a huge value add."
+    },
+    {
+      "id": "check-page-2a538c89c7",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "page": "batches",
+      "excerpt": "The system can predict when players might get injured, suggest the right amount of training, and even test different game strategies using AI."
+    },
+    {
+      "id": "check-page-dbb5bc3a45",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "page": "batches",
+      "excerpt": "Anyone on the team can ask questions in normal language like “Who’s at risk of injury?” or “Show me our weakest defense spots” and get instant answers – no computer skills needed."
+    },
+    {
+      "id": "check-page-63ed2cb79d",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "page": "batches",
+      "excerpt": "Digital transformation in sports is revolutionizing fan engagement, athlete performance, and operational efficiency through technologies like AI, wearables, and data analytics. bbColata is initially focusing on high-value, data-intensive segments of the sports industry where AI-driven insights can deliver immediate competitive and financial impact."
+    },
+    {
       "id": "check-page-acfaab227f",
       "url": "https://portershed.com/meet-the-cohort-devopness/",
       "page": "batches",
       "excerpt": "Meet The Cohort: Devopness | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
     },
     {
+      "id": "check-page-bbdfb214d8",
+      "url": "https://portershed.com/meet-the-cohort-devopness/",
+      "page": "batches",
+      "excerpt": "News Meet The Cohort Devopness Devopness As part of our AI Venture Forge “Meet the Cohort” series, we’re excited to spotlight Devopness, a startup transforming the way developers manage infrastructure."
+    },
+    {
+      "id": "check-page-7f7d366afd",
+      "url": "https://portershed.com/meet-the-cohort-devopness/",
+      "page": "batches",
+      "excerpt": "Website Company | Devops AI What does “DevOps happiness” mean to you, and how does Devopness deliver it?"
+    },
+    {
+      "id": "check-page-a7ec2b7833",
+      "url": "https://portershed.com/meet-the-cohort-devopness/",
+      "page": "batches",
+      "excerpt": "Many startups and small businesses struggle with too many tools, frequent context switching and high onboarding costs for DevOps engineers, leading to dissatisfaction with release times."
+    },
+    {
+      "id": "check-page-d292bbba9c",
+      "url": "https://portershed.com/meet-the-cohort-devopness/",
+      "page": "batches",
+      "excerpt": "How do your AI agents transform deployment and infrastructure management?"
+    },
+    {
+      "id": "check-page-5dbc3a6a34",
+      "url": "https://portershed.com/meet-the-cohort-devopness/",
+      "page": "batches",
+      "excerpt": "How do you hope to use the Venture Forge workshops and mentors?"
+    },
+    {
+      "id": "check-page-ecfc2d4bf6",
+      "url": "https://portershed.com/meet-the-cohort-devopness/",
+      "page": "batches",
+      "excerpt": "The mentorship and network will be invaluable for connecting with strategic investors and refining our scaling trajectory."
+    },
+    {
+      "id": "check-page-80e7019877",
+      "url": "https://portershed.com/meet-the-cohort-devopness/",
+      "page": "batches",
+      "excerpt": "We initially target ambitious software teams in startups and SMBs with limited (0-2) DevOps engineers, who prioritise rapidly shipping their MVP or continuously improving their products."
+    },
+    {
       "id": "check-page-40c2a7e23e",
       "url": "https://portershed.com/meet-the-cohort-dwello/",
       "page": "batches",
       "excerpt": "Meet the Cohort: Dwello | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-c0ce2c4e1f",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "page": "batches",
+      "excerpt": "News Meet The Cohort Forge Robotics Dwello As part of our AI Venture Forge “Meet the Cohort” series, we’re excited to spotlight a startup reshaping the future of property search: Dwello."
+    },
+    {
+      "id": "check-page-4ba8a493c8",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "page": "batches",
+      "excerpt": "They’re not just listing homes, they’re reimagining how people connect, with an AI-driven platform that makes renting, buying, and sharing properties transparent, seamless, and human-centred."
+    },
+    {
+      "id": "check-page-857f8dcc54",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "page": "batches",
+      "excerpt": "Website Company | Property Management AI What inspired you to rethink leasing & property management processes with Dwello’s technology?"
+    },
+    {
+      "id": "check-page-21d0eaa5e8",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "page": "batches",
+      "excerpt": "For landlords, Dwello replaces messy WhatsApp threads, spreadsheets, and costly managers with a single AI system of action that remembers leases, repairs, receipts, and rent."
+    },
+    {
+      "id": "check-page-77376d896a",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "page": "batches",
+      "excerpt": "A vacant unit is listed, prospective tenants self-view using digital access, applications are screened instantly, and once leased, the same unit brain continues to chase rent, coordinate repairs, and log receipts for taxes and insurance."
+    },
+    {
+      "id": "check-page-065dac8fee",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "page": "batches",
+      "excerpt": "What kind of market traction are you hoping to build during AI Venture Forge?"
+    },
+    {
+      "id": "check-page-b3c10e1428",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "page": "batches",
+      "excerpt": "During AI Venture Forge, our goal is to convert those commitments into live units on the platform and prove repeatable growth."
+    },
+    {
+      "id": "check-page-e1601a8635",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "page": "batches",
+      "excerpt": "That’s why we’re building software so intuitive that even non–real estate people feel more confident and joy in managing an investment property."
+    },
+    {
+      "id": "check-page-4ce81f1cf2",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "page": "batches",
+      "excerpt": "In San Francisco during Tech Week, we’ll connect with investors and partners at the centre of the AI ecosystem."
+    },
+    {
+      "id": "check-page-61eb98bb60",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "page": "batches",
+      "excerpt": "It’s a chance to position Dwello not just as proptech, but as an AI-native company creating a new category: a system of action for real estate."
+    },
+    {
+      "id": "check-page-b602b571b2",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "page": "batches",
+      "excerpt": "Meet The Cohort: FarmBiddy | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-2b6da2f837",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "page": "batches",
+      "excerpt": "News Meet The Cohort FarmBiddy FarmBiddy As part of our AI Venture Forge “Meet the Cohort” series, we’re excited to introduce FarmBiddy, a smart assistant built specifically for the day-to-day realities of modern farming."
+    },
+    {
+      "id": "check-page-2f69430586",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "page": "batches",
+      "excerpt": "Linkedin Company | Farming AI What motivated you to create a virtual farming advisor?"
+    },
+    {
+      "id": "check-page-703ae537a6",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "page": "batches",
+      "excerpt": "What support do you hope to gain from the Venture Forge Accelerator?"
+    },
+    {
+      "id": "check-page-1f1b3f8344",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "page": "batches",
+      "excerpt": "AI expertise and mentorship."
+    },
+    {
+      "id": "check-page-71a894d5cc",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "page": "batches",
+      "excerpt": "The programme’s network of AI Mentors are helping us avoid costly mistakes as we train models on Irish farming data and optimise voice recognition for outdoor conditions."
+    },
+    {
+      "id": "check-page-953db4000a",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "page": "batches",
+      "excerpt": "We need guidance on building trust, pricing strategies, and distribution channels that actually work in agriculture."
+    },
+    {
+      "id": "check-page-57c15e594f",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "page": "batches",
+      "excerpt": "We’re building something that could transform Irish agriculture, but we need funding to scale beyond our initial development."
+    },
+    {
+      "id": "check-page-4653fd6213",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "page": "batches",
+      "excerpt": "The programme’s investor network and pitch refinement support could help us articulate FarmBiddy’s potential to investors who might not immediately understand agricultural markets."
+    },
+    {
+      "id": "check-page-f200962a2e",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "page": "batches",
+      "excerpt": "Finally, we want to be surrounded by other founders solving hard problems with AI."
+    },
+    {
+      "id": "check-page-534419c2aa",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "page": "batches",
+      "excerpt": "What resistance have you faced getting farmers to trust AI ?"
+    },
+    {
+      "id": "check-page-217b0c17b3",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "page": "batches",
+      "excerpt": "The biggest resistance isn’t about AI, it’s about being burned by technology before."
+    },
+    {
+      "id": "check-page-af577ef58e",
+      "url": "https://portershed.com/meet-the-cohort-farmbiddy/",
+      "page": "batches",
+      "excerpt": "Farmers hear “AI” and think it’s either Artificial Insemination or another tech solution built by people who’ve never stepped in cow dung."
+    },
+    {
+      "id": "check-page-b9c8ba6ac1",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "page": "batches",
+      "excerpt": "Meet the Cohort: Forge Robotics | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart"
+    },
+    {
+      "id": "check-page-f741cf3174",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "page": "batches",
+      "excerpt": "News Meet The Cohort Forge Robotics Forge Robotics As part of our AI Venture Forge “Meet the Cohort” series, we’re thrilled to feature one of the most forward-thinking startups tackling one of manufacturing’s most pressing crises: Forge Robotics."
+    },
+    {
+      "id": "check-page-6265b2f1b3",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "page": "batches",
+      "excerpt": "They’re not just automating tasks – they’re redefining how robots think, with a bold, AI-first approach to welding automation."
+    },
+    {
+      "id": "check-page-2c26e94563",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "page": "batches",
+      "excerpt": "Website Company | Robotics AI What problem are you solving in manufacturing with robot “brains”?"
+    },
+    {
+      "id": "check-page-9bf043347f",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "page": "batches",
+      "excerpt": "We are tackling one of the most urgent threats to global manufacturing, the skilled labour shortage."
+    },
+    {
+      "id": "check-page-7619935695",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "page": "batches",
+      "excerpt": "To solve this, we are giving manufacturing robots the brains that they have been missing."
+    },
+    {
+      "id": "check-page-eda8f0d45a",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "page": "batches",
+      "excerpt": "Our AI-powered system gives robots the perception, adaptability, and decision-making needed to work like a human: scan the part, understand the geometry, and execute welds, without needing everything to be perfect."
+    },
+    {
+      "id": "check-page-3c3bb27219",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "page": "batches",
+      "excerpt": "In theory, AI could be retrofitted onto existing welding robots, but in practice, most industrial cells aren’t built for it."
+    },
+    {
+      "id": "check-page-171c8f11fd",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "page": "batches",
+      "excerpt": "Instead, we’re designing Forge as a full-stack AI-native welding system: a modular cobot-based cell built from off-the-shelf hardware, outfitted with our own perception and motion intelligence."
+    },
+    {
+      "id": "check-page-e12cf0aaee",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "page": "batches",
+      "excerpt": "How will the AI Venture Forge mentorship help you refine your go-to-market?"
+    },
+    {
+      "id": "check-page-3872c439d3",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "page": "batches",
+      "excerpt": "The people that we will meet and those who we get connected to will be the reason that we move towards getting our product working on manufacturing floors in weeks not years."
+    },
+    {
+      "id": "check-page-550e59780a",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "page": "batches",
+      "excerpt": "We know that the technology we are building and the industry we are breaking into need the right connections, and we believe we can make many of them here at AI Venture Forge."
+    },
+    {
+      "id": "check-page-7910dcd27e",
+      "url": "https://portershed.com/meet-the-cohort-forge-robotics/",
+      "page": "batches",
+      "excerpt": "What barriers have you encountered around the adoption of AI-driven robotics?"
+    },
+    {
+      "id": "check-page-d7b6485ca7",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "page": "batches",
+      "excerpt": "Meet The Cohort: Shoden AI | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-11e92339c0",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "page": "batches",
+      "excerpt": "News Meet The Cohort Shoden AI Shoden aI As part of our AI Venture Forge “Meet the Cohort” series, we’re excited to introduce Shoden AI, a company on a mission to transform sales through full-cycle automation."
+    },
+    {
+      "id": "check-page-3e54e5b8ba",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "page": "batches",
+      "excerpt": "Shoden AI takes the manual grind out of prospecting by automating every stage of the outbound process, from identifying and researching leads to crafting personalised messages, managing follow-ups, and scheduling meetings."
+    },
+    {
+      "id": "check-page-71bb854de7",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "page": "batches",
+      "excerpt": "At Shoden AI, we recognised a critical gap in sales development."
+    },
+    {
+      "id": "check-page-f2c6703167",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "page": "batches",
+      "excerpt": "We created Nezumi to address this challenge by automating outbound sales with an AI-driven solution."
+    },
+    {
+      "id": "check-page-93d5b6ae18",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "page": "batches",
+      "excerpt": "Nezumi acts as a personal AI SDR that can handle lead generation, outreach, and follow-ups, all while being more affordable and much more efficient than a human counterpart."
+    },
+    {
+      "id": "check-page-cd659f3ad0",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "page": "batches",
+      "excerpt": "How does your AI SDR differ from other sales automation tools?"
+    },
+    {
+      "id": "check-page-ab1adbd666",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "page": "batches",
+      "excerpt": "What sets Shoden AI apart from other sales automation tools is its unique blend of AI and human collaboration."
+    },
+    {
+      "id": "check-page-163c96ecb9",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "page": "batches",
+      "excerpt": "Our AI SDR is designed to work seamlessly with human input, not replace it entirely."
+    },
+    {
+      "id": "check-page-1f9ac97a5b",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "page": "batches",
+      "excerpt": "While other tools might rely solely on AI or scripts, Shoden AI offers a “human-in-the-loop” model, where the AI learns and adapts based on real-time human feedback."
+    },
+    {
+      "id": "check-page-b3ad40cd98",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "page": "batches",
+      "excerpt": "Early customers have seen impressive results with Shoden AI."
+    },
+    {
+      "id": "check-page-7b0e522724",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "page": "batches",
+      "excerpt": "These figures reflect the high-quality outreach that Shoden AI enables."
+    },
+    {
+      "id": "check-page-90a3729aa2",
+      "url": "https://portershed.com/meet-the-cohort-shoden-ai/",
+      "page": "batches",
+      "excerpt": "Customers also report significant reductions in their sales development costs, with our AI SDR being 5x cheaper and 2x more productive compared to human SDRs."
+    },
+    {
+      "id": "check-page-f2e4273ec3",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "page": "batches",
+      "excerpt": "Meet the Cohort: Timbi | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-f4f475bd83",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "page": "batches",
+      "excerpt": "News Meet The Cohort Timbi Timbi As part of our AI Venture Forge “Meet the Cohort” series, we’re excited to feature a company that is rethinking how innovation is funded across Europe: Timbi."
+    },
+    {
+      "id": "check-page-0afac7ea70",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "page": "batches",
+      "excerpt": "Website Company | Funding support through AI What motivated you to tackle EU funding complexity with Timbi?"
+    },
+    {
+      "id": "check-page-03a0b2de89",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "page": "batches",
+      "excerpt": "“Timbi isn’t your typical fast-scaling AI startup aiming for unicorn status or a Silicon Valley exit."
+    },
+    {
+      "id": "check-page-f6333b73d3",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "page": "batches",
+      "excerpt": "Timbi exists to simplify, support, and unlock these opportunities for those who truly need them and aim for impactful projects.” How does Timbi reduce stress for SMEs applying for funding?"
+    },
+    {
+      "id": "check-page-34309ef10a",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "page": "batches",
+      "excerpt": "Timbi helps SMEs navigate EU funding with a virtual AI assistant that simplifies and speeds up the pre-award process."
+    },
+    {
+      "id": "check-page-c6b7e2ba43",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "page": "batches",
+      "excerpt": "By cutting down the time spent on admin tasks by up to 80%, Timbi lets innovators focus on their ideas, not the paperwork.” What parts of the AI Venture Forge programme are most valuable to you?"
+    },
+    {
+      "id": "check-page-93ae49128a",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "page": "batches",
+      "excerpt": "“The strategic mentorship and focused AI product validation are invaluable."
+    },
+    {
+      "id": "check-page-d817375b0f",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "page": "batches",
+      "excerpt": "Access to experts in product-market fit, growth strategy, and applied AI would help us sharpen our offering and move faster."
+    },
+    {
+      "id": "check-page-0acc8633bc",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "page": "batches",
+      "excerpt": "Beyond that, the strength of the network we could gain, both within the cohort and across Ireland’s wider innovation ecosystem, is a huge asset."
+    },
+    {
+      "id": "check-page-defe90a33a",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "page": "batches",
+      "excerpt": "The programme offers a rare platform for visibility and connection, opening doors to key stakeholders, partners, and investors across Europe and beyond."
+    },
+    {
+      "id": "check-page-b9457082b7",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "page": "batches",
+      "excerpt": "We’re especially excited about the international exposure and learning opportunities that come with upcoming visits to Paris and San Francisco, they represent pivotal moments to showcase Timbi on the global stage and build relationships that will fuel our next stage of growth.” How do you plan to build commercial traction beyond the Accelerator And what challenges have you currently faced?"
+    },
+    {
+      "id": "check-page-577f144999",
+      "url": "https://portershed.com/meet-the-cohort-timbi/",
+      "page": "batches",
+      "excerpt": "We’re already working with paying clients across Europe, which gives us a strong foundation."
+    },
+    {
+      "id": "check-page-6c3a3006da",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "page": "batches",
+      "excerpt": "Meet the Cohort: Timbi | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-e1fa90f7fb",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "page": "batches",
+      "excerpt": "News Meet The Cohort Timbi Timbi As part of our AI Venture Forge “Meet the Cohort” series, we’re excited to feature a company that is rethinking how innovation is funded across Europe: Timbi."
+    },
+    {
+      "id": "check-page-df8cbd1a64",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "page": "batches",
+      "excerpt": "Website Company | Funding support through AI What motivated you to tackle EU funding complexity with Timbi?"
+    },
+    {
+      "id": "check-page-57cbfa79a4",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "page": "batches",
+      "excerpt": "“Timbi isn’t your typical fast-scaling AI startup aiming for unicorn status or a Silicon Valley exit."
+    },
+    {
+      "id": "check-page-36fa05bbb1",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "page": "batches",
+      "excerpt": "Timbi exists to simplify, support, and unlock these opportunities for those who truly need them and aim for impactful projects.” How does Timbi reduce stress for SMEs applying for funding?"
+    },
+    {
+      "id": "check-page-b0e97ae358",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "page": "batches",
+      "excerpt": "Timbi helps SMEs navigate EU funding with a virtual AI assistant that simplifies and speeds up the pre-award process."
+    },
+    {
+      "id": "check-page-3a0caa1f39",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "page": "batches",
+      "excerpt": "By cutting down the time spent on admin tasks by up to 80%, Timbi lets innovators focus on their ideas, not the paperwork.” What parts of the AI Venture Forge programme are most valuable to you?"
+    },
+    {
+      "id": "check-page-455fbf10ba",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "page": "batches",
+      "excerpt": "“The strategic mentorship and focused AI product validation are invaluable."
+    },
+    {
+      "id": "check-page-39714083b9",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "page": "batches",
+      "excerpt": "Access to experts in product-market fit, growth strategy, and applied AI would help us sharpen our offering and move faster."
+    },
+    {
+      "id": "check-page-8c50448dc4",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "page": "batches",
+      "excerpt": "Beyond that, the strength of the network we could gain, both within the cohort and across Ireland’s wider innovation ecosystem, is a huge asset."
+    },
+    {
+      "id": "check-page-6decae9d7a",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "page": "batches",
+      "excerpt": "The programme offers a rare platform for visibility and connection, opening doors to key stakeholders, partners, and investors across Europe and beyond."
+    },
+    {
+      "id": "check-page-638cee2a3c",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "page": "batches",
+      "excerpt": "We’re especially excited about the international exposure and learning opportunities that come with upcoming visits to Paris and San Francisco, they represent pivotal moments to showcase Timbi on the global stage and build relationships that will fuel our next stage of growth.” How do you plan to build commercial traction beyond the Accelerator And what challenges have you currently faced?"
+    },
+    {
+      "id": "check-page-91244003dc",
+      "url": "https://portershed.com/meet-the-cohort-timbi/%20",
+      "page": "batches",
+      "excerpt": "We’re already working with paying clients across Europe, which gives us a strong foundation."
     }
   ],
   "findings": {

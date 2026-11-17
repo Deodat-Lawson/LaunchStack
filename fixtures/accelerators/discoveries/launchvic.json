@@ -1,15 +1,7 @@
 {
   "programId": "launchvic",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
-    {
-      "url": "https://assets.launchvic.org/app/uploads/2022/12/05034130/CivVic-Labs-Is-Calling-For-Startups-To-Apply-For-Their-Accelerator-Program-04-Apr-2019.pdf",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://launchvic.org/about-the-ecosystem/",
       "page": "details",
@@ -123,14 +115,6 @@
       "origin": "official"
     },
     {
-      "url": "https://launchvic.org/event/navigating-the-us-investment-market-insights-for-victorian-founders-and-investors/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://launchvic.org/faqs-for-founders/",
       "page": "terms",
       "anchor": "",
@@ -171,10 +155,58 @@
       "origin": "official"
     },
     {
+      "url": "https://launchvic.org/funding-news/1-5-million-investment-a-lightning-rod-for-energytech-entrepreneurs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://launchvic.org/funding-news/angel-investment-groups-help-victorian-startups-grow/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://launchvic.org/funding-news/closing-the-gender-investment-gap/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://launchvic.org/funding-news/inspiring-investment-in-victorian-agtech-startups/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://launchvic.org/funding-news/investment-boost-for-womens-startups/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://launchvic.org/funding-news/skalata-investment-to-unlock-20-million-for-victorian-startups/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://launchvic.org/get-ready-for-investment/",
       "page": "terms",
       "anchor": "Get Ready for Investment",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

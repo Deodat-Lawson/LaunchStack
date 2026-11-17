@@ -1,6 +1,6 @@
 {
   "programId": "catalyst-fund",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.thecatalystfund.com/catalyst-climate-champions",
@@ -67,22 +67,6 @@
       "origin": "official"
     },
     {
-      "url": "https://www.thecatalystfund.com/portfolio?94232af5_page=2",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.thecatalystfund.com/portfolio?aa42568c_page=2",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.thecatalystfund.com/portfolios/abalobi",
       "page": "portfolio",
       "anchor": "",
@@ -108,6 +92,62 @@
     },
     {
       "url": "https://www.thecatalystfund.com/portfolios/aquarech",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/portfolios/asaak",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/portfolios/assuraf",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/portfolios/atikus",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/portfolios/bamba-2",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/portfolios/banco-mare",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/portfolios/bekia",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/portfolios/biobuu",
       "page": "portfolio",
       "anchor": "",
       "fetched": true,

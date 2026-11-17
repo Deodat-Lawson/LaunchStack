@@ -1,20 +1,207 @@
 {
   "programId": "accelerate-long-island-hot-spot",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
-    "https://www.accelerateli.org/"
+    "https://www.accelerateli.org/",
+    "https://accelerateli.org/application/",
+    "https://accelerateli.org/about/",
+    "https://accelerateli.org/programs-initiatives/",
+    "https://accelerateli.org/resource/empire-state-innovation-matching-grants-program-img/",
+    "https://accelerateli.org/supplier-finance-programs/"
   ],
-  "evidence": [],
+  "evidence": [
+    {
+      "id": "check-route-233733c64d",
+      "url": "https://www.accelerateli.org/",
+      "title": "Accelerate Long Island – Hot Spot — homepage",
+      "excerpt": "Hot Spot Application → https://accelerateli.org/application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-40be35fc60",
+      "url": "https://accelerateli.org/programs-initiatives/",
+      "title": "Accelerate Long Island – Hot Spot — program page",
+      "excerpt": "Apply → https://accelerateli.org/application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7440867ae3",
+      "url": "https://www.accelerateli.org/",
+      "title": "Accelerate Long Island – Hot Spot — homepage",
+      "excerpt": "Building the Future of Tech, Life Sciences, Clean Energy, AI, and Science-Driven Startups. → https://accelerateli.org/application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-818bbf6ba3",
+      "url": "https://www.accelerateli.org/",
+      "title": "Accelerate Long Island – Hot Spot — homepage",
+      "excerpt": "Apply Now for the Long Island Innovation Hot Spot Program → https://accelerateli.org/application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a411575d79",
+      "url": "https://accelerateli.org/about/",
+      "title": "Accelerate Long Island – Hot Spot — program page",
+      "excerpt": "Apply → https://accelerateli.org/application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b7d6317e13",
+      "url": "https://accelerateli.org/programs-initiatives/",
+      "title": "Accelerate Long Island – Hot Spot — program page",
+      "excerpt": "Start Your Hot Spot Application → https://accelerateli.org/application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ca05e5d457",
+      "url": "https://accelerateli.org/supplier-finance-programs/",
+      "title": "Accelerate Long Island – Hot Spot — program page",
+      "excerpt": "Apply → https://accelerateli.org/application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d68dfde212",
+      "url": "https://accelerateli.org/about/",
+      "title": "Accelerate Long Island – Hot Spot — program page",
+      "excerpt": "Start Your Hot Spot Application → https://accelerateli.org/application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d8269f9ba0",
+      "url": "https://www.accelerateli.org/",
+      "title": "Accelerate Long Island – Hot Spot — homepage",
+      "excerpt": "Start Your Hot Spot Application → https://accelerateli.org/application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e9493582f4",
+      "url": "https://accelerateli.org/resource/empire-state-innovation-matching-grants-program-img/",
+      "title": "Accelerate Long Island – Hot Spot — program page",
+      "excerpt": "Apply → https://accelerateli.org/application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ff203e3f71",
+      "url": "https://accelerateli.org/about/",
+      "title": "Accelerate Long Island – Hot Spot — program page",
+      "excerpt": "Hot Spot Application → https://accelerateli.org/application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ff44ee6422",
+      "url": "https://www.accelerateli.org/",
+      "title": "Accelerate Long Island – Hot Spot — homepage",
+      "excerpt": "Apply → https://accelerateli.org/application/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-d7cfbac4ae",
+      "url": "https://www.accelerateli.org/",
+      "page": "details",
+      "excerpt": "Accelerate | Long Island Home Programs Events Portfolio Board Resources Apply Contact Building the Future of Tech, Life Sciences, Clean Energy, AI, and Science-Driven Startups. Accelerate Long Island is a unique collaboration among the region’s research, academic institutions and business communities to commercialize research and create an entrepreneurial ecosystem. Apply Now for the Long Island Innovation Hot Spot Program Why Long Island? A Region Built for Innovation. Accelerate Long Island is home to world-class research, top talent, and a thriving business community. Long Island is where startups launch and grow. APPLY TODAY Start Your Hot Spot Application Relevant documents (pitch deck, executive summary, or related materials) Please leave this field empty. Submit My Application Building the Future of Tech, Life Sciences, Clean Energy, AI, and Science-Driven Startups. From university research labs to regional innovation hubs, Accelerate Long Island fuels the growth of potential startups. With 21 portfolio companies and over $100M in follow-on funding raised, we’re proving that Long Island is more than a region, it’s a launchpad for global impact. Startups Accelerated $ In Follow-On Funding Institution Partnerships Innovation Jobs Created Learn More Who We Serve For Founders You’re building the next big breakthrough, we’ll help you fund it, scale it, and get it seen. Start"
+    },
+    {
+      "id": "check-page-87041727af",
+      "url": "https://www.accelerateli.org/",
+      "page": "details",
+      "excerpt": "From IP to incorporation, we bridge Tech, AI, and science-driven and commercialization."
+    },
+    {
+      "id": "check-page-52b013030a",
+      "url": "https://www.accelerateli.org/",
+      "page": "details",
+      "excerpt": "Learn More For Investors Looking for vetted startups solving real problems in biotech, energy, and AI?"
+    },
+    {
+      "id": "check-page-2cf8117601",
+      "url": "https://www.accelerateli.org/",
+      "page": "details",
+      "excerpt": "Apply Submit your Hot Spot application to get started Match Get connected to funding, mentors, and partners Accelerate Scale your startup with targeted support What We Offer From Research Lab to Generating Venture, We Bridge the Gap."
+    },
+    {
+      "id": "check-page-2c359d4436",
+      "url": "https://www.accelerateli.org/",
+      "page": "details",
+      "excerpt": "What We Offer Startup Funding & Seed Capital We connect businesses to strategic investments."
+    },
+    {
+      "id": "check-page-2f1bb3c676",
+      "url": "https://www.accelerateli.org/",
+      "page": "details",
+      "excerpt": "What We Offer Founder Support & Mentorship Hands-on guidance to navigate the startup journey."
+    },
+    {
+      "id": "check-page-ef0b6f7480",
+      "url": "https://accelerateli.org/application/",
+      "page": "application",
+      "excerpt": "Application | Accelerate Home Programs Events Portfolio Board Resources Apply Contact Apply to the Hot Spot Startup Program Join a curated network of founders, researchers, and partners transforming science and technology into investable ventures across Long Island.  Start Your Application Below APPLY TODAY Why Join the Hot Spot? The Hot Spot is more than a program, it’s a gateway. As part of Accelerate Long Island’s accelerator initiative, accepted applicants gain exclusive access to startup support services, trusted ecosystem partners, and tailored commercialization resources. If you’re building in biotech, clean tech, or advanced science, this is where you belong. N Hands-on mentorship & advisory N Investor and funding access N Private portal with curated service providers N Visibility across Long Island’s innovation network N Ecosystem credibility and long-term support Start Your Hot Spot Application Relevant documents (pitch deck, executive summary, or related materials) Please leave this field empty. Submit My Application Who We’re Looking For Founders of early-stage science or tech startups Researchers ready to commercialize groundbreaking discoveries Startups located in or serving the Long Island region Ventures seeking funding, partnerships, or strategic support Mission-aligned teams committed to regional economic growth Hot Spot Application Apply for Access to Long"
+    },
+    {
+      "id": "check-page-e8d50af774",
+      "url": "https://accelerateli.org/about/",
+      "page": "details",
+      "excerpt": "About | Accelerate Home Programs Events Portfolio Board Resources Apply Contact Accelerating What Matters Most — Innovation, Jobs, and Regional Impact Accelerate Long Island is a catalyst for science-driven entrepreneurship, building bridges between research, startups, investors, and institutions to fuel Long Island’s innovation economy. Our Mission To empower science and tech entrepreneurs with the resources, relationships, and regional momentum needed to turn breakthrough ideas into thriving businesses. Our Vision A future where Long Island leads the nation in commercializing research, creating high-quality jobs, and accelerating innovation that changes the world. We Connect. We Accelerate. We Catalyze. Connect Startups to Resources Funding, mentorship, and institutional partnerships to support scalable innovation. Accelerate Commercialization Guiding researchers and founders through IP, incorporation, and market launch. Build a Startup Ecosystem Curating a high-trust network of service providers, partners, and investors. Drive Regional Growth Supporting job creation, economic development, and tech-based revitalization. Hot Spot Application Apply for Access to Long Island’s Startup Gateway. Why Long Island Is a Launchpad Long Island is home to world-class institutions like Cold Spring Harbor Lab, Stony Brook University, and Brookhaven National Lab. It’s where research meets"
+    },
+    {
+      "id": "check-page-56476e64fb",
+      "url": "https://accelerateli.org/programs-initiatives/",
+      "page": "details",
+      "excerpt": "Warning : The magic method Preloader_Plus\\Preloader_Plus::__wakeup() must have public visibility in /home/u746567304/domains/accelerateli.org/public_html/wp-content/plugins/preloader-plus/inc/preloader-plus.php on line 94 Warning : The magic method Preloader_Plus_Pro\\Preloader_Plus_Pro::__wakeup() must have public visibility in /home/u746567304/domains/accelerateli.org/public_html/wp-content/plugins/preloader-plus/preloader-plus-pro/inc/preloader-plus-pro.php on line 59 Programs / Initiatives | Accelerate Home Programs Events Portfolio Board Resources Apply Contact Programs That Turn Innovation Into Impact From startup acceleration to university partnerships, Accelerate Long Island offers structured programs that help entrepreneurs, researchers, and stakeholders bring growth ideas to life. What Our Programs Deliver Accelerate Long Island’s programs are designed to bridge the gap between early-stage innovation and real world success. Whether you’re a founder applying to the Hot Spot or a researcher seeking to commercialize your discovery, our initiatives offer the infrastructure, insight, and introductions to move you forward. N Hands-on mentorship and coaching N Founder-investor matchmaking N Research-to-market guidance N Startup funding readiness N Ecosystem introductions The Hot Spot: Long Island’s Startup Gateway The Hot Spot Program is a highly selective initiative for"
+    },
+    {
+      "id": "check-page-1ab986e958",
+      "url": "https://accelerateli.org/programs-initiatives/",
+      "page": "details",
+      "excerpt": "N Hands-on mentorship and coaching N Founder-investor matchmaking N Research-to-market guidance N Startup funding readiness N Ecosystem introductions The Hot Spot: Long Island’s Startup Gateway The Hot Spot Program is a highly selective initiative for early-stage tech and life science startups."
+    },
+    {
+      "id": "check-page-f5f50aab01",
+      "url": "https://accelerateli.org/programs-initiatives/",
+      "page": "details",
+      "excerpt": "Accepted members gain strategic mentorship, access to vetted service providers, and direct connections to investors and regional partners."
+    },
+    {
+      "id": "check-page-1257d0802c",
+      "url": "https://accelerateli.org/resource/empire-state-innovation-matching-grants-program-img/",
+      "page": "details",
+      "excerpt": "Empire State Innovation Matching Grants Program (IMG) | Accelerate Home Programs Events Portfolio Board Resources Apply Contact Empire State Innovation Matching Grants Program (IMG) by technosites | Jul 22, 2025 Categories All Ecosystem Impact Events Featured Founder Spotlights Partner News Startup Wins Accelerate Long Island is a unique collaboration among the region’s research, academic institutions and business community to commercialize research and create an entrepreneurial ecosystem. Quick Links Home About Services Programs / Initiatives Useful Links Application Portfolio Board Resources Get in touch Need support? dlloyd@accelerateli.org Follow Follow Copyright © 2025 Accelerate | All Rights Reserved. Privacy policy | Terms and conditions | Copyright"
+    },
+    {
+      "id": "check-page-a08a630952",
+      "url": "https://accelerateli.org/supplier-finance-programs/",
+      "page": "details",
+      "excerpt": "Warning : The magic method Preloader_Plus\\Preloader_Plus::__wakeup() must have public visibility in /home/u746567304/domains/accelerateli.org/public_html/wp-content/plugins/preloader-plus/inc/preloader-plus.php on line 94 Warning : The magic method Preloader_Plus_Pro\\Preloader_Plus_Pro::__wakeup() must have public visibility in /home/u746567304/domains/accelerateli.org/public_html/wp-content/plugins/preloader-plus/preloader-plus-pro/inc/preloader-plus-pro.php on line 59 From Lab to Launch: How One Stony Brook Researcher Secured $2M in Funding | Accelerate Home Programs Events Portfolio Board Resources Apply Contact From Lab to Launch: How One Stony Brook Researcher Secured $2M in Funding by technosites | Jun 19, 2025 | Featured | 0 comments Discover how breakthrough research in clean energy led to one of Long Island’s most exciting startup success stories through ALI’s accelerator support. Submit a Comment Cancel reply Your email address will not be published. Required fields are marked * Comment * Name * Email * Website Save my name, email, and website in this browser for the next time I comment. Categories All Ecosystem Impact Events Featured Founder Spotlights Partner News Startup Wins Accelerate Long Island is a unique collaboration among the region’s research, academic institutions and business community to commercialize research and create an entrepreneurial ecosystem."
+    }
+  ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
-    "applicationUrl": [],
+    "routes": [
+      {
+        "value": "https://accelerateli.org/application/",
+        "evidenceId": "check-route-ff44ee6422"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://accelerateli.org/application/",
+        "evidenceId": "check-route-ff44ee6422"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

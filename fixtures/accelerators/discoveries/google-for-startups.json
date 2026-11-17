@@ -1,6 +1,6 @@
 {
   "programId": "google-for-startups",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://startup.google.com/about-us/",
@@ -94,60 +94,124 @@
       "url": "https://startup.google.com/intl/es/programs/accelerator/europe-middle-east-africa/",
       "page": "details",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://startup.google.com/intl/es/programs/ai-academy/",
       "page": "details",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://startup.google.com/intl/es/programs/black-founders-fund/",
       "page": "details",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://startup.google.com/intl/es/programs/cloud-academy/",
       "page": "details",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://startup.google.com/intl/es/programs/directory/",
       "page": "details",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://startup.google.com/intl/es/programs/forum/",
       "page": "details",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://startup.google.com/intl/es/programs/founders-academy/",
       "page": "details",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://startup.google.com/intl/es/programs/founders-funds/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/gemini-api-sprints/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/growth-academy/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/latino-founders-fund/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/startup-school/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/ukraine-support-fund/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/women-founders-fund/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/fr/programs/accelerator/canada/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/ja/programs/",
       "page": "details",
       "anchor": "",
       "fetched": true,
@@ -155,7 +219,103 @@
       "origin": "official"
     },
     {
-      "url": "https://startup.google.com/intl/es/programs/gemini-api-sprints/",
+      "url": "https://startup.google.com/intl/ja/programs/accelerator/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/ja/programs/accelerator/americas/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/ja/programs/accelerator/asia-pacific/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/ja/programs/accelerator/europe-middle-east-africa/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/ja/programs/accelerator/japan/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/ja/programs/ai-academy/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/ja/programs/ai-academy/apac/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/ja/programs/black-founders-fund/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/ja/programs/cloud-academy/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/ja/programs/cloud-academy/apac/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/ja/programs/demo-day-asia/tokyo/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/ja/programs/directory/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/ja/programs/forum/",
       "page": "details",
       "anchor": "",
       "fetched": true,

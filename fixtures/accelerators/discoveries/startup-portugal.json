@@ -1,7 +1,15 @@
 {
   "programId": "startup-portugal",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://fundinggc.startupportugal.com/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://startupportugal.com/about-us/",
       "page": "details",
@@ -14,70 +22,6 @@
       "url": "https://startupportugal.com/acredicao-rni/",
       "page": "details",
       "anchor": "Find out more about the network",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupportugal.com/blog/2020-12-4-from-investment-funds-to-drag-queens-key-moments-of-the-second-day-of-the-web-summit/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupportugal.com/blog/2020-9-18-investment-in-portugal-as-a-growing-success-story/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupportugal.com/blog/applications-open-for-the-empreende-xxi-program/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupportugal.com/blog/faqs-startupportugal-programs/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupportugal.com/blog/ii-sustainable-blue-economy-investment-forum-2/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupportugal.com/blog/portugal-at-web-summit-qatar-exploring-new-opportunities-for-startups-and-investment/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupportugal.com/blog/sim-circuit-showcase-for-startups-investment-matching/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupportugal.com/blog/vouchers-updates/",
-      "page": "batches",
-      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -86,7 +30,7 @@
       "url": "https://startupportugal.com/categoria-programa/ecosystem/",
       "page": "details",
       "anchor": "Ecosystem",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -94,7 +38,7 @@
       "url": "https://startupportugal.com/categoria-programa/entrepreneurs/",
       "page": "details",
       "anchor": "Entrepreneurs",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -102,7 +46,7 @@
       "url": "https://startupportugal.com/categoria-programa/ignite/",
       "page": "details",
       "anchor": "Ignite",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -118,7 +62,7 @@
       "url": "https://startupportugal.com/one-stop-shop/",
       "page": "details",
       "anchor": "I’M BUILDING A STARTUP. Access funding, visas and programmes to grow your business in Portugal and abroad.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -126,7 +70,7 @@
       "url": "https://startupportugal.com/programa/above-beyond-hangouts/",
       "page": "details",
       "anchor": "Above & Beyond Hangouts",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -134,7 +78,15 @@
       "url": "https://startupportugal.com/programa/business-abroad/",
       "page": "details",
       "anchor": "Business Abroad",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupportugal.com/programa/empreende-xxi/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -142,13 +94,53 @@
       "url": "https://startupportugal.com/programa/road-2-web-summit/",
       "page": "details",
       "anchor": "Road 2 Web Summit",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupportugal.com/programa/sim-circuit/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://startupportugal.com/programa/sim-startups-investment-matching/",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupportugal.com/programa/start-from-knowledge/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupportugal.com/programa/startup-visa/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupportugal.com/programa/startup-voucher/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -167,22 +159,6 @@
       "page": "details",
       "anchor": "See all",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupportugal.com/pt/blog/ii-sustainable-blue-economy-investment-forum/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupportugal.com/pt/blog/sim-circuit-showcase-for-startups-investment-matching-2/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

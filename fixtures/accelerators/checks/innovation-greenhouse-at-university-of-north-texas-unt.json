@@ -1,16 +1,43 @@
 {
   "programId": "innovation-greenhouse-at-university-of-north-texas-unt",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "http://innovation.unt.edu"
   ],
   "evidence": [
     {
+      "id": "check-format-c5183015fb",
+      "url": "http://innovation.unt.edu",
+      "title": "Innovation Greenhouse at the University of North Texas (UNT) — homepage",
+      "excerpt": "121 8:00 AM - 5:00 PM Monday - Thursday *All team works remote on Fridays DISCOVERY PARK HOURS College of Information",
+      "page": "details"
+    },
+    {
       "id": "check-phone-dfd562d024",
       "url": "http://innovation.unt.edu",
-      "title": "Innovation Greenhouse at the University of North Texas (UNT) — homepage checked by scrape.py",
+      "title": "Innovation Greenhouse at the University of North Texas (UNT) — homepage",
       "excerpt": "940-369-7428",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-3314dd72ef",
+      "url": "http://innovation.unt.edu",
+      "page": "details",
+      "excerpt": "Innovation and Commercialization | University of North Texas Skip to main content close Search... Search Search Options Search This Site Search All of UNT University of North Texas MYUNT CANVAS STUDENT EMAIL UNT DIRECTORY SEARCH Division of Research and Innovation Innovation and Commercialization Education & Resources Back Education & Resources FAQs Innovation Exchange Recaps URD Panel Session Innovation & Commercialization Process Back Innovation & Commercialization Process Submit an Invention Disclosure Commercialization Back Commercialization Startup Formation Available Technologies Events Contact Us Submit an Invention Disclosure Menu Education & Resources Back Education & Resources FAQs Innovation Exchange Recaps URD Panel Session Innovation & Commercialization Process Back Innovation & Commercialization Process Submit an Invention Disclosure Commercialization Back Commercialization Startup Formation Available Technologies Contact Us Submit an Invention Disclosure Search: Search Type THIS SITE ALL of UNT Search Search Quicklinks: MyUNT CANVAS STUDENT EMAIL UNT DIRECTORY Research Home Support Units Innovation and Commercialization I &C INNOVATION EXCHANGE - I &C INNOVATION EXCHANGE Fall 2026 - Session 1 What is Intellectual Property and How Can I Protect it? Learn the fundamentals of protecting your ideas, inventions, and creative works during this interactive"
+    },
+    {
+      "id": "check-page-29b46dad95",
+      "url": "http://innovation.unt.edu",
+      "page": "details",
+      "excerpt": "Education & Resources Through workshops, department meetings, lecture series, one-on-one meetings, and regular newsletters, the I&C team uses a range of tools to engage faculty and students to learn more about entrepreneurship, innovating, and commercializing technologies."
+    },
+    {
+      "id": "check-page-389f584701",
+      "url": "http://innovation.unt.edu",
+      "page": "details",
+      "excerpt": "Commercialization Working collaboratively with faculty and/or student innovators, the I&C team identifies and partners with groups to commercialize UNT innovations."
     }
   ],
   "findings": {
@@ -26,8 +53,20 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-c5183015fb"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

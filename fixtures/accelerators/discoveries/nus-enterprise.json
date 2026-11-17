@@ -1,6 +1,6 @@
 {
   "programId": "nus-enterprise",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://nusx.edu.sg/about",
@@ -22,14 +22,6 @@
       "url": "https://nusx.edu.sg/iti",
       "page": "details",
       "anchor": "ITI Overview Start with the problem",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
-      "page": "details",
-      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -118,6 +110,54 @@
       "url": "https://nusx.edu.sg/programmes/noc/locations",
       "page": "details",
       "anchor": "Locations",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "page": "details",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

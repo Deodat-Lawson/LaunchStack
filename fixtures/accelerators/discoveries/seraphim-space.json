@@ -1,12 +1,20 @@
 {
   "programId": "seraphim-space",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://academy.seraphim.vc/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://accelerator.seraphim.vc/",
       "page": "details",
       "anchor": "Academy",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -14,7 +22,7 @@
       "url": "https://seraphim.vc/about/",
       "page": "details",
       "anchor": "About",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -23,6 +31,22 @@
       "page": "details",
       "anchor": "Team",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://seraphim.vc/generation-space/live-stream/meet-the-seraphim-space-accelerator-mission-14-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://seraphim.vc/generation-space/live-stream/seraphim-space-accelerator-mission-15-cohort-reveal-webinar/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -75,54 +99,6 @@
       "origin": "official"
     },
     {
-      "url": "https://seraphim.vc/generation-space/podcast/industry-for-the-intelligent-age-with-brian-manning-co-founder-ceo-xona-and-generation-space-investment-vp-lewis-jones/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://seraphim.vc/news/2026-spacetech-predictions-investment-trends/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://seraphim.vc/news/25-million-investment-into-isotropic-systems/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://seraphim.vc/news/adaptive-insurance-secures-5m-investment-to-launch-ai-powered-climate-resilience-platform/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://seraphim.vc/news/announcing-our-investment-in-space-camp-alum-xona-space-systems/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://seraphim.vc/news/ascendarc-secures-3-95m-in-seed-funding-to-revolutionise-satellite-communications-for-u-s-military-and-commercial-applications/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://seraphim.vc/news/mp-space-raises-16m-in-seed-funding/",
       "page": "terms",
       "anchor": "New Investment: MP Space Raises $16M In Seed Funding TL;DR / Executive Summary The MP Space Team Sydney-based space power technology company MP Space has closed a $23 million (US$1",
@@ -147,22 +123,6 @@
       "origin": "official"
     },
     {
-      "url": "https://seraphim.vc/news/seraphim-space-accelerator-opens-applications-for-mission-12-with-leidos-secured-as-a-new-sponsor/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://seraphim.vc/news/uk-launches-65-million-funding-call-for-space-technologies-and-applications/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://seraphim.vc/portfolio/",
       "page": "portfolio",
       "anchor": "Portfolio",
@@ -171,10 +131,66 @@
       "origin": "official"
     },
     {
+      "url": "https://seraphim.vc/research/spacetech-investment-tracker-q1-2025-2/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://seraphim.vc/research/spacetech-investment-tracker-q1-2025/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://seraphim.vc/research/spacetech-investment-tracker-q2-2025/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://seraphim.vc/research/spacetech-investment-tracker-q2-2026-2/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://seraphim.vc/research/spacetech-investment-tracker-q2-2026/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://seraphim.vc/research/spacetech-investment-tracker-q3-2025/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://seraphim.vc/research/spacetech-investment-tracker-q3-2026-2/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://seraphim.vc/seraphim-spacetech-investment-tracker/",
       "page": "terms",
       "anchor": "SpaceTech Tracker",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

@@ -1,15 +1,7 @@
 {
   "programId": "balderton",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
-    {
-      "url": "https://careers.balderton.com/companies",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://careers.balderton.com/jobs?__hsfp=4048727588&__hssc=51647990.23.1634215967246&__hstc=51647990.a84059ed3fe8efa2b63fe9e02c4327e1.1634027149833.1634027149833.1634027149833.1",
       "page": "portfolio",
@@ -46,30 +38,6 @@
       "url": "https://www.balderton.com/news/category/portfolio-news/",
       "page": "portfolio",
       "anchor": "Portfolio News",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.balderton.com/news/category/portfolio-news/page/2/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.balderton.com/news/itoflow-raises-2-5-million-to-bring-institutional-grade-portfolio-management-to-every-investment-firm/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.balderton.com/news/unit1-studio-breaks-major-barrier-to-avatar-concert-adoption-secures-new-investment/",
-      "page": "terms",
-      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

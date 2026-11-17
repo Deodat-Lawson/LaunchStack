@@ -1,6 +1,6 @@
 {
   "programId": "sosv",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://sosv.com/",
     "https://sosv.com/apply",
@@ -16,14 +16,47 @@
     "https://sosv.com/legal-faqs/?faq_id=17358",
     "https://sosv.com/legal-faqs/?faq_id=17363",
     "https://sosv.com/legal-faqs/?faq_id=17365",
-    "https://sosv.com/legal-faqs/?faq_id=17366"
+    "https://sosv.com/legal-faqs/?faq_id=17366",
+    "https://sosv.com/legal-faqs/?faq_id=17367",
+    "https://sosv.com/legal-faqs/?faq_id=17368",
+    "https://sosv.com/legal-faqs/?faq_id=17370",
+    "https://sosv.com/legal-faqs/?faq_id=17373",
+    "https://sosv.com/legal-faqs/?faq_id=17374"
   ],
   "evidence": [
+    {
+      "id": "check-deal-03a47d85fa",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
+      "page": "terms"
+    },
     {
       "id": "check-deal-058460f89a",
       "url": "https://sosv.com/legal-faqs/?faq_id=17358",
       "title": "SOSV — terms page",
       "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-0e9e925c20",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-0fe15924bd",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-1216dc9ab0",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash",
       "page": "terms"
     },
     {
@@ -55,10 +88,45 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-1ac0d60633",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-1ed2f263fe",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-1efd046394",
       "url": "https://sosv.com/legal-faqs/?faq_id=17365",
       "title": "SOSV — terms page",
       "excerpt": "for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-20f67b3484",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "(as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-22fcad4c42",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-2304e3bd1c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
       "page": "terms"
     },
     {
@@ -104,6 +172,13 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-38a1ce02bc",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-394f5489d5",
       "url": "https://sosv.com/legal-faqs/?faq_id=17366",
       "title": "SOSV — terms page",
@@ -125,6 +200,13 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-46a56e5ecc",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-4f38ca45ff",
       "url": "https://sosv.com/legal-faqs/?faq_id=17365",
       "title": "SOSV — terms page",
@@ -132,10 +214,31 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-503f106379",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-553b0b5eaa",
       "url": "https://sosv.com/legal-faqs/?faq_id=17363",
       "title": "SOSV — terms page",
       "excerpt": "be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-59d811582f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-5b73e5d8c5",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash",
       "page": "terms"
     },
     {
@@ -160,6 +263,13 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-615ab24d0c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-64e049f189",
       "url": "https://sosv.com/legal-faqs/?faq_id=17356",
       "title": "SOSV — terms page",
@@ -181,6 +291,13 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-66deb1c5dd",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-6753d2e3af",
       "url": "https://sosv.com/legal-faqs/?faq_id=17356",
       "title": "SOSV — terms page",
@@ -192,6 +309,20 @@
       "url": "https://sosv.com/legal-faqs/?faq_id=17354",
       "title": "SOSV — terms page",
       "excerpt": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6a24f4cc08",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6a89f704b6",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this",
       "page": "terms"
     },
     {
@@ -230,10 +361,24 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-7bf0024627",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-7cb2cb6c62",
       "url": "https://sosv.com/legal-faqs/",
       "title": "SOSV — terms page",
       "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-84a90afaa3",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
       "page": "terms"
     },
     {
@@ -244,10 +389,24 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-86410d6441",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "(as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-8be4068827",
       "url": "https://sosv.com/legal-faqs/?faq_id=17365",
       "title": "SOSV — terms page",
       "excerpt": "for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-8d9fa1c6d8",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "(as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The",
       "page": "terms"
     },
     {
@@ -258,10 +417,38 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-90e7510ff9",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-944189f177",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-99a0f8d5b4",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-99ed3243e6",
       "url": "https://sosv.com/legal-faqs/?faq_id=17363",
       "title": "SOSV — terms page",
       "excerpt": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-9ab0b1bab7",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash",
       "page": "terms"
     },
     {
@@ -272,10 +459,24 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-a2734b95d8",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-a2fcbee881",
       "url": "https://sosv.com/legal-faqs/?faq_id=17363",
       "title": "SOSV — terms page",
       "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a807a4e426",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "(as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The",
       "page": "terms"
     },
     {
@@ -293,10 +494,24 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-af6137cb0f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-c1a619409e",
       "url": "https://sosv.com/legal-faqs/?faq_id=17365",
       "title": "SOSV — terms page",
       "excerpt": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c54adc6ca9",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this",
       "page": "terms"
     },
     {
@@ -370,8 +585,43 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-efea34b27f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f2d1fdad67",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-f32f41a413",
       "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f4113b99ea",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "(as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f5bda975b0",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f6baa311a7",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
       "title": "SOSV — terms page",
       "excerpt": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
       "page": "terms"
@@ -412,10 +662,31 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-00cc87ea49",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0129763e0b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-04967b5350",
       "url": "https://sosv.com/legal-faqs/?faq_id=17358",
       "title": "SOSV — terms page",
       "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-083ea62274",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
       "page": "terms"
     },
     {
@@ -437,6 +708,13 @@
       "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
       "title": "SOSV — terms page",
       "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0a02cfbd1e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "with the first 25% vesting in after your first 12 months with the Company and the remainder typically",
       "page": "terms"
     },
     {
@@ -465,6 +743,13 @@
       "url": "https://sosv.com/legal-faqs/",
       "title": "SOSV — terms page",
       "excerpt": "with the first 25% vesting in after your first 12 months with the Company and the remainder typically",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0b2f9dd556",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
       "page": "terms"
     },
     {
@@ -503,6 +788,13 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-148eb5eaca",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-15e2251f70",
       "url": "https://sosv.com/legal-faqs/?faq_id=17366",
       "title": "SOSV — terms page",
@@ -528,6 +820,13 @@
       "url": "https://sosv.com/legal-faqs/?faq_id=17356",
       "title": "SOSV — terms page",
       "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-1cd56f5900",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
       "page": "terms"
     },
     {
@@ -559,6 +858,13 @@
       "page": "application"
     },
     {
+      "id": "check-duration-22ed86e56d",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-24d5b3af0a",
       "url": "https://sosv.com/legal-faqs/?faq_id=17366",
       "title": "SOSV — terms page",
@@ -587,10 +893,24 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-279c22ade0",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-2b57a93e09",
       "url": "https://sosv.com/legal-faqs/",
       "title": "SOSV — terms page",
       "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-2bbbc52af4",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
       "page": "terms"
     },
     {
@@ -622,8 +942,22 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-3422bf138c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "to the Anniversary Date, which is typically 12 months from the execution date of the Cash SAFE, SOSV",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-38dfdbb8f6",
       "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3b4e19a68e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
       "title": "SOSV — terms page",
       "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
       "page": "terms"
@@ -641,6 +975,13 @@
       "title": "SOSV — homepage",
       "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
       "page": "details"
+    },
+    {
+      "id": "check-duration-3b930991a0",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "with the first 25% vesting in after your first 12 months with the Company and the remainder typically",
+      "page": "terms"
     },
     {
       "id": "check-duration-3da308e979",
@@ -713,6 +1054,13 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-51eda34851",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "to the Anniversary Date, which is typically 12 months from the execution date of the Cash SAFE, SOSV",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-5278c2e7ae",
       "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
       "title": "SOSV — terms page",
@@ -748,6 +1096,27 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-5db13d6d9c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-608e138cd6",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-61960c3318",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-62abbf6257",
       "url": "https://sosv.com/legal-faqs/?faq_id=17357",
       "title": "SOSV — terms page",
@@ -762,11 +1131,32 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-6518bd5d5e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-65e8c5805b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-6870e5eacb",
       "url": "https://sosv.com/apply",
       "title": "SOSV — application page",
       "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
       "page": "application"
+    },
+    {
+      "id": "check-duration-693b3b5f64",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
+      "page": "terms"
     },
     {
       "id": "check-duration-6d19c0fd6a",
@@ -783,6 +1173,13 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-6e208ff0e7",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-6ea6c5a654",
       "url": "https://sosv.com/apply/sosv",
       "title": "SOSV — application page",
@@ -794,6 +1191,13 @@
       "url": "https://sosv.com/legal-faqs/?faq_id=17366",
       "title": "SOSV — terms page",
       "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6eb783585f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
       "page": "terms"
     },
     {
@@ -853,10 +1257,24 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-76402329ca",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-79e1925981",
       "url": "https://sosv.com/legal-faqs/?faq_id=17354",
       "title": "SOSV — terms page",
       "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7d90ef204b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
       "page": "terms"
     },
     {
@@ -871,6 +1289,13 @@
       "url": "https://sosv.com/legal-faqs/?faq_id=17356",
       "title": "SOSV — terms page",
       "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-84caa5b267",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
       "page": "terms"
     },
     {
@@ -892,6 +1317,13 @@
       "url": "https://sosv.com/legal-faqs/?faq_id=17358",
       "title": "SOSV — terms page",
       "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8928504531",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
       "page": "terms"
     },
     {
@@ -923,10 +1355,31 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-8d4aa03acc",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-9174733e15",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "with the first 25% vesting in after your first 12 months with the Company and the remainder typically",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-92264a9d3b",
       "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
       "title": "SOSV — terms page",
       "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-929618f75e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
       "page": "terms"
     },
     {
@@ -937,10 +1390,24 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-940a7fc113",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-9757fe4f86",
       "url": "https://sosv.com/legal-faqs/?faq_id=17365",
       "title": "SOSV — terms page",
       "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-9760f3f3e1",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "with the first 25% vesting in after your first 12 months with the Company and the remainder typically",
       "page": "terms"
     },
     {
@@ -962,6 +1429,20 @@
       "url": "https://sosv.com/legal-faqs/?faq_id=17354",
       "title": "SOSV — terms page",
       "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-9e99c55962",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "to the Anniversary Date, which is typically 12 months from the execution date of the Cash SAFE, SOSV",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a08d1e30ba",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
       "page": "terms"
     },
     {
@@ -1007,6 +1488,13 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-aa8fc324b8",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-aaa25a0c08",
       "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
       "title": "SOSV — terms page",
@@ -1018,6 +1506,13 @@
       "url": "https://sosv.com/legal-faqs/?faq_id=17363",
       "title": "SOSV — terms page",
       "excerpt": "to the Anniversary Date, which is typically 12 months from the execution date of the Cash SAFE, SOSV",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-aeedb985d3",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
       "page": "terms"
     },
     {
@@ -1042,10 +1537,31 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-b29adcac05",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b5386f9a6d",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-b5951ddf4e",
       "url": "https://sosv.com/legal-faqs/?faq_id=17363",
       "title": "SOSV — terms page",
       "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b6b6e33ddc",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
       "page": "terms"
     },
     {
@@ -1056,10 +1572,24 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-bd30206f69",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-bdffcdd995",
       "url": "https://sosv.com/legal-faqs/?faq_id=17365",
       "title": "SOSV — terms page",
       "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-be15e15985",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "to the Anniversary Date, which is typically 12 months from the execution date of the Cash SAFE, SOSV",
       "page": "terms"
     },
     {
@@ -1068,6 +1598,13 @@
       "title": "SOSV — application page",
       "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
       "page": "application"
+    },
+    {
+      "id": "check-duration-c2e0c6a06b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
     },
     {
       "id": "check-duration-c4c6bf90cc",
@@ -1084,10 +1621,31 @@
       "page": "details"
     },
     {
+      "id": "check-duration-c65ab42f0b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "to the Anniversary Date, which is typically 12 months from the execution date of the Cash SAFE, SOSV",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c78eb4746e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-c8b4dae826",
       "url": "https://sosv.com/legal-faqs/?faq_id=17357",
       "title": "SOSV — terms page",
       "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ca2f86c93e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
       "page": "terms"
     },
     {
@@ -1126,6 +1684,13 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-d3d8c8fd74",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-d412a52404",
       "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
       "title": "SOSV — terms page",
@@ -1161,10 +1726,24 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-da5b05cc31",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-db1d29add8",
       "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
       "title": "SOSV — terms page",
       "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-dbd9a957e2",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
       "page": "terms"
     },
     {
@@ -1173,6 +1752,13 @@
       "title": "SOSV — homepage",
       "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
       "page": "details"
+    },
+    {
+      "id": "check-duration-dc201d3b93",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "with the first 25% vesting in after your first 12 months with the Company and the remainder typically",
+      "page": "terms"
     },
     {
       "id": "check-duration-dc24cd3382",
@@ -1245,6 +1831,20 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-e66fdcf6c2",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e799bd4e13",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-e7c2d3681c",
       "url": "https://sosv.com/legal-faqs/?faq_id=17358",
       "title": "SOSV — terms page",
@@ -1256,6 +1856,20 @@
       "url": "https://sosv.com/legal-faqs/?faq_id=17363",
       "title": "SOSV — terms page",
       "excerpt": "with the first 25% vesting in after your first 12 months with the Company and the remainder typically",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e879624a94",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e9aaeffbf6",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
       "page": "terms"
     },
     {
@@ -1329,6 +1943,13 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-f7596be88f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-f865e83a79",
       "url": "https://sosv.com/legal-faqs/?faq_id=17365",
       "title": "SOSV — terms page",
@@ -1357,6 +1978,20 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-fbc876d841",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-fdadc2fba7",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-fe2082ad2e",
       "url": "https://sosv.com/legal-faqs/?faq_id=17365",
       "title": "SOSV — terms page",
@@ -1371,10 +2006,24 @@
       "page": "terms"
     },
     {
+      "id": "check-format-0a2c897ad8",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
       "id": "check-format-1838a6ec45",
       "url": "https://sosv.com/application-faqs/",
       "title": "SOSV — terms page",
       "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-1843f4e15f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
       "page": "terms"
     },
     {
@@ -1385,8 +2034,22 @@
       "page": "terms"
     },
     {
+      "id": "check-format-32a8143afd",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
       "id": "check-format-3738999842",
       "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3764072ccb",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
       "title": "SOSV — terms page",
       "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
       "page": "terms"
@@ -1410,6 +2073,20 @@
       "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
       "title": "SOSV — terms page",
       "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-691bf2ec90",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6c281a4c2d",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
       "page": "terms"
     },
     {
@@ -1445,6 +2122,20 @@
       "url": "https://sosv.com/legal-faqs/?faq_id=17366",
       "title": "SOSV — terms page",
       "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8b680e7510",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8d8ee3f3a5",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
       "page": "terms"
     },
     {
@@ -1553,6 +2244,20 @@
       "page": "terms"
     },
     {
+      "id": "check-format-d619cb5670",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d764e94d01",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
       "id": "check-format-dddf7c1164",
       "url": "https://sosv.com/apply/hax",
       "title": "SOSV — application page",
@@ -1602,11 +2307,25 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-078deb7f82",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-0946b1838e",
       "url": "https://sosv.com/apply",
       "title": "SOSV — application page",
       "excerpt": "Our Portfolio → https://sosv.com/portfolio",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-0e0b4173c2",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-163672f373",
@@ -1651,6 +2370,20 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-3b7bf21981",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-3e48cbe01f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-4551ccf0ca",
       "url": "https://sosv.com/apply/hax",
       "title": "SOSV — application page",
@@ -1679,6 +2412,13 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-5aa5bb1306",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-5e512e3ee7",
       "url": "https://sosv.com/legal-faqs/?faq_id=17365",
       "title": "SOSV — terms page",
@@ -1690,6 +2430,13 @@
       "url": "https://sosv.com/legal-faqs/?faq_id=17354",
       "title": "SOSV — terms page",
       "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6551480203",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
       "page": "terms"
     },
     {
@@ -1711,6 +2458,13 @@
       "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
       "title": "SOSV — terms page",
       "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-807cea084d",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
       "page": "terms"
     },
     {
@@ -1753,6 +2507,20 @@
       "url": "https://sosv.com/legal-faqs/?faq_id=17366",
       "title": "SOSV — terms page",
       "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c540205f26",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c59ea941ed",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
       "page": "terms"
     },
     {
@@ -1805,6 +2573,13 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-f9f1487b6e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "title": "SOSV — terms page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-fef93a10fb",
       "url": "https://sosv.com/legal-faqs/",
       "title": "SOSV — terms page",
@@ -1826,6 +2601,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-1a45b3a2a2",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "title": "SOSV — terms page",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
+    },
+    {
       "id": "check-route-1f53a99937",
       "url": "https://sosv.com/",
       "title": "SOSV — homepage",
@@ -1842,6 +2624,27 @@
     {
       "id": "check-route-349fa840e8",
       "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3b04a83f88",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "title": "SOSV — terms page",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3c165dd6f8",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "title": "SOSV — terms page",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3dae302534",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
       "title": "SOSV — terms page",
       "excerpt": "Apply → https://sosv.com/apply",
       "page": "terms"
@@ -1894,6 +2697,13 @@
       "title": "SOSV — homepage",
       "excerpt": "Apply → https://sosv.com/apply",
       "page": "details"
+    },
+    {
+      "id": "check-route-a5f5167d23",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "title": "SOSV — terms page",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
     },
     {
       "id": "check-route-af03c26c6c",
@@ -1960,6 +2770,78 @@
       "excerpt": "SOSV - Deep Tech for Human and Planetary Health Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Deep Tech for Human and Planetary Health SOSV is the world’s most active deep tech venture capital firm investing at pre-seed, with deeply resourced locations for founders in New York, Newark, and San Francisco. LEARN ABOUT OUR LOCATIONS Post Watch SOSV Deep Tech Summit Replays On-Demand Post Nov 11, 2026 NJ Means Business, So Does SOSV Wall Street Journal Nov 09, 2026 How Do You Save the World’s Chocolate Supply? California Cultured & Voyage Foods Are Reinventing Chocolate Forbes Nov 06, 2026 Can 3D Weaving Change The Economics Of Fashion? unspun & Arvind Test On-Demand Manufacturing See all news We help startups go further, faster. 800+ Portfolio Companies $7.5B Raised by Portfolio 2021-2025 2,700 SOSV Co-investors 7,500 Investors in Network 44% Founders with PhDs 2021-2025 85,000 Sq ft Lab & Office Space SOSV Founders Mariano Alvarez & Brendan Collins Co-founders, Avalo.AI Avalo.ai: An Agricultural Revolution Through AI Plant Evolution Picture this: Acres of cotton all around you. 150,000 plants. Now, harvest them all, collect the seeds — all 45 million of them"
     },
     {
+      "id": "check-page-1de2a4f8a4",
+      "url": "https://sosv.com/",
+      "page": "details",
+      "excerpt": "READ PROFILE SOSV Founders Karim Pichara and Matias Muchnik Co-founders, NotCo NotCo’s plant-based foods are on store shelves, but its AI engine “Giuseppe” is the real business While it might look like a plant-based food company, NotCo is in the data and AI business—and aims to disrupt R&D in many industries that use animal and plant ingredients."
+    },
+    {
+      "id": "check-page-4e4209b71c",
+      "url": "https://sosv.com/",
+      "page": "details",
+      "excerpt": "He had pitched nearly 150 venture capital firms."
+    },
+    {
+      "id": "check-page-b6882d0098",
+      "url": "https://sosv.com/",
+      "page": "details",
+      "excerpt": "READ PROFILE SOSV Founders Adebayo Alonge and Amy Kao Co-founders of RxAll RxAll’s Life-Saving Deep Tech for African Pharmacies Adebayo (“Ade”) Alonge and Amy Kao, co-founders of RxAll had invented a handheld scanner for detecting counterfeit prescription drugs—an illicit, multibillion-dollar industry that kills an estimated 1 million people annually around the world and 100,000 in Africa."
+    },
+    {
+      "id": "check-page-f962813886",
+      "url": "https://sosv.com/",
+      "page": "details",
+      "excerpt": "READ PROFILE SOSV SF Office First Check in Deep Tech ® Each year, SOSV makes about 60 pre-seed investments of up to $550k each, as well as another 150 follow-on investments in deep tech companies."
+    },
+    {
+      "id": "check-page-45b2ec0308",
+      "url": "https://sosv.com/",
+      "page": "details",
+      "excerpt": "The pre-seed founders join SOSV’s General Partner-led teams at our offices and labs in San Francisco, New York City, and Newark for intensive, customized work designed to dramatically speed up product development, commercial strategy, regulatory advances, corporate connections and fund-raising."
+    },
+    {
+      "id": "check-page-0f75888238",
+      "url": "https://sosv.com/",
+      "page": "details",
+      "excerpt": "SOSV General Partners A Deep Tech Dream Team SOSV’s General Partners draw on deep experience as investors, entrepreneurs, operators, scientists and engineers."
+    },
+    {
+      "id": "check-page-aa699274b7",
+      "url": "https://sosv.com/",
+      "page": "details",
+      "excerpt": "They operate as three teams, one at each location , and each ready for founders across the full breadth of deep tech, from physical AI to therapeutics, energy to critical minerals."
+    },
+    {
+      "id": "check-page-5c39636f05",
+      "url": "https://sosv.com/",
+      "page": "details",
+      "excerpt": "Each location also has unique strengths, such as Silicon Valley’s investor networks, New York’s corporate and healthcare ecosystem, and Newark’s embedded design engineering and prototyping."
+    },
+    {
+      "id": "check-page-c56a0e4872",
+      "url": "https://sosv.com/",
+      "page": "details",
+      "excerpt": "HAX Demo Day The Best Data and Global Reach In addition to being the the most active pre-seed deep tech investor, SOSV gathers fine-grain data on deep tech trends through regular VC-Founder Matchups , the annual Climate Tech Summit , and the Deep Tech Live series, which engage thousands of founders each year."
+    },
+    {
+      "id": "check-page-5b4054abc3",
+      "url": "https://sosv.com/",
+      "page": "details",
+      "excerpt": "SOSV is no less at home in Silicon Valley than the global ecosystem."
+    },
+    {
+      "id": "check-page-11ad023e1b",
+      "url": "https://sosv.com/",
+      "page": "details",
+      "excerpt": "In addition to its US offices, SOSV has teams working in India, China, and the EU, and SOSV’s 2700+ co-investors span the globe."
+    },
+    {
+      "id": "check-page-de25201c81",
+      "url": "https://sosv.com/",
+      "page": "details",
+      "excerpt": "HAX Workshop Manager & CNC Machine An Infrastructure For Builders In the past decade, SOSV raised more than $75 million in grants to build and outfit 85,000 square feet of labs, offices and event spaces in San Francisco, New York City, Newark, and soon, Princeton."
+    },
+    {
       "id": "check-page-0b52c2367b",
       "url": "https://sosv.com/apply",
       "page": "application",
@@ -1970,6 +2852,12 @@
       "url": "https://sosv.com/apply/hax",
       "page": "application",
       "excerpt": "Apply to HAX - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC * indicates required fields HAX Locations Which HAX location are you applying to? * HAX (Newark, NJ) HAX Plasma Forge (Princeton, NJ) Company Give us a quick peek at your company. Prior to applying * I confirm that my company is building a Hard Tech product. Company Name * Website Contact Email * Enter Email Confirm Email We'll use this email address to confirm that we have received your application, and to subscribe you to our newsletters if you decide to opt in. It will also be our primary point of contact if we're interested in your application, so please make sure that it is valid, up-to-date and checked regularly. Description, in 140 characters or less * Location * City State / Province / Region Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso"
+    },
+    {
+      "id": "check-page-65021bb6f0",
+      "url": "https://sosv.com/apply/hax",
+      "page": "application",
+      "excerpt": "Please list your prior fundraises (dilutive and non-dilutive) as a single USD amount * Are all the founders working full time?"
     },
     {
       "id": "check-page-92a37e0654",
@@ -1984,10 +2872,112 @@
       "excerpt": "Application FAQ - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Application FAQ Process How do I apply to an SOSV Startup Development Program? Please submit an application to one of our startup development programs (HAX or IndieBio) via our Application Portal . Applications are reviewed by investment teams on a rolling basis. You are able to start and save an application at any time and return to it later to submit when you are ready. Can I apply to more than one SOSV Startup Development Program? Yes, if your company is a fit for multiple programs you may apply to more than one program. How does the application process work? After our initial review, our investment teams email a select number of startups to begin a standard diligence process via a series of screening calls. Our screening calls will cover introductions, your 10-15 minute pitch (including materials). We will look to discuss your founding team, technology, addressable market, competitive landscape, and proposed technical development plan for the SOSV program. We also work with our network of experts across technology fields and industries to help us review applications. This process can"
     },
     {
+      "id": "check-page-62a5a64472",
+      "url": "https://sosv.com/application-faqs/",
+      "page": "terms",
+      "excerpt": "At IndieBio we look for deep tech companies aimed at solving intractable or difficult problems that will impact 1B+ members of humanity."
+    },
+    {
+      "id": "check-page-79bfce0d9a",
+      "url": "https://sosv.com/application-faqs/",
+      "page": "terms",
+      "excerpt": "Human and Planetary Health is our mission."
+    },
+    {
+      "id": "check-page-1ca3202291",
+      "url": "https://sosv.com/application-faqs/",
+      "page": "terms",
+      "excerpt": "We see biology as a technology that can be applied across all verticals which can include therapeutics, the future of food, biomaterials, biological tools, diagnostics, synthetic biology, genomics, and data analysis to just name a few areas."
+    },
+    {
+      "id": "check-page-f1a10a7218",
+      "url": "https://sosv.com/application-faqs/",
+      "page": "terms",
+      "excerpt": "At HAX we look for deep tech companies building products for validated problems in three main areas: (1) B2B: These companies use sensor data to improve communications and unlock efficiencies for businesses, create new industrial processes or build automation for a variety of use cases."
+    },
+    {
+      "id": "check-page-37d847fe75",
+      "url": "https://sosv.com/application-faqs/",
+      "page": "terms",
+      "excerpt": "(2) Healthcare: These companies are solving pressing problems to make healthcare more effective, accessible and affordable using data and novel treatment protocols."
+    },
+    {
+      "id": "check-page-591adaf0c6",
+      "url": "https://sosv.com/application-faqs/",
+      "page": "terms",
+      "excerpt": "Some programs ask that you participate in-person (HAX – Newark & Shenzhen, IndieBio – New York & San Francisco)."
+    },
+    {
+      "id": "check-page-2571938151",
+      "url": "https://sosv.com/application-faqs/",
+      "page": "terms",
+      "excerpt": "Yes, we have accepted teams that have previously raised funding through venture capital, angel investors, or grants."
+    },
+    {
+      "id": "check-page-ada4f78a22",
+      "url": "https://sosv.com/application-faqs/",
+      "page": "terms",
+      "excerpt": "All SOSV registered trademarks are owned by SOSV Investments LLC Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Press & Media Stay In The Know Curated trends and insights on deep tech for human and planetary health."
+    },
+    {
+      "id": "check-page-36a5dae2d8",
+      "url": "https://sosv.com/application-faqs/",
+      "page": "terms",
+      "excerpt": "Wallis and Futuna Western Sahara Yemen Zambia Zimbabwe Åland Islands How would you describe yourself? * (Required) Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other We don’t spam."
+    },
+    {
       "id": "check-page-c06d02f030",
       "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
       "page": "terms",
       "excerpt": "HAX's Rightbot lands Amazon investment for freight unloading robots - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Back HAX’s Rightbot lands Amazon investment for freight unloading robots Back Lauren McCranie January 22, 2024 Rightbot’s robotic solution. Source: Rightbot Rightbot, which develops suction-based robots that unload various shapes and sizes of freight, has raised $6.25 million in a funding round led by Amazon’s Industrial Innovation Fund, with participation from SOSV and Entrepreneur First. The company produces automated mobile robots to unload floor-loaded containers of cartons and polybags. Using a suction based mechanism, the system has an ability to lift up to 55lbs. An active intelligence system adjusts the suction power according to box weight and dimensions. To address the challenge of variability in unloading, Rightbot has designed a patent pending mobile robot + robotic arm + conveyor system, where all elements works in tandem to deliver high throughput together with high reliability. “Unstructured truck and container loads are varied and unpredictable in nature. They have consistently presented a hurdle in unloading automation,”"
+    },
+    {
+      "id": "check-page-cc685029cd",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "page": "terms",
+      "excerpt": "“We realized that an existing robot arm was not going to solve this problem, so we set out to understand the customer problem and solve it with a customized robot.” “The robotics industry is currently experiencing an unprecedented upswing."
+    },
+    {
+      "id": "check-page-5fe346ac47",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "page": "terms",
+      "excerpt": "We’re seeing a significant shortage of manual labor for repetitive tasks in warehouses, which is driving demand for robotic solutions,” Dutta said, adding that Rightbot has “multiple pilots” lined up for 2024 with customers in e-commerce and retail."
+    },
+    {
+      "id": "check-page-b242ca54b5",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "page": "terms",
+      "excerpt": "Post-pandemic, the supply chain for robotics components has stabilized, setting the stage for exciting developments ahead in our industry.” READ COMPLETE ARTICLE Did you know?"
+    },
+    {
+      "id": "check-page-735e46bcb2",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "page": "terms",
+      "excerpt": "Avalo.ai: An Agricultural Revolution Through AI Plant Evolution Picture this: Acres of cotton all around you."
+    },
+    {
+      "id": "check-page-9a855ff750",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "page": "terms",
+      "excerpt": "He had pitched nearly 150 venture capital firms."
+    },
+    {
+      "id": "check-page-454cca188d",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "page": "terms",
+      "excerpt": "RxAll’s Life-Saving Deep Tech for African Pharmacies Adebayo (“Ade”) Alonge and Amy Kao, co-founders of RxAll had nvented a handheld scanner for detecting counterfeit prescription drugs—an illicit, multibillion-dollar industry that kills an estimated 1 million people annually globally and 100,000 in Africa."
+    },
+    {
+      "id": "check-page-a6dc663261",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "page": "terms",
+      "excerpt": "All SOSV registered trademarks are owned by SOSV Investments LLC Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Press & Media Stay In The Know Curated trends and insights on deep tech for human and planetary health."
+    },
+    {
+      "id": "check-page-323a4e19c4",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "page": "terms",
+      "excerpt": "Wallis and Futuna Western Sahara Yemen Zambia Zimbabwe Åland Islands How would you describe yourself? * (Required) Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other We don’t spam."
     },
     {
       "id": "check-page-043205f5f6",
@@ -1996,10 +2986,112 @@
       "excerpt": "HAX's XFuel closes €8.2 million investment round for high-grade biomass fuels - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Back HAX’s XFuel closes €8.2 million investment round for high-grade biomass fuels Back SOSV Team July 26, 2022 XFuel aims to decarbonize the transportation industry—marine, road, and aviation. Photo by Erik Mclean on Unsplash XFuel , a company on a mission to convert biomass waste into drop-in low-carbon fuels, recently closed an €8.2 million investment round, according to Ship & Bunker’s article, “Biofuel Producer XFuel Raises €8.2 Million Investment Round” . AENU , a German VC firm, took the lead on the investment round with additional support from SOSV and Union Square Ventures , the article reports. XFuel ( HAX 2022 ) uses a modular refinery design to produce second-generation biofuel for marine, diesel, and aviation. “Using modular and scalable biorefineries, XFuel can produce high-grade fuels at a comparable or lower price point to fossil-based fuels on the market,” XFuel told Ship & Bunker in an emailed statement. “Independent assessments have shown that XFuel’s technology can currently deliver fuel with GHG savings of"
     },
     {
+      "id": "check-page-40a301a999",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "page": "terms",
+      "excerpt": "Avalo.ai: An Agricultural Revolution Through AI Plant Evolution Picture this: Acres of cotton all around you."
+    },
+    {
+      "id": "check-page-ac4e52a0b5",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "page": "terms",
+      "excerpt": "He had pitched nearly 150 venture capital firms."
+    },
+    {
+      "id": "check-page-e7200a64c5",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "page": "terms",
+      "excerpt": "RxAll’s Life-Saving Deep Tech for African Pharmacies Adebayo (“Ade”) Alonge and Amy Kao, co-founders of RxAll had nvented a handheld scanner for detecting counterfeit prescription drugs—an illicit, multibillion-dollar industry that kills an estimated 1 million people annually globally and 100,000 in Africa."
+    },
+    {
+      "id": "check-page-8d2c7b810b",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "page": "terms",
+      "excerpt": "All SOSV registered trademarks are owned by SOSV Investments LLC Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Press & Media Stay In The Know Curated trends and insights on deep tech for human and planetary health."
+    },
+    {
+      "id": "check-page-837c02be39",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "page": "terms",
+      "excerpt": "Wallis and Futuna Western Sahara Yemen Zambia Zimbabwe Åland Islands How would you describe yourself? * (Required) Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other We don’t spam."
+    },
+    {
       "id": "check-page-1c5a93fd02",
       "url": "https://sosv.com/legal-faqs/",
       "page": "terms",
       "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-25b9d45618",
+      "url": "https://sosv.com/legal-faqs/",
+      "page": "terms",
+      "excerpt": "The Program Costs include access across the SOSV locations (San Francisco, New York, and Newark) to desk space, state of the art lab and workshop facilities, high spec equipment, specialized materials, in-house technical experts, mentorship, extensive investor network, etc."
+    },
+    {
+      "id": "check-page-b0b6f1b254",
+      "url": "https://sosv.com/legal-faqs/",
+      "page": "terms",
+      "excerpt": "Without the Discount Rate or the Valuation Cap, the SAFE would essentially convert into the Equity Securities at the same price as the equity issued in the Equity Financing, giving no incentive or benefit to the early stage Investor."
+    },
+    {
+      "id": "check-page-9a6ab93efa",
+      "url": "https://sosv.com/legal-faqs/",
+      "page": "terms",
+      "excerpt": "The Discount Rate The discount rate acknowledges that the SAFE holder has taken on additional risk in investing at such an early stage in the startup."
+    },
+    {
+      "id": "check-page-b75b215a55",
+      "url": "https://sosv.com/legal-faqs/",
+      "page": "terms",
+      "excerpt": "The Valuation Cap The valuation cap in the SAFE (the “Valuation Cap”) again aims to acknowledge the risk taken by the early stage SAFE holder as an investor in the Company."
+    },
+    {
+      "id": "check-page-3324a06671",
+      "url": "https://sosv.com/legal-faqs/",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-a1641e285a",
+      "url": "https://sosv.com/legal-faqs/",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-fd95443dfa",
+      "url": "https://sosv.com/legal-faqs/",
+      "page": "terms",
+      "excerpt": "This right, a.k.a the “MFN”, means that if the Company grants more favorable rights than those that exist in the Cash Safe either prior to entering into the Cash SAFE, or prior to conversion of the Cash SAFE – then SOSV may choose to adopt those particular more favorable rights in addition to its current rights."
+    },
+    {
+      "id": "check-page-8279474c8f",
+      "url": "https://sosv.com/legal-faqs/",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies via a certain fund and from time to time SOSV may have to assign certain investments between those internal funds or companies."
+    },
+    {
+      "id": "check-page-95a8967896",
+      "url": "https://sosv.com/legal-faqs/",
+      "page": "terms",
+      "excerpt": "The Program Amount generally covers access to desk space, state of the art lab and workshop facilities, high spec lab equipment, specialized materials, in-house technical experts, mentorship, extensive investor networks, etc. across the SOSV Program locations."
+    },
+    {
+      "id": "check-page-3324a06671",
+      "url": "https://sosv.com/legal-faqs/",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-a1641e285a",
+      "url": "https://sosv.com/legal-faqs/",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-52d5c853f2",
+      "url": "https://sosv.com/legal-faqs/",
+      "page": "terms",
+      "excerpt": "This is required because prior to the Company’s first Equity Financing the Company is in a particularly early stage of their growth and cannot afford for any Founder to leave and retain a portion of the cap table."
     },
     {
       "id": "check-page-eaf7f4eaf8",
@@ -2008,10 +3100,154 @@
       "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
     },
     {
+      "id": "check-page-5fdfdb3352",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "page": "terms",
+      "excerpt": "The Program Costs include access across the SOSV locations (San Francisco, New York, and Newark) to desk space, state of the art lab and workshop facilities, high spec equipment, specialized materials, in-house technical experts, mentorship, extensive investor network, etc."
+    },
+    {
+      "id": "check-page-69dffeb8de",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "page": "terms",
+      "excerpt": "Without the Discount Rate or the Valuation Cap, the SAFE would essentially convert into the Equity Securities at the same price as the equity issued in the Equity Financing, giving no incentive or benefit to the early stage Investor."
+    },
+    {
+      "id": "check-page-cf50dd12f2",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "page": "terms",
+      "excerpt": "The Discount Rate The discount rate acknowledges that the SAFE holder has taken on additional risk in investing at such an early stage in the startup."
+    },
+    {
+      "id": "check-page-d3cda3208c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "page": "terms",
+      "excerpt": "The Valuation Cap The valuation cap in the SAFE (the “Valuation Cap”) again aims to acknowledge the risk taken by the early stage SAFE holder as an investor in the Company."
+    },
+    {
+      "id": "check-page-1291445697",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-4bc3bce303",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-b1d88d87d3",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "page": "terms",
+      "excerpt": "This right, a.k.a the “MFN”, means that if the Company grants more favorable rights than those that exist in the Cash Safe either prior to entering into the Cash SAFE, or prior to conversion of the Cash SAFE – then SOSV may choose to adopt those particular more favorable rights in addition to its current rights."
+    },
+    {
+      "id": "check-page-5d31b02646",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies via a certain fund and from time to time SOSV may have to assign certain investments between those internal funds or companies."
+    },
+    {
+      "id": "check-page-2d3293d563",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "page": "terms",
+      "excerpt": "The Program Amount generally covers access to desk space, state of the art lab and workshop facilities, high spec lab equipment, specialized materials, in-house technical experts, mentorship, extensive investor networks, etc. across the SOSV Program locations."
+    },
+    {
+      "id": "check-page-1291445697",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-4bc3bce303",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-cdc6f6095c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "page": "terms",
+      "excerpt": "This is required because prior to the Company’s first Equity Financing the Company is in a particularly early stage of their growth and cannot afford for any Founder to leave and retain a portion of the cap table."
+    },
+    {
       "id": "check-page-d6e8c999e9",
       "url": "https://sosv.com/legal-faqs/?faq_id=17356",
       "page": "terms",
       "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-dd129f4979",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "page": "terms",
+      "excerpt": "The Program Costs include access across the SOSV locations (San Francisco, New York, and Newark) to desk space, state of the art lab and workshop facilities, high spec equipment, specialized materials, in-house technical experts, mentorship, extensive investor network, etc."
+    },
+    {
+      "id": "check-page-07da584d04",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "page": "terms",
+      "excerpt": "Without the Discount Rate or the Valuation Cap, the SAFE would essentially convert into the Equity Securities at the same price as the equity issued in the Equity Financing, giving no incentive or benefit to the early stage Investor."
+    },
+    {
+      "id": "check-page-fa9b6302b4",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "page": "terms",
+      "excerpt": "The Discount Rate The discount rate acknowledges that the SAFE holder has taken on additional risk in investing at such an early stage in the startup."
+    },
+    {
+      "id": "check-page-9b33779a42",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "page": "terms",
+      "excerpt": "The Valuation Cap The valuation cap in the SAFE (the “Valuation Cap”) again aims to acknowledge the risk taken by the early stage SAFE holder as an investor in the Company."
+    },
+    {
+      "id": "check-page-dae7276dba",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-8df25e71ba",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-80807643ea",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "page": "terms",
+      "excerpt": "This right, a.k.a the “MFN”, means that if the Company grants more favorable rights than those that exist in the Cash Safe either prior to entering into the Cash SAFE, or prior to conversion of the Cash SAFE – then SOSV may choose to adopt those particular more favorable rights in addition to its current rights."
+    },
+    {
+      "id": "check-page-87218aef8a",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies via a certain fund and from time to time SOSV may have to assign certain investments between those internal funds or companies."
+    },
+    {
+      "id": "check-page-7ac37fc9af",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "page": "terms",
+      "excerpt": "The Program Amount generally covers access to desk space, state of the art lab and workshop facilities, high spec lab equipment, specialized materials, in-house technical experts, mentorship, extensive investor networks, etc. across the SOSV Program locations."
+    },
+    {
+      "id": "check-page-dae7276dba",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-8df25e71ba",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-0e84cecd7c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "page": "terms",
+      "excerpt": "This is required because prior to the Company’s first Equity Financing the Company is in a particularly early stage of their growth and cannot afford for any Founder to leave and retain a portion of the cap table."
     },
     {
       "id": "check-page-b20bc2bf64",
@@ -2020,10 +3256,154 @@
       "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
     },
     {
+      "id": "check-page-fb8a81ed10",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "page": "terms",
+      "excerpt": "The Program Costs include access across the SOSV locations (San Francisco, New York, and Newark) to desk space, state of the art lab and workshop facilities, high spec equipment, specialized materials, in-house technical experts, mentorship, extensive investor network, etc."
+    },
+    {
+      "id": "check-page-df1c3bd328",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "page": "terms",
+      "excerpt": "Without the Discount Rate or the Valuation Cap, the SAFE would essentially convert into the Equity Securities at the same price as the equity issued in the Equity Financing, giving no incentive or benefit to the early stage Investor."
+    },
+    {
+      "id": "check-page-0437ea3c46",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "page": "terms",
+      "excerpt": "The Discount Rate The discount rate acknowledges that the SAFE holder has taken on additional risk in investing at such an early stage in the startup."
+    },
+    {
+      "id": "check-page-0aa9da63a7",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "page": "terms",
+      "excerpt": "The Valuation Cap The valuation cap in the SAFE (the “Valuation Cap”) again aims to acknowledge the risk taken by the early stage SAFE holder as an investor in the Company."
+    },
+    {
+      "id": "check-page-280d840f9c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-07050fb29c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-43b6637662",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "page": "terms",
+      "excerpt": "This right, a.k.a the “MFN”, means that if the Company grants more favorable rights than those that exist in the Cash Safe either prior to entering into the Cash SAFE, or prior to conversion of the Cash SAFE – then SOSV may choose to adopt those particular more favorable rights in addition to its current rights."
+    },
+    {
+      "id": "check-page-a6bba6d175",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies via a certain fund and from time to time SOSV may have to assign certain investments between those internal funds or companies."
+    },
+    {
+      "id": "check-page-13f91caa0b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "page": "terms",
+      "excerpt": "The Program Amount generally covers access to desk space, state of the art lab and workshop facilities, high spec lab equipment, specialized materials, in-house technical experts, mentorship, extensive investor networks, etc. across the SOSV Program locations."
+    },
+    {
+      "id": "check-page-280d840f9c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-07050fb29c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-5a025321e5",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "page": "terms",
+      "excerpt": "This is required because prior to the Company’s first Equity Financing the Company is in a particularly early stage of their growth and cannot afford for any Founder to leave and retain a portion of the cap table."
+    },
+    {
       "id": "check-page-2482a11eba",
       "url": "https://sosv.com/legal-faqs/?faq_id=17358",
       "page": "terms",
       "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-d0d85ddabb",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "page": "terms",
+      "excerpt": "The Program Costs include access across the SOSV locations (San Francisco, New York, and Newark) to desk space, state of the art lab and workshop facilities, high spec equipment, specialized materials, in-house technical experts, mentorship, extensive investor network, etc."
+    },
+    {
+      "id": "check-page-e6e2b2d875",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "page": "terms",
+      "excerpt": "Without the Discount Rate or the Valuation Cap, the SAFE would essentially convert into the Equity Securities at the same price as the equity issued in the Equity Financing, giving no incentive or benefit to the early stage Investor."
+    },
+    {
+      "id": "check-page-e6740d264f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "page": "terms",
+      "excerpt": "The Discount Rate The discount rate acknowledges that the SAFE holder has taken on additional risk in investing at such an early stage in the startup."
+    },
+    {
+      "id": "check-page-400b2e3df3",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "page": "terms",
+      "excerpt": "The Valuation Cap The valuation cap in the SAFE (the “Valuation Cap”) again aims to acknowledge the risk taken by the early stage SAFE holder as an investor in the Company."
+    },
+    {
+      "id": "check-page-c27a39e87c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-e81b7a2034",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-9f9b17bcb7",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "page": "terms",
+      "excerpt": "This right, a.k.a the “MFN”, means that if the Company grants more favorable rights than those that exist in the Cash Safe either prior to entering into the Cash SAFE, or prior to conversion of the Cash SAFE – then SOSV may choose to adopt those particular more favorable rights in addition to its current rights."
+    },
+    {
+      "id": "check-page-371fac81c3",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies via a certain fund and from time to time SOSV may have to assign certain investments between those internal funds or companies."
+    },
+    {
+      "id": "check-page-b9170515ae",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "page": "terms",
+      "excerpt": "The Program Amount generally covers access to desk space, state of the art lab and workshop facilities, high spec lab equipment, specialized materials, in-house technical experts, mentorship, extensive investor networks, etc. across the SOSV Program locations."
+    },
+    {
+      "id": "check-page-c27a39e87c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-e81b7a2034",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-5c2cf711bb",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "page": "terms",
+      "excerpt": "This is required because prior to the Company’s first Equity Financing the Company is in a particularly early stage of their growth and cannot afford for any Founder to leave and retain a portion of the cap table."
     },
     {
       "id": "check-page-fc38a00442",
@@ -2032,16 +3412,622 @@
       "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
     },
     {
+      "id": "check-page-aceec503bd",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "page": "terms",
+      "excerpt": "The Program Costs include access across the SOSV locations (San Francisco, New York, and Newark) to desk space, state of the art lab and workshop facilities, high spec equipment, specialized materials, in-house technical experts, mentorship, extensive investor network, etc."
+    },
+    {
+      "id": "check-page-d70f9ce913",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "page": "terms",
+      "excerpt": "Without the Discount Rate or the Valuation Cap, the SAFE would essentially convert into the Equity Securities at the same price as the equity issued in the Equity Financing, giving no incentive or benefit to the early stage Investor."
+    },
+    {
+      "id": "check-page-6661147c95",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "page": "terms",
+      "excerpt": "The Discount Rate The discount rate acknowledges that the SAFE holder has taken on additional risk in investing at such an early stage in the startup."
+    },
+    {
+      "id": "check-page-7b2d9e04ab",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "page": "terms",
+      "excerpt": "The Valuation Cap The valuation cap in the SAFE (the “Valuation Cap”) again aims to acknowledge the risk taken by the early stage SAFE holder as an investor in the Company."
+    },
+    {
+      "id": "check-page-14b1145aca",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-93d9c41bdd",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-81c2ec0040",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "page": "terms",
+      "excerpt": "This right, a.k.a the “MFN”, means that if the Company grants more favorable rights than those that exist in the Cash Safe either prior to entering into the Cash SAFE, or prior to conversion of the Cash SAFE – then SOSV may choose to adopt those particular more favorable rights in addition to its current rights."
+    },
+    {
+      "id": "check-page-9669fc14aa",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies via a certain fund and from time to time SOSV may have to assign certain investments between those internal funds or companies."
+    },
+    {
+      "id": "check-page-563dc4de1a",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "page": "terms",
+      "excerpt": "The Program Amount generally covers access to desk space, state of the art lab and workshop facilities, high spec lab equipment, specialized materials, in-house technical experts, mentorship, extensive investor networks, etc. across the SOSV Program locations."
+    },
+    {
+      "id": "check-page-14b1145aca",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-93d9c41bdd",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-1117b4554b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "page": "terms",
+      "excerpt": "This is required because prior to the Company’s first Equity Financing the Company is in a particularly early stage of their growth and cannot afford for any Founder to leave and retain a portion of the cap table."
+    },
+    {
       "id": "check-page-5eed248980",
       "url": "https://sosv.com/legal-faqs/?faq_id=17365",
       "page": "terms",
       "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
     },
     {
+      "id": "check-page-9af4994daf",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "page": "terms",
+      "excerpt": "The Program Costs include access across the SOSV locations (San Francisco, New York, and Newark) to desk space, state of the art lab and workshop facilities, high spec equipment, specialized materials, in-house technical experts, mentorship, extensive investor network, etc."
+    },
+    {
+      "id": "check-page-f6b9574898",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "page": "terms",
+      "excerpt": "Without the Discount Rate or the Valuation Cap, the SAFE would essentially convert into the Equity Securities at the same price as the equity issued in the Equity Financing, giving no incentive or benefit to the early stage Investor."
+    },
+    {
+      "id": "check-page-fa9777d373",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "page": "terms",
+      "excerpt": "The Discount Rate The discount rate acknowledges that the SAFE holder has taken on additional risk in investing at such an early stage in the startup."
+    },
+    {
+      "id": "check-page-9af6e80c01",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "page": "terms",
+      "excerpt": "The Valuation Cap The valuation cap in the SAFE (the “Valuation Cap”) again aims to acknowledge the risk taken by the early stage SAFE holder as an investor in the Company."
+    },
+    {
+      "id": "check-page-e9fb1c49ae",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-15ced2b3fb",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-5a96ca8b76",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "page": "terms",
+      "excerpt": "This right, a.k.a the “MFN”, means that if the Company grants more favorable rights than those that exist in the Cash Safe either prior to entering into the Cash SAFE, or prior to conversion of the Cash SAFE – then SOSV may choose to adopt those particular more favorable rights in addition to its current rights."
+    },
+    {
+      "id": "check-page-ecbf408e51",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies via a certain fund and from time to time SOSV may have to assign certain investments between those internal funds or companies."
+    },
+    {
+      "id": "check-page-926674fe64",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "page": "terms",
+      "excerpt": "The Program Amount generally covers access to desk space, state of the art lab and workshop facilities, high spec lab equipment, specialized materials, in-house technical experts, mentorship, extensive investor networks, etc. across the SOSV Program locations."
+    },
+    {
+      "id": "check-page-e9fb1c49ae",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-15ced2b3fb",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-c6883132a8",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "page": "terms",
+      "excerpt": "This is required because prior to the Company’s first Equity Financing the Company is in a particularly early stage of their growth and cannot afford for any Founder to leave and retain a portion of the cap table."
+    },
+    {
       "id": "check-page-0209bf56b9",
       "url": "https://sosv.com/legal-faqs/?faq_id=17366",
       "page": "terms",
       "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-f04f66af8a",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "page": "terms",
+      "excerpt": "The Program Costs include access across the SOSV locations (San Francisco, New York, and Newark) to desk space, state of the art lab and workshop facilities, high spec equipment, specialized materials, in-house technical experts, mentorship, extensive investor network, etc."
+    },
+    {
+      "id": "check-page-14b812abe9",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "page": "terms",
+      "excerpt": "Without the Discount Rate or the Valuation Cap, the SAFE would essentially convert into the Equity Securities at the same price as the equity issued in the Equity Financing, giving no incentive or benefit to the early stage Investor."
+    },
+    {
+      "id": "check-page-7ec60ac1a7",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "page": "terms",
+      "excerpt": "The Discount Rate The discount rate acknowledges that the SAFE holder has taken on additional risk in investing at such an early stage in the startup."
+    },
+    {
+      "id": "check-page-5a63e99ea8",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "page": "terms",
+      "excerpt": "The Valuation Cap The valuation cap in the SAFE (the “Valuation Cap”) again aims to acknowledge the risk taken by the early stage SAFE holder as an investor in the Company."
+    },
+    {
+      "id": "check-page-47b6313d8c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-957a7fe645",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-92b78b6a64",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "page": "terms",
+      "excerpt": "This right, a.k.a the “MFN”, means that if the Company grants more favorable rights than those that exist in the Cash Safe either prior to entering into the Cash SAFE, or prior to conversion of the Cash SAFE – then SOSV may choose to adopt those particular more favorable rights in addition to its current rights."
+    },
+    {
+      "id": "check-page-f08ca1d68f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies via a certain fund and from time to time SOSV may have to assign certain investments between those internal funds or companies."
+    },
+    {
+      "id": "check-page-c52e3df0c5",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "page": "terms",
+      "excerpt": "The Program Amount generally covers access to desk space, state of the art lab and workshop facilities, high spec lab equipment, specialized materials, in-house technical experts, mentorship, extensive investor networks, etc. across the SOSV Program locations."
+    },
+    {
+      "id": "check-page-47b6313d8c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-957a7fe645",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-a048972466",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "page": "terms",
+      "excerpt": "This is required because prior to the Company’s first Equity Financing the Company is in a particularly early stage of their growth and cannot afford for any Founder to leave and retain a portion of the cap table."
+    },
+    {
+      "id": "check-page-3d55d16ff2",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "page": "terms",
+      "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-845a351435",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "page": "terms",
+      "excerpt": "The Program Costs include access across the SOSV locations (San Francisco, New York, and Newark) to desk space, state of the art lab and workshop facilities, high spec equipment, specialized materials, in-house technical experts, mentorship, extensive investor network, etc."
+    },
+    {
+      "id": "check-page-64c75cebe4",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "page": "terms",
+      "excerpt": "Without the Discount Rate or the Valuation Cap, the SAFE would essentially convert into the Equity Securities at the same price as the equity issued in the Equity Financing, giving no incentive or benefit to the early stage Investor."
+    },
+    {
+      "id": "check-page-a0a64e60c0",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "page": "terms",
+      "excerpt": "The Discount Rate The discount rate acknowledges that the SAFE holder has taken on additional risk in investing at such an early stage in the startup."
+    },
+    {
+      "id": "check-page-66d4bdcd46",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "page": "terms",
+      "excerpt": "The Valuation Cap The valuation cap in the SAFE (the “Valuation Cap”) again aims to acknowledge the risk taken by the early stage SAFE holder as an investor in the Company."
+    },
+    {
+      "id": "check-page-450f1957fb",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-5ad0c8f12b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-c8aa61ef7e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "page": "terms",
+      "excerpt": "This right, a.k.a the “MFN”, means that if the Company grants more favorable rights than those that exist in the Cash Safe either prior to entering into the Cash SAFE, or prior to conversion of the Cash SAFE – then SOSV may choose to adopt those particular more favorable rights in addition to its current rights."
+    },
+    {
+      "id": "check-page-269d159bcf",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies via a certain fund and from time to time SOSV may have to assign certain investments between those internal funds or companies."
+    },
+    {
+      "id": "check-page-87101ce1b2",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "page": "terms",
+      "excerpt": "The Program Amount generally covers access to desk space, state of the art lab and workshop facilities, high spec lab equipment, specialized materials, in-house technical experts, mentorship, extensive investor networks, etc. across the SOSV Program locations."
+    },
+    {
+      "id": "check-page-450f1957fb",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-5ad0c8f12b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-03198dc931",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "page": "terms",
+      "excerpt": "This is required because prior to the Company’s first Equity Financing the Company is in a particularly early stage of their growth and cannot afford for any Founder to leave and retain a portion of the cap table."
+    },
+    {
+      "id": "check-page-e49b06e449",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "page": "terms",
+      "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-1cb0dea569",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "page": "terms",
+      "excerpt": "The Program Costs include access across the SOSV locations (San Francisco, New York, and Newark) to desk space, state of the art lab and workshop facilities, high spec equipment, specialized materials, in-house technical experts, mentorship, extensive investor network, etc."
+    },
+    {
+      "id": "check-page-4448957f32",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "page": "terms",
+      "excerpt": "Without the Discount Rate or the Valuation Cap, the SAFE would essentially convert into the Equity Securities at the same price as the equity issued in the Equity Financing, giving no incentive or benefit to the early stage Investor."
+    },
+    {
+      "id": "check-page-06be7b7df9",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "page": "terms",
+      "excerpt": "The Discount Rate The discount rate acknowledges that the SAFE holder has taken on additional risk in investing at such an early stage in the startup."
+    },
+    {
+      "id": "check-page-06e4345c62",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "page": "terms",
+      "excerpt": "The Valuation Cap The valuation cap in the SAFE (the “Valuation Cap”) again aims to acknowledge the risk taken by the early stage SAFE holder as an investor in the Company."
+    },
+    {
+      "id": "check-page-6509685d36",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-f71420dc34",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-3625b74796",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "page": "terms",
+      "excerpt": "This right, a.k.a the “MFN”, means that if the Company grants more favorable rights than those that exist in the Cash Safe either prior to entering into the Cash SAFE, or prior to conversion of the Cash SAFE – then SOSV may choose to adopt those particular more favorable rights in addition to its current rights."
+    },
+    {
+      "id": "check-page-fb3e307d6a",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies via a certain fund and from time to time SOSV may have to assign certain investments between those internal funds or companies."
+    },
+    {
+      "id": "check-page-aa3aa1a736",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "page": "terms",
+      "excerpt": "The Program Amount generally covers access to desk space, state of the art lab and workshop facilities, high spec lab equipment, specialized materials, in-house technical experts, mentorship, extensive investor networks, etc. across the SOSV Program locations."
+    },
+    {
+      "id": "check-page-6509685d36",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-f71420dc34",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-c37750ad1d",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "page": "terms",
+      "excerpt": "This is required because prior to the Company’s first Equity Financing the Company is in a particularly early stage of their growth and cannot afford for any Founder to leave and retain a portion of the cap table."
+    },
+    {
+      "id": "check-page-081fe35535",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "page": "terms",
+      "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-45f79a2e83",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "page": "terms",
+      "excerpt": "The Program Costs include access across the SOSV locations (San Francisco, New York, and Newark) to desk space, state of the art lab and workshop facilities, high spec equipment, specialized materials, in-house technical experts, mentorship, extensive investor network, etc."
+    },
+    {
+      "id": "check-page-6246608158",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "page": "terms",
+      "excerpt": "Without the Discount Rate or the Valuation Cap, the SAFE would essentially convert into the Equity Securities at the same price as the equity issued in the Equity Financing, giving no incentive or benefit to the early stage Investor."
+    },
+    {
+      "id": "check-page-9de0d0d42e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "page": "terms",
+      "excerpt": "The Discount Rate The discount rate acknowledges that the SAFE holder has taken on additional risk in investing at such an early stage in the startup."
+    },
+    {
+      "id": "check-page-74a1684865",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "page": "terms",
+      "excerpt": "The Valuation Cap The valuation cap in the SAFE (the “Valuation Cap”) again aims to acknowledge the risk taken by the early stage SAFE holder as an investor in the Company."
+    },
+    {
+      "id": "check-page-0fe9dd77d1",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-9b67aaf470",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-adae506b25",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "page": "terms",
+      "excerpt": "This right, a.k.a the “MFN”, means that if the Company grants more favorable rights than those that exist in the Cash Safe either prior to entering into the Cash SAFE, or prior to conversion of the Cash SAFE – then SOSV may choose to adopt those particular more favorable rights in addition to its current rights."
+    },
+    {
+      "id": "check-page-cb68373577",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies via a certain fund and from time to time SOSV may have to assign certain investments between those internal funds or companies."
+    },
+    {
+      "id": "check-page-cd704da7d2",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "page": "terms",
+      "excerpt": "The Program Amount generally covers access to desk space, state of the art lab and workshop facilities, high spec lab equipment, specialized materials, in-house technical experts, mentorship, extensive investor networks, etc. across the SOSV Program locations."
+    },
+    {
+      "id": "check-page-0fe9dd77d1",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-9b67aaf470",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-a06c22ef83",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "page": "terms",
+      "excerpt": "This is required because prior to the Company’s first Equity Financing the Company is in a particularly early stage of their growth and cannot afford for any Founder to leave and retain a portion of the cap table."
+    },
+    {
+      "id": "check-page-29a18ee10b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "page": "terms",
+      "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-804753c838",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "page": "terms",
+      "excerpt": "The Program Costs include access across the SOSV locations (San Francisco, New York, and Newark) to desk space, state of the art lab and workshop facilities, high spec equipment, specialized materials, in-house technical experts, mentorship, extensive investor network, etc."
+    },
+    {
+      "id": "check-page-5fe8f88177",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "page": "terms",
+      "excerpt": "Without the Discount Rate or the Valuation Cap, the SAFE would essentially convert into the Equity Securities at the same price as the equity issued in the Equity Financing, giving no incentive or benefit to the early stage Investor."
+    },
+    {
+      "id": "check-page-db38f5ead0",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "page": "terms",
+      "excerpt": "The Discount Rate The discount rate acknowledges that the SAFE holder has taken on additional risk in investing at such an early stage in the startup."
+    },
+    {
+      "id": "check-page-7bd357d70b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "page": "terms",
+      "excerpt": "The Valuation Cap The valuation cap in the SAFE (the “Valuation Cap”) again aims to acknowledge the risk taken by the early stage SAFE holder as an investor in the Company."
+    },
+    {
+      "id": "check-page-bd8f026d60",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-d4ef79ed25",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-790e8e66c4",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "page": "terms",
+      "excerpt": "This right, a.k.a the “MFN”, means that if the Company grants more favorable rights than those that exist in the Cash Safe either prior to entering into the Cash SAFE, or prior to conversion of the Cash SAFE – then SOSV may choose to adopt those particular more favorable rights in addition to its current rights."
+    },
+    {
+      "id": "check-page-c5b524f14d",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies via a certain fund and from time to time SOSV may have to assign certain investments between those internal funds or companies."
+    },
+    {
+      "id": "check-page-f4c7a5bef7",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "page": "terms",
+      "excerpt": "The Program Amount generally covers access to desk space, state of the art lab and workshop facilities, high spec lab equipment, specialized materials, in-house technical experts, mentorship, extensive investor networks, etc. across the SOSV Program locations."
+    },
+    {
+      "id": "check-page-bd8f026d60",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-d4ef79ed25",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-f2f6dda3cc",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "page": "terms",
+      "excerpt": "This is required because prior to the Company’s first Equity Financing the Company is in a particularly early stage of their growth and cannot afford for any Founder to leave and retain a portion of the cap table."
+    },
+    {
+      "id": "check-page-52189c5a68",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "page": "terms",
+      "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-5325fcfc17",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "page": "terms",
+      "excerpt": "The Program Costs include access across the SOSV locations (San Francisco, New York, and Newark) to desk space, state of the art lab and workshop facilities, high spec equipment, specialized materials, in-house technical experts, mentorship, extensive investor network, etc."
+    },
+    {
+      "id": "check-page-6945a9ce22",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "page": "terms",
+      "excerpt": "Without the Discount Rate or the Valuation Cap, the SAFE would essentially convert into the Equity Securities at the same price as the equity issued in the Equity Financing, giving no incentive or benefit to the early stage Investor."
+    },
+    {
+      "id": "check-page-0fb2c0291f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "page": "terms",
+      "excerpt": "The Discount Rate The discount rate acknowledges that the SAFE holder has taken on additional risk in investing at such an early stage in the startup."
+    },
+    {
+      "id": "check-page-3e9637977f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "page": "terms",
+      "excerpt": "The Valuation Cap The valuation cap in the SAFE (the “Valuation Cap”) again aims to acknowledge the risk taken by the early stage SAFE holder as an investor in the Company."
+    },
+    {
+      "id": "check-page-cc447ec527",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-223558de42",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-d8f77beaaa",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "page": "terms",
+      "excerpt": "This right, a.k.a the “MFN”, means that if the Company grants more favorable rights than those that exist in the Cash Safe either prior to entering into the Cash SAFE, or prior to conversion of the Cash SAFE – then SOSV may choose to adopt those particular more favorable rights in addition to its current rights."
+    },
+    {
+      "id": "check-page-dc2a400698",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies via a certain fund and from time to time SOSV may have to assign certain investments between those internal funds or companies."
+    },
+    {
+      "id": "check-page-e3be008102",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "page": "terms",
+      "excerpt": "The Program Amount generally covers access to desk space, state of the art lab and workshop facilities, high spec lab equipment, specialized materials, in-house technical experts, mentorship, extensive investor networks, etc. across the SOSV Program locations."
+    },
+    {
+      "id": "check-page-cc447ec527",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "page": "terms",
+      "excerpt": "SOSV invests in companies with a view to being involved with these companies throughout each company’s life cycle, and building a strong relationship with the Founders."
+    },
+    {
+      "id": "check-page-223558de42",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "page": "terms",
+      "excerpt": "SOSV invests in your Company at an early stage with the intention of building a long term supportive relationship to help you build and scale your Company."
+    },
+    {
+      "id": "check-page-d62ccce422",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
+      "page": "terms",
+      "excerpt": "This is required because prior to the Company’s first Equity Financing the Company is in a particularly early stage of their growth and cannot afford for any Founder to leave and retain a portion of the cap table."
     }
   ],
   "findings": {

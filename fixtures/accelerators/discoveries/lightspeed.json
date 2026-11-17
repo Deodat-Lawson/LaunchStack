@@ -1,6 +1,6 @@
 {
   "programId": "lightspeed",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://jobs.lsvp.com/jobs",
@@ -14,7 +14,7 @@
       "url": "https://lsvp.com/about/",
       "page": "details",
       "anchor": "About",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -59,6 +59,22 @@
       "origin": "official"
     },
     {
+      "url": "https://lsvp.com/feeds/blck-vc-launches-scout-program-with-lightspeed-sequoia-to-support-more-black-investors/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/do-developers-really-care-about-open-source/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://lsvp.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
       "page": "terms",
       "anchor": "",
@@ -86,12 +102,124 @@
       "url": "https://lsvp.com/feeds/lightspeed-india-on-asias-tech-investment-opportunities/",
       "page": "terms",
       "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/lightspeed-india-singapore-is-the-most-under-talked-about-market-in-the-region/",
+      "page": "details",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://lsvp.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/lightspeed-ventures-to-ramp-up-investments-in-climate-change-and-ai/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/lightspeeds-new-consumer-partner-on-seed-deals-the-downturn-and-a-timeline-for-the-metaverse/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/meet-26-rising-star-fintech-vcs-excited-about-whats-next-in-the-sector-even-during-a-market-and-investing-pullback/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/microsoft-chairman-john-thompson-on-his-investment-in-cloud-computing/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/our-investment-in-pintu/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/startup-affirm-gets-investment-from-gic-and-a-valuation-nearing-2-billion/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/stripes-former-vc-dealmaker-joins-lightspeed-to-invest-in-sizzling-fintech/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/vectorized-announces-15-5m-investment-to-build-simpler-streaming-data-tool/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/why-investors-still-crowd-into-some-deals/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/yugabyte-announces-48m-investment-as-cloud-native-database-makes-enterprise-push/",
       "page": "terms",
       "anchor": "",
       "fetched": true,
@@ -123,34 +251,10 @@
       "origin": "official"
     },
     {
-      "url": "https://lsvp.com/stories/announcing-overops-real-time-event-intelligence-for-modern-applications/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://lsvp.com/stories/building-the-worlds-first-ai-native-audit-technology-our-investment-in-modus/",
       "page": "terms",
       "anchor": "Building the World’s First AI-Native Audit Technology: Our Investment in Modus",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://lsvp.com/stories/building-with-endor-labs-application-security-for-all/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://lsvp.com/stories/building-with-langfuse-observability-analytics-for-llm-applications/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -163,14 +267,6 @@
       "origin": "official"
     },
     {
-      "url": "https://lsvp.com/stories/optimizing-llms-for-real-world-applications/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/",
       "page": "terms",
       "anchor": "Our Investment in Fireworks AI: the Inference Platform Aiming to Power Every GenAI Application",
@@ -179,34 +275,10 @@
       "origin": "official"
     },
     {
-      "url": "https://lsvp.com/stories/startups-v-incumbents-the-battle-for-ais-application-layer/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://lsvp.com/stories/taking-the-big-leap-in-cloud-application-security-or-cloud-native-security/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://lsvp.com/stories/the-future-of-market-research-is-autonomous-our-investment-in-dialogue/",
       "page": "terms",
       "anchor": "The Future of Market Research is Autonomous: Our Investment in Dialogue",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://lsvp.com/stories/vectorized-free-and-source-available-cloud-native-infrastructure-for-real-time-applications/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

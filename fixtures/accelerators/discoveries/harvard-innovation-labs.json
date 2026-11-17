@@ -1,6 +1,6 @@
 {
   "programId": "harvard-innovation-labs",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "http://apply.innovationlabs.harvard.edu/prog/student_membership_program",
@@ -30,7 +30,7 @@
       "url": "https://innovationlabs.harvard.edu/about/about-us",
       "page": "details",
       "anchor": "About",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -46,7 +46,7 @@
       "url": "https://innovationlabs.harvard.edu/about/ecosystem",
       "page": "details",
       "anchor": "Explore Our Ecosystem",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -62,7 +62,7 @@
       "url": "https://innovationlabs.harvard.edu/about/staff",
       "page": "details",
       "anchor": "Meet Our Team",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -70,7 +70,7 @@
       "url": "https://innovationlabs.harvard.edu/about/visit",
       "page": "details",
       "anchor": "Visit Us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -78,22 +78,6 @@
       "url": "https://innovationlabs.harvard.edu/about/volunteer",
       "page": "details",
       "anchor": "Volunteer Opportunities",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://innovationlabs.harvard.edu/articles/2020-presidents-innovation-challenge-opens-applications",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://innovationlabs.harvard.edu/articles/2023-2024-launch-lab-x-geo-cohort",
-      "page": "batches",
-      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -110,7 +94,7 @@
       "url": "https://innovationlabs.harvard.edu/climate/climate-circle",
       "page": "details",
       "anchor": "Climate Circle Accelerator",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -126,7 +110,7 @@
       "url": "https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
       "page": "application",
       "anchor": "Wed, Nov 18 Tips + Tricks for Applying to the 2027 President's Innovation Challenge Online 4:30 PM",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -179,17 +163,17 @@
       "origin": "official"
     },
     {
-      "url": "https://innovationlabs.harvard.edu/login?redirect=https%3A%2F%2Fwww.eventbrite.com%2Fe%2Ftips-tricks-for-applying-to-the-2027-presidents-innovation-challenge-tickets-2003682998787",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
       "page": "application",
-      "anchor": "",
+      "anchor": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
-      "page": "application",
-      "anchor": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/eligibility",
+      "page": "details",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -206,7 +190,15 @@
       "url": "https://innovationlabs.harvard.edu/venture/care-hero-2",
       "page": "batches",
       "anchor": "Care Hero Care Hero is building the AI teammates for home care agencies, starting with recruiting. Our AI recruiter engages every applicant in minutes and interviews 24/7 - nights,",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innovationlabs.harvard.edu/venture/skiply",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

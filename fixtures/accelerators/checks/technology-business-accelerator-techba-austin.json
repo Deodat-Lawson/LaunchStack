@@ -1,37 +1,972 @@
 {
   "programId": "technology-business-accelerator-techba-austin",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
-    "https://www.ic2.utexas.edu/global/programs/techba/"
+    "https://www.ic2.utexas.edu/global/programs/techba/",
+    "https://ic2.utexas.edu/video-why-texas-is-the-ideal-research-laboratory/",
+    "https://ic2.utexas.edu/about-ic%c2%b2-institute/",
+    "https://ic2.utexas.edu/about/",
+    "https://ic2.utexas.edu/program/",
+    "https://ic2.utexas.edu/program/%20",
+    "https://ic2.utexas.edu/programs-latest-bkup/",
+    "https://ic2.utexas.edu/programs/",
+    "https://ic2.utexas.edu/programs/george-kozmetsky-student-challenge/",
+    "https://ic2.utexas.edu/programs/home-to-texas/",
+    "https://ic2.utexas.edu/programs/march-economic-madness/",
+    "https://ic2.utexas.edu/programs/regional-economic-recovery-initiative/",
+    "https://ic2.utexas.edu/readiness-training-program/",
+    "https://ic2.utexas.edu/ready-for-change-the-value-of-thinking-about-whats-next/",
+    "https://ic2.utexas.edu/regional-xlr8-program-continues-to-generate-excitement-among-community-leaders/",
+    "https://ic2.utexas.edu/",
+    "https://ic2.utexas.edu/history/",
+    "https://ic2.utexas.edu/programs/student-challenge/",
+    "https://ic2.utexas.edu/xlr8/",
+    "https://ic2.utexas.edu/news/bbr-study-quantifies-economic-impact-of-lauded-ut-teacher-preparation-program/"
   ],
   "evidence": [
     {
+      "id": "check-duration-a66532c7bb",
+      "url": "https://ic2.utexas.edu/ready-for-change-the-value-of-thinking-about-whats-next/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "hosted sports tournaments to the area at least 40 weeks out of each year and bring in outside revenue",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-efe5bd22b4",
+      "url": "https://ic2.utexas.edu/ready-for-change-the-value-of-thinking-about-whats-next/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "and build resilience. During this intensive 6-week program, leaders actively engaged in full &",
+      "page": "details"
+    },
+    {
+      "id": "check-email-063810558c",
+      "url": "https://ic2.utexas.edu/video-why-texas-is-the-ideal-research-laboratory/",
+      "title": "Technology Business Accelerator (TechBA) Austin — terms page",
+      "excerpt": "2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-09e37202b8",
+      "url": "https://ic2.utexas.edu/programs/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-0a51a628cd",
+      "url": "https://ic2.utexas.edu/programs/home-to-texas/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-0b246ca545",
+      "url": "https://ic2.utexas.edu/history/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "VIDEO 2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-0b656349c3",
+      "url": "https://ic2.utexas.edu/programs-latest-bkup/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "Member 2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-121402cc6d",
+      "url": "https://ic2.utexas.edu/programs/student-challenge/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "For more information on joining Student Challenges contact info@ic2.utexas.edu Awards Cash prizes will be given to the top three teams:",
+      "page": "details"
+    },
+    {
+      "id": "check-email-16ead49b26",
+      "url": "https://ic2.utexas.edu/xlr8/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "Page 2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-18b50589e0",
+      "url": "https://ic2.utexas.edu/about-ic%c2%b2-institute/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-210e365623",
+      "url": "https://ic2.utexas.edu/programs/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "Member 2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-24edd858bf",
+      "url": "https://ic2.utexas.edu/programs/george-kozmetsky-student-challenge/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "For more information on joining Student Challenges contact info@ic2.utexas.edu Awards Cash prizes will be given to the top three teams:",
+      "page": "details"
+    },
+    {
       "id": "check-email-2adeaf887e",
       "url": "https://www.ic2.utexas.edu/global/programs/techba/",
-      "title": "Technology Business Accelerator (TechBA) Austin — homepage checked by scrape.py",
+      "title": "Technology Business Accelerator (TechBA) Austin — homepage",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-32fa6d68b6",
+      "url": "https://ic2.utexas.edu/programs-latest-bkup/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-44e53668e2",
+      "url": "https://ic2.utexas.edu/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "TOUCH 2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-4bf3c44c55",
+      "url": "https://ic2.utexas.edu/news/bbr-study-quantifies-economic-impact-of-lauded-ut-teacher-preparation-program/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-544d646221",
+      "url": "https://ic2.utexas.edu/about/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "Report 2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5463090c10",
+      "url": "https://ic2.utexas.edu/xlr8/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5975453b7b",
+      "url": "https://ic2.utexas.edu/about/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-65abf55347",
+      "url": "https://ic2.utexas.edu/ready-for-change-the-value-of-thinking-about-whats-next/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": ". 2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-6840ffd1a9",
+      "url": "https://ic2.utexas.edu/programs/student-challenge/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-68c0878396",
+      "url": "https://ic2.utexas.edu/programs/regional-economic-recovery-initiative/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-6ae72af8eb",
+      "url": "https://ic2.utexas.edu/programs/march-economic-madness/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7c54a7d5ef",
+      "url": "https://ic2.utexas.edu/video-why-texas-is-the-ideal-research-laboratory/",
+      "title": "Technology Business Accelerator (TechBA) Austin — terms page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-862fdd8c26",
+      "url": "https://ic2.utexas.edu/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8fbc676591",
+      "url": "https://ic2.utexas.edu/programs/regional-economic-recovery-initiative/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-98d454973f",
+      "url": "https://ic2.utexas.edu/about-ic%c2%b2-institute/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "Report 2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-99dd3fdca6",
+      "url": "https://ic2.utexas.edu/programs/home-to-texas/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-9e02fd4a9a",
+      "url": "https://ic2.utexas.edu/program/%20",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a5e21d6957",
+      "url": "https://ic2.utexas.edu/program/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
       "excerpt": "info@ic2.utexas.edu",
       "page": "details"
     },
     {
       "id": "check-email-a792c3309a",
       "url": "https://www.ic2.utexas.edu/global/programs/techba/",
-      "title": "Technology Business Accelerator (TechBA) Austin — homepage checked by scrape.py",
+      "title": "Technology Business Accelerator (TechBA) Austin — homepage",
       "excerpt": "TOUCH 2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ba3fe8c754",
+      "url": "https://ic2.utexas.edu/programs/george-kozmetsky-student-challenge/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-bb52cebffe",
+      "url": "https://ic2.utexas.edu/regional-xlr8-program-continues-to-generate-excitement-among-community-leaders/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c02213d1b8",
+      "url": "https://ic2.utexas.edu/news/bbr-study-quantifies-economic-impact-of-lauded-ut-teacher-preparation-program/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "→ 2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c6bc20ff46",
+      "url": "https://ic2.utexas.edu/programs/george-kozmetsky-student-challenge/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c746f0020b",
+      "url": "https://ic2.utexas.edu/program/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "Member 2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c7d9fa1968",
+      "url": "https://ic2.utexas.edu/programs/march-economic-madness/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ca63d4a752",
+      "url": "https://ic2.utexas.edu/programs/student-challenge/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ce2d0df3cd",
+      "url": "https://ic2.utexas.edu/program/%20",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "Member 2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-db0b337ab8",
+      "url": "https://ic2.utexas.edu/regional-xlr8-program-continues-to-generate-excitement-among-community-leaders/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-email-eb578639b1",
+      "url": "https://ic2.utexas.edu/history/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f84908c295",
+      "url": "https://ic2.utexas.edu/ready-for-change-the-value-of-thinking-about-whats-next/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-format-036d15c754",
+      "url": "https://ic2.utexas.edu/programs/student-challenge/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "to take on problems related to the needs of small or remote communities and bring fresh and innovative ideas of growth",
+      "page": "details"
+    },
+    {
+      "id": "check-format-bf0f147ffe",
+      "url": "https://ic2.utexas.edu/programs/march-economic-madness/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "addressed problems related to the need for small or remote communities to grow and thrive, while maintaining unique",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c43f821b42",
+      "url": "https://ic2.utexas.edu/programs/george-kozmetsky-student-challenge/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "to take on problems related to the needs of small or remote communities and bring fresh and innovative ideas of growth",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f4b50f1449",
+      "url": "https://ic2.utexas.edu/programs/march-economic-madness/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "student team competition to address problems of small or remote communities. It gave university students an opportunity to",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-05d1dbc67a",
+      "url": "https://ic2.utexas.edu/programs/student-challenge/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-06a6dacf0b",
+      "url": "https://ic2.utexas.edu/programs/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0c72c93573",
+      "url": "https://ic2.utexas.edu/history/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0f1acf4fb7",
+      "url": "https://ic2.utexas.edu/program/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-10bccd1a26",
+      "url": "https://ic2.utexas.edu/ready-for-change-the-value-of-thinking-about-whats-next/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-11354afe1f",
+      "url": "https://ic2.utexas.edu/programs/march-economic-madness/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-164b4bd3d5",
+      "url": "https://ic2.utexas.edu/programs/regional-economic-recovery-initiative/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-1b374b7017",
+      "url": "https://ic2.utexas.edu/programs/march-economic-madness/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-1c32e04d54",
+      "url": "https://ic2.utexas.edu/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-235157eb50",
+      "url": "https://ic2.utexas.edu/news/bbr-study-quantifies-economic-impact-of-lauded-ut-teacher-preparation-program/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-24b899de09",
+      "url": "https://ic2.utexas.edu/regional-xlr8-program-continues-to-generate-excitement-among-community-leaders/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-29d1d4bbe9",
+      "url": "https://ic2.utexas.edu/about/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-2a5c5fb64d",
+      "url": "https://ic2.utexas.edu/programs-latest-bkup/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-2a7d2e4265",
+      "url": "https://ic2.utexas.edu/program/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-30ed55b785",
+      "url": "https://ic2.utexas.edu/about-ic%c2%b2-institute/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-34d98aa64b",
+      "url": "https://ic2.utexas.edu/about/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-3aad050ccc",
+      "url": "https://ic2.utexas.edu/programs/george-kozmetsky-student-challenge/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-408a55cdd3",
+      "url": "https://ic2.utexas.edu/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-41bfc9e23c",
+      "url": "https://ic2.utexas.edu/programs/regional-economic-recovery-initiative/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-57efed3c6c",
+      "url": "https://ic2.utexas.edu/programs/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-59f3bfe6e2",
+      "url": "https://ic2.utexas.edu/video-why-texas-is-the-ideal-research-laboratory/",
+      "title": "Technology Business Accelerator (TechBA) Austin — terms page",
+      "excerpt": "(512) 475-8900",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-6573800f65",
+      "url": "https://ic2.utexas.edu/news/bbr-study-quantifies-economic-impact-of-lauded-ut-teacher-preparation-program/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-72031b1c19",
+      "url": "https://ic2.utexas.edu/programs/home-to-texas/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-75efc4c3ef",
+      "url": "https://ic2.utexas.edu/program/%20",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-821a7a21a2",
+      "url": "https://ic2.utexas.edu/programs/student-challenge/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-8497a63917",
+      "url": "https://ic2.utexas.edu/programs/home-to-texas/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-9030502349",
+      "url": "https://ic2.utexas.edu/history/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-a1511634c0",
+      "url": "https://ic2.utexas.edu/video-why-texas-is-the-ideal-research-laboratory/",
+      "title": "Technology Business Accelerator (TechBA) Austin — terms page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-aff0c7fcc8",
+      "url": "https://ic2.utexas.edu/xlr8/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-baaf022e72",
+      "url": "https://ic2.utexas.edu/programs/george-kozmetsky-student-challenge/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c4db191722",
+      "url": "https://ic2.utexas.edu/about-ic%c2%b2-institute/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
       "page": "details"
     },
     {
       "id": "check-phone-c701d6f4a6",
       "url": "https://www.ic2.utexas.edu/global/programs/techba/",
-      "title": "Technology Business Accelerator (TechBA) Austin — homepage checked by scrape.py",
+      "title": "Technology Business Accelerator (TechBA) Austin — homepage",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-cbaab536f6",
+      "url": "https://ic2.utexas.edu/programs-latest-bkup/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-cbcb285c3e",
+      "url": "https://ic2.utexas.edu/program/%20",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
       "excerpt": "\"telephone\": \"512 475 8900\"",
       "page": "details"
     },
     {
       "id": "check-phone-df59132725",
       "url": "https://www.ic2.utexas.edu/global/programs/techba/",
-      "title": "Technology Business Accelerator (TechBA) Austin — homepage checked by scrape.py",
+      "title": "Technology Business Accelerator (TechBA) Austin — homepage",
       "excerpt": "(512) 475-8900",
       "page": "details"
+    },
+    {
+      "id": "check-phone-e410da3431",
+      "url": "https://ic2.utexas.edu/regional-xlr8-program-continues-to-generate-excitement-among-community-leaders/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-ea03ae7f1a",
+      "url": "https://ic2.utexas.edu/ready-for-change-the-value-of-thinking-about-whats-next/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-f67f452125",
+      "url": "https://ic2.utexas.edu/xlr8/",
+      "title": "Technology Business Accelerator (TechBA) Austin — program page",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-d79cc569d3",
+      "url": "https://www.ic2.utexas.edu/global/programs/techba/",
+      "page": "details",
+      "excerpt": "The IC² Institute - Innovating Well-Being - Technology Innovations to Advance a Well-Being Economy About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry HOME Interdisciplinary Research Real-World Impact Explore the Latest News from IC 2 Latest New Research: AI Learning Lab RECENT EVENT: Graduate Fellows Research Showcase March 31, 2026 10:00 AM - 12:00 PM IC² Institute, UT Austin LEARN MORE Doctors & AI: 5 Implications for the Future of Medicine Insight: Sandbox Testing for Agentic AI SEE MORE NEWS & INSIGHTS > Student Spotlight: Luke McDonald Examining Northwest Arkansas's Entrepreneurial Ecosystem Continuing to Lead The IC 2 Institute is a globally respected research institute created in 1977 to explore how technological innovation generates economic development and shared prosperity. Today’s IC 2 is advancing the development of responsible Al to improve health care and other aspects of community well-being. View our research Learn more about IC 2 IC 2 is Shaping the Conversation around AI in Health Care We’re driving cutting-edge research to advance responsible, human-complementary AI in health care — exploring how AI impacts clinical decisions,"
+    },
+    {
+      "id": "check-page-be6860d87e",
+      "url": "https://www.ic2.utexas.edu/global/programs/techba/",
+      "page": "details",
+      "excerpt": "View our research Learn more about IC 2 IC 2 is Shaping the Conversation around AI in Health Care We’re driving cutting-edge research to advance responsible, human-complementary AI in health care — exploring how AI impacts clinical decisions, patient care, and the future of work."
+    },
+    {
+      "id": "check-page-2b63e5ecdb",
+      "url": "https://www.ic2.utexas.edu/global/programs/techba/",
+      "page": "details",
+      "excerpt": "Funding UT faculty teams who are at the center of pioneering research."
+    },
+    {
+      "id": "check-page-cff64b7266",
+      "url": "https://ic2.utexas.edu/video-why-texas-is-the-ideal-research-laboratory/",
+      "page": "terms",
+      "excerpt": "Video: Why Texas is the Ideal Research Laboratory - The IC² Institute About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Video: Why Texas is the Ideal Research Laboratory 2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect Emergency Information Site Policies Web Accessibility Policy Web Privacy Policy IC² Newsletter Quarterly newsletter with selected happenings from the Institute. Unsubscribe anytime. Thanks for subscribing! First Name Last Name Email Subscribe About Research BBR Programs News/Insights Events Connect Emergency Information Site Policies Web Accessibility Policy Web Privacy Policy © The University of Texas at Austin 2024"
+    },
+    {
+      "id": "check-page-48ebf32691",
+      "url": "https://ic2.utexas.edu/about-ic%c2%b2-institute/",
+      "page": "details",
+      "excerpt": "About the IC² Institute | Research Institute at the University of Texas About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Home Program 9 About IC² Institute About IC² Innovation. Capital. Creativity. Lasting Impact A “think and do tank” at the University of Texas since 1977, the IC² Institute is known worldwide for its impactful, interdisciplinary research on the drivers of economic development and shared prosperity. Many of its legacy programs – like the Austin Technology Incubator (ATI) , the Master of Science in Technology Commercialization program, and the Home to Texas internship program — serve as models for leaders around the world in their efforts to build entrepreneurial ecosystems and innovation-driven economies. Learn more about IC² Institute history > Innovating Well-Being Under its new mission, Innovating Well-Being , the Institute continues to engage in research that translates into real-world impact. Today’s IC² Institute is exploring a new, expanded vision of shared prosperity — one that includes key elements of community well-being. We’re prioritizing research that reduces health disparities, advances the responsible development of AI"
+    },
+    {
+      "id": "check-page-6dc153d130",
+      "url": "https://ic2.utexas.edu/about-ic%c2%b2-institute/",
+      "page": "details",
+      "excerpt": "We’re prioritizing research that reduces health disparities, advances the responsible development of AI in health care, supports the transition to green energy, promotes community resilience, and ensures equitable access to economic development and entrepreneurship."
+    },
+    {
+      "id": "check-page-838a60ea2b",
+      "url": "https://ic2.utexas.edu/about-ic%c2%b2-institute/",
+      "page": "details",
+      "excerpt": "IC² creates opportunities for interdisciplinary research — bringing new insights, energy and purpose to initiatives that advance the well-being economy."
+    },
+    {
+      "id": "check-page-ee25504d44",
+      "url": "https://ic2.utexas.edu/about-ic%c2%b2-institute/",
+      "page": "details",
+      "excerpt": "Today, there is a growing need to leverage data and new technologies to cultivate an innovation economy predicated on inclusion, health and well-being, and social impact."
+    },
+    {
+      "id": "check-page-b7b1899e54",
+      "url": "https://ic2.utexas.edu/about-ic%c2%b2-institute/",
+      "page": "details",
+      "excerpt": "Craig Watkins IC² Impact Since 2019 Recent Impact (Since 2019) 43 UT faculty researchers have received funding from IC² to advance their research."
+    },
+    {
+      "id": "check-page-306dd86064",
+      "url": "https://ic2.utexas.edu/about-ic%c2%b2-institute/",
+      "page": "details",
+      "excerpt": "277 Women- and minority-owned businesses have graduated from our Readiness Training Program."
+    },
+    {
+      "id": "check-page-d79b441982",
+      "url": "https://ic2.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "About the IC² Institute | Research Institute at the University of Texas About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Home Program 9 About IC² Institute About IC² Innovation. Capital. Creativity. Lasting Impact A “think and do tank” at the University of Texas since 1977, the IC² Institute is known worldwide for its impactful, interdisciplinary research on the drivers of economic development and shared prosperity. Many of its legacy programs – like the Austin Technology Incubator (ATI) , the Master of Science in Technology Commercialization program, and the Home to Texas internship program — serve as models for leaders around the world in their efforts to build entrepreneurial ecosystems and innovation-driven economies. Learn more about IC² Institute history > Innovating Well-Being Under its new mission, Innovating Well-Being , the Institute continues to engage in research that translates into real-world impact. Today’s IC² Institute is exploring a new, expanded vision of shared prosperity — one that includes key elements of community well-being. We’re prioritizing research that reduces health disparities, advances the responsible development of AI"
+    },
+    {
+      "id": "check-page-ac0646f7d3",
+      "url": "https://ic2.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "We’re prioritizing research that reduces health disparities, advances the responsible development of AI in health care, supports the transition to green energy, promotes community resilience, and ensures equitable access to economic development and entrepreneurship."
+    },
+    {
+      "id": "check-page-43feed0e91",
+      "url": "https://ic2.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "IC² creates opportunities for interdisciplinary research — bringing new insights, energy and purpose to initiatives that advance the well-being economy."
+    },
+    {
+      "id": "check-page-1d8a784a24",
+      "url": "https://ic2.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "Today, there is a growing need to leverage data and new technologies to cultivate an innovation economy predicated on inclusion, health and well-being, and social impact."
+    },
+    {
+      "id": "check-page-a54c26ccb7",
+      "url": "https://ic2.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "Craig Watkins IC² Impact Since 2019 Recent Impact (Since 2019) 43 UT faculty researchers have received funding from IC² to advance their research."
+    },
+    {
+      "id": "check-page-391ca17876",
+      "url": "https://ic2.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "277 Women- and minority-owned businesses have graduated from our Readiness Training Program."
+    },
+    {
+      "id": "check-page-3846ea3688",
+      "url": "https://ic2.utexas.edu/program/",
+      "page": "details",
+      "excerpt": "IC² Institute Programs | Entrepreneurship Programs Texas | Innovation About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Home Program 9 Program Programs Translating Research into Results “Doing” is part of our DNA. Funding cross-disciplinary research. Convening experts. Bridging communities. Mentoring students. Bringing people together to turn ideas into impact. Current Programs Student Capstones Guided by IC² Institute mentors, upper-level UT students apply lessons learned in the classroom to a real-world challenge for a local client. Faculty Research Through periodic funding cycles, the Institute supports interdisciplinary faculty research that aligns with our mission. Current focus areas include AI in health care, human-centered AI, and human-AI teaming. Visiting Scholars Thirty years and running: The Visiting Scholars program offers professors and industry professionals the opportunity to research and publish in residence at the Institute. Lab Meetings Online “lab meetings” allow innovators from the UT campus and broader community to present their work to the IC² Institute and identify areas of common interest and potential collaboration. Graduate"
+    },
+    {
+      "id": "check-page-f40447e678",
+      "url": "https://ic2.utexas.edu/program/",
+      "page": "details",
+      "excerpt": "Graduate Fellows The Institute supports selected final-year doctoral candidates as they pursue groundbreaking research at the intersection of AI, health care, and workforce innovation."
+    },
+    {
+      "id": "check-page-b87590dbf2",
+      "url": "https://ic2.utexas.edu/program/",
+      "page": "details",
+      "excerpt": "Conferences and Workshops IC² Institute conferences and workshops bring together community and thought leaders to meet today’s challenges in AI and health care."
+    },
+    {
+      "id": "check-page-394797c0da",
+      "url": "https://ic2.utexas.edu/program/%20",
+      "page": "details",
+      "excerpt": "IC² Institute Programs | Entrepreneurship Programs Texas | Innovation About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Home Program 9 Program Programs Translating Research into Results “Doing” is part of our DNA. Funding cross-disciplinary research. Convening experts. Bridging communities. Mentoring students. Bringing people together to turn ideas into impact. Current Programs Student Capstones Guided by IC² Institute mentors, upper-level UT students apply lessons learned in the classroom to a real-world challenge for a local client. Faculty Research Through periodic funding cycles, the Institute supports interdisciplinary faculty research that aligns with our mission. Current focus areas include AI in health care, human-centered AI, and human-AI teaming. Visiting Scholars Thirty years and running: The Visiting Scholars program offers professors and industry professionals the opportunity to research and publish in residence at the Institute. Lab Meetings Online “lab meetings” allow innovators from the UT campus and broader community to present their work to the IC² Institute and identify areas of common interest and potential collaboration. Graduate"
+    },
+    {
+      "id": "check-page-cd6275b8ad",
+      "url": "https://ic2.utexas.edu/program/%20",
+      "page": "details",
+      "excerpt": "Graduate Fellows The Institute supports selected final-year doctoral candidates as they pursue groundbreaking research at the intersection of AI, health care, and workforce innovation."
+    },
+    {
+      "id": "check-page-e36fd9f281",
+      "url": "https://ic2.utexas.edu/program/%20",
+      "page": "details",
+      "excerpt": "Conferences and Workshops IC² Institute conferences and workshops bring together community and thought leaders to meet today’s challenges in AI and health care."
+    },
+    {
+      "id": "check-page-8c046820d8",
+      "url": "https://ic2.utexas.edu/programs-latest-bkup/",
+      "page": "details",
+      "excerpt": "Programs Latest bkup - The IC² Institute About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Home Program 9 Programs Latest bkup Programs Translating Research into Results “Doing” is part of our DNA. Funding cross-disciplinary research. Convening experts. Bridging communities. Mentoring students. Bringing people together to turn ideas into impact. Current Programs Student Capstones Guided by IC² Institute mentors, upper-level UT students apply lessons learned in the classroom to a real-world challenge for a local client. Faculty Research Through periodic funding cycles, the Institute supports interdisciplinary faculty research that aligns with our mission. Current focus areas include AI in health care, human-centered AI, and human-AI teaming. Visiting Scholars Thirty years and running: The Visiting Scholars program offers professors and industry professionals the opportunity to research and publish in residence at the Institute. Lab Meetings Online “lab meetings” allow innovators from the UT campus and broader community to present their work to the IC² Institute and identify areas of common interest and potential collaboration. Graduate Fellows The"
+    },
+    {
+      "id": "check-page-2096bcddf9",
+      "url": "https://ic2.utexas.edu/programs-latest-bkup/",
+      "page": "details",
+      "excerpt": "Graduate Fellows The Institute supports selected final-year doctoral candidates as they pursue groundbreaking research at the intersection of AI, health care, and workforce innovation."
+    },
+    {
+      "id": "check-page-0d44e6f1b3",
+      "url": "https://ic2.utexas.edu/programs-latest-bkup/",
+      "page": "details",
+      "excerpt": "Conferences and Workshops IC² Institute conferences and workshops bring together community and thought leaders to meet today’s challenges in AI and health care."
+    },
+    {
+      "id": "check-page-145e6770aa",
+      "url": "https://ic2.utexas.edu/programs/",
+      "page": "details",
+      "excerpt": "IC² Institute Programs | Entrepreneurship Programs Texas | Innovation About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Home Program 9 Program Programs Translating Research into Results “Doing” is part of our DNA. Funding cross-disciplinary research. Convening experts. Bridging communities. Mentoring students. Bringing people together to turn ideas into impact. Current Programs Student Capstones Guided by IC² Institute mentors, upper-level UT students apply lessons learned in the classroom to a real-world challenge for a local client. Faculty Research Through periodic funding cycles, the Institute supports interdisciplinary faculty research that aligns with our mission. Current focus areas include AI in health care, human-centered AI, and human-AI teaming. Visiting Scholars Thirty years and running: The Visiting Scholars program offers professors and industry professionals the opportunity to research and publish in residence at the Institute. Lab Meetings Online “lab meetings” allow innovators from the UT campus and broader community to present their work to the IC² Institute and identify areas of common interest and potential collaboration. Graduate"
+    },
+    {
+      "id": "check-page-a2bf18adae",
+      "url": "https://ic2.utexas.edu/programs/",
+      "page": "details",
+      "excerpt": "Graduate Fellows The Institute supports selected final-year doctoral candidates as they pursue groundbreaking research at the intersection of AI, health care, and workforce innovation."
+    },
+    {
+      "id": "check-page-a12961239e",
+      "url": "https://ic2.utexas.edu/programs/",
+      "page": "details",
+      "excerpt": "Conferences and Workshops IC² Institute conferences and workshops bring together community and thought leaders to meet today’s challenges in AI and health care."
+    },
+    {
+      "id": "check-page-e2f08e2654",
+      "url": "https://ic2.utexas.edu/programs/george-kozmetsky-student-challenge/",
+      "page": "details",
+      "excerpt": "George Kozmetsky Student Challenge - The IC² Institute About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Home Program 9 Program 9 George Kozmetsky Student Challenge George Kozmetsky Student Challenge Our student challenges allow our students to take on problems related to the needs of small or remote communities and bring fresh and innovative ideas of growth and sustainability while maintaining unique community identities and good quality of life for their citizens. Click the image above to view the 2021 George Kosmetsky Student Challenge Presentations The George Kozmetsky Memorial Student Challenge is named in honor of the founder of the IC² Institute. As with Kozmetsky’s original work at the institute in the 1970s, the Challenge requires an interdisciplinary approach. Although students from any major are eligible to participate, student teams must represent more than one school or college at UT Austin, and the members of each team cannot be all graduate students or all first-year students. The top ten student teams deliver live presentations before a panel of three expert judges, and at the end of the day three teams walk away with a total of"
+    },
+    {
+      "id": "check-page-c502317519",
+      "url": "https://ic2.utexas.edu/programs/home-to-texas/",
+      "page": "details",
+      "excerpt": "Home to Texas™ - The IC² Institute About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Home Program 9 Program 9 Home to Texas™ Home to Texas™ Changing the World Starts at Home https://www.youtube.com/watch?v=oSEOQd2QK8s Home to Texas™ is a summer internship and workforce development program that facilitates University of Texas undergraduates with well-paid internships and research experiences designed to help them understand the underlying values of their home communities. The IC² Institute has partnered with UT Austin School of Undergraduate Studies and Texas Career Engagement for the program, matching first-year undergraduate students from all majors with employers in their hometowns who are seeking students with fresh and informed perspectives. 90 students participated over three years. Home to Texas students work in a variety of fields, not limited to their academic majors. Placements are for full-time (40 hours/week) positions and have included experiences in government, science, the arts, law, banking, community development, and more. 17 communities have participated in Home to Texas. Participation allows for local companies to provide work"
+    },
+    {
+      "id": "check-page-3179f2d43e",
+      "url": "https://ic2.utexas.edu/programs/home-to-texas/",
+      "page": "details",
+      "excerpt": "Internships that include mentoring and opportunities to learn about the organization’s mission and vision and interact with a variety of employees are favored. $5000 is the amount a single student earns while participating on the program."
+    },
+    {
+      "id": "check-page-8a0242d48e",
+      "url": "https://ic2.utexas.edu/programs/home-to-texas/",
+      "page": "details",
+      "excerpt": "During their experience, students enroll in a summer online course that requires local community research and analysis."
+    },
+    {
+      "id": "check-page-1843215c4d",
+      "url": "https://ic2.utexas.edu/programs/march-economic-madness/",
+      "page": "details",
+      "excerpt": "March Economic Madness - The IC² Institute About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Home Program 9 Program 9 March Economic Madness March Economic Madness March Economic Madness ran in 2021 and 2022 and was the first interscholastic student team competition to address problems of small or remote communities. It gave university students an opportunity to form teams and compete across universities in a hackathon style to come up with solutions for real communities seeking both sustainable growth and good quality of life for their citizens. Challenge participants addressed problems related to the need for small or remote communities to grow and thrive, while maintaining unique community identities and good quality of life for their citizens. We awarded over $50,000 to winning teams through this competition. Student Team Criteria Participating universities formed teams of students from at least two colleges/schools. Awards The top teams from each university competed in a final round. The team selected as winner of the final round was awarded $25,000. The winning team also brought home the March Economic Madness trophy to the team’s university to"
+    },
+    {
+      "id": "check-page-d51e50e82d",
+      "url": "https://ic2.utexas.edu/programs/march-economic-madness/",
+      "page": "details",
+      "excerpt": "Linda Matthew, Ph.D Associate Professor, Department of Population Health, Chief, Division of Community Engagement and Health Equity, Faculty Director, Community-Driven Initiatives Joshua B."
+    },
+    {
+      "id": "check-page-028669de04",
+      "url": "https://ic2.utexas.edu/programs/march-economic-madness/",
+      "page": "details",
+      "excerpt": "Associate Professor, Dept of Communication Studies UT Austin Nishi Viswanathan, MBBS, MBA Director of Texas Health Catalyst, Health Ecosystem, UT Austin Austin, TX March Economic Madness ( 2021 ) 2022 Student Finalist Presentations First Place: Team Corsicana – A Telehealth Curriculum Round 2 Finalists: Team Brownwood."
+    },
+    {
+      "id": "check-page-ee4d738b64",
+      "url": "https://ic2.utexas.edu/programs/regional-economic-recovery-initiative/",
+      "page": "details",
+      "excerpt": "Regional Economic Recovery Initiative - The IC² Institute About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Home Program 9 Program 9 Regional Economic Recovery Initiative Regional Economic Recovery Initiative Launched in March 2020 in response to the growing global social and economic impact, the goal of the Regional Economic Recovery Initiative is to better understand Texas communities and provide evidence-based recommendations for next steps for community planning. This responsive initiative includes: Regional Economic Recovery Research – Extensive quantitative and qualitative research across 80 Texas and Louisiana communities this summer. The State of THE STATE OF TEXAS Report – a compilation of various research on the economic impact of COVID19 on Texas plus context and trends. REGIONAL XLR8 – Convening 150 leaders from 58 communities across all five regions of Texas over September to October 2020 for a new type of “accelerator” that helps communities rethink recovery, take strategic action, and build resilience. 2 nd George Kozmetsky Memorial Student Challenge – Competition from October to November for diverse student teams to address community"
+    },
+    {
+      "id": "check-page-3896e00ee2",
+      "url": "https://ic2.utexas.edu/readiness-training-program/",
+      "page": "details",
+      "excerpt": "UT-Austin Training Program for HUBs – Smallbiz Readiness Training Program for Historically Underutilized Businesses / Small Businesses Funnel One, Fall 2026 Learn How To: Grow your business Enhance your capacity Advance in concepts and techniques Find contract opportunities with government agencies Readiness Training Program for HUBs/Small Businesses: Two-Part Training Program The Readiness Training Program for HUBs/Small Businesses is an innovative training program that enhances the competitiveness and capacity of minority and women- owned small businesses to bid on public sector contracts in the Austin region. The RTP for HUBs has a two-funnel (phase) design that addresses the needs of participating companies at various stages of their growth, as well as governments that rely extensively on minority/women owned small businesses to provide necessary services and products. Funnel One is designed for minority- and women-owned small businesses that are either new or still small (startups or companies with under $500K in revenues.) The emphasis of Funnel One is on government contracting, and presents the necessary steps for a small business to register or become certified, learn about contracting opportunities, and bid on and execute contracts with governments. Session presenters also share advice and best practices in accessing capital, identifying customers, and presenting"
+    },
+    {
+      "id": "check-page-2fbd6dd683",
+      "url": "https://ic2.utexas.edu/readiness-training-program/",
+      "page": "details",
+      "excerpt": "Session presenters also share advice and best practices in accessing capital, identifying customers, and presenting business capabilities to potential prime contractors and government agencies."
+    },
+    {
+      "id": "check-page-13ba51fc64",
+      "url": "https://ic2.utexas.edu/readiness-training-program/",
+      "page": "details",
+      "excerpt": "Margaret Castillo, Small Business Development Analyst, Central Health Session 2: November 17, 2026 Communicating Your Capabilities, Value Propositions, Capability Statements, and Elevator Pitches: Cheryl A."
+    },
+    {
+      "id": "check-page-d15a08b95b",
+      "url": "https://ic2.utexas.edu/ready-for-change-the-value-of-thinking-about-whats-next/",
+      "page": "details",
+      "excerpt": "Ready for Change: The Value of Thinking About What’s Next - The IC² Institute About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Home Program 9 Economic Development 9 Ready for Change: The Value of Thinking About What’s Next Ready for Change: The Value of Thinking About What’s Next Nocona is a city that has steadily maintained—with few exceptions—prosperity and energy over more than a hundred years, despite the fact that industries responsible for its livelihood have come and gone. World-famous Justin Boots, established in Nocona in 1889 but moved to Fort Worth in 1925, gave way to Nocona Boot Company that closed in 1999. Fenoglio Boot Company now produces boots here and Nokona (with a K) is the only American made baseball glove in the US. Our city of only about 3,000 citizens also offers employment via an envelope factory, a machine shop for airplanes, a brewery, orchid and plant production, and numerous other small and large businesses. We are lucky in more ways than one. We are home to the only hospital in the county, have fiber-based internet, and a community where the haves do not shy away from helping the have-nots. We have benefitted from the"
+    },
+    {
+      "id": "check-page-debcf95153",
+      "url": "https://ic2.utexas.edu/ready-for-change-the-value-of-thinking-about-whats-next/",
+      "page": "details",
+      "excerpt": "We have benefitted from the revenues of the oil and gas industry in our region, and have other natural resources to enjoy, such as Lake Nocona."
+    },
+    {
+      "id": "check-page-e7ff7f1b86",
+      "url": "https://ic2.utexas.edu/ready-for-change-the-value-of-thinking-about-whats-next/",
+      "page": "details",
+      "excerpt": "One is the need for a more vibrant downtown with increased retail outlets and restaurants for our residents and visitors."
+    },
+    {
+      "id": "check-page-27a8f234e1",
+      "url": "https://ic2.utexas.edu/ready-for-change-the-value-of-thinking-about-whats-next/",
+      "page": "details",
+      "excerpt": "A current goal is the creation of a community sports complex—on a donated 40-acre parcel of land—that will bring hosted sports tournaments to the area at least 40 weeks out of each year and bring in outside revenue each weekend – benefiting the community with the use of the hotels, gas stations, restaurants, community services, and retail spin-off."
+    },
+    {
+      "id": "check-page-95cc61c267",
+      "url": "https://ic2.utexas.edu/ready-for-change-the-value-of-thinking-about-whats-next/",
+      "page": "details",
+      "excerpt": "The vocational training can also prepare young people for jobs or businesses to serve the oil and gas industry—jobs that won’t be subject to the fluctuations of boom and bust unemployment periods."
+    },
+    {
+      "id": "check-page-a8063e1d07",
+      "url": "https://ic2.utexas.edu/ready-for-change-the-value-of-thinking-about-whats-next/",
+      "page": "details",
+      "excerpt": "As a part of the IC² Regional Economic Recovery Initiative , Regional XLR8 is a new type of “accelerator” that helps communities rethink recovery, take strategic action, and build resilience."
+    },
+    {
+      "id": "check-page-6dc188627d",
+      "url": "https://ic2.utexas.edu/regional-xlr8-program-continues-to-generate-excitement-among-community-leaders/",
+      "page": "details",
+      "excerpt": "Regional XLR8 Program Continues to Generate Excitement among Community Leaders - The IC² Institute About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Home Program 9 Uncategorized 9 Regional XLR8 Program Continues to Generate Excitement among Community Leaders Regional XLR8 Program Continues to Generate Excitement among Community Leaders The Fall 2020 cohort of the Regional XLR8 program came together when the world around them was greatly disrupted. Faced with a global pandemic, among other challenges, Texas communities sought to adapt and explore ways to address major changes to everyday life. Community leaders who participated in Regional XLR8 found solace in the fact that they were not alone and joined forces to tackle issues facing their communities. Participants discussed their current situations and goals for their communities, identified what could be done to achieve their goals based on available resources, discussed growth strategies with peers, and developed community growth plans. On March 23, participants from over 20 Texas communities of the Fall 2020 Regional XLR8 cohort came together for a reunion, where five selected leaders from the"
+    },
+    {
+      "id": "check-page-18d9043809",
+      "url": "https://ic2.utexas.edu/regional-xlr8-program-continues-to-generate-excitement-among-community-leaders/",
+      "page": "details",
+      "excerpt": "Marshall’s local government sought to spread awareness of job openings and available opportunities through marketing campaigns."
+    },
+    {
+      "id": "check-page-3aae550e49",
+      "url": "https://ic2.utexas.edu/regional-xlr8-program-continues-to-generate-excitement-among-community-leaders/",
+      "page": "details",
+      "excerpt": "In addition, the former Nocona boot factory building has been repurposed to house a destination brewery, cutting edge industrial manufacturing facility for Nokona leather products and a community service not-for profit."
+    },
+    {
+      "id": "check-page-d0c141b1e9",
+      "url": "https://ic2.utexas.edu/",
+      "page": "details",
+      "excerpt": "The IC² Institute - Innovating Well-Being - Technology Innovations to Advance a Well-Being Economy About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry HOME Interdisciplinary Research Real-World Impact Explore the Latest News from IC 2 Latest New Research: AI Learning Lab RECENT EVENT: Graduate Fellows Research Showcase March 31, 2026 10:00 AM - 12:00 PM IC² Institute, UT Austin LEARN MORE Doctors & AI: 5 Implications for the Future of Medicine Insight: Sandbox Testing for Agentic AI SEE MORE NEWS & INSIGHTS > Student Spotlight: Luke McDonald Examining Northwest Arkansas's Entrepreneurial Ecosystem Continuing to Lead The IC 2 Institute is a globally respected research institute created in 1977 to explore how technological innovation generates economic development and shared prosperity. Today’s IC 2 is advancing the development of responsible Al to improve health care and other aspects of community well-being. View our research Learn more about IC 2 IC 2 is Shaping the Conversation around AI in Health Care We’re driving cutting-edge research to advance responsible, human-complementary AI in health care — exploring how AI impacts clinical decisions,"
+    },
+    {
+      "id": "check-page-c1a88f55ca",
+      "url": "https://ic2.utexas.edu/",
+      "page": "details",
+      "excerpt": "View our research Learn more about IC 2 IC 2 is Shaping the Conversation around AI in Health Care We’re driving cutting-edge research to advance responsible, human-complementary AI in health care — exploring how AI impacts clinical decisions, patient care, and the future of work."
+    },
+    {
+      "id": "check-page-54e5535b55",
+      "url": "https://ic2.utexas.edu/",
+      "page": "details",
+      "excerpt": "Funding UT faculty teams who are at the center of pioneering research."
+    },
+    {
+      "id": "check-page-fcc02845cc",
+      "url": "https://ic2.utexas.edu/history/",
+      "page": "details",
+      "excerpt": "IC² Institute | History of Innovation at UT Austin | Founder Of IC² - George Kozmetsky About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Home Program 9 History History of the IC² Institute Local legacy. Global impact. The Visionary Leadership of George Kozmetsky Tech pioneer George Kozmetsky founded the “Institute for the Study of Constructive Capitalism” — the IC² Institute — in 1977. (The Institute was later renamed, its letters henceforth denoting “Innovation’, “Creativity” and “Capital” — three ingredients deemed essential for economic development.) The history of the IC² Institute is inextricably linked to the development of Austin as we know it today: an entrepreneurial hub and a thriving center for technology and innovation. As founder of IC², George Kozmetsky used Austin as a laboratory to test and scale his concepts for building an entrepreneurial ecosystem to drive regional economies. Later, Kozmetsky and subsequent IC² directors shared those concepts with a global audience eager to adapt the “Austin model” to their communities. Follow the timeline below to learn more about the IC² Institute, the history of innovation in Austin, and the"
+    },
+    {
+      "id": "check-page-3c62941bca",
+      "url": "https://ic2.utexas.edu/history/",
+      "page": "details",
+      "excerpt": "1984 IC² launches the country’s first business plan competition."
+    },
+    {
+      "id": "check-page-111441a327",
+      "url": "https://ic2.utexas.edu/history/",
+      "page": "details",
+      "excerpt": "1989 IC² launches the Austin Technology Incubator (ATI), the longest active technology incubator in the United States."
+    },
+    {
+      "id": "check-page-9f41761713",
+      "url": "https://ic2.utexas.edu/history/",
+      "page": "details",
+      "excerpt": "1990 IC² forms The Capital Network, a seed venture capital network that was at one time the largest in the country, and in Austin was the precursor to the Central Texas Angel Network ."
+    },
+    {
+      "id": "check-page-3f0744e491",
+      "url": "https://ic2.utexas.edu/history/",
+      "page": "details",
+      "excerpt": "1990s IC² mentors communities around the world, sharing the “Austin Model”— where business, academic, and community leaders come together synergistically to catalyze innovation."
+    },
+    {
+      "id": "check-page-0de7f5ed58",
+      "url": "https://ic2.utexas.edu/programs/student-challenge/",
+      "page": "details",
+      "excerpt": "George Kozmetsky Student Challenge - The IC² Institute About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Home Program 9 Program 9 George Kozmetsky Student Challenge George Kozmetsky Student Challenge Our student challenges allow our students to take on problems related to the needs of small or remote communities and bring fresh and innovative ideas of growth and sustainability while maintaining unique community identities and good quality of life for their citizens. Click the image above to view the 2021 George Kosmetsky Student Challenge Presentations The George Kozmetsky Memorial Student Challenge is named in honor of the founder of the IC² Institute. As with Kozmetsky’s original work at the institute in the 1970s, the Challenge requires an interdisciplinary approach. Although students from any major are eligible to participate, student teams must represent more than one school or college at UT Austin, and the members of each team cannot be all graduate students or all first-year students. The top ten student teams deliver live presentations before a panel of three expert judges, and at the end of the day three teams walk away with a total of"
+    },
+    {
+      "id": "check-page-9abdac061e",
+      "url": "https://ic2.utexas.edu/xlr8/",
+      "page": "details",
+      "excerpt": "Regional XLR8 - The IC² Institute About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Regional XLR8 2020 will go down in history as one of the most challenging years our country and the state of Texas have experienced in more than a century. Yet, during these challenging times, there are opportunities for the well-prepared to identify and leverage for future success. Let’s use this critical period to rethink recovery, take strategic action, and build resilience. To help communities respond to 2020 opportunities, the IC 2 Institute is offering Regional XLR8 – a new type of accelerator program to build thriving and resilient communities. Regional XLR8 emphasizes the human-centered aspect of community economic development. Program participants explore regional collaboration, identify opportunities for growth fitting regional assets, and develop a plan to turn “opportunity into reality.” Regional XLR8 builds on IC 2 ’s 43 years of “thinking and doing,” where best entrepreneurial practices are applied to regional economic development. In XLR8, community leaders will be able to develop new programs, rapidly measure outcomes, and refine for maximum impact."
+    },
+    {
+      "id": "check-page-5361f8d1c0",
+      "url": "https://ic2.utexas.edu/news/bbr-study-quantifies-economic-impact-of-lauded-ut-teacher-preparation-program/",
+      "page": "details",
+      "excerpt": "UTeach Program Creates Significant Economic Impact, BBR Study Finds - The IC² Institute About IC² Institute Overview History Bureau of Business Research People Research Priorities Current Initiatives Publications Bureau of Business Research Programs News/Insights News Insights Newsletter Events Connect with IC² Institute Donors Students Faculty Researchers Industry Home Economic Development UTeach Program Creates Significant Economic Impact, BBR Study Finds UTeach Program Creates Significant Economic Impact, BBR Study Finds UTeach equips STEM majors with practical teaching experience and specially designed classes in math and science education. Photo Credit: UTeach Institute Published February 13, 2026 The UTeach program is a nationally recognized teacher preparation program which launched in 1997 to address the shortage of qualified STEM teachers in U.S. secondary schools. By recruiting STEM majors and equipping them with practical classroom experience, specially designed courses in math and science education, and mentoring by master educators, the program produces graduates who really know their subject (math, science, computer science, etc.) and are well-prepared to teach it. The program’s success led to the creation of the UTeach Institute , which drives expansion of the UTeach model into other states. Almost twenty years in, the Institute has established partner programs"
     }
   ],
   "findings": {
@@ -56,8 +991,29 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "40",
+        "evidenceId": "check-duration-a66532c7bb"
+      },
+      {
+        "value": "6",
+        "evidenceId": "check-duration-efe5bd22b4"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-c43f821b42"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

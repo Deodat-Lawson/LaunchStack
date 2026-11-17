@@ -1,25 +1,1194 @@
 {
   "programId": "southern-tier-startup-alliance",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.ststartup.com/",
+    "https://www.ststartup.com/investment-report/",
+    "https://www.ststartup.com/news-updates/",
+    "https://www.ststartup.com/news-updates/page/2/",
+    "https://www.ststartup.com/news-updates/page/3/",
+    "https://www.ststartup.com/news-updates/page/4/",
+    "https://www.ststartup.com/news-updates/page/5/",
+    "https://www.ststartup.com/news-updates/page/6/",
+    "https://www.ststartup.com/news-updates/page/7/",
     "https://www.ststartup.com/what-we-offer/",
-    "https://www.ststartup.com/news-updates/"
+    "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+    "https://www.ststartup.com/portfolio-item/incubatorworks-corning/",
+    "https://www.ststartup.com/portfolio-item/koffman-southern-tier-incubator/",
+    "https://www.ststartup.com/portfolio-item/mcgovern-center-at-cornell-university/",
+    "https://www.ststartup.com/portfolio-item/rev-ithaca-startup-works/",
+    "https://www.ststartup.com/portfolio-item/start-up-suite-at-binghamton-university/",
+    "https://www.ststartup.com/2024/07/08/2023-investment-report/",
+    "https://www.ststartup.com/2024/07/08/q1-2024-investment-report-2/",
+    "https://www.ststartup.com/2024/10/11/q2-2024-investment-report/"
   ],
   "evidence": [
     {
+      "id": "check-deal-08386f171d",
+      "url": "https://www.ststartup.com/2024/07/08/2023-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "Grants Carbon to Stone, Inc. , headquartered in Ithaca, received $350,000 of grant funding from Carbontech Development Initiative in September",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-0ea48b5f35",
+      "url": "https://www.ststartup.com/2024/10/11/q2-2024-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "Hempitecture’s grant. Natrion , headquartered in Ithaca, received $65,000 of grant funding from FuzeHub in April, 2024. Read more about",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-307e8b4070",
+      "url": "https://www.ststartup.com/2024/10/11/q2-2024-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "about Natrion’s grant. REEgen , headquartered in Ithaca, received $50,000 of grant funding from ClimateTech in May, 2024. Read more about",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-42e699df32",
+      "url": "https://www.ststartup.com/2024/10/11/q2-2024-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "ClimateTech in May, 2024. Read more about RETRN Bio’s grant. Total: $1,330,000 Competitions Agrivoltaic Design Studio, headquartered in Ithaca, won",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-4d3f920156",
+      "url": "https://www.ststartup.com/2024/07/08/2023-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "Opal Wearable’s grant. Soctera , headquartered in Ithaca, received $250,000 of grant funding from the Air Force Research Lab in April 2023. Read",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-583ec40112",
+      "url": "https://www.ststartup.com/2024/10/11/q2-2024-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "REEgen’s grant. RETRN Bio , headquartered in Syracuse, received $50,000 of grant funding from ClimateTech in May, 2024. Read more about RETRN",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-5d591fb819",
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "title": "Southern Tier Startup Alliance — batches page",
+      "excerpt": "News Investment Reports News KLAW Industries and the Koffman Receive $125,000 Award from DOE August 22, 2023 ... Read More Koffman Southern Tier",
+      "page": "batches"
+    },
+    {
+      "id": "check-deal-ace14c6d04",
+      "url": "https://www.ststartup.com/2024/07/08/2023-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "Ecolectro Inc.’s grant. Havos , headquartered in Ithaca, received $320,000 of grant funding from the Rockefeller Foundation in May 2023. Read",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ba23fb59f6",
+      "url": "https://www.ststartup.com/2024/10/11/q2-2024-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "$2,280,000 Grants Hempitecture* , headquartered in Idaho, received $1.1 million of grant funding from the State of New York in June, 2024. Read more",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c29089ce13",
+      "url": "https://www.ststartup.com/2024/10/11/q2-2024-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "about REEgen’s grant. REEgen , headquartered in Ithaca, received $65,000 of grant funding from FuzeHub in April, 2024. Read more about",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-fd38d5655c",
+      "url": "https://www.ststartup.com/2024/07/08/2023-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "grant. . Ecolectro Inc. , headquartered in Ithaca, received $1.08 million of grant funding from NYSERDA in August 2023. Read more about",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-63acaf5a97",
+      "url": "https://www.ststartup.com/2024/10/11/q2-2024-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "is now open for Business Plan Class, A 7-week course open to all Co.Starters graduates.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6017d75c1a",
+      "url": "https://www.ststartup.com/2024/10/11/q2-2024-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "Benefits Workshop Monday, November 18 | 10 – 11 a.m. ET | Virtual This exclusive webinar for member startups of incubators",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-b0aa7a9bf0",
+      "url": "https://www.ststartup.com/2024/10/11/q2-2024-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "Plan Class Tuesday, October 22 | 7 Sessions | Online and In-Person Registration is now open for Business Plan Class, A 7-week",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-bef0b892f1",
+      "url": "https://www.ststartup.com/2024/10/11/q2-2024-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "Food and Ag Summit! November 6-7, 2024 in Ithaca, NY and Virtual All-access registration is $75 ($25 for students) |",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-cfc1d3cdaf",
+      "url": "https://www.ststartup.com/2024/10/11/q2-2024-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "Hardware Accelerator at Rev: Ithaca Startup Works Attend a Virtual Information Session | Application Deadline: November 22,",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-0c681919dc",
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "title": "Southern Tier Startup Alliance — program page",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "details"
+    },
+    {
+      "id": "check-location-16aacaae29",
+      "url": "https://www.ststartup.com/2024/10/11/q2-2024-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "to include. Investments Agri-trak , headquartered in Pultneyville, raised $180,000 of Series 1 venture",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-202b61068e",
+      "url": "https://www.ststartup.com/investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-2d03321a50",
+      "url": "https://www.ststartup.com/2024/07/08/q1-2024-investment-report-2/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "about SBIR and STTR grants. Soctera , headquartered in Ithaca, was awarded a Phase II SBIR grant",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-58174e8db5",
+      "url": "https://www.ststartup.com/portfolio-item/start-up-suite-at-binghamton-university/",
+      "title": "Southern Tier Startup Alliance — portfolio page",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-787e45b9b6",
+      "url": "https://www.ststartup.com/2024/07/08/2023-investment-report/",
+      "title": "Southern Tier Startup Alliance — terms page",
+      "excerpt": "SBIR and STTR grants. ATC-NY INC. , headquartered in Ithaca, was awarded a Phase I SBIR grant",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-83b12f988e",
+      "url": "https://www.ststartup.com/news-updates/page/4/",
+      "title": "Southern Tier Startup Alliance — batches page",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-9a5673320e",
+      "url": "https://www.ststartup.com/portfolio-item/rev-ithaca-startup-works/",
+      "title": "Southern Tier Startup Alliance — portfolio page",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-a9b07554e3",
+      "url": "https://www.ststartup.com/news-updates/",
+      "title": "Southern Tier Startup Alliance — batches page",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-b3325a5be3",
+      "url": "https://www.ststartup.com/news-updates/page/5/",
+      "title": "Southern Tier Startup Alliance — batches page",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-be1117c542",
+      "url": "https://www.ststartup.com/portfolio-item/incubatorworks-corning/",
+      "title": "Southern Tier Startup Alliance — portfolio page",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-c3b91157b3",
+      "url": "https://www.ststartup.com/portfolio-item/koffman-southern-tier-incubator/",
+      "title": "Southern Tier Startup Alliance — portfolio page",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-c4489cab17",
+      "url": "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+      "title": "Southern Tier Startup Alliance — program page",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "details"
+    },
+    {
+      "id": "check-location-ce685d3cab",
+      "url": "https://www.ststartup.com/news-updates/page/6/",
+      "title": "Southern Tier Startup Alliance — batches page",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-dbf239925e",
+      "url": "https://www.ststartup.com/news-updates/page/7/",
+      "title": "Southern Tier Startup Alliance — batches page",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-e6db429d64",
+      "url": "https://www.ststartup.com/news-updates/page/2/",
+      "title": "Southern Tier Startup Alliance — batches page",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-f35eb388e3",
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "title": "Southern Tier Startup Alliance — batches page",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-f5c3838e7c",
+      "url": "https://www.ststartup.com/",
+      "title": "Southern Tier Startup Alliance — homepage",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "details"
+    },
+    {
+      "id": "check-location-fe67a444b2",
+      "url": "https://www.ststartup.com/portfolio-item/mcgovern-center-at-cornell-university/",
+      "title": "Southern Tier Startup Alliance — portfolio page",
+      "excerpt": "a seed VC fund and accelerator based in NYC. Prior to his current role, Justin was",
+      "page": "portfolio"
+    },
+    {
       "id": "check-name-5e464b4811",
       "url": "https://www.ststartup.com/",
-      "title": "Southern Tier Startup Alliance — homepage checked by scrape.py",
+      "title": "Southern Tier Startup Alliance — homepage",
       "excerpt": "Southern Tier Startup Alliance – We support people starting and growing companies in the",
       "page": "details"
     },
     {
       "id": "check-route-548ab3da88",
       "url": "https://www.ststartup.com/",
-      "title": "Southern Tier Startup Alliance — homepage checked by scrape.py",
+      "title": "Southern Tier Startup Alliance — homepage",
       "excerpt": "https://www.ststartup.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-46c9b59e13",
+      "url": "https://www.ststartup.com/",
+      "page": "details",
+      "excerpt": "Southern Tier Startup Alliance – We support people starting and growing companies in the region. Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Southern Tier Startup Alliance (STSA) The Southern Tier Startup Alliance (STSA) is a member organization of business incubators in the Southern Tier region of New York, promoting business development resources for entrepreneurs and startups in the region. STSA also serves as Launch New York’s representative in the Southern Tier, helping connect startups with funding and mentorship. Our objective is to help increase the number of jobs in the region by supporting new, scalable businesses, thus diversifying the employment base and strengthening the economy. Since 2016: 462 Financial Deals Supported Through STSA Over $1B Total Financial Deals Closed by STSA Startups 188 Total Groups Investing in the Southern Tier Partner Incubators IncubatorWorks Corning Rev: Ithaca Startup Works Center for Life Science Ventures at Cornell University Koffman Southern Tier Incubator Binghamton University Start-Up Suites Praxis Center for Venture Development Runway & Spinout Programs"
+    },
+    {
+      "id": "check-page-9b5899ec27",
+      "url": "https://www.ststartup.com/",
+      "page": "details",
+      "excerpt": "STSA leverages the region’s best assets — including a partnership between top research institutions like Cornell University and Binghamton University, and Corning’s Enterprises — combined with mentorship and connections to capital, enabling our member startups to grow and scale rapidly."
+    },
+    {
+      "id": "check-page-e805faebd4",
+      "url": "https://www.ststartup.com/",
+      "page": "details",
+      "excerpt": "Our Focus The Southern Tier Startup Alliance has programs to support entrepreneurs at all stages of starting and scaling, but our main focus areas are: Clean Energy Together with state and federal partners, the Southern Tier Startup Alliance is committed to supporting the growth of a vibrant clean energy and energy storage ecosystem in our region."
+    },
+    {
+      "id": "check-page-7777fa5bbf",
+      "url": "https://www.ststartup.com/",
+      "page": "details",
+      "excerpt": "Manufacturing & Hardware Xerox, IBM, and Corning Incorporated are just a few of the companies that have grown out of our region."
+    },
+    {
+      "id": "check-page-7a9d0fa67f",
+      "url": "https://www.ststartup.com/",
+      "page": "details",
+      "excerpt": "The Southern Tier Startup Alliance works to leverage this legacy of manufacturing and product entrepreneurship with new, innovative partnerships."
+    },
+    {
+      "id": "check-page-3cd2a92db9",
+      "url": "https://www.ststartup.com/",
+      "page": "details",
+      "excerpt": "Food & AgTech Seven million acres of New York State is farmland – much of it in or near the Southern Tier."
+    },
+    {
+      "id": "check-page-affa5220c5",
+      "url": "https://www.ststartup.com/",
+      "page": "details",
+      "excerpt": "Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation."
+    },
+    {
+      "id": "check-page-3e7669b306",
+      "url": "https://www.ststartup.com/",
+      "page": "details",
+      "excerpt": "Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible."
+    },
+    {
+      "id": "check-page-11ad97b741",
+      "url": "https://www.ststartup.com/",
+      "page": "details",
+      "excerpt": "Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on manufacturing and business planning, along with a team dedicated to making manufacturing easier."
+    },
+    {
+      "id": "check-page-5e89f7b714",
+      "url": "https://www.ststartup.com/",
+      "page": "details",
+      "excerpt": "Visit Website × ClimateTech Prototyping Hardware Accelerator Led by Rev: Ithaca Startup Works and supported by NYSERDA, the ClimateTech Prototyping Hardware Accelerator supports climate technology startups in a like-minded cohort where they are matched with clean energy and clean tech mentors and learn from industry experts."
+    },
+    {
+      "id": "check-page-6501a5f64c",
+      "url": "https://www.ststartup.com/",
+      "page": "details",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-d265704a37",
+      "url": "https://www.ststartup.com/",
+      "page": "details",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-7759933747",
+      "url": "https://www.ststartup.com/",
+      "page": "details",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Justin Smithline Justin Smithline is a technology entrepreneur who has spent more than 15 years growing successful enterprise technology companies, with a professional focus on sales, product development, and marketing."
+    },
+    {
+      "id": "check-page-012b39be0c",
+      "url": "https://www.ststartup.com/investment-report/",
+      "page": "terms",
+      "excerpt": "Investment Reports – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Investment Reports Investment activities in startup companies in the Southern Tier region of New York Q2 2026 Investment Report by Admin in Investment Report Investment in the Southern Tier is distributed on a quarterly basis to highlight the signi... Q1 2026 Investment Report by Admin in Investment Report Investment in the Southern Tier will be distributed on a quarterly basis to highlight the... 2025 Investment Report by Admin in Investment Report Investment in the Southern Tier will be distributed on a quarterly basis to highlight... Q3 2025 Investment Report by Admin in Investment Report Investment in the Southern Tier will be distributed on a quarterly basis to highlight the ... Q2 2025 Investment Report by Admin in Investment Report Investment in the Southern Tier will be distributed on a quarterly basis to highlight the ... Q1 2025 Investment Report by Admin in Investment Report Investment in the Southern Tier will be distributed on a quarterly basis to highlight the ... 2024 Investment Report by"
+    },
+    {
+      "id": "check-page-a515cf5120",
+      "url": "https://www.ststartup.com/investment-report/",
+      "page": "terms",
+      "excerpt": "Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation."
+    },
+    {
+      "id": "check-page-4517f51383",
+      "url": "https://www.ststartup.com/investment-report/",
+      "page": "terms",
+      "excerpt": "Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible."
+    },
+    {
+      "id": "check-page-98965ba734",
+      "url": "https://www.ststartup.com/investment-report/",
+      "page": "terms",
+      "excerpt": "Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on manufacturing and business planning, along with a team dedicated to making manufacturing easier."
+    },
+    {
+      "id": "check-page-0176b3a2fe",
+      "url": "https://www.ststartup.com/investment-report/",
+      "page": "terms",
+      "excerpt": "Visit Website × ClimateTech Prototyping Hardware Accelerator Led by Rev: Ithaca Startup Works and supported by NYSERDA, the ClimateTech Prototyping Hardware Accelerator supports climate technology startups in a like-minded cohort where they are matched with clean energy and clean tech mentors and learn from industry experts."
+    },
+    {
+      "id": "check-page-624ef98591",
+      "url": "https://www.ststartup.com/investment-report/",
+      "page": "terms",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-f5fa87a89d",
+      "url": "https://www.ststartup.com/investment-report/",
+      "page": "terms",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-5c818966a2",
+      "url": "https://www.ststartup.com/investment-report/",
+      "page": "terms",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Justin Smithline Justin Smithline is a technology entrepreneur who has spent more than 15 years growing successful enterprise technology companies, with a professional focus on sales, product development, and marketing."
+    },
+    {
+      "id": "check-page-e010e0ca57",
+      "url": "https://www.ststartup.com/investment-report/",
+      "page": "terms",
+      "excerpt": "Although primarily an operator, Justin is also an active investor who has backed startups with a combined enterprise exit value exceeding $1.2 billion."
+    },
+    {
+      "id": "check-page-235e46e76d",
+      "url": "https://www.ststartup.com/investment-report/",
+      "page": "terms",
+      "excerpt": "He is currently a Partner at Entrepreneurs Roundtable Accelerator, a seed VC fund and accelerator based in NYC."
+    },
+    {
+      "id": "check-page-3e116dad9b",
+      "url": "https://www.ststartup.com/investment-report/",
+      "page": "terms",
+      "excerpt": "Justin also helped lead the successful private equity backed carve out and turnaround of Backstage, a leading B2B media portal for the performing arts community, where he led all sales, product development, and technology."
+    },
+    {
+      "id": "check-page-8bab794510",
+      "url": "https://www.ststartup.com/investment-report/",
+      "page": "terms",
+      "excerpt": "Justin holds an MBA from Cornell University. × Alex Hagen Alex Hagen, a serial entrepreneur, joined STSA as an Entrepreneur in Residence."
+    },
+    {
+      "id": "check-page-7e6be86460",
+      "url": "https://www.ststartup.com/investment-report/",
+      "page": "terms",
+      "excerpt": "Previously the Director of the Southern Tier Clean Energy Incubator, Hagen is also currently CEO at ShrubBucket.com, an online order aggregation business that has the goal of disrupting the gardening industry."
+    },
+    {
+      "id": "check-page-eaf94cbfc6",
+      "url": "https://www.ststartup.com/news-updates/",
+      "page": "batches",
+      "excerpt": "News – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports News Q3 2024 Investment Report January 14, 2025 ... Read More Q2 2026 Investment Report October 13, 2026 ... Read More Building Community Through Shared Kitchen Ithaca and The SMORG July 30, 2026 ... Read More Q1 2026 Investment Report July 16, 2026 ... Read More 2025 Investment Report April 16, 2026 ... Read More Q3 2025 Investment Report January 29, 2026 ... Read More Q2 2025 Investment Report October 16, 2025 ... Read More Q1 2025 Investment Report July 14, 2025 ... Read More 2024 Investment Report April 23, 2025 ... Read More Q2 2024 Investment Report October 11, 2024 ... Read More 1 2 3 4 5 6 7 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation. Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads"
+    },
+    {
+      "id": "check-page-1c15797e48",
+      "url": "https://www.ststartup.com/news-updates/",
+      "page": "batches",
+      "excerpt": "Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible."
+    },
+    {
+      "id": "check-page-8cb4ec4f2b",
+      "url": "https://www.ststartup.com/news-updates/",
+      "page": "batches",
+      "excerpt": "Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on manufacturing and business planning, along with a team dedicated to making manufacturing easier."
+    },
+    {
+      "id": "check-page-e748e7d1c1",
+      "url": "https://www.ststartup.com/news-updates/",
+      "page": "batches",
+      "excerpt": "Visit Website × ClimateTech Prototyping Hardware Accelerator Led by Rev: Ithaca Startup Works and supported by NYSERDA, the ClimateTech Prototyping Hardware Accelerator supports climate technology startups in a like-minded cohort where they are matched with clean energy and clean tech mentors and learn from industry experts."
+    },
+    {
+      "id": "check-page-1f68428d29",
+      "url": "https://www.ststartup.com/news-updates/",
+      "page": "batches",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-e9c5023395",
+      "url": "https://www.ststartup.com/news-updates/",
+      "page": "batches",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-a97c605e88",
+      "url": "https://www.ststartup.com/news-updates/",
+      "page": "batches",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Justin Smithline Justin Smithline is a technology entrepreneur who has spent more than 15 years growing successful enterprise technology companies, with a professional focus on sales, product development, and marketing."
+    },
+    {
+      "id": "check-page-702255962c",
+      "url": "https://www.ststartup.com/news-updates/",
+      "page": "batches",
+      "excerpt": "Although primarily an operator, Justin is also an active investor who has backed startups with a combined enterprise exit value exceeding $1.2 billion."
+    },
+    {
+      "id": "check-page-4c2e160a08",
+      "url": "https://www.ststartup.com/news-updates/",
+      "page": "batches",
+      "excerpt": "He is currently a Partner at Entrepreneurs Roundtable Accelerator, a seed VC fund and accelerator based in NYC."
+    },
+    {
+      "id": "check-page-41908617cd",
+      "url": "https://www.ststartup.com/news-updates/",
+      "page": "batches",
+      "excerpt": "Justin also helped lead the successful private equity backed carve out and turnaround of Backstage, a leading B2B media portal for the performing arts community, where he led all sales, product development, and technology."
+    },
+    {
+      "id": "check-page-18c9d22acd",
+      "url": "https://www.ststartup.com/news-updates/",
+      "page": "batches",
+      "excerpt": "Justin holds an MBA from Cornell University. × Alex Hagen Alex Hagen, a serial entrepreneur, joined STSA as an Entrepreneur in Residence."
+    },
+    {
+      "id": "check-page-101f1309fb",
+      "url": "https://www.ststartup.com/news-updates/",
+      "page": "batches",
+      "excerpt": "Previously the Director of the Southern Tier Clean Energy Incubator, Hagen is also currently CEO at ShrubBucket.com, an online order aggregation business that has the goal of disrupting the gardening industry."
+    },
+    {
+      "id": "check-page-abfa5ab6b9",
+      "url": "https://www.ststartup.com/news-updates/",
+      "page": "batches",
+      "excerpt": "Previously, he was the CFO at Renovus Solar during a time of rapid growth from 7 employees to over 60."
+    },
+    {
+      "id": "check-page-35a33bc0f0",
+      "url": "https://www.ststartup.com/news-updates/page/2/",
+      "page": "batches",
+      "excerpt": "News – Page 2 – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports News Q1 2024 Investment Report July 8, 2024 ... Read More 2023 Investment Report July 8, 2024 ... Read More RETRN Bio Joins Cornell’s Center for Life Science Ventures Incubator June 20, 2024 ... Read More IncubatorWorks Helps SoupaPOTamus Launch Successful Startup June 10, 2024 ... Read More Koffman Incubator Wins $50K at Growth Accelerator Competition May 9, 2024 ... Read More Soctera wins $1M SBIR Award for Semiconductor Innovation May 2, 2024 ... Read More Equity in Innovation Computer Lab Opens at Koffman Incubator February 9, 2024 ... Read More IncubatorWorks Elmira Gets Piece of $114M NENY Grant February 9, 2024 ... Read More EMPEQ Wins $150,000 Grand Prize from HUSTLE Defense Accelerator Program September 14, 2023 ... Read More Edge Spray Secures Partnership with USA Fencing August 31, 2023 ... Read More 1 2 3 4 5 6 7 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for"
+    },
+    {
+      "id": "check-page-e66d24c6fa",
+      "url": "https://www.ststartup.com/news-updates/page/2/",
+      "page": "batches",
+      "excerpt": "Read More 1 2 3 4 5 6 7 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation."
+    },
+    {
+      "id": "check-page-39d3e5b12c",
+      "url": "https://www.ststartup.com/news-updates/page/2/",
+      "page": "batches",
+      "excerpt": "Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible."
+    },
+    {
+      "id": "check-page-ae01a245ae",
+      "url": "https://www.ststartup.com/news-updates/page/2/",
+      "page": "batches",
+      "excerpt": "Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on manufacturing and business planning, along with a team dedicated to making manufacturing easier."
+    },
+    {
+      "id": "check-page-2ad6e7a884",
+      "url": "https://www.ststartup.com/news-updates/page/2/",
+      "page": "batches",
+      "excerpt": "Visit Website × ClimateTech Prototyping Hardware Accelerator Led by Rev: Ithaca Startup Works and supported by NYSERDA, the ClimateTech Prototyping Hardware Accelerator supports climate technology startups in a like-minded cohort where they are matched with clean energy and clean tech mentors and learn from industry experts."
+    },
+    {
+      "id": "check-page-b9244f1f90",
+      "url": "https://www.ststartup.com/news-updates/page/2/",
+      "page": "batches",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-0470690235",
+      "url": "https://www.ststartup.com/news-updates/page/2/",
+      "page": "batches",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-7b0b088e20",
+      "url": "https://www.ststartup.com/news-updates/page/2/",
+      "page": "batches",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Justin Smithline Justin Smithline is a technology entrepreneur who has spent more than 15 years growing successful enterprise technology companies, with a professional focus on sales, product development, and marketing."
+    },
+    {
+      "id": "check-page-8f623c2ce9",
+      "url": "https://www.ststartup.com/news-updates/page/2/",
+      "page": "batches",
+      "excerpt": "Although primarily an operator, Justin is also an active investor who has backed startups with a combined enterprise exit value exceeding $1.2 billion."
+    },
+    {
+      "id": "check-page-c0fd930cf5",
+      "url": "https://www.ststartup.com/news-updates/page/2/",
+      "page": "batches",
+      "excerpt": "He is currently a Partner at Entrepreneurs Roundtable Accelerator, a seed VC fund and accelerator based in NYC."
+    },
+    {
+      "id": "check-page-71837b834d",
+      "url": "https://www.ststartup.com/news-updates/page/2/",
+      "page": "batches",
+      "excerpt": "Justin also helped lead the successful private equity backed carve out and turnaround of Backstage, a leading B2B media portal for the performing arts community, where he led all sales, product development, and technology."
+    },
+    {
+      "id": "check-page-6d5836dec2",
+      "url": "https://www.ststartup.com/news-updates/page/2/",
+      "page": "batches",
+      "excerpt": "Justin holds an MBA from Cornell University. × Alex Hagen Alex Hagen, a serial entrepreneur, joined STSA as an Entrepreneur in Residence."
+    },
+    {
+      "id": "check-page-c3198e5809",
+      "url": "https://www.ststartup.com/news-updates/page/2/",
+      "page": "batches",
+      "excerpt": "Previously the Director of the Southern Tier Clean Energy Incubator, Hagen is also currently CEO at ShrubBucket.com, an online order aggregation business that has the goal of disrupting the gardening industry."
+    },
+    {
+      "id": "check-page-8fbd464711",
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "page": "batches",
+      "excerpt": "News – Page 3 – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports News KLAW Industries and the Koffman Receive $125,000 Award from DOE August 22, 2023 ... Read More Koffman Southern Tier Incubator Welcomes New Executive Director August 16, 2023 ... Read More Carbon Upcycling Technologies Raises $26 Million in Series A Financing August 10, 2023 ... Read More AvantGuard Closes Successful Seed Funding Round, CEO Receives Recognition June 5, 2023 ... Read More Q&A with Entrepreneur in Residence Illa Burbank May 8, 2023 ... Read More New Dominion Enterprises Awarded $2.2 Million in SBIR Funding April 6, 2023 ... Read More Stephanie Wisner Joins STSA as Entrepreneur in Residence March 28, 2023 ... Read More Antithesis Foods Takes Part in Grant to Grow NYS Chickpeas March 21, 2023 ... Read More Forte Protein Joins Center for Life Science Ventures February 9, 2023 ... Read More Q&A with Entrepreneur in Residence Caitlin Parrucci February 8, 2023 ... Read More 1 2 3 4 5 6 7 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact ©"
+    },
+    {
+      "id": "check-page-ea8a8b18b6",
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "page": "batches",
+      "excerpt": "Read More 1 2 3 4 5 6 7 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation."
+    },
+    {
+      "id": "check-page-b99639ce38",
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "page": "batches",
+      "excerpt": "Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible."
+    },
+    {
+      "id": "check-page-f31271efa5",
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "page": "batches",
+      "excerpt": "Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on manufacturing and business planning, along with a team dedicated to making manufacturing easier."
+    },
+    {
+      "id": "check-page-12bedcb098",
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "page": "batches",
+      "excerpt": "Visit Website × ClimateTech Prototyping Hardware Accelerator Led by Rev: Ithaca Startup Works and supported by NYSERDA, the ClimateTech Prototyping Hardware Accelerator supports climate technology startups in a like-minded cohort where they are matched with clean energy and clean tech mentors and learn from industry experts."
+    },
+    {
+      "id": "check-page-7f4bd3b207",
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "page": "batches",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-912751f2a8",
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "page": "batches",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-21c956a370",
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "page": "batches",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Justin Smithline Justin Smithline is a technology entrepreneur who has spent more than 15 years growing successful enterprise technology companies, with a professional focus on sales, product development, and marketing."
+    },
+    {
+      "id": "check-page-9de8103958",
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "page": "batches",
+      "excerpt": "Although primarily an operator, Justin is also an active investor who has backed startups with a combined enterprise exit value exceeding $1.2 billion."
+    },
+    {
+      "id": "check-page-6ed1e5dd79",
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "page": "batches",
+      "excerpt": "He is currently a Partner at Entrepreneurs Roundtable Accelerator, a seed VC fund and accelerator based in NYC."
+    },
+    {
+      "id": "check-page-11b893a939",
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "page": "batches",
+      "excerpt": "Justin also helped lead the successful private equity backed carve out and turnaround of Backstage, a leading B2B media portal for the performing arts community, where he led all sales, product development, and technology."
+    },
+    {
+      "id": "check-page-86545c06ec",
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "page": "batches",
+      "excerpt": "Justin holds an MBA from Cornell University. × Alex Hagen Alex Hagen, a serial entrepreneur, joined STSA as an Entrepreneur in Residence."
+    },
+    {
+      "id": "check-page-5e7951b0ef",
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "page": "batches",
+      "excerpt": "Previously the Director of the Southern Tier Clean Energy Incubator, Hagen is also currently CEO at ShrubBucket.com, an online order aggregation business that has the goal of disrupting the gardening industry."
+    },
+    {
+      "id": "check-page-c0186ef616",
+      "url": "https://www.ststartup.com/news-updates/page/4/",
+      "page": "batches",
+      "excerpt": "News – Page 4 – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports News Halomine, Inso Biosciences Land Grants to Combat Disease Outbreak December 16, 2022 ... Read More Q&A with Entrepreneur in Residence Li Jiang December 15, 2022 ... Read More Three startups graduate from Cornell’s Center for Life Science Ventures December 1, 2022 ... Read More KLAW Industries Awarded $500K in EPA Funding￼ November 21, 2022 ... Read More KLAW Industries Cements Partnership with City of Binghamton August 23, 2022 ... Read More Southern Tier Soft Landing Program Brings Jobs and Dollars to Upstate NY June 27, 2022 ... Read More McGovern Biotech Startup Closes $2.2 Million Pre-Seed Round May 31, 2022 ... Read More Cornell Joins NY-led Group to Propose Hydrogen Energy Hub April 28, 2022 ... Read More Ag Genetics Startup Meiogenix Joins McGovern Center April 13, 2022 ... Read More Koffman Collaborates on Course to Support Black Business Owners April 1, 2022 ... Read More 1 2 3 4 5 6 7 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern"
+    },
+    {
+      "id": "check-page-b8c0c863ad",
+      "url": "https://www.ststartup.com/news-updates/page/4/",
+      "page": "batches",
+      "excerpt": "Read More 1 2 3 4 5 6 7 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation."
+    },
+    {
+      "id": "check-page-291d96cb38",
+      "url": "https://www.ststartup.com/news-updates/page/4/",
+      "page": "batches",
+      "excerpt": "Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible."
+    },
+    {
+      "id": "check-page-8ec3da8d45",
+      "url": "https://www.ststartup.com/news-updates/page/4/",
+      "page": "batches",
+      "excerpt": "Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on manufacturing and business planning, along with a team dedicated to making manufacturing easier."
+    },
+    {
+      "id": "check-page-baf6a53b4b",
+      "url": "https://www.ststartup.com/news-updates/page/4/",
+      "page": "batches",
+      "excerpt": "Visit Website × ClimateTech Prototyping Hardware Accelerator Led by Rev: Ithaca Startup Works and supported by NYSERDA, the ClimateTech Prototyping Hardware Accelerator supports climate technology startups in a like-minded cohort where they are matched with clean energy and clean tech mentors and learn from industry experts."
+    },
+    {
+      "id": "check-page-8dabf663d8",
+      "url": "https://www.ststartup.com/news-updates/page/4/",
+      "page": "batches",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-a171b15ad1",
+      "url": "https://www.ststartup.com/news-updates/page/4/",
+      "page": "batches",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-6d7b7a716d",
+      "url": "https://www.ststartup.com/news-updates/page/4/",
+      "page": "batches",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Justin Smithline Justin Smithline is a technology entrepreneur who has spent more than 15 years growing successful enterprise technology companies, with a professional focus on sales, product development, and marketing."
+    },
+    {
+      "id": "check-page-bee7577ab3",
+      "url": "https://www.ststartup.com/news-updates/page/4/",
+      "page": "batches",
+      "excerpt": "Although primarily an operator, Justin is also an active investor who has backed startups with a combined enterprise exit value exceeding $1.2 billion."
+    },
+    {
+      "id": "check-page-49aac4da6a",
+      "url": "https://www.ststartup.com/news-updates/page/4/",
+      "page": "batches",
+      "excerpt": "He is currently a Partner at Entrepreneurs Roundtable Accelerator, a seed VC fund and accelerator based in NYC."
+    },
+    {
+      "id": "check-page-59bafd2a6a",
+      "url": "https://www.ststartup.com/news-updates/page/4/",
+      "page": "batches",
+      "excerpt": "Justin also helped lead the successful private equity backed carve out and turnaround of Backstage, a leading B2B media portal for the performing arts community, where he led all sales, product development, and technology."
+    },
+    {
+      "id": "check-page-7216d23b5d",
+      "url": "https://www.ststartup.com/news-updates/page/4/",
+      "page": "batches",
+      "excerpt": "Justin holds an MBA from Cornell University. × Alex Hagen Alex Hagen, a serial entrepreneur, joined STSA as an Entrepreneur in Residence."
+    },
+    {
+      "id": "check-page-be9b56d0ae",
+      "url": "https://www.ststartup.com/news-updates/page/4/",
+      "page": "batches",
+      "excerpt": "Previously the Director of the Southern Tier Clean Energy Incubator, Hagen is also currently CEO at ShrubBucket.com, an online order aggregation business that has the goal of disrupting the gardening industry."
+    },
+    {
+      "id": "check-page-c0392a97a2",
+      "url": "https://www.ststartup.com/news-updates/page/5/",
+      "page": "batches",
+      "excerpt": "News – Page 5 – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports News Startup Granted EPA Registration for Disinfectant System February 16, 2022 ... Read More Koffman Southern Tier Incubator Awarded $1.6M EDA Grant January 20, 2022 ... Read More SunTegra Solar Invests in Binghamton Economy November 30, 2021 ... Read More Nutrition Startup on the Rise with Retail Launch August 31, 2021 ... Read More EthosGen Selected as a Finalist in Amazon Clean Energy Accelerator August 31, 2021 ... Read More Nancy Kirby Shares Insights on Leadership and Entrepreneurship May 12, 2021 ... Read More iM3NY Secures $85M to Build Lithium-ion Gigafactory in the Southern Tier April 27, 2021 ... Read More Cloud-Optimization Startup Secures $5 Million in Seed Funding April 20, 2021 ... Read More Startup Installs Innovative Solar Tech at Cornell April 8, 2021 ... Read More E-commerce Startup Rosie Secures $10M in Financing March 2, 2021 ... Read More 1 2 3 4 5 6 7 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance"
+    },
+    {
+      "id": "check-page-ab709c8cec",
+      "url": "https://www.ststartup.com/news-updates/page/5/",
+      "page": "batches",
+      "excerpt": "Read More 1 2 3 4 5 6 7 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation."
+    },
+    {
+      "id": "check-page-fd14e72a00",
+      "url": "https://www.ststartup.com/news-updates/page/5/",
+      "page": "batches",
+      "excerpt": "Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible."
+    },
+    {
+      "id": "check-page-abb6182c59",
+      "url": "https://www.ststartup.com/news-updates/page/5/",
+      "page": "batches",
+      "excerpt": "Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on manufacturing and business planning, along with a team dedicated to making manufacturing easier."
+    },
+    {
+      "id": "check-page-08be6f8e29",
+      "url": "https://www.ststartup.com/news-updates/page/5/",
+      "page": "batches",
+      "excerpt": "Visit Website × ClimateTech Prototyping Hardware Accelerator Led by Rev: Ithaca Startup Works and supported by NYSERDA, the ClimateTech Prototyping Hardware Accelerator supports climate technology startups in a like-minded cohort where they are matched with clean energy and clean tech mentors and learn from industry experts."
+    },
+    {
+      "id": "check-page-c423157baa",
+      "url": "https://www.ststartup.com/news-updates/page/5/",
+      "page": "batches",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-79949db5e5",
+      "url": "https://www.ststartup.com/news-updates/page/5/",
+      "page": "batches",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-338e61feb3",
+      "url": "https://www.ststartup.com/news-updates/page/5/",
+      "page": "batches",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Justin Smithline Justin Smithline is a technology entrepreneur who has spent more than 15 years growing successful enterprise technology companies, with a professional focus on sales, product development, and marketing."
+    },
+    {
+      "id": "check-page-ea9c56644d",
+      "url": "https://www.ststartup.com/news-updates/page/5/",
+      "page": "batches",
+      "excerpt": "Although primarily an operator, Justin is also an active investor who has backed startups with a combined enterprise exit value exceeding $1.2 billion."
+    },
+    {
+      "id": "check-page-8bf870c542",
+      "url": "https://www.ststartup.com/news-updates/page/5/",
+      "page": "batches",
+      "excerpt": "He is currently a Partner at Entrepreneurs Roundtable Accelerator, a seed VC fund and accelerator based in NYC."
+    },
+    {
+      "id": "check-page-d35fbbfab5",
+      "url": "https://www.ststartup.com/news-updates/page/5/",
+      "page": "batches",
+      "excerpt": "Justin also helped lead the successful private equity backed carve out and turnaround of Backstage, a leading B2B media portal for the performing arts community, where he led all sales, product development, and technology."
+    },
+    {
+      "id": "check-page-10bc4b0cf5",
+      "url": "https://www.ststartup.com/news-updates/page/5/",
+      "page": "batches",
+      "excerpt": "Justin holds an MBA from Cornell University. × Alex Hagen Alex Hagen, a serial entrepreneur, joined STSA as an Entrepreneur in Residence."
+    },
+    {
+      "id": "check-page-83eb7b99ab",
+      "url": "https://www.ststartup.com/news-updates/page/5/",
+      "page": "batches",
+      "excerpt": "Previously the Director of the Southern Tier Clean Energy Incubator, Hagen is also currently CEO at ShrubBucket.com, an online order aggregation business that has the goal of disrupting the gardening industry."
+    },
+    {
+      "id": "check-page-881afe01c6",
+      "url": "https://www.ststartup.com/news-updates/page/6/",
+      "page": "batches",
+      "excerpt": "News – Page 6 – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports News Dimensional Energy Selected as $20M Finalist in Carbon X Prize February 3, 2021 ... Read More Student Startup Turns Bottles into Buildings with Sustainable Cement September 9, 2020 ... Read More KSTI Welcomes Sodium-Ion Battery Startup September 9, 2020 ... Read More Antimicrobial Tech Startup Receives NSF Funding to Fight COVID-19 June 17, 2020 ... Read More Enduraphin Scores First Athlete Nico Sturm June 25, 2019 ... Read More Second-Annual Startup Summit Hosted By Koffman Southern Tier Incubator May 14, 2019 ... Read More Rev Shepherds Growth of New Solar Grazing Company May 9, 2019 ... Read More IncubatorWorks VETS Program Helps Veteran Entrepreneurs Launch Businesses May 8, 2019 ... Read More Year One: The Southern Tier Start-Up Summit 2018 May 17, 2018 ... Read More Support for Regional Minority and Women Business Owners May 16, 2018 ... Read More 1 2 3 4 5 6 7 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026"
+    },
+    {
+      "id": "check-page-ec6f2da718",
+      "url": "https://www.ststartup.com/news-updates/page/6/",
+      "page": "batches",
+      "excerpt": "Read More 1 2 3 4 5 6 7 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation."
+    },
+    {
+      "id": "check-page-cb8eb0a205",
+      "url": "https://www.ststartup.com/news-updates/page/6/",
+      "page": "batches",
+      "excerpt": "Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible."
+    },
+    {
+      "id": "check-page-f0ccd7ed5e",
+      "url": "https://www.ststartup.com/news-updates/page/6/",
+      "page": "batches",
+      "excerpt": "Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on manufacturing and business planning, along with a team dedicated to making manufacturing easier."
+    },
+    {
+      "id": "check-page-8ca2c22b9e",
+      "url": "https://www.ststartup.com/news-updates/page/6/",
+      "page": "batches",
+      "excerpt": "Visit Website × ClimateTech Prototyping Hardware Accelerator Led by Rev: Ithaca Startup Works and supported by NYSERDA, the ClimateTech Prototyping Hardware Accelerator supports climate technology startups in a like-minded cohort where they are matched with clean energy and clean tech mentors and learn from industry experts."
+    },
+    {
+      "id": "check-page-a8c9dedf4d",
+      "url": "https://www.ststartup.com/news-updates/page/6/",
+      "page": "batches",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-7f5ffda211",
+      "url": "https://www.ststartup.com/news-updates/page/6/",
+      "page": "batches",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-b07c0d8193",
+      "url": "https://www.ststartup.com/news-updates/page/6/",
+      "page": "batches",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Justin Smithline Justin Smithline is a technology entrepreneur who has spent more than 15 years growing successful enterprise technology companies, with a professional focus on sales, product development, and marketing."
+    },
+    {
+      "id": "check-page-2907adb74f",
+      "url": "https://www.ststartup.com/news-updates/page/6/",
+      "page": "batches",
+      "excerpt": "Although primarily an operator, Justin is also an active investor who has backed startups with a combined enterprise exit value exceeding $1.2 billion."
+    },
+    {
+      "id": "check-page-a396cd4901",
+      "url": "https://www.ststartup.com/news-updates/page/6/",
+      "page": "batches",
+      "excerpt": "He is currently a Partner at Entrepreneurs Roundtable Accelerator, a seed VC fund and accelerator based in NYC."
+    },
+    {
+      "id": "check-page-8d1cfaf892",
+      "url": "https://www.ststartup.com/news-updates/page/6/",
+      "page": "batches",
+      "excerpt": "Justin also helped lead the successful private equity backed carve out and turnaround of Backstage, a leading B2B media portal for the performing arts community, where he led all sales, product development, and technology."
+    },
+    {
+      "id": "check-page-eb0ca1264b",
+      "url": "https://www.ststartup.com/news-updates/page/6/",
+      "page": "batches",
+      "excerpt": "Justin holds an MBA from Cornell University. × Alex Hagen Alex Hagen, a serial entrepreneur, joined STSA as an Entrepreneur in Residence."
+    },
+    {
+      "id": "check-page-a1ef67cf50",
+      "url": "https://www.ststartup.com/news-updates/page/6/",
+      "page": "batches",
+      "excerpt": "Previously the Director of the Southern Tier Clean Energy Incubator, Hagen is also currently CEO at ShrubBucket.com, an online order aggregation business that has the goal of disrupting the gardening industry."
+    },
+    {
+      "id": "check-page-89be202b9e",
+      "url": "https://www.ststartup.com/news-updates/page/7/",
+      "page": "batches",
+      "excerpt": "News – Page 7 – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports News Am I Eligible for Tax Benefits From START-UP NY? March 7, 2016 ... Read More 1 2 3 4 5 6 7 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation. Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible. Upon completion of our program, participants are positioned to recruit team members, bring on partners, initiate work with contract manufacturers, and pitch to investors. Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on manufacturing and business"
+    },
+    {
+      "id": "check-page-39eeccca0a",
+      "url": "https://www.ststartup.com/news-updates/page/7/",
+      "page": "batches",
+      "excerpt": "Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on manufacturing and business planning, along with a team dedicated to making manufacturing easier."
+    },
+    {
+      "id": "check-page-62af2e4202",
+      "url": "https://www.ststartup.com/news-updates/page/7/",
+      "page": "batches",
+      "excerpt": "Visit Website × ClimateTech Prototyping Hardware Accelerator Led by Rev: Ithaca Startup Works and supported by NYSERDA, the ClimateTech Prototyping Hardware Accelerator supports climate technology startups in a like-minded cohort where they are matched with clean energy and clean tech mentors and learn from industry experts."
+    },
+    {
+      "id": "check-page-72355249b3",
+      "url": "https://www.ststartup.com/news-updates/page/7/",
+      "page": "batches",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-fdb0f237d2",
+      "url": "https://www.ststartup.com/news-updates/page/7/",
+      "page": "batches",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-68202d92a7",
+      "url": "https://www.ststartup.com/news-updates/page/7/",
+      "page": "batches",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Justin Smithline Justin Smithline is a technology entrepreneur who has spent more than 15 years growing successful enterprise technology companies, with a professional focus on sales, product development, and marketing."
+    },
+    {
+      "id": "check-page-e7496f3614",
+      "url": "https://www.ststartup.com/news-updates/page/7/",
+      "page": "batches",
+      "excerpt": "Although primarily an operator, Justin is also an active investor who has backed startups with a combined enterprise exit value exceeding $1.2 billion."
+    },
+    {
+      "id": "check-page-42e59cda55",
+      "url": "https://www.ststartup.com/news-updates/page/7/",
+      "page": "batches",
+      "excerpt": "He is currently a Partner at Entrepreneurs Roundtable Accelerator, a seed VC fund and accelerator based in NYC."
+    },
+    {
+      "id": "check-page-097a318fe6",
+      "url": "https://www.ststartup.com/news-updates/page/7/",
+      "page": "batches",
+      "excerpt": "Justin also helped lead the successful private equity backed carve out and turnaround of Backstage, a leading B2B media portal for the performing arts community, where he led all sales, product development, and technology."
+    },
+    {
+      "id": "check-page-d721b7f08a",
+      "url": "https://www.ststartup.com/news-updates/page/7/",
+      "page": "batches",
+      "excerpt": "Justin holds an MBA from Cornell University. × Alex Hagen Alex Hagen, a serial entrepreneur, joined STSA as an Entrepreneur in Residence."
+    },
+    {
+      "id": "check-page-e628574036",
+      "url": "https://www.ststartup.com/news-updates/page/7/",
+      "page": "batches",
+      "excerpt": "Previously the Director of the Southern Tier Clean Energy Incubator, Hagen is also currently CEO at ShrubBucket.com, an online order aggregation business that has the goal of disrupting the gardening industry."
+    },
+    {
+      "id": "check-page-b3f2b5a6d3",
+      "url": "https://www.ststartup.com/news-updates/page/7/",
+      "page": "batches",
+      "excerpt": "Previously, he was the CFO at Renovus Solar during a time of rapid growth from 7 employees to over 60."
+    },
+    {
+      "id": "check-page-0ab9a128f7",
+      "url": "https://www.ststartup.com/news-updates/page/7/",
+      "page": "batches",
+      "excerpt": "Prior to Renovus, Hagen was the founding CEO of Weaver Wind Energy Inc. and raised over $1M in grants and angel capital."
+    },
+    {
+      "id": "check-page-4e731c0001",
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "page": "details",
+      "excerpt": "STSA Benefits – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports The Southern Tier Startup Alliance leverages the contributions of its partner incubators and existing entrepreneurial resources in the region and creates support services where none currently exist. STSA also serves as Launch New York’s representative in the Southern Tier, helping connect startups with funding and mentorship. Partner incubators organize workshops and programming for budding entrepreneurs, while Entrepreneurs in Residence provide 1:1 mentoring to young companies ready to grow. Support from Empire State Development/NYSTAR has helped improve the success rate of startups in our partner incubators by offering incentives and tax benefits through the NYS Innovation Hot Spot program. Incubation & NYS Incubation Benefits Startups in New York State (or those willing to relocate to NYS) may be eligible to apply for tax benefits through the Innovation Hot Spot Program. Learn More About the Benefits. Mentorship The team of Entrepreneurs in Residence (EIRs) come from diverse backgrounds and industries,"
+    },
+    {
+      "id": "check-page-94f61218d6",
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "page": "details",
+      "excerpt": "Mentorship The team of Entrepreneurs in Residence (EIRs) come from diverse backgrounds and industries, providing support to entrepreneurs and startups through all stages: ideation, prototyping, and launch."
+    },
+    {
+      "id": "check-page-6df9eb54bf",
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "page": "details",
+      "excerpt": "In addition to providing 1:1 mentoring to entrepreneurs and startups in the region, EIRs lead workshops and support the entrepreneurial community within and outside of our member incubators."
+    },
+    {
+      "id": "check-page-a17701f37e",
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "page": "details",
+      "excerpt": "Meet the Entrepreneurs in Residence ."
+    },
+    {
+      "id": "check-page-3b06ab4796",
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "page": "details",
+      "excerpt": "Workshops & Events The Southern Tier Startup Alliance helps to connect and mobilize our regional startup community."
+    },
+    {
+      "id": "check-page-09e78d77e1",
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "page": "details",
+      "excerpt": "You can find upcoming events on each incubator’s website."
+    },
+    {
+      "id": "check-page-88a9e950d8",
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "page": "details",
+      "excerpt": "Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation."
+    },
+    {
+      "id": "check-page-7a53f748bb",
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "page": "details",
+      "excerpt": "Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible."
+    },
+    {
+      "id": "check-page-592e0a4c61",
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "page": "details",
+      "excerpt": "Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on manufacturing and business planning, along with a team dedicated to making manufacturing easier."
+    },
+    {
+      "id": "check-page-ff5e99fb60",
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "page": "details",
+      "excerpt": "Visit Website × ClimateTech Prototyping Hardware Accelerator Led by Rev: Ithaca Startup Works and supported by NYSERDA, the ClimateTech Prototyping Hardware Accelerator supports climate technology startups in a like-minded cohort where they are matched with clean energy and clean tech mentors and learn from industry experts."
+    },
+    {
+      "id": "check-page-ba42b83d88",
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "page": "details",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-93f7b62a42",
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "page": "details",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-89dd6fa983",
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "page": "details",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Justin Smithline Justin Smithline is a technology entrepreneur who has spent more than 15 years growing successful enterprise technology companies, with a professional focus on sales, product development, and marketing."
+    },
+    {
+      "id": "check-page-31f9a492a7",
+      "url": "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+      "page": "details",
+      "excerpt": "NYS Benefits You Could Qualify For – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports NYS Benefits You Could Qualify For NY Innovation Hot Spot Tax Benefits NY Innovation Hot Spot Tax Benefits provide tax incentives for a five-year window of exemption from state corporate income tax and state sales tax on purchases. In this period, partners in the company are also eligible to deduct their income from the company. In 2013, New York State created the Innovation Hot Spot program to fund operations in business incubators and extend tax incentives to qualified ventures in participating incubators and accelerators. The Southern Tier Startup Alliance serves as the Innovation Hot Spot in the Southern Tier region. The Department of Taxation and Finance has a detailed memo that further describes the program. Qualifying members/clients of partner incubators may be eligible to apply for Innovation Hot Spot tax benefits, if they meet the following eligibility requirements: The company must be an active member in good standing of a partner incubator, be on a path toward scalable"
+    },
+    {
+      "id": "check-page-c057be3360",
+      "url": "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+      "page": "details",
+      "excerpt": "Qualifying members/clients of partner incubators may be eligible to apply for Innovation Hot Spot tax benefits, if they meet the following eligibility requirements: The company must be an active member in good standing of a partner incubator, be on a path toward scalable development, and must be in the formative or early stage of development."
+    },
+    {
+      "id": "check-page-9846eb5501",
+      "url": "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+      "page": "details",
+      "excerpt": "The company must be a legal entity which is less than five years old, or less than 7 years old for a life sciences company."
+    },
+    {
+      "id": "check-page-b45fba0317",
+      "url": "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+      "page": "details",
+      "excerpt": "From November – January, companies which are members/clients of a Partner Incubator are sent an email from their respective incubator staff/leadership with a link to apply."
+    },
+    {
+      "id": "check-page-840b56f79d",
+      "url": "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+      "page": "details",
+      "excerpt": "Q: What are the partner incubators?"
+    },
+    {
+      "id": "check-page-8d3b9bfb34",
+      "url": "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+      "page": "details",
+      "excerpt": "A: The Center for Life Science Ventures at Cornell University, IncubatorWorks Corning, IncubatorWorks Elmira, Koffman Southern Tier Incubator, Praxis Center for Venture Development, Rev: Ithaca Startup Works, Runway & Spinout Programs at Cornell Tech, and Start-up Suite at Binghamton University are all Partner Incubators."
+    },
+    {
+      "id": "check-page-219086d964",
+      "url": "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+      "page": "details",
+      "excerpt": "So, if your LLC or S-Corp is less than five years old, has less than $1m in revenue, and is generating income, there could be a pretty significant financial benefit to owners by joining one of the STSA’s incubator partners."
+    },
+    {
+      "id": "check-page-9ff41a132f",
+      "url": "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+      "page": "details",
+      "excerpt": "Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation."
+    },
+    {
+      "id": "check-page-9437819b7f",
+      "url": "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+      "page": "details",
+      "excerpt": "Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible."
+    },
+    {
+      "id": "check-page-5fe4d971f6",
+      "url": "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+      "page": "details",
+      "excerpt": "Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on manufacturing and business planning, along with a team dedicated to making manufacturing easier."
+    },
+    {
+      "id": "check-page-38b161cdbd",
+      "url": "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+      "page": "details",
+      "excerpt": "Visit Website × ClimateTech Prototyping Hardware Accelerator Led by Rev: Ithaca Startup Works and supported by NYSERDA, the ClimateTech Prototyping Hardware Accelerator supports climate technology startups in a like-minded cohort where they are matched with clean energy and clean tech mentors and learn from industry experts."
+    },
+    {
+      "id": "check-page-e9af8c3469",
+      "url": "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+      "page": "details",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-ee507d9bcb",
+      "url": "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+      "page": "details",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-8189679a4d",
+      "url": "https://www.ststartup.com/portfolio-item/incubatorworks-corning/",
+      "page": "portfolio",
+      "excerpt": "IncubatorWorks Corning – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports IncubatorWorks Corning IncubatorWorks Corning Date June 14, 2017 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation. Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible. Upon completion of our program, participants are positioned to recruit team members, bring on partners, initiate work with contract manufacturers, and pitch to investors. Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on manufacturing and business planning, along with a"
+    },
+    {
+      "id": "check-page-4dd93ea95e",
+      "url": "https://www.ststartup.com/portfolio-item/koffman-southern-tier-incubator/",
+      "page": "portfolio",
+      "excerpt": "Koffman Southern Tier Incubator – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Koffman Southern Tier Incubator Koffman Southern Tier Incubator Date June 14, 2017 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation. Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible. Upon completion of our program, participants are positioned to recruit team members, bring on partners, initiate work with contract manufacturers, and pitch to investors. Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on manufacturing and"
+    },
+    {
+      "id": "check-page-5939a1ae8c",
+      "url": "https://www.ststartup.com/portfolio-item/mcgovern-center-at-cornell-university/",
+      "page": "portfolio",
+      "excerpt": "McGovern Center at Cornell University – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports McGovern Center at Cornell University McGovern Center at Cornell University Date June 14, 2017 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation. Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible. Upon completion of our program, participants are positioned to recruit team members, bring on partners, initiate work with contract manufacturers, and pitch to investors. Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on"
+    },
+    {
+      "id": "check-page-0b686b1ef3",
+      "url": "https://www.ststartup.com/portfolio-item/rev-ithaca-startup-works/",
+      "page": "portfolio",
+      "excerpt": "Rev: Ithaca Startup Works – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Rev: Ithaca Startup Works Rev: Ithaca Startup Works Date June 14, 2017 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation. Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible. Upon completion of our program, participants are positioned to recruit team members, bring on partners, initiate work with contract manufacturers, and pitch to investors. Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on manufacturing and business planning, along"
+    },
+    {
+      "id": "check-page-63c49255c7",
+      "url": "https://www.ststartup.com/portfolio-item/start-up-suite-at-binghamton-university/",
+      "page": "portfolio",
+      "excerpt": "Start-up Suite at Binghamton University – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Start-up Suite at Binghamton University Start-up Suite at Binghamton University Date June 14, 2017 Pages Benefits NYS Benefits You Could Qualify For Find an Incubator Entrepreneurs-in-Residence Contact © Southern Tier Startup Alliance 2026 This program is administered by the Center for Regional Economic Advancement , a division of Cornell Research & Innovation. Prototyping Hardware Accelerator Rev: Ithaca Startups Works offers a deep dive into prototyping through its summer-long Prototyping Hardware Accelerator that leads product teams through a process for determining if their ideas are commercially desirable, technologically viable, and economically feasible. Upon completion of our program, participants are positioned to recruit team members, bring on partners, initiate work with contract manufacturers, and pitch to investors. Visit Website × Scale for ClimateTech Administered by NextCorps and SecondMuse and supported by NYSERDA, Scale for ClimateTech provides immersive training on"
+    },
+    {
+      "id": "check-page-0ddb62c78c",
+      "url": "https://www.ststartup.com/2024/07/08/2023-investment-report/",
+      "page": "terms",
+      "excerpt": "2023 Investment Report – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports 2023 Investment Report 08 Jul 2023 Investment Report by Admin in Investment Report Comments Small Business Innovation Research (SBIR) and Small Business Technology Transfer (STTR) Note: These are federal programs that provide non-dilutive seed funding to startup companies for early-stage product development. Read more about SBIR and STTR grants. ATC-NY INC. , headquartered in Ithaca, was awarded a Phase I SBIR grant totaling $99,972.00 through the Department of Defense in September 2023. Read more about ATC-NY INC.’s grant. BrailleWear , headquartered in Ithaca, was awarded a Phase I SBIR grant totaling $274,999 through the National Science Foundation in May 2023. Read more about Braille Wear’s grant. Carbon To Stone, Inc. , headquartered in Ithaca, was awarded a Phase I SBIR grant totaling $250,000 through the Department of Energy in July 2023. Read more about Carbon To Stone, Inc.’s grant. Carbon To Stone, Inc. , headquartered in Ithaca, was awarded a Phase I STTR grant totaling $250,000 through the"
+    },
+    {
+      "id": "check-page-970c984705",
+      "url": "https://www.ststartup.com/2024/07/08/q1-2024-investment-report-2/",
+      "page": "terms",
+      "excerpt": "Q1 2024 Investment Report – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Q1 2024 Investment Report 08 Jul Q1 2024 Investment Report by Admin in Investment Report Comments Investment in the Southern Tier will be distributed on a quarterly basis to highlight the significant startup investment activity in the Southern Tier. Note: while some information is made publicly available in real time, certain fundraising activities may be reported later, leading to potential fluctuations beyond the reporting timeframe. $20,000 is the threshold for determining which funding events to include. Small Business Innovation Research (SBIR) and Small Business Technology Transfer (STTR) Note: These are federal programs that provide non-dilutive seed funding to startup companies for early-stage product development. Read more about SBIR and STTR grants. Soctera , headquartered in Ithaca, was awarded a Phase II SBIR grant totaling $1,000,000 through the National Science Foundation in March 2024. Read more about Soctera’s grant . Total: $1,000,000 Investments EMPEQ (Empower Equity),"
+    },
+    {
+      "id": "check-page-3d7e1f328c",
+      "url": "https://www.ststartup.com/2024/10/11/q2-2024-investment-report/",
+      "page": "terms",
+      "excerpt": "Q2 2024 Investment Report – Southern Tier Startup Alliance Contact Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Home Find an Incubator About Benefits Entrepreneurs-in-Residence Operational Team News Investment Reports Q2 2024 Investment Report 11 Oct Q2 2024 Investment Report by Mariellen Brown in Investment Report Comments Investment in the Southern Tier will be distributed on a quarterly basis to highlight the significant startup investment activity in the Southern Tier. Note: while some information is made publicly available in real time, certain fundraising activities may be reported later, leading to potential fluctuations beyond the reporting timeframe. $20,000 is the threshold for determining which funding events to include. Investments Agri-trak , headquartered in Pultneyville, raised $180,000 of Series 1 venture funding from Launch NY, The W Fund, JHH vc, and other investors in July, 2024. Read more about Agri-Track’s funding. CareTech Human , headquartered in Ithaca, raised $175,000 of seed funding from Launch NY in April, 2024. Read more about CareTech Human’s funding. Edenesque, headquartered in Kingston, raised $175,000 of venture funding through a combination of equity and convertible debt from"
     }
   ],
   "findings": {
@@ -35,8 +1204,140 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "7",
+        "evidenceId": "check-duration-63acaf5a97"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-b0aa7a9bf0"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-6017d75c1a"
+      }
+    ],
+    "location": [
+      {
+        "value": "NYC",
+        "evidenceId": "check-location-f5c3838e7c"
+      },
+      {
+        "value": "Ithaca",
+        "evidenceId": "check-location-787e45b9b6"
+      },
+      {
+        "value": "Pultneyville",
+        "evidenceId": "check-location-16aacaae29"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "News Investment Reports News KLAW Industries and the Koffman Receive $125,000 Award from DOE August 22, 2023 ... Read More Koffman Southern Tier",
+        "evidenceId": "check-deal-5d591fb819"
+      },
+      {
+        "value": "Grants Carbon to Stone, Inc. , headquartered in Ithaca, received $350,000 of grant funding from Carbontech Development Initiative in September",
+        "evidenceId": "check-deal-08386f171d"
+      },
+      {
+        "value": "grant. . Ecolectro Inc. , headquartered in Ithaca, received $1.08 million of grant funding from NYSERDA in August 2023. Read more about",
+        "evidenceId": "check-deal-fd38d5655c"
+      },
+      {
+        "value": "Ecolectro Inc.’s grant. Havos , headquartered in Ithaca, received $320,000 of grant funding from the Rockefeller Foundation in May 2023. Read",
+        "evidenceId": "check-deal-ace14c6d04"
+      },
+      {
+        "value": "Opal Wearable’s grant. Soctera , headquartered in Ithaca, received $250,000 of grant funding from the Air Force Research Lab in April 2023. Read",
+        "evidenceId": "check-deal-4d3f920156"
+      },
+      {
+        "value": "$2,280,000 Grants Hempitecture* , headquartered in Idaho, received $1.1 million of grant funding from the State of New York in June, 2024. Read more",
+        "evidenceId": "check-deal-ba23fb59f6"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "125000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-5d591fb819"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "350000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-08386f171d"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "1080000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-fd38d5655c"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "320000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-ace14c6d04"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "250000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-4d3f920156"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "1100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-ba23fb59f6"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

@@ -1,6 +1,6 @@
 {
   "programId": "alchemist",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.alchemist.vc/about",
@@ -35,22 +35,6 @@
       "origin": "official"
     },
     {
-      "url": "https://www.alchemist.vc/blog/influencer-series-are-machines-already-conscious-what-founders-need-to-know-about-the-future-of-intelligence",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.alchemist.vc/blog/influencer-series-why-quantum-computing-is-about-to-get-very-real",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.alchemist.vc/blog/meet-the-inaugural-alchemist-chicago-cohort",
       "page": "batches",
       "anchor": "",
@@ -59,16 +43,16 @@
       "origin": "official"
     },
     {
-      "url": "https://www.alchemist.vc/blog/scaling-ai-across-borders-how-bitgrit-leveraged-alchemist-programs-to-enter-the-us-market",
-      "page": "details",
+      "url": "https://www.alchemist.vc/blog/startups-stop-acting-like-consultants-set-up-pocs-that-lead-to-real-deals",
+      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.alchemist.vc/blog/startups-stop-acting-like-consultants-set-up-pocs-that-lead-to-real-deals",
-      "page": "terms",
+      "url": "https://www.alchemist.vc/chicago",
+      "page": "other",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -94,7 +78,15 @@
       "url": "https://www.alchemist.vc/founders",
       "page": "details",
       "anchor": "Overview",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.alchemist.vc/japan",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -115,6 +107,14 @@
       "origin": "official"
     },
     {
+      "url": "https://www.alchemist.vc/podcasts-archive/eric-ries-incorruptible-companies-key-takeaways",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.alchemist.vc/podcasts-archive/jobs-act-investment-crowdfunding-customer-investors",
       "page": "terms",
       "anchor": "",
@@ -127,6 +127,22 @@
       "page": "portfolio",
       "anchor": "Portfolio",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.alchemist.vc/portfolio-2",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.alchemist.vc/programs",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

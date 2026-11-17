@@ -1,31 +1,19 @@
 {
   "programId": "station-f",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://stationf.co/",
+    "https://stationf.co/terms",
+    "https://stationf.co/about",
+    "https://stationf.co/programs",
+    "https://landingzone-apply.stationf.co",
+    "https://stationf.co/programs/in-house",
+    "https://stationf.co/programs/resources",
     "https://stationf.co/news/7-common-mistakes-to-avoid-when-applying-to-the-founders-program",
     "https://stationf.co/news/applications-for-fighters-program-season-5-open-today",
-    "https://stationf.co/news/applications-of-blockchain-technology-beyond-cryptocurrencies",
-    "https://stationf.co/news/founders-program-season-9-useful-tips-for-a-successful-application",
-    "https://stationf.co/news/founders-programs-applications-for-season-9-open-today",
-    "https://stationf.co/news/how-covid-19-is-impacting-startup-applications-trends",
-    "https://stationf.co/news/leeway-future-40-2020-raises-42m-to-build-its-modern-and-collaborative-application-for-contract-management",
-    "https://stationf.co/news/station-f-opens-applications-for-founders-program-and-fighters-program-next-seasons",
-    "https://stationf.co/news/angel-investing-vc-and-scout-programs-how-is-investment-taught",
-    "https://stationf.co/news/diversity-in-investment-with-joshua-olusanya-notion-capital-and-daisy-onubogu-backed-vc",
-    "https://stationf.co/news/saul-klein-localglobe-there-will-be-a-lot-of-investment-activity-in-the-coming-months",
-    "https://stationf.co/terms",
-    "https://stationf.co/news/batch3-founders",
-    "https://stationf.co/news/covid-19-updates-regarding-station-f"
+    "https://stationf.co/news/applications-of-blockchain-technology-beyond-cryptocurrencies"
   ],
   "evidence": [
-    {
-      "id": "check-announced-1743de4232",
-      "url": "https://stationf.co/news/how-covid-19-is-impacting-startup-applications-trends",
-      "title": "Station F — application page",
-      "excerpt": "remains more or less unchanged, meaning applicants for July had to apply by April 5. Procedure unchanged, just more flexibility While the review",
-      "page": "application"
-    },
     {
       "id": "check-announced-f0191b747a",
       "url": "https://stationf.co/news/7-common-mistakes-to-avoid-when-applying-to-the-founders-program",
@@ -34,53 +22,74 @@
       "page": "application"
     },
     {
-      "id": "check-duration-01330965ae",
-      "url": "https://stationf.co/news/station-f-opens-applications-for-founders-program-and-fighters-program-next-seasons",
+      "id": "check-duration-11098f732c",
+      "url": "https://landingzone-apply.stationf.co",
       "title": "Station F — application page",
-      "excerpt": "and benefit from peer-to-peer learning for 6 months to 2 years depending of their needs. Since the",
+      "excerpt": "batch? + No. Founders program selection happens 2 weeks before each batch starts, after reviewing every",
       "page": "application"
     },
     {
-      "id": "check-duration-0b85243bf4",
-      "url": "https://stationf.co/news/leeway-future-40-2020-raises-42m-to-build-its-modern-and-collaborative-application-for-contract-management",
+      "id": "check-duration-138ad63139",
+      "url": "https://landingzone-apply.stationf.co",
       "title": "Station F — application page",
-      "excerpt": "Evaneos, Ifop and Voodoo – and 500 users. In 8 months, more than 10.000 contracts have already been",
+      "excerpt": "F? + Yes, if your startup spent less than 6 months in a STATION F program. Startups that stayed",
       "page": "application"
     },
     {
-      "id": "check-duration-4f76f0b5df",
-      "url": "https://stationf.co/news/saul-klein-localglobe-there-will-be-a-lot-of-investment-activity-in-the-coming-months",
-      "title": "Station F — terms page",
-      "excerpt": "to survive through troubled waters for the next 18 months. If they had planned to raise funds, it would be",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-6f129faad6",
-      "url": "https://stationf.co/news/founders-program-season-9-useful-tips-for-a-successful-application",
+      "id": "check-duration-30c54f6356",
+      "url": "https://landingzone-apply.stationf.co",
       "title": "Station F — application page",
-      "excerpt": "I read something like: “ We’ll reach 5k€ MRR in 12 months easy. ” Well – If it’s that easy, why aren’t you",
+      "excerpt": "seat on the world's biggest startup campus. 1 month's notice departure 1 desk = 1 person Add desks",
       "page": "application"
     },
     {
-      "id": "check-duration-d8d51bbd72",
-      "url": "https://stationf.co/news/founders-program-season-9-useful-tips-for-a-successful-application",
+      "id": "check-duration-5773efbc1a",
+      "url": "https://stationf.co/programs/in-house",
+      "title": "Station F — program page",
+      "excerpt": "top startups: targeting €1M in revenue within 6 months Powered by the best: from VCs to LLM, GPU,",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-fb41781fc4",
+      "url": "https://stationf.co/programs/in-house",
+      "title": "Station F — program page",
+      "excerpt": "aiming to go fast and far. Duration: 3 to 18 months The most experienced entrepreneurs on campus",
+      "page": "details"
+    },
+    {
+      "id": "check-format-69b78e3b04",
+      "url": "https://stationf.co/programs/in-house",
+      "title": "Station F — program page",
+      "excerpt": "or underprivileged backgrounds Location: STATION F Format: Hybrid Price: Free Language: French Join Now Applications are",
+      "page": "details"
+    },
+    {
+      "id": "check-format-cb6defbae0",
+      "url": "https://landingzone-apply.stationf.co",
       "title": "Station F — application page",
-      "excerpt": "context. Progress made and plan for the next 6 months: not your grocery shopping list Yes, you read",
+      "excerpt": "social media and marketing. Landing → P26 The AI coach for in-person field reps. Landing → S26 A digital twin of public",
       "page": "application"
     },
     {
-      "id": "check-format-1028247d8e",
-      "url": "https://stationf.co/news/how-covid-19-is-impacting-startup-applications-trends",
-      "title": "Station F — application page",
-      "excerpt": "to buy. – Providing health support at scale. While work in remote is booming, isolation is following the same path and",
-      "page": "application"
+      "id": "check-format-de758a3d0d",
+      "url": "https://stationf.co/programs/in-house",
+      "title": "Station F — program page",
+      "excerpt": "Tech startups (early stage) Location: STATION F Format: Hybrid – minimum presence is required Price: Starting from €259 /",
+      "page": "details"
     },
     {
-      "id": "check-format-1c30addb69",
-      "url": "https://stationf.co/news/how-covid-19-is-impacting-startup-applications-trends",
-      "title": "Station F — application page",
-      "excerpt": "be able to move away from physical offices and consider remote working, while making efficiency at the core. It goes from",
-      "page": "application"
+      "id": "check-format-fdf2d08724",
+      "url": "https://stationf.co/programs/in-house",
+      "title": "Station F — program page",
+      "excerpt": "the most promising projects will move on to Round 2. Hybrid format: accessible both online and on-site Designed to fit",
+      "page": "details"
+    },
+    {
+      "id": "check-location-29ca6fff7d",
+      "url": "https://stationf.co/programs/resources",
+      "title": "Station F — program page",
+      "excerpt": "old desk Our emblematic building is based in Central Paris, and it happens to be a historical",
+      "page": "details"
     },
     {
       "id": "check-location-6d9da4ee68",
@@ -90,13 +99,6 @@
       "page": "details"
     },
     {
-      "id": "check-location-90e116f109",
-      "url": "https://stationf.co/news/diversity-in-investment-with-joshua-olusanya-notion-capital-and-daisy-onubogu-backed-vc",
-      "title": "Station F — terms page",
-      "excerpt": "AfricInvest Capital, a growth fund based in Tunisia; a consumer-tech VC fund in Indonesia;",
-      "page": "terms"
-    },
-    {
       "id": "check-name-0591cd8fca",
       "url": "https://stationf.co/",
       "title": "Station F — homepage",
@@ -104,11 +106,11 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-352ab418e9",
-      "url": "https://stationf.co/news/saul-klein-localglobe-there-will-be-a-lot-of-investment-activity-in-the-coming-months",
-      "title": "Station F — terms page",
+      "id": "check-portfolio-217510a830",
+      "url": "https://stationf.co/programs/in-house",
+      "title": "Station F — program page",
       "excerpt": "Startups → https://stationf.co/startups",
-      "page": "terms"
+      "page": "details"
     },
     {
       "id": "check-portfolio-42b5002c45",
@@ -118,25 +120,11 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-489e504f3e",
-      "url": "https://stationf.co/news/diversity-in-investment-with-joshua-olusanya-notion-capital-and-daisy-onubogu-backed-vc",
-      "title": "Station F — terms page",
-      "excerpt": "Startups → https://stationf.co/startups",
-      "page": "terms"
-    },
-    {
       "id": "check-portfolio-4bf5561863",
       "url": "https://stationf.co/terms",
       "title": "Station F — terms page",
       "excerpt": "Startups → https://stationf.co/startups",
       "page": "terms"
-    },
-    {
-      "id": "check-portfolio-6117ae343c",
-      "url": "https://stationf.co/news/founders-programs-applications-for-season-9-open-today",
-      "title": "Station F — application page",
-      "excerpt": "Startups → https://stationf.co/startups",
-      "page": "application"
     },
     {
       "id": "check-portfolio-66a148d3be",
@@ -146,32 +134,18 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-71af153c86",
+      "url": "https://stationf.co/about",
+      "title": "Station F — program page",
+      "excerpt": "Startups → https://stationf.co/startups",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-72f2277854",
       "url": "https://stationf.co/",
       "title": "Station F — homepage",
       "excerpt": "Startups → https://stationf.co/startups",
       "page": "details"
-    },
-    {
-      "id": "check-portfolio-99fdbc030a",
-      "url": "https://stationf.co/news/founders-program-season-9-useful-tips-for-a-successful-application",
-      "title": "Station F — application page",
-      "excerpt": "Startups → https://stationf.co/startups",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-b37a967694",
-      "url": "https://stationf.co/news/angel-investing-vc-and-scout-programs-how-is-investment-taught",
-      "title": "Station F — terms page",
-      "excerpt": "Startups → https://stationf.co/startups",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-b4afa8877d",
-      "url": "https://stationf.co/news/station-f-opens-applications-for-founders-program-and-fighters-program-next-seasons",
-      "title": "Station F — application page",
-      "excerpt": "Startups → https://stationf.co/startups",
-      "page": "application"
     },
     {
       "id": "check-portfolio-bd60243794",
@@ -181,11 +155,11 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-c93badb1bc",
-      "url": "https://stationf.co/news/leeway-future-40-2020-raises-42m-to-build-its-modern-and-collaborative-application-for-contract-management",
-      "title": "Station F — application page",
+      "id": "check-portfolio-bf996e2c78",
+      "url": "https://stationf.co/programs",
+      "title": "Station F — program page",
       "excerpt": "Startups → https://stationf.co/startups",
-      "page": "application"
+      "page": "details"
     },
     {
       "id": "check-portfolio-db0f2da604",
@@ -195,25 +169,25 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-ec9c8c1cbf",
-      "url": "https://stationf.co/news/how-covid-19-is-impacting-startup-applications-trends",
-      "title": "Station F — application page",
+      "id": "check-portfolio-ee4f7a07be",
+      "url": "https://stationf.co/programs/resources",
+      "title": "Station F — program page",
       "excerpt": "Startups → https://stationf.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-rolling-9ab804982d",
+      "url": "https://landingzone-apply.stationf.co",
+      "title": "Station F — application page",
+      "excerpt": "at STATION F. Take off anywhere. Apply now ↗ Now open · applications reviewed on a rolling basis The space Work at the heart of the campus. Flex office space in the CREATE",
       "page": "application"
     },
     {
-      "id": "check-portfolio-f61849fbb8",
-      "url": "https://stationf.co/news/batch3-founders",
-      "title": "Station F — batches page",
-      "excerpt": "Startups → https://stationf.co/startups",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-ff4b9ec36e",
-      "url": "https://stationf.co/news/covid-19-updates-regarding-station-f",
-      "title": "Station F — batches page",
-      "excerpt": "Startups → https://stationf.co/startups",
-      "page": "batches"
+      "id": "check-rolling-f2bcceaa17",
+      "url": "https://stationf.co/programs/in-house",
+      "title": "Station F — program page",
+      "excerpt": "Format: Hybrid Price: Free Language: French Join Now Applications are reviewed on a rolling basis The most selective program on campus built for early-stage startups aiming to",
+      "page": "details"
     },
     {
       "id": "check-route-46b4d6a3bd",
@@ -223,11 +197,18 @@
       "page": "details"
     },
     {
-      "id": "check-route-6b197d9600",
-      "url": "https://stationf.co/news/founders-program-season-9-useful-tips-for-a-successful-application",
-      "title": "Station F — application page",
-      "excerpt": "applying to the STATION F Founders Program → https://stationf.co/news/founders-programs-applications-for-season-9-open-today/",
-      "page": "application"
+      "id": "check-route-9e484c245f",
+      "url": "https://stationf.co/programs",
+      "title": "Station F — program page",
+      "excerpt": "Join → https://fai-apply.stationf.co",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bbd5e6e038",
+      "url": "https://stationf.co/programs",
+      "title": "Station F — program page",
+      "excerpt": "Join → https://landingzone-apply.stationf.co",
+      "page": "details"
     },
     {
       "id": "check-route-d106397305",
@@ -235,6 +216,20 @@
       "title": "Station F — application page",
       "excerpt": "apply online on STATION F’s website → https://stationf.co/apply?program=fighters",
       "page": "application"
+    },
+    {
+      "id": "check-route-da9970442a",
+      "url": "https://stationf.co/programs",
+      "title": "Station F — program page",
+      "excerpt": "Join → https://www.f6s.com/shakeupfactory/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-status-330d2c7bba",
+      "url": "https://stationf.co/programs/in-house",
+      "title": "Station F — program page",
+      "excerpt": "and support entrepreneurs at every stage – from idea to scale. Join Now Batch started on September 15, 2026 Applications are now closed, stay tuned for the next round! Europe's premier place to build AI. Built for top startups: targeting €1M in",
+      "page": "details"
     }
   ],
   "pageQuotes": [
@@ -243,6 +238,252 @@
       "url": "https://stationf.co/",
       "page": "details",
       "excerpt": "STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact The world's biggest startup campus There's no better place to build: from idea to scale, STATION F gives 1,000+ startups access to a high-impact ecosystem and a network of top-tier partners, entrepreneurs, and funds. Join 9,000 startups €1B+ raised / year 30+ programs 700+ investors Proudly built at STATION F View more From our campus to the global stage — meet some of STATION F's most successful startups. Unicorn Unicorn 70M users globally Raised €50M Series B Raised €26M Series B Raised $73M Series B Acquired by Hugging Face Acquired by H Company Unicorn Acquired by Samsung Medison Raised $31M Series A Raised €25M Series A Previous slide Next slide Join one of STATION F's 30+ startup programs Our campus is home to over 30 startup programs run by STATION F as well as top-tier partners. Discover all Programs Join our In-house Programs What you get at STATION F STATION F is not your average place to work. Unparalleled international business contacts Business is largely relationship-based. If you are looking to meet someone - whether they be CEO or Prime Minister - you have a pretty good chance of meeting them at STATION F. This is one of the most international communities in Europe. Be surrounded by leading startups & companies Build your startup alongside 1,000 cutting-edge"
+    },
+    {
+      "id": "check-page-eb8bf0994d",
+      "url": "https://stationf.co/",
+      "page": "details",
+      "excerpt": "Our emblematic building is based in Central Paris, and it happens to be a historical monument."
+    },
+    {
+      "id": "check-page-68590b08f0",
+      "url": "https://stationf.co/",
+      "page": "details",
+      "excerpt": "Access world-first programs in deeptech, AI, and quantum, plus in-house experts to help with visas, funding, and admin."
+    },
+    {
+      "id": "check-page-76c1da6ef7",
+      "url": "https://stationf.co/",
+      "page": "details",
+      "excerpt": "5 Parvis Alan Turing, 75013 Paris, France Follow us Programs In-house programs Resources Events Spaces News About Contact Visits Sales Press Sites Future 40 Flatmates Newsletter I agree to receive regular information and news about STATION F."
+    },
+    {
+      "id": "check-page-a10049bffe",
+      "url": "https://stationf.co/terms",
+      "page": "terms",
+      "excerpt": "Terms of Use | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact Terms of Use Definition Words or expressions starting with a capital letter have the following meanings: “General Conditions of use” : means the present general conditions of use applicable to the designated Services. “Newsletter” : means the emails sent on a regular basis to inform about the news regarding the STATION F campus (news, events, etc.). “Privacy Policy” : refers to the privacy policy regarding the processing of personal data of Website users. “Services” : refers to the sending of the Newsletter, the possibility of contacting STATION F via the contact form and, more generally, the browsing on the Website. “Website” : refers to the website at URL “https://stationf.co” and any affiliated sub-domains. “STATION F” : French simplified joint-stock company with sole shareholder (société par actions simplifiée à associé unique), with share capital of €125,393,275, with corporate registration number 794 493 841 RCS Paris and whose registered office is located at 16 rue de la Ville l'Evêque in Paris (75008). “User” : means any person browsing the Website. Article 1: Object The purpose of these General Conditions of use is to specify the rights and responsibilities of the User in his/her use of the Website. They also apply when the User subscribes to the"
+    },
+    {
+      "id": "check-page-61e4fec61a",
+      "url": "https://stationf.co/terms",
+      "page": "terms",
+      "excerpt": "Failing this, the courts of Paris shall have exclusive jurisdiction."
+    },
+    {
+      "id": "check-page-5abbf7deee",
+      "url": "https://stationf.co/terms",
+      "page": "terms",
+      "excerpt": "5 Parvis Alan Turing, 75013 Paris, France Follow us Programs In-house programs Resources Events Spaces News About Contact Visits Sales Press Sites Future 40 Flatmates Newsletter I agree to receive regular information and news about STATION F."
+    },
+    {
+      "id": "check-page-2be2525fb5",
+      "url": "https://stationf.co/about",
+      "page": "details",
+      "excerpt": "About | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact About Long before it was home to startups, STATION F was already a place of innovation. STATION F: innovating since 1927! A monument 1927 The building was built by engineer Eugène Freyssinet, who happens to also be the person who first patented prestressed concrete. The former Halle Freyssinet building was originally a freight station and represented a major breakthrough for its time. Iconic, luminous, and visionary, the building was listed as a historical monument in 2012. A bold idea 2013 Our founder, Xavier Niel, purchased the building with a bold idea: to transform this industrial masterpiece into the world's largest startup campus. His goal? Bring together 1,000 startups under one roof and provide all the services they need to grow. Leading innovation Since 2017 At the time, the idea seemed quite far-fetched – even former President François Hollande wasn't sure whether or not there were 1,000 startups in France. And yet, since opening, that bet has paid off: over 1,000 startups call STATION F home each year, in addition to many world-class partners. Transforming the French ecosystem Since opening, STATION F has played a key role in reshaping the French tech ecosystem. Before, the startup landscape in France was fragmented, siloed, and largely under the radar. By"
+    },
+    {
+      "id": "check-page-0276c1f302",
+      "url": "https://stationf.co/about",
+      "page": "details",
+      "excerpt": "By bringing together top startups and leading innovation partners, STATION F quickly became a main hub for tech in Europe."
+    },
+    {
+      "id": "check-page-0a66118b51",
+      "url": "https://stationf.co/about",
+      "page": "details",
+      "excerpt": "The country has quickly moved up the ranks and now tops the charts in Europe and around the world for innovation."
+    },
+    {
+      "id": "check-page-98fa251617",
+      "url": "https://stationf.co/about",
+      "page": "details",
+      "excerpt": "Today, STATION F is home to the largest AI startup community in Europe."
+    },
+    {
+      "id": "check-page-bbdfcb92b8",
+      "url": "https://stationf.co/about",
+      "page": "details",
+      "excerpt": "5 Parvis Alan Turing, 75013 Paris, France Follow us Programs In-house programs Resources Events Spaces News About Contact Visits Sales Press Sites Future 40 Flatmates Newsletter I agree to receive regular information and news about STATION F."
+    },
+    {
+      "id": "check-page-1d36b2758d",
+      "url": "https://stationf.co/programs",
+      "page": "details",
+      "excerpt": "All Programs | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact Programs Thousands of founders have built here – now it's your turn . Find your perfect program to fit your needs and support your growth in STATION F's unique ecosystem. All Programs In-house Programs Resources Landing A space for early-stage startups to discover STATION F before choosing a program. Generalist Join F/ai The place to build AI. AI Join Fighters STATION F's program for unconventional founders from all backgrounds. No degree? No problem. Generalist Join Founders STATION F's flagship program for early-stage companies. Generalist Join TikTok Online Safety Innovation Program The TikTok Online Safety Innovation Program, in partnership with STATION F, supports startups developing breakthrough technologies that make digital services safer, more trusted and more empowering for everyone. Cybersecurity & Digital Trust Join Future of Tourism by The Royal Commission for AlUla x Galeries Lafayette Join the international acceleration program positioning AlUla as a living laboratory for the future of tourism. Tourism Join Université Paris 1 Panthéon-Sorbonne x IAE Paris-Sorbonne Support entrepreneurs who place humans, societal responsibility, and sustainable innovation at the heart of their projects. Generalist Join Cisco Program by the global leader in secure"
+    },
+    {
+      "id": "check-page-3be618fa4c",
+      "url": "https://stationf.co/programs",
+      "page": "details",
+      "excerpt": "Generalist Join Cisco Program by the global leader in secure AI infrastructure to support the growth of startups in the Agentic AI revolution."
+    },
+    {
+      "id": "check-page-b00259f6f5",
+      "url": "https://stationf.co/programs",
+      "page": "details",
+      "excerpt": "AI Join Care Forward by Doctolib, @Hôtel-Dieu (AP-HP), and Roche Three major health players launch \"Care Forward\" at STATION F to help Europe's next-gen health startups scale from concept to clinical adoption."
+    },
+    {
+      "id": "check-page-1ac0df0808",
+      "url": "https://stationf.co/programs",
+      "page": "details",
+      "excerpt": "Health Join Sanofi Program on Digital & AI research in the pharmaceutical industry."
+    },
+    {
+      "id": "check-page-e7357dc21e",
+      "url": "https://stationf.co/programs",
+      "page": "details",
+      "excerpt": "Health Join PSG PSG Labs, a first-ever program run by the iconic football club."
+    },
+    {
+      "id": "check-page-346485573c",
+      "url": "https://stationf.co/programs",
+      "page": "details",
+      "excerpt": "Sports Join Meta Program to empower European open-source AI startups, in partnership with Hugging Face."
+    },
+    {
+      "id": "check-page-b66eff91a6",
+      "url": "https://stationf.co/programs",
+      "page": "details",
+      "excerpt": "AI Join Microsoft The GenAI startup accelerator, in partnership with GitHub, Mistral, Nvidia and Tech consulting firm Cellenza."
+    },
+    {
+      "id": "check-page-97d7685027",
+      "url": "https://stationf.co/programs",
+      "page": "details",
+      "excerpt": "AI Join LVMH La Maison des Startups by LVMH, to invent the future of luxury."
+    },
+    {
+      "id": "check-page-95084fc3d5",
+      "url": "https://stationf.co/programs",
+      "page": "details",
+      "excerpt": "Luxury Join HEC Incubator leveraging the ecosystem of leading business school HEC to help entrepreneurs grow."
+    },
+    {
+      "id": "check-page-8364502297",
+      "url": "https://stationf.co/programs",
+      "page": "details",
+      "excerpt": "Generalist Join L'Oréal Providing mentoring and key beauty industry stakeholders for early-stage beautytech startups."
+    },
+    {
+      "id": "check-page-fa74a867ca",
+      "url": "https://stationf.co/programs",
+      "page": "details",
+      "excerpt": "Generalist Join Huawei Huawei's program is for ambitious startups in industrial, retail or new energy vehicle sectors, looking to drive impact and build sustainable growth."
+    },
+    {
+      "id": "check-page-3acb464f08",
+      "url": "https://stationf.co/programs",
+      "page": "details",
+      "excerpt": "Sustainability Join Marble Leading startup studio in climate tech."
+    },
+    {
+      "id": "check-page-f8ed2605fa",
+      "url": "https://stationf.co/programs",
+      "page": "details",
+      "excerpt": "Brings together scientists, engineers and operators to build deeptech to cool the planet."
+    },
+    {
+      "id": "check-page-178b4d017f",
+      "url": "https://landingzone-apply.stationf.co",
+      "page": "application",
+      "excerpt": "Landing Zone — STATION F The offer FAQ Apply now ↗ Land at STATION F. Take off anywhere. Apply now ↗ Now open · applications reviewed on a rolling basis The space Work at the heart of the campus. Flex office space in the CREATE zone Set up anywhere in the dedicated area, bring your monitor. Surrounded by 1000+ startups Bring investors, clients and candidates through the SHARE zone. Who it's for Built for early-stage founders. Join at any step Whatever stage you are in currently, the Landing Zone will help you get to the next stage. 01 02 03 04 01 Idea 02 MVP 03 Pilots 04 First clients 05 Incubation At every step of the journey, you get access to Meet co-founders Expert office hours 200+ perks: cloud credits & AI tokens and more Get featured in our investor newsletter Unlimited guest invites (Share Zone) 12h of meeting rooms per desk / month In numbers Landing Zone in a nutshell. 370+ Early stage entrepreneurs 70+ startups transferred to another STATION F program 5 Landing Zone startups selected for Future 40 in 2026 74% started as solo founders 61 verticals represented 1/3 of the startups featured in the investor newsletter come from the Landing Zone Success stories Landing alumni hall of fame. Landing alumni went on to and many more… Acquired Query Juriste The AI legal assistant for lawyers. Built at the Landing Zone, then acquired by Lexroom for millions. Landing → Acquired"
+    },
+    {
+      "id": "check-page-c4386a80c4",
+      "url": "https://landingzone-apply.stationf.co",
+      "page": "application",
+      "excerpt": "Landing → Acquired The AI OS for enterprise social media and marketing."
+    },
+    {
+      "id": "check-page-2574a18c60",
+      "url": "https://landingzone-apply.stationf.co",
+      "page": "application",
+      "excerpt": "Landing → P26 The AI coach for in-person field reps."
+    },
+    {
+      "id": "check-page-e978912b5f",
+      "url": "https://landingzone-apply.stationf.co",
+      "page": "application",
+      "excerpt": "Landing → SandrAI Your AI partner for dealership operations."
+    },
+    {
+      "id": "check-page-72c3252af4",
+      "url": "https://landingzone-apply.stationf.co",
+      "page": "application",
+      "excerpt": "1 month's notice departure 1 desk = 1 person Add desks anytime Apply now ↗ What is included With your desk Full-time desk Free seating in the CREATE zone Program applications Apply to any program from the inside Expert office hours Bring your challenges, our mentorship offices guide you."
+    },
+    {
+      "id": "check-page-5bf5212c18",
+      "url": "https://landingzone-apply.stationf.co",
+      "page": "application",
+      "excerpt": "5 Parvis Alan Turing, 75013 Paris, France Follow us Programs In-house programs Resources Events Spaces Contact Visits Sales Press Sites STATION F Future 40 Flatmates © STATION F Landing Zone"
+    },
+    {
+      "id": "check-page-d5e1743f00",
+      "url": "https://stationf.co/programs/in-house",
+      "page": "details",
+      "excerpt": "In-house Programs | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact Programs Thousands of founders have built here – now it's your turn . Find your perfect program to fit your needs and support your growth in STATION F's unique ecosystem. All Programs In-house Programs Resources In-house Programs are run directly by the STATION F team and support entrepreneurs at every stage – from idea to scale. Join Now Batch started on September 15, 2026 Applications are now closed, stay tuned for the next round! Europe's premier place to build AI. Built for top startups: targeting €1M in revenue within 6 months Powered by the best: from VCs to LLM, GPU, agentic and cloud providers Join Now Batch started on July 15, 2026 Applications are now closed, stay tuned for the next round! For entrepreneurs who've fought harder to get here: a free two-round program for founders from atypical or less privileged backgrounds. Round 1 - One month to learn the basics of entrepreneurship. You'll get advice from top founders, office hours with our team, and access to the Fighters community. At the end of this round, the most promising projects will move on to Round 2. Hybrid format: accessible both online and on-site Designed to fit around your schedule Round 2 - Full access to STATION F. You'll get a dedicated desk, tap into STATION F's top resources,"
+    },
+    {
+      "id": "check-page-00bbd3d65d",
+      "url": "https://stationf.co/programs/in-house",
+      "page": "details",
+      "excerpt": "On-site presence required to benefit fully from the program Key Features Audience: Entrepreneurs from atypical or underprivileged backgrounds Location: STATION F Format: Hybrid Price: Free Language: French Join Now Applications are reviewed on a rolling basis The most selective program on campus built for early-stage startups aiming to go fast and far."
+    },
+    {
+      "id": "check-page-97f6343bf1",
+      "url": "https://stationf.co/programs/in-house",
+      "page": "details",
+      "excerpt": "Join a strong community with dedicated mentorship and support at every step."
+    },
+    {
+      "id": "check-page-6a209ab927",
+      "url": "https://stationf.co/programs/in-house",
+      "page": "details",
+      "excerpt": "5 Parvis Alan Turing, 75013 Paris, France Follow us Programs In-house programs Resources Events Spaces News About Contact Visits Sales Press Sites Future 40 Flatmates Newsletter I agree to receive regular information and news about STATION F."
+    },
+    {
+      "id": "check-page-763f17bb41",
+      "url": "https://stationf.co/programs/resources",
+      "page": "details",
+      "excerpt": "Resources | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact Programs Thousands of founders have built here – now it's your turn . Find your perfect program to fit your needs and support your growth in STATION F's unique ecosystem. All Programs In-house Programs Resources All the services and resources entrepreneurs need, so that they can focus on what's most important: building their business. Unparalleled international business contacts One of the most international communities in Europe STATION F boasts a community of 70 different nationalities spanning all continents. If you are trying to build an international business, this is the place to do it. Access to literally anyone We receive tons of delegations and visitors from around the world, which provides a lot of unique opportunities. If there is someone you want to meet - whether it be CEO of a company or Prime Minister of a specific country - you'll increase your chances by being on campus. Funding with top-tier investors This is one of the first places investors stop when they want to invest in early-stage innovation. We have a massive investor community, with investors from around the world. If there is someone you want on your cap table, we can help make it happen. Too many leading brands, organizations & events Our campus has one of the highest densities of"
+    },
+    {
+      "id": "check-page-7dbf46abb2",
+      "url": "https://stationf.co/programs/resources",
+      "page": "details",
+      "excerpt": "One-of-a-kind work and living space Not just any old desk Our emblematic building is based in Central Paris, and it happens to be a historical monument."
+    },
+    {
+      "id": "check-page-a617ef4ee0",
+      "url": "https://stationf.co/programs/resources",
+      "page": "details",
+      "excerpt": "Flexible & communal housing Paris is no easy feat when it comes to finding housing - and it's often more of a challenge for entrepreneurs."
+    },
+    {
+      "id": "check-page-ce7fc2c28f",
+      "url": "https://stationf.co/programs/resources",
+      "page": "details",
+      "excerpt": "Leading Programs in AI, Climate, Quantum and more Many of our programs are unique within the French & European ecosystem - sometimes even in the world."
+    },
+    {
+      "id": "check-page-13717b6f4b",
+      "url": "https://stationf.co/programs/resources",
+      "page": "details",
+      "excerpt": "We have startup studios that are building the future deeptech and climate tech companies, AI programs with the top AI brands, one of the only quantum computing programs in Europe, and more!"
+    },
+    {
+      "id": "check-page-532b40b01c",
+      "url": "https://stationf.co/programs/resources",
+      "page": "details",
+      "excerpt": "We have La French Tech staff based at STATION F to help you navigate the many government services that you may need to get in touch with."
+    },
+    {
+      "id": "check-page-208f913f4f",
+      "url": "https://stationf.co/programs/resources",
+      "page": "details",
+      "excerpt": "5 Parvis Alan Turing, 75013 Paris, France Follow us Programs In-house programs Resources Events Spaces News About Contact Visits Sales Press Sites Future 40 Flatmates Newsletter I agree to receive regular information and news about STATION F."
     },
     {
       "id": "check-page-28a1ee3d1b",
@@ -261,72 +502,6 @@
       "url": "https://stationf.co/news/applications-of-blockchain-technology-beyond-cryptocurrencies",
       "page": "application",
       "excerpt": "Applications of Blockchain Technology Beyond Cryptocurrencies | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact Applications of Blockchain Technology Beyond Cryptocurrencies When most people think of blockchain, the first thing that comes to mind is very likely to be \"Bitcoin\". However, many applications of blockchain technology exist beyond cryptocurrencies. Published on Apr 19, 2020 Listen on Acast Blockchain has been one of the most talked-about new technologies in the last decade. Since it was first introduced in 2008, we have seen a huge hype around the technology with high expectations for its disruptive potential to contribute to a more “democratic internet”. Over the years, we’ve seen interest wane as some experiments have failed to pick up. However, as the technology becomes more widely understood, the ways in which it can benefit individuals and companies start to crystallize. Many people naturally associate blockchain to cryptocurrency but many interesting use cases of the technology exist beyond crypto and that’s what we set out to explore in this week’s podcast episode with: – Jagoda Hebda, founder of Venezvit (Chain Accelerator), a startup using blockchain to reduce medication fraud in humanitarian aid efforts; – Harry Halpin, co-founder of Nym Technologies (Founders Program), a startup that is building"
-    },
-    {
-      "id": "check-page-d0248160fa",
-      "url": "https://stationf.co/news/founders-program-season-9-useful-tips-for-a-successful-application",
-      "page": "application",
-      "excerpt": "Founders Program season 9: useful tips for a successful application | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact Founders Program season 9: useful tips for a successful application Applications for Founders Program’s next season are open. As a member of our selection board, Stéphane Ibos, Co-Founder and CEO of Maestrano and Keypup, wanted to give you some useful tips before you apply. Published on Mar 17, 2021 So you’re thinking about applying to the STATION F Founders Program ? Great idea, and congratulations on this initiative. The Founders Program is a fantastic way to bring your startup to the next level. When selected, you will discover a motivating, vibrant environment that will no doubt stimulate you and your team and help you a great deal on your path to success! Of course, there is a little hurdle to overcome: being selected. We see lots of applications – most of them solid, appealing and supported by great people! It makes our judging even more difficult as places are limited and only the best will get a seat. I have had the privilege of being a jury member since the very creation of STATION F and I have therefore seen and evaluated numerous applications. Some really swiped me off my feet. Literally. Others have left me frustrated and underwhelmed. Most were somewhere in the middle. I propose to share with"
-    },
-    {
-      "id": "check-page-bc6682562a",
-      "url": "https://stationf.co/news/founders-programs-applications-for-season-9-open-today",
-      "page": "application",
-      "excerpt": "Founders Program’s applications for season 9 open today | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact Founders Program’s applications for season 9 open today All entrepreneurs looking to join Founders Program’s new batch can apply on STATION F’s website before April 4th. Published on Mar 9, 2021 STATION F announced today the opening of the applications for the next season of its Founders Program. Early-stage startups looking to join the program can apply online on STATION F’s website before April 4th to start the program in early July. The Founders Program, the largest of STATION F’s +30 startups programs with more than 200 early-stage startups, offers access to an exclusive community of selected founders. Entrepreneurs who join also benefit from peer-to-peer learning and workshops with top entrepreneurs. Since the launch of STATION F, successful companies like Crafty – acquired by Talentsoft – or NeoPlants – developing the first generation of bioengineered plants able to purify the air, joined the program. How to join? Entrepreneurs who want to join the Founders Program need to work on a tech project, to be full-time on their project and to have a first MVP. They will have to fill out an online application ( here ) and make a selection-video that will be reviewed by STATION F’s Selection Board, a group of 100+ top"
-    },
-    {
-      "id": "check-page-8945b03da2",
-      "url": "https://stationf.co/news/how-covid-19-is-impacting-startup-applications-trends",
-      "page": "application",
-      "excerpt": "How Covid-19 is impacting startup application trends | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact How Covid-19 is impacting startup application trends By Marwan Elfitesse, Head of Startup Programs at STATION F Published on Apr 15, 2020 How are startups going during the Covid-19 crisis? You probably already know that STATION F is closed , however that doesn’t mean everything must come to a standstill. For example, STATION F’s in-house Founders Program (more on the program here and here ) applications procedure remains more or less unchanged, meaning applicants for July had to apply by April 5. Procedure unchanged, just more flexibility While the review process is still undergoing (everything is still to play for!), we wanted to share some of the differences we are observing with these applications with regards to previous batches. When we say the procedure is more or less unchanged, this means we have the same target: attract early-stage startups with big ambitions -, in two rounds (online application & video. We also have the same mantra: a program where resources come from entrepreneurs and… where applications are assessed by established entrepreneurs from our Selection Board . Keeping the same dates for the applications is a challenge with the ongoing crisis but feedbacks for the first round will be shared on April"
-    },
-    {
-      "id": "check-page-afdd706979",
-      "url": "https://stationf.co/news/leeway-future-40-2020-raises-42m-to-build-its-modern-and-collaborative-application-for-contract-management",
-      "page": "application",
-      "excerpt": "Leeway (Future 40, 2020) raises 4,2M$ to build its modern and collaborative application for contract management | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact Leeway (Future 40, 2020) raises 4,2M$ to build its modern and collaborative application for contract management Leeway, one of the startups nominated at STATION F’s most promising companies in 2020 (Future 40) empowers legal teams to manage the whole contract lifecycle within a single intuitive and collaborative application. Published on Mar 31, 2021 Negotiating contracts shouldn’t be that complicated! So Antoine Fabre, Sébastien Decrême and Thibaut Caoudal decided to make it easier by creating Leeway in 2019, an intuitive and collaborative application to manage the whole contract lifecycle. Launched in beta last 2020, Leeway already has more than 30 companies using its platform – including names like Evaneos, Ifop and Voodoo – and 500 users. In 8 months, more than 10.000 contracts have already been created. They just raised 4.2M$ to accelerate their development and hire more than 20 new employees. Selected to be part of Future 40 in 2020, STATION F’s group of most promising companies hand picked among the 1.000 startups of the campus, Leeway completed its first fundraising with investors like HenQ, Kima Ventures – Xavier Niel’s VC fund – and business angels like"
-    },
-    {
-      "id": "check-page-b5d46c4286",
-      "url": "https://stationf.co/news/station-f-opens-applications-for-founders-program-and-fighters-program-next-seasons",
-      "page": "application",
-      "excerpt": "STATION F opens applications for Founders Program and Fighters Program next seasons | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact STATION F opens applications for Founders Program and Fighters Program next seasons All entrepreneurs looking to join can apply on STATION F's website. Published on Aug 24, 2020 STATION F, the world’s largest startup campus, announced today that applications for the next seasons of its Founders and Fighters Programs are now open. Startups looking to join the Founders Program can apply online before October 1st and entrepreneurs who are willing to join the Fighters Program are eligible to apply before October 18. Founders Program: Helping entrepreneurs to bring their ambitious ideas to life With the Founders Program, the largest startup program of STATION F welcoming more than early-stage 200 startups, entrepreneurs get access to an exclusive community and benefit from peer-to-peer learning for 6 months to 2 years depending of their needs. Since the launch of the program in June 2017, companies like Crafty – recently acquired by TalentSoft – or NeoPlants – developing the first generation of bioengineered plants able to purify the air – already benefited from the community. Entrepreneurs applying for the Founders Program are selected by STATION F’s Selection Board – a network of 100"
-    },
-    {
-      "id": "check-page-6cb6564ef9",
-      "url": "https://stationf.co/news/angel-investing-vc-and-scout-programs-how-is-investment-taught",
-      "page": "terms",
-      "excerpt": "Angel Investing, VC, and Scout Programs: How to teach investing? | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact Angel Investing, VC, and Scout Programs: How to teach investing? Featuring Included VC, Chapter One VC, and Angel Investing School Published on Oct 15, 2020 Listen on Acast With the development of investment vehicles and financial instruments like syndicates and rolling funds, investing has become more accessible in recent years to a wider non-VC and non-finance audience, especially in early-stage. This leads us to two questions. First, is investment something that can be taught? Second, how is it actually taught? In this week’s episode, we dive into the topic with three ecosystem friends that run angel investing, VC, and scout programs: – Nikita Thakrar , Co-Founder and Director of Included VC , a one-year VC fellowship program for individuals from diverse communities; – Andy Ayim , Creator of Angel Investing School , a London-based training school for people who want to learn how to get started with investing in startups; – Jeff Morris Jr. , formerly VP Product at Tinder and now Founder and Managing Partner at Chapter One VC , launching a VC scout program. Listen to the full episode on Apple Podcast , Spotify , Deezer & Google Podcast . Media & press relations Looking for press resources? Download our press"
-    },
-    {
-      "id": "check-page-e6ec32e480",
-      "url": "https://stationf.co/news/diversity-in-investment-with-joshua-olusanya-notion-capital-and-daisy-onubogu-backed-vc",
-      "page": "terms",
-      "excerpt": "Diversity in Investment with Joshua Olusanya (Notion Capital) and Daisy Onubogu (Backed VC) | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact Diversity in Investment with Joshua Olusanya (Notion Capital) and Daisy Onubogu (Backed VC) “In order to see the changes that we want to see, it’s not going to be comfortable.” Published on Jul 24, 2020 Listen on Acast In light of the recent racial injustices in America, many people in the tech community have been speaking up about the inequalities within our ecosystem. We’ve seen the example of Alexis Ohanian, co-founder of Reddit, step down from his position at the company’s board and ask to be replaced by a black candidate. We’ve seen VCs launch dedicated funds that would focus exclusively on companies by black founders. And, so on. This issue of diversity has gotten a lot less coverage on this side of the ocean in Europe but we’ve heard some investors speak up, namely our two guests for this week’s podcast: Joshua Olusanya of Notion Capital, who published a powerful opinion piece about Diversity in Venture Capital on Medium, and Daisy Onubogu of Backed VC. Daisy is Head of Networks at Backed VC and D&I champion on the Investment Committee. She’s also an Advisor at Roam International, Emerge Conference, and a board director of global charity, Future Brilliance. Previously, she was"
-    },
-    {
-      "id": "check-page-b8cdbdfdbc",
-      "url": "https://stationf.co/news/saul-klein-localglobe-there-will-be-a-lot-of-investment-activity-in-the-coming-months",
-      "page": "terms",
-      "excerpt": "Saul Klein (LocalGlobe): “There will be a lot of investment activity in the coming months” | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact Saul Klein (LocalGlobe): “There will be a lot of investment activity in the coming months” STATION F is (virtually) sitting down with various VCs to understand how they see the impact of the current Covid-19 crisis on tech startups. Published on May 20, 2020 Saul Klein is a serial entrepreneur, operator and investor with over 25 years experience building and exiting companies in the US, Israel and Europe. He has a passion for working with seed and early stage businesses and the positive impact that technology can make on society. Saul is currently a Founding Partner at LocalGlobe and Latitude Ventures. Gwen Salley, Head of Investment & Services at STATION F, interviewed him to learn more on how LocalGlobe is managing the crisis and his vision on the ecosystem in the coming months. What is the concrete impact you are seeing on your portfolio companies? What we are seeing is very consistent with the macro trends in the economy and what Sifted and Dealroom reported in this very comprehensive analysis of the current situation in the European ecosystem. As for our portfolio, areas like healthtech, food delivery, collaboration tools and education resources are seeing a massive increase in"
-    },
-    {
-      "id": "check-page-a10049bffe",
-      "url": "https://stationf.co/terms",
-      "page": "terms",
-      "excerpt": "Terms of Use | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact Terms of Use Definition Words or expressions starting with a capital letter have the following meanings: “General Conditions of use” : means the present general conditions of use applicable to the designated Services. “Newsletter” : means the emails sent on a regular basis to inform about the news regarding the STATION F campus (news, events, etc.). “Privacy Policy” : refers to the privacy policy regarding the processing of personal data of Website users. “Services” : refers to the sending of the Newsletter, the possibility of contacting STATION F via the contact form and, more generally, the browsing on the Website. “Website” : refers to the website at URL “https://stationf.co” and any affiliated sub-domains. “STATION F” : French simplified joint-stock company with sole shareholder (société par actions simplifiée à associé unique), with share capital of €125,393,275, with corporate registration number 794 493 841 RCS Paris and whose registered office is located at 16 rue de la Ville l'Evêque in Paris (75008). “User” : means any person browsing the Website. Article 1: Object The purpose of these General Conditions of use is to specify the rights and responsibilities of the User in his/her use of the Website. They also apply when the User subscribes to the"
-    },
-    {
-      "id": "check-page-29dd9e15ff",
-      "url": "https://stationf.co/news/batch3-founders",
-      "page": "batches",
-      "excerpt": "Discover the latest 10 startups selected for Founders Program 2.0 | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact Discover the latest 10 startups selected for Founders Program 2.0 For the third batch of STATION F's Founders Program, 10 startups mostly focused on Climate and AI have been selected. Published on Oct 13, 2023 The Founders Program is STATION F's most selective acceleration program. This in-house initiative was created to help early-stage companies build strong teams, discover product-market fit, and secure early-stage funding to facilitate further growth. Each startup has the opportunity to select a highly experienced Advisor to work with, including the founders of Alan, Swile, The Sandbox or Heetch. These advisors will provide guidance and valuable insights on the most critical challenges that startups typically face. We recommend that startups incentivize the advisor by adding them to the cap table. Today, we are unveiling the startups that make-up batch 3 of the Founders Program: Klart AI is your AI-powered assistant for boosting productivity and collaboration. It integrates with major platforms, connects to databases, ensures data privacy, and provides real-time AI support. Livna is a crypto cashback solution. Users can purchase in their partner stores and get free crypto as cashback. Nockee is a"
-    },
-    {
-      "id": "check-page-997ffb2416",
-      "url": "https://stationf.co/news/covid-19-updates-regarding-station-f",
-      "page": "batches",
-      "excerpt": "Covid-19: Updates regarding STATION F | STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact Covid-19: Updates regarding STATION F Follow the updates of STATION F regarding Covid-19. Published on Mar 8, 2020 Update of July 17, 10am: Following the latest updates from French authorities and in order to ensure our residents safety, wearing a face mask is mandatory at all times and anywhere at STATION F starting July 20, 2020. This includes meeting rooms, open spaces, common spaces for entrepreneurs, guests and staff members. No access will be allowed without a mask. The STATION F Team. Mise à jour du 17 juillet, 10 heures : Suite aux nouvelles recommandations des autorités françaises et afin d’assurer la sécurité de tous les résidents, le port du masque est obligatoire à tout moment et dans l’intégralité de STATION F à partir du 20 juillet 2020. Cela inclut les salles de réunion, les bureaux, les espaces communs pour les entrepreneurs, visiteurs et membres du staff. Aucun accès ne sera possible sans masque. L’équipe STATION F. Update of May 4, 10am: At STATION F, we put safety of our residents first. That’s why we’ve decided to close temporarily STATION F on March 14. Following the latest recommendations of French authorities and in order to let those who need to work from the campus do so, we’ve decided to partially reopen"
     }
   ],
   "findings": {
@@ -334,12 +509,20 @@
     "phones": [],
     "routes": [
       {
-        "value": "https://stationf.co/apply?program=fighters",
-        "evidenceId": "check-route-d106397305"
+        "value": "https://landingzone-apply.stationf.co",
+        "evidenceId": "check-route-bbd5e6e038"
       },
       {
-        "value": "https://stationf.co/news/founders-programs-applications-for-season-9-open-today/",
-        "evidenceId": "check-route-6b197d9600"
+        "value": "https://fai-apply.stationf.co",
+        "evidenceId": "check-route-9e484c245f"
+      },
+      {
+        "value": "https://www.f6s.com/shakeupfactory/apply",
+        "evidenceId": "check-route-da9970442a"
+      },
+      {
+        "value": "https://stationf.co/apply?program=fighters",
+        "evidenceId": "check-route-d106397305"
       }
     ],
     "applicationUrl": [
@@ -348,53 +531,59 @@
         "evidenceId": "check-route-46b4d6a3bd"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": false,
+        "evidenceId": "check-status-330d2c7bba"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
-    "rolling": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-9ab804982d"
+      }
+    ],
     "announcedIntake": [
       {
         "value": "Oct",
         "evidenceId": "check-announced-f0191b747a"
-      },
-      {
-        "value": "April",
-        "evidenceId": "check-announced-1743de4232"
       }
     ],
     "cohortStarts": [],
     "durationWeeks": [
       {
-        "value": "12 months",
-        "evidenceId": "check-duration-6f129faad6"
+        "value": "1 month",
+        "evidenceId": "check-duration-30c54f6356"
+      },
+      {
+        "value": "2",
+        "evidenceId": "check-duration-11098f732c"
       },
       {
         "value": "6 months",
-        "evidenceId": "check-duration-d8d51bbd72"
-      },
-      {
-        "value": "8 months",
-        "evidenceId": "check-duration-0b85243bf4"
+        "evidenceId": "check-duration-138ad63139"
       },
       {
         "value": "18 months",
-        "evidenceId": "check-duration-4f76f0b5df"
+        "evidenceId": "check-duration-fb41781fc4"
       }
     ],
     "format": [
       {
-        "value": "remote",
-        "evidenceId": "check-format-1c30addb69"
+        "value": "in-person",
+        "evidenceId": "check-format-cb6defbae0"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-fdf2d08724"
       }
     ],
     "location": [
       {
         "value": "Central Paris",
         "evidenceId": "check-location-6d9da4ee68"
-      },
-      {
-        "value": "Tunisia",
-        "evidenceId": "check-location-90e116f109"
       }
     ],
     "selectivity": [],

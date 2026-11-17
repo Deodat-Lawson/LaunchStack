@@ -1,6 +1,6 @@
 {
   "programId": "hkstp",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://epic.hkstp.org/",
@@ -150,22 +150,6 @@
       "url": "https://www.hkstp.org/en/discover/investment-opportunities",
       "page": "terms",
       "anchor": "Investment Opportunities",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
-      "page": "application",
-      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -175,22 +159,6 @@
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -246,7 +214,7 @@
       "url": "https://www.hkstp.org/en/programmes/funding/venture-fund-and-investment-matching",
       "page": "terms",
       "anchor": "Venture Fund and Fundraising Platform",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -299,6 +267,22 @@
       "origin": "official"
     },
     {
+      "url": "https://www.hkstp.org/en/programmes/mentorship/mentorship-event/component/mentorship-event/data/hkstp-ideation-cohort-training---business-plan---mr-tat-koon-koh",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hkstp.org/en/programmes/mentorship/mentorship-event/component/mentorship-event/data/hkstp-ideation-cohort-training---prof-frank-yam",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.hkstp.org/en/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
       "page": "application",
       "anchor": "",
@@ -339,6 +323,22 @@
       "origin": "official"
     },
     {
+      "url": "https://www.hkstp.org/en/talent/early-career-and-internship/hyab-youth-start-up-internship-programme/job-posts/117-neardeal-international-limited",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hkstp.org/en/talent/early-career-and-internship/hyab-youth-start-up-internship-programme/job-posts/118-neardeal-international-limited",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.hkstp.org/en/talent/global-talents/global-internship-programme",
       "page": "details",
       "anchor": "Global Internship Programme",
@@ -347,32 +347,24 @@
       "origin": "official"
     },
     {
-      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
-      "page": "application",
+      "url": "https://www.hkstp.org/zh-cn/discover/investment-opportunities",
+      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
-      "page": "application",
+      "url": "https://www.hkstp.org/zh-cn/programmes/funding/venture-fund-and-investment-matching",
+      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
-      "page": "application",
+      "url": "https://www.hkstp.org/zh-cn/programmes/mentorship/mentorship-event/component/mentorship-event/data/hkstp-ideation-cohort-training---business-plan---mr-tat-koon-koh",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -387,7 +379,39 @@
       "origin": "official"
     },
     {
-      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "url": "https://www.hkstp.org/zh-cn/talent/early-career-and-internship/hyab-youth-start-up-internship-programme/job-posts/117-neardeal-international-limited",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hkstp.org/zh-cn/talent/early-career-and-internship/hyab-youth-start-up-internship-programme/job-posts/118-neardeal-international-limited",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hkstp.org/zh-hk/discover/investment-opportunities",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hkstp.org/zh-hk/programmes/funding/venture-fund-and-investment-matching",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hkstp.org/zh-hk/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
       "page": "application",
       "anchor": "",
       "fetched": true,
@@ -395,16 +419,16 @@
       "origin": "official"
     },
     {
-      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
-      "page": "application",
+      "url": "https://www.hkstp.org/zh-hk/talent/early-career-and-internship/hyab-youth-start-up-internship-programme/job-posts/117-neardeal-international-limited",
+      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
-      "page": "application",
+      "url": "https://www.hkstp.org/zh-hk/talent/early-career-and-internship/hyab-youth-start-up-internship-programme/job-posts/118-neardeal-international-limited",
+      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,

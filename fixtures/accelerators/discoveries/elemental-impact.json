@@ -1,11 +1,19 @@
 {
   "programId": "elemental-impact",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://elementalimpact.com/annual-report-2025/",
       "page": "portfolio",
       "anchor": "Annual Report 2025: A Year of Extremes Today, we invite you to explore our 2025 Annual Report. In it, we reflect on the stories that shaped our year, the on-the-ground strategies t",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/backing-the-builders/",
+      "page": "other",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -20,14 +28,6 @@
     },
     {
       "url": "https://elementalimpact.com/companies/actionfigure/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://elementalimpact.com/companies/allume-energy/",
       "page": "portfolio",
       "anchor": "",
       "fetched": true,
@@ -75,14 +75,6 @@
       "origin": "official"
     },
     {
-      "url": "https://elementalimpact.com/how-policy-uncertainty-is-shaping-climate-innovation/",
-      "page": "portfolio",
-      "anchor": "Elemental Insights How Policy Uncertainty is Shaping Climate Innovation For climate companies, policy can determine whether projects are deployed, delayed, or derailed. In 2025, th",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://elementalimpact.com/latest/events/midwest-climate-dealflow-summit/",
       "page": "terms",
       "anchor": "",
@@ -107,8 +99,32 @@
       "origin": "official"
     },
     {
+      "url": "https://elementalimpact.com/newsletters/portfolio-monthly-announcing-elemental-impact/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://elementalimpact.com/nth-cycle-is-revolutionizing-the-u-s-s-critical-mineral-supply-chain-from-the-heart-of-ohio/",
       "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/portfolio-portal/recent-newsletters/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/welcome-to-the-elemental-portfolio-16-climate-technologies-creating-jobs-and-local-economic-impact/",
+      "page": "portfolio",
       "anchor": "",
       "fetched": true,
       "blocked": null,

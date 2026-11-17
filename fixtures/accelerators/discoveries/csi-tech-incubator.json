@@ -1,27 +1,19 @@
 {
   "programId": "csi-tech-incubator",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
-      "url": "https://www.csiinnovationhub.com/cohortalumni",
-      "page": "portfolio",
-      "anchor": "FOUNDERS",
+      "url": "https://www.csiinnovationhub.com/about",
+      "page": "details",
+      "anchor": "About",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.csiinnovationhub.com/about",
-      "page": "details",
-      "anchor": "About",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.csiinnovationhub.com/programs",
-      "page": "details",
-      "anchor": "Programs",
+      "url": "https://www.csiinnovationhub.com/cohortalumni",
+      "page": "portfolio",
+      "anchor": "FOUNDERS",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -35,10 +27,18 @@
       "origin": "official"
     },
     {
-      "url": "https://www.csiinnovationhub.com/thriveprogram",
-      "page": "details",
-      "anchor": "Thrive Program",
-      "fetched": false,
+      "url": "https://www.csiinnovationhub.com/event-details/investment-research-101-workshop",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/event-details/tech-talks-stephen-deberry-founding-partner-at-bronze-investments",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -47,6 +47,142 @@
       "page": "terms",
       "anchor": "FAQ",
       "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/programs",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/single-post/fall-winter-2021-cohort-week-5-november-16-2021",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/single-post/tech-talks-stephen-deberry-bronze-investments-december-2-2020",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/single-post/ttp-residency-bootcamp-demo-day-cohort-2-january-28-2021",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/single-post/verizon-business-mentorship-program-cohort-6-orientation-may-25-2021",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/single-post/verizon-business-mentorship-program-cohort-6-session-1-june-1-2021",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/single-post/verizon-business-mentorship-program-cohort-6-session-2-june-8-2021",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/single-post/verizon-business-mentorship-program-cohort-6-session-3-june-14-2021",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/single-post/verizon-business-mentorship-program-cohort-6-session-4-june-22-2021",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2020-cohort-week-3-january-25-2021",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2020-cohort-week-4-february-1-2021",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2020-cohort-week-5-february-8-2021",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-1-october-18-2021",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-2-october-25-2021",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-3-november-2-2021",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-4-november-8-2021",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/thriveprogram",
+      "page": "details",
+      "anchor": "Thrive Program",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     }

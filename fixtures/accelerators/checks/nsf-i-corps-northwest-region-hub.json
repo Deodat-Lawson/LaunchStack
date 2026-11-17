@@ -1,31 +1,940 @@
 {
   "programId": "nsf-i-corps-northwest-region-hub",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.nwicorps.org/",
-    "https://www.nwicorps.org/regional-program-2"
+    "https://www.nwicorps.org/national-i-corps-program-old",
+    "https://www.nwicorps.org/national-i-corps-program-old-11-july",
+    "https://www.nwicorps.org/national-icorps-program-1-1",
+    "https://www.nwicorps.org/national-icorps-program-1-1-1",
+    "https://www.nwicorps.org/national-icorps-program-1-1-1-1",
+    "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1",
+    "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1",
+    "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1",
+    "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1",
+    "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1-1",
+    "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1-1-1",
+    "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-2",
+    "https://www.nwicorps.org/national-icorps-program-1-1-1-1-2",
+    "https://www.nwicorps.org/national-icorps-program-2",
+    "https://www.nwicorps.org/regional-program",
+    "https://www.nwicorps.org/regional-program-1",
+    "https://www.nwicorps.org/regional-program-2",
+    "https://www.nwicorps.org/regional-program-3",
+    "https://www.nwicorps.org/blog/category/UC+Berkeley+Alumni"
   ],
   "evidence": [
     {
+      "id": "check-announced-875af13659",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "January 29th, February 2nd Kickoff Date: January 28th, 12-1 PM PST Apply by January 14 Program Timeline FAQ 1. What are the eligibility requirements for",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-8ef4663ea4",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "3rd, December 3rd, December 10th (5-8 PM) Oregon State University Apply by November 16 Start Date: January 12, 2027 Focus Area: Semi-Conductors Course",
+      "page": "details"
+    },
+    {
+      "id": "check-deadline-741133c6d1",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "12th, January 29th, February 2nd UC Davis Start Date: February 2, 2027 Apply by December 21 Focus Area: Semi-Conductors Course Format:",
+      "page": "details"
+    },
+    {
+      "id": "check-deadline-836e828127",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "3rd, December 10th (5-8 PM) Oregon State University Apply by November 16 Start Date: January 12, 2027 Focus Area: Semi-Conductors Course Format: Virtual",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-02abd377a0",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-09d7efc603",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0ab775dca7",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0dfc8fa2ef",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-1c3caf4699",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-1d8f8daf8e",
+      "url": "https://www.nwicorps.org/regional-program",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "the customer discovery process. During a free 2-4 week course, learn from proven entrepreneurs how to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-286a7d3284",
+      "url": "https://www.nwicorps.org/national-i-corps-program-old-11-july",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "the National NSF I-Corps program, an immersive 7-week training that comes with a $50,000 NSF grant for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-351aefdbc2",
+      "url": "https://www.nwicorps.org/regional-program-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "the customer discovery process. During a free 2-4 week course, learn from proven entrepreneurs how to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-396302020c",
+      "url": "https://www.nwicorps.org/national-i-corps-program-old",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-39a12d34f7",
+      "url": "https://www.nwicorps.org/regional-program-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "- this takes 10 minutes to complete. Second, ~2-3 weeks before the first day of class, you'll be",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-4caf0a666f",
+      "url": "https://www.nwicorps.org/regional-program",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "- this takes 10 minutes to complete. Second, ~2-3 weeks before the first day of class, you'll be",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-513b0a8a0b",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-524586477e",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-52b451496e",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-54b2113000",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-65e7cc9b96",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-68e3ad9f00",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7124d6f56e",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-849e83a307",
+      "url": "https://www.nwicorps.org/regional-program",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "may be eligible to continue to the 7 week National NSF I-Corps program, which includes a",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-84fafa45bc",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-8773c17271",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-8919051be1",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "process . About the Program During a free 2-4 week course , learn from proven entrepreneurs how to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-8a8288aa7a",
+      "url": "https://www.nwicorps.org/national-i-corps-program-old-11-july",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-8c02037c9c",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9a9631548e",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "- this takes 10 minutes to complete. Second, ~2-3 weeks before the first day of class, you'll be",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9ea7ebd0a0",
+      "url": "https://www.nwicorps.org/regional-program-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "may be eligible to continue to the 7 week National NSF I-Corps program, which includes a",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-a0652fb544",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-a7e128eb91",
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "the customer discovery process. During a free 2-4 week course, learn from proven entrepreneurs how to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ac74b79a7c",
+      "url": "https://www.nwicorps.org/national-i-corps-program-old",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "the National NSF I-Corps program, an immersive 7-week training that comes with a $50,000 NSF grant for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b0db8a5ce5",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b3f5495889",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b53b1cdfc8",
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "- this takes 10 minutes to complete. Second, ~2-3 weeks before the first day of class, you'll be",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ba52410673",
+      "url": "https://www.nwicorps.org/national-icorps-program-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-be2683635f",
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "may be eligible to continue to the 7 week National NSF I-Corps program, which includes a",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d0a84ef874",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-de6d082624",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-df1141d092",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f06b17d38b",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f7709e0ca8",
+      "url": "https://www.nwicorps.org/national-icorps-program-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "the National NSF I-Corps program, an immersive 7-week training that comes with a $50,000 NSF grant for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-fd6a346b96",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "may be eligible to continue to the 7 week National NSF I-Corps program, which includes a",
+      "page": "details"
+    },
+    {
+      "id": "check-format-13d78ad637",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "12, 2027 Focus Area: Semi-Conductors Course Format: Virtual Workshop Dates: January 12th, January 29th, February 2nd",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1fadef2033",
+      "url": "https://www.nwicorps.org/regional-program-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "4. Are NSF I-Corps Northwest Hub courses in-person or remote? Each course is remote or hybrid, with course sessions",
+      "page": "details"
+    },
+    {
+      "id": "check-format-30e140a35b",
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Northwest Hub courses in-person or remote? Each course is remote or hybrid, with course sessions offered on Zoom. 5. Do you",
+      "page": "details"
+    },
+    {
+      "id": "check-format-366f2ad0d1",
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Hub courses in-person or remote? Each course is remote or hybrid, with course sessions offered on Zoom. 5. Do you require a",
+      "page": "details"
+    },
+    {
+      "id": "check-format-39343f2df5",
+      "url": "https://www.nwicorps.org/regional-program",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "instructor. 4. Are NSF I-Corps Northwest Hub courses in-person or remote? Each course is remote or hybrid, with course",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3c42508d83",
+      "url": "https://www.nwicorps.org/regional-program",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "4. Are NSF I-Corps Northwest Hub courses in-person or remote? Each course is remote or hybrid, with course sessions",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5538d93d68",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Hub courses in-person or remote? Each course is remote or hybrid, with course sessions offered on Zoom. 5. Do you require a",
+      "page": "details"
+    },
+    {
+      "id": "check-format-73b9cbda9c",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "instructor. 4. Are NSF I-Corps Northwest Hub courses in-person or remote? Each course is remote or hybrid, with course",
+      "page": "details"
+    },
+    {
+      "id": "check-format-7778306093",
+      "url": "https://www.nwicorps.org/regional-program-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Hub courses in-person or remote? Each course is remote or hybrid, with course sessions offered on Zoom. 5. Do you require a",
+      "page": "details"
+    },
+    {
+      "id": "check-format-7fa70aaa66",
+      "url": "https://www.nwicorps.org/regional-program",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Hub courses in-person or remote? Each course is remote or hybrid, with course sessions offered on Zoom. 5. Do you require a",
+      "page": "details"
+    },
+    {
+      "id": "check-format-89d92372fa",
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "instructor. 4. Are NSF I-Corps Northwest Hub courses in-person or remote? Each course is remote or hybrid, with course",
+      "page": "details"
+    },
+    {
+      "id": "check-format-9c94be52d9",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "4. Are NSF I-Corps Northwest Hub courses in-person or remote? Each course is remote or hybrid, with course sessions",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ba24a3cb47",
+      "url": "https://www.nwicorps.org/regional-program",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Northwest Hub courses in-person or remote? Each course is remote or hybrid, with course sessions offered on Zoom. 5. Do you",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c1ccca1b7e",
+      "url": "https://www.nwicorps.org/regional-program-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "instructor. 4. Are NSF I-Corps Northwest Hub courses in-person or remote? Each course is remote or hybrid, with course",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d06620d8dc",
+      "url": "https://www.nwicorps.org/regional-program-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Northwest Hub courses in-person or remote? Each course is remote or hybrid, with course sessions offered on Zoom. 5. Do you",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d82d5fabe3",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "by December 21 Focus Area: Semi-Conductors Course Format: Virtual Workshop Dates: January 12th, January 29th, February 2nd",
+      "page": "details"
+    },
+    {
+      "id": "check-format-dab2885a5f",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Innovators Start Date: November 30, 2026 Course Format: Virtual Workshop Dates: November 3rd, December 3rd, December 10th",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e6cf206e28",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Northwest Hub courses in-person or remote? Each course is remote or hybrid, with course sessions offered on Zoom. 5. Do you",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f85967f675",
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "4. Are NSF I-Corps Northwest Hub courses in-person or remote? Each course is remote or hybrid, with course sessions",
+      "page": "details"
+    },
+    {
+      "id": "check-location-86092d03d1",
+      "url": "https://www.nwicorps.org/regional-program-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Early stage startup founder teams located in Northern California, Oregon, Washington, and Alaska are",
+      "page": "details"
+    },
+    {
+      "id": "check-location-89f5ac6162",
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Early stage startup founder teams located in Northern California, Oregon, Washington, and Alaska are",
+      "page": "details"
+    },
+    {
+      "id": "check-location-918f64cc68",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Early stage startup founder teams located in Northern California, Oregon, Washington, and Alaska are",
+      "page": "details"
+    },
+    {
+      "id": "check-location-cef82e6dc0",
+      "url": "https://www.nwicorps.org/regional-program",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Early stage startup founder teams located in Northern California, Oregon, Washington, and Alaska are",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0c6fe2bdae",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-11dac7991e",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1cccbfb601",
+      "url": "https://www.nwicorps.org/blog/category/UC+Berkeley+Alumni",
+      "title": "NSF I-Corps Northwest Region Hub — portfolio page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-3d0bc5465d",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3f185f2cc1",
+      "url": "https://www.nwicorps.org/national-i-corps-program-old-11-july",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4f914a964c",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
       "id": "check-route-868ef077af",
       "url": "https://www.nwicorps.org/",
-      "title": "NSF I-Corps Northwest Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps Northwest Region Hub — homepage",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9aa2306f09",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a042351be3",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a0601e806c",
+      "url": "https://www.nwicorps.org/national-i-corps-program-old",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
       "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
       "page": "details"
     },
     {
       "id": "check-route-a6e7c2621d",
       "url": "https://www.nwicorps.org/regional-program-2",
-      "title": "NSF I-Corps Northwest Region Hub — details page checked by scrape.py",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a9c29a9f9d",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ab53110ed6",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b4287207be",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b6cf566ee8",
+      "url": "https://www.nwicorps.org/national-icorps-program-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
       "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
       "page": "details"
     },
     {
       "id": "check-route-b893109153",
       "url": "https://www.nwicorps.org/",
-      "title": "NSF I-Corps Northwest Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps Northwest Region Hub — homepage",
       "excerpt": "https://www.nwicorps.org/",
       "page": "details"
+    },
+    {
+      "id": "check-route-c6960e7687",
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ca7ca9e619",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e41446a9d0",
+      "url": "https://www.nwicorps.org/regional-program",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e8e3c21b27",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-2",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ebbea30aa1",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1",
+      "title": "NSF I-Corps Northwest Region Hub — program page",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-9099186058",
+      "url": "https://www.nwicorps.org/",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply NSF I-Corps Hub Northwest Transform your innovative technology into a startup About us The NSF I-Corps Northwest Hub offers Lean Startup courses, where teams of STEM innovators learn how to apply the scientific method to business in order to find the best path to commercialization. Learn More Samay wouldn’t be what it is today without the help of the NSF I-Corps. As a first-time founder without business experience, learning the ins and outs of customer discovery positioned us to get into the most competitive national programs and secure almost $2M in grant awards from NSF and NIH. Whenever I meet an early-stage founder, especially those who are not well represented in the tech industry (women and POC), I always tell them to complete this course before spending any time fundraising or building a product. Maria Artunduaga Founder, Samay Medical Doctorate (MD) Pontificia Universidad Javeriana Master of"
+    },
+    {
+      "id": "check-page-4f3de9170f",
+      "url": "https://www.nwicorps.org/",
+      "page": "details",
+      "excerpt": "Maria Artunduaga Founder, Samay Medical Doctorate (MD) Pontificia Universidad Javeriana Master of Translational Medicine (MTM) UCSF/University of California, Berkeley Master of Public Health (MPH) University of Washington NSF I-Corps is designed for academic researchers and early stage founders to validate their commercial market and de-risk the technology commercialization process."
+    },
+    {
+      "id": "check-page-6b7783acc7",
+      "url": "https://www.nwicorps.org/",
+      "page": "details",
+      "excerpt": "Teams with an early stage tech innovation based startup or startup idea in the Northwest Region (Northern California, Oregon, Washington, and Alaska) are eligible to apply."
+    },
+    {
+      "id": "check-page-5478310959",
+      "url": "https://www.nwicorps.org/national-i-corps-program-old",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive NSF grant to validate product market fit Teams who complete the Intro to Lean Startup: NSF I-Corps Method program with instructor endorsement are eligible to apply for the National NSF I-Corps program, an immersive 7-week training that comes with a $50,000 NSF grant for customer discovery. Teams conduct 100 customer feedback interviews and receive a clear yes or no on product market fit. Teams who complete the National NSF I-Corps program have a much higher funding rate, including SBIR grants and investments. For NSF SBIR Phase I grants, NSF I-Corps alums have a ~50% win rate, vs 15-20% for the general applicant pool. Past Bay Area NSF I-Corps Method National program teams are: 2022 Summer WUIGo Ozark MCT Bio Lab Cerberus JuvanAqua Periscope Kit Aepnus Technology PupilQuest NovelCoating Dr. Horticulture Enol Tao Trees"
+    },
+    {
+      "id": "check-page-2b951e383e",
+      "url": "https://www.nwicorps.org/national-i-corps-program-old-11-july",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive NSF grant to validate product market fit Teams who complete the Intro to Lean Startup: NSF I-Corps Method program with instructor endorsement are eligible to apply for the National NSF I-Corps program, an immersive 7-week training that comes with a $50,000 NSF grant for customer discovery. Teams conduct 100 customer feedback interviews and receive a clear yes or no on product market fit. Teams who complete the National NSF I-Corps program have a much higher funding rate, including SBIR grants and investments. For NSF SBIR Phase I grants, NSF I-Corps alums have a ~50% win rate, vs 15-20% for the general applicant pool. Past Bay Area NSF I-Corps Method National program teams are: 2024 Winter Enano PanPath Zoetic Motion Mense 2023 Fall Homeroom RareTerra Phonocath Audio AI Data Platform Vellex 2023 Summer VitalSense Micro-CAL"
+    },
+    {
+      "id": "check-page-dce507302a",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive NSF grant to validate product market fit Teams who complete a Regional NSF I-Corps Hub Northwest course, have IP developed in an academic lab, and receive a Hub recommendation letter are eligible to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for customer discovery. Teams conduct 100 customer discovery interviews, validate their customer ecosystem, and receive a much deeper understanding into all the different stakeholders who influence whether or not their technology is adopted. Teams who complete the National NSF I-Corps program have a much higher funding rate, including SBIR grants and investments. For NSF SBIR Phase I grants, NSF I-Corps alums have a ~50% win rate, vs 15-20% for the general applicant pool. Past Northwest Hub NSF I-Corps National program teams are:"
+    },
+    {
+      "id": "check-page-e504874a7b",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive NSF grant to validate product market fit Teams who complete a Regional NSF I-Corps Hub Northwest course, have IP developed in an academic lab, and receive a Hub recommendation letter are eligible to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for customer discovery. Teams conduct 100 customer discovery interviews, validate their customer ecosystem, and receive a much deeper understanding into all the different stakeholders who influence whether or not their technology is adopted. Teams who complete the National NSF I-Corps program have a much higher funding rate, including SBIR grants and investments. For NSF SBIR Phase I grants, NSF I-Corps alums have a ~50% win rate, vs 15-20% for the general applicant pool. Past Northwest Hub NSF I-Corps National program teams are:"
+    },
+    {
+      "id": "check-page-e3a55386dc",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1",
+      "page": "details",
+      "excerpt": "Past Northwest Hub NSF I-Corps National program teams are: 2024 | Fall SparkGene Biotechnology NeedleGPS Carousel Diagnostics Hydro Nexus Exhalos Pseudotools 2024 | Summer Engage-RX MetaMRI 2024 | Spring Yodeai Noble Dome AnyG Labs Survey Genomics ASyncHealth CyberReady Ooney 2024 | Winter Enano PanPath Zoetic Motion Mense © Copyrights 2021."
+    },
+    {
+      "id": "check-page-6ad9c7118b",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive NSF grant to validate product market fit Teams who complete a Regional NSF I-Corps Hub Northwest course, have IP developed in an academic lab, and receive a Hub recommendation letter are eligible to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for customer discovery. Teams conduct 100 customer discovery interviews, validate their customer ecosystem, and receive a much deeper understanding into all the different stakeholders who influence whether or not their technology is adopted. Teams who complete the National NSF I-Corps program have a much higher funding rate, including SBIR grants and investments. For NSF SBIR Phase I grants, NSF I-Corps alums have a ~50% win rate, vs 15-20% for the general applicant pool. Past Northwest Hub NSF I-Corps National program teams are:"
+    },
+    {
+      "id": "check-page-7598a8e00d",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1",
+      "page": "details",
+      "excerpt": "Past Northwest Hub NSF I-Corps National program teams are: 2024 | Fall SparkGene Biotechnology NeedleGPS Carousel Diagnostics Hydro Nexus Exhalos Pseudotools 2024 | Summer Engage-RX MetaMRI 2024 | Spring Yodeai Noble Dome AnyG Labs Survey Genomics ASyncHealth CyberReady Ooney 2024 | Winter Enano PanPath Zoetic Motion Mense © Copyrights 2021."
+    },
+    {
+      "id": "check-page-326983639a",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive NSF grant to validate product market fit Teams who complete a Regional NSF I-Corps Hub Northwest course, have IP developed in an academic lab, and receive a Hub recommendation letter are eligible to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for customer discovery. Teams conduct 100 customer discovery interviews, validate their customer ecosystem, and receive a much deeper understanding into all the different stakeholders who influence whether or not their technology is adopted. Teams who complete the National NSF I-Corps program have a much higher funding rate, including SBIR grants and investments. For NSF SBIR Phase I grants, NSF I-Corps alums have a ~50% win rate, vs 15-20% for the general applicant pool. Past Northwest Hub NSF I-Corps National program teams are:"
+    },
+    {
+      "id": "check-page-21b702222c",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1",
+      "page": "details",
+      "excerpt": "Past Northwest Hub NSF I-Corps National program teams are: 2023 | Fall Homeroom Audio AI Data Platform RareTerra Vellex Phonocath 2023 | Summer VitalSense Micro-CAL MyCareerCoach Dannce.ai 2023 | Spring Burneogel VERDE Nanomaterials MeBioTech The Nitrogen Company Re-Li-Cycle 2023 | Winter YektaSonics Smart Bioauthentication Diaita Page Environmental Ama AI Chain Noctura Devices © Copyrights 2021."
+    },
+    {
+      "id": "check-page-c672ea1d02",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive NSF grant to validate product market fit Teams who complete a Regional NSF I-Corps Hub Northwest course, have IP developed in an academic lab, and receive a Hub recommendation letter are eligible to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for customer discovery. Teams conduct 100 customer discovery interviews, validate their customer ecosystem, and receive a much deeper understanding into all the different stakeholders who influence whether or not their technology is adopted. Teams who complete the National NSF I-Corps program have a much higher funding rate, including SBIR grants and investments. For NSF SBIR Phase I grants, NSF I-Corps alums have a ~50% win rate, vs 15-20% for the general applicant pool. Past Northwest Hub NSF I-Corps National program teams are:"
+    },
+    {
+      "id": "check-page-b949d84349",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1",
+      "page": "details",
+      "excerpt": "Past Northwest Hub NSF I-Corps National program teams are: 2021 | Fall T’ena Health Technologies nanoME NeuroMarkers LiDAR Matrix CNS Curative E-Rapid Test SHChecker 2021 | Summer Sentauri Chill Tech Refiberd PUR-GEM Epinoma Hilbert Matching Scopi 2021 | Spring Advanced Quantum Technologies 2021 | Winter AmCyt Vitally Health Lumi Biolabs AT Dev NeoPose © Copyrights 2021."
+    },
+    {
+      "id": "check-page-fd3ab36bbb",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive NSF grant to validate product market fit Teams who complete a Regional NSF I-Corps Hub Northwest course, have IP developed in an academic lab, and receive a Hub recommendation letter are eligible to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for customer discovery. Teams conduct 100 customer discovery interviews, validate their customer ecosystem, and receive a much deeper understanding into all the different stakeholders who influence whether or not their technology is adopted. Teams who complete the National NSF I-Corps program have a much higher funding rate, including SBIR grants and investments. For NSF SBIR Phase I grants, NSF I-Corps alums have a ~50% win rate, vs 15-20% for the general applicant pool. Past Northwest Hub NSF I-Corps National program teams are:"
+    },
+    {
+      "id": "check-page-f2fde50d45",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1",
+      "page": "details",
+      "excerpt": "Past Northwest Hub NSF I-Corps National program teams are: 2020 | Fall ChangeVU Eyesight Quest Intropic Materials 2020 | Summer Verne Nitricity Relentlo Earthwise Media Safe Leaf Hubly Surgical Redvest Castle Health Aila Health pHixed BlueDot Photonics Immergo Biodock AI 2020 | Spring DeepRed Technologies AtheroeM LifespanVL 2020 | Winter Berkeley Marine Robotics CanaryQ Ipse © Copyrights 2021."
+    },
+    {
+      "id": "check-page-6cae2b83df",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive NSF grant to validate product market fit Teams who complete a Regional NSF I-Corps Hub Northwest course, have IP developed in an academic lab, and receive a Hub recommendation letter are eligible to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for customer discovery. Teams conduct 100 customer discovery interviews, validate their customer ecosystem, and receive a much deeper understanding into all the different stakeholders who influence whether or not their technology is adopted. Teams who complete the National NSF I-Corps program have a much higher funding rate, including SBIR grants and investments. For NSF SBIR Phase I grants, NSF I-Corps alums have a ~50% win rate, vs 15-20% for the general applicant pool. Past Northwest Hub NSF I-Corps National program teams are:"
+    },
+    {
+      "id": "check-page-cc953f8cf7",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1",
+      "page": "details",
+      "excerpt": "Past Northwest Hub NSF I-Corps National program teams are: 2019 | Fall Voyage Biomedical Exceller AI Oralome 2019 | Summer BerkeleySens Exabyte Systems RePurpose Energy 2019 | Spring Eysz Noble Thermodynamic Systems BioSuper Technology JungleBio 2019 | Winter Epixego Coreless Technologies © Copyrights 2021."
+    },
+    {
+      "id": "check-page-cf5cba3bb2",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1-1",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive NSF grant to validate product market fit Teams who complete a Regional NSF I-Corps Hub Northwest course, have IP developed in an academic lab, and receive a Hub recommendation letter are eligible to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for customer discovery. Teams conduct 100 customer discovery interviews, validate their customer ecosystem, and receive a much deeper understanding into all the different stakeholders who influence whether or not their technology is adopted. Teams who complete the National NSF I-Corps program have a much higher funding rate, including SBIR grants and investments. For NSF SBIR Phase I grants, NSF I-Corps alums have a ~50% win rate, vs 15-20% for the general applicant pool. Past Northwest Hub NSF I-Corps National program teams are:"
+    },
+    {
+      "id": "check-page-e45a1bcd65",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1-1-1",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive NSF grant to validate product market fit Teams who complete a Regional NSF I-Corps Hub Northwest course, have IP developed in an academic lab, and receive a Hub recommendation letter are eligible to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for customer discovery. Teams conduct 100 customer discovery interviews, validate their customer ecosystem, and receive a much deeper understanding into all the different stakeholders who influence whether or not their technology is adopted. Teams who complete the National NSF I-Corps program have a much higher funding rate, including SBIR grants and investments. For NSF SBIR Phase I grants, NSF I-Corps alums have a ~50% win rate, vs 15-20% for the general applicant pool. Past Northwest Hub NSF I-Corps National program teams are:"
+    },
+    {
+      "id": "check-page-6e91509d14",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-2",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive NSF grant to validate product market fit Teams who complete a Regional NSF I-Corps Hub Northwest course, have IP developed in an academic lab, and receive a Hub recommendation letter are eligible to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for customer discovery. Teams conduct 100 customer discovery interviews, validate their customer ecosystem, and receive a much deeper understanding into all the different stakeholders who influence whether or not their technology is adopted. Teams who complete the National NSF I-Corps program have a much higher funding rate, including SBIR grants and investments. For NSF SBIR Phase I grants, NSF I-Corps alums have a ~50% win rate, vs 15-20% for the general applicant pool. Past Northwest Hub NSF I-Corps National program teams are:"
+    },
+    {
+      "id": "check-page-77467c0433",
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-2",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive NSF grant to validate product market fit Teams who complete a Regional NSF I-Corps Hub Northwest course, have IP developed in an academic lab, and receive a Hub recommendation letter are eligible to apply for the National NSF I-Corps program, a 7-week training that comes with a $50,000 NSF grant for customer discovery. Teams conduct 100 customer discovery interviews, validate their customer ecosystem, and receive a much deeper understanding into all the different stakeholders who influence whether or not their technology is adopted. Teams who complete the National NSF I-Corps program have a much higher funding rate, including SBIR grants and investments. For NSF SBIR Phase I grants, NSF I-Corps alums have a ~50% win rate, vs 15-20% for the general applicant pool. Past Northwest Hub NSF I-Corps National program teams are:"
+    },
+    {
+      "id": "check-page-2fbc149f34",
+      "url": "https://www.nwicorps.org/national-icorps-program-2",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply National NSF I-Corps 7 weeks, 100 customer interviews, and a 50K non-dilutive NSF grant to validate product market fit Teams who complete the Intro to Lean Startup: NSF I-Corps Method program with instructor endorsement are eligible to apply for the National NSF I-Corps program, an immersive 7-week training that comes with a $50,000 NSF grant for customer discovery. Teams conduct 100 customer feedback interviews and receive a clear yes or no on product market fit. Teams who complete the National NSF I-Corps program have a much higher funding rate, including SBIR grants and investments. For NSF SBIR Phase I grants, NSF I-Corps alums have a ~50% win rate, vs 15-20% for the general applicant pool. Past Bay Area NSF I-Corps Method National program teams are: 2023 Winter YektaSonics Smart Bioauthentication Diaita Page Environmental Ama AI Chain Noctura Devices 2022 FALL Soof Solutions Micromize Bioremedi"
+    },
+    {
+      "id": "check-page-098b8ffec2",
+      "url": "https://www.nwicorps.org/national-icorps-program-2",
+      "page": "details",
+      "excerpt": "Past Bay Area NSF I-Corps Method National program teams are: 2023 Winter YektaSonics Smart Bioauthentication Diaita Page Environmental Ama AI Chain Noctura Devices 2022 FALL Soof Solutions Micromize Bioremedi Spectre Rapid Heating and Cooling 2022 Summer WUIGo Ozark MCT Bio Lab Cerberus JuvanAqua Periscope Kit Aepnus Technology PupilQuest NovelCoating Dr."
+    },
+    {
+      "id": "check-page-cd7cba5f0c",
+      "url": "https://www.nwicorps.org/regional-program",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply NSF I-Corps Training Each month, NSF I-Corps Hub Northwest offers no cost market validation courses for university researchers and early stage startup founders About the Program NSF I-Corps Hub Northwest trains early stage teams with a fundamental technology innovation to validate their commercial market and find a scalable business model through the customer discovery process. During a free 2-4 week course, learn from proven entrepreneurs how to conduct 20 customer discovery interviews, identify your top customer segment & value props, and accelerate finding product market fit. Teams that complete the Regional course, have university IP, and receive Hub recommendation may be eligible to continue to the 7 week National NSF I-Corps program, which includes a $50,000 National Science Foundation grant. Program Timeline Eligibility Requirements Team of 2-4 people No technology commercialization or"
+    },
+    {
+      "id": "check-page-b7d830cbcb",
+      "url": "https://www.nwicorps.org/regional-program",
+      "page": "details",
+      "excerpt": "Team Size - Each application is required to have a team of 2-4 members, typically comprised of university faculty, students, researchers, or recent alums."
+    },
+    {
+      "id": "check-page-f00fd202b3",
+      "url": "https://www.nwicorps.org/regional-program",
+      "page": "details",
+      "excerpt": "Early stage startup founder teams located in Northern California, Oregon, Washington, and Alaska are also eligible."
+    },
+    {
+      "id": "check-page-62f674d1b3",
+      "url": "https://www.nwicorps.org/regional-program",
+      "page": "details",
+      "excerpt": "Technology Innovation - NSF I-Corps is designed both for early stage technology based startups in the Northwest Region (Northern California, Washington, Oregon), and for early stage teams who develop a new fundamental discovery in science or engineering at a university or academic lab."
+    },
+    {
+      "id": "check-page-74a84c9480",
+      "url": "https://www.nwicorps.org/regional-program",
+      "page": "details",
+      "excerpt": "Early Stage - If you have a startup idea and the customer discovery process is completely new to you, you’re in the right place."
+    },
+    {
+      "id": "check-page-483eb60070",
+      "url": "https://www.nwicorps.org/regional-program",
+      "page": "details",
+      "excerpt": "If you are an early stage technology based startup in the Northwest Region (Northern California, Washington, Oregon), we welcome you to apply."
+    },
+    {
+      "id": "check-page-246503aa6a",
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply NSF I-Corps Training Each month, NSF I-Corps Hub Northwest offers no cost market validation courses for university researchers and early stage startup founders About the Program NSF I-Corps Hub Northwest trains early stage teams with a fundamental technology innovation to validate their commercial market and find a scalable business model through the customer discovery process. During a free 2-4 week course, learn from proven entrepreneurs how to conduct 20 customer discovery interviews, identify your top customer segment & value props, and accelerate finding product market fit. Teams that complete the Regional course, have university IP, and receive Hub recommendation may be eligible to continue to the 7 week National NSF I-Corps program, which includes a $50,000 National Science Foundation grant. Program Timeline Eligibility Requirements Team of 2-4 people No technology commercialization or"
+    },
+    {
+      "id": "check-page-9f85f2eac0",
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "page": "details",
+      "excerpt": "Team Size - Each application is required to have a team of 2-4 members, typically comprised of university faculty, students, researchers, or recent alums."
+    },
+    {
+      "id": "check-page-58d1ae9e79",
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "page": "details",
+      "excerpt": "Early stage startup founder teams located in Northern California, Oregon, Washington, and Alaska are also eligible."
+    },
+    {
+      "id": "check-page-151944166c",
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "page": "details",
+      "excerpt": "Technology Innovation - NSF I-Corps is designed both for early stage technology based startups in the Northwest Region (Northern California, Washington, Oregon), and for early stage teams who develop a new fundamental discovery in science or engineering at a university or academic lab."
+    },
+    {
+      "id": "check-page-eb44323bad",
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "page": "details",
+      "excerpt": "Early Stage - If you have a startup idea and the customer discovery process is completely new to you, you’re in the right place."
+    },
+    {
+      "id": "check-page-af8e631b86",
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "page": "details",
+      "excerpt": "If you are an early stage technology based startup in the Northwest Region (Northern California, Washington, Oregon), we welcome you to apply."
+    },
+    {
+      "id": "check-page-1daf4d9a8a",
+      "url": "https://www.nwicorps.org/regional-program-2",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply NSF I-Corps Training Each month, NSF I-Corps Hub Northwest offers no cost market validation courses for university researchers and early stage startup founders About the Program NSF I-Corps Hub Northwest trains early stage teams with a fundamental technology innovation to validate their commercial market and find a scalable business model through the customer discovery process. During a free 2-4 week course, learn from proven entrepreneurs how to conduct 20 customer discovery interviews, identify your top customer segment & value props, and accelerate finding product market fit. Teams that complete the Regional course, have university IP, and receive Hub recommendation may be eligible to continue to the 7 week National NSF I-Corps program, which includes a $50,000 National Science Foundation grant. Program Timeline Eligibility Requirements Team of 2-4 people No technology commercialization or"
+    },
+    {
+      "id": "check-page-1132a43396",
+      "url": "https://www.nwicorps.org/regional-program-2",
+      "page": "details",
+      "excerpt": "Team Size - Each application is required to have a team of 2-4 members, typically comprised of university faculty, students, researchers, or recent alums."
+    },
+    {
+      "id": "check-page-2337118553",
+      "url": "https://www.nwicorps.org/regional-program-2",
+      "page": "details",
+      "excerpt": "Early stage startup founder teams located in Northern California, Oregon, Washington, and Alaska are also eligible."
+    },
+    {
+      "id": "check-page-166e565f85",
+      "url": "https://www.nwicorps.org/regional-program-2",
+      "page": "details",
+      "excerpt": "Technology Innovation - NSF I-Corps is designed both for early stage technology based startups in the Northwest Region (Northern California, Washington, Oregon), and for early stage teams who develop a new fundamental discovery in science or engineering at a university or academic lab."
+    },
+    {
+      "id": "check-page-369b2e31c6",
+      "url": "https://www.nwicorps.org/regional-program-2",
+      "page": "details",
+      "excerpt": "Early Stage - If you have a startup idea and the customer discovery process is completely new to you, you’re in the right place."
+    },
+    {
+      "id": "check-page-e12d2b5592",
+      "url": "https://www.nwicorps.org/regional-program-2",
+      "page": "details",
+      "excerpt": "If you are an early stage technology based startup in the Northwest Region (Northern California, Washington, Oregon), we welcome you to apply."
+    },
+    {
+      "id": "check-page-56cd2ff6da",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "page": "details",
+      "excerpt": "Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply NSF I-Corps Training Each month, NSF I-Corps Hub Northwest offers no cost market validation courses for university researchers and early stage startup founders NSF I-Corps Hub Northwest trains early stage teams with a fundamental technology innovation to validate their commercial market and find a scalable business model through the customer discovery process . About the Program During a free 2-4 week course , learn from proven entrepreneurs how to conduct 20 customer discovery interviews, identify your top customer segment & value props, and accelerate finding product market fit. Explore Current Courses Teams that complete the Regional course, have university IP , and receive Hub recommendation may be eligible to continue to the 7 week National NSF I-Corps program, which includes a $50,000 National Science Foundation grant. Eligibility Requirements Teams of 2-4 People No technology"
+    },
+    {
+      "id": "check-page-d220826d25",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "page": "details",
+      "excerpt": "Team Size - Each application is required to have a team of 2-4 members, typically comprised of university faculty, students, researchers, or recent alums."
+    },
+    {
+      "id": "check-page-2e1ad1a34f",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "page": "details",
+      "excerpt": "Early stage startup founder teams located in Northern California, Oregon, Washington, and Alaska are also eligible."
+    },
+    {
+      "id": "check-page-8041f3571f",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "page": "details",
+      "excerpt": "Technology Innovation - NSF I-Corps is designed both for early stage technology based startups in the Northwest Region (Northern California, Washington, Oregon), and for early stage teams who develop a new fundamental discovery in science or engineering at a university or academic lab."
+    },
+    {
+      "id": "check-page-40e8dd86d6",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "page": "details",
+      "excerpt": "Early Stage - If you have a startup idea and the customer discovery process is completely new to you, you’re in the right place."
+    },
+    {
+      "id": "check-page-6afb6ce635",
+      "url": "https://www.nwicorps.org/regional-program-3",
+      "page": "details",
+      "excerpt": "If you are an early stage technology based startup in the Northwest Region (Northern California, Washington, Oregon), we welcome you to apply."
+    },
+    {
+      "id": "check-page-8685d4838d",
+      "url": "https://www.nwicorps.org/blog/category/UC+Berkeley+Alumni",
+      "page": "portfolio",
+      "excerpt": "UC Berkeley Alumni — Northwest Region NSF I-Corps Hub 0 Skip to Content Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Who We Are Leadership & Faculty Tech Scouts Blog Contact Login Account Apply Open Menu Close Menu Regional I-Corps Program National I-Corps Program Folder: Who We Are Back Leadership & Faculty Tech Scouts Blog Contact Login Account Apply © Copyrights 2021. All Rights Reserved"
     }
   ],
   "findings": {
@@ -45,9 +954,65 @@
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
-    "deadlines": [],
+    "deadlines": [
+      {
+        "value": "2027-01-12",
+        "evidenceId": "check-deadline-836e828127"
+      },
+      {
+        "value": "2027-02-02",
+        "evidenceId": "check-deadline-741133c6d1"
+      }
+    ],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "November",
+        "evidenceId": "check-announced-8ef4663ea4"
+      },
+      {
+        "value": "January",
+        "evidenceId": "check-announced-875af13659"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "7",
+        "evidenceId": "check-duration-396302020c"
+      },
+      {
+        "value": "4",
+        "evidenceId": "check-duration-1d8f8daf8e"
+      },
+      {
+        "value": "3",
+        "evidenceId": "check-duration-4caf0a666f"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-39343f2df5"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-3c42508d83"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-7fa70aaa66"
+      }
+    ],
+    "location": [
+      {
+        "value": "Northern California",
+        "evidenceId": "check-location-cef82e6dc0"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

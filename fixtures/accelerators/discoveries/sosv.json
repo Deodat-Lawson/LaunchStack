@@ -1,6 +1,6 @@
 {
   "programId": "sosv",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://sosv.com/about/",
@@ -124,6 +124,46 @@
     },
     {
       "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/legal-faqs/?faq_id=17368",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/legal-faqs/?faq_id=17370",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/legal-faqs/?faq_id=17373",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/legal-faqs/?faq_id=17374",
       "page": "terms",
       "anchor": "",
       "fetched": true,

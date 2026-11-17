@@ -1,87 +1,439 @@
 {
   "programId": "downstate-biotech-incubator-and-biobat",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.downstate.edu/research/biotech-incubators/park-incubator.html",
-    "https://www.downstate.edu/patient-care/index.html",
-    "https://www.downstate.edu/research/biotech-incubators/internships.html"
+    "https://www.downstate.edu/about/community-impact/brooklyn-lend/_documents/forms/application-self-advocates-and-family-members.pdf",
+    "https://www.downstate.edu/about/community-impact/brooklyn-lend/_documents/forms/applications-clinicians2026.pdf",
+    "https://www.downstate.edu/about/community-impact/brooklyn-lend/_documents/forms/rev-lend-2026-application-for-clinicians2.pdf",
+    "https://www.downstate.edu/about/community-impact/brooklyn-lend/_documents/forms/rev-lend-2026-application-self-advocates-familymembers2.pdf",
+    "https://www.downstate.edu/about/community-impact/brooklyn-lend/_documents/lend-fillable-application-2022-2023.pdf",
+    "https://www.downstate.edu/about/community-impact/brooklyn-lend/applications.html",
+    "https://www.downstate.edu/about/our-administration/finance/_documents/card-services/new-forms/Card-Application-Change-Form-v2.pdf",
+    "https://www.downstate.edu/about/our-administration/finance/_documents/card-services/new-forms/Cardholder-Application-Change-Form-V5.1.pdf",
+    "https://www.downstate.edu/about/our-administration/finance/administrative-services/quick-copy-center/_documents/SD354Face-to-faceASsessmentWithin1HrofApplicationofRestraintSeclusion.pdf",
+    "https://www.downstate.edu/about/our-administration/finance/contracts-purchasing/procurement/_documents/dmc-cardholder-application-form-dtd-12-07-18.pdf",
+    "https://www.downstate.edu/about/our-administration/finance/faculty-student-association/_documents/fsa-employment-application.pdf",
+    "https://www.downstate.edu/about/our-administration/finance/faculty-student-association/_documents/fsa003-mobile-vending-permit-application-form.pdf",
+    "https://www.downstate.edu/about/our-administration/finance/faculty-student-association/_documents/fsa005a-trust-and-agency-application-form.pdf",
+    "https://www.downstate.edu/about/our-administration/finance/faculty-student-association/_documents/fsatrustandagencyapplicationform.pdf",
+    "https://www.downstate.edu/about/our-administration/information-services-technology/_documents/lawson/lawson-enterprise-resource-planning-application-gl.pdf",
+    "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/academic-computing-technology/academic-applications.html",
+    "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/application-development.html",
+    "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+    "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/clinical-applications.html"
   ],
   "evidence": [
     {
-      "id": "check-phone-6aa4af3a1b",
-      "url": "https://www.downstate.edu/patient-care/index.html",
-      "title": "Downstate Biotech Incubator and BioBAT — details page checked by scrape.py",
-      "excerpt": "Call or Text Today (7185695618)",
-      "page": "details"
+      "id": "check-format-9b7d585b8c",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/academic-computing-technology/academic-applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Automation of curricular management Online and hybrid instructional design SUNY Downstate Health Sciences",
+      "page": "application"
     },
     {
-      "id": "check-portfolio-72e0ee7aee",
-      "url": "https://www.downstate.edu/patient-care/index.html",
-      "title": "Downstate Biotech Incubator and BioBAT — details page checked by scrape.py",
-      "excerpt": "Alumni → https://www.downstate.edu/education-training/alumni/index.html",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-7a38756df3",
-      "url": "https://www.downstate.edu/research/biotech-incubators/park-incubator.html",
-      "title": "Downstate Biotech Incubator and BioBAT — homepage checked by scrape.py",
-      "excerpt": "Alumni → https://www.downstate.edu/education-training/alumni/index.html",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-ef48d82a19",
-      "url": "https://www.downstate.edu/research/biotech-incubators/internships.html",
-      "title": "Downstate Biotech Incubator and BioBAT — application page checked by scrape.py",
+      "id": "check-portfolio-004df215f8",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/academic-computing-technology/academic-applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
       "excerpt": "Alumni → https://www.downstate.edu/education-training/alumni/index.html",
       "page": "application"
     },
     {
-      "id": "check-route-2060d7bc37",
+      "id": "check-portfolio-06d5fec03f",
+      "url": "https://www.downstate.edu/about/community-impact/brooklyn-lend/applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Alumni → https://www.downstate.edu/education-training/alumni/index.html",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-1eea01d241",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/application-development.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Alumni → https://www.downstate.edu/education-training/alumni/index.html",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7a38756df3",
       "url": "https://www.downstate.edu/research/biotech-incubators/park-incubator.html",
-      "title": "Downstate Biotech Incubator and BioBAT — homepage checked by scrape.py",
-      "excerpt": "Biotech Incubator → https://www.downstate.edu/research/biotech-incubators/park-incubator.html",
+      "title": "Downstate Biotech Incubator and BioBAT — homepage",
+      "excerpt": "Alumni → https://www.downstate.edu/education-training/alumni/index.html",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-8399b49080",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Alumni → https://www.downstate.edu/education-training/alumni/index.html",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d0ac5b581c",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/clinical-applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Alumni → https://www.downstate.edu/education-training/alumni/index.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1911454e42",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/application-development.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Biotechnology Incubator Application → https://www.downstate.edu/research/biotech-incubators/internships.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-43efba589b",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Revenue Cycle Applications Group → https://www.downstate.edu/about/our-administration/information-services-technology/divisions/revenue.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-46d196f21a",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Application Development → https://www.downstate.edu/about/our-administration/information-services-technology/divisions/application-development.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6d68fadee1",
+      "url": "https://www.downstate.edu/about/community-impact/brooklyn-lend/applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Application for Self-Advocates and Family Members → https://www.downstate.edu/about/community-impact/lend-brooklyn/_documents/forms/rev-lend-2026-application-self-advocates-familymembers2.pdf",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6e63589676",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/application-development.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Revenue Cycle Applications Group → https://www.downstate.edu/about/our-administration/information-services-technology/divisions/revenue.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-75a3e29a9e",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "[More] → https://www.downstate.edu/about/our-administration/information-services-technology/_documents/lawson/lawson-enterprise-resource-planning-application-gl.pdf",
+      "page": "application"
+    },
+    {
+      "id": "check-route-77fcc8e0a2",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Biotechnology Incubator Application → https://www.downstate.edu/research/biotech-incubators/internships.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8135533baf",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Clinical Applications Group → https://www.downstate.edu/about/our-administration/information-services-technology/divisions/clinical-applications.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-88512edd93",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/clinical-applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Business Applications Group → https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-90e1cc0a1b",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/clinical-applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Biotechnology Incubator Application → https://www.downstate.edu/research/biotech-incubators/internships.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9b001aee7f",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/academic-computing-technology/academic-applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Biotechnology Incubator Application → https://www.downstate.edu/research/biotech-incubators/internships.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9b1f8f8b48",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/clinical-applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Revenue Cycle Applications Group → https://www.downstate.edu/about/our-administration/information-services-technology/divisions/revenue.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ad1040793d",
+      "url": "https://www.downstate.edu/about/community-impact/brooklyn-lend/applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Biotechnology Incubator Application → https://www.downstate.edu/research/biotech-incubators/internships.html",
+      "page": "application"
     },
     {
       "id": "check-route-b470522339",
       "url": "https://www.downstate.edu/research/biotech-incubators/park-incubator.html",
-      "title": "Downstate Biotech Incubator and BioBAT — homepage checked by scrape.py",
+      "title": "Downstate Biotech Incubator and BioBAT — homepage",
       "excerpt": "Biotechnology Incubator Application → https://www.downstate.edu/research/biotech-incubators/internships.html",
       "page": "details"
     },
     {
-      "id": "check-route-e5159cc6f5",
-      "url": "https://www.downstate.edu/patient-care/index.html",
-      "title": "Downstate Biotech Incubator and BioBAT — details page checked by scrape.py",
-      "excerpt": "Biotechnology Incubator Application → https://www.downstate.edu/research/biotech-incubators/internships.html",
-      "page": "details"
+      "id": "check-route-caec63ebe9",
+      "url": "https://www.downstate.edu/about/community-impact/brooklyn-lend/applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Application for Clinicians → https://www.downstate.edu/about/community-impact/lend-brooklyn/_documents/forms/rev-lend-2026-application-for-clinicians2.pdf",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cb3fe92be5",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/clinical-applications.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Application Development → https://www.downstate.edu/about/our-administration/information-services-technology/divisions/application-development.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e5c084e25b",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/application-development.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Business Applications Group → https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ff2c15a639",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/application-development.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page",
+      "excerpt": "Clinical Applications Group → https://www.downstate.edu/about/our-administration/information-services-technology/divisions/clinical-applications.html",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-7e881b1d1c",
+      "url": "https://www.downstate.edu/research/biotech-incubators/park-incubator.html",
+      "page": "details",
+      "excerpt": "Downstate Biotechnology Incubator - Facilities and Resources | SUNY Downstate Health Sciences University SUNY Downstate Toggle Navigation Menu Patient Care Patient Care Overview University Hospital at Downstate Downstate Health Downstate Health Physicians For Patients Find a Doctor Find Treatment Areas of Care Patient & Family Support Insurance & Billing Find a Clinical Trial For Doctors & Staff Nursing Services Lab Services Pathology Close Submenu Education & Training Education & Training Overview The Downstate Experience Find Your Program Residencies & Fellowships The Medical Research Library of Brooklyn Colleges & Schools College of Medicine College of Nursing School of Graduate Studies School of Health Professions School of Public Health Offices & Centers Office of Academic Affairs Office of Student Affairs Student Services Graduate Medical Education Center for Healthcare Simulation Office for Institutional Equity Close Submenu Research Research Overview Office of the Senior Vice President of Research Office of Research Administration Research Centers & Departments Research Opportunities Research Related Services Research Compliance & Training Clinical Trials Getting Research Done Downstate Biotechnology Incubator Tech @ 710 Incubator Company Profiles Biotechnology Incubator Application Close Submenu News & Events News & Events Overview Office of Communications & Marketing"
+    },
+    {
+      "id": "check-page-9ecbc8d840",
+      "url": "https://www.downstate.edu/about/community-impact/brooklyn-lend/_documents/forms/application-self-advocates-and-family-members.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.6 %���� 331 0 obj < >stream h޼Wmo I �+�� ���J ��FM�*���|�� Y�� l���k�z`�=.9��D=/�� ?�g��a�ii� �cNH�� X�2�, � �Jx��`�8�Q�I SB�@3� ��aJ Т,S6C�cZHĠ j 8�q�1m3�޽�� �}�� M����� ����rZ��� ��F�Q5M L ��~���e �� W�_�� 8g ��b1[�) O1 ׌ n�� IKҐ��# �h�&�H� A�� �kI�Ms��h�� < ��@z ���_Oz=� �/h]� Es��I��k��&;��(��4';��� Cz �to:g � ��d7�C~jҧI�'����� ����~��_ �g���A����� ���X�, � �Ͽ���� #�0 z_��y���h`=��� �|�LL�����]� I���B@ ����q�(� �&�p�: ,� � � Ve��8�u�(���|Q0��� < ����c��q ��ۺx� �ɯ�\"�B�V�S]���䫕Y� ��k\"d�Ը\\���C�B��:b���W9A����j47Y= ����,�� �U ߸ã�PA>0k�K~���N |�J �z ��( �; � Λ��Ϊ�� < ��;NF�%�� �� e�C� �) z\" �8F�g�� � 6���FX\\�� p %`�k����OHn�A�ŉɽx �͛�%7�c�j!��m =� �� e��D ��ܔ ��Dx\"�w$ ��1J�' ��q oO��U�� �' �7�� � I���1k�: ��t���e��yZ����t��ؘO Z� � � � ���V s < ��? >stream h�\\�]k�0 ��ʹ3�p9Mc�\"��:�>tS6 � ���b#iZ���u╷���+ ��T��� \"��&x�M ]�E\\,���B]R���H� U�2G=� �/��h�x �*� ��� � q��& �V6�#U�-����㐍n4��m� ���j�ᥥ�~aS� �N�;q�s�[&��q�\\�? �� �sӅ� � tt� �5@��w�� ��� �tK? endstream endobj 333 0 obj < >stream h�2�0W0P0��P01 R� �&& 66����y% � �ޙ)�� y � � � RY�� ���Zlg Wm Uli Vl &M��%D *a ��! �ȀĢT�!F` a�� j �h# �: ��9 endstream endobj 334 0 obj < >stream h��[m��6 �+��⮒�N � Nvs \\�]$ m �6m ���,����7C� ז�^ ׇ� x�!� �pf�� F � N(g� �s OI$3�TD |j� � b��'�(0R(���R� `S�� f4� � �H�= F� �\\Ë&\\{fC�U�b��Va�D l �D(�)� #�ˌ �(�� h��z �WX��A�5��1M��Z �P�c�%� �� QRB �*��B�����rN4������: �D+ ���.Pȣ�I4 ��` �-1 q�� �3A��"
+    },
+    {
+      "id": "check-page-32359a177e",
+      "url": "https://www.downstate.edu/about/community-impact/brooklyn-lend/_documents/forms/applications-clinicians2026.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.6 %���� 472 0 obj < > endobj 494 0 obj < >/Filter/FlateDecode/ID[ < 6620558EC8A214859F5D41C8BCB272C7> ]/Index[472 40]/Info 471 0 R/Length 112/Prev 229766/Root 473 0 R/Size 512/Type/XRef/W[1 3 1]>>stream h�bbd` ``b``_ \" ��� �dY \"YyA$� �� �w����*��HN 0; L��H q ɜ \"E���O@�� ɸ�8��5 DZO ���� � �A\"@3hB�g`�� ` m� [ endstream endobj startxref 0 %%EOF 511 0 obj < >stream h�b``` �( V �R A d�`�d`a��������t� C�� �' �`* ʫ0�n�rHW �up�'\"**�/ƀ �6m��� ������A��9CCC��� '+��� N �-MJ� 3�4 ;�::� �a��Ȱ �������q��ƈU��\"�� -,� ��������F��M�cÝ KY�ć E:�8 N�L�(3�Km2 ˣN�u�� ^�(��031�=(0P��ec:��y� ��޴ǙsNd ��a3 \\p#�S�O]�qϳ +���O����0�D��/J� v,{{A������Á �Rk��G� 6������Gn�z,�_1�T���Ko˕.v < �qR��� �ji +k��|���g_��������� [� 3R��~ֲ��:�u0hE��u����.8��efOY���)�ft Ӗl؝�az��I_k�D�嶝���Y�ŝub�+ \\��.��2;v�L肋9E�B5��X� ����122 h 0� �fcv < 0��FA��� �/. ��)v5 bT�y�k � >.�f� ?w�i�s�4 V �Á� N��G * Ԅ8 � $8�ؘ d ����HZ0���_n�I #��]� �O-5: 3�Kh���� g��eg�S+�\\s�����၂� 1>�fƇ \\�i�QHI�� �d�\\e�� 0h�I� 0-Jji� 8� ���q B < '��l�^ d *����\\�((dl � \"� �V� �76K �� ,{ �w��R@� �� � �m ְ�A�a � �t� �W E�5 ��w1�f��/d < ,��d�)�Q���;!y�� K L�9��A�� L3 !�>�P � �. @h �g �� ���0 �3 �Ѓ���Ѓ���K��K � L � �E@ c� i � A2K�� ��P PTb C=� Q� *� �� �V�*�� ���髇� Q Q �� N�B�Y 6 �F�3�� ��U C��� q 3�D ��1E T� A� BD �ʥp�!.f �P=�d ڥ� ���� (��u рѝ�9O � �'ǀ� < ��s��^� ֚zZeS��\"g��'�7���d,�{\\^ E��0O�Ӄ � �}���ϟ>�⟿uv 6x�p13T�}�Q��S��u����K� �O���5�b�߲���F��X �"
+    },
+    {
+      "id": "check-page-960411100b",
+      "url": "https://www.downstate.edu/about/community-impact/brooklyn-lend/_documents/forms/rev-lend-2026-application-for-clinicians2.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.6 %���� 536 0 obj < >stream h޼Wko�H �+�qW � R�D�i�6Q�� m� .x�% �n����� e�� $3�w�cι׶MNHa� 1D ��t� �� M�P:Z� �IC %T0�&Z���U���� �$^qB;�h� 6�$ # O�0F�r & '���$k�۷�h�S� ��� ��L�\\��I�n1YN�Ō��G��$/ � )^����r�!y��zϫ� ��0V�*�TW���ָ�K¸؎^a�Xǽ���� F }� �k� y�}���1�Nj�Y�ʭ� �}�D��ÿ�?�8-���\"/����]��G y9�� �ǺG� yz�� �l��N�}�y��7�D؍� � ! �/��l7�|�8�D� �I���yh䯡�� �*�?��,�} �[���#�H���qa��>�� � �:� �&Ǜ� ? q �g� ���u���^��߿-.�ór]M�țMwT < ���ZlD�� |��VO7��-U �� U=�߈�|1�Z��V�8�����M���-��� < ��g��Zrא&�5��z^ia[ ����* � � ��r~9..6弞 �y%d�*�27��,�� ���fS=�J � �� �� 7�U�;bu*��� ��*]W��j� ޗ+6�k�i� � *� 7O_6�n�z� ���/�� QEY���� M��[M v�%���k�= AH? ��� �� � ��s�-��S���w �� � ��H�� �V� {*w>� ��GO-����y֍��Y�.� *C��e' �m� ߟ ��� ѵ=z Dw ��Q� b $ ǀvAl�-�2P| �F'� `����6A�>�:�]�� ^�� ��1� �9� ��n �� �e{��� ���jҶ� �\\��&/_Y�� *��|���̈́�g� . �Os?%}����1� y ۃ�lc�?��9��3�{�W�\"˶�b�ty���� � ��Q�jx��'�(I/��� �H��|��~!� �|�D-��^�>E�{��ڞ&Jj�C��C�C��7��Ӫ�VW�_�o�8�L < �J��g� ��y� ��`r�|( � /�TJ�3���:����[R�1�#� �\\� endstream endobj 537 0 obj < >stream h�L�� �0 D ��L �4��� ڪ���� nB 1X �ME�z �p=s�l ���c�ʟ ��]Y 3,��� EY�Zy�l��&IWp q r �m ~� �;�)[��� 4Î�Թ�q^�,E�W�FrU�j ;��{ �f#�# V��A�I[ )�+�� i2�����)� _h �|�Lࣀ��V��{ N !.�5�Q� ���K� y�C� endstream endobj 538 0 obj < >stream h�21�P0P01� b s C }��Ҽ CC}�̔�h���B X ��� �,H� HLO-������(65�(6�h �P S0ed �� � �ȀĢT�!&` a�� b�� D'X���!A e�:B endstream endobj 539 0 obj < >stream"
+    },
+    {
+      "id": "check-page-2bc536eb2d",
+      "url": "https://www.downstate.edu/about/community-impact/brooklyn-lend/_documents/forms/rev-lend-2026-application-self-advocates-familymembers2.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.6 %���� 368 0 obj < >stream h޼W�n I ��~�(B}�� !a0� Ǌl����� f�H��`��ߧ�� �e�ՊH��r���ϩ걖� ��e6(��9!�z `L��� �fL*�V�I�`FI&]0�PL � ͔2 V�) ���L� ��i! �. � ��Fƴ� {��� ����; 4� ���7|t ��i5+�sh~ �G�4 0 o�}>��5���*X � �o �m *��l}�d\\� 3Z8U� d-YCV �,\\Gc5YE�� 7��!�����'?�� � � �'P ������:A�� �Q�W�4�ɿ��h�G� E}�����s*�ߐ_C�&��� �넧}M�7�Cqj�ɟ'������t ���}���;~9 ���b ����A ���X�, � �Ͽ���� #�0 z_��y���h`=��� �|�L���Y��瀤^�� � Bg�qv\\. H��� �\\� ������ '��� �t��/ &�U�G�j�?�?���-����/ ��z*�/ jU>�Պ�I�Z���p* < &B�� ��u=|�W�~�GLp �*'�����[��MV�E�wR}^��` ���o��1V� ���%�� l' >{% ��� � �|� �A�ys/��j1; {� '#������M����!c � ^z\" ��F�g�� � 6��8FX �P � -`�c����OHn�A�ŉɽx �͛�%7�c�j!��m_z$ �'7� ��,�!�I ��Dx\"�w }` -�� ��v oOګ+��>8�|�� � �sD8�oa�Vw ��t���e��yZ�r���\\�? ��]m�ٱw� Nw� ^x�f�j�0�����G �]{7�B)���g � ��&� �u5�j�k�!bRj�5 ߎ����ڏ�׮�)�=ń��S H����g�` i�%�K ��p� � p+ < 4o�g�� ��k�'�w��w��� J� ���� ���a��*��u�����6�s/ԜQ�Cs ���E`��M��/7 [QJ) U��%��CU < B���ն뚯O��^��� �+��X �-� � ) endstream endobj 369 0 obj < >stream h�L��j 1 �_��L 6ǘ *\"Xǖ�Z�X(n �H�q\"��P�����n���/� 㱘��+D��PI� � ��D\\̢��B�S�, I� U e u�?�~[� �p� � PK��� �]T � � L]���T,����jǡ�=h8���y R= ԁú��~`�?�B��w�b璷L��m��� �� �Sӄ� � �tv� t�*��Ż�v�O&� ��KE endstream endobj 370 0 obj < >stream h�2�0W0P0��P01 R� �&& 66����y% � �ޙ)�� y � � � RY�� ���Zlg Wm Qllj Vl &M��%D� B�B(s 52 �( h� �AA�m0�: b�� A� �W8� endstream endobj 371 0 obj < >stream h�Ԗ�J�@ �_e�`wg?�"
+    },
+    {
+      "id": "check-page-13ca8aa416",
+      "url": "https://www.downstate.edu/about/community-impact/brooklyn-lend/_documents/lend-fillable-application-2022-2023.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.6 %���� 733 0 obj < > endobj 778 0 obj < >/Filter/FlateDecode/ID[ < 6D0A7E2B484EE5469388A5501C999819> < 02220329C1A3684487AB368E4983F345>]/Index[733 73]/Info 732 0 R/Length 155/Prev 358545/Root 734 0 R/Size 806/Type/XRef/W[1 3 1]>>stream h�bbd` ``b`� � � �� D2� �q`� �LB�3E\"�ǂ�_H� �j �ģ �� q& q��`v7X� D2 �S��)X l;� �4 �� ����\"��~� �� ��� �b\"� vm� H�h6��� � ���1�vF � �J �AG� :�9@� y� � endstream endobj startxref 0 %%EOF 805 0 obj < >stream hެV{8�Y ?ߘ �r'JZ�K�h5Z�\\Rd(�Hj �e�\\*MY� < �����4�\\Z�K6�B(�-�b�_iZ� �����g���}v���=���~������ !$� � �#D݆���&�$�$\"#� 0��Q�� �z 2=U���a � mNl}x� ����gĻ/\\���+�L�ȵ��ҟζk�TI� ��ޮ��9i�)/S���p�IS Yk�wW�{�1�5c�睞� iɶ� �;����Ʈ��\\R����z4�V�`�g��Eʉ] �R��� G� x�*}P:� ڸ��-�C�Ϭ{�KT��~�m8`����Zr���&�= /���� ��*;��U���҇�m����f�&K]�2I�H,�g��R��ӲQ�A� < �t#�I��\"��d��14���l�4� ��u�tl ���w�i��>�� ��nK:c�X\\��t�S�ͪ�^�F}_�fm��7/��aDh���ь �'.�iʯ�!��4[yVT�N���ej�a1���Xl��ܾ(�g^�� ˆ���X��aRSV ;�zЊc�s������8��� �K���y �� Y v\\ �n�/Y���?���� pu�� ����� K:� � �z��\"�.�>����9[�. ;y����q��Z��w�n�Z^z��=�l�S����o BB��sZZ�5 �� 6K �]kH ��洖��딖@3��i����H�ߴ����7� hSj �o�o�M���Z�� �)\"1�\"�� �� �mH [�� ��1 �\"!x�x�gbd�C��IS^���c�I)$ � &Ě�.R < - c���>�z� !�_ WSu0*���� #��# E# �� �F� � �� L d ȡcb��c �(� v , � �2 � �� 2 � �� ��P��tq `�( V E,x�aĆ'�1����F��G�j �Q&� �� .��1xz l��&�)� B`�� ��g @9 �I�L���r \"!:��*�B� �� �+��0�u q�i� � � ��#�qB � k!�U � � c u�� �8�� m�G�oOt[�p�&�G'=���E��`� d��"
+    },
+    {
+      "id": "check-page-2e45150336",
+      "url": "https://www.downstate.edu/about/community-impact/brooklyn-lend/applications.html",
+      "page": "application",
+      "excerpt": "Application for Clinicians | SUNY Downstate SUNY Downstate Toggle Navigation Menu Patient Care Patient Care Overview University Hospital at Downstate Downstate Health Downstate Health Physicians For Patients Find a Doctor Find Treatment Areas of Care Patient & Family Support Insurance & Billing Find a Clinical Trial For Doctors & Staff Nursing Services Lab Services Pathology Close Submenu Education & Training Education & Training Overview The Downstate Experience Find Your Program Residencies & Fellowships The Medical Research Library of Brooklyn Colleges & Schools College of Medicine College of Nursing School of Graduate Studies School of Health Professions School of Public Health Offices & Centers Office of Academic Affairs Office of Student Affairs Student Services Graduate Medical Education Center for Healthcare Simulation Office for Institutional Equity Close Submenu Research Research Overview Office of the Senior Vice President of Research Office of Research Administration Research Centers & Departments Research Opportunities Research Related Services Research Compliance & Training Clinical Trials Getting Research Done Downstate Biotechnology Incubator Tech @ 710 Incubator Company Profiles Biotechnology Incubator Application Close Submenu News & Events News & Events Overview Office of Communications & Marketing Upcoming Events Resources New Media Services Classroom"
+    },
+    {
+      "id": "check-page-aac97a61fb",
+      "url": "https://www.downstate.edu/about/community-impact/brooklyn-lend/applications.html",
+      "page": "application",
+      "excerpt": "Register for an Informations Session Application for Clinicians Application for Self-Advocates and Family Members Letter or Recommendation Form SUNY Downstate Health Sciences University Our Mission Community Impact News & Media Job Opportunities Contact Us I am a..."
+    },
+    {
+      "id": "check-page-0ab7585434",
+      "url": "https://www.downstate.edu/about/our-administration/finance/_documents/card-services/new-forms/Card-Application-Change-Form-v2.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.7 %���� 463 0 obj < > endobj 560 0 obj < >/Filter/FlateDecode/ID[ < 04C1D06B48B74075A3922A731EE1C716> < 9D2B97035C44F14BA70AE6C905D401D2>]/Index[463 321]/Info 462 0 R/Length 301/Prev 803682/Root 464 0 R/Size 784/Type/XRef/W[1 3 1]>>stream h���1/�Q ��sN� Ck0�H��@$F\" �� a��El �!, � ��_�f ��� 0 KE�����{?@ ˻�����s�{RS�~1�ܓ� 7{C.�k�d���8� �O C�A f�*y�\\%�� ȍ�nԕ�5��j� NE���k�X�ug����컙wr ��W熘3��-���Q��/���-�XxK�{�ܵ�� ���� =�8K}������ :�� ١�pv�\\'��z2s�{�� �� >stream h�l��+�a Ɵg߻��o6 j��� ���n �4n\\JM�� �Qʅ�2D$�� � �LmYIRsAj�_�$�\\h�}[j���s�s~��{^ c�� �r��J�� P��nT� J� z;�u| 6%�;�q���C < � Y � GH!C� ��c ��_F���D㕱OL �aO수 �4��o��� � . 8��� UxV�\\� �g� �r�S >>>/Lang(en-US)/MarkInfo < >/Metadata 13 0 R/Outlines 18 0 R/Pages 461 0 R/StructTreeRoot 33 0 R/Type/Catalog/ViewerPreferences < >>> endobj 465 0 obj < >/ExtGState < >/Font < >/ProcSet[/PDF/Text/ImageC]/XObject < >>>/Rotate 0/StructParents 0/Tabs/S/Thumb 12 0 R/TrimBox[0.0 0.0 612.0 792.0]/Type/Page>> endobj 466 0 obj < >/Subtype/Form/Type/XObject>>stream H�D�1 � �}ž� /��� ���(�O�(Z\\�3��\\! ջ�c�$X^3 hV>&�r��$�$�,��{�o|�Q^&�b���;��(-�rk���W n �� D endstream endobj 467 0 obj < >/Subtype/Form/Type/XObject>>stream H�2TH�2P0P0׳051Q��307V(J�J�2T � �s �*�� D�9LI1 @� ks � endstream endobj 468 0 obj < >/Subtype/Form/Type/XObject>>stream H�D�� �0 ���'����0 54L 4� �/ � �N��E� �P*M�XU�E-� 1���} ��{ғXIN�9r� O� ��� >�& �7��4 \\��y�� . F� {"
+    },
+    {
+      "id": "check-page-a010dcce65",
+      "url": "https://www.downstate.edu/about/our-administration/finance/_documents/card-services/new-forms/Cardholder-Application-Change-Form-V5.1.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.7 %���� 11 0 obj < > endobj 47 0 obj < >/Filter/FlateDecode/ID[ < 16DA95118DCA204681DFAF5263E81C97> ]/Index[11 83]/Info 10 0 R/Length 159/Prev 708486/Root 12 0 R/Size 94/Type/XRef/W[1 3 1]>>stream h�bbd` ``b``v � � �� D } �b� R� D�^ �\"��l]0� ̾ \"�E�$#c �-x D2n �` ��`�߂�X- �ׂؿ��j�AlS&�� �4 l/� �U� �y Xe X$ DZAD��*�A$K H�:U �c� �w��� GI&`��_ 0 �� endstream endobj startxref 0 %%EOF 93 0 obj < >stream h�b``Pb``������s *` b � d1%(f` f bpw�� ! ��U�Ձ� V%F �n�� > endobj 13 0 obj < >/ProcSet[/PDF/Text/ImageC]/XObject < >>>/Rotate 0/Type/Page>> endobj 14 0 obj < >stream h�̛k�\\����J}L �� 4 8�vbt�'��I���A��n �e��`��g=�\"�� �Dr20 �j��$7���b �p)� C��p��_j���/5]Z �R�=g��ri3Xs�g���.=E{�_bN�: �� c�6Z �E ��% �]ZVa^Z�B ֧^b�њ �d�N!��� �*�K��K ��m���=Q�V�*�K/ �-��0/�F�1�K��k����P�0)ا 6���#��/� ���.�Fn�^�y�@ �M�,�\"� gt ��1�0��� s �]���$ۮ ms�u���u�� y��'?{�� ��� Ǘ�e?__~����Yÿ}��_���k+����>}��]q��~����>{�� k�ۍ�g z��/ݛ���ū��?Ώ?�n�뻯^|g����^|��� ~��w/�~����~��'_���?��o�~���_�� ��'���?b �ٿ~�� /�\\R�L����_�x�� ����>}� ?�C �٫�_ o'�������Q Qm�k� w���� }�ꇟ���7/_ s��w� ��/_�ȗT4 ����/���?��� ��w�� }�F�_���ś�����|��_��R� |i%�g��y���_>���W/. ���7/����j�}�÷/ԙ� ���7��{���M�L}�/� ��. ��{ ��o��5��j?� � ��������i�U:��p[ȳ? �F�)�K��O=˥^��m;�Qi7FJ�@k�?_245��J���?S:� ��x/ٿ��4�:������݆iF��ؠe�˸ ���1B/Ɇe�h�l�! � 7���� ���y)ƭ-d���5֛ &7ލ�Dq���U�j�� �u � !sl�B��wA�ػ�X15>��m�n��:����QTn�} rʶ� �`흲��> 2a��M �:Nۆ9�Ms"
+    },
+    {
+      "id": "check-page-730a1a0a54",
+      "url": "https://www.downstate.edu/about/our-administration/finance/administrative-services/quick-copy-center/_documents/SD354Face-to-faceASsessmentWithin1HrofApplicationofRestraintSeclusion.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.4 %���� 140 0 obj < > endobj xref 140 31 0000000016 00000 n 0000001364 00000 n 0000001677 00000 n 0000001866 00000 n 0000002267 00000 n 0000002651 00000 n 0000003108 00000 n 0000003145 00000 n 0000003374 00000 n 0000003618 00000 n 0000003696 00000 n 0000004327 00000 n 0000004443 00000 n 0000005026 00000 n 0000005458 00000 n 0000005870 00000 n 0000006285 00000 n 0000006655 00000 n 0000006878 00000 n 0000007374 00000 n 0000007664 00000 n 0000007914 00000 n 0000008502 00000 n 0000008984 00000 n 0000011678 00000 n 0000014584 00000 n 0000018267 00000 n 0000018499 00000 n 0000018705 00000 n 0000001186 00000 n 0000000933 00000 n trailer < < 94DDCF99696D5B4C97A7642F40F0F0C9>]>> startxref 0 %%EOF 170 0 obj < >stream x�b```f``������n��ǀ | ,@Q � o�00�� 3�� ~��e d��e I�� � < �00�� ii � ��2�p6�n\\��p�烦����b�xa�ȅ]2 �� �K�J� g�c���� j ; C� �\" � b�� �!| A�� 2f iF � 0 �. � endstream endobj 169 0 obj < >/Size 140/Type/XRef>>stream x�bbbe`b`` Ń 3Υ�} �` $ endstream endobj 141 0 obj < >/Metadata 10 0 R/PieceInfo < >>>/Pages 9 0 R/PageLayout/OneColumn/OCProperties < >/OCGs[142 0 R]>>/StructTreeRoot 12 0 R/Type/Catalog/LastModified(D:20091204135946)/PageLabels 7 0 R>> endobj 142 0 obj < >/PageElement < >>>/Name(HeaderFooter)/Type/OCG>> endobj 143 0 obj < >/ColorSpace < >/Font < >/ProcSet[/PDF/Text/ImageB]/Properties < >/ExtGState < >>>/Type/Page>> endobj 144 0 obj < > endobj 145 0 obj < >"
+    },
+    {
+      "id": "check-page-7221e24744",
+      "url": "https://www.downstate.edu/about/our-administration/finance/contracts-purchasing/procurement/_documents/dmc-cardholder-application-form-dtd-12-07-18.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.6 %���� 14 0 obj < > endobj 61 0 obj < >/Filter/FlateDecode/ID[ < 1A424F38FA9B3D4BBDF5C8FD8F3983EC>]/Index[14 100]/Info 13 0 R/Length 127/Prev 30716/Root 15 0 R/Size 114/Type/XRef/W[1 2 1]>>stream h�bbd ``b`� $ � �! k �X � Ɲ01�]pY ��* 7�q7�� .[ ��ˢ � � �� �g+�� @�y �4 �z \"6��Q V2�u Hp� �;@b� &F�� S G&�)� @� i�%l endstream endobj startxref 0 %%EOF 113 0 obj < >stream h�b``�e``f �x- T� �, - x�. 30�1�2)p3�1m�m��ޠØ��P�|@�� {� � � � �� ֌ ��5�@eIg� Q ���� �F� ޣ ��320$iAh��@Z���u�ة!��g 6�i$�4~����! p� (����� Q�� Ĭ �G!|Fm� �k'� endstream endobj 15 0 obj < > endobj 16 0 obj < > endobj 17 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 18 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 19 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 20 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 21 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 22 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 23 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 24 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 25 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 26 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 27 0 obj < >/Subtype/Form/Type/XObject>>stream"
+    },
+    {
+      "id": "check-page-a8c3fcc518",
+      "url": "https://www.downstate.edu/about/our-administration/finance/faculty-student-association/_documents/fsa-employment-application.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.7 %���� 295 0 obj < >stream h��{{� ���W�ؿ�8 Yx q����cF�G� I��i��jVK�a�Z6[ ����e&�E6�)yc��Rt �3 $� Sr�6��Ƙ� ۚ�X (c �m��kLhQ� S� U�h( [\" �� ���8��ƅ� k���D� ӸT,el㊥^�5��4��7 ��x��Ml�w� BK�����Li|\"��m _���� -沶 &��5�b.��iTK���+6! ަ&��ƹ ��jc h �6�`@g�h3��l ]���51P�u�!pP ��i���M, ��$cѸ4�ej��&%� �m�2�{�� ���d����dgQ�� ��>7�F�qRC ���)X��� m elS\" \\S �j��L$0B� f �)�#C㔖` 4NI�8�ٷ- ��Ӵ �@}�k �q� ����a_, �2� #�G�Ԙh j3� �H = �M-r��&�#&� �h��у�@ �4G�X]�9 b�\" �� ģ5Y��i� h�9��L\"��X�)� �h�f� r��� �!�� )0 ဋ-�� 9�D& < �|,� 9b�-��� �� { P �����OO � 薟�>�9��������T�lu��/V�)����Oק��/W��������Ֆ�?� ���:{�� _����w��;E���� )���� ./ �M�4h 5M�fM��tG%���j�4��gt < �� ��xVǳ:���p'䷎���q��cu ��8 �) ]lN/�ϖ�o��z;;=� �\\��m.ϗ���x�~��~ oh��v��w�G��������eGww�~3�� ��w��%��|��}��d�n9���ǋ�Ÿ;��.>�� 'g�5 < >��N�G����% ��ζ�_��� ���buy1��m� ֗ ��\\�����V�?�k�!=�׮|P��s��p�|��u|� �� �X �W�Ưe��2_�&b � ڰewq� /�� _H� rB�� ?�ܬ!D�O/78���#� � �V�f ������돟 ��f~�т +��d���{B�%�fD�yw6�t� ��n>>��2@��M׍?.//d���X_\\҆-֛�� ���f���n|~٘��\\6���h��|�\\��t�}{��|vqz�d�rF� \\ ��)S��ly&3h!]�b�'� � ��d�l'�J�~�'�`'��O��Ϥ�3��l��Y�녴y!m^ ڼ�� < �~ ���^I�W��ՠ�+m��:�\\n ��ǯ�p�J׷�����۾�_��͇��P�ۜ ��[^�g�w&ճAߙL;뇘�6��z�m�s'��A�ﵐ6 i� �Y�m:چ�L���ki� 4_k���|�i� لK�x) / /� ��r˛� O�$U �O���I�#�l�B;�%B�#GrCl- �# �i�� |�����!e~�Z|\"4^l?7߭׿^lכN��m � < \"e�4�؎ ۗ �f��F��G ����7/O~|6��N� 1��/�\\F :#M�r>2����bۀc4?.�s��/VęfKވ]��V� vr��Y�5� dMCu�[`�Ώ Ɍ s i H� �)�#0 � b?�}f ?�S="
+    },
+    {
+      "id": "check-page-22cf9748bc",
+      "url": "https://www.downstate.edu/about/our-administration/finance/faculty-student-association/_documents/fsa003-mobile-vending-permit-application-form.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.6 %���� 150 0 obj < > endobj 175 0 obj < >/Filter/FlateDecode/ID[ < 0275E4920AB42C4BA0E6CEBB20AAB142> ]/Index[150 57]/Info 149 0 R/Length 109/Prev 108750/Root 151 0 R/Size 207/Type/XRef/W[1 2 1]>>stream h�bbd ``b` +� S;�`\\ �� \\Q �,� g a \" Ab�A, � D8��� �6 � $¹A\\e�Q� �l��} V5�� $t�3012���00 *�?S�c� և � endstream endobj startxref 0 %%EOF 206 0 obj < >stream h�b```a``:�������A� �2�@�1�an �? \"|���^ �EG GG X X �ˁ�8 K�E � | �8~2q2=b��$�h��)�� S ��瑰U � � u � �&�d � ���ث � �x> 330= R�@�S@����# �Hn �em ŌN � endstream endobj 151 0 obj < >/Metadata 9 0 R/PageLayout/OneColumn/Pages 148 0 R/StructTreeRoot 17 0 R/Type/Catalog>> endobj 152 0 obj < >/Font < >/ProcSet[/PDF/Text/ImageC]/XObject < >>>/Rotate 0/StructParents 0/Tabs/R/Type/Page>> endobj 153 0 obj < >/ProcSet[/PDF]>>>>stream H�� �Pp�uV�r�u� 0 � � endstream endobj 154 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 155 0 obj < >stream h��Xmo�8 �+ �æ��I�z � J�t��&m�l�M�hG�,y�ҫ���3���٤i��[ P 4�f�3 G�!�0`�9aȜ(F 17�~���Ř`� P;T� ��O �\\����� ��� !Q�\\?�� !- v��]߬!E �X0�Ƙ� &����E#� �d2���ǼУ �� �E�͉C4 Չ#� R,��� � ��� 턃���2߅>����]h' < ���} 8nȞ=������c��ߊ=��sLL�E�f� �W�q�� x ;? < �'e�`�� x ���xΜ�R M��\"�1d0���ղ�����:�갫w�f���ÿ]$,I^��9��,����y B��� �=$��'3>��_1�*��\\/�+� y \\� l� � � t��_��f���M��t�g �f�g U4�U��U�e�zS�Z �j������~�g� JP�a���$���t~b/�4�5� Y���'�BuS�@ �� E� #Uk��إ ��w]� ���&!�"
+    },
+    {
+      "id": "check-page-4caa1cb559",
+      "url": "https://www.downstate.edu/about/our-administration/finance/faculty-student-association/_documents/fsa005a-trust-and-agency-application-form.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.6 %���� 444 0 obj < >stream h��{k� ���_9 \\X�� 00`[�ع ǰ��fj��bˎ0�d��`���^ko����O��8��`���b���X+6 �nb 7�w��M�r��MuY�|�*�ˍw��E���v�c�E��YJ��ꛗ��o� �V�7!$y��� K��, )�&���ބ\"���� |��Ēo��\"s� $�q% M.����?�����*�UrU�� %$\\ \\IyH %V�5�J �u�*Uޕ K�E����z� � >�;Q��� ��\\�, ��+�Q�J�&W W���� �� �\\����Ty.� ����5\\u䦛Ҝ��B�U��I(�KO�Py%_ M�X?iKiI�5EwSzAn�r����JW�*�U�R�(C P�$��+�A�75��o���n ~��Ϟ < � � �����o~y��+����o^|����r���O ��f$�H#��W ~x���/%���ԑ���|��O�6| � < }��۟ L5I�A�O��� KĜ�x�G���] �aѸY�� < >a��.'��id/z7b{s��S>����'X��v�����ڪf з�EڶjMЊ n�~���� �Ӎ��õ���� �j��M+�K �ʠ|���}q c��� =G��@cʜ�4�� ݛt���G�{��|������7/ Y *�� Y]9� 2�e�y����� z�� ������?yy�� ?z����~z�ї_���|����~���G����W?z���� ?�64����F�����O�� s@[�� �9%U�1�� cu i�i�.�6���Ƶ�� �C�� �* � ~(��}'_� ��㓟�Y;��y�[f ?� ٜ�� ��g����o � ���?Y� w���� /����V��?�a\"g� ��e�~�d�-��홉�ɟ�|��7 ��_����˿~+��_���~y2�>~�� t�T�� J����˟n�x��'��, �y} �����~Hᤗ�&׽�^ �΢ �� ^* B�}� �w�S`?}����>{��_�= �f�S�73�Mnz'���A�S � gg���� r W3�M���}wqCI� �sJ��`q�2��@��\"#�����7��>��� t� �Zn�� ���ŏ�>��� 8]�f���i���継� �����{�]>�� �`�cy�bZ�� O���ч���?� �Ʒ7�����-�\"=��ϱ� < �2����O z���~�ѷ/�$����Ҳ' �N���?}�m۹r��� �~�RJ䒺��� �=y���_�DWn >�'?�!ߪ��8 ˬ^>(�ʑ% 9�i)���O ���3���O ?��� < }�D$���� �t ?y��'�� >��GL���O^~���/^����Ϙ� �� 췟�|,c����=�q�_�|�ߋt�n����O x�����g�Ⱦ o���� ��������^P�`?|��ы ���o �p;z��� �H�� � �3FN�� �TX�v���-5c> �G�Yv�\\ � Z�7�x � a0HZ ����xo�s-�祌 24.�4�1�*� �eO�� ���"
+    },
+    {
+      "id": "check-page-c41edc2096",
+      "url": "https://www.downstate.edu/about/our-administration/finance/faculty-student-association/_documents/fsatrustandagencyapplicationform.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.6 %���� 691 0 obj < > endobj 717 0 obj < >/Filter/FlateDecode/ID[ < 881195B4CBC3AA44A39DDEF2FC4585F5>]/Index[691 57]/Info 690 0 R/Length 96/Prev 128324/Root 692 0 R/Size 748/Type/XRef/W[1 2 1]>>stream h�bbd ``b`� F>@�� �` q�O�Xf �M �)�� qAb�R(b�p1&,bb?� w �` ��A�Ҁ�� Ȣe L�L Y ��B�g ~ ` 1 � endstream endobj startxref 0 %%EOF 747 0 obj < >stream h�b```f`0�f`e`��� �� @16 � >300^�0� @R��X���z��|�4�LS�0�+ `��� a 0�@ \\ �� @Z � �F 2�3��h �� �Q�dHex�8�y [ _�$� 6'p � �V��I5� �� | � � ) ���`n f`t+ ��@� ��8 [㶙��� ��2y� t�i ��f`|X r; � � c�R m��Py ��8 �OG!� � ��A endstream endobj 692 0 obj < >/Metadata 92 0 R/Names 719 0 R/PageLabels 687 0 R/PageLayout/OneColumn/Pages 689 0 R/Perms < /Filter/Adobe.PPKLite/M(D:20120523144411-04'00')/Name(ARE Acrobat Product v8.0 P23 0002337)/Prop_Build < >/Filter < >/PubSec < >>>/Reference[ < >/Type/SigRef>>]/SubFilter/adbe.pkcs7.detached/Type/Sig>>>>/PieceInfo < >>>/StructTreeRoot 141 0 R/Type/Catalog>> endobj 693 0 obj < >stream H���[k�0 ��� g}�L� ���C7' �n�؞B��.,��I����K�8[�2���^����w�a>T�g��_]���@H�9z6t:`%��> г�� r�%Ƃ��1Un n��iؕM ��D��Y2\\a ��ɉ( \\�֌�F��ޠ >� 훂�2 ��v��D� E�\\(���I �#� �}��� Y��Ғ�-7�� ��t�~2o�t��bֆ|X q yT�.p*۞ �yH���(G�̓9 �4^{� ��o�� 9�A���f��x�J�B ���$(�� ϝ�m� \\�MC�i�eQ��I����x���)@-���Ȗ�{��p� e�*���|[� ` l�� endstream endobj 694 0 obj < >stream H�ܑAK�@ ��� � �AH��` т Z z ��I\\�f�d� ��n l�i ={�y�>޼�)L�!�N»�{oN(�HbT %a�A V�R��`� #,"
+    },
+    {
+      "id": "check-page-5252095ca3",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/_documents/lawson/lawson-enterprise-resource-planning-application-gl.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.4 %���� 47 0 obj < > endobj xref 47 15 0000000016 00000 n 0000000929 00000 n 0000000596 00000 n 0000001173 00000 n 0000001426 00000 n 0000001854 00000 n 0000002393 00000 n 0000002427 00000 n 0000004947 00000 n 0000005254 00000 n 0000007923 00000 n 0000008178 00000 n 0000008423 00000 n 0000008662 00000 n 0000000763 00000 n trailer < < 683bb7db26d4a94bbf7c26aae7af8a10>]>> startxref 0 %%EOF 49 0 obj < >stream x�b``�f``~� �� �� �Y 8 X� ����A���wc�� �ى�K6��58˴ ,����r B3X 1# �b5�f��� ` v� � endstream endobj 61 0 obj < >/W[1 1 1]/Type/XRef/Index[7 40]>>stream x�bbbd`b`` � � '� { endstream endobj 48 0 obj < >>>/LastModified(D:20080814172023)/MarkInfo < >>> endobj 50 0 obj < >/Font < >/ProcSet[/PDF/Text]/ExtGState < >>>/StructParents 0>> endobj 51 0 obj < > endobj 52 0 obj < > endobj 53 0 obj[/ICCBased 56 0 R] endobj 54 0 obj < >stream H��Wks�J ��_1�OR��hF�ԭ[�1�q6~,�Mm��A��ѽXb% ���{zF Kl6T�� �8}�t���&��o��� _]2�����嘝� � �(q�a��r��q��� ��\\�]���������̱ ��\\0����l^2�����Ӽ`\\h�����Dv��q��/gߌ/�� �Ҵ��gl�U�� i)�T���XHv�N230���������j�ܷ]�'o�3#{f��f�.�*�M�}ޮ_�p��M����n+f�� < ���&ה�]� o�@�u�|�-w:~ ��M���\"�7 Zl�dz ���*��\\� ���}Nb � ˖��a�Í�m��q���4��e���*�$��K$�fcIб]J��)M �`=� k��ãd���d�(a�ܱ�i�d@ S}�n�X�۬z�2�ڣ,�SK����O��;�ȗ no��� �Ǉ�eV ��QJ\"&�s����8�� �9Y.S� �9l� ��6y�78� �� ��ɳ��� V�&C�� 5���: �G � : �KB zrS��I)K�Ͷ�V�� $����K s��\"��aĻ�,� 0J H�� #� �D-U��5繁NlQ��� �E)p�x��H�W� �ۭ� މ( � � �- �>"
+    },
+    {
+      "id": "check-page-d04408e8b8",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/academic-computing-technology/academic-applications.html",
+      "page": "application",
+      "excerpt": "Academic Applications | Academic Computing & Technology | Information Services | SUNY Downstate SUNY Downstate Toggle Navigation Menu Patient Care Patient Care Overview University Hospital at Downstate Downstate Health Downstate Health Physicians For Patients Find a Doctor Find Treatment Areas of Care Patient & Family Support Insurance & Billing Find a Clinical Trial For Doctors & Staff Nursing Services Lab Services Pathology Close Submenu Education & Training Education & Training Overview The Downstate Experience Find Your Program Residencies & Fellowships The Medical Research Library of Brooklyn Colleges & Schools College of Medicine College of Nursing School of Graduate Studies School of Health Professions School of Public Health Offices & Centers Office of Academic Affairs Office of Student Affairs Student Services Graduate Medical Education Center for Healthcare Simulation Office for Institutional Equity Close Submenu Research Research Overview Office of the Senior Vice President of Research Office of Research Administration Research Centers & Departments Research Opportunities Research Related Services Research Compliance & Training Clinical Trials Getting Research Done Downstate Biotechnology Incubator Tech @ 710 Incubator Company Profiles Biotechnology Incubator Application Close Submenu News & Events News & Events Overview Office of Communications & Marketing Upcoming"
+    },
+    {
+      "id": "check-page-a34f57a1bc",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/academic-computing-technology/academic-applications.html",
+      "page": "application",
+      "excerpt": "To partner with faculty, academic administration and campus information technology departments to support the educational enterprise."
+    },
+    {
+      "id": "check-page-3715c2a154",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/academic-computing-technology/academic-applications.html",
+      "page": "application",
+      "excerpt": "To provide faculty development training and materials to individuals and departments/programs."
+    },
+    {
+      "id": "check-page-ae398830a3",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/application-development.html",
+      "page": "application",
+      "excerpt": "Application Development | Information Services | SUNY Downstate Health Sciences University SUNY Downstate Toggle Navigation Menu Patient Care Patient Care Overview University Hospital at Downstate Downstate Health Downstate Health Physicians For Patients Find a Doctor Find Treatment Areas of Care Patient & Family Support Insurance & Billing Find a Clinical Trial For Doctors & Staff Nursing Services Lab Services Pathology Close Submenu Education & Training Education & Training Overview The Downstate Experience Find Your Program Residencies & Fellowships The Medical Research Library of Brooklyn Colleges & Schools College of Medicine College of Nursing School of Graduate Studies School of Health Professions School of Public Health Offices & Centers Office of Academic Affairs Office of Student Affairs Student Services Graduate Medical Education Center for Healthcare Simulation Office for Institutional Equity Close Submenu Research Research Overview Office of the Senior Vice President of Research Office of Research Administration Research Centers & Departments Research Opportunities Research Related Services Research Compliance & Training Clinical Trials Getting Research Done Downstate Biotechnology Incubator Tech @ 710 Incubator Company Profiles Biotechnology Incubator Application Close Submenu News & Events News & Events Overview Office of Communications & Marketing Upcoming"
+    },
+    {
+      "id": "check-page-2936bb2a4e",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+      "page": "application",
+      "excerpt": "Business Applications Group | Information Services | SUNY Downstate Health Sciences University SUNY Downstate Toggle Navigation Menu Patient Care Patient Care Overview University Hospital at Downstate Downstate Health Downstate Health Physicians For Patients Find a Doctor Find Treatment Areas of Care Patient & Family Support Insurance & Billing Find a Clinical Trial For Doctors & Staff Nursing Services Lab Services Pathology Close Submenu Education & Training Education & Training Overview The Downstate Experience Find Your Program Residencies & Fellowships The Medical Research Library of Brooklyn Colleges & Schools College of Medicine College of Nursing School of Graduate Studies School of Health Professions School of Public Health Offices & Centers Office of Academic Affairs Office of Student Affairs Student Services Graduate Medical Education Center for Healthcare Simulation Office for Institutional Equity Close Submenu Research Research Overview Office of the Senior Vice President of Research Office of Research Administration Research Centers & Departments Research Opportunities Research Related Services Research Compliance & Training Clinical Trials Getting Research Done Downstate Biotechnology Incubator Tech @ 710 Incubator Company Profiles Biotechnology Incubator Application Close Submenu News & Events News & Events Overview Office of Communications & Marketing Upcoming"
+    },
+    {
+      "id": "check-page-a0abded67a",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+      "page": "application",
+      "excerpt": "Lawson delivers complete solutions for complex enterprise processes, with product lines built and proven on the most advanced, open standard technologies."
+    },
+    {
+      "id": "check-page-ab802b9838",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+      "page": "application",
+      "excerpt": "Lawson provides cross-industry applications such as Financials, Human Capital Management, Business Intelligence, and Supply Chain Management."
+    },
+    {
+      "id": "check-page-8b251d180e",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+      "page": "application",
+      "excerpt": "Lawson's Supply Chain Management The Supply Chain Management Suite is designed to increase visibility and improve material flow through the supply chain by managing planning; scheduling; procurement and fulfillment for optimum service levels and maximum profitability."
+    },
+    {
+      "id": "check-page-e722572c2d",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+      "page": "application",
+      "excerpt": "Lawson’s Supply Chain Management copes as easily with the configuration of increasingly complex supply chains as it does with high volumes of simple transactions, using flexible tools to help with strategic decision making and operational control."
+    },
+    {
+      "id": "check-page-39405e7768",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+      "page": "application",
+      "excerpt": "Lawson Enterprise Resource Planning Application Lawson Enterprise Resource Planning Application - July 2008 Roll Out - Effective July 1, 2008, Downstate Medical Center will be live on a new Finance and Purchasing/Inventory system for Pharmacy."
+    },
+    {
+      "id": "check-page-af89cf4627",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+      "page": "application",
+      "excerpt": "Vincent Health System Memorial Healthcare System Health Alliance of Greater Cincinnati Greater Baltimore Medical Center Catholic Healthcare West Bryan LGH Medical Center Banner Health System Advocate Healthcare System SUNY Downstate Health Sciences University Our Mission Community Impact News & Media Job Opportunities Contact Us I am a..."
+    },
+    {
+      "id": "check-page-de712ff3e2",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/clinical-applications.html",
+      "page": "application",
+      "excerpt": "Clinical Applications Group | Information Services | SUNY Downstate Health Sciences University SUNY Downstate Toggle Navigation Menu Patient Care Patient Care Overview University Hospital at Downstate Downstate Health Downstate Health Physicians For Patients Find a Doctor Find Treatment Areas of Care Patient & Family Support Insurance & Billing Find a Clinical Trial For Doctors & Staff Nursing Services Lab Services Pathology Close Submenu Education & Training Education & Training Overview The Downstate Experience Find Your Program Residencies & Fellowships The Medical Research Library of Brooklyn Colleges & Schools College of Medicine College of Nursing School of Graduate Studies School of Health Professions School of Public Health Offices & Centers Office of Academic Affairs Office of Student Affairs Student Services Graduate Medical Education Center for Healthcare Simulation Office for Institutional Equity Close Submenu Research Research Overview Office of the Senior Vice President of Research Office of Research Administration Research Centers & Departments Research Opportunities Research Related Services Research Compliance & Training Clinical Trials Getting Research Done Downstate Biotechnology Incubator Tech @ 710 Incubator Company Profiles Biotechnology Incubator Application Close Submenu News & Events News & Events Overview Office of Communications & Marketing Upcoming"
+    },
+    {
+      "id": "check-page-5fc9811de9",
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/clinical-applications.html",
+      "page": "application",
+      "excerpt": "Clinical Applications Staff Name Phone Michelle Daniels-DeVore (718) 613-8552 Richard Ajimati (718) 826-5023 Eon Watts (718) 270-8198 Office Fax (718) 270-8143 SUNY Downstate Health Sciences University Our Mission Community Impact News & Media Job Opportunities Contact Us I am a..."
     }
   ],
   "findings": {
     "emails": [],
-    "phones": [
+    "phones": [],
+    "routes": [
       {
-        "value": "7185695618",
-        "evidenceId": "check-phone-6aa4af3a1b"
+        "value": "https://www.downstate.edu/research/biotech-incubators/internships.html",
+        "evidenceId": "check-route-b470522339"
+      },
+      {
+        "value": "https://www.downstate.edu/about/community-impact/lend-brooklyn/_documents/forms/rev-lend-2026-application-for-clinicians2.pdf",
+        "evidenceId": "check-route-caec63ebe9"
+      },
+      {
+        "value": "https://www.downstate.edu/about/community-impact/lend-brooklyn/_documents/forms/rev-lend-2026-application-self-advocates-familymembers2.pdf",
+        "evidenceId": "check-route-6d68fadee1"
+      },
+      {
+        "value": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/business-applications.html",
+        "evidenceId": "check-route-e5c084e25b"
+      },
+      {
+        "value": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/clinical-applications.html",
+        "evidenceId": "check-route-ff2c15a639"
+      },
+      {
+        "value": "https://www.downstate.edu/about/our-administration/information-services-technology/divisions/revenue.html",
+        "evidenceId": "check-route-6e63589676"
       }
     ],
-    "routes": [
+    "applicationUrl": [
       {
         "value": "https://www.downstate.edu/research/biotech-incubators/internships.html",
         "evidenceId": "check-route-b470522339"
       }
     ],
-    "applicationUrl": [
-      {
-        "value": "https://www.downstate.edu/research/biotech-incubators/park-incubator.html",
-        "evidenceId": "check-route-2060d7bc37"
-      }
-    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-9b7d585b8c"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.downstate.edu/education-training/alumni/index.html",

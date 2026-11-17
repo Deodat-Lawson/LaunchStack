@@ -1,6 +1,6 @@
 {
   "programId": "nexus-venture-partners",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.nexusvp.com/companies",
@@ -27,74 +27,10 @@
       "origin": "official"
     },
     {
-      "url": "https://www.nexusvp.com/companies/agilitas-sports",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nexusvp.com/companies/allo-health",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nexusvp.com/companies/animall",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.nexusvp.com/companies/apollo-io",
       "page": "portfolio",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nexusvp.com/companies/arkin-net",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nexusvp.com/companies/aryaka",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nexusvp.com/companies/asknicely",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nexusvp.com/companies/assetplus",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nexusvp.com/companies/aurva-io",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },

@@ -1,12 +1,12 @@
 {
   "programId": "third-derivative",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.third-derivative.org/about",
       "page": "details",
       "anchor": "About Us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -14,7 +14,7 @@
       "url": "https://www.third-derivative.org/about?hsLang=en",
       "page": "details",
       "anchor": "LEARN MORE ABOUT US",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -43,58 +43,10 @@
       "origin": "official"
     },
     {
-      "url": "https://www.third-derivative.org/blog/celebrating-cohort417",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.third-derivative.org/blog/d3-incoming-general-cohort-25-3-newsbrief",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.third-derivative.org/blog/d3-launches-first-cohort-co2-startups",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.third-derivative.org/blog/introducing-third-derivatives-cohort-24-1",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.third-derivative.org/blog/third-derivative-and-rmi-launch-industrial-innovation-cohorts-to-accelerate-decarbonization-of-steel-cement-and-chemicals",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.third-derivative.org/blog/third-derivative-unveils-26-startup-climate-cohort-focused-on-hard-tech-and-deployment",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.third-derivative.org/clean-mobile-power-initiative-cohort",
       "page": "batches",
       "anchor": "Clean Mobile Power Initiative Cohort",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -118,7 +70,7 @@
       "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
       "page": "batches",
       "anchor": "Industrial Innovation Cohorts",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -166,7 +118,15 @@
       "url": "https://www.third-derivative.org/startups",
       "page": "details",
       "anchor": "Eligibility & Selection",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/startups?hsLang=en",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

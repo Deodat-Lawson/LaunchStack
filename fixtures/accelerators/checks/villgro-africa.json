@@ -1,6 +1,6 @@
 {
   "programId": "villgro-africa",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://villgroafrica.org/",
     "https://villgroafrica.org/applying-for-villgro-africa-incubation-program/",
@@ -16,7 +16,12 @@
     "https://villgroafrica.org/villgro-africa-incubatees-selected-for-avpa-deal-share-room/",
     "https://villgroafrica.org/african-women-innovating-in-healthcare-awiih-2024-2025-cohort/",
     "https://villgroafrica.org/clinicpesa-selected-for-mit-d-labs-2019-2020-cohort/",
-    "https://villgroafrica.org/more-health-for-africa-2025-2026-cohort/"
+    "https://villgroafrica.org/more-health-for-africa-2025-2026-cohort/",
+    "https://villgroafrica.org/a-lite-cnn-african-voices-changemakers-program/",
+    "https://villgroafrica.org/about-advisory-services/",
+    "https://villgroafrica.org/about/",
+    "https://villgroafrica.org/about/healthcare-innovation-partnerships/",
+    "https://villgroafrica.org/about/values/"
   ],
   "evidence": [
     {
@@ -55,6 +60,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-04e972386a",
+      "url": "https://villgroafrica.org/about/healthcare-innovation-partnerships/",
+      "title": "Villgro Africa — program page",
+      "excerpt": "Portfolio → https://villgroafrica.org/investors/investment-portfolio/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-08065ea76e",
       "url": "https://villgroafrica.org/senior-investment-analyst-full-time/",
       "title": "Villgro Africa — terms page",
@@ -67,6 +79,13 @@
       "title": "Villgro Africa — application page",
       "excerpt": "Portfolio → https://villgroafrica.org/investors/investment-portfolio/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-1ae5bca2b5",
+      "url": "https://villgroafrica.org/about/",
+      "title": "Villgro Africa — program page",
+      "excerpt": "Portfolio → https://villgroafrica.org/investors/investment-portfolio/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-27f972b580",
@@ -88,6 +107,13 @@
       "title": "Villgro Africa — batches page",
       "excerpt": "Portfolio → https://villgroafrica.org/investors/investment-portfolio/",
       "page": "batches"
+    },
+    {
+      "id": "check-portfolio-48e0406fca",
+      "url": "https://villgroafrica.org/about/values/",
+      "title": "Villgro Africa — program page",
+      "excerpt": "Portfolio → https://villgroafrica.org/investors/investment-portfolio/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-4b30bea741",
@@ -160,6 +186,20 @@
       "page": "batches"
     },
     {
+      "id": "check-portfolio-dfb6e450d5",
+      "url": "https://villgroafrica.org/about-advisory-services/",
+      "title": "Villgro Africa — program page",
+      "excerpt": "Portfolio → https://villgroafrica.org/investors/investment-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ff6b2f20c9",
+      "url": "https://villgroafrica.org/a-lite-cnn-african-voices-changemakers-program/",
+      "title": "Villgro Africa — program page",
+      "excerpt": "Portfolio → https://villgroafrica.org/investors/investment-portfolio/",
+      "page": "details"
+    },
+    {
       "id": "check-rolling-c3402e5e5b",
       "url": "https://villgroafrica.org/innovators/apply-now/",
       "title": "Villgro Africa — application page",
@@ -181,11 +221,25 @@
       "page": "batches"
     },
     {
+      "id": "check-route-1cead12cae",
+      "url": "https://villgroafrica.org/a-lite-cnn-african-voices-changemakers-program/",
+      "title": "Villgro Africa — program page",
+      "excerpt": "Apply Now → https://villgroafrica.org/innovators/apply-now/",
+      "page": "details"
+    },
+    {
       "id": "check-route-23cddcc191",
       "url": "https://villgroafrica.org/investor-deal-book/",
       "title": "Villgro Africa — terms page",
       "excerpt": "Apply Now → https://villgroafrica.org/innovators/apply-now/",
       "page": "terms"
+    },
+    {
+      "id": "check-route-2411c99342",
+      "url": "https://villgroafrica.org/about-advisory-services/",
+      "title": "Villgro Africa — program page",
+      "excerpt": "Apply Now → https://villgroafrica.org/innovators/apply-now/",
+      "page": "details"
     },
     {
       "id": "check-route-3b4b9f603a",
@@ -265,6 +319,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-c882382442",
+      "url": "https://villgroafrica.org/about/",
+      "title": "Villgro Africa — program page",
+      "excerpt": "Apply Now → https://villgroafrica.org/innovators/apply-now/",
+      "page": "details"
+    },
+    {
       "id": "check-route-d02f447797",
       "url": "https://villgroafrica.org/flare-seals-emergency-response-deal-with-uber/",
       "title": "Villgro Africa — terms page",
@@ -284,6 +345,20 @@
       "title": "Villgro Africa — terms page",
       "excerpt": "apply here → https://villgroafrica.org/innovators/apply-now/",
       "page": "terms"
+    },
+    {
+      "id": "check-route-e81e9acf33",
+      "url": "https://villgroafrica.org/about/values/",
+      "title": "Villgro Africa — program page",
+      "excerpt": "Apply Now → https://villgroafrica.org/innovators/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fc27ebf8b3",
+      "url": "https://villgroafrica.org/about/healthcare-innovation-partnerships/",
+      "title": "Villgro Africa — program page",
+      "excerpt": "Apply Now → https://villgroafrica.org/innovators/apply-now/",
+      "page": "details"
     }
   ],
   "pageQuotes": [
@@ -294,10 +369,64 @@
       "excerpt": "Villgro Africa | Supporting Emerging Healthcare Businesses Menu Innovators Incubation Program What We Offer Apply Now Investors Why Villgro Portfolio Advisory Resources Podcasts Blog News Reports Villgro Insights About Team Partnerships Careers FAQ’s Funding Calls Villgro at 10 close We help healthcare innovators Access Funds Scale Up Have An Impact Learn How Click below to access our Villgro at 10 report Villgro at 10 Innovations In Healthcare In Africa Villgro Africa is an incubator and impact investor supporting emerging healthcare businesses in Africa. We offer emerging companies a personalised incubation experience to help effectively scale ideas and navigate the African startup ecosystem. Apply Today Impact Delivered Our goal is to help innovators build viable and scalable health and life science solutions that improve quality of life for people across Africa. $3.3M+ Seed funding $49M+ Follow on funding 20M+ Lives Impacted How We Deliver Impact Our Services Villgro Africa acts as a growth guide. We rely on our deep sector knowledge and vast partner network to help innovators realise their full business potential while providing needed healthcare innovations that benefit society as a whole . Funding Seed funding and access to impact investors. Learn More Incubation Customised support for emerging health businesses. Learn More Advisory Industry expertise in the African"
     },
     {
+      "id": "check-page-a1a4cb43f9",
+      "url": "https://villgroafrica.org/",
+      "page": "details",
+      "excerpt": "Learn More Advisory Industry expertise in the African innovation space."
+    },
+    {
+      "id": "check-page-77557dcde9",
+      "url": "https://villgroafrica.org/",
+      "page": "details",
+      "excerpt": "Read More African Women Innovating in Healthcare Villgro Africa’s first women-focused incubation program revealed that tailored mentorship, catalytic funding, and community building are key to scaling women-led health innovations and driving health equity across Africa."
+    },
+    {
+      "id": "check-page-4511ee1d9c",
+      "url": "https://villgroafrica.org/",
+      "page": "details",
+      "excerpt": "Read More Empowering MedTech and BioTech Innovation Villgro Africa’s Expert-Led Immersion Program bridges the gap between invention and enterprise for MedTech and Biotech startups, offering expert guidance, structured validation, and manufacturing support to turn prototypes into scalable, market-ready healthcare solutions across Africa."
+    },
+    {
+      "id": "check-page-c7c3eb1873",
+      "url": "https://villgroafrica.org/",
+      "page": "details",
+      "excerpt": "Read More Our Partners We co-create and collaborate with partners who share our vision for building innovative businesses within the African health landscape."
+    },
+    {
+      "id": "check-page-13d6ab0cec",
+      "url": "https://villgroafrica.org/",
+      "page": "details",
+      "excerpt": "Connect with us and find out how our business incubation Africa program can help you scale."
+    },
+    {
       "id": "check-page-bb4ad0d53d",
       "url": "https://villgroafrica.org/applying-for-villgro-africa-incubation-program/",
       "page": "application",
       "excerpt": "Applying for the Villgro Africa Incubation Program? - Villgro Africa Menu Innovators Incubation Program What We Offer Apply Now Investors Why Villgro Portfolio Advisory Resources Podcasts Blog News Reports Villgro Insights About Team Partnerships Careers FAQ’s Funding Calls Villgro at 10 close 4 Tips from Rob Beyer, Co-Founder and Executive Chairman of Villgro Africa Our incubation program at Villgro Africa offers customised support to startups, taking them from simply having a good idea to a place where they are ready for investment and scaling. So what are we looking for when it comes to accepting applicants into our program? We don’t expect you to have everything figured out, but there are a few building blocks that demonstrate that you have the potential to succeed. Rob Beyer is Villgro Africa’s Co-Founder and Executive Chairman. He has years of experience helping business grow and takes a hands-on role in evaluating applications that come in for the incubation program. Here are a few tips from him on what can make your application stand out. 1. Focus on Establishing a Good Team We invest in people first and ideas second. We want to find people who are “investable.” This means that your team, especially the leadership, should demonstrate commitment to the initiative and show that you have the potential to take the idea forward. We like to see applicants who have more than"
+    },
+    {
+      "id": "check-page-80ee45c070",
+      "url": "https://villgroafrica.org/applying-for-villgro-africa-incubation-program/",
+      "page": "application",
+      "excerpt": "Ensure There is Potential for Sustainability Although we are, of course, interested in social impact, your venture also needs to have a viable business case."
+    },
+    {
+      "id": "check-page-4d5f1de441",
+      "url": "https://villgroafrica.org/applying-for-villgro-africa-incubation-program/",
+      "page": "application",
+      "excerpt": "Ultimately, the incubation program is for startups that have the potential to produce returns — both impact and financial returns."
+    },
+    {
+      "id": "check-page-9e0891b648",
+      "url": "https://villgroafrica.org/applying-for-villgro-africa-incubation-program/",
+      "page": "application",
+      "excerpt": "Cast a Compelling Vision Applicants to the Villgro Africa incubation program are not required to have everything figured out."
+    },
+    {
+      "id": "check-page-193d5c24fd",
+      "url": "https://villgroafrica.org/applying-for-villgro-africa-incubation-program/",
+      "page": "application",
+      "excerpt": "However, the market — and even the incubation program itself — are competitive."
     },
     {
       "id": "check-page-e03734517c",
@@ -312,6 +441,36 @@
       "excerpt": "Call for Applications: Bioscience Innovation Bootcamp - Villgro Africa Menu Innovators Incubation Program What We Offer Apply Now Investors Why Villgro Portfolio Advisory Resources Podcasts Blog News Reports Villgro Insights About Team Partnerships Careers FAQ’s Funding Calls Villgro at 10 close BioInnovate Africa is a regional science and innovation-driven initiative, supported by Sida and implemented as a programme of the International Centre of Insect Physiology and Ecology ( icipe ). It operates in Burundi, Ethiopia, Kenya, Rwanda, Tanzania, and Uganda. We also collaborate with partners in South Sudan. BioInnovate Africa enables scientists in Eastern Africa to develop and translate innovative bioscience research ideas, technologies and inventions into practical uses in society, which promote economic growth, create jobs, and reduce poverty. Thus, BioInnovate Africa fosters the development of a sustainable bioeconomy in the region by strengthening the capacity of scientists and institutions to link innovative ideas from the bench to business. As part of the initiative, a 5-day bioscience innovation bootcamp has been organized for entrepreneurial scientists in eastern Africa to empower them to develop innovative and commercially viable biological-based ideas in areas including but not limited to; Agroecology Food and feed Waste water treatment Biopharmaceutical Bioenergy"
     },
     {
+      "id": "check-page-18faed9063",
+      "url": "https://villgroafrica.org/call-for-applications-bioscience-innovation-bootcamp/",
+      "page": "application",
+      "excerpt": "This call shall be limited to citizens and/or nationals of the seven (7) BioInnovate Africa participating countries attached to a university, research institution, private company, or other related organization (either as an employee or student)."
+    },
+    {
+      "id": "check-page-505d34c845",
+      "url": "https://villgroafrica.org/call-for-applications-bioscience-innovation-bootcamp/",
+      "page": "application",
+      "excerpt": "How you will benefit Access to Investors – Networking with investors & industry players at the 1st Regional Bioeconomy Conference."
+    },
+    {
+      "id": "check-page-91d15238ad",
+      "url": "https://villgroafrica.org/call-for-applications-bioscience-innovation-bootcamp/",
+      "page": "application",
+      "excerpt": "Investment Readiness –Winners of the pitch event will get admission to a 3 months acceleration program by Villgro Kenya & BioInnovate Africa."
+    },
+    {
+      "id": "check-page-8ee2b686f9",
+      "url": "https://villgroafrica.org/call-for-applications-bioscience-innovation-bootcamp/",
+      "page": "application",
+      "excerpt": "Fundraising – Increase your chances of being eligible for future BioInnovate Africa & Villgro Kenya funding and technical assistance."
+    },
+    {
+      "id": "check-page-31b112d9cb",
+      "url": "https://villgroafrica.org/call-for-applications-bioscience-innovation-bootcamp/",
+      "page": "application",
+      "excerpt": "Next Steps Successful teams will be notified through email by 9th October 2020 Selected teams are expected to participate in the bootcamp for five days on 17-21 October 2020."
+    },
+    {
       "id": "check-page-97c61e5a87",
       "url": "https://villgroafrica.org/innovators/apply-now/",
       "page": "application",
@@ -322,6 +481,30 @@
       "url": "https://villgroafrica.org/5-steps-to-becoming-investment-ready/",
       "page": "terms",
       "excerpt": "5 Steps to Becoming Investment Ready - Villgro Africa Menu Innovators Incubation Program What We Offer Apply Now Investors Why Villgro Portfolio Advisory Resources Podcasts Blog News Reports Villgro Insights About Team Partnerships Careers FAQ’s Funding Calls Villgro at 10 close As a founder of a startup, you’ll eventually reach a stage in your business where you need to start looking for further investment. After you have proven your concept, gained some traction and established that there is, in fact, a market for your product or service, it’s time for you to get the funding required to take your business to the next level. But what do you need to have in place before you start seeking out investors? How can you set yourself up for success? The phrase “investment readiness” is used often, but what does that actually mean in practical terms? Here are five things that your startup needs to establish before you start reaching out to potential investors. 1. Conduct a Funding Needs Assessment The first step is to determine what your needs are. How much capital do you need to raise? It’s important to have reasons behind this number and to know what it will be spent on and why. If you have not done a proper funding needs assessment, you may end up discovering that your ask does not actually meet your needs. You may even decide in the process of developing your funding needs"
+    },
+    {
+      "id": "check-page-41892444c6",
+      "url": "https://villgroafrica.org/5-steps-to-becoming-investment-ready/",
+      "page": "terms",
+      "excerpt": "Are you looking for a development financial institution (DFI) or is the company at a very early stage and you really need to look for an angel investor?"
+    },
+    {
+      "id": "check-page-842e6dedc0",
+      "url": "https://villgroafrica.org/5-steps-to-becoming-investment-ready/",
+      "page": "terms",
+      "excerpt": "Are you looking for grant funding or should you be targeting venture capitalists?"
+    },
+    {
+      "id": "check-page-fbd7f15fa8",
+      "url": "https://villgroafrica.org/5-steps-to-becoming-investment-ready/",
+      "page": "terms",
+      "excerpt": "This is a role that Villgro Africa plays for our incubation companies."
+    },
+    {
+      "id": "check-page-2b77070452",
+      "url": "https://villgroafrica.org/5-steps-to-becoming-investment-ready/",
+      "page": "terms",
+      "excerpt": "Learn more about our incubation program and apply here !"
     },
     {
       "id": "check-page-300712bda6",
@@ -336,6 +519,12 @@
       "excerpt": "Innovators Forum: Building Resilience Through Investment in Biomedical and Diagnostics Innovation and Manufacturing in Kenya - Villgro Africa Menu Innovators Incubation Program What We Offer Apply Now Investors Why Villgro Portfolio Advisory Resources Podcasts Blog News Reports Villgro Insights About Team Partnerships Careers FAQ’s Funding Calls Villgro at 10 close COVID-19 is taking its toll on Africa, reemphasising persistent structural weaknesses that overexpose countries like Kenya to the social, health and economic impacts of the pandemic. These include a high dependency on imports in areas such as drugs, machinery and equipment, weak local production systems, limited digital connectivity and the prevalence of informal micro businesses. However, as well as highlighting reasons for concern, Kenya’s response to COVID-19 also has the potential to accelerate innovation, improve the response of healthcare systems and ignite a growth recovery, unlocking industrialisation, modernisation and continental integration. In this first event of the Innovators Forum, we will be convening a diverse group of experts to share their experiences and insights. Together, we will explore the channels through which trade and industrial policies can help launch a renewed, job-rich and sustainable development agenda in Kenya; one that leverages immense untapped national and regional potential,"
     },
     {
+      "id": "check-page-a0b68788cc",
+      "url": "https://villgroafrica.org/innovators-forum-building-resilience-through-investment-in-biomedical-and-diagnostics-innovation-and-manufacturing-in-kenya/",
+      "page": "terms",
+      "excerpt": "Together, we will explore the channels through which trade and industrial policies can help launch a renewed, job-rich and sustainable development agenda in Kenya; one that leverages immense untapped national and regional potential, enables homegrown innovation to thrive and opens up new opportunities for local business to create new and better jobs."
+    },
+    {
       "id": "check-page-816a777d52",
       "url": "https://villgroafrica.org/investor-deal-book/",
       "page": "terms",
@@ -346,6 +535,78 @@
       "url": "https://villgroafrica.org/resources/faqs/",
       "page": "terms",
       "excerpt": "FAQ's - Villgro Africa Menu Innovators Incubation Program What We Offer Apply Now Investors Why Villgro Portfolio Advisory Resources Podcasts Blog News Reports Villgro Insights About Team Partnerships Careers FAQ’s Funding Calls Villgro at 10 close Frequently asked questions about healthcare innovation in Africa Still want to know more about Villgro Africa? Whether you’re an innovator applying to our incubation program, an investor looking for opportunities in the health space, or a potential advisory client interested in our services, we’re ready to answer your questions! Find the answers to some of the most commonly asked questions below. What sectors does Villgro Africa work in? We support startups in the healthcare and life sciences, which cuts across biotech, medtech, service delivery, health systems strengthening, nutrition, sanitation, etc. At what stage of development does a company need to be in to qualify for incubation? We support companies from ideation, growth to mature stage. Our incubation plan is custom designed for each enterprise based on their needs at their current stage. We work with entrepreneurs to help them become ready for investment. We expect the investable enterprises to scale up their social impact as they grow after incubation. What services does Villgro Africa offer? Incubation – We combine hands-on technical support and industry-expert"
+    },
+    {
+      "id": "check-page-430fe9b02e",
+      "url": "https://villgroafrica.org/resources/faqs/",
+      "page": "terms",
+      "excerpt": "Incubation – We combine hands-on technical support and industry-expert mentorship to ensure our incubation companies are investor and market ready."
+    },
+    {
+      "id": "check-page-3f6c8045c7",
+      "url": "https://villgroafrica.org/resources/faqs/",
+      "page": "terms",
+      "excerpt": "Advisory – Led by a multidisciplinary team, we use our extensive knowledge of the African healthcare innovation and incubation space to help external companies that need support in market entry, commercialisation and growth and/or developing public partnerships."
+    },
+    {
+      "id": "check-page-73c08d399e",
+      "url": "https://villgroafrica.org/resources/faqs/",
+      "page": "terms",
+      "excerpt": "Investment Pipeline – For those wanting to invest in the African health sector, Villgro provides a pipeline of exciting, innovative companies that have good product-market fit, a strong business plan and the potential to scale their solution."
+    },
+    {
+      "id": "check-page-698388391c",
+      "url": "https://villgroafrica.org/resources/faqs/",
+      "page": "terms",
+      "excerpt": "Investors can be confident that innovators supported by Villgro Africa have received the necessary support to be investment ready."
+    },
+    {
+      "id": "check-page-4c9904225a",
+      "url": "https://villgroafrica.org/resources/faqs/",
+      "page": "terms",
+      "excerpt": "Who is Jaza Rift ventures and how are they related to Villgro Africa?"
+    },
+    {
+      "id": "check-page-0a11a82e40",
+      "url": "https://villgroafrica.org/resources/faqs/",
+      "page": "terms",
+      "excerpt": "Jaza Rift Ventures is a venture capital fund that invests in the innovative and invention-based pre-seed, seed and Series A stage healthcare startups in Africa."
+    },
+    {
+      "id": "check-page-49ea65cc18",
+      "url": "https://villgroafrica.org/resources/faqs/",
+      "page": "terms",
+      "excerpt": "Jaza Rift is part of the Villgro ecosystem and partners with Villgro Africa in order to access our strong pipeline, deep technical healthcare expertise and networks to increase the chance of success for the high-performing entrepreneurs they invest in."
+    },
+    {
+      "id": "check-page-71260e7f66",
+      "url": "https://villgroafrica.org/resources/faqs/",
+      "page": "terms",
+      "excerpt": "Depending on the stage of the company, Villgro Africa invests up to $50,000 in pre-seed or seed investment."
+    },
+    {
+      "id": "check-page-3ec6c8294a",
+      "url": "https://villgroafrica.org/resources/faqs/",
+      "page": "terms",
+      "excerpt": "What type of capital does Villgro Africa deploy?"
+    },
+    {
+      "id": "check-page-976a332cf7",
+      "url": "https://villgroafrica.org/resources/faqs/",
+      "page": "terms",
+      "excerpt": "Villgro Africa provides either grant or equity capital (or both) depending on the nature of the funding call."
+    },
+    {
+      "id": "check-page-dd0a219488",
+      "url": "https://villgroafrica.org/resources/faqs/",
+      "page": "terms",
+      "excerpt": "What do I need to do to qualify for funding and/or incubation?"
+    },
+    {
+      "id": "check-page-8dbe205ebd",
+      "url": "https://villgroafrica.org/resources/faqs/",
+      "page": "terms",
+      "excerpt": "Innovators interested in our business incubator program should have: Multidisciplinary, collaborative team with one technical co-founder Problem-solution fit Product-market fit Minimum viable product built Validated market demand Clear revenue model At least one full-time founder who can be dedicated to the program Have A Question Not In Our FAQ's?"
     },
     {
       "id": "check-page-a266e36415",
@@ -372,10 +633,178 @@
       "excerpt": "Clinicpesa selected for MIT D-lab's 2019-2020 cohort - Villgro Africa Menu Innovators Incubation Program What We Offer Apply Now Investors Why Villgro Portfolio Advisory Resources Podcasts Blog News Reports Villgro Insights About Team Partnerships Careers FAQ’s Funding Calls Villgro at 10 close Villgro Kenya incubatee clinicPesa has been selected alongside 5 other startups for the MIT D-Lab’s Scale Ups Fellowship. These six social enterprises were selected among 150+ that were nominated by you and represent a diverse range of sectors, including healthcare, agriculture, construction, and more. clinicPesa provides access to healthcare financing through digital microloans and savings to uninsured low-income individuals in Uganda. clinicPesa enables its users to transfer small amounts of money to their accounts whenever possible, through their mobile phones or clinicPesa’s homepage. This allows customers to build a small pot of savings that can be used to access basic healthcare, offset medical bills, and buy drugs at any clinicPesa-registered clinic, hospital or pharmacy. The other startups selected for the fellowship include Solar Freeze (Kenya), Kwangu Kwako (Kenya), Expressions Global, Fixchap and Eco Act (Tanzania). Launched in 2012, the D-Lab Scale-Ups Fellowship is a one year program, providing a $20K grant to each fellow and tailored mentoring, capacity building and"
     },
     {
+      "id": "check-page-44fe69672d",
+      "url": "https://villgroafrica.org/clinicpesa-selected-for-mit-d-labs-2019-2020-cohort/",
+      "page": "batches",
+      "excerpt": "Launched in 2012, the D-Lab Scale-Ups Fellowship is a one year program, providing a $20K grant to each fellow and tailored mentoring, capacity building and inclusive design training, and networking."
+    },
+    {
       "id": "check-page-387452e907",
       "url": "https://villgroafrica.org/more-health-for-africa-2025-2026-cohort/",
       "page": "batches",
       "excerpt": "MORE HEALTH for Africa – 2025 & 2026 Cohort - Villgro Africa Menu Innovators Incubation Program What We Offer Apply Now Investors Why Villgro Portfolio Advisory Resources Podcasts Blog News Reports Villgro Insights About Team Partnerships Careers FAQ’s Funding Calls Villgro at 10 close Explore Our Team Advisory Articles Funding Calls Subscribe Subscribe to our newsletter \" * \" indicates required fields Your Email * Submit Contact Bishop Magua Centre 3rd Floor Off Ngong Road +254 20 2212061 [email protected] Copyright © 2026 All Rights Reserved Sitemap | Privacy"
+    },
+    {
+      "id": "check-page-6e3009b8fe",
+      "url": "https://villgroafrica.org/a-lite-cnn-african-voices-changemakers-program/",
+      "page": "details",
+      "excerpt": "A-Lite on CNN's African Voices: Changemakers\" Menu Innovators Incubation Program What We Offer Apply Now Investors Why Villgro Portfolio Advisory Resources Podcasts Blog News Reports Villgro Insights About Team Partnerships Careers FAQ’s Funding Calls Villgro at 10 close A-Lite Uganda, a Villgro Africa investee and incubation company, has been highlighted by CNN in a short documentary. Watch the full video from “African Voices: Changemakers” here: Explore Our Team Advisory Articles Funding Calls Subscribe Subscribe to our newsletter \" * \" indicates required fields Your Email * Submit Contact Bishop Magua Centre 3rd Floor Off Ngong Road +254 20 2212061 [email protected] Copyright © 2026 All Rights Reserved Sitemap | Privacy"
+    },
+    {
+      "id": "check-page-6409e03e4a",
+      "url": "https://villgroafrica.org/about-advisory-services/",
+      "page": "details",
+      "excerpt": "About Advisory Services - Villgro Africa Menu Innovators Incubation Program What We Offer Apply Now Investors Why Villgro Portfolio Advisory Resources Podcasts Blog News Reports Villgro Insights About Team Partnerships Careers FAQ’s Funding Calls Villgro at 10 close We at Villgro Africa are most well known for being an incubator and impact investor for emerging businesses in the African health sector. However, our years of experience incubating startups has resulted in an understanding of the African healthcare ecosystem as a whole. We now use that knowledge to provide advisory services to clients who want to enter the market, commercialise products, or establish partnerships. About Villgro Africa’s Advisory Services In our advisory services, we take the expertise our team has gained through our core incubation and use that to provide consulting services. These are usually more short-term engagements, the longest of which has been about six months. As Advisory Lead , I oversee each of our client relationships. Together with a strong team, we manage the project from generating the proposal, engaging with the client, helping them define their problem, coming up with a scope of work, and then implementing the agreed way forward. An Example of Success The Vayu Global Health Foundation is an organisation that aims to create innovative healthcare solutions in order to increase"
+    },
+    {
+      "id": "check-page-537f2767c6",
+      "url": "https://villgroafrica.org/about-advisory-services/",
+      "page": "details",
+      "excerpt": "An Example of Success The Vayu Global Health Foundation is an organisation that aims to create innovative healthcare solutions in order to increase access to effective healthcare, especially focusing on mothers and babies."
+    },
+    {
+      "id": "check-page-61da755737",
+      "url": "https://villgroafrica.org/about-advisory-services/",
+      "page": "details",
+      "excerpt": "Our initial engagement involved doing a market study for East Africa and we were tasked with looking at an opportunity for uptake in the market."
+    },
+    {
+      "id": "check-page-38035a18be",
+      "url": "https://villgroafrica.org/about-advisory-services/",
+      "page": "details",
+      "excerpt": "Because of previous connections that had been made between Vayu and hospitals in Kenya and Tanzania, we started by focusing on these two markets."
+    },
+    {
+      "id": "check-page-40b0dc86ab",
+      "url": "https://villgroafrica.org/about-advisory-services/",
+      "page": "details",
+      "excerpt": "We went further and looked at other markets including the Philippines, Brazil, and India."
+    },
+    {
+      "id": "check-page-470a67fd14",
+      "url": "https://villgroafrica.org/about-advisory-services/",
+      "page": "details",
+      "excerpt": "Towards the end of our engagement, we brokered a relationship with a manufacturer in Kilifi, Kenya, called Revital Healthcare."
+    },
+    {
+      "id": "check-page-ae6af97054",
+      "url": "https://villgroafrica.org/about-advisory-services/",
+      "page": "details",
+      "excerpt": "As a result, Revital is actually manufacturing the bubble CPAP device, which is now being exported out of Kenya and used all over the world, not only in low-resource settings, but also in Europe and the US."
+    },
+    {
+      "id": "check-page-ef41445a83",
+      "url": "https://villgroafrica.org/about-advisory-services/",
+      "page": "details",
+      "excerpt": "Looking Ahead We are looking forward to getting more clients like Vayu and others that we can support to bring their solutions into the African market and benefit our population."
+    },
+    {
+      "id": "check-page-38fa1a09b8",
+      "url": "https://villgroafrica.org/about-advisory-services/",
+      "page": "details",
+      "excerpt": "We even hope that some of the incubation companies that we currently support will grow to the point where they can, instead of being supported by us, become paying clients who hire us to provide strategic support or advice."
+    },
+    {
+      "id": "check-page-d46cc239f9",
+      "url": "https://villgroafrica.org/about-advisory-services/",
+      "page": "details",
+      "excerpt": "We are most experienced in East Africa, which is where many of our projects until now have been based, but we also want to grow engagements across the continent and expand the team that is supporting our advisory clients."
+    },
+    {
+      "id": "check-page-096c89aab3",
+      "url": "https://villgroafrica.org/about/",
+      "page": "details",
+      "excerpt": "About - Villgro Africa Menu Innovators Incubation Program What We Offer Apply Now Investors Why Villgro Portfolio Advisory Resources Podcasts Blog News Reports Villgro Insights About Team Partnerships Careers FAQ’s Funding Calls Villgro at 10 close Explore Our Team Advisory Articles Funding Calls Subscribe Subscribe to our newsletter \" * \" indicates required fields Your Email * Submit Contact Bishop Magua Centre 3rd Floor Off Ngong Road +254 20 2212061 [email protected] Copyright © 2026 All Rights Reserved Sitemap | Privacy"
+    },
+    {
+      "id": "check-page-0211ccd5a2",
+      "url": "https://villgroafrica.org/about/healthcare-innovation-partnerships/",
+      "page": "details",
+      "excerpt": "Healthcare Innovation Partnerships - Villgro Africa Menu Innovators Incubation Program What We Offer Apply Now Investors Why Villgro Portfolio Advisory Resources Podcasts Blog News Reports Villgro Insights About Team Partnerships Careers FAQ’s Funding Calls Villgro at 10 close Committed To Strong Healthcare Innovation Partnerships A Collaborative, Impact Focussed Ecosystem We are building healthcare innovation partnerships that span academia, government, investors and private businesses across Africa, ready to support and scale social impact on the continent. We leverage this network to help emerging health and life sciences innovators scale and grow. A critical part of this ecosystem is Jaza Rift Ventures , which invests in innovative and invention-based pre-seed, seed and Series A stage healthcare startups in Africa. Our Partners We know that partnerships are an essential part of achieving our vision. When we each bring our unique expertise to the table, we become more than the sum of our parts. \"We have been impressed by Villgro Africa’s dedication, professionalism, and grit in supporting a range of compelling businesses while building their own brand and organisation. We value their transparency and their commitment to always be a learning organisation.\" Nicholas Colloff Director, Argidius Foundation \"We are excited, proud, and honoured to have been deeply involved in"
+    },
+    {
+      "id": "check-page-89b2068079",
+      "url": "https://villgroafrica.org/about/healthcare-innovation-partnerships/",
+      "page": "details",
+      "excerpt": "We value their transparency and their commitment to always be a learning organisation.\" Nicholas Colloff Director, Argidius Foundation \"We are excited, proud, and honoured to have been deeply involved in Villgro Africa’s growth and look forward to our continued role in the ongoing development of more healthcare innovation partnerships.\" Dr."
+    },
+    {
+      "id": "check-page-4334ac8262",
+      "url": "https://villgroafrica.org/about/healthcare-innovation-partnerships/",
+      "page": "details",
+      "excerpt": "Arun Venkatesan CEO, Villgro USA Want To Join Our Healthcare Innovation Ecosystem?"
+    },
+    {
+      "id": "check-page-a7bd7ccc4f",
+      "url": "https://villgroafrica.org/about/healthcare-innovation-partnerships/",
+      "page": "details",
+      "excerpt": "We partner with academia, government, investors and private businesses across Africa and beyond who are ready to support and scale social impact on the continent through healthcare innovation partnerships."
+    },
+    {
+      "id": "check-page-6b3b78b62d",
+      "url": "https://villgroafrica.org/about/values/",
+      "page": "details",
+      "excerpt": "Values - Villgro Africa Menu Innovators Incubation Program What We Offer Apply Now Investors Why Villgro Portfolio Advisory Resources Podcasts Blog News Reports Villgro Insights About Team Partnerships Careers FAQ’s Funding Calls Villgro at 10 close Pioneering Social Entrepreneurship And Impact Investment ABOUT US We are Africa’s leading health and life sciences incubator, offering emerging companies a customised incubation experience to help effectively navigate the African startup ecosystem and scale ideas. Our goal is to help innovators develop and scale sustainable health and science solutions that improve quality of life for people across Africa. We rely on our deep sector knowledge and vast partner network to help innovators access funding and mentorship to realise their full business potential while providing needed healthcare innovations. OUR VISION Driving sustainable, social and market based innovations across Africa. OUR ETHOS We believe that Africa’s development problems will be sustainably resolved through for-profit, innovative products and business models that are demand-driven and scalable. Such enterprises deliver social impact by creating jobs for Africa’s rural and urban poor and/or by meeting their needs as the target market. OUR VALUES To support global health innovation through social entrepreneurship. To de-risk impact investment for global health"
+    },
+    {
+      "id": "check-page-79e9a8e942",
+      "url": "https://villgroafrica.org/about/values/",
+      "page": "details",
+      "excerpt": "To de-risk impact investment for global health innovations through early stage incubation."
+    },
+    {
+      "id": "check-page-25bf3e954d",
+      "url": "https://villgroafrica.org/about/values/",
+      "page": "details",
+      "excerpt": "To promote a vibrant healthcare and life sciences innovation system in Africa."
+    },
+    {
+      "id": "check-page-fa18ad9394",
+      "url": "https://villgroafrica.org/about/values/",
+      "page": "details",
+      "excerpt": "Custom Incubation Our hands-on incubation plan is custom-designed for each enterprise with a focus on technical assistance to become ready for investment."
+    },
+    {
+      "id": "check-page-484b6b1a62",
+      "url": "https://villgroafrica.org/about/values/",
+      "page": "details",
+      "excerpt": "We expect the investable enterprises to scale up their social impact as they grow after incubation."
+    },
+    {
+      "id": "check-page-8e582f5008",
+      "url": "https://villgroafrica.org/about/values/",
+      "page": "details",
+      "excerpt": "Healthcare Focus Our strength is in healthcare and life sciences, including primary healthcare, mother and child health (MCH), non-communicable diseases (NCD), nutrition in agriculture, water and sanitation in environmental management, or safety ergonomics in design of tools and products."
+    },
+    {
+      "id": "check-page-5eb2361497",
+      "url": "https://villgroafrica.org/about/values/",
+      "page": "details",
+      "excerpt": "Ecosystem of Support We provide high-touch mentorship and connect incubatees with mentors, investors, C-level talent and advisory boards who bring with them years of experience and connections in both the healthcare industry and entrepreneurship."
+    },
+    {
+      "id": "check-page-046ef4312c",
+      "url": "https://villgroafrica.org/about/values/",
+      "page": "details",
+      "excerpt": "GEOGRAPHICAL PRESENCE Villgro Africa was first established in 2015 (known then as Villgro Kenya) to serve a nascent global health innovation ecosystem in Kenya and the East Africa region."
+    },
+    {
+      "id": "check-page-262a478c9a",
+      "url": "https://villgroafrica.org/about/values/",
+      "page": "details",
+      "excerpt": "In 2020, Villgro Kenya formally rebranded to “Villgro Africa” to expand its geographical scope and reach more people across the continent."
+    },
+    {
+      "id": "check-page-f7e3e93b8b",
+      "url": "https://villgroafrica.org/about/values/",
+      "page": "details",
+      "excerpt": "Beyond Kenya, we now support incubation companies in 4 countries and have established partnerships in Tanzania, Zambia and Ghana."
+    },
+    {
+      "id": "check-page-eab56795d9",
+      "url": "https://villgroafrica.org/about/values/",
+      "page": "details",
+      "excerpt": "Mali Senegal Burkina Faso Ivory Coast Nigeria Cameroon Nigeria Ethiopia Egypt Morocco Sudan Kenya Uganda Tanzania Zambia Malawi Democratic Republic of the Congo Angola South Africa Let's Talk Want to learn more about our work and impact?"
     }
   ],
   "findings": {

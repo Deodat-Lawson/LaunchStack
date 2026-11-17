@@ -1,6 +1,6 @@
 {
   "programId": "space-capital",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.spacecapital.com/about",
@@ -67,30 +67,6 @@
       "origin": "official"
     },
     {
-      "url": "https://www.spacecapital.com/portfolio/all-space",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.spacecapital.com/portfolio/allevi",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.spacecapital.com/portfolio/arbol",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.spacecapital.com/research",
       "page": "other",
       "anchor": "",
@@ -100,6 +76,14 @@
     },
     {
       "url": "https://www.spacecapital.com/space-iq",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.spacecapital.com/talent",
       "page": "other",
       "anchor": "",
       "fetched": true,

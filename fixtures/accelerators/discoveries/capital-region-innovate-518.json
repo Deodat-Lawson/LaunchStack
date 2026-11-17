@@ -1,5 +1,158 @@
 {
   "programId": "capital-region-innovate-518",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
-  "pages": []
+  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "pages": [
+    {
+      "url": "https://www.albany.edu/admissions-aid",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/africana-studies-graduate-program-curriculum.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/anthropology-graduate-program-curricula.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/art-graduate-program-curricula.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/childhood-education-combined-program.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/combined-baccalaureate-programs.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/digital-forensics-cybersecurity-ms-combined-program.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/dual-masters-degree-programs.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/early-childhood-education-combined-program.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/faculty-eligibility-teach.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/history-ma-information-science-ms-dual-program.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/information-science-school-library-combined-program.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/international-affairs-combined-program.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/literacy-combined-program.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/program-classics.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/program-liberal-studies.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.albany.edu/graduate-bulletin/program-linguistics.php",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

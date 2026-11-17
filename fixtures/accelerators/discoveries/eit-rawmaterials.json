@@ -1,6 +1,6 @@
 {
   "programId": "eit-rawmaterials",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://alumni.eitrawmaterials.eu/",
@@ -14,7 +14,7 @@
       "url": "https://eitrawmaterials.eu/about-finance-fundraising",
       "page": "details",
       "anchor": "",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -22,7 +22,7 @@
       "url": "https://eitrawmaterials.eu/about-us",
       "page": "details",
       "anchor": "About Us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -95,14 +95,6 @@
       "page": "details",
       "anchor": "Customized Services",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/articles/call-for-applications-members-of-executive-board",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -203,6 +195,14 @@
       "origin": "official"
     },
     {
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://eitrawmaterials.eu/our-portfolio",
       "page": "portfolio",
       "anchor": "View our startup portfolio",
@@ -260,6 +260,30 @@
     },
     {
       "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/press-releases/weeefiner-investment-2025",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/search?fulltext=&search_page%5B1%5D=topic%3A320&sort_bef_combine=search_api_relevance_DESC",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/terms-and-conditions",
       "page": "terms",
       "anchor": "",
       "fetched": true,

@@ -1,14 +1,11 @@
 {
   "programId": "mit-delta-v",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://entrepreneurship.mit.edu/accelerator/program/",
     "https://entrepreneurship.mit.edu/accelerator/apply/",
     "https://entrepreneurship.mit.edu/accelerator/faq/",
-    "https://entrepreneurship.mit.edu/tag/investment/",
     "https://entrepreneurship.mit.edu/easter-2021-basket-of-updates/",
-    "https://entrepreneurship.mit.edu/news/designx-selects-first-cohort/",
-    "https://entrepreneurship.mit.edu/news/twoxar-announces-series-quest-collapse-drug-discovery-timelines/",
     "https://entrepreneurship.mit.edu/accelerator/",
     "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
     "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
@@ -16,7 +13,15 @@
     "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
     "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
     "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
-    "https://entrepreneurship.mit.edu/wp-content/uploads/delta-v-2020-cohort-FINAL-infographic-copy.png"
+    "https://entrepreneurship.mit.edu/wp-content/uploads/delta-v-2020-cohort-FINAL-infographic-copy.png",
+    "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+    "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+    "https://entrepreneurship.mit.edu/wp-content/uploads/2022-cohort-final.pdf",
+    "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+    "https://entrepreneurship.mit.edu/wp-content/uploads/2023-cohort-scaled.jpg",
+    "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+    "https://entrepreneurship.mit.edu/wp-content/uploads/2024-cohort-scaled.jpg",
+    "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/"
   ],
   "evidence": [
     {
@@ -41,6 +46,13 @@
       "page": "details"
     },
     {
+      "id": "check-announced-9410b528dd",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "the real world. We will announce the teams that make up this year’s cohort closer to Demo Day in September. (click infographic to enlarge) Watch the Full Demo Day Webcast",
+      "page": "details"
+    },
+    {
       "id": "check-announced-96b4ce2bad",
       "url": "https://entrepreneurship.mit.edu/accelerator/apply/",
       "title": "MIT delta v — application page",
@@ -52,6 +64,13 @@
       "url": "https://entrepreneurship.mit.edu/accelerator/",
       "title": "MIT delta v — program page",
       "excerpt": "31 – Drop in Office Hours (11:00am – 4:00pm) Wednesday April 1 – Applications close at 5:00pm Eastern Monday April 27 – interviews with finalist teams first week of May – acceptance",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-bfc23f17b4",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "the real world. We will announce the teams that make up this year’s cohort closer to Demo Day in September. (click infographic to enlarge) Click to Subscribe to Our Newsletter",
       "page": "details"
     },
     {
@@ -95,13 +114,6 @@
       "title": "MIT delta v — application page",
       "excerpt": "Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner",
       "page": "application"
-    },
-    {
-      "id": "check-deal-36fe89cd2d",
-      "url": "https://entrepreneurship.mit.edu/news/designx-selects-first-cohort/",
-      "title": "MIT delta v — batches page",
-      "excerpt": "will provide support via targeted courses, external mentorship, $15,000 in equity-free seed funding, and a robust network to help students",
-      "page": "batches"
     },
     {
       "id": "check-deal-4bfbce9325",
@@ -167,6 +179,13 @@
       "page": "details"
     },
     {
+      "id": "check-duration-1e34ee9082",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "over 25% of patients being readmitted within 3 months. Our platform equips caregivers with",
+      "page": "details"
+    },
+    {
       "id": "check-duration-76a17c393a",
       "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
       "title": "MIT delta v — program page",
@@ -178,6 +197,20 @@
       "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
       "title": "MIT delta v — program page",
       "excerpt": "with limited data and the pandemic- induced elimination of in-person hiring events, recruiters need a better way to predict",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2062b51f30",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "exists to meet their needs. Our initial offering features in-person professional support groups of 5-7 women guided by trained",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2c16711e95",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "care. www.augmend.health Be Your Own Boss (byob) Virtual manager for content creators Far too often creators (i.e.,",
       "page": "details"
     },
     {
@@ -223,6 +256,13 @@
       "page": "details"
     },
     {
+      "id": "check-format-6b1a07bdde",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "from their work. Our answer is Hyperfan, a centralized virtual community for professional artists to interact with their",
+      "page": "details"
+    },
+    {
       "id": "check-format-74b0382fe4",
       "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
       "title": "MIT delta v — program page",
@@ -251,10 +291,24 @@
       "page": "details"
     },
     {
+      "id": "check-format-97cae107d8",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "AugMend Health Complementing therapy with self-guided virtual reality AugMend Health helps large mental healthcare",
+      "page": "details"
+    },
+    {
       "id": "check-format-99f4aa05a2",
       "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
       "title": "MIT delta v — program page",
       "excerpt": "Carballo SM ’20, and Trang Luu SM ’20. delta v as in Virtual When MIT closed in March — in the middle of applications —",
+      "page": "details"
+    },
+    {
+      "id": "check-format-bb412fbe14",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "creators to focus on creating content, while their virtual manager does all the heavy-lifting. byob is an all-in-one",
       "page": "details"
     },
     {
@@ -265,6 +319,20 @@
       "page": "details"
     },
     {
+      "id": "check-format-e21f468415",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "a new city. As our post-pandemic world becomes even more virtual and work-from-home becomes normalized, women are left with",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e381259229",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "to create and connect with their communities through fun virtual worlds. We’re putting the social back into social media!",
+      "page": "details"
+    },
+    {
       "id": "check-format-ea152629e1",
       "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
       "title": "MIT delta v — program page",
@@ -272,10 +340,24 @@
       "page": "details"
     },
     {
+      "id": "check-format-ea343aa761",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "women in compatible groups of 4-6 and nudging them to meet in-person. Women have more fun together, and Livvi provides a safe",
+      "page": "details"
+    },
+    {
       "id": "check-format-ed2de38f62",
       "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
       "title": "MIT delta v — program page",
       "excerpt": "minds with their peers and thoughtful instructors. In virtual seminars, they explore their interests and build enduring",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f39c487778",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "effective dental treatments. ‍ www.t33.dental Yoku Ai Your virtual mood ring At Yoku, we are building interactive AI tools",
       "page": "details"
     },
     {
@@ -301,10 +383,34 @@
       "excerpt": "MIT delta v Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match MIT delta v Greg Wymer 2026-08-19T15:30:11-04:00 Friday September 11 4:00 pm – 5:30pm (doors at 3:30) MIT Kresge Auditorium Get Your Tickets Now! Won’t be in Cambridge? Watch the livestream! Register for the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner Network Meet Our Partners Our delta v Partners are key components of the accelerator program. Partners are C-suite executives, founders, VCs, and domain experts across multiple industries. Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We"
     },
     {
+      "id": "check-page-227875e609",
+      "url": "https://entrepreneurship.mit.edu/accelerator/program/",
+      "page": "details",
+      "excerpt": "Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We unlock over $200K in value per team in perks & partnerships that help startups scale!"
+    },
+    {
+      "id": "check-page-d380085ea4",
+      "url": "https://entrepreneurship.mit.edu/accelerator/program/",
+      "page": "details",
+      "excerpt": "In the News MIT News MIT’s delta v accelerator receives $6M gift to supercharge startups being built by student founders Boston Globe “Klaviyo founders give $6 million to boost MIT startups, Boston’s competitiveness” Learn More About delta v Info Session Slide Deck Apply to delta v!"
+    },
+    {
       "id": "check-page-4b42bdfa3f",
       "url": "https://entrepreneurship.mit.edu/accelerator/apply/",
       "page": "application",
       "excerpt": "MIT delta v Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match MIT delta v Greg Wymer 2026-08-19T15:30:11-04:00 Friday September 11 4:00 pm – 5:30pm (doors at 3:30) MIT Kresge Auditorium Get Your Tickets Now! Won’t be in Cambridge? Watch the livestream! Register for the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner Network Meet Our Partners Our delta v Partners are key components of the accelerator program. Partners are C-suite executives, founders, VCs, and domain experts across multiple industries. Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We"
+    },
+    {
+      "id": "check-page-3f22d4e7f1",
+      "url": "https://entrepreneurship.mit.edu/accelerator/apply/",
+      "page": "application",
+      "excerpt": "Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We unlock over $200K in value per team in perks & partnerships that help startups scale!"
+    },
+    {
+      "id": "check-page-168094c8f7",
+      "url": "https://entrepreneurship.mit.edu/accelerator/apply/",
+      "page": "application",
+      "excerpt": "In the News MIT News MIT’s delta v accelerator receives $6M gift to supercharge startups being built by student founders Boston Globe “Klaviyo founders give $6 million to boost MIT startups, Boston’s competitiveness” Learn More About delta v Info Session Slide Deck Apply to delta v!"
     },
     {
       "id": "check-page-abc10f2566",
@@ -313,10 +419,16 @@
       "excerpt": "MIT delta v Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match MIT delta v Greg Wymer 2026-08-19T15:30:11-04:00 Friday September 11 4:00 pm – 5:30pm (doors at 3:30) MIT Kresge Auditorium Get Your Tickets Now! Won’t be in Cambridge? Watch the livestream! Register for the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner Network Meet Our Partners Our delta v Partners are key components of the accelerator program. Partners are C-suite executives, founders, VCs, and domain experts across multiple industries. Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We"
     },
     {
-      "id": "check-page-73bcc1ec9c",
-      "url": "https://entrepreneurship.mit.edu/tag/investment/",
+      "id": "check-page-38ca602479",
+      "url": "https://entrepreneurship.mit.edu/accelerator/faq/",
       "page": "terms",
-      "excerpt": "investment Archives - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match investment MIT Innovators: Aline Oliveira and Fabricio Pezente [Proventus] Gallery 5 04, 2018 MIT Innovators: Aline Oliveira and Fabricio Pezente [Proventus] Martin Trust Center 2018-04-05T13:08:41-04:00 We chat to Aline Oliveira (CEO) and Fabricio Pezente (Head of Product Development) of Proventus about their goals to support America’s farming community with their new start-up venture. … MIT Innovators: Aline Oliveira and Fabricio Pezente [Proventus] Martin Trust Center 2018-04-05T13:08:41-04:00 Click to Subscribe to Our Newsletter Martin Trust Center for MIT Entrepreneurship One Amherst Street E40-160 Cambridge MA 02142 617.253.8653 trustcenter@mit.edu Accessibility Follow About"
+      "excerpt": "Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We unlock over $200K in value per team in perks & partnerships that help startups scale!"
+    },
+    {
+      "id": "check-page-f05d8af90d",
+      "url": "https://entrepreneurship.mit.edu/accelerator/faq/",
+      "page": "terms",
+      "excerpt": "In the News MIT News MIT’s delta v accelerator receives $6M gift to supercharge startups being built by student founders Boston Globe “Klaviyo founders give $6 million to boost MIT startups, Boston’s competitiveness” Learn More About delta v Info Session Slide Deck Apply to delta v!"
     },
     {
       "id": "check-page-3781005885",
@@ -325,16 +437,34 @@
       "excerpt": "Easter 2021 Basket of Updates - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match Easter 2021 Basket of Updates Author: Bill Aulet An Easter 2021 basket full of random updates: Trish Cotter Moves On : After over 5 years of complete dedication to the Martin Trust Center for MIT Entrepreneurship, Executive Director Trish Cotter has decided to transition out to find her next challenge. Trish’s spectacular contributions in running delta v, operations, teaching, mentoring, and overseeing the myriad of other programs like EDP has brought the center to a whole new level. She has been a gift to the students, the staff, MIT Sloan, MIT, and the entire entrepreneurial community, and while we hate to lose her, we understand and are so grateful for the time we"
     },
     {
-      "id": "check-page-79db14b9c2",
-      "url": "https://entrepreneurship.mit.edu/news/designx-selects-first-cohort/",
+      "id": "check-page-1ac6f06aaa",
+      "url": "https://entrepreneurship.mit.edu/easter-2021-basket-of-updates/",
       "page": "batches",
-      "excerpt": "DesignX Selects First Cohort - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match DesignX Selects First Cohort DesignX Selects First Cohort Eight student-led teams hoping to launch ventures ranging from real estate development, to urban diagnostics, to novel design solutions for schoolchildren have been selected as the inaugural cohort for DesignX, the new entrepreneurship accelerator from MIT’s School of Architecture and Planning (SA+P). Fifteen teams gathered at the MIT Media Lab on Saturday to present their ideas to a selection panel drawn largely from outside MIT. The teams included students, faculty, and alumni from every unit of SA+P, joined by others specializing in engineering, business, and computer science. Of these, eight teams were chosen"
+      "excerpt": "Carly Chase takes the helm for this flagship program having been at our center since 2017 when she founded the Trust Center NYC Startup Studio ."
     },
     {
-      "id": "check-page-6f3897d908",
-      "url": "https://entrepreneurship.mit.edu/news/twoxar-announces-series-quest-collapse-drug-discovery-timelines/",
+      "id": "check-page-9e4661b33d",
+      "url": "https://entrepreneurship.mit.edu/easter-2021-basket-of-updates/",
       "page": "batches",
-      "excerpt": "twoXAR Announces Series A in Quest to Collapse Drug Discovery Timelines - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match twoXAR Announces Series A in Quest to Collapse Drug Discovery Timelines twoXAR Announces Series A in Quest to Collapse Drug Discovery Timelines from MIT Sloan News by Edward Mason The pharmaceutical industry’s traditional plodding path for discovering drugs can cost billions of dollars, require more than a dozen years from concept to consumer, and in the end result in a product with a jaw-dropping price tag. Enter twoXAR , a Palo Alto, California, startup that hopes to apply artificial intelligence to big data to reduce the timeline of drug discovery and cut health care costs. This week, the MIT-alumnus led company announced it"
+      "excerpt": "She will be running delta v with experienced partners Paul Cheek, Kit Hickey, and Kosta Ligris – all Entrepreneurs In Residence (EIRs) at our center as well as Lecturers teaching entrepreneurship."
+    },
+    {
+      "id": "check-page-f2b8a002de",
+      "url": "https://entrepreneurship.mit.edu/easter-2021-basket-of-updates/",
+      "page": "batches",
+      "excerpt": "New Online Course on “Finance and Financing” for Entrepreneurs Under Development Now : My big side project now is working on something that people have been requesting for years, but the pandemic finally gave me some time to work on."
+    },
+    {
+      "id": "check-page-1a248ba051",
+      "url": "https://entrepreneurship.mit.edu/easter-2021-basket-of-updates/",
+      "page": "batches",
+      "excerpt": "As I look back over just the past 30 days, we have been able to do very meaningful engagement with workshops for Volta/Dalhousie University/CDL in Halifax, Catalyst in Belfast, Oxford University (upcoming), and The Cube in Spain."
+    },
+    {
+      "id": "check-page-4fbadf1fbb",
+      "url": "https://entrepreneurship.mit.edu/easter-2021-basket-of-updates/",
+      "page": "batches",
+      "excerpt": "You can feel the energy waiting to be unleashed when this pandemic is over and it is going to be very exciting."
     },
     {
       "id": "check-page-701ec7d6ac",
@@ -343,16 +473,172 @@
       "excerpt": "MIT delta v Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match MIT delta v Greg Wymer 2026-08-19T15:30:11-04:00 Friday September 11 4:00 pm – 5:30pm (doors at 3:30) MIT Kresge Auditorium Get Your Tickets Now! Won’t be in Cambridge? Watch the livestream! Register for the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner Network Meet Our Partners Our delta v Partners are key components of the accelerator program. Partners are C-suite executives, founders, VCs, and domain experts across multiple industries. Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We"
     },
     {
+      "id": "check-page-653279d8e9",
+      "url": "https://entrepreneurship.mit.edu/accelerator/",
+      "page": "details",
+      "excerpt": "Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We unlock over $200K in value per team in perks & partnerships that help startups scale!"
+    },
+    {
+      "id": "check-page-1064bef1f4",
+      "url": "https://entrepreneurship.mit.edu/accelerator/",
+      "page": "details",
+      "excerpt": "In the News MIT News MIT’s delta v accelerator receives $6M gift to supercharge startups being built by student founders Boston Globe “Klaviyo founders give $6 million to boost MIT startups, Boston’s competitiveness” Learn More About delta v Info Session Slide Deck Apply to delta v!"
+    },
+    {
       "id": "check-page-d726e41002",
       "url": "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
       "page": "details",
       "excerpt": "MIT delta v Demo Day 2016 Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match 2016 delta v Teams 2016 delta v Teams Greg Wymer 2022-07-25T20:38:50-04:00 Alfie Alfie: created by students for students! Alfie knows student debt makes pursuing your dreams difficult. So they work with universities to offer an income-based financing solution. Alfie predicts future income profiles and invests in students for a fixed percentage of income over a set period of time. Students get greater flexibility and never have to worry about debt again! Armoire www.armoire.style Armoire is pioneering ‘wardrobe-as-a-service’. They offer their customer an endless stream of high-end clothes to rent, which Armoire personalizes to her style and fit preferences using machine learning algorithms. With door-to-door pickup and"
     },
     {
+      "id": "check-page-25506e765b",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
+      "page": "details",
+      "excerpt": "Emerald www.emeraldinno.com Emerald transforms your home into a health-aware home that detects falls, provides health insights, and sends alerts when emergencies are detected."
+    },
+    {
+      "id": "check-page-01833e1e7a",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
+      "page": "details",
+      "excerpt": "Based on an award-winning technology out of MIT, Emerald’s device uses wireless signals to track mobility, sleep quality, and health status, so there is no need to wear a pendant or bracelet or install cameras."
+    },
+    {
+      "id": "check-page-50b3d1e200",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
+      "page": "details",
+      "excerpt": "FactoryShop FactoryShop empowers America’s machine shops, the unsung heroes of the manufacturing world."
+    },
+    {
+      "id": "check-page-0b81bf968a",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
+      "page": "details",
+      "excerpt": "FleteYa FleteYa seeks to make freight transportation more efficient by connecting carriers and shippers through their platform."
+    },
+    {
+      "id": "check-page-36863e92c9",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
+      "page": "details",
+      "excerpt": "Kumwe Logistics www.kumwe.com Kumwe Logistics is a tech-enabled brokerage that lowers the cost of transporting goods in East Africa."
+    },
+    {
+      "id": "check-page-4685065ab2",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
+      "page": "details",
+      "excerpt": "Freight transportation in East Africa costs 60% more than in developed countries, which has a crippling effect on economic development."
+    },
+    {
+      "id": "check-page-f4a85e00e5",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
+      "page": "details",
+      "excerpt": "Kumwe is lowering these costs by connecting shippers and truck owners via an online marketplace."
+    },
+    {
+      "id": "check-page-773122da60",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
+      "page": "details",
+      "excerpt": "Kumwe started operation in Rwanda in August 2016 with 23 completed transports in the first month, and is expanding its operations into Uganda in early 2017."
+    },
+    {
+      "id": "check-page-92fff21a2c",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
+      "page": "details",
+      "excerpt": "LeanOnMe www.lean0n.me LeanOnMe is a mobile-based anonymous peer-to-peer support network that is improving the general state of mental health on college campuses by supplementing existing counseling services."
+    },
+    {
+      "id": "check-page-97633b053f",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
+      "page": "details",
+      "excerpt": "Stigma around mental health leaves many students untreated, which causes them to perform poor academically or to drop out, thus costing universities financially and otherwise."
+    },
+    {
+      "id": "check-page-81773fac0f",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
+      "page": "details",
+      "excerpt": "The Perch camera vision system tracks weightlifting workouts and provides coaches with crucial information about the performance and health of their athletes."
+    },
+    {
+      "id": "check-page-78336cc48b",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
+      "page": "details",
+      "excerpt": "Rendever is building a research-based virtual reality platform to improve the aging process by providing cognitive stimulation and social engagement for the elderly."
+    },
+    {
       "id": "check-page-eb48cdb02a",
       "url": "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
       "page": "details",
       "excerpt": "2017 MIT delta v Teams - Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match 2017 delta v 2017 delta v Greg Wymer 2023-07-11T14:40:30-04:00 (click to enlarge) 2017 Teams Alba Focused on empowering women to achieve their goals, Alba has developed a care giving marketplace for parents in Latin America. Its founders have seen just how difficult it is for Latin American families to balance work, life, and child care, especially with an increasing amount of qualified women joining the workforce. Lack of traditional home help, due to changes in labor laws, has made finding help at home an even more difficult task. Furthermore, there are thousands of unemployed students with a flexible schedule that are looking to earn a fair salary while focusing on their"
+    },
+    {
+      "id": "check-page-7fa7a86028",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
+      "page": "details",
+      "excerpt": "This framework promises that systemic changes to a population’s health can be detected within a matter of weeks, rather than years. www.biobot.io Blockparty We live in a food-obsessed culture with affluent Americans spending more on food than ever before."
+    },
+    {
+      "id": "check-page-9e8714a239",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
+      "page": "details",
+      "excerpt": "Meanwhile, one in seven people in Boston are food insecure, meaning they don’t reliably know where their next meal is coming from."
+    },
+    {
+      "id": "check-page-19e3f5c674",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
+      "page": "details",
+      "excerpt": "Bloomer Tech Bloomer Tech is transforming heart health and quality of life for women suffering from or at risk of heart disease."
+    },
+    {
+      "id": "check-page-82a0f83a20",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
+      "page": "details",
+      "excerpt": "This enables a woman to take control of her healthy life while simultaneously building a report of her vitals and health state for her physician. www.bloomertech.com DeepBench DeepBench connects expert advisors with those who need their insights, accomplishing this by arranging paid one–on–one phone consultations, written response Q&A, or in-person interviews."
+    },
+    {
+      "id": "check-page-3238881514",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
+      "page": "details",
+      "excerpt": "EasyEmail (formerly Point) EasyEmail is an AI-powered tool that finds important tasks in your business email and automatically writes replies within seconds."
+    },
+    {
+      "id": "check-page-98cad3331f",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
+      "page": "details",
+      "excerpt": "Hosta’s platform uses video from a smartphone camera to draft interactive, 3D architectural models using artificial intelligence. hosta.ai Infinite Cooling Power plants use 139 billion gallons of fresh water per day, 50% of total US freshwater withdrawals."
+    },
+    {
+      "id": "check-page-f48cb797ec",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
+      "page": "details",
+      "excerpt": "Infinite Cooling’s solution will also be crucial for developing countries where stress on surface and ground water is reaching drastic levels, yet energy demand is still increasing exponentially. www.infinite-cooling.com Klarity Klarity’s vision is to provide widespread access to concise and trustworthy legal advice through intelligent technology."
+    },
+    {
+      "id": "check-page-601f8c416a",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
+      "page": "details",
+      "excerpt": "Its unique, user-friendly cloud application was designed to fit seamlessly into your workflow. www.tryklarity.com Mesodyne Mesodyne is bringing portable power to dismounted soldiers who carry 10-20 pounds of batteries to support a 72-hour mission, leading to high soldier injury liability, complicated front line logistics, and less food, water, and ammunition that can be carried."
+    },
+    {
+      "id": "check-page-2670817731",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
+      "page": "details",
+      "excerpt": "Mesodyne’s breakthrough technology enables ultra-portable, reliable, and affordable energy generation at the 1-100 W range."
+    },
+    {
+      "id": "check-page-1e08253e32",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
+      "page": "details",
+      "excerpt": "Beyond soldier power, Mesodyne’s technology will unleash the full potential of human and technological mobility across numerous defense and civilian markets. www.mesodyne.com Nesterly On any night, 50 million bedrooms sit empty across the U.S., many belonging to older homeowners whose lifestyles have changed."
+    },
+    {
+      "id": "check-page-b08d3917ce",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
+      "page": "details",
+      "excerpt": "Nesterly digitally connects these homeowners to young renters interested in paying part of their rent by doing tasks around the home. www.nesterly.com NeuroMesh NeuroMesh is a managed security and intelligence company for Internet of Things (IoT) devices."
+    },
+    {
+      "id": "check-page-feabbf00c2",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
+      "page": "details",
+      "excerpt": "Most critical infrastructure relies on IoT to function."
     },
     {
       "id": "check-page-86abb311eb",
@@ -367,10 +653,154 @@
       "excerpt": "2018 delta v - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match 2018 delta v 2018 delta v Greg Wymer 2022-07-25T20:23:19-04:00 (click to enlarge) 2018 Teams Aavia The pill on time, every time Aavia is empowering women by improving the Birth Control Pill experience with IoT and behavioral science. Our solution is a patent-pending smart device and app that actually know if she’s taken her Birth Control Pill so she can take on her day with confidence. The smart device contains sensors that recognize Pill count and position, and sends persistent and customizable reminders to her phone app via Bluetooth. The phone app automatically logs the time of intake and boasts of several features, including time zone adjustments, proactive educational tips, symptom"
     },
     {
+      "id": "check-page-91a3446ca8",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+      "page": "details",
+      "excerpt": "The phone app automatically logs the time of intake and boasts of several features, including time zone adjustments, proactive educational tips, symptom tracking, and actionable insights customized to her Pill-taking habits. www.aavia.io AdaViv Grow together, grow smarter AdaViv is a hardware-enabled, predictive agriculture company."
+    },
+    {
+      "id": "check-page-c3afc29be5",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+      "page": "details",
+      "excerpt": "Keeping “24/7 eyes on the plants,” our sensing and AI and computer vision uncovers hidden plant biometrics and translates data into actionable insights for growers."
+    },
+    {
+      "id": "check-page-ba0d0c22b2",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+      "page": "details",
+      "excerpt": "Through proprietary machine learning technology, we create site plans within a few days, instead of weeks."
+    },
+    {
+      "id": "check-page-df0d80eee0",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+      "page": "details",
+      "excerpt": "In a world where falsified news, 24-hour publishing cycles, and endless volumes of content make it difficult for you to keep up…we’re on a mission to make it easier. www.belowthefold.news Buddy Your digital trainer for mental health Born out of MIT, Buddy is a digital personal trainer for mental wellness."
+    },
+    {
+      "id": "check-page-80f62bf33f",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+      "page": "details",
+      "excerpt": "Centaur Labs Improving diagnosis with collective intelligence Centaur Labs is working to improve healthcare through combining crowdsourcing and artificial intelligence."
+    },
+    {
+      "id": "check-page-26ce685fe7",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+      "page": "details",
+      "excerpt": "By doing so, users can help train the next generation of artificial intelligence algorithms—and themselves —at the same time. www.centaurlabs.com Chord Progressive homeownership Chord is the home finance company for the millennial tired of throwing away money each month on rent but doesn’t want to take on a ton of mortgage debt in order to buy."
+    },
+    {
+      "id": "check-page-7e1d373a31",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+      "page": "details",
+      "excerpt": "We use a combination of evidence-based medical guidelines and an AI-augmented care coach to guide patients through their personalized care journeys."
+    },
+    {
+      "id": "check-page-8b97f5e1c8",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+      "page": "details",
+      "excerpt": "This leads to reduced surgery cancellations, lower post-surgery readmissions, higher patient satisfaction, and improved patient retention.. www.daytoday.health Floating Point Group Algorithmic solution for alternative cryptocurrency liquidity Bitcoin and Ethereum make up 70% of the cryptocurrency market."
+    },
+    {
+      "id": "check-page-c6b386d873",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+      "page": "details",
+      "excerpt": "Buying just $300,000 of a top cryptocurrency causes a 6% slippage in the market, and affects other markets."
+    },
+    {
+      "id": "check-page-c8856c2f25",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+      "page": "details",
+      "excerpt": "This means that tokens/cryptocurrencies outside Bitcoin and Ethereum are not traded, and thus cryptocurrency projects cannot flourish."
+    },
+    {
+      "id": "check-page-f19b170538",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+      "page": "details",
+      "excerpt": "We allow people to trade the 30%, and save millions of dollars. www.floating.group Function of Beauty (f/k/a Atolla) Machine learning platform for optimizing skin health Taking care of your skin is complicated—most people struggle to find skincare products that are effective because they don’t understand their skin or how to choose products that will work."
+    },
+    {
+      "id": "check-page-6a522c19cb",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+      "page": "details",
+      "excerpt": "Function of Beauty is a skin health platform that leverages machine learning to simplify skin science."
+    },
+    {
       "id": "check-page-11dabd64dd",
       "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
       "page": "details",
       "excerpt": "2019 delta v - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match 2019 delta v 2019 delta v Greg Wymer 2023-07-17T17:27:30-04:00 (click to enlarge) “Take the First Step” Abound Early learning, without the screens By fourth grade, roughly 1 in 3 children in the U.S. is a proficient reader, and 1 in 10 possesses the advanced reading skills needed to succeed in the 21st century economy. As a nation, we have spent billions of dollars trying to ensure that all children can read well, but we have never substantively engaged the stakeholder who is there the most—and cares the most—about an individual child’s reading success: the parent. Most parents don’t realize what it takes to read well, or understand that language and literacy skills accumulate over time,"
+    },
+    {
+      "id": "check-page-90a0922f8a",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "page": "details",
+      "excerpt": "We built our IoT system to operate and last even in the most remote, toughest conditions."
+    },
+    {
+      "id": "check-page-3997d5e779",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "page": "details",
+      "excerpt": "Acoustic Wells reduces the need for the painstaking task of daily inspection of wells while providing operators much more fine-grained, actionable data. www.acoustic-wells.com Atem Helping people breathe easy Atem enables patients with asthma/COPD to take control of their health."
+    },
+    {
+      "id": "check-page-dcb3e8f720",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "page": "details",
+      "excerpt": "Inhaler technique and adherence are key aspects of good lung health, but it can be tricky to stick to the right regimen."
+    },
+    {
+      "id": "check-page-dac3105daf",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "page": "details",
+      "excerpt": "By recognizing patterns, enabling self-experimentation, and connecting you with healthcare and nutrition experts, auggi empowers you to take back control of your life. www.auggi.ai Boom (f/k/a Alpaca) Helping people find their homes Boom is a tech start-up disrupting the apartment rental space."
+    },
+    {
+      "id": "check-page-e770f4feff",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "page": "details",
+      "excerpt": "Boom’s AI manages the largest network of housing Facebook groups in the world, active in over 200 cities. www.boompay.app Easel Flexible childcare."
+    },
+    {
+      "id": "check-page-9d49cf0d75",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "page": "details",
+      "excerpt": "Our founding team members have extensive backgrounds in both the beauty industry and biochemical manufacturing, with PhDs from MIT in materials science and AI."
+    },
+    {
+      "id": "check-page-8dbba540e3",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "page": "details",
+      "excerpt": "We established Hardworkers with the simple vision of bringing workers together to navigate the world full of driverless cars, cashier-less stores, and AI-enabled warehouses."
+    },
+    {
+      "id": "check-page-e841aa5c4b",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "page": "details",
+      "excerpt": "At Haystack Health, we are shaping the future of chronic disease management, starting with hypothyroidism, by building a virtual care clinic that is data-driven, comprehensive and accessible to better serve patients."
+    },
+    {
+      "id": "check-page-64b627a037",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "page": "details",
+      "excerpt": "This results in massive socio-economic losses and public health risks."
+    },
+    {
+      "id": "check-page-cc3cf831d1",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "page": "details",
+      "excerpt": "Let’s discover the city in a new way! www.lynx.rent Mantle Biotech Extreme biology."
+    },
+    {
+      "id": "check-page-fbdbad42cd",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "page": "details",
+      "excerpt": "Mantle Biotech is producing low-cost, robust, and accurate medical diagnostics to address unmet needs in global health."
+    },
+    {
+      "id": "check-page-32b8e71502",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "page": "details",
+      "excerpt": "Yet current wearables aimed at helping consumers are not able to understand our body movements holistically."
     },
     {
       "id": "check-page-582157a8e3",
@@ -379,10 +809,490 @@
       "excerpt": "2020 delta v - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match 2020 delta v 2020 delta v Greg Wymer 2023-07-11T14:51:47-04:00 2020 Demo Day Webcast (click to enlarge) 2020 Teams Aimvest Technologies, Inc. Goal-based investing 2.0 Aimvest Technologies provides an asset management platform to financial planners. We allow them to set precise targets for their clients’ portfolios and our quantitative risk-management models manage risk in real time to optimize for the probability of hitting these targets. In contrast to tedious risk-tolerance questionnaires and arbitrary risk scores that fail to maximize such probabilities, our scientific approach to risk-taking helps planners have a meaningful and trusted dialogue with clients, and reconciles budgeting"
     },
     {
+      "id": "check-page-abcfd1f005",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "page": "details",
+      "excerpt": "Our hardware pairs with our app to deliver sleep metrics and recommendations, giving women back the sleep they deserve. www.aurablue.cool Contack The best hire ever The Business Process Outsourcing industry regularly experiences turnover above 50%."
+    },
+    {
+      "id": "check-page-b17e36e8fe",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "page": "details",
+      "excerpt": "Contack uses patent-pending machine learning algorithms to predict the Employee Lifetime ValueTM for customer service agents in large contact centers."
+    },
+    {
+      "id": "check-page-e9ef2bfbe3",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "page": "details",
+      "excerpt": "We’ve built an e-commerce company that simplifies the supply chain and provides complete transparency by empowering off-loaders and harvesters to ship seafood directly from the dock."
+    },
+    {
+      "id": "check-page-2ae167d5b7",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "page": "details",
+      "excerpt": "Our vision is to develop a suite of connected health wearables that improve both physical and emotional recovery."
+    },
+    {
+      "id": "check-page-1519ed9fd9",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "page": "details",
+      "excerpt": "Importantly, our connected app serves as a platform for device control, and mom-centric postpartum education, support, and care. www.bemomme.com MYAVA Make the right choice, on you Young women live busy lifestyles and enjoy shopping online but deciding what clothes to buy is time consuming and returns are a hassle."
+    },
+    {
+      "id": "check-page-20e06c3556",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "page": "details",
+      "excerpt": "Preloved Born again baby gear Preloved is a parent-to-parent marketplace for preowned baby gear."
+    },
+    {
+      "id": "check-page-a2c956e83a",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "page": "details",
+      "excerpt": "Our mission is to accelerate the world’s transition to the circular economy, by creating a verified marketplace for outgrown baby gear. qBraid Explore quantum computing qBraid is working to create and prepare the quantum workforce: making quantum programming easier to learn by making it easier to do."
+    },
+    {
+      "id": "check-page-7ec406a9b9",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "page": "details",
+      "excerpt": "We offer a simple cloud environment to write quantum code, compatible across all quantum hardware, and interoperable with all quantum algorithm development tools."
+    },
+    {
+      "id": "check-page-9706e778c1",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "page": "details",
+      "excerpt": "This includes integrated course and tutorial material to streamline the process of learning, building, and deploying quantum-enabled solutions. www.qbraid.com Respezy The power of knowledge and change for your health As we begin to reopen, it can be difficult to know what are the right things to do for our health."
+    },
+    {
+      "id": "check-page-6245b477d4",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "page": "details",
+      "excerpt": "This fall, 5 million college students will be returning to campuses, creating concerns for student health and safety."
+    },
+    {
+      "id": "check-page-67855f78e5",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "page": "details",
+      "excerpt": "The app allows students to plan and track their daily behaviors and lower their health risks."
+    },
+    {
+      "id": "check-page-eae2b7c34c",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "page": "details",
+      "excerpt": "Thiozen Low carbon hydrogen for the oil and gas sector Hydrogen produced by fossil fuel reforming (96% of total H2 production) contributes to 2.3% of global warming emissions."
+    },
+    {
       "id": "check-page-0548ff9da2",
       "url": "https://entrepreneurship.mit.edu/wp-content/uploads/delta-v-2020-cohort-FINAL-infographic-copy.png",
       "page": "batches",
       "excerpt": "�PNG IHDR � � �i3� gAMA �� �a cHRM z& �� � �� u0 �` :� p��Q < �eXIfMM * J R ( �i Z � � � � �� � m2�p pHYs � � n�u> YiTXtXML:com.adobe.xmp 1 L�'Y @ IDATx ����-�y ��˅�F ��1� �`Ȥ M �4� < � � B < � ��IC�~� i߽��ﵿ������ @� @� @� @� � �/6��L� @� @� @� @� Ll @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @�"
+    },
+    {
+      "id": "check-page-667324d931",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+      "page": "details",
+      "excerpt": "2021 delta v - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match 2021 delta v Meet Our Teams! 2021 delta v Greg Wymer 2025-07-14T14:13:10-04:00 Connect to Our Teams Digital Program Book Please enjoy the digital version of our Demo Day book to learn even more about each team as well as connect with the founders via the contact links on each team page. Click to Read Opening + Bill Aulet’s Welcome FSA to Today: 2012 Alumni Bill Aulet’s Closing Remarks 2021 Teams Almond Fintech The friendliest way to access and transfer money across providers and borders Almond is building an international bank transfer system, without the banks. There are over 250 distinct mobile wallet apps in Southeast Asia serving about 300M users. However, most mobile wallets are"
+    },
+    {
+      "id": "check-page-4a68447c64",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+      "page": "details",
+      "excerpt": "Interoperability in digital financial services can facilitate a projected $3.7T increase in GDP across developing countries by 2025."
+    },
+    {
+      "id": "check-page-7d91364bda",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+      "page": "details",
+      "excerpt": "Carestry is the Care Registry that allows you to seamlessly and effectively harness the support of your community by showing them what you need most. www.carestry.io Empallo Using AI to revolutionize our fight against heart failure Heart failure is the leading cause of hospital stays in the U.S."
+    },
+    {
+      "id": "check-page-25c7b7f024",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+      "page": "details",
+      "excerpt": "Empallo uses machine learning to unlock hidden information and harness insights from vast amounts of patient data."
+    },
+    {
+      "id": "check-page-b4f761dcad",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+      "page": "details",
+      "excerpt": "We are on a mission to become India’s first body specialist brand."
+    },
+    {
+      "id": "check-page-23fa24df6e",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+      "page": "details",
+      "excerpt": "One that is powered by 100% natural formulations, ancient wellness rituals and India’s digital commerce revolution."
+    },
+    {
+      "id": "check-page-054d852734",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+      "page": "details",
+      "excerpt": "Ivu Biologics is a technology platform focused on manufacturing, storing and delivering these fragile organisms across various sectors."
+    },
+    {
+      "id": "check-page-efbd488e83",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+      "page": "details",
+      "excerpt": "We use biodegradable, non microplastic materials that lower our environmental impact on our food and water systems while working to ensure a net zero carbon future. www.ivubio.com KickbitApp Helping you kick the habit In the United States, 20-30% of adults bite their nails chronically."
+    },
+    {
+      "id": "check-page-18ef03fc23",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+      "page": "details",
+      "excerpt": "At KickbitApp, we help people stop their nail-biting habit by creating a custom plan and matching them with helping products so they can grow their nails and confidence. www.kickbitapp.com LA FIRME Providing access to affordable architectural and engineering services to families in Latam Every year, 66% of the Latin American population moves into self-built houses."
+    },
+    {
+      "id": "check-page-fa04882a4e",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+      "page": "details",
+      "excerpt": "Today, the logistics side of the air industry remains analog with simple bookings taking days and rates held as trade secrets."
+    },
+    {
+      "id": "check-page-0faab47c18",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+      "page": "details",
+      "excerpt": "Pelicargo aims to disrupt air cargo with a marketplace that allows any freight forwarder to instantly book space with airlines."
+    },
+    {
+      "id": "check-page-d0e589b4a7",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+      "page": "details",
+      "excerpt": "Project Restore Us (PRU) brings the wholesale grocery pipeline’s cost-effectiveness and efficiency closer to the homes of food-insecure families in the Greater Boston area."
+    },
+    {
+      "id": "check-page-1af8cda4e3",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+      "page": "details",
+      "excerpt": "By leveraging the restaurant supply chain, we and our team of volunteers have helped mitigate food insecurity by serving 750,000+ pounds of food to 2,000+ families. www.projectrestoreus.org Project Us AI for inclusion The past decades have brought unprecedented progress in our understanding of and fight for inclusion."
+    },
+    {
+      "id": "check-page-c95da5e9e4",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "page": "details",
+      "excerpt": "2022 delta v - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match 2022 delta v 2022 delta v Greg Wymer 2025-07-14T14:24:32-04:00 Connect to Our Teams Digital Program Book Please enjoy the digital version of our Demo Day book to learn even more about each team as well as connect with the founders via the contact links on each team page. (optimized for desktop) Click to Read Introduction Trust Center Director Bill Aulet & MIT Sloan Dean David Schmittlein Ben & Jenny’s 2022 delta v co-leads & Trust Center EIRs Ben Soltoff and Jenny Larios Berlin Our 2022 Teams CashEx Digital banking for African communities We help African migrants get their first US bank account and debit card just before arriving in the US, move their savings to the US after arriving,"
+    },
+    {
+      "id": "check-page-5fc8ca0004",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "page": "details",
+      "excerpt": "However, with recent advances in Machine Learning, such decisions can now be made optimally using data to maximize profits."
+    },
+    {
+      "id": "check-page-e4ea612340",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "page": "details",
+      "excerpt": "We bring models for data-driven pricing to millions of SMB owners worldwide, starting with B2C Fast-Moving-Consumer-Goods (FMCG) companies in eCommerce. www.catalan.ai Congo Clothing Company Impact never looked so good The Democratic Republic of Congo (DRC) is home to the 21st century’s most precious minerals."
+    },
+    {
+      "id": "check-page-d92bbdad3a",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "page": "details",
+      "excerpt": "Worse yet, most consumers with the income to make a difference are disconnected from this reality."
+    },
+    {
+      "id": "check-page-8eaa357feb",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "page": "details",
+      "excerpt": "What if we could precisely measure fitness, cycle, and physical health multiple times per day providing trends via a mobile application empowering females to optimize performance goals based on their female physiology and cycle?"
+    },
+    {
+      "id": "check-page-013b8510cb",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "page": "details",
+      "excerpt": "Powered by AI. www.trykino.com Livvi Helping women prioritize their social lives Making friends as an adult is hard."
+    },
+    {
+      "id": "check-page-f66a04e311",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "page": "details",
+      "excerpt": "Women have more fun together, and Livvi provides a safe and effective way to enhance their social lives. www.livvi.app Mesophase Surface engineering for energy efficiency Mesophase designs revolutionary surfaces inspired by nature."
+    },
+    {
+      "id": "check-page-99adb028ed",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "page": "details",
+      "excerpt": "Our technology’s extraordinary heat transfer and anti-corrosion properties have extremely broad applicability: improving energy efficiency, eliminating scaling and fouling, and preventing corrosion in ovens, power plants, and anything in between. www.mesophase.org Moshion An AIoT system for pressure injury or fall prevention Pressure injuries and falls cost US healthcare $61 billion per year."
+    },
+    {
+      "id": "check-page-6749b22329",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "page": "details",
+      "excerpt": "Using real-time sensor data and the power of Machine Learning, the system performs patient risk analysis to prevent these life- threatening events."
+    },
+    {
+      "id": "check-page-1666f6c13b",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "page": "details",
+      "excerpt": "This cuts down on manual coordination over email/phone, increases overall coordination and informational accuracy, and speeds case closure rates. www.multitudeinsights.com Oasis Helping healthcare providers uncover and act on unpreviously undiscovered social needs Social determinants of health (SDOH), such as food insecurity, can impact up to 80% of a person’s health."
+    },
+    {
+      "id": "check-page-5a1d4ed620",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "page": "details",
+      "excerpt": "Healthcare providers are increasingly incentivized to help, hoping to avoid poor health outcomes and high cost of care."
+    },
+    {
+      "id": "check-page-c831942e71",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "page": "details",
+      "excerpt": "Most people simply live with the pain or use relieving techniques that either damage their health or compromise their independence as they are bedridden."
+    },
+    {
+      "id": "check-page-9d01b1a251",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "page": "details",
+      "excerpt": "We are on a mission to create a community of empowered people who can take charge of their period wellness. www.ourkaia.com PAIRA Proactively developing adolescent mental health Each year approximately 1 in 6 (~2.5 million) adolescents create a detailed plan to commit suicide, and 1 in 12 actually try to."
+    },
+    {
+      "id": "check-page-1627852e16",
+      "url": "https://entrepreneurship.mit.edu/wp-content/uploads/2022-cohort-final.pdf",
+      "page": "batches",
+      "excerpt": "%PDF-1.5 %���� 1 0 obj < >/OCGs[5 0 R]>>/Pages 3 0 R/Type/Catalog>> endobj 2 0 obj < >stream application/pdf 2022 cohort5 no fonts 2022-08-19T11:28:38-05:00 2022-08-19T11:28:38-05:00 2022-08-19T11:28:38-05:00 Adobe Illustrator CS5.1 256 192 JPEG /9j/4AAQSkZJRgABAgEBLAEsAAD/7QAsUGhvdG9zaG9wIDMuMAA4QklNA+0AAAAAABABLAAAAAEA AQEsAAAAAQAB/+4ADkFkb2JlAGTAAAAAAf/bAIQABgQEBAUEBgUFBgkGBQYJCwgGBggLDAoKCwoK DBAMDAwMDAwQDA4PEA8ODBMTFBQTExwbGxscHx8fHx8fHx8fHwEHBwcNDA0YEBAYGhURFRofHx8f Hx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8f/8AAEQgAwAEAAwER AAIRAQMRAf/EAaIAAAAHAQEBAQEAAAAAAAAAAAQFAwIGAQAHCAkKCwEAAgIDAQEBAQEAAAAAAAAA AQACAwQFBgcICQoLEAACAQMDAgQCBgcDBAIGAnMBAgMRBAAFIRIxQVEGE2EicYEUMpGhBxWxQiPB UtHhMxZi8CRygvElQzRTkqKyY3PCNUQnk6OzNhdUZHTD0uIIJoMJChgZhJRFRqS0VtNVKBry4/PE 1OT0ZXWFlaW1xdXl9WZ2hpamtsbW5vY3R1dnd4eXp7fH1+f3OEhYaHiImKi4yNjo+Ck5SVlpeYmZ qbnJ2en5KjpKWmp6ipqqusra6voRAAICAQIDBQUEBQYECAMDbQEAAhEDBCESMUEFURNhIgZxgZEy obHwFMHR4SNCFVJicvEzJDRDghaSUyWiY7LCB3PSNeJEgxdUkwgJChgZJjZFGidkdFU38qOzwygp 0+PzhJSktMTU5PRldYWVpbXF1eX1RlZmdoaWprbG1ub2R1dnd4eXp7fH1+f3OEhYaHiImKi4yNjo +DlJWWl5iZmpucnZ6fkqOkpaanqKmqq6ytrq+v/aAAwDAQACEQMRAD8A9U4q7FXYq7FXYq7FUv0w k3ur1PS7Wn/SJBiqYYq7FXYq7FXYq7FUun/5SGy/5hLv/k7bYqmOKsd86+XvLur2Uba5cPb21vyC ukgiqX4mlaE1+AUpgMgObPHjlM1EWWIx6J+U00sURu5WaJgVaVpQjHkz/FyQR05MK7AbD3rX48e9"
+    },
+    {
+      "id": "check-page-584fcbb03e",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "page": "details",
+      "excerpt": "2023 delta v - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match 2023 delta v 2023 delta v Greg Wymer 2025-07-14T14:18:11-04:00 Connect to Our Teams Digital Program Book Please enjoy the digital version of our Demo Day book to learn even more about each team as well as connect with the founders via the contact form. (optimized for desktop) CLICK TO READ Introduction Trust Center Director Bill Aulet + MIT President Sally Kornbluth + Chair of the MIT Corporation Mark Gorenberg delta v Through the Years The student teams aren’t the only ones who innovate. See how our accelerator has changed for the better since its launch in 2012. Our 2023 Teams Agrichat AI Unlocking agricultural research Population growth and climate change have escalated the risk of"
+    },
+    {
+      "id": "check-page-0d3c655d78",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "page": "details",
+      "excerpt": "Our 2023 Teams Agrichat AI Unlocking agricultural research Population growth and climate change have escalated the risk of famine, affecting millions of lives."
+    },
+    {
+      "id": "check-page-4b01ad6f3e",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "page": "details",
+      "excerpt": "Unfortunately, this crucial knowledge remains inaccessible to farmers, trapped in research papers, PDFs, and blogs. ‍ Agrichat leverages the power of generative AI to consolidate agricultural research, enabling farmers to conversationally access timely insights tailored to their unique farming conditions."
+    },
+    {
+      "id": "check-page-4342469104",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "page": "details",
+      "excerpt": "Using machine learning, we prioritize key information on patients to equip clinicians with detailed insights, while our technology detects early risk factors, improving preventative care."
+    },
+    {
+      "id": "check-page-ed73b7fd70",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "page": "details",
+      "excerpt": "Transforming mental health treatment, we aim to democratize access and provide holistic, trauma-informed care. www.augmend.health Be Your Own Boss (byob) Virtual manager for content creators Far too often creators (i.e., social media influencers) struggle to earn money, limiting their ability to entertain, educate and inspire their audience."
+    },
+    {
+      "id": "check-page-8a692e9770",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "page": "details",
+      "excerpt": "Where being your own boss is more than a dream, it’s a reality. www.byob.ai Boston Quantum Reimagine what computing can do Complex optimization problems underpin critical decisions across several industries."
+    },
+    {
+      "id": "check-page-9be211e2c8",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "page": "details",
+      "excerpt": "Boston Quantum leverages quantum computing to navigate these complexities and unlock solutions previously deemed unattainable, starting with the financial industry."
+    },
+    {
+      "id": "check-page-a9d3df87ca",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "page": "details",
+      "excerpt": "With an initial focus on currency markets, we use quantum and quantum-inspired algorithms to rapidly uncover high-profit trading opportunities in networks of tens of assets – and hundreds of prices."
+    },
+    {
+      "id": "check-page-34a78b6ace",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "page": "details",
+      "excerpt": "We are creating a future where financial processes are streamlined, cash flows are optimized, and SMBs flourish in a connected global marketplace."
+    },
+    {
+      "id": "check-page-125f535d86",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "page": "details",
+      "excerpt": "As such, SMBs lack control over treasury workflows, suffer extended cash cycles and battle revenue leakage."
+    },
+    {
+      "id": "check-page-0061bdc37b",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "page": "details",
+      "excerpt": "Our innovative platform streamlines treasury management workflows, payments and currency exchange to experience seamless international trade with embedded financing. www.trycru.com Eki Agrivoltaics Farming soil and sun Eki Agrivoltaics enables the coexistence of agriculture and solar energy by scaling an innovative photovoltaic technology and offering a revenue-sharing model to farmers."
+    },
+    {
+      "id": "check-page-cee479daac",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "page": "details",
+      "excerpt": "We unlock millions of acres of agricultural land for clean energy, generate more revenue/acre, and ultimately empower rural areas."
+    },
+    {
+      "id": "check-page-01f8dd2062",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "page": "details",
+      "excerpt": "Let’s farm soil and sun, together. www.ekiagrivoltaics.com fascia Accelerating health innovations through the power of sleep science Sleep has long been thought of as a pause in people’s daily lives."
+    },
+    {
+      "id": "check-page-a5278094e9",
+      "url": "https://entrepreneurship.mit.edu/wp-content/uploads/2023-cohort-scaled.jpg",
+      "page": "batches",
+      "excerpt": "���� JFIF ` ` �� ;CREATOR: gd-jpeg v1.0 (using IJG JPEG v62), quality = 82 �� C ! ' \"#%%% ),($+!$%$�� C $ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$�� � \" �� �� � } !1A Qa \"q 2��� #B�� R��$3br� %&'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz��������������������������������������������������������������������������� �� � w !1 AQ aq \"2� B���� #3R� br� $4�%� &'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz�������������������������������������������������������������������������� ? ���(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(�"
+    },
+    {
+      "id": "check-page-af995558e9",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+      "page": "details",
+      "excerpt": "2024 delta v - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match 2024 delta v 2024 delta v Greg Wymer 2025-10-01T13:47:13-04:00 Digital Program Book Please enjoy the digital version of our Demo Day book to learn even more about and connect with each team. (optimized for desktop) CLICK TO READ All Unique Objects From idea to 3D, simplify your design journey At AUO, we’re revolutionizing 3D design by empowering designers and companies with AI-driven tools that accelerate innovation. Starting in the home decor and furniture industry, our generative AI tool dramatically reduces the traditional 40-hour design process. By quickly converting sketches into 3D models and enhancing them with customized presets, we help designers bring their visions to life"
+    },
+    {
+      "id": "check-page-643d83a2e8",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+      "page": "details",
+      "excerpt": "As a B2B solution, we not only shorten the time to market but also keep companies competitive and responsive to market demands."
+    },
+    {
+      "id": "check-page-49bba56dd1",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+      "page": "details",
+      "excerpt": "We’re setting a new standard for efficiency and creativity, with plans to expand our impact across various industries. www.alluniqueobjects.com Avenir AI (formerly Health+) Preventing burnout with AI risk detection and timely, actionable insights Employee health benefits are the 2nd-largest corporate expense in the U.S."
+    },
+    {
+      "id": "check-page-a18f15311b",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+      "page": "details",
+      "excerpt": "Every year, employers spend $1.9T on health benefits – and growing."
+    },
+    {
+      "id": "check-page-cfdcccb2f2",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+      "page": "details",
+      "excerpt": "To alleviate this burden and balance the grid, EQORE’s smart energy storage system reduces peaks on-site."
+    },
+    {
+      "id": "check-page-126a51cfb0",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+      "page": "details",
+      "excerpt": "We aim to cut electricity bills of industrial facilities by up to 30% without affecting their operations. www.eqore.net Expat AI AI-powered solution to navigate the immigration journey in the U.S."
+    },
+    {
+      "id": "check-page-41eaeecc5f",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+      "page": "details",
+      "excerpt": "Expat AI is dedicated to assisting immigrants in the US with form completion in their native language, helping them achieve their primary goals of obtaining work permits and permanent residency."
+    },
+    {
+      "id": "check-page-d569e3526b",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+      "page": "details",
+      "excerpt": "Our AI-powered solution offers a personalized experience to democratize access to essential immigration resources."
+    },
+    {
+      "id": "check-page-ba9255ff72",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+      "page": "details",
+      "excerpt": "Our solution provides personalized guidance and an educational user experience, making complex immigration processes accessible and affordable. www.expatusa.ai Fount Enabling value-driven insurance acquisition US insurance marketers spend more than $15B annually on digital advertising to generate leads."
+    },
+    {
+      "id": "check-page-b2f5bd6e0d",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+      "page": "details",
+      "excerpt": "This complexity reduces their ability to focus on what matters, targeting high value insurance customers."
+    },
+    {
+      "id": "check-page-e2aaf87e48",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+      "page": "details",
+      "excerpt": "Fount is building the world’s most intelligent insurance marketing AI co-pilot."
+    },
+    {
+      "id": "check-page-af85ea3954",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+      "page": "details",
+      "excerpt": "More often than not, they realize late and are unable to prevent the onset of the disease causing high out of pocket health expenditure and poor quality of life."
+    },
+    {
+      "id": "check-page-146b780471",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+      "page": "details",
+      "excerpt": "Health Galaxy is a co-pilot for young adults to become more aware of their heart health and help them navigate through this journey in a more social, connected and engaging way."
+    },
+    {
+      "id": "check-page-7918e8ae95",
+      "url": "https://entrepreneurship.mit.edu/wp-content/uploads/2024-cohort-scaled.jpg",
+      "page": "batches",
+      "excerpt": "���� JFIF ` ` �� ;CREATOR: gd-jpeg v1.0 (using IJG JPEG v62), quality = 82 �� C ! ' \"#%%% ),($+!$%$�� C $ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$�� � \" �� �� � } !1A Qa \"q 2��� #B�� R��$3br� %&'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz��������������������������������������������������������������������������� �� � w !1 AQ aq \"2� B���� #3R� br� $4�%� &'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz�������������������������������������������������������������������������� ? ���(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(� �(�"
+    },
+    {
+      "id": "check-page-36683e8092",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
+      "page": "details",
+      "excerpt": "2025 delta v - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match 2025 delta v 2025 delta v Greg Wymer 2025-10-03T20:12:10-04:00 READ OUR PROGRAM BOOK BACKSTAGE ACCESS TO THE TEAMS AutoAce AI agents for car dealerships AutoAce builds AI agents for car dealerships, replacing inefficient legacy systems that overwhelm staff. Our AI copilots automate repetitive tasks, starting with a 24/7 voice agent that answers 100% of inbound service calls and books appointments, freeing employees to focus on customers and high-priority work. Our mission is to create the complete AI-native operating system for the modern dealership. autoace.ai Carbion Recharging the domestic battery supply, naturally Carbion was founded by two MIT engineers driven to turn waste into"
+    },
+    {
+      "id": "check-page-2ea19835d3",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
+      "page": "details",
+      "excerpt": "Our mission is to create the complete AI-native operating system for the modern dealership. autoace.ai Carbion Recharging the domestic battery supply, naturally Carbion was founded by two MIT engineers driven to turn waste into value."
+    },
+    {
+      "id": "check-page-19353101e9",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
+      "page": "details",
+      "excerpt": "Graphite is a critical material for electrification and energy storage, yet over 95% of battery-grade supply comes from China."
+    },
+    {
+      "id": "check-page-5b8e13efc5",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
+      "page": "details",
+      "excerpt": "Clima Technologies is revolutionizing this space with the AI Building Engineer: an expert assistant that enables facilities managers to talk to their buildings in real time."
+    },
+    {
+      "id": "check-page-4e5619728d",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
+      "page": "details",
+      "excerpt": "Using computer vision and AI, we analyze movement, predict risks, and guide lasting recovery."
+    },
+    {
+      "id": "check-page-79b0b45877",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
+      "page": "details",
+      "excerpt": "Manufacturers juggle many factors, including material costs, labor, manufacturing, transportation, and installation."
+    },
+    {
+      "id": "check-page-835a592157",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
+      "page": "details",
+      "excerpt": "Forma’s generative optimization software empowers manufacturers to make smarter, faster decisions, while also reducing their climate impact."
+    },
+    {
+      "id": "check-page-151b78b608",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
+      "page": "details",
+      "excerpt": "Take control of your health."
+    },
+    {
+      "id": "check-page-5c82fc76cc",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
+      "page": "details",
+      "excerpt": "Gees is helping millions of women with hormonal conditions like polycystic ovary syndrome (PCOS) take control of their health."
+    },
+    {
+      "id": "check-page-f796726252",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
+      "page": "details",
+      "excerpt": "They founded Ground3d, a social impact organization building a new model rooted in community ownership."
+    },
+    {
+      "id": "check-page-99dd71c431",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
+      "page": "details",
+      "excerpt": "Ground3d uses a digital tool for crowdsourcing hyperlocal environmental data, beginning with street-level documentation of cloudburst events in NYC."
+    },
+    {
+      "id": "check-page-1946e0c526",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
+      "page": "details",
+      "excerpt": "Ground3D equips residents to create data collectively and use it for climate resilience, preservation, and advocacy. ground3d.xyz GrowthFactor Expansion made easy GrowthFactor is retail real estate made easy."
+    },
+    {
+      "id": "check-page-b33f33a5c4",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
+      "page": "details",
+      "excerpt": "We provide an AI-powered software platform and a fractional real estate analyst to our customers that they use to scale their retail footprint with confidence, where mistakes can be exceptionally costly."
     }
   ],
   "findings": {
@@ -407,6 +1317,10 @@
       {
         "value": "April",
         "evidenceId": "check-announced-f602162706"
+      },
+      {
+        "value": "September",
+        "evidenceId": "check-announced-bfc23f17b4"
       }
     ],
     "cohortStarts": [],
@@ -414,6 +1328,10 @@
       {
         "value": "8",
         "evidenceId": "check-duration-76a17c393a"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-1e34ee9082"
       }
     ],
     "format": [
@@ -444,10 +1362,6 @@
       {
         "value": "and mentorship. delta v Perks & Partnerships We unlock over $200K in value per team in perks & partnerships that help startups scale!",
         "evidenceId": "check-deal-7949a1da41"
-      },
-      {
-        "value": "will provide support via targeted courses, external mentorship, $15,000 in equity-free seed funding, and a robust network to help students",
-        "evidenceId": "check-deal-36fe89cd2d"
       }
     ],
     "dealComponents": [
@@ -474,18 +1388,6 @@
           "condition": null
         },
         "evidenceId": "check-deal-03fbf77dce"
-      },
-      {
-        "value": {
-          "kind": "grant",
-          "amount": "15000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Grant",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-36fe89cd2d"
       }
     ],
     "portfolioPages": [],

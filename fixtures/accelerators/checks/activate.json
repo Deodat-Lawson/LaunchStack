@@ -1,22 +1,27 @@
 {
   "programId": "activate",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://activate.org/",
     "https://activate.org/application-interest/thank-you",
     "https://activate.org/apply",
     "https://activate.org/la-bridge-info?hsLang=en",
-    "https://activate.org/news/activate-opens-2024-fellowship-applications-during-climate-week-nyc",
-    "https://activate.org/news/how-activate-fellows-are-applying-deep-tech-innovations-to-reimagine-mining",
     "https://activate.org/singapore-apply",
     "https://activate.org/la-bridge-info",
     "https://activate.org/singapore-apply?hsLang=en",
-    "https://www.activate.org/apply",
     "https://activate.org/faq",
     "https://activate.org/apply?hsLang=en",
-    "https://activate.org/news/where-does-climate-investment-currently-stand",
+    "https://www.activate.org/apply/?hsLang=en",
     "https://activate.org/faq?hsLang=en",
-    "https://info.activate.org/singapore-apply?hsLang=en"
+    "https://info.activate.org/singapore-apply?hsLang=en",
+    "https://activate.org/meet-the-cohort-2025-activate-berkeley-fellows",
+    "https://activate.org/meet-the-cohort2025-activate-houston-fellows",
+    "https://activate.org/about-us",
+    "https://activate.org/activate-partner-programs",
+    "https://activate.org/global-programs",
+    "https://activate.org/global-programs?hsLang=en",
+    "https://activate.org/japan-bridge-program",
+    "https://activate.org/about-us/?hsLang=en"
   ],
   "evidence": [
     {
@@ -48,18 +53,18 @@
       "page": "application"
     },
     {
-      "id": "check-deal-333a0fd47a",
-      "url": "https://www.activate.org/apply",
-      "title": "Activate — application page",
-      "excerpt": "Benefits Financial Support for Personal & Business Expenses $100K living stipend per year $100K in R&D support $12K in travel and",
-      "page": "application"
-    },
-    {
       "id": "check-deal-3a3fc55051",
       "url": "https://activate.org/faq",
       "title": "Activate — terms page",
       "excerpt": "Activate does not have dedicated laboratory space, but: We provide $100,000 in research funding to each project / company in the fellowship that",
       "page": "terms"
+    },
+    {
+      "id": "check-deal-4072d4825c",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "title": "Activate — application page",
+      "excerpt": "for Personal & Business Expenses $100K living stipend per year $100K in R&D support $12K in travel and professional development funds per",
+      "page": "application"
     },
     {
       "id": "check-deal-438ef57c0c",
@@ -76,15 +81,8 @@
       "page": "application"
     },
     {
-      "id": "check-deal-df4c1210be",
-      "url": "https://www.activate.org/apply",
-      "title": "Activate — application page",
-      "excerpt": "for Personal & Business Expenses $100K living stipend per year $100K in R&D support $12K in travel and professional development funds per",
-      "page": "application"
-    },
-    {
-      "id": "check-deal-e7a3d171b5",
-      "url": "https://www.activate.org/apply",
+      "id": "check-deal-caf22553a7",
+      "url": "https://www.activate.org/apply/?hsLang=en",
       "title": "Activate — application page",
       "excerpt": "Business Expenses $100K living stipend per year $100K in R&D support $12K in travel and professional development funds per year Health",
       "page": "application"
@@ -95,6 +93,13 @@
       "title": "Activate — terms page",
       "excerpt": "Activate does not have dedicated laboratory space, but: We provide $100,000 in research funding to each project / company in the fellowship that",
       "page": "terms"
+    },
+    {
+      "id": "check-deal-fa0cd0024f",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "title": "Activate — application page",
+      "excerpt": "Benefits Financial Support for Personal & Business Expenses $100K living stipend per year $100K in R&D support $12K in travel and",
+      "page": "application"
     },
     {
       "id": "check-duration-0baad8628c",
@@ -109,6 +114,20 @@
       "title": "Activate — application page",
       "excerpt": "without infringement)—within the first 1–2 months of the program. What types of IP are eligible?",
       "page": "application"
+    },
+    {
+      "id": "check-duration-3ab0c672f6",
+      "url": "https://activate.org/global-programs",
+      "title": "Activate — program page",
+      "excerpt": "readiness. Delivered in flexible 3- or 6-month formats, BRIDGE meets innovators where they are",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e31cfda5bc",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "title": "Activate — program page",
+      "excerpt": "readiness. Delivered in flexible 3- or 6-month formats, BRIDGE meets innovators where they are",
+      "page": "details"
     },
     {
       "id": "check-duration-e66d451baa",
@@ -167,13 +186,6 @@
       "page": "application"
     },
     {
-      "id": "check-email-831955c685",
-      "url": "https://www.activate.org/apply",
-      "title": "Activate — application page",
-      "excerpt": "Contact Our Recruitment Team (apply@activate.org)",
-      "page": "application"
-    },
-    {
       "id": "check-email-846b0e8405",
       "url": "https://activate.org/faq?hsLang=en",
       "title": "Activate — terms page",
@@ -209,6 +221,13 @@
       "page": "terms"
     },
     {
+      "id": "check-email-c37f39a80e",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "title": "Activate — application page",
+      "excerpt": "Contact Our Recruitment Team (apply@activate.org)",
+      "page": "application"
+    },
+    {
       "id": "check-email-f18ce83849",
       "url": "https://activate.org/faq?hsLang=en",
       "title": "Activate — terms page",
@@ -237,18 +256,18 @@
       "page": "application"
     },
     {
-      "id": "check-format-0c1405a8c9",
-      "url": "https://www.activate.org/apply",
-      "title": "Activate — application page",
-      "excerpt": "U.S.-based trips (sponsored by Activate) Attend weekly virtual national educational programming in your first year Attend",
-      "page": "application"
-    },
-    {
       "id": "check-format-0ee3099919",
       "url": "https://activate.org/apply",
       "title": "Activate — application page",
       "excerpt": "local programming (in-person for in-residence communities, virtual for Anywhere). Anywhere fellows additionally attend",
       "page": "application"
+    },
+    {
+      "id": "check-format-0f16f0b1a3",
+      "url": "https://activate.org/japan-bridge-program",
+      "title": "Activate — program page",
+      "excerpt": "accountability and community. In-Person Workshops Two in-person workshops in Tokyo, designed to accelerate learning and",
+      "page": "details"
     },
     {
       "id": "check-format-152a9265d0",
@@ -262,6 +281,13 @@
       "url": "https://activate.org/la-bridge-info",
       "title": "Activate — application page",
       "excerpt": "BRIDGE PROGRAM Six months of self-paced content, monthly virtual sessions, peer learning forums, and cohort events. You",
+      "page": "application"
+    },
+    {
+      "id": "check-format-268d3c4801",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "title": "Activate — application page",
+      "excerpt": "local programming (in-person for in-residence communities, virtual for Anywhere). Anywhere fellows additionally attend",
       "page": "application"
     },
     {
@@ -328,6 +354,13 @@
       "page": "application"
     },
     {
+      "id": "check-format-6b8135d09a",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "title": "Activate — application page",
+      "excerpt": "U.S.-based trips (sponsored by Activate) Attend weekly virtual national educational programming in your first year Attend",
+      "page": "application"
+    },
+    {
       "id": "check-format-73d5d6c5ad",
       "url": "https://activate.org/faq",
       "title": "Activate — terms page",
@@ -347,6 +380,20 @@
       "title": "Activate — terms page",
       "excerpt": "connected. The 5 fellowship communities are: Anywhere (virtual, with US-based quarterly trips sponsored by Activate)",
       "page": "terms"
+    },
+    {
+      "id": "check-format-8ad9f2caa1",
+      "url": "https://activate.org/about-us",
+      "title": "Activate — program page",
+      "excerpt": "—Berkeley, New York, Boston, Houston, and Anywhere, a remote-centric program that connects top scientists from across",
+      "page": "details"
+    },
+    {
+      "id": "check-format-982258416e",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "title": "Activate — application page",
+      "excerpt": "requirements Attend bi-weekly local programming (in-person for in-residence communities, virtual for Anywhere).",
+      "page": "application"
     },
     {
       "id": "check-format-a33a6fd805",
@@ -377,13 +424,6 @@
       "page": "terms"
     },
     {
-      "id": "check-format-b3aaa729fe",
-      "url": "https://www.activate.org/apply",
-      "title": "Activate — application page",
-      "excerpt": "local programming (in-person for in-residence communities, virtual for Anywhere). Anywhere fellows additionally attend",
-      "page": "application"
-    },
-    {
       "id": "check-format-b65eee03c5",
       "url": "https://activate.org/faq?hsLang=en",
       "title": "Activate — terms page",
@@ -398,11 +438,25 @@
       "page": "application"
     },
     {
+      "id": "check-format-b81b264ae7",
+      "url": "https://activate.org/japan-bridge-program",
+      "title": "Activate — program page",
+      "excerpt": "biweekly peer pods to build accountability and community. In-Person Workshops Two in-person workshops in Tokyo, designed to",
+      "page": "details"
+    },
+    {
       "id": "check-format-c73d113354",
       "url": "https://activate.org/faq?hsLang=en",
       "title": "Activate — terms page",
       "excerpt": "Managing Director. Additionally, the annual week-long, in-person retreat occurs in June each summer, which brings together",
       "page": "terms"
+    },
+    {
+      "id": "check-format-cc22cb944b",
+      "url": "https://activate.org/about-us/?hsLang=en",
+      "title": "Activate — program page",
+      "excerpt": "—Berkeley, New York, Boston, Houston, and Anywhere, a remote-centric program that connects top scientists from across",
+      "page": "details"
     },
     {
       "id": "check-format-d46f4d8c75",
@@ -416,13 +470,6 @@
       "url": "https://activate.org/singapore-apply",
       "title": "Activate — application page",
       "excerpt": "(e.g., licensable public IP, permission to operate, or hybrid model) Additional clarification may be requested during",
-      "page": "application"
-    },
-    {
-      "id": "check-format-de9baa91af",
-      "url": "https://www.activate.org/apply",
-      "title": "Activate — application page",
-      "excerpt": "requirements Attend bi-weekly local programming (in-person for in-residence communities, virtual for Anywhere).",
       "page": "application"
     },
     {
@@ -545,6 +592,13 @@
       "page": "terms"
     },
     {
+      "id": "check-route-03ce5f6bd2",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "title": "Activate — application page",
+      "excerpt": "Apply Now → https://activate.org/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-0587960f89",
       "url": "https://activate.org/la-bridge-info",
       "title": "Activate — application page",
@@ -552,11 +606,18 @@
       "page": "application"
     },
     {
-      "id": "check-route-0de23d53c2",
-      "url": "https://www.activate.org/apply",
-      "title": "Activate — application page",
-      "excerpt": "Fellowship Fit → https://activate.org/apply#fellowship-fit",
-      "page": "application"
+      "id": "check-route-071c9711a3",
+      "url": "https://activate.org/japan-bridge-program",
+      "title": "Activate — program page",
+      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info?hsLang=en",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0e325a33cf",
+      "url": "https://activate.org/global-programs",
+      "title": "Activate — program page",
+      "excerpt": "Learn about Activate Global - Singapore Fellowship → https://activate.org/singapore-apply?hsLang=en",
+      "page": "details"
     },
     {
       "id": "check-route-195581f903",
@@ -566,6 +627,20 @@
       "page": "application"
     },
     {
+      "id": "check-route-1d78ef8b4a",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "title": "Activate — application page",
+      "excerpt": "Skip to content → https://activate.org/apply?hsLang=en#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2296d560cc",
+      "url": "https://activate.org/activate-partner-programs",
+      "title": "Activate — program page",
+      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info?hsLang=en",
+      "page": "details"
+    },
+    {
       "id": "check-route-2adfeafdd5",
       "url": "https://activate.org/apply",
       "title": "Activate — application page",
@@ -573,10 +648,17 @@
       "page": "application"
     },
     {
-      "id": "check-route-398c34954b",
-      "url": "https://activate.org/news/how-activate-fellows-are-applying-deep-tech-innovations-to-reimagine-mining",
+      "id": "check-route-318d0f4ea4",
+      "url": "https://activate.org/meet-the-cohort2025-activate-houston-fellows",
+      "title": "Activate — batches page",
+      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info?hsLang=en",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-3af71b72d4",
+      "url": "https://www.activate.org/apply/?hsLang=en",
       "title": "Activate — application page",
-      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info",
+      "excerpt": "Fellowship Benefits → https://activate.org/apply?hsLang=en#fellowship-benefits",
       "page": "application"
     },
     {
@@ -594,20 +676,6 @@
       "page": "terms"
     },
     {
-      "id": "check-route-40ffd7ad05",
-      "url": "https://activate.org/news/activate-opens-2024-fellowship-applications-during-climate-week-nyc",
-      "title": "Activate — application page",
-      "excerpt": "Apply Now → https://activate.org/apply",
-      "page": "application"
-    },
-    {
-      "id": "check-route-44281d4dbe",
-      "url": "https://activate.org/news/where-does-climate-investment-currently-stand",
-      "title": "Activate — terms page",
-      "excerpt": "Apply Now → https://activate.org/apply",
-      "page": "terms"
-    },
-    {
       "id": "check-route-44c9e1090e",
       "url": "https://info.activate.org/singapore-apply?hsLang=en",
       "title": "Activate — terms page",
@@ -620,6 +688,27 @@
       "title": "Activate — terms page",
       "excerpt": "activate.org/apply → https://www.activate.org/apply/?hsLang=en",
       "page": "terms"
+    },
+    {
+      "id": "check-route-48d4d82913",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "title": "Activate — program page",
+      "excerpt": "Apply Now → https://activate.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4977b7bdae",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "title": "Activate — application page",
+      "excerpt": "Preparing Your Application → https://activate.org/apply?hsLang=en#preparing-your-application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4b2847f6eb",
+      "url": "https://activate.org/activate-partner-programs",
+      "title": "Activate — program page",
+      "excerpt": "Apply Now → https://activate.org/apply",
+      "page": "details"
     },
     {
       "id": "check-route-4e3e233237",
@@ -643,11 +732,11 @@
       "page": "terms"
     },
     {
-      "id": "check-route-56d586ca65",
-      "url": "https://www.activate.org/apply",
-      "title": "Activate — application page",
-      "excerpt": "Preparing Your Application → https://activate.org/apply#preparing-your-application",
-      "page": "application"
+      "id": "check-route-5989f81f7e",
+      "url": "https://activate.org/about-us",
+      "title": "Activate — program page",
+      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info?hsLang=en",
+      "page": "details"
     },
     {
       "id": "check-route-5a07967146",
@@ -657,11 +746,18 @@
       "page": "terms"
     },
     {
-      "id": "check-route-5d6c7f1d8f",
-      "url": "https://www.activate.org/apply",
-      "title": "Activate — application page",
-      "excerpt": "Fellow & Project Eligibility → https://activate.org/apply#fellow-and-project-eligibility",
-      "page": "application"
+      "id": "check-route-5d3f626c16",
+      "url": "https://activate.org/global-programs",
+      "title": "Activate — program page",
+      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info?hsLang=en",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5f9bf6b5bd",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "title": "Activate — program page",
+      "excerpt": "Learn about Activate Global - Singapore Fellowship → https://activate.org/singapore-apply?hsLang=en",
+      "page": "details"
     },
     {
       "id": "check-route-67abe7a08d",
@@ -671,11 +767,11 @@
       "page": "application"
     },
     {
-      "id": "check-route-6a9954f405",
-      "url": "https://www.activate.org/apply",
-      "title": "Activate — application page",
+      "id": "check-route-6d0433be47",
+      "url": "https://activate.org/global-programs",
+      "title": "Activate — program page",
       "excerpt": "Apply Now → https://activate.org/apply",
-      "page": "application"
+      "page": "details"
     },
     {
       "id": "check-route-719ef818d7",
@@ -692,13 +788,6 @@
       "page": "details"
     },
     {
-      "id": "check-route-78bb670b83",
-      "url": "https://activate.org/news/where-does-climate-investment-currently-stand",
-      "title": "Activate — terms page",
-      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info",
-      "page": "terms"
-    },
-    {
       "id": "check-route-863bea5fa1",
       "url": "https://activate.org/faq?hsLang=en",
       "title": "Activate — terms page",
@@ -706,31 +795,38 @@
       "page": "terms"
     },
     {
-      "id": "check-route-8775cc72b7",
-      "url": "https://www.activate.org/apply",
-      "title": "Activate — application page",
-      "excerpt": "Skip to content → https://activate.org/apply#main-content",
-      "page": "application"
-    },
-    {
-      "id": "check-route-96284b1211",
-      "url": "https://activate.org/news/activate-opens-2024-fellowship-applications-during-climate-week-nyc",
-      "title": "Activate — application page",
-      "excerpt": "applications are open → https://www.activate.org/apply",
-      "page": "application"
-    },
-    {
-      "id": "check-route-9a41e5e642",
-      "url": "https://www.activate.org/apply",
-      "title": "Activate — application page",
-      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info?hsLang=en",
-      "page": "application"
-    },
-    {
-      "id": "check-route-9c939efb76",
-      "url": "https://activate.org/news/how-activate-fellows-are-applying-deep-tech-innovations-to-reimagine-mining",
-      "title": "Activate — application page",
+      "id": "check-route-89a9f1b5fb",
+      "url": "https://activate.org/about-us/?hsLang=en",
+      "title": "Activate — program page",
       "excerpt": "Apply Now → https://activate.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8dc1ff664b",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "title": "Activate — program page",
+      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info?hsLang=en",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9684c1e82b",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "title": "Activate — application page",
+      "excerpt": "https://activate.org/apply?hsLang=en",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9b833da907",
+      "url": "https://activate.org/about-us",
+      "title": "Activate — program page",
+      "excerpt": "Apply Now → https://activate.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a062480a0d",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "title": "Activate — application page",
+      "excerpt": "Fellow & Project Eligibility → https://activate.org/apply?hsLang=en#fellow-and-project-eligibility",
       "page": "application"
     },
     {
@@ -741,18 +837,18 @@
       "page": "terms"
     },
     {
-      "id": "check-route-ac089b7b6b",
-      "url": "https://www.activate.org/apply",
-      "title": "Activate — application page",
-      "excerpt": "Fellowship Benefits → https://activate.org/apply#fellowship-benefits",
-      "page": "application"
-    },
-    {
       "id": "check-route-affe060cec",
       "url": "https://activate.org/la-bridge-info?hsLang=en",
       "title": "Activate — application page",
       "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info",
       "page": "application"
+    },
+    {
+      "id": "check-route-c202953d87",
+      "url": "https://activate.org/meet-the-cohort-2025-activate-berkeley-fellows",
+      "title": "Activate — batches page",
+      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info?hsLang=en",
+      "page": "batches"
     },
     {
       "id": "check-route-c469da54f0",
@@ -790,10 +886,17 @@
       "page": "terms"
     },
     {
-      "id": "check-route-d517c32bd2",
-      "url": "https://www.activate.org/apply",
+      "id": "check-route-d4e0aaab76",
+      "url": "https://activate.org/japan-bridge-program",
+      "title": "Activate — program page",
+      "excerpt": "Apply Now → https://activate.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d9545ba7fa",
+      "url": "https://www.activate.org/apply/?hsLang=en",
       "title": "Activate — application page",
-      "excerpt": "https://activate.org/apply",
+      "excerpt": "Fellowship Fit → https://activate.org/apply?hsLang=en#fellowship-fit",
       "page": "application"
     },
     {
@@ -802,6 +905,13 @@
       "title": "Activate — terms page",
       "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info?hsLang=en",
       "page": "terms"
+    },
+    {
+      "id": "check-route-d9e0779e7f",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "title": "Activate — application page",
+      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info?hsLang=en",
+      "page": "application"
     },
     {
       "id": "check-route-e247e85fd9",
@@ -825,6 +935,20 @@
       "page": "application"
     },
     {
+      "id": "check-route-e876fda066",
+      "url": "https://activate.org/meet-the-cohort2025-activate-houston-fellows",
+      "title": "Activate — batches page",
+      "excerpt": "Apply Now → https://activate.org/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-ea35acfaae",
+      "url": "https://activate.org/about-us/?hsLang=en",
+      "title": "Activate — program page",
+      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info?hsLang=en",
+      "page": "details"
+    },
+    {
       "id": "check-route-ed84bafdc3",
       "url": "https://info.activate.org/singapore-apply?hsLang=en",
       "title": "Activate — terms page",
@@ -839,17 +963,17 @@
       "page": "terms"
     },
     {
+      "id": "check-route-f571578381",
+      "url": "https://activate.org/meet-the-cohort-2025-activate-berkeley-fellows",
+      "title": "Activate — batches page",
+      "excerpt": "Apply Now → https://activate.org/apply",
+      "page": "batches"
+    },
+    {
       "id": "check-route-fcca21d971",
       "url": "https://activate.org/singapore-apply",
       "title": "Activate — application page",
       "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info?hsLang=en",
-      "page": "application"
-    },
-    {
-      "id": "check-route-ff154ace7f",
-      "url": "https://activate.org/news/activate-opens-2024-fellowship-applications-during-climate-week-nyc",
-      "title": "Activate — application page",
-      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info",
       "page": "application"
     },
     {
@@ -858,6 +982,13 @@
       "title": "Activate — terms page",
       "excerpt": "selection criteria → https://activate.org/apply/#fellowship-fit",
       "page": "terms"
+    },
+    {
+      "id": "check-status-059af37688",
+      "url": "https://activate.org/activate-partner-programs",
+      "title": "Activate — program page",
+      "excerpt": "Activate-Partner Programs Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
+      "page": "details"
     },
     {
       "id": "check-status-062a0e07f2",
@@ -874,6 +1005,13 @@
       "page": "application"
     },
     {
+      "id": "check-status-1872ade028",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "title": "Activate — application page",
+      "excerpt": "Join Activate’s Community of Hard-Tech Leaders Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
+      "page": "application"
+    },
+    {
       "id": "check-status-2baf73e531",
       "url": "https://activate.org/",
       "title": "Activate — homepage",
@@ -881,18 +1019,32 @@
       "page": "details"
     },
     {
-      "id": "check-status-54a276d160",
-      "url": "https://activate.org/news/where-does-climate-investment-currently-stand",
-      "title": "Activate — terms page",
-      "excerpt": "Where does climate investment currently stand? — Activate Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
-      "page": "terms"
+      "id": "check-status-3db2e4fcb2",
+      "url": "https://activate.org/meet-the-cohort2025-activate-houston-fellows",
+      "title": "Activate — batches page",
+      "excerpt": "Meet the Cohort 2025 Activate Houston Fellows Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
+      "page": "batches"
     },
     {
-      "id": "check-status-56f2193c46",
-      "url": "https://activate.org/news/activate-opens-2024-fellowship-applications-during-climate-week-nyc",
-      "title": "Activate — application page",
-      "excerpt": "Activate Opens 2024 Fellowship Applications During Climate Week NYC — Activate Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
-      "page": "application"
+      "id": "check-status-53e3877699",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "title": "Activate — program page",
+      "excerpt": "Global Programs Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
+      "page": "details"
+    },
+    {
+      "id": "check-status-6302140837",
+      "url": "https://activate.org/meet-the-cohort-2025-activate-berkeley-fellows",
+      "title": "Activate — batches page",
+      "excerpt": "Meet the Cohort 2025 Activate Berkeley Fellows Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
+      "page": "batches"
+    },
+    {
+      "id": "check-status-779bc2f84f",
+      "url": "https://activate.org/about-us",
+      "title": "Activate — program page",
+      "excerpt": "About Us—Hard Tech for Good Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
+      "page": "details"
     },
     {
       "id": "check-status-7d2fe4d148",
@@ -900,6 +1052,13 @@
       "title": "Activate — terms page",
       "excerpt": "Activate Fellowship FAQ Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
       "page": "terms"
+    },
+    {
+      "id": "check-status-7f18a005b3",
+      "url": "https://activate.org/japan-bridge-program",
+      "title": "Activate — program page",
+      "excerpt": "Japan Bridge Program Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
+      "page": "details"
     },
     {
       "id": "check-status-98d4ace3dd",
@@ -916,18 +1075,25 @@
       "page": "application"
     },
     {
-      "id": "check-status-a16ef3fd62",
-      "url": "https://www.activate.org/apply",
-      "title": "Activate — application page",
-      "excerpt": "Join Activate’s Community of Hard-Tech Leaders Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
-      "page": "application"
-    },
-    {
       "id": "check-status-c93c01e05e",
       "url": "https://activate.org/singapore-apply?hsLang=en",
       "title": "Activate — application page",
       "excerpt": "Activate Global Fellows– Singapore: From Lab to Market Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
       "page": "application"
+    },
+    {
+      "id": "check-status-e0c4cba9fe",
+      "url": "https://activate.org/global-programs",
+      "title": "Activate — program page",
+      "excerpt": "Global Programs Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
+      "page": "details"
+    },
+    {
+      "id": "check-status-ea4337ada2",
+      "url": "https://activate.org/about-us/?hsLang=en",
+      "title": "Activate — program page",
+      "excerpt": "About Us—Hard Tech for Good Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
+      "page": "details"
     },
     {
       "id": "check-status-eab8adb9c4",
@@ -941,13 +1107,6 @@
       "url": "https://activate.org/apply",
       "title": "Activate — application page",
       "excerpt": "Join Activate’s Community of Hard-Tech Leaders Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
-      "page": "application"
-    },
-    {
-      "id": "check-status-f5064d5a82",
-      "url": "https://activate.org/news/how-activate-fellows-are-applying-deep-tech-innovations-to-reimagine-mining",
-      "title": "Activate — application page",
-      "excerpt": "Fellows Are Applying Deep-Tech Innovations to Reimagine Mining and Materials — Activate Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
       "page": "application"
     },
     {
@@ -973,6 +1132,12 @@
       "excerpt": "Activate—Driving Hard Tech for Good Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Your browser does not support the video tag. Building the community that drives science into impact Activate Fellows set a high bar for innovation and impact. Fellow Success Stories Read more > 353 Fellows Supported $6.5B follow-on funding raised by Fellows 3,000 Jobs Created Where scientists become leaders of world-changing ventures. Activate's flagship fellowship program was the first fellowship for entrepreneurial scientists—providing the mindsets, skills, networks, and support needed to turn breakthrough hard tech into real-world impact. Through Activate’s expanded global programming, we’re supporting science entrepreneurs at every stage of their journey, offering the most comprehensive programming in the space. We support scientists throughout the founder journey. Watch Video Watch Video Insights and Innovations Latest Activate Stories Newsletters"
     },
     {
+      "id": "check-page-fac1f1aea2",
+      "url": "https://activate.org/",
+      "page": "details",
+      "excerpt": "Fellow Highlights Hard Tech to Market: Foray Bioscience Is Regenerating Plants for Agriculture, Conservation, and Bioproduction Stories of Activate Fellows and alumni turning scientific breakthroughs into hard-tech impact."
+    },
+    {
       "id": "check-page-e2c8c12b76",
       "url": "https://activate.org/application-interest/thank-you",
       "page": "application",
@@ -985,22 +1150,112 @@
       "excerpt": "Join Activate’s Community of Hard-Tech Leaders Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Activate Fellowship Application Guide Sign up to be notified when applications open for the Activate Fellowship! Applications for the Activate Fellowship are currently closed. Interested in applying? Complete the application interest form, and we’ll let you know as soon as the next application cycle opens. Get Notified About Cohort 2028 Learn about Activate Singapore Jump to content Fellowship Benefits Fellow & Project Eligibility Fellowship Fit Preparing Your Application Activate Fellowship Selection Timeline Fellowship Benefits Financial Support for Personal & Business Expenses $100K living stipend per year $100K in R&D support $12K in travel and professional development funds per year Health insurance stipend Relocation allowance Focus on Community and Collaboration Community-based programming every two weeks, featuring workshops, fellow"
     },
     {
+      "id": "check-page-45670e744a",
+      "url": "https://activate.org/apply",
+      "page": "application",
+      "excerpt": "Unparalleled Support for Fellows Education tailored for the scientist-turned-founder, including a weekly Elements of Entrepreneurship course in your first quarter."
+    },
+    {
+      "id": "check-page-5f22237400",
+      "url": "https://activate.org/apply",
+      "page": "application",
+      "excerpt": "Regular one-on-one mentorship with your community’s Managing Director to tackle challenges and refine your strategy."
+    },
+    {
+      "id": "check-page-b9fc2022f5",
+      "url": "https://activate.org/apply",
+      "page": "application",
+      "excerpt": "Must be leading the commercial development of a hardware-based technology innovation for the first time if awarded the fellowship i.e., not a repeat hard tech founder."
+    },
+    {
+      "id": "check-page-bf5e3b4b13",
+      "url": "https://activate.org/apply",
+      "page": "application",
+      "excerpt": "Must be committed full-time to the proposed project or company if awarded the fellowship."
+    },
+    {
+      "id": "check-page-80cc9dc6c5",
+      "url": "https://activate.org/apply",
+      "page": "application",
+      "excerpt": "Must be legally able to work in the U.S. for the duration of the fellowship."
+    },
+    {
+      "id": "check-page-598bdc1477",
+      "url": "https://activate.org/apply",
+      "page": "application",
+      "excerpt": "View our 16 Verticals Fellowship Fit What we look for in Activate fellows Hard Tech Leader Transformative Tech Community Participation Technical Expert Are you deeply knowledgeable in the field of your proposed project to independently and safely lead the technical work involved?"
+    },
+    {
+      "id": "check-page-502399cf19",
+      "url": "https://activate.org/apply",
+      "page": "application",
+      "excerpt": "It’s ok if your company is not yet incorporated or you’ve not yet left your day job — the fellowship is designed to enable you to take that step."
+    },
+    {
+      "id": "check-page-5dd87f9cf1",
+      "url": "https://activate.org/apply",
+      "page": "application",
+      "excerpt": "We look for fellows whose success would be significantly accelerated or made possible by the fellowship."
+    },
+    {
+      "id": "check-page-97bcddfbb6",
+      "url": "https://activate.org/apply",
+      "page": "application",
+      "excerpt": "Will the fellowship meaningfully alter the trajectory of your professional development and your proposed project?"
+    },
+    {
+      "id": "check-page-0b1a4ffd23",
+      "url": "https://activate.org/apply",
+      "page": "application",
+      "excerpt": "Hard Tech for Good Is your proposed project rooted in sound scientific principles?"
+    },
+    {
+      "id": "check-page-f1bd8947f5",
+      "url": "https://activate.org/apply",
+      "page": "application",
+      "excerpt": "Is your project aligned with Activate’s mission of hard tech for good?"
+    },
+    {
+      "id": "check-page-c6e6013fae",
+      "url": "https://activate.org/apply",
+      "page": "application",
+      "excerpt": "We encourage you to think broadly about the potential use cases and impact of your technology when determining if your project fits. * Life Science Projects Our Fellowship does not currently support projects that only have applications in healthcare."
+    },
+    {
       "id": "check-page-b1ded7dfca",
       "url": "https://activate.org/la-bridge-info?hsLang=en",
       "page": "application",
       "excerpt": "Activate's LSI BRIDGE Program: Learn More Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Activate Louisiana - LSI BRIDGE What will you Activate? Louisiana’s labs and classrooms hold discoveries the world hasn’t seen yet. Applications for LSI BRIDGE are open through Dec. 15. LSI BRIDGE is a six-month program that helps scientists and engineers explore whether their research could become a company. Apply Now Become a Supporter Louisiana already has the science Now it needs a path beyond the lab. Every year, brilliant scientific research stalls before reaching the people who need it. Not because of a lack of ideas, but because of gaps in entrepreneurial skills, capital, and community. Activate exists to help close that gap. In Louisiana, we’re creating opportunities for scientists, engineers, students, and technical talent to explore what’s possible. You don’t need a business plan. You don’t need to have it all figured out. What matters"
     },
     {
-      "id": "check-page-06695f0756",
-      "url": "https://activate.org/news/activate-opens-2024-fellowship-applications-during-climate-week-nyc",
+      "id": "check-page-813407e20c",
+      "url": "https://activate.org/la-bridge-info?hsLang=en",
       "page": "application",
-      "excerpt": "Activate Opens 2024 Fellowship Applications During Climate Week NYC — Activate Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Activate Opens 2024 Fellowship Applications During Climate Week NYC September 20, 2023 Tweet Activate opens applications for its 2024 fellowship and seeks scientists driven to address pressing global challenges. September 20, 2023 - New York, NY - Activate , a leader in hard-tech entrepreneurial fellowships, today announced that applications are open for their 2024 cohort, starting September 19 and closing October 17, 2023. The window to apply begins during Climate Week NYC , at the tail end of the hottest summer ever on record, where Activate Fellows and partners will be presenting hard-tech solutions to our most pressing decarbonization challenges and beyond. “Climate Week is a premier showcase for innovation, and the opening of Activate applications couldn’t come at a more aligned time,” says Activate"
+      "excerpt": "Option to add 1:1 coaching and mentorship from Activate’s network."
     },
     {
-      "id": "check-page-20b89b949f",
-      "url": "https://activate.org/news/how-activate-fellows-are-applying-deep-tech-innovations-to-reimagine-mining",
+      "id": "check-page-97b24e5334",
+      "url": "https://activate.org/la-bridge-info?hsLang=en",
       "page": "application",
-      "excerpt": "How Activate Fellows Are Applying Deep-Tech Innovations to Reimagine Mining and Materials — Activate Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. How Activate Fellows Are Applying Deep-Tech Innovations to Reimagine Mining and Materials February 6, 2025 Tweet Photo credit: Gus Marquez (Cohort 2023) The next generation of mining and materials will be shaped by deep-tech breakthroughs and scientific innovation. Activate Fellows are working on a range of new approaches that can transform mine waste into valuable resources and establish new methods for extracting critical minerals. We sat down with Activate Fellow Gus Marquez (Cohort 2023), co-founder and CEO of a stealth company that's working on a new approach in mine waste-to-value. As a licensed mining engineer with an MBA and MS in Environment & Resources from Stanford University, he explained why mining and mine waste are the biggest opportunities you've probably never thought about."
+      "excerpt": "Nomination Form GET INVOLVED Help us find Louisiana’s next critical thinkers For faculty, advisors, and campus partners Tell us about a student or researcher No commitment."
+    },
+    {
+      "id": "check-page-ca9c50a8cd",
+      "url": "https://activate.org/la-bridge-info?hsLang=en",
+      "page": "application",
+      "excerpt": "Work with us Stories from the Activate community Hard Tech to Market: Foray Bioscience Is Regenerating Plants for Agriculture, Conservation, and Bioproduction Stories of Activate Fellows and alumni turning scientific breakthroughs into hard-tech impact."
+    },
+    {
+      "id": "check-page-0416f7d4b5",
+      "url": "https://activate.org/la-bridge-info?hsLang=en",
+      "page": "application",
+      "excerpt": "Read more Hard Tech to Market: Supercarb’s New Class of Fiber Could Change How Performance Clothing Is Made Stories of Activate Fellows and alumni turning scientific breakthroughs into hard-tech impact."
+    },
+    {
+      "id": "check-page-8d6bb0e057",
+      "url": "https://activate.org/la-bridge-info?hsLang=en",
+      "page": "application",
+      "excerpt": "Read more Hard Tech to Market: Semion Protects Crops by Activating Plants’ Own Defense Mechanisms Stories of Activate Fellows and alumni turning scientific breakthroughs into hard-tech impact."
     },
     {
       "id": "check-page-8c10b53dd2",
@@ -1009,10 +1264,112 @@
       "excerpt": "Activate Global Fellows– Singapore: From Lab to Market Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Learn more about becoming a Singapore Activate Global Fellow Stay Informed for the Next Cohort Become a Partner Open to technologists and researchers from all AUs & RIs (A*STAR) across Singapore Applications for Cohort 2026 have closed. Stay connected for when we announce our first cohort of Fellows! Fellowship Fit What we look for in Activate fellows Technical Expert Leader-Ready Transformative Tech High Impact Are you deeply knowledgeable in the field of your proposed project to independently and safely lead the technical work involved? Can you communicate complicated, technical concepts to a general audience? Are you motivated to grow professionally and focus on business leadership, in addition to scientific expertise? Can you manage conflict and act with integrity through ambiguity to mobilize the resources needed to advance your"
     },
     {
+      "id": "check-page-9d536b25c4",
+      "url": "https://activate.org/singapore-apply",
+      "page": "application",
+      "excerpt": "Is your project aligned with Activate’s mission of hard tech for good?"
+    },
+    {
+      "id": "check-page-abb4a0d346",
+      "url": "https://activate.org/singapore-apply",
+      "page": "application",
+      "excerpt": "Will the fellowship meaningfully alter the trajectory of your professional development and your proposed project?"
+    },
+    {
+      "id": "check-page-cbc77c95a0",
+      "url": "https://activate.org/singapore-apply",
+      "page": "application",
+      "excerpt": "Fellow Eligibility Scientists and technologists exploring commercialization of IP from a Singapore institute of higher learning, autonomous university, or A*STAR."
+    },
+    {
+      "id": "check-page-b8933b7d33",
+      "url": "https://activate.org/singapore-apply",
+      "page": "application",
+      "excerpt": "Must be willing to establish a company in Singapore."
+    },
+    {
+      "id": "check-page-a838ba5116",
+      "url": "https://activate.org/singapore-apply",
+      "page": "application",
+      "excerpt": "Must be leading the commercial development of a hardware-based technology innovation for the first time if awarded the fellowship (i.e., not a repeat hard-tech founder)."
+    },
+    {
+      "id": "check-page-d59f6472ed",
+      "url": "https://activate.org/singapore-apply",
+      "page": "application",
+      "excerpt": "Must be committed full-time to the proposed project or company if awarded the fellowship."
+    },
+    {
+      "id": "check-page-27f13a2638",
+      "url": "https://activate.org/singapore-apply",
+      "page": "application",
+      "excerpt": "Must be legally able to travel to the U.S. during the fellowship."
+    },
+    {
+      "id": "check-page-897f15a488",
+      "url": "https://activate.org/singapore-apply",
+      "page": "application",
+      "excerpt": "Read our FAQs Driving Innovation Across Sectors Activate supports 16 verticals, aligned with our broader mission to meet the urgency of global challenges * Our Fellowship does not currently support innovators developing technologies that only have application in mammalian health."
+    },
+    {
+      "id": "check-page-fedf54ab70",
+      "url": "https://activate.org/singapore-apply",
+      "page": "application",
+      "excerpt": "Market Viability : Will you create value in a marketplace?"
+    },
+    {
+      "id": "check-page-0790b0da6e",
+      "url": "https://activate.org/singapore-apply",
+      "page": "application",
+      "excerpt": "Social Impact : How does your technology contribute to a better world?"
+    },
+    {
+      "id": "check-page-39e3b90ad1",
+      "url": "https://activate.org/singapore-apply",
+      "page": "application",
+      "excerpt": "One year work plan (1 slide) Present your proposed one year work plan during the fellowship to progress from your current status (provided in the earlier slides) toward the technical vision you shared in the previous document."
+    },
+    {
+      "id": "check-page-762c1f176e",
+      "url": "https://activate.org/singapore-apply",
+      "page": "application",
+      "excerpt": "Independent applicants must demonstrate that their technology: Is eligible for commercialization under Singapore’s research and IP frameworks, and Has a clear, defensible IP pathway (e.g., licensable public IP, permission to operate, or hybrid model) Additional clarification may be requested during the review process."
+    },
+    {
       "id": "check-page-fa5f0ccae9",
       "url": "https://activate.org/la-bridge-info",
       "page": "application",
       "excerpt": "Activate's LSI BRIDGE Program: Learn More Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Activate Louisiana - LSI BRIDGE What will you Activate? Louisiana’s labs and classrooms hold discoveries the world hasn’t seen yet. Applications for LSI BRIDGE are open through Dec. 15. LSI BRIDGE is a six-month program that helps scientists and engineers explore whether their research could become a company. Apply Now Become a Supporter Louisiana already has the science Now it needs a path beyond the lab. Every year, brilliant scientific research stalls before reaching the people who need it. Not because of a lack of ideas, but because of gaps in entrepreneurial skills, capital, and community. Activate exists to help close that gap. In Louisiana, we’re creating opportunities for scientists, engineers, students, and technical talent to explore what’s possible. You don’t need a business plan. You don’t need to have it all figured out. What matters"
+    },
+    {
+      "id": "check-page-f2f7e4bec4",
+      "url": "https://activate.org/la-bridge-info",
+      "page": "application",
+      "excerpt": "Option to add 1:1 coaching and mentorship from Activate’s network."
+    },
+    {
+      "id": "check-page-cfdfd1b3bf",
+      "url": "https://activate.org/la-bridge-info",
+      "page": "application",
+      "excerpt": "Nomination Form GET INVOLVED Help us find Louisiana’s next critical thinkers For faculty, advisors, and campus partners Tell us about a student or researcher No commitment."
+    },
+    {
+      "id": "check-page-e284f48d67",
+      "url": "https://activate.org/la-bridge-info",
+      "page": "application",
+      "excerpt": "Work with us Stories from the Activate community Hard Tech to Market: Foray Bioscience Is Regenerating Plants for Agriculture, Conservation, and Bioproduction Stories of Activate Fellows and alumni turning scientific breakthroughs into hard-tech impact."
+    },
+    {
+      "id": "check-page-1bcb5e9b34",
+      "url": "https://activate.org/la-bridge-info",
+      "page": "application",
+      "excerpt": "Read more Hard Tech to Market: Supercarb’s New Class of Fiber Could Change How Performance Clothing Is Made Stories of Activate Fellows and alumni turning scientific breakthroughs into hard-tech impact."
+    },
+    {
+      "id": "check-page-6d35f7545a",
+      "url": "https://activate.org/la-bridge-info",
+      "page": "application",
+      "excerpt": "Read more Hard Tech to Market: Semion Protects Crops by Activating Plants’ Own Defense Mechanisms Stories of Activate Fellows and alumni turning scientific breakthroughs into hard-tech impact."
     },
     {
       "id": "check-page-d491d1c8a7",
@@ -1021,10 +1378,76 @@
       "excerpt": "Activate Global Fellows– Singapore: From Lab to Market Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Learn more about becoming a Singapore Activate Global Fellow Stay Informed for the Next Cohort Become a Partner Open to technologists and researchers from all AUs & RIs (A*STAR) across Singapore Applications for Cohort 2026 have closed. Stay connected for when we announce our first cohort of Fellows! Fellowship Fit What we look for in Activate fellows Technical Expert Leader-Ready Transformative Tech High Impact Are you deeply knowledgeable in the field of your proposed project to independently and safely lead the technical work involved? Can you communicate complicated, technical concepts to a general audience? Are you motivated to grow professionally and focus on business leadership, in addition to scientific expertise? Can you manage conflict and act with integrity through ambiguity to mobilize the resources needed to advance your"
     },
     {
-      "id": "check-page-3130843dfb",
-      "url": "https://www.activate.org/apply",
+      "id": "check-page-c6ebcfc46b",
+      "url": "https://activate.org/singapore-apply?hsLang=en",
       "page": "application",
-      "excerpt": "Join Activate’s Community of Hard-Tech Leaders Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Activate Fellowship Application Guide Sign up to be notified when applications open for the Activate Fellowship! Applications for the Activate Fellowship are currently closed. Interested in applying? Complete the application interest form, and we’ll let you know as soon as the next application cycle opens. Get Notified About Cohort 2028 Learn about Activate Singapore Jump to content Fellowship Benefits Fellow & Project Eligibility Fellowship Fit Preparing Your Application Activate Fellowship Selection Timeline Fellowship Benefits Financial Support for Personal & Business Expenses $100K living stipend per year $100K in R&D support $12K in travel and professional development funds per year Health insurance stipend Relocation allowance Focus on Community and Collaboration Community-based programming every two weeks, featuring workshops, fellow"
+      "excerpt": "Is your project aligned with Activate’s mission of hard tech for good?"
+    },
+    {
+      "id": "check-page-ea1b9c432f",
+      "url": "https://activate.org/singapore-apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Will the fellowship meaningfully alter the trajectory of your professional development and your proposed project?"
+    },
+    {
+      "id": "check-page-3ab12dddac",
+      "url": "https://activate.org/singapore-apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Fellow Eligibility Scientists and technologists exploring commercialization of IP from a Singapore institute of higher learning, autonomous university, or A*STAR."
+    },
+    {
+      "id": "check-page-70c2ac8efb",
+      "url": "https://activate.org/singapore-apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Must be willing to establish a company in Singapore."
+    },
+    {
+      "id": "check-page-0e570e1a6a",
+      "url": "https://activate.org/singapore-apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Must be leading the commercial development of a hardware-based technology innovation for the first time if awarded the fellowship (i.e., not a repeat hard-tech founder)."
+    },
+    {
+      "id": "check-page-76f08e44f9",
+      "url": "https://activate.org/singapore-apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Must be committed full-time to the proposed project or company if awarded the fellowship."
+    },
+    {
+      "id": "check-page-4540d3912f",
+      "url": "https://activate.org/singapore-apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Must be legally able to travel to the U.S. during the fellowship."
+    },
+    {
+      "id": "check-page-47d4d7efd6",
+      "url": "https://activate.org/singapore-apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Read our FAQs Driving Innovation Across Sectors Activate supports 16 verticals, aligned with our broader mission to meet the urgency of global challenges * Our Fellowship does not currently support innovators developing technologies that only have application in mammalian health."
+    },
+    {
+      "id": "check-page-5c8a221342",
+      "url": "https://activate.org/singapore-apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Market Viability : Will you create value in a marketplace?"
+    },
+    {
+      "id": "check-page-cd42150917",
+      "url": "https://activate.org/singapore-apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Social Impact : How does your technology contribute to a better world?"
+    },
+    {
+      "id": "check-page-05110b7895",
+      "url": "https://activate.org/singapore-apply?hsLang=en",
+      "page": "application",
+      "excerpt": "One year work plan (1 slide) Present your proposed one year work plan during the fellowship to progress from your current status (provided in the earlier slides) toward the technical vision you shared in the previous document."
+    },
+    {
+      "id": "check-page-40f3f268d0",
+      "url": "https://activate.org/singapore-apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Independent applicants must demonstrate that their technology: Is eligible for commercialization under Singapore’s research and IP frameworks, and Has a clear, defensible IP pathway (e.g., licensable public IP, permission to operate, or hybrid model) Additional clarification may be requested during the review process."
     },
     {
       "id": "check-page-9ca497310b",
@@ -1033,16 +1456,232 @@
       "excerpt": "Activate Fellowship FAQ Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Activate Fellowship FAQ Activate Fellowship FAQ About the Fellowship Fellowship Eligibility Fellowship Application Process Fellowship Communities About the Fellowship When does the fellowship begin? What are the expectations of the fellowship in the first few months? July 1. Applicants will be selected in spring and quickly begin the onboarding process for a successful start to the fellowship in the summer. Local, community-specific programming occurs on a biweekly basis starting in July. Fellows will also begin meeting regularly with community staff, including regular mentoring meetings with their Managing Director. Additionally, the annual week-long, in-person retreat occurs in June each summer, which brings together all current fellows across all communities. Shortly after the retreat, all new fellows will begin the weekly “Elements of Entrepreneurship” core"
     },
     {
+      "id": "check-page-5f7bb3c90d",
+      "url": "https://activate.org/faq",
+      "page": "terms",
+      "excerpt": "Department of Energy (DOE) Lab-Embedded Entrepreneurship Program (LEEP) at Lawrence Berkeley National Laboratory, which partners with Activate to provide a world-class fellowship in Berkeley."
+    },
+    {
+      "id": "check-page-1177a38e41",
+      "url": "https://activate.org/faq",
+      "page": "terms",
+      "excerpt": "Program staff from Cyclotron Road and Activate Berkeley work closely together to coordinate the fellowship experience."
+    },
+    {
+      "id": "check-page-6b13330dfc",
+      "url": "https://activate.org/faq",
+      "page": "terms",
+      "excerpt": "Activate does not charge any fees or take any equity (financial stake) in fellow companies for individuals to join and participate in the fellowship."
+    },
+    {
+      "id": "check-page-9944cb1793",
+      "url": "https://activate.org/faq",
+      "page": "terms",
+      "excerpt": "Our fellowship program supports people, first and foremost."
+    },
+    {
+      "id": "check-page-f585814126",
+      "url": "https://activate.org/faq",
+      "page": "terms",
+      "excerpt": "Can I participate in the fellowship part-time?"
+    },
+    {
+      "id": "check-page-555dcd4287",
+      "url": "https://activate.org/faq",
+      "page": "terms",
+      "excerpt": "However, you are allowed (and encouraged!) to work on your project using additional sources of funding or grants."
+    },
+    {
+      "id": "check-page-ddeb8d169a",
+      "url": "https://activate.org/faq",
+      "page": "terms",
+      "excerpt": "In fact, we actively help and encourage fellows to apply for grants (e.g."
+    },
+    {
+      "id": "check-page-5853d006f5",
+      "url": "https://activate.org/faq",
+      "page": "terms",
+      "excerpt": "Who owns or controls the intellectual property (IP) produced during the fellowship?"
+    },
+    {
+      "id": "check-page-1718981220",
+      "url": "https://activate.org/faq",
+      "page": "terms",
+      "excerpt": "That said, our goal from day one is to support you in finding the best path to drive your technology concept toward impact in the marketplace."
+    },
+    {
+      "id": "check-page-e2b15ec497",
+      "url": "https://activate.org/faq",
+      "page": "terms",
+      "excerpt": "All fellows begin the educational, mentorship, and non-financial elements of the fellowship on July 1."
+    },
+    {
+      "id": "check-page-5714c59287",
+      "url": "https://activate.org/faq",
+      "page": "terms",
+      "excerpt": "Fellows are also required to attend the early-summer fellowship kickoff events."
+    },
+    {
+      "id": "check-page-b764efbd2f",
+      "url": "https://activate.org/faq",
+      "page": "terms",
+      "excerpt": "The cohort-based elements of the fellowship will not shift or extend beyond May 31 of the second year, regardless of when financial benefits begin."
+    },
+    {
       "id": "check-page-fa3fb315a9",
       "url": "https://activate.org/apply?hsLang=en",
       "page": "application",
       "excerpt": "Join Activate’s Community of Hard-Tech Leaders Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Activate Fellowship Application Guide Sign up to be notified when applications open for the Activate Fellowship! Applications for the Activate Fellowship are currently closed. Interested in applying? Complete the application interest form, and we’ll let you know as soon as the next application cycle opens. Get Notified About Cohort 2028 Learn about Activate Singapore Jump to content Fellowship Benefits Fellow & Project Eligibility Fellowship Fit Preparing Your Application Activate Fellowship Selection Timeline Fellowship Benefits Financial Support for Personal & Business Expenses $100K living stipend per year $100K in R&D support $12K in travel and professional development funds per year Health insurance stipend Relocation allowance Focus on Community and Collaboration Community-based programming every two weeks, featuring workshops, fellow"
     },
     {
-      "id": "check-page-ef50f67fd0",
-      "url": "https://activate.org/news/where-does-climate-investment-currently-stand",
-      "page": "terms",
-      "excerpt": "Where does climate investment currently stand? — Activate Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Where does climate investment currently stand? July 24, 2024 Tweet Venture capital’s role in fostering climate-tech innovation is more crucial than ever. In our third episode of Science on a Mission , we dive into the current state of venture capital in climate tech and discuss trends and expectations for the coming years. Recorded live at SXSW, Activate Director of Investments Calvin Cupini moderates a conversation with journalist and investor Molly Wood, Matthew Nordan of Azolla Ventures, and Craig Lawrence of Energy Transition Ventures. Wood says she realized in 2017 that climate tech was going to be “the biggest tech and business story in the world.“ Since then, there’s been “hockey-stick growth,” especially around 2020, which saw a huge spike in interest in climate-tech innovations and in investments and valuation of these"
+      "id": "check-page-353a01fd26",
+      "url": "https://activate.org/apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Unparalleled Support for Fellows Education tailored for the scientist-turned-founder, including a weekly Elements of Entrepreneurship course in your first quarter."
+    },
+    {
+      "id": "check-page-cb2c1d1184",
+      "url": "https://activate.org/apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Regular one-on-one mentorship with your community’s Managing Director to tackle challenges and refine your strategy."
+    },
+    {
+      "id": "check-page-2baea3ba7f",
+      "url": "https://activate.org/apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Must be leading the commercial development of a hardware-based technology innovation for the first time if awarded the fellowship i.e., not a repeat hard tech founder."
+    },
+    {
+      "id": "check-page-73f04ba3ed",
+      "url": "https://activate.org/apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Must be committed full-time to the proposed project or company if awarded the fellowship."
+    },
+    {
+      "id": "check-page-4f3eb8b784",
+      "url": "https://activate.org/apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Must be legally able to work in the U.S. for the duration of the fellowship."
+    },
+    {
+      "id": "check-page-5c203d0314",
+      "url": "https://activate.org/apply?hsLang=en",
+      "page": "application",
+      "excerpt": "View our 16 Verticals Fellowship Fit What we look for in Activate fellows Hard Tech Leader Transformative Tech Community Participation Technical Expert Are you deeply knowledgeable in the field of your proposed project to independently and safely lead the technical work involved?"
+    },
+    {
+      "id": "check-page-b4d6306f89",
+      "url": "https://activate.org/apply?hsLang=en",
+      "page": "application",
+      "excerpt": "It’s ok if your company is not yet incorporated or you’ve not yet left your day job — the fellowship is designed to enable you to take that step."
+    },
+    {
+      "id": "check-page-a233259429",
+      "url": "https://activate.org/apply?hsLang=en",
+      "page": "application",
+      "excerpt": "We look for fellows whose success would be significantly accelerated or made possible by the fellowship."
+    },
+    {
+      "id": "check-page-4c4423fca4",
+      "url": "https://activate.org/apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Will the fellowship meaningfully alter the trajectory of your professional development and your proposed project?"
+    },
+    {
+      "id": "check-page-23fb19bd9f",
+      "url": "https://activate.org/apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Hard Tech for Good Is your proposed project rooted in sound scientific principles?"
+    },
+    {
+      "id": "check-page-2403490070",
+      "url": "https://activate.org/apply?hsLang=en",
+      "page": "application",
+      "excerpt": "Is your project aligned with Activate’s mission of hard tech for good?"
+    },
+    {
+      "id": "check-page-31dab6a8bf",
+      "url": "https://activate.org/apply?hsLang=en",
+      "page": "application",
+      "excerpt": "We encourage you to think broadly about the potential use cases and impact of your technology when determining if your project fits. * Life Science Projects Our Fellowship does not currently support projects that only have applications in healthcare."
+    },
+    {
+      "id": "check-page-bad1db8144",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "page": "application",
+      "excerpt": "Join Activate’s Community of Hard-Tech Leaders Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Activate Fellowship Application Guide Sign up to be notified when applications open for the Activate Fellowship! Applications for the Activate Fellowship are currently closed. Interested in applying? Complete the application interest form, and we’ll let you know as soon as the next application cycle opens. Get Notified About Cohort 2028 Learn about Activate Singapore Jump to content Fellowship Benefits Fellow & Project Eligibility Fellowship Fit Preparing Your Application Activate Fellowship Selection Timeline Fellowship Benefits Financial Support for Personal & Business Expenses $100K living stipend per year $100K in R&D support $12K in travel and professional development funds per year Health insurance stipend Relocation allowance Focus on Community and Collaboration Community-based programming every two weeks, featuring workshops, fellow"
+    },
+    {
+      "id": "check-page-0a09bb07a9",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "page": "application",
+      "excerpt": "Unparalleled Support for Fellows Education tailored for the scientist-turned-founder, including a weekly Elements of Entrepreneurship course in your first quarter."
+    },
+    {
+      "id": "check-page-4048f3eb44",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "page": "application",
+      "excerpt": "Regular one-on-one mentorship with your community’s Managing Director to tackle challenges and refine your strategy."
+    },
+    {
+      "id": "check-page-75af1ae998",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "page": "application",
+      "excerpt": "Must be leading the commercial development of a hardware-based technology innovation for the first time if awarded the fellowship i.e., not a repeat hard tech founder."
+    },
+    {
+      "id": "check-page-bb822b5889",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "page": "application",
+      "excerpt": "Must be committed full-time to the proposed project or company if awarded the fellowship."
+    },
+    {
+      "id": "check-page-181b216712",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "page": "application",
+      "excerpt": "Must be legally able to work in the U.S. for the duration of the fellowship."
+    },
+    {
+      "id": "check-page-9a84bc068c",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "page": "application",
+      "excerpt": "View our 16 Verticals Fellowship Fit What we look for in Activate fellows Hard Tech Leader Transformative Tech Community Participation Technical Expert Are you deeply knowledgeable in the field of your proposed project to independently and safely lead the technical work involved?"
+    },
+    {
+      "id": "check-page-fbcfadb8dd",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "page": "application",
+      "excerpt": "It’s ok if your company is not yet incorporated or you’ve not yet left your day job — the fellowship is designed to enable you to take that step."
+    },
+    {
+      "id": "check-page-e83f335ee3",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "page": "application",
+      "excerpt": "We look for fellows whose success would be significantly accelerated or made possible by the fellowship."
+    },
+    {
+      "id": "check-page-b9f4b88db3",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "page": "application",
+      "excerpt": "Will the fellowship meaningfully alter the trajectory of your professional development and your proposed project?"
+    },
+    {
+      "id": "check-page-ec6357d9c5",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "page": "application",
+      "excerpt": "Hard Tech for Good Is your proposed project rooted in sound scientific principles?"
+    },
+    {
+      "id": "check-page-53d673b4a2",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "page": "application",
+      "excerpt": "Is your project aligned with Activate’s mission of hard tech for good?"
+    },
+    {
+      "id": "check-page-0dd8040b05",
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "page": "application",
+      "excerpt": "We encourage you to think broadly about the potential use cases and impact of your technology when determining if your project fits. * Life Science Projects Our Fellowship does not currently support projects that only have applications in healthcare."
     },
     {
       "id": "check-page-7aca2a91fa",
@@ -1051,10 +1690,586 @@
       "excerpt": "Activate Fellowship FAQ Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Activate Fellowship FAQ Activate Fellowship FAQ About the Fellowship Fellowship Eligibility Fellowship Application Process Fellowship Communities About the Fellowship When does the fellowship begin? What are the expectations of the fellowship in the first few months? July 1. Applicants will be selected in spring and quickly begin the onboarding process for a successful start to the fellowship in the summer. Local, community-specific programming occurs on a biweekly basis starting in July. Fellows will also begin meeting regularly with community staff, including regular mentoring meetings with their Managing Director. Additionally, the annual week-long, in-person retreat occurs in June each summer, which brings together all current fellows across all communities. Shortly after the retreat, all new fellows will begin the weekly “Elements of Entrepreneurship” core"
     },
     {
+      "id": "check-page-49565a488b",
+      "url": "https://activate.org/faq?hsLang=en",
+      "page": "terms",
+      "excerpt": "Department of Energy (DOE) Lab-Embedded Entrepreneurship Program (LEEP) at Lawrence Berkeley National Laboratory, which partners with Activate to provide a world-class fellowship in Berkeley."
+    },
+    {
+      "id": "check-page-ac7fdff336",
+      "url": "https://activate.org/faq?hsLang=en",
+      "page": "terms",
+      "excerpt": "Program staff from Cyclotron Road and Activate Berkeley work closely together to coordinate the fellowship experience."
+    },
+    {
+      "id": "check-page-76bb99d828",
+      "url": "https://activate.org/faq?hsLang=en",
+      "page": "terms",
+      "excerpt": "Activate does not charge any fees or take any equity (financial stake) in fellow companies for individuals to join and participate in the fellowship."
+    },
+    {
+      "id": "check-page-8570cb9a71",
+      "url": "https://activate.org/faq?hsLang=en",
+      "page": "terms",
+      "excerpt": "Our fellowship program supports people, first and foremost."
+    },
+    {
+      "id": "check-page-871ceb08c8",
+      "url": "https://activate.org/faq?hsLang=en",
+      "page": "terms",
+      "excerpt": "Can I participate in the fellowship part-time?"
+    },
+    {
+      "id": "check-page-9da1382608",
+      "url": "https://activate.org/faq?hsLang=en",
+      "page": "terms",
+      "excerpt": "However, you are allowed (and encouraged!) to work on your project using additional sources of funding or grants."
+    },
+    {
+      "id": "check-page-9cef670208",
+      "url": "https://activate.org/faq?hsLang=en",
+      "page": "terms",
+      "excerpt": "In fact, we actively help and encourage fellows to apply for grants (e.g."
+    },
+    {
+      "id": "check-page-b6579f5555",
+      "url": "https://activate.org/faq?hsLang=en",
+      "page": "terms",
+      "excerpt": "Who owns or controls the intellectual property (IP) produced during the fellowship?"
+    },
+    {
+      "id": "check-page-9de300f720",
+      "url": "https://activate.org/faq?hsLang=en",
+      "page": "terms",
+      "excerpt": "That said, our goal from day one is to support you in finding the best path to drive your technology concept toward impact in the marketplace."
+    },
+    {
+      "id": "check-page-478fd3b6c3",
+      "url": "https://activate.org/faq?hsLang=en",
+      "page": "terms",
+      "excerpt": "All fellows begin the educational, mentorship, and non-financial elements of the fellowship on July 1."
+    },
+    {
+      "id": "check-page-05afdf12ef",
+      "url": "https://activate.org/faq?hsLang=en",
+      "page": "terms",
+      "excerpt": "Fellows are also required to attend the early-summer fellowship kickoff events."
+    },
+    {
+      "id": "check-page-0474fb3415",
+      "url": "https://activate.org/faq?hsLang=en",
+      "page": "terms",
+      "excerpt": "The cohort-based elements of the fellowship will not shift or extend beyond May 31 of the second year, regardless of when financial benefits begin."
+    },
+    {
       "id": "check-page-174c096cac",
       "url": "https://info.activate.org/singapore-apply?hsLang=en",
       "page": "terms",
       "excerpt": "Activate Global Fellows– Singapore: From Lab to Market Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Learn more about becoming a Singapore Activate Global Fellow Stay Informed for the Next Cohort Become a Partner Open to technologists and researchers from all AUs & RIs (A*STAR) across Singapore Applications for Cohort 2026 have closed. Stay connected for when we announce our first cohort of Fellows! Fellowship Fit What we look for in Activate fellows Technical Expert Leader-Ready Transformative Tech High Impact Are you deeply knowledgeable in the field of your proposed project to independently and safely lead the technical work involved? Can you communicate complicated, technical concepts to a general audience? Are you motivated to grow professionally and focus on business leadership, in addition to scientific expertise? Can you manage conflict and act with integrity through ambiguity to mobilize the resources needed to advance your"
+    },
+    {
+      "id": "check-page-2153d2c16c",
+      "url": "https://info.activate.org/singapore-apply?hsLang=en",
+      "page": "terms",
+      "excerpt": "Is your project aligned with Activate’s mission of hard tech for good?"
+    },
+    {
+      "id": "check-page-b9f76a34fc",
+      "url": "https://info.activate.org/singapore-apply?hsLang=en",
+      "page": "terms",
+      "excerpt": "Will the fellowship meaningfully alter the trajectory of your professional development and your proposed project?"
+    },
+    {
+      "id": "check-page-a8e98accb7",
+      "url": "https://info.activate.org/singapore-apply?hsLang=en",
+      "page": "terms",
+      "excerpt": "Fellow Eligibility Scientists and technologists exploring commercialization of IP from a Singapore institute of higher learning, autonomous university, or A*STAR."
+    },
+    {
+      "id": "check-page-e0c52fbb79",
+      "url": "https://info.activate.org/singapore-apply?hsLang=en",
+      "page": "terms",
+      "excerpt": "Must be willing to establish a company in Singapore."
+    },
+    {
+      "id": "check-page-855dbdb72d",
+      "url": "https://info.activate.org/singapore-apply?hsLang=en",
+      "page": "terms",
+      "excerpt": "Must be leading the commercial development of a hardware-based technology innovation for the first time if awarded the fellowship (i.e., not a repeat hard-tech founder)."
+    },
+    {
+      "id": "check-page-a997d0d224",
+      "url": "https://info.activate.org/singapore-apply?hsLang=en",
+      "page": "terms",
+      "excerpt": "Must be committed full-time to the proposed project or company if awarded the fellowship."
+    },
+    {
+      "id": "check-page-3c959afdcf",
+      "url": "https://info.activate.org/singapore-apply?hsLang=en",
+      "page": "terms",
+      "excerpt": "Must be legally able to travel to the U.S. during the fellowship."
+    },
+    {
+      "id": "check-page-f133b50e08",
+      "url": "https://info.activate.org/singapore-apply?hsLang=en",
+      "page": "terms",
+      "excerpt": "Read our FAQs Driving Innovation Across Sectors Activate supports 16 verticals, aligned with our broader mission to meet the urgency of global challenges * Our Fellowship does not currently support innovators developing technologies that only have application in mammalian health."
+    },
+    {
+      "id": "check-page-76e038d84f",
+      "url": "https://info.activate.org/singapore-apply?hsLang=en",
+      "page": "terms",
+      "excerpt": "Market Viability : Will you create value in a marketplace?"
+    },
+    {
+      "id": "check-page-9dfaabdb14",
+      "url": "https://info.activate.org/singapore-apply?hsLang=en",
+      "page": "terms",
+      "excerpt": "Social Impact : How does your technology contribute to a better world?"
+    },
+    {
+      "id": "check-page-e0dfd3680c",
+      "url": "https://info.activate.org/singapore-apply?hsLang=en",
+      "page": "terms",
+      "excerpt": "One year work plan (1 slide) Present your proposed one year work plan during the fellowship to progress from your current status (provided in the earlier slides) toward the technical vision you shared in the previous document."
+    },
+    {
+      "id": "check-page-aedb132d6c",
+      "url": "https://info.activate.org/singapore-apply?hsLang=en",
+      "page": "terms",
+      "excerpt": "Independent applicants must demonstrate that their technology: Is eligible for commercialization under Singapore’s research and IP frameworks, and Has a clear, defensible IP pathway (e.g., licensable public IP, permission to operate, or hybrid model) Additional clarification may be requested during the review process."
+    },
+    {
+      "id": "check-page-dbf479c29e",
+      "url": "https://activate.org/meet-the-cohort-2025-activate-berkeley-fellows",
+      "page": "batches",
+      "excerpt": "Meet the Cohort 2025 Activate Berkeley Fellows Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Activate Berkeley Meet the Cohort 2025 Fellows Activate Fellowship FAQ Connect with Activate Fellows Thank you for joining us to meet the Cohort 2025 fellows in the Activate Berkeley Community. Our fellows look forward to connecting with you one-on-one. Please use the links below to connect with them. NextSet Materials NextSet Materials enables the reprocessing of historically unrecyclable thermosets and the recovery of valuable composite materials for reuse. Learn more. Yasmeen AlFaraj CONNECT ON LINKEDIN 4th State Energies 4th State Energies (fka SiLi-ion Inc.) produces plasma-created silicon that replaces graphite in Li-ion batteries, boosts capacity, lowers cost, and seamlessly integrates into existing battery production lines. Learn more. Pankaj Ghildiyal CONNECT ON LINKEDIN Carbide Radio Carbide Radio is building next-generation silicon"
+    },
+    {
+      "id": "check-page-d175287019",
+      "url": "https://activate.org/meet-the-cohort-2025-activate-berkeley-fellows",
+      "page": "batches",
+      "excerpt": "Pankaj Ghildiyal CONNECT ON LINKEDIN Carbide Radio Carbide Radio is building next-generation silicon carbide RF semiconductor chips powering 5G and 6G cellular infrastructure."
+    },
+    {
+      "id": "check-page-c637b8a32d",
+      "url": "https://activate.org/meet-the-cohort-2025-activate-berkeley-fellows",
+      "page": "batches",
+      "excerpt": "Albert Kumar CONNECT ON LINKEDIN Vertility Health Vertility Health is helping farmers break the rules of genetics—without gene editing."
+    },
+    {
+      "id": "check-page-8b30cbe965",
+      "url": "https://activate.org/meet-the-cohort-2025-activate-berkeley-fellows",
+      "page": "batches",
+      "excerpt": "Andre Cruz CONNECT ON LINKEDIN Astral Materials Astral Materials manufactures ultra-high-quality semiconductors that cannot be made on Earth to serve advanced applications bottlenecked by crystal quality."
+    },
+    {
+      "id": "check-page-56a635a4ed",
+      "url": "https://activate.org/meet-the-cohort-2025-activate-berkeley-fellows",
+      "page": "batches",
+      "excerpt": "Jessica Frick CONNECT ON LINKEDIN Astral Materials Astral Materials manufactures ultra-high-quality semiconductors that cannot be made on Earth to serve advanced applications bottlenecked by crystal quality."
+    },
+    {
+      "id": "check-page-a6da23c37f",
+      "url": "https://activate.org/meet-the-cohort-2025-activate-berkeley-fellows",
+      "page": "batches",
+      "excerpt": "Jiya Janowitz CONNECT ON LINKEDIN Lagomics Lagomics combines AI and multiplexed experimental validation to map billions of protein interactions, unlocking programmable smell and next-gen bio-digital interfaces."
+    },
+    {
+      "id": "check-page-4cd4e3c550",
+      "url": "https://activate.org/meet-the-cohort-2025-activate-berkeley-fellows",
+      "page": "batches",
+      "excerpt": "Kiavash Kiaee CONNECT ON LINKEDIN Lagomics Lagomics combines AI and multiplexed experimental validation to map billions of protein interactions, unlocking programmable smell and next-gen bio-digital interfaces."
+    },
+    {
+      "id": "check-page-141a37f3ea",
+      "url": "https://activate.org/meet-the-cohort-2025-activate-berkeley-fellows",
+      "page": "batches",
+      "excerpt": "Jacob Roberts CONNECT ON LINKEDIN Membravo Membravo makes the world’s most robust polymer membranes for gas and liquid separations, cutting industrial waste and energy consumption."
+    },
+    {
+      "id": "check-page-4a79c22bf1",
+      "url": "https://activate.org/meet-the-cohort-2025-activate-berkeley-fellows",
+      "page": "batches",
+      "excerpt": "Milad Yavari CONNECT ON LINKEDIN Membravo Membravo makes the world’s most robust polymer membranes for gas and liquid separations, cutting industrial waste and energy consumption."
+    },
+    {
+      "id": "check-page-78218a3f65",
+      "url": "https://activate.org/meet-the-cohort2025-activate-houston-fellows",
+      "page": "batches",
+      "excerpt": "Meet the Cohort 2025 Activate Houston Fellows Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Activate Houston Meet the Cohort 2025 Fellows Activate Fellowship FAQ Connect with Activate Fellows Thank you for joining us to meet the Cohort 2025 fellows in the Activate Houston Community. Our fellows look forward to connecting with you one-on-one. Please use the links below to connect with them. FlowCellutions FlowCellutions prevents power outages for critical infrastructure such as hospitals, data centers, and the grid through predictive battery diagnostics. Learn more. Becca Segel CONNECT ON LINKEDIN EMAIL Lift Biolabs Lift Biolabs builds buoyant protein reagents that simplify purification across therapeutic and industrial biotech. Learn more. Eugene Chung CONNECT ON LINKEDIN EMAIL Biosimo Biosimo, a chemical engineering startup, develops and operates processes to produce bio-based platform chemicals. Learn more. Iria Mostrou-Moser CONNECT"
+    },
+    {
+      "id": "check-page-2296560d79",
+      "url": "https://activate.org/meet-the-cohort2025-activate-houston-fellows",
+      "page": "batches",
+      "excerpt": "Iria Mostrou-Moser CONNECT ON LINKEDIN EMAIL EarthFlow AI EarthFlow AI is making subsurface climate and energy solutions scalable with ultra-fast AI simulation."
+    },
+    {
+      "id": "check-page-89d87696d0",
+      "url": "https://activate.org/meet-the-cohort2025-activate-houston-fellows",
+      "page": "batches",
+      "excerpt": "Jon Bessette CONNECT ON LINKEDIN EMAIL Brightlight Photonics Brightlight Photonics builds tiny, powerful lasers that unlock quantum, biomedical, and industrial breakthroughs outside the lab."
+    },
+    {
+      "id": "check-page-a8f22e4222",
+      "url": "https://activate.org/meet-the-cohort2025-activate-houston-fellows",
+      "page": "batches",
+      "excerpt": "Alec Ajnsztajn CONNECT ON LINKEDIN EMAIL Elysium Robotics Elysium is developing muscle-like actuators to enable low-cost robots with human-level dexterity to address labor shortages."
+    },
+    {
+      "id": "check-page-d18757985c",
+      "url": "https://activate.org/meet-the-cohort2025-activate-houston-fellows",
+      "page": "batches",
+      "excerpt": "Rodrigo Alvarez-Icaza Rivera CONNECT ON LINKEDIN EMAIL Nanoscale Labs Nanoscale Labs is developing affordable commercial-scale nanomanufacturing systems to create products that solve critical public health and sustainability problems."
+    },
+    {
+      "id": "check-page-42105335a8",
+      "url": "https://activate.org/meet-the-cohort2025-activate-houston-fellows",
+      "page": "batches",
+      "excerpt": "Sonia Dagan CONNECT ON LINKEDIN EMAIL Raven Space Systems Raven Space Systems is modernizing composite manufacturing with breakthrough 3D printing and Industry 4.0 solutions."
+    },
+    {
+      "id": "check-page-3f119caa46",
+      "url": "https://activate.org/meet-the-cohort2025-activate-houston-fellows",
+      "page": "batches",
+      "excerpt": "Blake Herren CONNECT ON LINKEDIN EMAIL Newfound Materials Newfound Materials is accelerating the discovery and manufacturing of critical energy materials via a predictive platform for inorganic materials synthesis."
+    },
+    {
+      "id": "check-page-433da72333",
+      "url": "https://activate.org/meet-the-cohort2025-activate-houston-fellows",
+      "page": "batches",
+      "excerpt": "Wei Meng CONNECT ON LINKEDIN EMAIL Bairitone Health Bairitone's AI-driven, sonar-based diagnostic imaging technology for home use reduces healthcare costs while improving accessibility."
+    },
+    {
+      "id": "check-page-e903f90ba1",
+      "url": "https://activate.org/about-us",
+      "page": "details",
+      "excerpt": "About Us—Hard Tech for Good Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Hard Tech for Good Bridging the gap between breakthrough research and real-world impact Hard Tech for Good At Activate, we believe that groundbreaking science has the power to change the world—but only if it reaches the people and places that need it most. That’s why we’re creating a new model for innovation: one that empowers scientists and engineers to lead, connects them with the resources to succeed, and transforms bold ideas into real-world solutions. By fostering collaboration and reshaping systems, we’re ensuring that the technologies of tomorrow address the challenges of today. The community that we are building are people united around the belief of hard tech for good and committed to act together Our Mission We're building the community that drives science into impact by: Growing the next generation of hard tech leaders. Creating demand for leaders who"
+    },
+    {
+      "id": "check-page-cd79230216",
+      "url": "https://activate.org/about-us",
+      "page": "details",
+      "excerpt": "Promoting consistent, impact-driven public sector support."
+    },
+    {
+      "id": "check-page-ea30b510a7",
+      "url": "https://activate.org/about-us",
+      "page": "details",
+      "excerpt": "Together, they create a ripple effect that strengthens the hard tech ecosystem and accelerates innovation."
+    },
+    {
+      "id": "check-page-43e502893b",
+      "url": "https://activate.org/about-us",
+      "page": "details",
+      "excerpt": "Flagship Fellowship Program A two-year program that equips science entrepreneurs with funding, mentorship, and a thriving network to navigate the path from lab to market."
+    },
+    {
+      "id": "check-page-7f54265680",
+      "url": "https://activate.org/about-us",
+      "page": "details",
+      "excerpt": "Learn More Entrepreneurial Programming Beyond the fellowship, we offer initiatives that strengthen the hard tech ecosystem and empower leaders throughout their journey."
+    },
+    {
+      "id": "check-page-411dc1cd52",
+      "url": "https://activate.org/about-us",
+      "page": "details",
+      "excerpt": "Department of Energy’s Lab Embedded Entrepreneurship Program (LEEP) at Berkeley Lab, Activate has grown beyond the fellowship to become a national hub for science entrepreneurship—while Cyclotron Road remains a close partner of the Berkeley fellowship community."
+    },
+    {
+      "id": "check-page-5d9bb2b1c3",
+      "url": "https://activate.org/about-us",
+      "page": "details",
+      "excerpt": "Today, we support five fellowship communities —Berkeley, New York, Boston, Houston, and Anywhere, a remote-centric program that connects top scientists from across the country."
+    },
+    {
+      "id": "check-page-8042593380",
+      "url": "https://activate.org/about-us",
+      "page": "details",
+      "excerpt": "Over the years, Activate has expanded its scope through partnerships with federal and state programs, including the National Science Foundation, DARPA, the NIST CHIPS Research and Development Office, NYSERDA, California Energy Commission, and MassCEC."
+    },
+    {
+      "id": "check-page-c99bc4c4be",
+      "url": "https://activate.org/about-us",
+      "page": "details",
+      "excerpt": "Together, we’re shaping the future by empowering the next generation of hard tech leaders."
+    },
+    {
+      "id": "check-page-1d02aa0bef",
+      "url": "https://activate.org/about-us",
+      "page": "details",
+      "excerpt": "Together, we’re advancing science entrepreneurship, fostering social impact, and creating pathways for value-driven innovation."
+    },
+    {
+      "id": "check-page-3d1bb972fb",
+      "url": "https://activate.org/activate-partner-programs",
+      "page": "details",
+      "excerpt": "Activate-Partner Programs Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Programming Partnerships Collaborating to Support Science Entrepreneurs Programming Partnerships Collaborating to Support Science Entrepreneurs Activate partners with leading organizations to design and deliver world-class programming that equips fellows with the tools to lead, launch, and scale. From specialized technical support to business coaching and leadership development, our partners help shape the journey of every science entrepreneur we serve. We invite mission-aligned institutions, companies, and experts to collaborate with us in building a supportive ecosystem for hard tech innovation. Together, we can: Co-create content that strengthens fellows’ technical, business, or leadership skills Offer mentorship, coaching, or office hours from seasoned professionals Provide pathways for fellows to engage with new industries, regions, and communities When we"
+    },
+    {
+      "id": "check-page-d29de3fc1d",
+      "url": "https://activate.org/activate-partner-programs",
+      "page": "details",
+      "excerpt": "Together, we can: Co-create content that strengthens fellows’ technical, business, or leadership skills Offer mentorship, coaching, or office hours from seasoned professionals Provide pathways for fellows to engage with new industries, regions, and communities When we bring our strengths together, we empower the scientists solving the world’s toughest problems."
+    },
+    {
+      "id": "check-page-d4e1eb0a6e",
+      "url": "https://activate.org/global-programs",
+      "page": "details",
+      "excerpt": "Global Programs Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Programs for Science Entrepreneurs Building pathways that turn breakthrough science into real-world impact Breakthrough technologies have the potential to transform the world—but scientists often lack the support to bring them to market. Activate partners with governments, institutions, and industry leaders to unlock that potential. We design programs that discover, fund, and champion scientists and engineers—helping them turn breakthrough research into companies and real-world impact. Why Partner with Activate You’re investing in innovation—but too often, it stops at discovery. We help you turn that investment into companies, jobs, and real-world solutions. We work with: Domestic & International Government Agencies Turn publicly funded research into companies that strengthen economic competitiveness, national security, and regional growth. Innovation Hubs & Ecosystem"
+    },
+    {
+      "id": "check-page-862cbdd3a6",
+      "url": "https://activate.org/global-programs",
+      "page": "details",
+      "excerpt": "Innovation Hubs & Ecosystem Builders Build strong pipelines of deep tech founders and expand capacity in critical technology areas."
+    },
+    {
+      "id": "check-page-2de957afe6",
+      "url": "https://activate.org/global-programs",
+      "page": "details",
+      "excerpt": "Through funding, mentorship, and training, scientists become leaders who can raise capital, build teams, and scale solutions."
+    },
+    {
+      "id": "check-page-560ecf9594",
+      "url": "https://activate.org/global-programs",
+      "page": "details",
+      "excerpt": "A Network That Compounds Our community of founders, mentors, and partners accelerates progress and creates long-term value for every participant."
+    },
+    {
+      "id": "check-page-dfc334ef44",
+      "url": "https://activate.org/global-programs",
+      "page": "details",
+      "excerpt": "Learn about Japan Bridge Program Learn about Louisiana Bridge Program Entrepreneurial Training Workshops Short, immersive programs designed to spark commercialization and build entrepreneurial thinking."
+    },
+    {
+      "id": "check-page-c35a56f76f",
+      "url": "https://activate.org/global-programs",
+      "page": "details",
+      "excerpt": "Participants learn how to: Evaluate market potential Communicate with funders and partners Understand financing and venture fundamentals Workshops are fully customizable to your organization’s goals and ecosystem needs—making them ideal for catalyzing deep tech innovation and creating immediate momentum within communities."
+    },
+    {
+      "id": "check-page-11e4477aa2",
+      "url": "https://activate.org/global-programs",
+      "page": "details",
+      "excerpt": "We bring a proven model—training, mentorship, and community—and adapt it to local priorities."
+    },
+    {
+      "id": "check-page-b93e552fc4",
+      "url": "https://activate.org/global-programs",
+      "page": "details",
+      "excerpt": "Each fellowship is customized to align with regional innovation priorities and ecosystem needs, ensuring relevance and long-term impact."
+    },
+    {
+      "id": "check-page-a25b3e02b5",
+      "url": "https://activate.org/global-programs",
+      "page": "details",
+      "excerpt": "Our global programs: Build local capacity for science-based entrepreneurship Support founders developing transformative technologies Connect participants to a global network of experts and partners Learn about Activate Global - Singapore Fellowship Strategic Alliances Long-term partnerships to solve systemic challenges in innovation."
+    },
+    {
+      "id": "check-page-cca5e0ca82",
+      "url": "https://activate.org/global-programs",
+      "page": "details",
+      "excerpt": "We work with leading organizations to design programs, share resources, and build scalable models that move entire sectors forward—from our founding collaboration with Lawrence Berkeley National Laboratory’s Cyclotron Road program to new alliances like The Engine Accelerator ."
+    },
+    {
+      "id": "check-page-0224805c6e",
+      "url": "https://activate.org/global-programs",
+      "page": "details",
+      "excerpt": "These alliances: Unlock new pathways for commercialization Strengthen innovation ecosystems Accelerate technologies in areas like energy, materials, and manufacturing Resources Created Through Strategic Alliances Design Your Program Partner with Activate to build the next generation of science-driven companies—and ensure breakthrough ideas don’t stop at the lab."
+    },
+    {
+      "id": "check-page-d44fc960c9",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "page": "details",
+      "excerpt": "Global Programs Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Programs for Science Entrepreneurs Building pathways that turn breakthrough science into real-world impact Breakthrough technologies have the potential to transform the world—but scientists often lack the support to bring them to market. Activate partners with governments, institutions, and industry leaders to unlock that potential. We design programs that discover, fund, and champion scientists and engineers—helping them turn breakthrough research into companies and real-world impact. Why Partner with Activate You’re investing in innovation—but too often, it stops at discovery. We help you turn that investment into companies, jobs, and real-world solutions. We work with: Domestic & International Government Agencies Turn publicly funded research into companies that strengthen economic competitiveness, national security, and regional growth. Innovation Hubs & Ecosystem"
+    },
+    {
+      "id": "check-page-721e4d962e",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "page": "details",
+      "excerpt": "Innovation Hubs & Ecosystem Builders Build strong pipelines of deep tech founders and expand capacity in critical technology areas."
+    },
+    {
+      "id": "check-page-50bf0a8125",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "page": "details",
+      "excerpt": "Through funding, mentorship, and training, scientists become leaders who can raise capital, build teams, and scale solutions."
+    },
+    {
+      "id": "check-page-93e125e055",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "page": "details",
+      "excerpt": "A Network That Compounds Our community of founders, mentors, and partners accelerates progress and creates long-term value for every participant."
+    },
+    {
+      "id": "check-page-1428346eae",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "page": "details",
+      "excerpt": "Learn about Japan Bridge Program Learn about Louisiana Bridge Program Entrepreneurial Training Workshops Short, immersive programs designed to spark commercialization and build entrepreneurial thinking."
+    },
+    {
+      "id": "check-page-339a2a5ea0",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "page": "details",
+      "excerpt": "Participants learn how to: Evaluate market potential Communicate with funders and partners Understand financing and venture fundamentals Workshops are fully customizable to your organization’s goals and ecosystem needs—making them ideal for catalyzing deep tech innovation and creating immediate momentum within communities."
+    },
+    {
+      "id": "check-page-2486096254",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "page": "details",
+      "excerpt": "We bring a proven model—training, mentorship, and community—and adapt it to local priorities."
+    },
+    {
+      "id": "check-page-c06fd7b2d6",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "page": "details",
+      "excerpt": "Each fellowship is customized to align with regional innovation priorities and ecosystem needs, ensuring relevance and long-term impact."
+    },
+    {
+      "id": "check-page-62d2cf7855",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "page": "details",
+      "excerpt": "Our global programs: Build local capacity for science-based entrepreneurship Support founders developing transformative technologies Connect participants to a global network of experts and partners Learn about Activate Global - Singapore Fellowship Strategic Alliances Long-term partnerships to solve systemic challenges in innovation."
+    },
+    {
+      "id": "check-page-51b2af8717",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "page": "details",
+      "excerpt": "We work with leading organizations to design programs, share resources, and build scalable models that move entire sectors forward—from our founding collaboration with Lawrence Berkeley National Laboratory’s Cyclotron Road program to new alliances like The Engine Accelerator ."
+    },
+    {
+      "id": "check-page-ff9868f12c",
+      "url": "https://activate.org/global-programs?hsLang=en",
+      "page": "details",
+      "excerpt": "These alliances: Unlock new pathways for commercialization Strengthen innovation ecosystems Accelerate technologies in areas like energy, materials, and manufacturing Resources Created Through Strategic Alliances Design Your Program Partner with Activate to build the next generation of science-driven companies—and ensure breakthrough ideas don’t stop at the lab."
+    },
+    {
+      "id": "check-page-1eee6c2e5f",
+      "url": "https://activate.org/japan-bridge-program",
+      "page": "details",
+      "excerpt": "Japan Bridge Program Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Science-driven ventures, rooted in Japan A nine-month learning experience designed to help research scientists and engineers in Japan explore the path from lab to real-world impact—before they’ve even incorporated. In partnership with: Tokyo IPC, Japan Bureau of Science Technology & Innovation, Hakuhodo What is the Activate BRIDGE Japan Program? BRIDGE—Bolstering Resources for Innovators from Developing and Growing Ecosystems—is Activate's model for reaching deep-tech founders early, when they are still based in a research lab and pre-incorporation, and biasing them toward long-term success. Built on a decade of experience supporting hundreds of hard-tech founders, BRIDGE emphasizes entrepreneurial mindset development and practical tools for translating research into viable ventures. It is not a generic accelerator. It is tailored for researchers and engineers who are"
+    },
+    {
+      "id": "check-page-ae6d7730df",
+      "url": "https://activate.org/japan-bridge-program",
+      "page": "details",
+      "excerpt": "The Japan program was launched as part of Japan's Global Campus Startup (GSC) initiative, funded by the Bureau of Science, Technology and Innovation, as Japan makes significant investments to develop its hard-tech ecosystem and create pathways for research-driven innovation to scale globally."
+    },
+    {
+      "id": "check-page-92e2921644",
+      "url": "https://activate.org/japan-bridge-program",
+      "page": "details",
+      "excerpt": "Program Elements A nine-month experience built for early-stage researchers Core Curriculum Activate's proven curriculum on entrepreneurial mindsets—covering technoeconomic framing, fundraising readiness, strategic relationships, and the habits of successful deep-tech founders."
+    },
+    {
+      "id": "check-page-2c0070d5d5",
+      "url": "https://activate.org/japan-bridge-program",
+      "page": "details",
+      "excerpt": "Mentoring & Coaching Monthly one-on-one sessions with an Activate entrepreneur-in-residence, monthly group coaching, and biweekly peer pods to build accountability and community."
+    },
+    {
+      "id": "check-page-0348f494c7",
+      "url": "https://activate.org/japan-bridge-program",
+      "page": "details",
+      "excerpt": "In-Person Workshops Two in-person workshops in Tokyo, designed to accelerate learning and deepen connections within Japan's emerging hard-tech community."
+    },
+    {
+      "id": "check-page-c843fe88ae",
+      "url": "https://activate.org/japan-bridge-program",
+      "page": "details",
+      "excerpt": "Immersion Trip A trip to connect with Activate Fellows and the broader U.S. deep-tech network—opening doors to global markets and capital for Japanese founders ready to scale."
+    },
+    {
+      "id": "check-page-72481dd712",
+      "url": "https://activate.org/japan-bridge-program",
+      "page": "details",
+      "excerpt": "A lasting network: Peer and mentor relationships—within Japan and connected to Activate's global community—that extend well beyond the program itself."
+    },
+    {
+      "id": "check-page-fcaf3f4c6d",
+      "url": "https://activate.org/japan-bridge-program",
+      "page": "details",
+      "excerpt": "Program Leadership Taylor Smith Senior Program Manager - Asia Taylor Smith leads the Activate BRIDGE Japan Program alongside the Activate Global Singapore Fellowship—expanding Activate's capacity to support science founders across Asia."
+    },
+    {
+      "id": "check-page-c64969b4d8",
+      "url": "https://activate.org/japan-bridge-program",
+      "page": "details",
+      "excerpt": "She holds a bachelor's degree in international relations from American University and completed a post-graduate fellowship in Germany focused on cross-cultural exchange."
+    },
+    {
+      "id": "check-page-88c95882a3",
+      "url": "https://activate.org/japan-bridge-program",
+      "page": "details",
+      "excerpt": "There's so much opportunity to be unlocked.\" Want to learn more about BRIDGE Japan?"
+    },
+    {
+      "id": "check-page-4f01e1682d",
+      "url": "https://activate.org/japan-bridge-program",
+      "page": "details",
+      "excerpt": "If you're a researcher or engineer in Japan curious about what commercialization could look like for your work, sign up to receive program updates, application information, and insights."
+    },
+    {
+      "id": "check-page-b55c76bdbf",
+      "url": "https://activate.org/about-us/?hsLang=en",
+      "page": "details",
+      "excerpt": "About Us—Hard Tech for Good Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs Singapore Japan Bridge Louisiana Bridge Tools for Innovators Partnerships Funding Partners Join Us About Us About Activate Our Team Careers Contact Us Blog Blog & News Upcoming Events View Fellows Get Involved View Fellows Get Involved This is a search field with an auto-suggest feature attached. There are no suggestions because the search field is empty. Hard Tech for Good Bridging the gap between breakthrough research and real-world impact Hard Tech for Good At Activate, we believe that groundbreaking science has the power to change the world—but only if it reaches the people and places that need it most. That’s why we’re creating a new model for innovation: one that empowers scientists and engineers to lead, connects them with the resources to succeed, and transforms bold ideas into real-world solutions. By fostering collaboration and reshaping systems, we’re ensuring that the technologies of tomorrow address the challenges of today. The community that we are building are people united around the belief of hard tech for good and committed to act together Our Mission We're building the community that drives science into impact by: Growing the next generation of hard tech leaders. Creating demand for leaders who"
+    },
+    {
+      "id": "check-page-baaeee88a4",
+      "url": "https://activate.org/about-us/?hsLang=en",
+      "page": "details",
+      "excerpt": "Promoting consistent, impact-driven public sector support."
+    },
+    {
+      "id": "check-page-b3176d009d",
+      "url": "https://activate.org/about-us/?hsLang=en",
+      "page": "details",
+      "excerpt": "Together, they create a ripple effect that strengthens the hard tech ecosystem and accelerates innovation."
+    },
+    {
+      "id": "check-page-b602bfad1e",
+      "url": "https://activate.org/about-us/?hsLang=en",
+      "page": "details",
+      "excerpt": "Flagship Fellowship Program A two-year program that equips science entrepreneurs with funding, mentorship, and a thriving network to navigate the path from lab to market."
+    },
+    {
+      "id": "check-page-5197b1d7ec",
+      "url": "https://activate.org/about-us/?hsLang=en",
+      "page": "details",
+      "excerpt": "Learn More Entrepreneurial Programming Beyond the fellowship, we offer initiatives that strengthen the hard tech ecosystem and empower leaders throughout their journey."
+    },
+    {
+      "id": "check-page-4c92ae33cb",
+      "url": "https://activate.org/about-us/?hsLang=en",
+      "page": "details",
+      "excerpt": "Department of Energy’s Lab Embedded Entrepreneurship Program (LEEP) at Berkeley Lab, Activate has grown beyond the fellowship to become a national hub for science entrepreneurship—while Cyclotron Road remains a close partner of the Berkeley fellowship community."
+    },
+    {
+      "id": "check-page-ea484813ea",
+      "url": "https://activate.org/about-us/?hsLang=en",
+      "page": "details",
+      "excerpt": "Today, we support five fellowship communities —Berkeley, New York, Boston, Houston, and Anywhere, a remote-centric program that connects top scientists from across the country."
+    },
+    {
+      "id": "check-page-a3cc762393",
+      "url": "https://activate.org/about-us/?hsLang=en",
+      "page": "details",
+      "excerpt": "Over the years, Activate has expanded its scope through partnerships with federal and state programs, including the National Science Foundation, DARPA, the NIST CHIPS Research and Development Office, NYSERDA, California Energy Commission, and MassCEC."
+    },
+    {
+      "id": "check-page-5e8dff2e7e",
+      "url": "https://activate.org/about-us/?hsLang=en",
+      "page": "details",
+      "excerpt": "Together, we’re shaping the future by empowering the next generation of hard tech leaders."
+    },
+    {
+      "id": "check-page-4c70ee22fb",
+      "url": "https://activate.org/about-us/?hsLang=en",
+      "page": "details",
+      "excerpt": "Together, we’re advancing science entrepreneurship, fostering social impact, and creating pathways for value-driven innovation."
     }
   ],
   "findings": {
@@ -1083,12 +2298,12 @@
         "evidenceId": "check-route-affe060cec"
       },
       {
-        "value": "https://www.activate.org/apply",
-        "evidenceId": "check-route-96284b1211"
-      },
-      {
         "value": "https://activate.org/singapore-apply?hsLang=en",
         "evidenceId": "check-route-719ef818d7"
+      },
+      {
+        "value": "https://www.activate.org/apply/?hsLang=en",
+        "evidenceId": "check-route-024b6e73f2"
       }
     ],
     "applicationUrl": [
@@ -1117,6 +2332,10 @@
       {
         "value": "2 months",
         "evidenceId": "check-duration-e66d451baa"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-3ab0c672f6"
       }
     ],
     "format": [

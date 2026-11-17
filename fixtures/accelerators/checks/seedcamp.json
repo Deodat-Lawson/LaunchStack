@@ -1,6 +1,6 @@
 {
   "programId": "seedcamp",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://seedcamp.com/",
     "https://seedcamp.com/views/2008-application-zeitgeist/",
@@ -16,7 +16,12 @@
     "https://seedcamp.com/views/can-you-beat-this-application-video-for/",
     "https://seedcamp.com/views/dmitry-koval-ceo-at-blockwise-on-blockchain-and-distributed-applications/",
     "https://seedcamp.com/views/dottxt-raises-11-9m-to-enable-llms-to-speak-the-language-of-every-application/",
-    "https://seedcamp.com/views/final-call-mini-seedcamp-prague-applications-close-midnight-wednesday-28th-september/"
+    "https://seedcamp.com/views/final-call-mini-seedcamp-prague-applications-close-midnight-wednesday-28th-september/",
+    "https://seedcamp.com/views/final-chance-of-getting-into-seedcamp-week-apply-to-mini-seedcamp-london/",
+    "https://seedcamp.com/views/is-your-startup-the-next-big-thing-you-have-a-few-days-left-to-apply/",
+    "https://seedcamp.com/views/last-chance-apply-to-sc-paris11/",
+    "https://seedcamp.com/views/last-chance-apply-to-seedcamp-week-london-now/",
+    "https://seedcamp.com/views/last-chance-to-apply-to-seedcamp-london/"
   ],
   "evidence": [
     {
@@ -34,10 +39,31 @@
       "page": "application"
     },
     {
+      "id": "check-announced-5cb40a68a9",
+      "url": "https://seedcamp.com/views/last-chance-to-apply-to-seedcamp-london/",
+      "title": "Seedcamp — application page",
+      "excerpt": "If so, be sure to get your team’s application submitted on time. Applications close at 11:59pm on the 8th January. For more information about our process, see here . Apply now!",
+      "page": "application"
+    },
+    {
       "id": "check-announced-9fa82403d3",
       "url": "https://seedcamp.com/views/final-call-mini-seedcamp-prague-applications-close-midnight-wednesday-28th-september/",
       "title": "Seedcamp — application page",
       "excerpt": "solving an important problem, and of course have a great product. Applications close midnight BST, September 28th . Related articles Mini Seedcamp Prague, October 20, 2011",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-aa5ba75be9",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-seedcamp-week-london-now/",
+      "title": "Seedcamp — application page",
+      "excerpt": "reaching Seedcamp network of individuals and organisations. Apply Applications close on the 12th of August (at 11.59pm). So, if you are sitting contemplating applying to",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-c710ef8199",
+      "url": "https://seedcamp.com/views/is-your-startup-the-next-big-thing-you-have-a-few-days-left-to-apply/",
+      "title": "Seedcamp — application page",
+      "excerpt": "a great product: apply to become the winner of Seedcamp Budapest. Applications close on 16 September at midnight GMT. For more information about the process, see here .",
       "page": "application"
     },
     {
@@ -97,6 +123,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-1e10fc06b3",
+      "url": "https://seedcamp.com/views/final-chance-of-getting-into-seedcamp-week-apply-to-mini-seedcamp-london/",
+      "title": "Seedcamp — application page",
+      "excerpt": "Our Companies → https://seedcamp.com/our-companies/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-2029e37502",
       "url": "https://seedcamp.com/views/applications-now-open-for-mini-seedcamp/",
       "title": "Seedcamp — application page",
@@ -115,6 +148,13 @@
       "url": "https://seedcamp.com/views/final-call-mini-seedcamp-prague-applications-close-midnight-wednesday-28th-september/",
       "title": "Seedcamp — application page",
       "excerpt": "Our Companies → https://seedcamp.com/our-companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-44985fcff5",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-seedcamp-week-london-now/",
+      "title": "Seedcamp — application page",
+      "excerpt": "Seedcamp family. → http://www.seedcamp.com/companies",
       "page": "application"
     },
     {
@@ -146,6 +186,20 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-73d575c597",
+      "url": "https://seedcamp.com/views/is-your-startup-the-next-big-thing-you-have-a-few-days-left-to-apply/",
+      "title": "Seedcamp — application page",
+      "excerpt": "Our Companies → https://seedcamp.com/our-companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-78cf8585e5",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-sc-paris11/",
+      "title": "Seedcamp — application page",
+      "excerpt": "Our Companies → https://seedcamp.com/our-companies/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-7f15113b86",
       "url": "https://seedcamp.com/views/applications-for-seedcamp-paris-now-open/",
       "title": "Seedcamp — application page",
@@ -162,6 +216,13 @@
     {
       "id": "check-portfolio-83b43e4802",
       "url": "https://seedcamp.com/views/apply-now-mini-seedcamp-belgrade/",
+      "title": "Seedcamp — application page",
+      "excerpt": "Our Companies → https://seedcamp.com/our-companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a694fe1a53",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-seedcamp-week-london-now/",
       "title": "Seedcamp — application page",
       "excerpt": "Our Companies → https://seedcamp.com/our-companies/",
       "page": "application"
@@ -209,6 +270,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-fe1daa0508",
+      "url": "https://seedcamp.com/views/last-chance-to-apply-to-seedcamp-london/",
+      "title": "Seedcamp — application page",
+      "excerpt": "Seedcamp family → http://www.seedcamp.com/companies",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-fe9f21254c",
       "url": "https://seedcamp.com/views/apply-now-mini-seedcamp-belgrade/",
       "title": "Seedcamp — application page",
@@ -216,10 +284,31 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-ffe1bc09ec",
+      "url": "https://seedcamp.com/views/last-chance-to-apply-to-seedcamp-london/",
+      "title": "Seedcamp — application page",
+      "excerpt": "Our Companies → https://seedcamp.com/our-companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0073b52099",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-seedcamp-week-london-now/",
+      "title": "Seedcamp — application page",
+      "excerpt": "apply to Seedcamp Week London → http://www.seedcamp.com/events/seedcamp-week-london-apply-now",
+      "page": "application"
+    },
+    {
       "id": "check-route-039420e04c",
       "url": "https://seedcamp.com/views/applications-now-open-for-mini-seedcamp/",
       "title": "Seedcamp — application page",
       "excerpt": "start your application today → http://seedcamp.com/pages/telaviv10",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0514de7508",
+      "url": "https://seedcamp.com/views/last-chance-to-apply-to-seedcamp-london/",
+      "title": "Seedcamp — application page",
+      "excerpt": "apply to Seedcamp London → http://apply.seedcamp.com/",
       "page": "application"
     },
     {
@@ -242,6 +331,27 @@
       "title": "Seedcamp — homepage",
       "excerpt": "https://seedcamp.com",
       "page": "details"
+    },
+    {
+      "id": "check-route-240978fb35",
+      "url": "https://seedcamp.com/views/is-your-startup-the-next-big-thing-you-have-a-few-days-left-to-apply/",
+      "title": "Seedcamp — application page",
+      "excerpt": "apply → http://apply.seedcamp.com/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2e6fff1c85",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-sc-paris11/",
+      "title": "Seedcamp — application page",
+      "excerpt": "apply to Mini Seedcamp Paris → http://www.seedcamp.com/events/paris",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4b2d3c2339",
+      "url": "https://seedcamp.com/views/last-chance-to-apply-to-seedcamp-london/",
+      "title": "Seedcamp — application page",
+      "excerpt": "Applications → http://apply.seedcamp.com/",
+      "page": "application"
     },
     {
       "id": "check-route-5f6857fd6f",
@@ -272,10 +382,24 @@
       "page": "application"
     },
     {
+      "id": "check-route-79dd9870c0",
+      "url": "https://seedcamp.com/views/last-chance-to-apply-to-seedcamp-london/",
+      "title": "Seedcamp — application page",
+      "excerpt": "Apply now! → http://www.seedcamp.com/application-guide",
+      "page": "application"
+    },
+    {
       "id": "check-route-7c3c843edd",
       "url": "https://seedcamp.com/views/final-call-mini-seedcamp-prague-applications-close-midnight-wednesday-28th-september/",
       "title": "Seedcamp — application page",
       "excerpt": "Michal Blaha → https://seedcamp.com/views/final-call-mini-seedcamp-prague-applications-close-midnight-wednesday-28th-september/linkedin.com/in/michalb",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7fe92f6ad2",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-seedcamp-week-london-now/",
+      "title": "Seedcamp — application page",
+      "excerpt": "Applications → http://www.seedcamp.com/events/seedcamp-week-london-apply-now",
       "page": "application"
     },
     {
@@ -300,6 +424,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-a633f1f932",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-sc-paris11/",
+      "title": "Seedcamp — application page",
+      "excerpt": "Apply to Mini Seedcamp Paris 6 December → http://www.seedcamp.com/2011/10/paris.html",
+      "page": "application"
+    },
+    {
       "id": "check-route-cf5b30cbbd",
       "url": "https://seedcamp.com/views/final-call-mini-seedcamp-prague-applications-close-midnight-wednesday-28th-september/",
       "title": "Seedcamp — application page",
@@ -314,10 +445,24 @@
       "page": "application"
     },
     {
+      "id": "check-route-e749df2793",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-sc-paris11/",
+      "title": "Seedcamp — application page",
+      "excerpt": "Applications → http://www.seedcamp.com/events/paris",
+      "page": "application"
+    },
+    {
       "id": "check-route-ee0c924032",
       "url": "https://seedcamp.com/views/applications-for-seedcamp-paris-now-open/",
       "title": "Seedcamp — application page",
       "excerpt": "Seedcamp Paris → http://www.seedcamp.com/events/seedcamp-paris-3rd-december-apply-now",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f71c952914",
+      "url": "https://seedcamp.com/views/is-your-startup-the-next-big-thing-you-have-a-few-days-left-to-apply/",
+      "title": "Seedcamp — application page",
+      "excerpt": "Peter Záboji → https://seedcamp.com/views/is-your-startup-the-next-big-thing-you-have-a-few-days-left-to-apply/ch.linkedin.com/in/zaboji",
       "page": "application"
     },
     {
@@ -342,10 +487,24 @@
       "page": "application"
     },
     {
+      "id": "check-status-861292dddd",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-sc-paris11/",
+      "title": "Seedcamp — application page",
+      "excerpt": "new tools? Answer yes to any of these questions and you should definitely apply to Mini Seedcamp Paris ! Applications are open until midnight Wednesday 16th November so make sure you don’t miss out. We look forward to seeing you in",
+      "page": "application"
+    },
+    {
       "id": "check-status-db70c81e5b",
       "url": "https://seedcamp.com/views/apply-now-mini-seedcamp-belgrade/",
       "title": "Seedcamp — application page",
       "excerpt": "to meeting investors, peers, advertise APIs and jobs. If you’re not already on there you really should be! Applications are now closed. Keep up to date with all things Seedcamp Unrivalled network • Unfiltered advice • Unwavering support •",
+      "page": "application"
+    },
+    {
+      "id": "check-status-f7ff2ee47e",
+      "url": "https://seedcamp.com/views/final-chance-of-getting-into-seedcamp-week-apply-to-mini-seedcamp-london/",
+      "title": "Seedcamp — application page",
+      "excerpt": "from Covestor Rhys Howell from Social Medium If you have what it takes and want to be part of the action – applications are open until midnight Sunday 24th July. Make sure you let us know about your company, the current progress and",
       "page": "application"
     }
   ],
@@ -381,10 +540,52 @@
       "excerpt": "Applications for Seedcamp Paris Now Open - Seedcamp By Your Side from Day One × Our Companies Our Team Seedcamp Nation Talent News & Views News Applications for Seedcamp Paris Now Open 12.10.2012 Deutsch: Paris: Eiffelturm und Marsfeld (Photo credit: Wikipedia) Our final Seedcamp of the year traditionally takes place in Paris to coincide with the fantastic LeWeb . This week in Paris is always a key date in most startups’ and investors’ calendars, so there’s no better time to meet great people in town. This year, Seedcamp Paris is taking place on Monday 3rd December. Once again, Orrick are kindly hosting us in their beautiful office and we’re proud to have the support of S oftLayer and Yammer as our Event Sponsors. Last year in Paris, we met great startups like Bluefields and Sush.io , who are now part of the Seedcamp Family . Over the last year they have made immense progress. We also have some of our stars like Teleportd , Stupeflix , Kwaga , Sparkeo and Psykosoft originating from France, so there is no doubt that the local talent is strong! As always at Seedcamp, we’re on the look out for hugely ambitious founders who think big and whose aim is to disrupt the status quo with their cutting edge technologies. Take a look at our ever-expanding Seedcamp Family to get a feel for what excites us. Whether it’s fashion focused too photo sharing apps, making exchange rate savings or"
     },
     {
+      "id": "check-page-8a36489ccf",
+      "url": "https://seedcamp.com/views/applications-for-seedcamp-paris-now-open/",
+      "page": "application",
+      "excerpt": "We will help you take your company to the next level – giving you access to funding , an immense network of relevant mentors, exposure to both the European and US investor community, and of course the Seedcamp Team itself."
+    },
+    {
+      "id": "check-page-a29cd564b5",
+      "url": "https://seedcamp.com/views/applications-for-seedcamp-paris-now-open/",
+      "page": "application",
+      "excerpt": "During Seedcamp Paris , 20 of the most promising startups will join us to present, network and be mentored by over of 80 of our triple A class mentors."
+    },
+    {
+      "id": "check-page-b743d9466f",
+      "url": "https://seedcamp.com/views/applications-for-seedcamp-paris-now-open/",
+      "page": "application",
+      "excerpt": "Following on from Seedcamp Paris, we’ll make the most promising teams our standard offer, ( €50k for 8-10% ) to join the Seedcamp Family."
+    },
+    {
+      "id": "check-page-834715bfce",
+      "url": "https://seedcamp.com/views/applications-for-seedcamp-paris-now-open/",
+      "page": "application",
+      "excerpt": "You’ll then join our year long programme consisting of 3 month office space at Campus London , monthly learning days, a 73 strong peer network to bounce ideas off and gain invaluable insights from."
+    },
+    {
+      "id": "check-page-ab04a5c2e8",
+      "url": "https://seedcamp.com/views/applications-for-seedcamp-paris-now-open/",
+      "page": "application",
+      "excerpt": "Access to our great network of over 2,000 mentors across Europe and the US, and to top it off, a Founders’ Pack worth more than €150k containing offers such as $25k AWS credits , access to Microsoft Bizspark , the Softlayer Catalyst Program , and many more."
+    },
+    {
+      "id": "check-page-736cd3d553",
+      "url": "https://seedcamp.com/views/applications-for-seedcamp-paris-now-open/",
+      "page": "application",
+      "excerpt": "We can’t wait to see all the great entrepreneurial talent from across Europe and beyond."
+    },
+    {
       "id": "check-page-15dbca5300",
       "url": "https://seedcamp.com/views/applications-now-open-for-mini-seedcamp/",
       "page": "application",
       "excerpt": "Applications now Open for Mini SeedCamp Tel Aviv! - Seedcamp By Your Side from Day One × Our Companies Our Team Seedcamp Nation Talent News & Views News Applications now Open for Mini SeedCamp Tel Aviv! 30.03.2010 SeedCamp will be returning to Tel Aviv on 6th May, to see more startups from the heart of the Israeli tech ecosystem. With the support of our partners the.co.ils and our supercool venue, The Afeka College of Engineering , it should be the best Mini Seedcamp Tel Aviv yet! Mini Seedcamp Tel Aviv will see 20 of the region’s best seed stage tech start-ups meet with around 50 experienced entrepreneurs, investors, and developers from the region and all over Europe to participate in a day of intense mentoring, panel discussions and presentations. Check out a great summary of last years event which was featured in Tech Aviv here ! Last year mentors included Gigi Levi, CEO of 888.com , Gilad Japhet, CEO of MyHeritage , Tal Barnoach , Chair of Beinsync, Avichay Nissenbaum , CEO of Yedda and over 50+ other mentors. This year we are looking forward to welcoming another all star group of mentors – so watch this space. Since Seedcamp Week , Tel Aviv based finalists YubiTech have rapidly progressed and recently securing funding from Granot Ventures. We hope to accelerate the success of more teams from the region through the connections built during the Mini Seedcamp. Applications"
+    },
+    {
+      "id": "check-page-c88a843445",
+      "url": "https://seedcamp.com/views/applications-now-open-for-mini-seedcamp/",
+      "page": "application",
+      "excerpt": "Applications are not restricted to Israel so we strongly urge teams from the surrounding region and all over Europe to apply."
     },
     {
       "id": "check-page-8e08d94eda",
@@ -393,10 +594,40 @@
       "excerpt": "Applications to Seedcamp Week just closed - What did we see? - Seedcamp By Your Side from Day One × Our Companies Our Team Seedcamp Nation Talent News & Views News Applications to Seedcamp Week just closed - What did we see? 25.08.2009 48 days later and applications for Seedcamp Week 2009 are closed. We believe the startups submitted represent a cross section of what is emerging from EMEA. So what have we found? Quantity is the most obvious measure, but one we don’t like to shout about as it doesn’t mean much on its own, plus we don’t like to boast. That said we are happy to announce that application numbers are similar to last year’s – downturn, what downturn? Considering TechCrunch’s graph of doom (see below), which shows a fall in startups founded, bottoming out around the new year – we think this is remarkably good news. Additionally, applicants came from over 40 countries highlighting that entrepreneurs are very active all across Europe and that teams want to startup here. The graph of applications over time resembles the famous hockey stick curve – almost half of the submissions were received on the last day! Last Sunday must have been a busy day for startups over Europe… There are many other trends we want to extract from the application data, such as; where are the teams from? what tools are they using? and what are their business models? When compared to previous"
     },
     {
+      "id": "check-page-d6cd8a9af4",
+      "url": "https://seedcamp.com/views/applications-to-seedcamp-week-just/",
+      "page": "application",
+      "excerpt": "When compared to previous years applications this could cast an interesting light on the state of and trends in European technology startups."
+    },
+    {
+      "id": "check-page-c81b234ad5",
+      "url": "https://seedcamp.com/views/applications-to-seedcamp-week-just/",
+      "page": "application",
+      "excerpt": "Seedcamp has now backed 14 companies , and over the past year we have got to know some cool nascent founders from all over Europe."
+    },
+    {
       "id": "check-page-707855bfee",
       "url": "https://seedcamp.com/views/applications-to-seedcamp-week-london-now-open/",
       "page": "application",
       "excerpt": "Applications to Seedcamp Week London now open - Seedcamp By Your Side from Day One × Our Companies Our Team Seedcamp Nation Talent News & Views News Applications to Seedcamp Week London now open 22.11.2013 Are you a founder? Do you have early traction? Are you ready to meet over 300 of our best mentors? If yes make sure to apply to our first Seedcamp Week London of 2014. What happens at Seedcamp Week London? Seedcamp Week London will take place at our home in the heart of Shoreditch at Campus during the first week of February. This is where we bring together 20 of Europe’s absolute best startups for a week long of intense mentoring. You’ll be able to glean knowledge from experienced founders, discuss product, design and scaling issues with our product mentors. Test your ‘go to market’ and pricing strategy with our marketing mentors as well as meet our corporate partners, who are working with us and our companies to bring their solutions to a wider audience. We always end the week with a bang – on Friday 7th February we host over 80 of Europe’s top angels and investors for our Investor Day. If you’re in doubt read about the experience from Anirvan – who attended the same event during September. What does joining the Seedcamp Family mean? Make sure to read about our deal structure here . Besides financial investment you can expect a strong peer-2-peer network – from the Seedcamp"
+    },
+    {
+      "id": "check-page-417463b8d0",
+      "url": "https://seedcamp.com/views/applications-to-seedcamp-week-london-now-open/",
+      "page": "application",
+      "excerpt": "You’ll benefit from some great offers in our Founders Pack, like sponsored Amazon hosting to the tune of 25.000, automatic enrollment in Bizspark Plus , and countless offers from legal support to discounts and free services from SaaS and infrastructure companies."
+    },
+    {
+      "id": "check-page-a4f31bc9a9",
+      "url": "https://seedcamp.com/views/applications-to-seedcamp-week-london-now-open/",
+      "page": "application",
+      "excerpt": "Take a look at our resources covering many issues startups face – this will give you a glimpse of the type of topics covered as part of Seedcamp Academy , our monthly program we run at Campus in London."
+    },
+    {
+      "id": "check-page-8512a2da61",
+      "url": "https://seedcamp.com/views/applications-to-seedcamp-week-london-now-open/",
+      "page": "application",
+      "excerpt": "We want to find new startups from across Europe to be a part of Seedcamp, and are keen to find the best of the best."
     },
     {
       "id": "check-page-db84ec9de2",
@@ -405,16 +636,94 @@
       "excerpt": "Apply Now - Mini Seedcamp Belgrade - Seedcamp By Your Side from Day One × Our Companies Our Team Seedcamp Nation Talent News & Views News Apply Now - Mini Seedcamp Belgrade 21.03.2013 Mini Seedcamp Belgrade will be our inaugural event taking place in Serbia and our first Mini Seedcamp of 2013 so we are very excited! We’ve watched the ecosystem grow fast over the years having attended various events there. Local Partners On the 5th of April, Mini Seedcamp Belgrade is taking place at a spectacular location, the Royal Palace , a mansion part of the Royal Compound. We have a super strong local team on the ground helping us make this happen, huge thank you to Vukasin Stojkov and his team at SEE ICT and our media partner start.it for all their hard work. Schedule The half-day event is action packed and a concentrated version of our previous Seedcamp events. It will showcase some of the best emerging startups from the region, each of which will present to a panel and receive immediate feedback. The schedule also includes a masterclass by Carlos Espinal , a panel discussion and plenty of networking allowing you to connect with other key figures in web technology from Serbia and further afield. Who should apply? Local and regional startups who are seeking exposure, advice, and want to increase their network, this is the event for you. It’s an opportunity to gain feedback on your"
     },
     {
+      "id": "check-page-f7e725a84b",
+      "url": "https://seedcamp.com/views/apply-now-mini-seedcamp-belgrade/",
+      "page": "application",
+      "excerpt": "We’ve stepped up our activities this year and aim to host Mini Seedcamp events in more than 20 cities primarily across Europe."
+    },
+    {
+      "id": "check-page-d4d721089a",
+      "url": "https://seedcamp.com/views/apply-now-mini-seedcamp-belgrade/",
+      "page": "application",
+      "excerpt": "It contains offers from corporates including AWS , Google and Bitly ."
+    },
+    {
+      "id": "check-page-fbc1fe697d",
+      "url": "https://seedcamp.com/views/apply-now-mini-seedcamp-belgrade/",
+      "page": "application",
+      "excerpt": "It’s monetary value exceeds €50k and is crucial for helping early stage bootstrapped teams grow."
+    },
+    {
       "id": "check-page-93b328bf10",
       "url": "https://seedcamp.com/views/apply-to-seedcamp-week-berlin-may-2014/",
       "page": "application",
       "excerpt": "Apply to Seedcamp Week Berlin - May 2014 - Seedcamp By Your Side from Day One × Our Companies Our Team Seedcamp Nation Talent News & Views News Apply to Seedcamp Week Berlin - May 2014 29.05.2014 The time has come for us to pack our bags once again and head to the vibrant, startup-rich city of Berlin. With its hipster cafes, bolstering co-working spaces like The Factory and Microsoft Ventures amongst many others, and a myriad of brilliant software engineers, it’s no surprise that this great city attracts some of Europe’s best Entrepreneurial talent. We’re looking forward to meeting 20 of Europe’s hottest startups from 12-14 May. The startups can expect to meet and spend quality time being mentored by the likes of: Alice Regester – 33Seconds Asaf Horesh – Greylock Partners Chris Chabot – Twitter David Nöel – Soundcloud Erik Olofsson – Creandum Jaka Levstek – D.Labs Jens Dissmann – Nokia John Henderson – White Star Capital Max Niederhofter – Sunstone Capital Paula Marttila – Digital Product and Business Developer Peter Reid – Entertainment Insights Philipp Moehring – AngelList Robert Moffat – Balderton Capital Sitar Teli – Connect Ventures Tobias Schirmer – BDMI In addition to extensive mentoring, this is one of only four events where we select the next members to join the Seedcamp Family. We are already 100+ strong and our teams have gone on to raise over $170m follow-on"
     },
     {
+      "id": "check-page-9320d9e5ba",
+      "url": "https://seedcamp.com/views/apply-to-seedcamp-week-berlin-may-2014/",
+      "page": "application",
+      "excerpt": "If you’re a founder with global ambitions and want to be a part of this epic journey, make sure to submit your application to Seedcamp Week Berlin here by 20th April ."
+    },
+    {
+      "id": "check-page-c4bca73050",
+      "url": "https://seedcamp.com/views/apply-to-seedcamp-week-berlin-may-2014/",
+      "page": "application",
+      "excerpt": "We are Europe’s most active seed investor and, having worked with 118 startups from 36 countries since 2007, we know the hurdles that founders face well."
+    },
+    {
+      "id": "check-page-db50e1a839",
+      "url": "https://seedcamp.com/views/apply-to-seedcamp-week-berlin-may-2014/",
+      "page": "application",
+      "excerpt": "We’ve designed a program that allows you to focus on building your business whilst providing you with the necessary support, introductions, advice and mentorship as and when needed."
+    },
+    {
+      "id": "check-page-e1226bdb7f",
+      "url": "https://seedcamp.com/views/apply-to-seedcamp-week-berlin-may-2014/",
+      "page": "application",
+      "excerpt": "In addition to Seedcamp Academy, our teams benefit from office space at the heartbeat of Silicon Roundabout, the rich resources and connections that being a resident of Campus provide, and a Founder’s Pack worth $150k with offers from Paypal, AWS, Google, and many others."
+    },
+    {
+      "id": "check-page-abf710243a",
+      "url": "https://seedcamp.com/views/apply-to-seedcamp-week-berlin-may-2014/",
+      "page": "application",
+      "excerpt": "Bridges to the US As part of the Seedcamp Academy program, twice a year we set sail for the US to meet over 350+ of our contacts in New York, Boston, San Francisco and The Valley."
+    },
+    {
+      "id": "check-page-db2e92b4d6",
+      "url": "https://seedcamp.com/views/apply-to-seedcamp-week-berlin-may-2014/",
+      "page": "application",
+      "excerpt": "We hope to see you in Berlin!"
+    },
+    {
       "id": "check-page-1b0a23a367",
       "url": "https://seedcamp.com/views/back-in-the-big-apple-apply-to-seedcamp-new-york-by-sunday/",
       "page": "application",
       "excerpt": "Back in the Big Apple - apply to Seedcamp New York by Sunday! - Seedcamp By Your Side from Day One × Our Companies Our Team Seedcamp Nation Talent News & Views News Back in the Big Apple - apply to Seedcamp New York by Sunday! 14.06.2012 Last year, we held our first Seedcamp New York proper. The idea is simple, and close to the normal way we run Seedcamp events: We aim to bring the best startups to expose them to the best local entrepreneurs, investors, and mentors. The main difference lies in the fact that we focus on bringing European startups to New York, thus exposing both sides to new contacts, people, and views on the startup ecosystem. Last year, we have seen an incredible number of great applications wanting to make the step over the big pond, and were impressed by the quality of the companies that came to the event. So impressed, in fact, that today 6 of the 20 teams of Seedcamp New York 2011 are Seedcamp companies! Some of these companies moved to New York City, to base themselves in the media and advertising hub that it is. They are in good company: New York is where a lot of Seedcamp companies take their first steps into the american market, like ERPLY and Zemanta have shown. This is not only due to the proximity to good old Europe, but also due to the dense network of mentors and investors that we have managed to build over the past years. Read what Campalyst"
+    },
+    {
+      "id": "check-page-e68b559e31",
+      "url": "https://seedcamp.com/views/back-in-the-big-apple-apply-to-seedcamp-new-york-by-sunday/",
+      "page": "application",
+      "excerpt": "Read what Campalyst co-founder Dalia has to say about the move to New York – not to forget about checkthis.com, who just recently raised an impressive funding round from top notch New York investors."
+    },
+    {
+      "id": "check-page-145cb69c43",
+      "url": "https://seedcamp.com/views/back-in-the-big-apple-apply-to-seedcamp-new-york-by-sunday/",
+      "page": "application",
+      "excerpt": "So – are you an entrepreneur in Europe, with eyes set on the US market, ready to take the next step to expand and build your company?"
+    },
+    {
+      "id": "check-page-af98380c37",
+      "url": "https://seedcamp.com/views/back-in-the-big-apple-apply-to-seedcamp-new-york-by-sunday/",
+      "page": "application",
+      "excerpt": "If you are, go ahead and apply to Seedcamp New York before midnight on Sunday and make sure you show us why your team and company in particular deserves a spot in one of the most coveted Seedcamp events of the year."
+    },
+    {
+      "id": "check-page-75bd442de2",
+      "url": "https://seedcamp.com/views/back-in-the-big-apple-apply-to-seedcamp-new-york-by-sunday/",
+      "page": "application",
+      "excerpt": "Besides the obvious chance of wowing us with your product, pitch, and perseverance to convince us to invest in your team and make you part of the Seedcamp network, you will get access to some of the best technology and startup entrepreneurs, mentors, investors, and operators in New York."
     },
     {
       "id": "check-page-53725479c6",
@@ -435,10 +744,160 @@
       "excerpt": "dottxt raises $11.9M to enable LLMs to speak the language of every application - Seedcamp By Your Side from Day One × Our Companies Our Team Seedcamp Nation Talent News & Views News dottxt raises $11.9M to enable LLMs to speak the language of every application 17.10.2024 Despite increased adoption of LLMs in entreprises, AI models still cannot be easily used in production environments. They are unable to generate text that respects both human-machine and machine-machine language rules, and thus they require human intervention. We are excited to partner with Dottxt , an ecosystem and platform for interacting with large language models (LLMs), designed to deliver the most accurate and high-performing structured language generation available. Using dottxt, LLMs can output language with vastly enhanced usability through customized, structured generation. Co-founders Rémi Louf , Dan Gerlanc , and Brandon Willard have worked together in various capacities for the past four years. During their last stint at New York-based AI firm Normal Computing, they started encountering issues with GPT-4, specifically extracting data and information in a systemized order to bypass vast amounts of manual work. While solving this issue the team invented an ingenious solution rooted in their unusual background in statistical modelling and compiler technology. A year later, their open source library,"
     },
     {
+      "id": "check-page-c2f34dc19f",
+      "url": "https://seedcamp.com/views/dottxt-raises-11-9m-to-enable-llms-to-speak-the-language-of-every-application/",
+      "page": "application",
+      "excerpt": "Artificial Intelligence giants such as OpenAI and Cohere are among the early users of the platform. dottxt’s mission is simple: make AI programmable so its potential meets the reliability demands of real-world systems ."
+    },
+    {
+      "id": "check-page-7b86b08dbe",
+      "url": "https://seedcamp.com/views/dottxt-raises-11-9m-to-enable-llms-to-speak-the-language-of-every-application/",
+      "page": "application",
+      "excerpt": "We are shaping a future where generative AI delivers on the kind of automation we were promised.” On why we partnered with dottxt, our Partner Sia Houchangnia , comments: “ LLMs already have the potential to unlock tremendous value, but their lack of reliability has been the key barrier to wider adoption. dottxt solves this problem."
+    },
+    {
+      "id": "check-page-df25b39716",
+      "url": "https://seedcamp.com/views/dottxt-raises-11-9m-to-enable-llms-to-speak-the-language-of-every-application/",
+      "page": "application",
+      "excerpt": "We are proud to be day-one backers of the company and are convinced that dottxt has the potential to become the default framework for LLM programming .” We believed in the team from day one, writing a cheque in their $3.2 million Pre-Seed round, completed in December 2023 and led by Elaia."
+    },
+    {
+      "id": "check-page-1542dc4e43",
+      "url": "https://seedcamp.com/views/dottxt-raises-11-9m-to-enable-llms-to-speak-the-language-of-every-application/",
+      "page": "application",
+      "excerpt": "Dottxt’s fast growth attracted investors’ attention and the team closed an $8.7 million Seed round led by EQT Ventures, in August 2024 in which we also participated."
+    },
+    {
       "id": "check-page-5d8e700121",
       "url": "https://seedcamp.com/views/final-call-mini-seedcamp-prague-applications-close-midnight-wednesday-28th-september/",
       "page": "application",
       "excerpt": "Final Call - Mini Seedcamp Prague applications close midnight Wednesday 28th September - Seedcamp By Your Side from Day One × Our Companies Our Team Seedcamp Nation Talent News & Views News Final Call - Mini Seedcamp Prague applications close midnight Wednesday 28th September 27.09.2011 Image via Wikipedia Seedcamp Prague is our first Mini Seedcamp to take place after Seedcamp Week and we’re looking forward to see some new faces in October. This year the strength and quality of applications has increased with each event we’ve hosted so we had high expectations for Prague. Perhaps it’s due to startups not been able to apply to a Mini Seedcamp since August or maybe it’s down to the location? Either way we’ve been blown away by the demand, so far we’ve received more application for Mini Seedcamp Prague than for almost all other events this year. If this is anything to go by Mini Seedcamp Prague is going to rock for sure! Mini Seedcamp Prague is taking place on the 20th October and we have a great list of mentors joining us who are looking forward to meeting the top 20 selected teams. To give you a small teaser as to who could be mentoring you here are some of the mentors joining us: Sitar Teli , Doughty Hanson Tobias Schirmer, Bertelsmann Digital Media Investments Dale Huxford, Orrick Ondrej Bartos, Credo Ventures Michal Pechoucek, Cognitive Security Klaus Konrad, Intel Capital"
+    },
+    {
+      "id": "check-page-f9be9e28b6",
+      "url": "https://seedcamp.com/views/final-chance-of-getting-into-seedcamp-week-apply-to-mini-seedcamp-london/",
+      "page": "application",
+      "excerpt": "Final chance of getting into Seedcamp Week - Apply to Mini Seedcamp London until Sunday 24th - Seedcamp By Your Side from Day One × Our Companies Our Team Seedcamp Nation Talent News & Views News Final chance of getting into Seedcamp Week - Apply to Mini Seedcamp London until Sunday 24th 21.07.2011 Image via Wikipedia We love hosting Mini Seedcamp events in great cities across Europe, and Seedcamp Ljubljana was a full success last week. However, we’re always excited to hold our (now biannual) Seedcamp London – after all this is home for us and many of our investors and mentors. The upcoming Mini Seedcamp London on August 11 will be the last opportunity for companies to become a fully-fledged member of the Seedcamp family and as a result, participate in Seedcamp Week 2011. The preparations for Seedcamp Week have started and we excited already for the largest Seedcamp event ever. If further excitement is required, it definitely comes from looking at a spectacular list of mentors who are geared up and ready to spend the day with the selected top teams. Here is a small teaser of who will be present: Best Tech Companies Obi Felten from Google Christian Hernandez Gallardo from Facebook Anthony Hicks from Paypal Bindi Karia from Microsoft Leading Investors Saul Klein from Index Ventures Michael Rolph from Anthemis Harry Briggs from Balderton Capital Ivan Farneti from Doughty Hanson"
+    },
+    {
+      "id": "check-page-3522f4672d",
+      "url": "https://seedcamp.com/views/final-chance-of-getting-into-seedcamp-week-apply-to-mini-seedcamp-london/",
+      "page": "application",
+      "excerpt": "Related articles We’re back in Town – London, last Mini Seedcamp before SC Week (seedcamp.com) How has Seedcamp done?"
+    },
+    {
+      "id": "check-page-3dc4facb1e",
+      "url": "https://seedcamp.com/views/is-your-startup-the-next-big-thing-you-have-a-few-days-left-to-apply/",
+      "page": "application",
+      "excerpt": "Is your startup the next big thing? You have a few days left to apply! - Seedcamp By Your Side from Day One × Our Companies Our Team Seedcamp Nation Talent News & Views News Is your startup the next big thing? You have a few days left to apply! 13.09.2012 Taking a look back at our yearly investment cycle, which just ended, we are confident in claiming that it has been a fantastic year. The number of startups applying to Seedcamp events increased, the geographical diversity of our events and investments is high, amazing teams like Traity , Checkthis and Sayduck amongst others joined the family, as well as new funds , investors and mentors. With the biggest Seedcamp Week ever organised just around the corner, we are excited that next month we will start our new investment cycle with a fresh bang at Seedcamp Budapest . Not only it is the first Seedcamp to take place after our annual flagship event, but it is also the first time we are holding this day-long mentorship programme in Hungary. First time in Hungary Having explored the startup ecosystem in Central and Eastern Europe over the past four years in different locations, this time we are excited to be surveying one of the most entrepreneurial cities of the region. Impressed by Antavo ‘s thirst for success as well as the strong technical expertise of startups like Prezi , the applications received so far don’t prove us wrong"
+    },
+    {
+      "id": "check-page-b9e0566842",
+      "url": "https://seedcamp.com/views/is-your-startup-the-next-big-thing-you-have-a-few-days-left-to-apply/",
+      "page": "application",
+      "excerpt": "On 25 October, we have a great mix of local and international mentors joining us, who are looking forward to meeting the top 20 teams."
+    },
+    {
+      "id": "check-page-81e14dd0ea",
+      "url": "https://seedcamp.com/views/is-your-startup-the-next-big-thing-you-have-a-few-days-left-to-apply/",
+      "page": "application",
+      "excerpt": "EBRD Venture Capital Investment Programme is a dedicated €100 million capital pool investing in early and growth stage innovation and technology startups originating from Central Europe to Central Asia."
+    },
+    {
+      "id": "check-page-a1627a446c",
+      "url": "https://seedcamp.com/views/is-your-startup-the-next-big-thing-you-have-a-few-days-left-to-apply/",
+      "page": "application",
+      "excerpt": "It is a great fit for the teams we will be meeting in Budapest."
+    },
+    {
+      "id": "check-page-cd6efa8633",
+      "url": "https://seedcamp.com/views/is-your-startup-the-next-big-thing-you-have-a-few-days-left-to-apply/",
+      "page": "application",
+      "excerpt": "As well as EBRD, we’ve have been offered tremendous support from our local partner, the European Entrepreneurship Foundation (EEF)."
+    },
+    {
+      "id": "check-page-3fdd8653f7",
+      "url": "https://seedcamp.com/views/is-your-startup-the-next-big-thing-you-have-a-few-days-left-to-apply/",
+      "page": "application",
+      "excerpt": "Make sure you don’t miss it: articulate your company’s vision, show your progress and most importantly have a great product: apply to become the winner of Seedcamp Budapest."
+    },
+    {
+      "id": "check-page-0ee811bdcd",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-sc-paris11/",
+      "page": "application",
+      "excerpt": "Apply to Mini Seedcamp Paris - Deadline on Wednesday - Seedcamp By Your Side from Day One × Our Companies Our Team Seedcamp Nation Talent News & Views News Apply to Mini Seedcamp Paris - Deadline on Wednesday 14.11.2011 Image by joe holmes via Flickr On the 6th December we’re hosting the final Mini Seedcamp of 2011, and what better way to end the year than hosting Mini Seedcamp Paris in the same week as the brilliant Le Web ! Some great mentors will be in town, and many will be joining us. We’re also excited about teaming up with Le Camping to host a party during the evening courtesy of 360 Capital Partners . A great extension to the day event for networking informally with no doubt a well deserved drink in hand. Here is a selection of a few big names who will be mentoring some of Europe’s hottest new companies: Anil Hasjee , Ex-Google M&A Christoph Janz , Seedcamp investor and successful entrepreneur Christophe Maire , founder of Gate5 and angel investor Collette Ballou , founder of Ballou PR Francois Tison , Partner at 360 Capital Partners Jan Borgstädt, principal at BDMI Mark Esiri, partner at Venrex Capital Management Mike Sigal , founder and CEO of Guidewire Group Sean Park , founder of Anthemis Group Stefan Tirtey , partner at Doughty Hanson Technology Ventures Xavier Lazarus , partner at Elaia Partners Yossi Vardi , angel investor 2011 has been a great year for Seedcamp"
+    },
+    {
+      "id": "check-page-825311b869",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-sc-paris11/",
+      "page": "application",
+      "excerpt": "On top of that, lots of great new mentors have taken part in our events, new Mini Seedcamp locations , new sponsors and local partners have helped us make this our best year yet."
+    },
+    {
+      "id": "check-page-1ff2cdbbef",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-sc-paris11/",
+      "page": "application",
+      "excerpt": "We’re therefore very excited to end the year with a bang at Mini Seedcamp Paris ; we have over 70 incredible mentors, now we just need 20 awesome startups to complete the package."
+    },
+    {
+      "id": "check-page-d943c32a5a",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-sc-paris11/",
+      "page": "application",
+      "excerpt": "Answer yes to any of these questions and you should definitely apply to Mini Seedcamp Paris !"
+    },
+    {
+      "id": "check-page-838a290f88",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-sc-paris11/",
+      "page": "application",
+      "excerpt": "We look forward to seeing you in Paris!"
+    },
+    {
+      "id": "check-page-21633e5e11",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-seedcamp-week-london-now/",
+      "page": "application",
+      "excerpt": "Last chance, apply to Seedcamp Week London now - Seedcamp By Your Side from Day One × Our Companies Our Team Seedcamp Nation Talent News & Views News Last chance, apply to Seedcamp Week London now 07.08.2013 Seedcamp Week London The countdown is on! It’s only a few weeks until Seedcamp Week London commences during the 1st week of September. Applications are flowing in from all over the globe and we’re really looking forward to what will be a great event. For those unfamiliar with what a Seedcamp Week entails, it’s where entrepreneurs, startups, mentors, founders, investors and tech aficionados come together for five intense days. Masterclasses, mentoring and networking events show startups what Seedcamp has to offer and help us select the newest teams to join Seedcamp. Only a handful of startups from the hundreds who have applied will be invited to join us in London to compete for a chance to join the Seedcamp family. Besides receiving investment, winning teams will benefit from the full Seedcamp Program including office space at Google Campus , Seedcamp Academy, a USA road trip , Demo Days and the Founder Pack worth €150k. For more information on Seedcamp events or the process, check out reports from previous events , about & investment terms , and our Seedcamp Week overview . Who will I meet? Seedcamp Week brings together leading entrepreneurs, investors and experts from all"
+    },
+    {
+      "id": "check-page-c51d1b022f",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-seedcamp-week-london-now/",
+      "page": "application",
+      "excerpt": "Seedcamp Week brings together leading entrepreneurs, investors and experts from all over Europe."
+    },
+    {
+      "id": "check-page-83dcf8508d",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-seedcamp-week-london-now/",
+      "page": "application",
+      "excerpt": "At Seedcamp Week London you will meet inspiring mentors like: Joe Cohen , Brent Hoberman , Christian Hernandez , and David Noel ."
+    },
+    {
+      "id": "check-page-1a6e5a0ac0",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-seedcamp-week-london-now/",
+      "page": "application",
+      "excerpt": "Bring plenty of business cards – Seedcamp Week London offers a week full of networking opportunities for startups to meet the far reaching Seedcamp network of individuals and organisations."
+    },
+    {
+      "id": "check-page-05f0fa59ab",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-seedcamp-week-london-now/",
+      "page": "application",
+      "excerpt": "So, if you are sitting contemplating applying to Seedcamp Week London – remember this: you’ll always miss 100% of the shots you don’t take!"
+    },
+    {
+      "id": "check-page-bfa6b0858b",
+      "url": "https://seedcamp.com/views/last-chance-apply-to-seedcamp-week-london-now/",
+      "page": "application",
+      "excerpt": "If you have a fantastic startup be sure to apply to Seedcamp Week London ."
+    },
+    {
+      "id": "check-page-120fee0f50",
+      "url": "https://seedcamp.com/views/last-chance-to-apply-to-seedcamp-london/",
+      "page": "application",
+      "excerpt": "Last chance to apply to Seedcamp London! - Seedcamp By Your Side from Day One × Our Companies Our Team Seedcamp Nation Talent News & Views News Last chance to apply to Seedcamp London! 03.01.2013 We would like to wish you all a fantastic 2013 – hopefully you are all set and ready to grow your startup in the next year. If you’re an ambitious founder, what better way to kick off 2013 than to apply to Seedcamp London – and take the chance of joining the Seedcamp family to get your company to the next level. Seedcamp London Seedcamp London will be held on the 30th and 31st of January and will be bigger than ever and spread over two days. The first day will be full of mentoring sessions with Europe’s best entrepreneurs, product and design folks, and marketers. We already have a very impressive list of our best international mentors signed up to attend. The second day will be a Demo Day where new and existing Seedcamp companies will have the opportunity to Demo and present their progress to top investors . Why apply From the applicants, 20 of the most promising early stage tech startups will be selected to attend the event. The winners will be the first of 2013 to join the Seedcamp family and will benefit from our huge network, investment and the Founders’ Pack worth over €150K. This is also the last chance to join the Seedcamp family prior to our annual USA trip taking place mid"
+    },
+    {
+      "id": "check-page-859d8c7891",
+      "url": "https://seedcamp.com/views/last-chance-to-apply-to-seedcamp-london/",
+      "page": "application",
+      "excerpt": "This is also the last chance to join the Seedcamp family prior to our annual USA trip taking place mid February where you’ll be meeting key players in New York, Boston, San Francisco and Silicon Valley."
     }
   ],
   "findings": {
@@ -509,6 +968,10 @@
       {
         "value": "September",
         "evidenceId": "check-announced-07b1c38333"
+      },
+      {
+        "value": "January",
+        "evidenceId": "check-announced-5cb40a68a9"
       }
     ],
     "cohortStarts": [],

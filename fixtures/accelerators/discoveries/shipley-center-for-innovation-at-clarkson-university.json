@@ -1,28 +1,28 @@
 {
   "programId": "shipley-center-for-innovation-at-clarkson-university",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
-      "url": "https://www.clarkson.edu/academics/majors-minors",
-      "page": "details",
-      "anchor": "Find Your Program",
+      "url": "http://gradapp.clarkson.edu/apply/",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.clarkson.edu/academics/honors",
-      "page": "details",
-      "anchor": "Honors Program",
+      "url": "https://engage.clarkson.edu",
+      "page": "portfolio",
+      "anchor": "Alumni",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school",
-      "page": "details",
-      "anchor": "The Clarkson School: Early College Program",
-      "fetched": false,
+      "url": "https://undergrad.clarkson.edu/apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -43,17 +43,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.clarkson.edu/about/snell-awards",
+      "url": "https://www.clarkson.edu/about/clarkson-brand",
       "page": "details",
-      "anchor": "Bertrand H. Snell Awards",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.clarkson.edu/about/history",
-      "page": "details",
-      "anchor": "History",
+      "anchor": "The Clarkson Brand",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -67,9 +59,17 @@
       "origin": "official"
     },
     {
-      "url": "https://www.clarkson.edu/about/university-leadership",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
       "page": "details",
-      "anchor": "University Leadership",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/about/history",
+      "page": "details",
+      "anchor": "History",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -83,17 +83,33 @@
       "origin": "official"
     },
     {
-      "url": "https://www.clarkson.edu/about/visit-clarkson",
+      "url": "https://www.clarkson.edu/about/shared-community/non-discrimination",
       "page": "details",
-      "anchor": "Visit Clarkson",
+      "anchor": "Non-Discrimination",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.clarkson.edu/about/clarkson-brand",
+      "url": "https://www.clarkson.edu/about/shared-community/non-discrimination/faqs",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/about/snell-awards",
       "page": "details",
-      "anchor": "The Clarkson Brand",
+      "anchor": "Bertrand H. Snell Awards",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/about/university-leadership",
+      "page": "details",
+      "anchor": "University Leadership",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -107,17 +123,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.clarkson.edu/apply",
-      "page": "application",
-      "anchor": "Apply",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.clarkson.edu/about/shared-community/non-discrimination",
+      "url": "https://www.clarkson.edu/about/visit-clarkson",
       "page": "details",
-      "anchor": "Non-Discrimination",
+      "anchor": "Visit Clarkson",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -127,6 +135,150 @@
       "page": "details",
       "anchor": "Potsdam Campus",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/academics/honors",
+      "page": "details",
+      "anchor": "Honors Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/academics/honors/how-apply-clarkson-honors-program",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/academics/majors-minors",
+      "page": "details",
+      "anchor": "Find Your Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/stem-education/inspire-video-collection/inspire-faqs",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school",
+      "page": "details",
+      "anchor": "The Clarkson School: Early College Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student/clarkson-school-admissions-policy-and-procedures",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/admissions-aid/graduate/how-to-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/deposited-undergraduate-students-welcome/new-undergraduate-student-faqs",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/admissions-financial-aid/sas/faqs",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/apply",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/international-admissions-requirements",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/node/10568",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/node/10577",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

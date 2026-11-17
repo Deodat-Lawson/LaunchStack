@@ -1,5 +1,62 @@
 {
   "programId": "tech-ranch-austin",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
-  "pages": []
+  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "pages": [
+    {
+      "url": "http://techranchaustin.com/contact",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techranchaustin.com/aboutus/",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techranchaustin.com/global-bridges/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techranchaustin.com/programs/",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techranchaustin.com/programs/ventureoutfitter/",
+      "page": "details",
+      "anchor": "Accelerate your market entry to Texas.",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techranchaustin.com/programs/vra/",
+      "page": "details",
+      "anchor": "Access our Austin-based network and global ecosystem.",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techranchaustin.com/vra",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

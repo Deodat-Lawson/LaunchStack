@@ -1,43 +1,97 @@
 {
   "programId": "startup-portugal",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://startupportugal.com/",
-    "https://startupportugal.com/blog/applications-open-for-the-empreende-xxi-program/",
-    "https://startupportugal.com/blog/2020-12-4-from-investment-funds-to-drag-queens-key-moments-of-the-second-day-of-the-web-summit/",
-    "https://startupportugal.com/blog/2020-9-18-investment-in-portugal-as-a-growing-success-story/",
-    "https://startupportugal.com/blog/faqs-startupportugal-programs/",
-    "https://startupportugal.com/blog/ii-sustainable-blue-economy-investment-forum-2/",
-    "https://startupportugal.com/blog/portugal-at-web-summit-qatar-exploring-new-opportunities-for-startups-and-investment/",
-    "https://startupportugal.com/blog/sim-circuit-showcase-for-startups-investment-matching/",
     "https://startupportugal.com/categoria-programa/investment/",
     "https://startupportugal.com/programa/sim-startups-investment-matching/",
-    "https://startupportugal.com/pt/blog/ii-sustainable-blue-economy-investment-forum/",
-    "https://startupportugal.com/pt/blog/sim-circuit-showcase-for-startups-investment-matching-2/",
     "https://startupportugal.com/pt/programa/sim-startups-investment-matching/",
-    "https://startupportugal.com/blog/vouchers-updates/",
-    "https://startupportugal.com/about-us/"
+    "https://startupportugal.com/about-us/",
+    "https://startupportugal.com/acredicao-rni/",
+    "https://startupportugal.com/categoria-programa/ecosystem/",
+    "https://startupportugal.com/categoria-programa/entrepreneurs/",
+    "https://startupportugal.com/categoria-programa/ignite/",
+    "https://startupportugal.com/one-stop-shop/",
+    "https://startupportugal.com/programa/above-beyond-hangouts/",
+    "https://startupportugal.com/programa/business-abroad/",
+    "https://startupportugal.com/programa/empreende-xxi/",
+    "https://startupportugal.com/programa/road-2-web-summit/",
+    "https://startupportugal.com/programa/scale-up-now/",
+    "https://startupportugal.com/programa/sim-circuit/",
+    "https://startupportugal.com/programa/start-from-knowledge/",
+    "https://fundinggc.startupportugal.com/",
+    "https://startupportugal.com/programa/startup-visa/",
+    "https://startupportugal.com/programa/startup-voucher/"
   ],
   "evidence": [
     {
-      "id": "check-duration-5c0dbcb1ef",
-      "url": "https://startupportugal.com/blog/faqs-startupportugal-programs/",
-      "title": "Startup Portugal — terms page",
-      "excerpt": "is granted by the StartUp Voucher? Between 4 to 12 months, accordingly to the stage of development of the",
-      "page": "terms"
+      "id": "check-announced-553ea12330",
+      "url": "https://startupportugal.com/programa/start-from-knowledge/",
+      "title": "Startup Portugal — program page",
+      "excerpt": "Apply Do you want to bring your research closer to the market? Applications close on September 30th or until the number of applications received reaches the limit",
+      "page": "details"
     },
     {
-      "id": "check-email-9ff859d449",
-      "url": "https://startupportugal.com/blog/faqs-startupportugal-programs/",
-      "title": "Startup Portugal — terms page",
-      "excerpt": "refer to our website or contact us at the email address contact@startupportugal.com. More articles Web Summit Get ready for Web Summit 2026!",
-      "page": "terms"
+      "id": "check-duration-f2c1485ce6",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "title": "Startup Portugal — program page",
+      "excerpt": "entry. Applications are open! In short Duration 4 months, from September to December, 2026 Format FORMAT",
+      "page": "details"
+    },
+    {
+      "id": "check-format-059b6210d3",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "title": "Startup Portugal — program page",
+      "excerpt": "4 months, from September to December, 2026 Format FORMAT Hybrid, with on-site sessions in Oporto and online sessions.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3c172a75c1",
+      "url": "https://startupportugal.com/programa/business-abroad/",
+      "title": "Startup Portugal — program page",
+      "excerpt": "support, or contact for your project, via email or in-person or online meetings. Contact the One Stop Shop Porto Praça",
+      "page": "details"
+    },
+    {
+      "id": "check-format-785c299fac",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "title": "Startup Portugal — program page",
+      "excerpt": "suscipit consequat ex vitae fermentum. Is the program in-person or online? Lorem ipsum dolor sit amet, consectetur",
+      "page": "details"
     },
     {
       "id": "check-format-fc33e038c6",
       "url": "https://startupportugal.com/about-us/",
       "title": "Startup Portugal — program page",
       "excerpt": "support, or contact for your project, via email or in-person or online meetings. Contact the One Stop Shop Porto Praça",
+      "page": "details"
+    },
+    {
+      "id": "check-location-287d15af82",
+      "url": "https://startupportugal.com/programa/business-abroad/",
+      "title": "Startup Portugal — program page",
+      "excerpt": "FAQ’s Who is it intended for? Startups based in Portugal (with a Portuguese tax identification",
+      "page": "details"
+    },
+    {
+      "id": "check-location-6d360ca013",
+      "url": "https://startupportugal.com/programa/road-2-web-summit/",
+      "title": "Startup Portugal — program page",
+      "excerpt": "Summit to promote and support startups based in Portugal in their participation in the",
+      "page": "details"
+    },
+    {
+      "id": "check-location-8e8731b223",
+      "url": "https://startupportugal.com/categoria-programa/entrepreneurs/",
+      "title": "Startup Portugal — program page",
+      "excerpt": "Summit to promote and support startups based in Portugal in their participation in the",
+      "page": "details"
+    },
+    {
+      "id": "check-location-9d5070c3f5",
+      "url": "https://startupportugal.com/categoria-programa/ecosystem/",
+      "title": "Startup Portugal — program page",
+      "excerpt": "Summit to promote and support startups based in Portugal in their participation in the",
       "page": "details"
     },
     {
@@ -53,6 +107,20 @@
       "title": "Startup Portugal — homepage",
       "excerpt": "Homepage • Startup Portugal Jump to main content Investors & Decision Makers Discover",
       "page": "details"
+    },
+    {
+      "id": "check-route-f70185f1a2",
+      "url": "https://startupportugal.com/programa/start-from-knowledge/",
+      "title": "Startup Portugal — program page",
+      "excerpt": "Apply Do you want to bring your research closer to the market? Applications close on September 30th or until the number of applications received reaches the limit determined according to the budget allocation. → https://fundinggc.startupportugal.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-status-fc3c70bbc0",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "title": "Startup Portugal — program page",
+      "excerpt": "in deep tech, bringing together the tools, network, and expertise needed to accelerate market entry. Applications are open! In short Duration 4 months, from September to December, 2026 Format FORMAT Hybrid, with on-site sessions in",
+      "page": "details"
     }
   ],
   "pageQuotes": [
@@ -63,46 +131,76 @@
       "excerpt": "Homepage • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation"
     },
     {
-      "id": "check-page-acdc90fa3e",
-      "url": "https://startupportugal.com/blog/applications-open-for-the-empreende-xxi-program/",
-      "page": "application",
-      "excerpt": "Applications open for the Empreende XXI program • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal"
+      "id": "check-page-a9e0a1e9dc",
+      "url": "https://startupportugal.com/",
+      "page": "details",
+      "excerpt": "RNi – Portugal Incubators Find out more about the network Hangout #57 | November 25 Grab my seat now!"
     },
     {
-      "id": "check-page-ef3c612cdf",
-      "url": "https://startupportugal.com/blog/2020-12-4-from-investment-funds-to-drag-queens-key-moments-of-the-second-day-of-the-web-summit/",
-      "page": "terms",
-      "excerpt": "From investment funds to drag queens: key moments of the second day of the Web Summit • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal?"
+      "id": "check-page-7c717fde03",
+      "url": "https://startupportugal.com/",
+      "page": "details",
+      "excerpt": "RNi – Portugal Incubators Find out more about the network Portugal."
     },
     {
-      "id": "check-page-940d080b33",
-      "url": "https://startupportugal.com/blog/2020-9-18-investment-in-portugal-as-a-growing-success-story/",
-      "page": "terms",
-      "excerpt": "Investment in Portugal as a growing success story • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal"
+      "id": "check-page-0d4b6590d6",
+      "url": "https://startupportugal.com/",
+      "page": "details",
+      "excerpt": "Startup Portugal brings the public and private sectors together around one goal: making it simpler to start, grow and invest in a company in Portugal."
     },
     {
-      "id": "check-page-47e9c1cb77",
-      "url": "https://startupportugal.com/blog/faqs-startupportugal-programs/",
-      "page": "terms",
-      "excerpt": "Frequently asked questions about Startup Portugal’s programs • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi –"
+      "id": "check-page-ab43744179",
+      "url": "https://startupportugal.com/",
+      "page": "details",
+      "excerpt": "About us Why Portugal?"
     },
     {
-      "id": "check-page-88f8fa35f8",
-      "url": "https://startupportugal.com/blog/ii-sustainable-blue-economy-investment-forum-2/",
-      "page": "terms",
-      "excerpt": "II Sustainable Blue Economy Investment Forum 2023 • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal"
+      "id": "check-page-73b8a036eb",
+      "url": "https://startupportugal.com/",
+      "page": "details",
+      "excerpt": "PROGRAMS Ecosystem Above & Beyond Hangouts Organized by Startup Portugal every last Wednesday of the month, at Ferroviário (Lisbon), Edifício Transparente (Porto) and online (via Zoom), this Hangout for the entrepreneurial community aims to bring together all the players in the ecosystem to discuss the challenges facing the community."
     },
     {
-      "id": "check-page-00683f19a0",
-      "url": "https://startupportugal.com/blog/portugal-at-web-summit-qatar-exploring-new-opportunities-for-startups-and-investment/",
-      "page": "terms",
-      "excerpt": "Portugal at Web Summit Qatar: Exploring New Opportunities for Startups and Investment • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal?"
+      "id": "check-page-051bce8d78",
+      "url": "https://startupportugal.com/",
+      "page": "details",
+      "excerpt": "Ecosystem Road 2 Web Summit R2WS is a program designed in collaboration with Web Summit to promote and support startups based in Portugal in their participation in the technology event."
     },
     {
-      "id": "check-page-b28b3d8d03",
-      "url": "https://startupportugal.com/blog/sim-circuit-showcase-for-startups-investment-matching/",
-      "page": "terms",
-      "excerpt": "SIM Circuit – Showcase for Startups & Investment Matching • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi –"
+      "id": "check-page-d133970762",
+      "url": "https://startupportugal.com/",
+      "page": "details",
+      "excerpt": "Internationalization Business Abroad The Business Abroad program ensures and supports the presence of Portuguese startups at international technology conferences, thus creating a more significant impact on their representation outside of Portugal and allowing them to coordinate their communications with international ecosystems and local media."
+    },
+    {
+      "id": "check-page-10f7bd6f7c",
+      "url": "https://startupportugal.com/",
+      "page": "details",
+      "excerpt": "Ecosystem Tech Foundry Portugal – Deep Tech Edition Tech Foundry Portugal – Deep Tech Edition is a national program designed to help scientific and technological teams move from the laboratory phase to market validation."
+    },
+    {
+      "id": "check-page-44b936f957",
+      "url": "https://startupportugal.com/",
+      "page": "details",
+      "excerpt": "It offers four months of intensive acceleration and access to a global network of investors and deep tech experts."
+    },
+    {
+      "id": "check-page-24aad99bd9",
+      "url": "https://startupportugal.com/",
+      "page": "details",
+      "excerpt": "See all 5091 Startups in Portugal 688 Recognized startups 1.5% of total exports 470M Capital raised in 2025 5091 Startups in Portugal 688 Recognized startups 1.5% of total exports 470M Capital raised in 2025 Tell us where you are."
+    },
+    {
+      "id": "check-page-8a7d69f00f",
+      "url": "https://startupportugal.com/",
+      "page": "details",
+      "excerpt": "Find mentoring, acceleration and support to turn an idea or research project into a company."
+    },
+    {
+      "id": "check-page-d4acce6415",
+      "url": "https://startupportugal.com/",
+      "page": "details",
+      "excerpt": "Access funding, visas and programmes to grow your business in Portugal and abroad."
     },
     {
       "id": "check-page-0e8bf1b60c",
@@ -111,22 +209,40 @@
       "excerpt": "Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why"
     },
     {
+      "id": "check-page-9064885e94",
+      "url": "https://startupportugal.com/categoria-programa/investment/",
+      "page": "terms",
+      "excerpt": "Ecosystem Vouchers for Incubators and Accelerators The Vouchers for Incubators and Accelerators are financial support programs, ranging from €30,000 to €150,000, that aim to create conditions for incubators and accelerators to invest in developing their talent and technological capacity in order to better support the startups they incubate."
+    },
+    {
+      "id": "check-page-129368f400",
+      "url": "https://startupportugal.com/categoria-programa/investment/",
+      "page": "terms",
+      "excerpt": "Porto Praça Coronel Pacheco 15, 4050-453 Porto Lisboa Cais Português | Pavilhão de Portugal, 1990-221 Lisboa Resources RNi – Portugal Incubators Startup Recognition Events and Opportunities Blog Founder’s Guide Ecosystem Reports Why Portugal?"
+    },
+    {
+      "id": "check-page-c2fbf3682b",
+      "url": "https://startupportugal.com/categoria-programa/investment/",
+      "page": "terms",
+      "excerpt": "Memoranda of Understanding Programs Entrepreneurs Ignite Investment See all About us About us Our Team Reports & Accounts and Legal Information Media Kit Newsletter Portugal's Entrepreneurial Ecosystem Mapping Platform Contacts Privacy Policy Cookie Policy Made by V-A Studio © 2026 Startup Portugal."
+    },
+    {
       "id": "check-page-4ab35592c3",
       "url": "https://startupportugal.com/programa/sim-startups-investment-matching/",
       "page": "terms",
       "excerpt": "SIM = Startups & Investment Matching • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi"
     },
     {
-      "id": "check-page-a0af0c6fed",
-      "url": "https://startupportugal.com/pt/blog/ii-sustainable-blue-economy-investment-forum/",
+      "id": "check-page-36c12cfe9a",
+      "url": "https://startupportugal.com/programa/sim-startups-investment-matching/",
       "page": "terms",
-      "excerpt": "II Sustainable Blue Economy Investment Forum • Startup Portugal Jump to main content Empreendedores Reconhecimento de startups Above & Beyond Hangouts SIM = Startups & Investment Matching Guia do Fundador Relatórios do Ecossistema Why Portugal? Incubadoras Conhecer a RNI - Rede Nacional de Incubação Acreditar a minha incubadora #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Investidores & Decisores Descobrir o ecossistema nacional do empreendorismo Consultar relatórios do ecossistema Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programas Ignite Empreendedores Ecossistema Ver todos Recursos RNI - Rede Nacional de Incubadoras Oportunidades & Eventos Blog Guia do Fundador Relatórios do Ecossistema Why Portugal? Memorandos de Entendimento Sobre Quem somos Equipa Conselho estratégico Relatórios & Contas e Informação Legal Media Kit Ecossistema One Stop Shop PT EN Empreendedores Incubadoras Investidores & Decisores Programas Recursos Sobre Ecossistema One Stop Shop PT EN Empreendedores Reconhecimento de startups Above & Beyond Hangouts SIM = Startups & Investment Matching Guia do Fundador Relatórios do Ecossistema Why Portugal? Incubadoras Conhecer a RNI - Rede Nacional de Incubação Acreditar a minha incubadora #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts"
+      "excerpt": "Porto Praça Coronel Pacheco 15, 4050-453 Porto Lisboa Cais Português | Pavilhão de Portugal, 1990-221 Lisboa Resources RNi – Portugal Incubators Startup Recognition Events and Opportunities Blog Founder’s Guide Ecosystem Reports Why Portugal?"
     },
     {
-      "id": "check-page-1e9c948dad",
-      "url": "https://startupportugal.com/pt/blog/sim-circuit-showcase-for-startups-investment-matching-2/",
+      "id": "check-page-c9e821f33f",
+      "url": "https://startupportugal.com/programa/sim-startups-investment-matching/",
       "page": "terms",
-      "excerpt": "SIM Circuit – Showcase for Startups & Investment Matching • Startup Portugal Jump to main content Empreendedores Reconhecimento de startups Above & Beyond Hangouts SIM = Startups & Investment Matching Guia do Fundador Relatórios do Ecossistema Why Portugal? Incubadoras Conhecer a RNI - Rede Nacional de Incubação Acreditar a minha incubadora #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Investidores & Decisores Descobrir o ecossistema nacional do empreendorismo Consultar relatórios do ecossistema Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programas Ignite Empreendedores Ecossistema Ver todos Recursos RNI - Rede Nacional de Incubadoras Oportunidades & Eventos Blog Guia do Fundador Relatórios do Ecossistema Why Portugal? Memorandos de Entendimento Sobre Quem somos Equipa Conselho estratégico Relatórios & Contas e Informação Legal Media Kit Ecossistema One Stop Shop PT EN Empreendedores Incubadoras Investidores & Decisores Programas Recursos Sobre Ecossistema One Stop Shop PT EN Empreendedores Reconhecimento de startups Above & Beyond Hangouts SIM = Startups & Investment Matching Guia do Fundador Relatórios do Ecossistema Why Portugal? Incubadoras Conhecer a RNI - Rede Nacional de Incubação Acreditar a minha incubadora #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond"
+      "excerpt": "Memoranda of Understanding Programs Entrepreneurs Ignite Investment See all About us About us Our Team Reports & Accounts and Legal Information Media Kit Newsletter Portugal's Entrepreneurial Ecosystem Mapping Platform Contacts Privacy Policy Cookie Policy Made by V-A Studio © 2026 Startup Portugal."
     },
     {
       "id": "check-page-643e13928c",
@@ -135,44 +251,705 @@
       "excerpt": "SIM = Startups & Investment Matching • Startup Portugal Jump to main content Empreendedores Reconhecimento de startups Above & Beyond Hangouts SIM = Startups & Investment Matching Guia do Fundador Relatórios do Ecossistema Why Portugal? Incubadoras Conhecer a RNI - Rede Nacional de Incubação Acreditar a minha incubadora #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Investidores & Decisores Descobrir o ecossistema nacional do empreendorismo Consultar relatórios do ecossistema Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programas Ignite Empreendedores Ecossistema Ver todos Recursos RNI - Rede Nacional de Incubadoras Oportunidades & Eventos Blog Guia do Fundador Relatórios do Ecossistema Why Portugal? Memorandos de Entendimento Sobre Quem somos Equipa Conselho estratégico Relatórios & Contas e Informação Legal Media Kit Ecossistema One Stop Shop PT EN Empreendedores Incubadoras Investidores & Decisores Programas Recursos Sobre Ecossistema One Stop Shop PT EN Empreendedores Reconhecimento de startups Above & Beyond Hangouts SIM = Startups & Investment Matching Guia do Fundador Relatórios do Ecossistema Why Portugal? Incubadoras Conhecer a RNI - Rede Nacional de Incubação Acreditar a minha incubadora #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts"
     },
     {
-      "id": "check-page-e947071d84",
-      "url": "https://startupportugal.com/blog/vouchers-updates/",
-      "page": "batches",
-      "excerpt": "Vouchers Updates! • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation"
+      "id": "check-page-b481723863",
+      "url": "https://startupportugal.com/pt/programa/sim-startups-investment-matching/",
+      "page": "terms",
+      "excerpt": "Porto Praça Coronel Pacheco 15, 4050-453 Porto Lisboa Cais Português | Pavilhão de Portugal, 1990-221 Lisboa Programas Empreendedores Ignite Investimento Ver todos Recursos RNi - Rede Nacional de Incubadoras Reconhecimento de Startup e Scale Up Eventos & Oportunidades Blog Guia do Fundador Relatórios do Ecossistema Why Portugal?"
+    },
+    {
+      "id": "check-page-71beaea2b5",
+      "url": "https://startupportugal.com/pt/programa/sim-startups-investment-matching/",
+      "page": "terms",
+      "excerpt": "Memorandos de Entendimento Sobre nós Quem somos A nossa equipa Relatórios & Contas e Informação Legal Media Kit Subscrever Newsletter Plataforma de Mapeamento do Ecossistema Contactos Política de Privacidade Política de Cookies Made by V-A Studio © 2026 Startup Portugal."
     },
     {
       "id": "check-page-9d260dabb2",
       "url": "https://startupportugal.com/about-us/",
       "page": "details",
       "excerpt": "About us • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation"
+    },
+    {
+      "id": "check-page-dfaca58726",
+      "url": "https://startupportugal.com/about-us/",
+      "page": "details",
+      "excerpt": "For 10 years, we’ve connected founders, investors, incubators and policymakers."
+    },
+    {
+      "id": "check-page-6e73bdec01",
+      "url": "https://startupportugal.com/about-us/",
+      "page": "details",
+      "excerpt": "We are Portugal’s national reference for entrepreneurship."
+    },
+    {
+      "id": "check-page-87f423df78",
+      "url": "https://startupportugal.com/about-us/",
+      "page": "details",
+      "excerpt": "Since 2016, we’ve bridged the public and private sectors, connecting founders, investors, incubators, companies and policymakers to build a stronger, more cohesive and more international ecosystem."
+    },
+    {
+      "id": "check-page-47a8ab3eac",
+      "url": "https://startupportugal.com/about-us/",
+      "page": "details",
+      "excerpt": "What we do We support the Government in shaping and implementing public policy for entrepreneurship, and we promote Portuguese startups in Portugal and abroad."
+    },
+    {
+      "id": "check-page-5580623755",
+      "url": "https://startupportugal.com/about-us/",
+      "page": "details",
+      "excerpt": "Our work is organised around three pillars: Ignite : we support those taking their first steps, through programs such as Start from Knowledge, Empreende XXI and Tech Foundry Portugal, and through the National Incubator Network (RNi)."
+    },
+    {
+      "id": "check-page-78ab0a4753",
+      "url": "https://startupportugal.com/about-us/",
+      "page": "details",
+      "excerpt": "Support : we manage Startup and Scaleup status recognition, the One Stop Shop, and support instruments such as the StartUP Vouchers and the Incubator Vouchers."
+    },
+    {
+      "id": "check-page-7f3ab19cc8",
+      "url": "https://startupportugal.com/about-us/",
+      "page": "details",
+      "excerpt": "We work alongside the Ministry of Economy, IAPMEI, ANI, AICEP, Portugal Ventures and Banco Português de Fomento."
+    },
+    {
+      "id": "check-page-198582e6cd",
+      "url": "https://startupportugal.com/about-us/",
+      "page": "details",
+      "excerpt": "We are a founding member of ESNA (European Startup Nations Alliance) and Startups for Europe."
+    },
+    {
+      "id": "check-page-ee931c3378",
+      "url": "https://startupportugal.com/about-us/",
+      "page": "details",
+      "excerpt": "Startup Portugal is a public-interest organisation, funded through a programme contract with IAPMEI, European funds such as the PRR, and its own revenue, including sponsorships."
+    },
+    {
+      "id": "check-page-4d1fefcf00",
+      "url": "https://startupportugal.com/about-us/",
+      "page": "details",
+      "excerpt": "Our Associates Institute for Support to Small and Medium Enterprises and Innovation IAPMEI (Institute for Support to Small and Medium Enterprises and Innovation) is a public strategic partner supporting micro, small and medium-sized enterprises in the industrial, commercial, service and construction sectors."
+    },
+    {
+      "id": "check-page-561d0171cd",
+      "url": "https://startupportugal.com/about-us/",
+      "page": "details",
+      "excerpt": "Portugal Ventures Created in June 2012, Portugal Ventures plays an active and fundamental role in financing and growing the national entrepreneurship ecosystem, supporting national projects and propelling their sustainable development."
+    },
+    {
+      "id": "check-page-9b2a27efcb",
+      "url": "https://startupportugal.com/about-us/",
+      "page": "details",
+      "excerpt": "A., aims to develop actions designed to support technological and business innovation in Portugal, contributing to the consolidation of the National Innovation System (SNI) and to strengthening the competitiveness of the national economy in global markets."
+    },
+    {
+      "id": "check-page-5c7f63b613",
+      "url": "https://startupportugal.com/acredicao-rni/",
+      "page": "details",
+      "excerpt": "Acreditação RNi • Startup Portugal Jump to main content Empreendedores Reconhecimento de startups Above & Beyond Hangouts SIM = Startups & Investment Matching Guia do Fundador Relatórios do Ecossistema Why Portugal? Incubadoras Conhecer a RNI - Rede Nacional de Incubação Acreditar a minha incubadora #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Investidores & Decisores Descobrir o ecossistema nacional do empreendorismo Consultar relatórios do ecossistema Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programas Ignite Empreendedores Ecossistema Ver todos Recursos RNI - Rede Nacional de Incubadoras Oportunidades & Eventos Blog Guia do Fundador Relatórios do Ecossistema Why Portugal? Memorandos de Entendimento Sobre Quem somos Equipa Conselho estratégico Relatórios & Contas e Informação Legal Media Kit Ecossistema One Stop Shop PT EN Empreendedores Incubadoras Investidores & Decisores Programas Recursos Sobre Ecossistema One Stop Shop PT EN Empreendedores Reconhecimento de startups Above & Beyond Hangouts SIM = Startups & Investment Matching Guia do Fundador Relatórios do Ecossistema Why Portugal? Incubadoras Conhecer a RNI - Rede Nacional de Incubação Acreditar a minha incubadora #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Investidores & Decisores"
+    },
+    {
+      "id": "check-page-fecc106794",
+      "url": "https://startupportugal.com/acredicao-rni/",
+      "page": "details",
+      "excerpt": "Memorandos de Entendimento Sobre Quem somos Equipa Conselho estratégico Relatórios & Contas e Informação Legal Media Kit Acreditação RNi A adesão à RNi – Portugal Incubators depende de um processo de acreditação conduzido pela Startup Portugal."
+    },
+    {
+      "id": "check-page-4d486ec546",
+      "url": "https://startupportugal.com/acredicao-rni/",
+      "page": "details",
+      "excerpt": "Porto Praça Coronel Pacheco 15, 4050-453 Porto Lisboa Cais Português | Pavilhão de Portugal, 1990-221 Lisboa Programas Empreendedores Ignite Investimento Ver todos Recursos RNi - Rede Nacional de Incubadoras Reconhecimento de Startup e Scale Up Eventos & Oportunidades Blog Guia do Fundador Relatórios do Ecossistema Why Portugal?"
+    },
+    {
+      "id": "check-page-48c817bd02",
+      "url": "https://startupportugal.com/acredicao-rni/",
+      "page": "details",
+      "excerpt": "Memorandos de Entendimento Sobre nós Quem somos A nossa equipa Relatórios & Contas e Informação Legal Media Kit Subscrever Newsletter Plataforma de Mapeamento do Ecossistema Contactos Política de Privacidade Política de Cookies Made by V-A Studio © 2026 Startup Portugal."
+    },
+    {
+      "id": "check-page-5a4321cd39",
+      "url": "https://startupportugal.com/categoria-programa/ecosystem/",
+      "page": "details",
+      "excerpt": "Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why"
+    },
+    {
+      "id": "check-page-52faa425d3",
+      "url": "https://startupportugal.com/categoria-programa/ecosystem/",
+      "page": "details",
+      "excerpt": "It offers four months of intensive acceleration and access to a global network of investors and deep tech experts."
+    },
+    {
+      "id": "check-page-71ef933a5d",
+      "url": "https://startupportugal.com/categoria-programa/ecosystem/",
+      "page": "details",
+      "excerpt": "Ecosystem Road 2 Web Summit R2WS is a program designed in collaboration with Web Summit to promote and support startups based in Portugal in their participation in the technology event."
+    },
+    {
+      "id": "check-page-6d1f2dcee9",
+      "url": "https://startupportugal.com/categoria-programa/ecosystem/",
+      "page": "details",
+      "excerpt": "Ecosystem Above & Beyond Hangouts Organized by Startup Portugal every last Wednesday of the month, at Ferroviário (Lisbon), Edifício Transparente (Porto) and online (via Zoom), this Hangout for the entrepreneurial community aims to bring together all the players in the ecosystem to discuss the challenges facing the community."
+    },
+    {
+      "id": "check-page-69a4453ae7",
+      "url": "https://startupportugal.com/categoria-programa/ecosystem/",
+      "page": "details",
+      "excerpt": "Ecosystem SIM Circuit The SIM (Startups & Investment Matching) Circuit is a showcase organized by Startup Portugal to promote the Portuguese entrepreneurial ecosystem."
+    },
+    {
+      "id": "check-page-cfbe9adeca",
+      "url": "https://startupportugal.com/categoria-programa/ecosystem/",
+      "page": "details",
+      "excerpt": "1 2 Porto Praça Coronel Pacheco 15, 4050-453 Porto Lisboa Cais Português | Pavilhão de Portugal, 1990-221 Lisboa Resources RNi – Portugal Incubators Startup Recognition Events and Opportunities Blog Founder’s Guide Ecosystem Reports Why Portugal?"
+    },
+    {
+      "id": "check-page-a5fe157fc0",
+      "url": "https://startupportugal.com/categoria-programa/ecosystem/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding Programs Entrepreneurs Ignite Investment See all About us About us Our Team Reports & Accounts and Legal Information Media Kit Newsletter Portugal's Entrepreneurial Ecosystem Mapping Platform Contacts Privacy Policy Cookie Policy Made by V-A Studio © 2026 Startup Portugal."
+    },
+    {
+      "id": "check-page-185eb25210",
+      "url": "https://startupportugal.com/categoria-programa/entrepreneurs/",
+      "page": "details",
+      "excerpt": "Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why"
+    },
+    {
+      "id": "check-page-5329182001",
+      "url": "https://startupportugal.com/categoria-programa/entrepreneurs/",
+      "page": "details",
+      "excerpt": "It offers four months of intensive acceleration and access to a global network of investors and deep tech experts."
+    },
+    {
+      "id": "check-page-ee18d98d89",
+      "url": "https://startupportugal.com/categoria-programa/entrepreneurs/",
+      "page": "details",
+      "excerpt": "Ecosystem Road 2 Web Summit R2WS is a program designed in collaboration with Web Summit to promote and support startups based in Portugal in their participation in the technology event."
+    },
+    {
+      "id": "check-page-43b009d492",
+      "url": "https://startupportugal.com/categoria-programa/entrepreneurs/",
+      "page": "details",
+      "excerpt": "Ecosystem Above & Beyond Hangouts Organized by Startup Portugal every last Wednesday of the month, at Ferroviário (Lisbon), Edifício Transparente (Porto) and online (via Zoom), this Hangout for the entrepreneurial community aims to bring together all the players in the ecosystem to discuss the challenges facing the community."
+    },
+    {
+      "id": "check-page-8d80de68c9",
+      "url": "https://startupportugal.com/categoria-programa/entrepreneurs/",
+      "page": "details",
+      "excerpt": "1 2 Porto Praça Coronel Pacheco 15, 4050-453 Porto Lisboa Cais Português | Pavilhão de Portugal, 1990-221 Lisboa Resources RNi – Portugal Incubators Startup Recognition Events and Opportunities Blog Founder’s Guide Ecosystem Reports Why Portugal?"
+    },
+    {
+      "id": "check-page-69126c4959",
+      "url": "https://startupportugal.com/categoria-programa/entrepreneurs/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding Programs Entrepreneurs Ignite Investment See all About us About us Our Team Reports & Accounts and Legal Information Media Kit Newsletter Portugal's Entrepreneurial Ecosystem Mapping Platform Contacts Privacy Policy Cookie Policy Made by V-A Studio © 2026 Startup Portugal."
+    },
+    {
+      "id": "check-page-661c263b15",
+      "url": "https://startupportugal.com/categoria-programa/ignite/",
+      "page": "details",
+      "excerpt": "Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why"
+    },
+    {
+      "id": "check-page-2689697c1d",
+      "url": "https://startupportugal.com/categoria-programa/ignite/",
+      "page": "details",
+      "excerpt": "Promoted by Startup Portugal and Plug and Play, it aimed to prepare startups and scaleups to scale into the United States market."
+    },
+    {
+      "id": "check-page-58fb1fbf5e",
+      "url": "https://startupportugal.com/categoria-programa/ignite/",
+      "page": "details",
+      "excerpt": "Porto Praça Coronel Pacheco 15, 4050-453 Porto Lisboa Cais Português | Pavilhão de Portugal, 1990-221 Lisboa Resources RNi – Portugal Incubators Startup Recognition Events and Opportunities Blog Founder’s Guide Ecosystem Reports Why Portugal?"
+    },
+    {
+      "id": "check-page-2439b8944f",
+      "url": "https://startupportugal.com/categoria-programa/ignite/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding Programs Entrepreneurs Ignite Investment See all About us About us Our Team Reports & Accounts and Legal Information Media Kit Newsletter Portugal's Entrepreneurial Ecosystem Mapping Platform Contacts Privacy Policy Cookie Policy Made by V-A Studio © 2026 Startup Portugal."
+    },
+    {
+      "id": "check-page-119e346814",
+      "url": "https://startupportugal.com/one-stop-shop/",
+      "page": "details",
+      "excerpt": "One Stop Shop • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation"
+    },
+    {
+      "id": "check-page-bcf40b81b9",
+      "url": "https://startupportugal.com/one-stop-shop/",
+      "page": "details",
+      "excerpt": "Centralized information and personalized support — online and offline — tailored to the needs of those who want to found, operate, and scale a business from Portugal."
+    },
+    {
+      "id": "check-page-23f40f8fab",
+      "url": "https://startupportugal.com/one-stop-shop/",
+      "page": "details",
+      "excerpt": "Porto Praça Coronel Pacheco 15, 4050-453 Porto Lisboa Cais Português | Pavilhão de Portugal, 1990-221 Lisboa Resources RNi – Portugal Incubators Startup Recognition Events and Opportunities Blog Founder’s Guide Ecosystem Reports Why Portugal?"
+    },
+    {
+      "id": "check-page-e3ef78106e",
+      "url": "https://startupportugal.com/one-stop-shop/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding Programs Entrepreneurs Ignite Investment See all About us About us Our Team Reports & Accounts and Legal Information Media Kit Newsletter Portugal's Entrepreneurial Ecosystem Mapping Platform Contacts Privacy Policy Cookie Policy Made by V-A Studio © 2026 Startup Portugal."
+    },
+    {
+      "id": "check-page-621bfd90bd",
+      "url": "https://startupportugal.com/programa/above-beyond-hangouts/",
+      "page": "details",
+      "excerpt": "Above & Beyond Hangouts • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation"
+    },
+    {
+      "id": "check-page-a6f1f72270",
+      "url": "https://startupportugal.com/programa/above-beyond-hangouts/",
+      "page": "details",
+      "excerpt": "On the last Wednesday of each month, join our Hangouts in: 📍 Lisbon: Ferroviário (Rua de Santa Apolónia 59, 1100-468 Lisbon) 📍 Porto: Edifício Transparente (Via do Castelo do Queijo 335 419, Porto) 💻 Remotely (via Zoom)!"
+    },
+    {
+      "id": "check-page-6dc1fc1ae6",
+      "url": "https://startupportugal.com/programa/above-beyond-hangouts/",
+      "page": "details",
+      "excerpt": "Past events Hangout #56 | On the ROAD 2 WEB SUMMIT October 2026 Hangout #55 | 10 YEARS of Startup Portugal September 2026 Hangout #54 | PITCH, please!"
+    },
+    {
+      "id": "check-page-28c223887f",
+      "url": "https://startupportugal.com/programa/above-beyond-hangouts/",
+      "page": "details",
+      "excerpt": "Playlist Above & Beyond Hangouts Porto Praça Coronel Pacheco 15, 4050-453 Porto Lisboa Cais Português | Pavilhão de Portugal, 1990-221 Lisboa Resources RNi – Portugal Incubators Startup Recognition Events and Opportunities Blog Founder’s Guide Ecosystem Reports Why Portugal?"
+    },
+    {
+      "id": "check-page-264e7f763b",
+      "url": "https://startupportugal.com/programa/above-beyond-hangouts/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding Programs Entrepreneurs Ignite Investment See all About us About us Our Team Reports & Accounts and Legal Information Media Kit Newsletter Portugal's Entrepreneurial Ecosystem Mapping Platform Contacts Privacy Policy Cookie Policy Made by V-A Studio © 2026 Startup Portugal."
+    },
+    {
+      "id": "check-page-196fe5ad95",
+      "url": "https://startupportugal.com/programa/business-abroad/",
+      "page": "details",
+      "excerpt": "Business Abroad • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation"
+    },
+    {
+      "id": "check-page-fa5a23fa5d",
+      "url": "https://startupportugal.com/programa/business-abroad/",
+      "page": "details",
+      "excerpt": "Startups based in Portugal (with a Portuguese tax identification number) that have a product and a website; To be legally recognized as a startup or scaleup ; Having your own unique product or software solutions, or working on your own hardware devices; To be an independent company and not a subsidiary/spin-off of a larger organization."
+    },
+    {
+      "id": "check-page-dabc2b4ee5",
+      "url": "https://startupportugal.com/programa/business-abroad/",
+      "page": "details",
+      "excerpt": "To get the startup to exhibit in the event’s exhibition area; Present the startup on the official stages of the event; Access to parallel events in partnership with relevant local actors, ecosystem stakeholders (focused on BA, VC, and business opportunities); Exposure of your startup’s brand on the communication channels of Startup Portugal, AICEP, and events."
+    },
+    {
+      "id": "check-page-2ec16e11c4",
+      "url": "https://startupportugal.com/programa/business-abroad/",
+      "page": "details",
+      "excerpt": "Contact the One Stop Shop Porto Praça Coronel Pacheco 15, 4050-453 Porto Lisboa Cais Português | Pavilhão de Portugal, 1990-221 Lisboa Resources RNi – Portugal Incubators Startup Recognition Events and Opportunities Blog Founder’s Guide Ecosystem Reports Why Portugal?"
+    },
+    {
+      "id": "check-page-132a32d0a6",
+      "url": "https://startupportugal.com/programa/business-abroad/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding Programs Entrepreneurs Ignite Investment See all About us About us Our Team Reports & Accounts and Legal Information Media Kit Newsletter Portugal's Entrepreneurial Ecosystem Mapping Platform Contacts Privacy Policy Cookie Policy Made by V-A Studio © 2026 Startup Portugal."
+    },
+    {
+      "id": "check-page-a0ea5f1ddd",
+      "url": "https://startupportugal.com/programa/empreende-xxi/",
+      "page": "details",
+      "excerpt": "Empreende XXI • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation"
+    },
+    {
+      "id": "check-page-0bcf952af4",
+      "url": "https://startupportugal.com/programa/empreende-xxi/",
+      "page": "details",
+      "excerpt": "This is a program developed by IEFP - the Institute for Employment and Vocational Training, in partnership with Startup Portugal."
+    },
+    {
+      "id": "check-page-576f6c5adc",
+      "url": "https://startupportugal.com/programa/empreende-xxi/",
+      "page": "details",
+      "excerpt": "If you have any questions, you can find out more by emailing empreendexxi@startupportugal.com Porto Praça Coronel Pacheco 15, 4050-453 Porto Lisboa Cais Português | Pavilhão de Portugal, 1990-221 Lisboa Resources RNi – Portugal Incubators Startup Recognition Events and Opportunities Blog Founder’s Guide Ecosystem Reports Why Portugal?"
+    },
+    {
+      "id": "check-page-8eb5adb327",
+      "url": "https://startupportugal.com/programa/empreende-xxi/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding Programs Entrepreneurs Ignite Investment See all About us About us Our Team Reports & Accounts and Legal Information Media Kit Newsletter Portugal's Entrepreneurial Ecosystem Mapping Platform Contacts Privacy Policy Cookie Policy Made by V-A Studio © 2026 Startup Portugal."
+    },
+    {
+      "id": "check-page-6c8a6c5500",
+      "url": "https://startupportugal.com/programa/road-2-web-summit/",
+      "page": "details",
+      "excerpt": "Road 2 Web Summit • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation"
+    },
+    {
+      "id": "check-page-488fb06b60",
+      "url": "https://startupportugal.com/programa/road-2-web-summit/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Programs Ecosystem Entrepreneurs Road 2 Web Summit R2WS is a program designed in collaboration with Web Summit to promote and support startups based in Portugal in their participation in the technology event."
+    },
+    {
+      "id": "check-page-c85ffa5806",
+      "url": "https://startupportugal.com/programa/road-2-web-summit/",
+      "page": "details",
+      "excerpt": "Connect with ecosystem leaders, mentors, and other founders."
+    },
+    {
+      "id": "check-page-292b4cc791",
+      "url": "https://startupportugal.com/programa/road-2-web-summit/",
+      "page": "details",
+      "excerpt": "Join a program designed for ambitious early-stage startups."
+    },
+    {
+      "id": "check-page-c85ffa5806",
+      "url": "https://startupportugal.com/programa/road-2-web-summit/",
+      "page": "details",
+      "excerpt": "Connect with ecosystem leaders, mentors, and other founders."
+    },
+    {
+      "id": "check-page-292b4cc791",
+      "url": "https://startupportugal.com/programa/road-2-web-summit/",
+      "page": "details",
+      "excerpt": "Join a program designed for ambitious early-stage startups."
+    },
+    {
+      "id": "check-page-edc105756a",
+      "url": "https://startupportugal.com/programa/road-2-web-summit/",
+      "page": "details",
+      "excerpt": "For over a decade, Startup Portugal has supported early-stage startups in presenting their products and services to the world."
+    },
+    {
+      "id": "check-page-e6d6d3d148",
+      "url": "https://startupportugal.com/programa/road-2-web-summit/",
+      "page": "details",
+      "excerpt": "Contacta a One Stop Shop More programs Internationalization Business Abroad The Business Abroad program ensures and supports the presence of Portuguese startups at international technology conferences, thus creating a more significant impact on their representation outside of Portugal and allowing them to coordinate their communications with international ecosystems and local media."
+    },
+    {
+      "id": "check-page-9af36cd89d",
+      "url": "https://startupportugal.com/programa/road-2-web-summit/",
+      "page": "details",
+      "excerpt": "Porto Praça Coronel Pacheco 15, 4050-453 Porto Lisboa Cais Português | Pavilhão de Portugal, 1990-221 Lisboa Resources RNi – Portugal Incubators Startup Recognition Events and Opportunities Blog Founder’s Guide Ecosystem Reports Why Portugal?"
+    },
+    {
+      "id": "check-page-51ee84a3f9",
+      "url": "https://startupportugal.com/programa/road-2-web-summit/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding Programs Entrepreneurs Ignite Investment See all About us About us Our Team Reports & Accounts and Legal Information Media Kit Newsletter Portugal's Entrepreneurial Ecosystem Mapping Platform Contacts Privacy Policy Cookie Policy Made by V-A Studio © 2026 Startup Portugal."
+    },
+    {
+      "id": "check-page-682dbd2f7f",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "page": "details",
+      "excerpt": "Scale Up Now • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation"
+    },
+    {
+      "id": "check-page-993f027638",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "page": "details",
+      "excerpt": "Promoted by Startup Portugal and Plug and Play, it aimed to prepare startups and scaleups to scale into the United States market."
+    },
+    {
+      "id": "check-page-6d4da661cf",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "page": "details",
+      "excerpt": "Tech Foundry Portugal is developed with the support of Hello Tomorrow , an international partner specializing in deep tech, bringing together the tools, network, and expertise needed to accelerate market entry."
+    },
+    {
+      "id": "check-page-a73514690a",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "page": "details",
+      "excerpt": "Maturity Scientific team, without a formally established company, or early-stage startup."
+    },
+    {
+      "id": "check-page-3818719525",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "page": "details",
+      "excerpt": "What the program offers An intensive program that combines personalized mentoring, workshops led by experts, and direct contact with the international partner’s global deep tech network. 🚀 Workshops, Mentoring & Support Specialized workshops on the main challenges of entering the market, with personalized support for each team after each module."
+    },
+    {
+      "id": "check-page-ea80aeae02",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "page": "details",
+      "excerpt": "Dedicated one-on-one mentoring with experts in cutting-edge technology, including researchers, founders, investors, and company executives."
+    },
+    {
+      "id": "check-page-cfb51541f7",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "page": "details",
+      "excerpt": "Ongoing support from a dedicated program manager throughout the entire program. 👥 Activities & Demo Day Visit to a leading company in the sector at the national level."
+    },
+    {
+      "id": "check-page-f8897ba6ac",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "page": "details",
+      "excerpt": "Demo Day with investors and industry stakeholders. 🌍 Global network of international partners Access to a community with over 5,000 cutting-edge technology startups in more than 100 countries."
+    },
+    {
+      "id": "check-page-ec5f4702c6",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "page": "details",
+      "excerpt": "She has supported leading companies and government organizations across EMEA and has worked in over 20 countries."
+    },
+    {
+      "id": "check-page-b424d61a59",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "page": "details",
+      "excerpt": "Prior to Plug and Play, Carolin worked for 3 years as a growth stage investor at Next47 (US$2 billion in AuM) and 1 year in a Fund of Funds role at Siemens Global Innovation Partners (€280 million in AuM)."
+    },
+    {
+      "id": "check-page-693ad4b00e",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "page": "details",
+      "excerpt": "Borja Aznar-Bonilla Managing Director @ Plug and Play Speaker @ Scale Up Now Seed/pre-seed investor in technology startups, with a Master’s degree in Business Administration and extensive international experience in dynamic sectors such as advertising technology, mobile applications, video content, and games."
+    },
+    {
+      "id": "check-page-ec5f4702c6",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "page": "details",
+      "excerpt": "She has supported leading companies and government organizations across EMEA and has worked in over 20 countries."
+    },
+    {
+      "id": "check-page-b424d61a59",
+      "url": "https://startupportugal.com/programa/scale-up-now/",
+      "page": "details",
+      "excerpt": "Prior to Plug and Play, Carolin worked for 3 years as a growth stage investor at Next47 (US$2 billion in AuM) and 1 year in a Fund of Funds role at Siemens Global Innovation Partners (€280 million in AuM)."
+    },
+    {
+      "id": "check-page-65de85a833",
+      "url": "https://startupportugal.com/programa/sim-circuit/",
+      "page": "details",
+      "excerpt": "SIM Circuit • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation"
+    },
+    {
+      "id": "check-page-6e928409e3",
+      "url": "https://startupportugal.com/programa/sim-circuit/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Programs Ecosystem Entrepreneurs SIM Circuit The SIM (Startups & Investment Matching) Circuit is a showcase organized by Startup Portugal to promote the Portuguese entrepreneurial ecosystem."
+    },
+    {
+      "id": "check-page-641033dab2",
+      "url": "https://startupportugal.com/programa/sim-circuit/",
+      "page": "details",
+      "excerpt": "Programs About the Program Within the framework of the “Vouchers for Startups – New Green and Digital Products” and “Vouchers for Incubators and Accelerators” programs, the SIM Circuit showcase is hitting the road, as part of the Recovery and Resilience Program (PRR)."
+    },
+    {
+      "id": "check-page-bcc1f32891",
+      "url": "https://startupportugal.com/programa/sim-circuit/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding Programs Entrepreneurs Ignite Investment See all About us About us Our Team Reports & Accounts and Legal Information Media Kit Newsletter Portugal's Entrepreneurial Ecosystem Mapping Platform Contacts Privacy Policy Cookie Policy Made by V-A Studio © 2026 Startup Portugal."
+    },
+    {
+      "id": "check-page-a00214f5ba",
+      "url": "https://startupportugal.com/programa/start-from-knowledge/",
+      "page": "details",
+      "excerpt": "Start from Knowledge • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation"
+    },
+    {
+      "id": "check-page-7a90a0ca4e",
+      "url": "https://startupportugal.com/programa/start-from-knowledge/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Programs Ecosystem Entrepreneurs Start from Knowledge Programs About the program The Start from Knowledge program supports students, researchers, and faculty who want to bring scientific and technological knowledge from academia to the market."
+    },
+    {
+      "id": "check-page-9e7b52c93f",
+      "url": "https://startupportugal.com/programa/start-from-knowledge/",
+      "page": "details",
+      "excerpt": "The program awards a non-refundable voucher of €30,000 per project, paid 100% upfront after approval, to support the initial steps in creating and validating the business."
+    },
+    {
+      "id": "check-page-933fa27a3a",
+      "url": "https://startupportugal.com/programa/start-from-knowledge/",
+      "page": "details",
+      "excerpt": "Notice NOTICE Startup Portugal/FITEC-2026-01 Info About the program The Start from Knowledge program is part of Deep2Start, a measure of the Accelerate Economy Plan, and is one of the three project types of the Startup Competitiveness Incentive System."
+    },
+    {
+      "id": "check-page-ded3b17f63",
+      "url": "https://startupportugal.com/programa/start-from-knowledge/",
+      "page": "details",
+      "excerpt": "The program is aimed at micro, small and medium-sized enterprises, including startups."
+    },
+    {
+      "id": "check-page-2e89f81721",
+      "url": "https://startupportugal.com/programa/start-from-knowledge/",
+      "page": "details",
+      "excerpt": "The company must be majority-owned by an individual who is currently, or has been in the previous two calendar years: Enrolled in a degree-granting study program at a national Higher Education Institution; Or to perform research or teaching duties at a national Higher Education Institution."
+    },
+    {
+      "id": "check-page-dc3c79fd0d",
+      "url": "https://startupportugal.com/programa/start-from-knowledge/",
+      "page": "details",
+      "excerpt": "Following submission, ANI and Startup Portugal participate in the technical analysis of the applications."
+    },
+    {
+      "id": "check-page-2eb83c5b5e",
+      "url": "https://startupportugal.com/programa/start-from-knowledge/",
+      "page": "details",
+      "excerpt": "Read the Notice here: CALL Startup Portugal/FITEC-2026-01 ."
+    },
+    {
+      "id": "check-page-cf47180df1",
+      "url": "https://startupportugal.com/programa/start-from-knowledge/",
+      "page": "details",
+      "excerpt": "Porto Praça Coronel Pacheco 15, 4050-453 Porto Lisboa Cais Português | Pavilhão de Portugal, 1990-221 Lisboa Resources RNi – Portugal Incubators Startup Recognition Events and Opportunities Blog Founder’s Guide Ecosystem Reports Why Portugal?"
+    },
+    {
+      "id": "check-page-281438c65b",
+      "url": "https://startupportugal.com/programa/start-from-knowledge/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding Programs Entrepreneurs Ignite Investment See all About us About us Our Team Reports & Accounts and Legal Information Media Kit Newsletter Portugal's Entrepreneurial Ecosystem Mapping Platform Contacts Privacy Policy Cookie Policy Made by V-A Studio © 2026 Startup Portugal."
+    },
+    {
+      "id": "check-page-f9d34ed18f",
+      "url": "https://fundinggc.startupportugal.com/",
+      "page": "application",
+      "excerpt": "Iniciar sessão — Startup Portugal - GC Saltar para o conteúdo principal Iniciar sessão — Startup Portugal Utilizador Palavra-passe Iniciar sessão Esqueceu-se da palavra-passe? Registar Procurar Este site utiliza cookies essenciais para o seu funcionamento. Ao continuar a navegar, aceita a utilização de cookies de acordo com a nossa Política de Privacidade . Saber mais Recusar Aceitar Instagram Twitter LinkedIn Facebook YouTube Acessibilidade | Contactos © 2026 Startup Portugal. Todos os direitos reservados"
+    },
+    {
+      "id": "check-page-83e0c2da1e",
+      "url": "https://startupportugal.com/programa/startup-visa/",
+      "page": "details",
+      "excerpt": "Startup Visa • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation"
+    },
+    {
+      "id": "check-page-36b81fac7a",
+      "url": "https://startupportugal.com/programa/startup-visa/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Programs Internationalization Startup Visa Operated through IAPMEI, the Startup Visa is a residency visa for entrepreneurs, aimed at attracting investment, talent, and innovation capacity to Portugal."
+    },
+    {
+      "id": "check-page-a550698348",
+      "url": "https://startupportugal.com/programa/startup-visa/",
+      "page": "details",
+      "excerpt": "About the program Operated through IAPMEI, the Startup Visa is a residency visa for entrepreneurs, aimed at attracting investment, talent, and innovation capacity to Portugal."
+    },
+    {
+      "id": "check-page-5e3518b06e",
+      "url": "https://startupportugal.com/programa/startup-visa/",
+      "page": "details",
+      "excerpt": "This is intended for foreign entrepreneurs, without permanent residence in the Schengen Area, who wish to develop their project in Portugal, even if they have not yet established a company, or entrepreneurs who already have business projects in their countries of origin and wish to carry out their activity in Portugal."
+    },
+    {
+      "id": "check-page-e5125b03f9",
+      "url": "https://startupportugal.com/programa/startup-visa/",
+      "page": "details",
+      "excerpt": "The assessment of economic and innovative potential is based on the degree of innovation, the scalability of the business, the market potential, the capacity of the management team, and the potential for creating qualified jobs in Portugal."
+    },
+    {
+      "id": "check-page-08e2e8614d",
+      "url": "https://startupportugal.com/programa/startup-visa/",
+      "page": "details",
+      "excerpt": "Check the list of incubators certified for the Startup Visa program ."
+    },
+    {
+      "id": "check-page-7a287ccdfa",
+      "url": "https://startupportugal.com/programa/startup-visa/",
+      "page": "details",
+      "excerpt": "01 Search for certified incubators and request a service quote."
+    },
+    {
+      "id": "check-page-fa0b0f7b71",
+      "url": "https://startupportugal.com/programa/startup-visa/",
+      "page": "details",
+      "excerpt": "Search for certified incubators and request a service quote."
+    },
+    {
+      "id": "check-page-90a8501010",
+      "url": "https://startupportugal.com/programa/startup-visa/",
+      "page": "details",
+      "excerpt": "01 Sign the contract with the certified incubator and submit it to the Startup Visa platform."
+    },
+    {
+      "id": "check-page-83c1cf4c43",
+      "url": "https://startupportugal.com/programa/startup-visa/",
+      "page": "details",
+      "excerpt": "I think that Startup Portugal, especially through initiatives like the Startup Voucher or the Startup Visa, is critical for us to be able to get started and to attract talent."
+    },
+    {
+      "id": "check-page-721d7fbe1b",
+      "url": "https://startupportugal.com/programa/startup-visa/",
+      "page": "details",
+      "excerpt": "Fernando Padovan Deeploy Ver vídeo I came with the Startup Visa. […] I chose to come to Portugal because of the operational costs and because it is a strategic location in Europe."
+    },
+    {
+      "id": "check-page-a317ab1a18",
+      "url": "https://startupportugal.com/programa/startup-visa/",
+      "page": "details",
+      "excerpt": "Contacta a One Stop Shop Porto Praça Coronel Pacheco 15, 4050-453 Porto Lisboa Cais Português | Pavilhão de Portugal, 1990-221 Lisboa Resources RNi – Portugal Incubators Startup Recognition Events and Opportunities Blog Founder’s Guide Ecosystem Reports Why Portugal?"
+    },
+    {
+      "id": "check-page-aa7ca057c2",
+      "url": "https://startupportugal.com/programa/startup-visa/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding Programs Entrepreneurs Ignite Investment See all About us About us Our Team Reports & Accounts and Legal Information Media Kit Newsletter Portugal's Entrepreneurial Ecosystem Mapping Platform Contacts Privacy Policy Cookie Policy Made by V-A Studio © 2026 Startup Portugal."
+    },
+    {
+      "id": "check-page-d0ea5bd354",
+      "url": "https://startupportugal.com/programa/startup-voucher/",
+      "page": "details",
+      "excerpt": "Startup Voucher • Startup Portugal Jump to main content Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation #IncubXdiscoveries Why Portugal? SIM = Startups & Investment Matching Above & Beyond Hangouts Programs Ignite Entrepreneurs Ecosystem See all Resources RNi – Portugal Incubators Events and Opportunities Blog Newsletter Founder’s Guide Ecosystem Reports Why Portugal? Memoranda of Understanding About About us Our Team Strategic Council Reports & Accounts and Legal Information Media Kit Ecosystem One Stop Shop EN PT Investors & Decision Makers Entrepreneurs Incubators Programs Resources About Ecosystem One Stop Shop EN PT Investors & Decision Makers Discover the national entrepreneurship ecosystem. Ecosystem Reports Why Portugal? SIM = Startups & Invesment Matching Above & Beyond Hangouts Entrepreneurs Startup Recognition Above & Beyond Hangouts Events and Opportunities SIM = Startups & Investment Matching Founder’s Guide Ecosystem Reports Why Portugal? Newsletter Incubators RNi – Portugal Incubators RNi Accreditation"
+    },
+    {
+      "id": "check-page-0442bc99fa",
+      "url": "https://startupportugal.com/programa/startup-voucher/",
+      "page": "details",
+      "excerpt": "Through training, mentoring, and financial support, the program supports business projects in the idea phase, contributing to digital transition, innovation, and the creation of qualified jobs."
+    },
+    {
+      "id": "check-page-4f765a1b5c",
+      "url": "https://startupportugal.com/programa/startup-voucher/",
+      "page": "details",
+      "excerpt": "Contacta a One Stop Shop Porto Praça Coronel Pacheco 15, 4050-453 Porto Lisboa Cais Português | Pavilhão de Portugal, 1990-221 Lisboa Resources RNi – Portugal Incubators Startup Recognition Events and Opportunities Blog Founder’s Guide Ecosystem Reports Why Portugal?"
+    },
+    {
+      "id": "check-page-c1a874004c",
+      "url": "https://startupportugal.com/programa/startup-voucher/",
+      "page": "details",
+      "excerpt": "Memoranda of Understanding Programs Entrepreneurs Ignite Investment See all About us About us Our Team Reports & Accounts and Legal Information Media Kit Newsletter Portugal's Entrepreneurial Ecosystem Mapping Platform Contacts Privacy Policy Cookie Policy Made by V-A Studio © 2026 Startup Portugal."
     }
   ],
   "findings": {
-    "emails": [
+    "emails": [],
+    "phones": [],
+    "routes": [
       {
-        "value": "contact@startupportugal.com",
-        "evidenceId": "check-email-9ff859d449"
+        "value": "https://fundinggc.startupportugal.com/",
+        "evidenceId": "check-route-f70185f1a2"
       }
     ],
-    "phones": [],
-    "routes": [],
-    "applicationUrl": [],
-    "applicationsOpen": [],
+    "applicationUrl": [
+      {
+        "value": "https://fundinggc.startupportugal.com/",
+        "evidenceId": "check-route-f70185f1a2"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-fc3c70bbc0"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
     "rolling": [],
-    "announcedIntake": [],
+    "announcedIntake": [
+      {
+        "value": "September",
+        "evidenceId": "check-announced-553ea12330"
+      }
+    ],
     "cohortStarts": [],
     "durationWeeks": [
       {
-        "value": "12 months",
-        "evidenceId": "check-duration-5c0dbcb1ef"
+        "value": "4 months",
+        "evidenceId": "check-duration-f2c1485ce6"
       }
     ],
     "format": [
       {
         "value": "in-person",
         "evidenceId": "check-format-fc33e038c6"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-059b6210d3"
       }
     ],
     "location": [

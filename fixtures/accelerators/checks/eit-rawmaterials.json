@@ -1,9 +1,8 @@
 {
   "programId": "eit-rawmaterials",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://eitrawmaterials.eu/",
-    "https://eitrawmaterials.eu/articles/call-for-applications-members-of-executive-board",
     "https://eitrawmaterials.eu/newsroom/success-stories/over-500-organisations-apply-eit-hei-initiatives-third-call-proposals",
     "https://eitrawmaterials.eu/erma/investment",
     "https://eitrawmaterials.eu/erma/investment/proposal",
@@ -16,7 +15,13 @@
     "https://eitrawmaterials.eu/erma-booster-call",
     "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
     "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
-    "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment"
+    "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
+    "https://eitrawmaterials.eu/press-releases/weeefiner-investment-2025",
+    "https://eitrawmaterials.eu/terms-and-conditions",
+    "https://eitrawmaterials.eu/node/2142",
+    "https://eitrawmaterials.eu/search?fulltext=&search_page%5B1%5D=topic%3A320&sort_bef_combine=search_api_relevance_DESC",
+    "https://eitrawmaterials.eu/about-finance-fundraising",
+    "https://eitrawmaterials.eu/about-us"
   ],
   "evidence": [
     {
@@ -25,6 +30,13 @@
       "title": "EIT RawMaterials — application page",
       "excerpt": "navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open",
       "page": "application"
+    },
+    {
+      "id": "check-announced-0d66c2b794",
+      "url": "https://eitrawmaterials.eu/about-us",
+      "title": "EIT RawMaterials — program page",
+      "excerpt": "navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open",
+      "page": "details"
     },
     {
       "id": "check-announced-13597647f6",
@@ -55,11 +67,11 @@
       "page": "terms"
     },
     {
-      "id": "check-announced-52b1bbcc8d",
-      "url": "https://eitrawmaterials.eu/articles/call-for-applications-members-of-executive-board",
-      "title": "EIT RawMaterials — application page",
+      "id": "check-announced-40ecb1371f",
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "title": "EIT RawMaterials — terms page",
       "excerpt": "navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open",
-      "page": "application"
+      "page": "terms"
     },
     {
       "id": "check-announced-58639821b3",
@@ -78,6 +90,13 @@
     {
       "id": "check-announced-60fd6ffea8",
       "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
+      "title": "EIT RawMaterials — terms page",
+      "excerpt": "navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open",
+      "page": "terms"
+    },
+    {
+      "id": "check-announced-8004d7cd52",
+      "url": "https://eitrawmaterials.eu/press-releases/weeefiner-investment-2025",
       "title": "EIT RawMaterials — terms page",
       "excerpt": "navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open",
       "page": "terms"
@@ -104,6 +123,13 @@
       "page": "terms"
     },
     {
+      "id": "check-announced-9c156a5a4b",
+      "url": "https://eitrawmaterials.eu/about-finance-fundraising",
+      "title": "EIT RawMaterials — program page",
+      "excerpt": "navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open",
+      "page": "details"
+    },
+    {
       "id": "check-announced-9c49339d82",
       "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-doubles-investment-novana-low-carbon-circular-vanadium-recovery",
       "title": "EIT RawMaterials — terms page",
@@ -125,11 +151,25 @@
       "page": "terms"
     },
     {
+      "id": "check-announced-cb04238c13",
+      "url": "https://eitrawmaterials.eu/search?fulltext=&search_page%5B1%5D=topic%3A320&sort_bef_combine=search_api_relevance_DESC",
+      "title": "EIT RawMaterials — terms page",
+      "excerpt": "navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open",
+      "page": "terms"
+    },
+    {
       "id": "check-announced-ed5631f8a5",
       "url": "https://eitrawmaterials.eu/",
       "title": "EIT RawMaterials — homepage",
       "excerpt": "or sort rare earth-containing magnets in end-of-life waste? Apply by 16 December to pitch it directly to Veolia. Now Live KAVA 14 Call - RIS",
       "page": "details"
+    },
+    {
+      "id": "check-announced-f9bb272f4f",
+      "url": "https://eitrawmaterials.eu/terms-and-conditions",
+      "title": "EIT RawMaterials — terms page",
+      "excerpt": "navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open",
+      "page": "terms"
     },
     {
       "id": "check-deal-0a7e15297f",
@@ -146,6 +186,13 @@
       "page": "application"
     },
     {
+      "id": "check-deal-3acddd54a4",
+      "url": "https://eitrawmaterials.eu/search?fulltext=&search_page%5B1%5D=topic%3A320&sort_bef_combine=search_api_relevance_DESC",
+      "title": "EIT RawMaterials — terms page",
+      "excerpt": "Resource Efficiency Spotlight Investment EIT RawMaterials invests €0.5 million in Finnish circularity start-up Weeefiner Press Release Nov 16, 2026",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-636345bdf1",
       "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
       "title": "EIT RawMaterials — terms page",
@@ -160,6 +207,13 @@
       "page": "application"
     },
     {
+      "id": "check-deal-7362388e03",
+      "url": "https://eitrawmaterials.eu/search?fulltext=&search_page%5B1%5D=topic%3A320&sort_bef_combine=search_api_relevance_DESC",
+      "title": "EIT RawMaterials — terms page",
+      "excerpt": "Release Nov 16, 2026 Sustainable Mining EIT RawMaterials invests €0.9 million in award-winning circularity innovator Sofi Filtration Press Release",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-966c1f5525",
       "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
       "title": "EIT RawMaterials — terms page",
@@ -167,10 +221,31 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-a491dd8160",
+      "url": "https://eitrawmaterials.eu/press-releases/weeefiner-investment-2025",
+      "title": "EIT RawMaterials — terms page",
+      "excerpt": "Procurement Contact Us Press Release EIT RawMaterials invests €0.5 million in Finnish circularity start-up Weeefiner EIT RawMaterials invests",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-b0ba8f002d",
       "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-launches-new-investment-call-technology-start-ups-scale-ups-and",
       "title": "EIT RawMaterials — terms page",
       "excerpt": "strategic, high-potential projects, the new call will invest up to €2.5m per project into innovative extraction, processing and recycling",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-cf0ef9f91c",
+      "url": "https://eitrawmaterials.eu/press-releases/weeefiner-investment-2025",
+      "title": "EIT RawMaterials — terms page",
+      "excerpt": "EIT RawMaterials invests €0.5 million in Finnish circularity start-up Weeefiner | EIT RawMaterials -",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-e56a1baeb0",
+      "url": "https://eitrawmaterials.eu/press-releases/weeefiner-investment-2025",
+      "title": "EIT RawMaterials — terms page",
+      "excerpt": "in Finnish circularity start-up Weeefiner EIT RawMaterials invests €0.5 million in Finnish start-up Weeefiner, whose breakthrough technology turns",
       "page": "terms"
     },
     {
@@ -188,18 +263,11 @@
       "page": "application"
     },
     {
-      "id": "check-format-53f9311a35",
-      "url": "https://eitrawmaterials.eu/articles/call-for-applications-members-of-executive-board",
-      "title": "EIT RawMaterials — application page",
-      "excerpt": "communication are allowed and used, but presence in person at formal Board meetings is preferred. The working",
-      "page": "application"
-    },
-    {
-      "id": "check-format-678fbdae11",
-      "url": "https://eitrawmaterials.eu/articles/call-for-applications-members-of-executive-board",
-      "title": "EIT RawMaterials — application page",
-      "excerpt": "Availability for Board meetings, preferably in person at least on a quarterly basis, and for participation in",
-      "page": "application"
+      "id": "check-format-68e41ab305",
+      "url": "https://eitrawmaterials.eu/about-finance-fundraising",
+      "title": "EIT RawMaterials — program page",
+      "excerpt": "materials… October 14, 2026 Success Story DOK-ING Mining: Remote-Operated Machines for the… Supported by the EIT",
+      "page": "details"
     },
     {
       "id": "check-location-2875747f9f",
@@ -230,6 +298,13 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-07d70af4da",
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "title": "EIT RawMaterials — terms page",
+      "excerpt": "Alumni → https://alumni.eitrawmaterials.eu/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-086919bcbb",
       "url": "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
       "title": "EIT RawMaterials — terms page",
@@ -251,13 +326,6 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-45838af179",
-      "url": "https://eitrawmaterials.eu/articles/call-for-applications-members-of-executive-board",
-      "title": "EIT RawMaterials — application page",
-      "excerpt": "Alumni → https://alumni.eitrawmaterials.eu/",
-      "page": "application"
-    },
-    {
       "id": "check-portfolio-62a068936d",
       "url": "https://eitrawmaterials.eu/press-releases/2025-greenland-resources-investment",
       "title": "EIT RawMaterials — terms page",
@@ -267,6 +335,13 @@
     {
       "id": "check-portfolio-6bd34ba67f",
       "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-launches-new-investment-call-technology-start-ups-scale-ups-and",
+      "title": "EIT RawMaterials — terms page",
+      "excerpt": "Alumni → https://alumni.eitrawmaterials.eu/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6e53299427",
+      "url": "https://eitrawmaterials.eu/terms-and-conditions",
       "title": "EIT RawMaterials — terms page",
       "excerpt": "Alumni → https://alumni.eitrawmaterials.eu/",
       "page": "terms"
@@ -286,6 +361,13 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-7bebc8c751",
+      "url": "https://eitrawmaterials.eu/search?fulltext=&search_page%5B1%5D=topic%3A320&sort_bef_combine=search_api_relevance_DESC",
+      "title": "EIT RawMaterials — terms page",
+      "excerpt": "Alumni → https://alumni.eitrawmaterials.eu/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-7ecc1c95f9",
       "url": "https://eitrawmaterials.eu/",
       "title": "EIT RawMaterials — homepage",
@@ -298,6 +380,13 @@
       "title": "EIT RawMaterials — terms page",
       "excerpt": "Alumni → https://alumni.eitrawmaterials.eu/",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9ea1411f3c",
+      "url": "https://eitrawmaterials.eu/about-finance-fundraising",
+      "title": "EIT RawMaterials — program page",
+      "excerpt": "Alumni → https://alumni.eitrawmaterials.eu/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-a08c63cd6f",
@@ -323,6 +412,20 @@
     {
       "id": "check-portfolio-b22ea4e98e",
       "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
+      "title": "EIT RawMaterials — terms page",
+      "excerpt": "Alumni → https://alumni.eitrawmaterials.eu/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ddaf107dc4",
+      "url": "https://eitrawmaterials.eu/about-us",
+      "title": "EIT RawMaterials — program page",
+      "excerpt": "Alumni → https://alumni.eitrawmaterials.eu/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e469b6c342",
+      "url": "https://eitrawmaterials.eu/press-releases/weeefiner-investment-2025",
       "title": "EIT RawMaterials — terms page",
       "excerpt": "Alumni → https://alumni.eitrawmaterials.eu/",
       "page": "terms"
@@ -364,10 +467,52 @@
       "excerpt": "Home | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board Departments Committees RIS Country Representatives Careers Procurement Contact Us EIT RawMaterials"
     },
     {
-      "id": "check-page-38903352d9",
-      "url": "https://eitrawmaterials.eu/articles/call-for-applications-members-of-executive-board",
-      "page": "application",
-      "excerpt": "Call for Applications for Members for the Executive Board of EIT RawMaterials e.V. | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board Departments Committees"
+      "id": "check-page-9e158db737",
+      "url": "https://eitrawmaterials.eu/",
+      "page": "details",
+      "excerpt": "Solutions for Professionals & Industry European Raw Materials Academy Modular learning activities strengthening the workforce powering Europe's raw materials future."
+    },
+    {
+      "id": "check-page-17bf805ded",
+      "url": "https://eitrawmaterials.eu/",
+      "page": "details",
+      "excerpt": "Solutions for Students, Professionals, & Industry European Advanced Materials Academy Modular learning activities delivering the skills powering Europe's next generation of innovation."
+    },
+    {
+      "id": "check-page-927cf9099c",
+      "url": "https://eitrawmaterials.eu/",
+      "page": "details",
+      "excerpt": "EIT Higher Education Initiative Call for Proposals Up to €1.25M funding per project to strengthen deep tech and advanced manufacturing innovation in higher education institutions."
+    },
+    {
+      "id": "check-page-9cd99051d7",
+      "url": "https://eitrawmaterials.eu/",
+      "page": "details",
+      "excerpt": "Investor Insights Series: Why traction and circular innovation matter for Europe's raw materials future."
+    },
+    {
+      "id": "check-page-2e081a3d31",
+      "url": "https://eitrawmaterials.eu/",
+      "page": "details",
+      "excerpt": "Accept How can Europe make better use of the raw materials it already has?"
+    },
+    {
+      "id": "check-page-d3fe0848f9",
+      "url": "https://eitrawmaterials.eu/",
+      "page": "details",
+      "excerpt": "From early stage start-ups to scale-ups and SMEs, our strategic advisory services are designed to open doors to funding and investment."
+    },
+    {
+      "id": "check-page-61a5bfd3da",
+      "url": "https://eitrawmaterials.eu/",
+      "page": "details",
+      "excerpt": "What We Do Live Calls We support innovative start-ups and SMEs through live calls and projects that accelerate growth, advance technology and produce sustainable material solutions."
+    },
+    {
+      "id": "check-page-6e07bb65e6",
+      "url": "https://eitrawmaterials.eu/",
+      "page": "details",
+      "excerpt": "Now Live KAVA 14 Call - RIS Innovation Calling proposals for RIS Capacity Building and Innovation projects to enhance Europe’s raw materials value chain through sustainable mining, processing, and recycling."
     },
     {
       "id": "check-page-c756b10f20",
@@ -376,10 +521,46 @@
       "excerpt": "Over 500 organisations apply for the EIT HEI Initiative’s third call for proposals | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board Departments Committees"
     },
     {
+      "id": "check-page-35cdbd7f00",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/over-500-organisations-apply-eit-hei-initiatives-third-call-proposals",
+      "page": "application",
+      "excerpt": "This year's applicants include: 286 higher education institutions (248 full partners and 38 associated partners); and 232 non-academic organisations (96 full partners and 136 associated partners)."
+    },
+    {
+      "id": "check-page-33515f926d",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/over-500-organisations-apply-eit-hei-initiatives-third-call-proposals",
+      "page": "application",
+      "excerpt": "With a fairly even distribution of academic and non-academic organisations, the EIT’s HEI Initiative is determined to achieve its goal of creating synergies between industry and higher education institutions to boost innovation and entrepreneurship in Europe."
+    },
+    {
+      "id": "check-page-157d2b66ce",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/over-500-organisations-apply-eit-hei-initiatives-third-call-proposals",
+      "page": "application",
+      "excerpt": "The consortia cover all EU Member States with 22 eligible countries from the EIT Regional Innovation Scheme , dedicated to closing the innovation gap between countries across Europe."
+    },
+    {
+      "id": "check-page-43db1c6e09",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/over-500-organisations-apply-eit-hei-initiatives-third-call-proposals",
+      "page": "application",
+      "excerpt": "We are particularly happy to see many participating partners from Ukraine, including 26 higher education institutions and 11 non-academic organisations."
+    },
+    {
+      "id": "check-page-fce65ec890",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/over-500-organisations-apply-eit-hei-initiatives-third-call-proposals",
+      "page": "application",
+      "excerpt": "The selected consortia will help build innovation capacity across Europe through the integration of deep tech talent activities."
+    },
+    {
       "id": "check-page-2e3cfb398f",
       "url": "https://eitrawmaterials.eu/erma/investment",
       "page": "terms",
       "excerpt": "ERMA: Investment | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board Departments Committees RIS Country Representatives Careers Procurement Contact Us ERMA:"
+    },
+    {
+      "id": "check-page-6fbe63d3d6",
+      "url": "https://eitrawmaterials.eu/erma/investment",
+      "page": "terms",
+      "excerpt": "Submit Calling on innovations, mining and recycling projects to strengthen the European economy and enhance its supply chains."
     },
     {
       "id": "check-page-99d25d0bb0",
@@ -394,10 +575,154 @@
       "excerpt": "EIT RawMaterials invests in German silicon recycling start up Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board Departments Committees RIS Country Representatives Careers Procurement Contact Us Success Story EIT RawMaterials"
     },
     {
+      "id": "check-page-07d548324f",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon",
+      "page": "terms",
+      "excerpt": "However, with a lifespan of 25 to 30 years, solar panels will inevitably require disposal and replacement."
+    },
+    {
+      "id": "check-page-035ace3ae2",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon",
+      "page": "terms",
+      "excerpt": "This highlights the urgent need to manage solar power waste and recycle vital raw materials used in production."
+    },
+    {
+      "id": "check-page-c7f109aaaa",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon",
+      "page": "terms",
+      "excerpt": "“For the green transition to a renewable energy system, millions more solar panels will need to be installed globally."
+    },
+    {
+      "id": "check-page-027283bc42",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon",
+      "page": "terms",
+      "excerpt": "But this also means a surge in solar panel waste containing silicon."
+    },
+    {
+      "id": "check-page-86bf0d58e6",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon",
+      "page": "terms",
+      "excerpt": "The team at Circular Silicon has found an efficient process to recover silicon from various waste streams, turning waste into a strategic raw material for Europe."
+    },
+    {
+      "id": "check-page-010d5b0058",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon",
+      "page": "terms",
+      "excerpt": "This exciting innovation aligns with Europe’s ambitious recycling targets set by the Critical Raw Materials Act."
+    },
+    {
+      "id": "check-page-497a4fd596",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon",
+      "page": "terms",
+      "excerpt": "We are thrilled to support the project, which marks our first direct investment in Northern Germany.” - Bernd Schäfer, CEO, Managing Director, EIT RawMaterials."
+    },
+    {
+      "id": "check-page-dd43d72570",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon",
+      "page": "terms",
+      "excerpt": "Circular Silicon is in total alignment with EU recommendations on recycling waste in the EU Given solar energy’s strategic importance to the energy transition, recycling solar panel waste is essential for reducing Europe’s reliance on other nations."
+    },
+    {
+      "id": "check-page-76ec6ce56a",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon",
+      "page": "terms",
+      "excerpt": "China currently dominates the global solar panel value chain, manufacturing 80% of all solar panels and controlling 88% of solar-grade polysilicon production."
+    },
+    {
+      "id": "check-page-0e53fc6957",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon",
+      "page": "terms",
+      "excerpt": "However, concerns have been raised about the human rights conditions and the high environmental footprint associated with solar panel production in the country."
+    },
+    {
+      "id": "check-page-ea7385bf79",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon",
+      "page": "terms",
+      "excerpt": "The need for domestic recycling capabilities in Europe is, therefore, more crucial than ever."
+    },
+    {
+      "id": "check-page-089bd301e3",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon",
+      "page": "terms",
+      "excerpt": "This was recently underlined by the European recommendation to raise recycling capacity by 10% by 2030 and collect, sort, and process 45% of each material contained in waste."
+    },
+    {
       "id": "check-page-ce9ac0429e",
       "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
       "page": "terms",
       "excerpt": "The return on critical minerals investment should be resilience, not profit | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board Departments Committees RIS"
+    },
+    {
+      "id": "check-page-bcbecf9743",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
+      "page": "terms",
+      "excerpt": "Europe is finally beginning to put serious public money behind critical raw materials."
+    },
+    {
+      "id": "check-page-be5d1f9262",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
+      "page": "terms",
+      "excerpt": "Germany's KfW-led Rohstofffonds, Italy's Fondo Nazionale del Made in Italy and France's InfraVia Critical Metals Fund all recognise that secure access to critical minerals has become a question of economic security as much as industrial competitiveness."
+    },
+    {
+      "id": "check-page-8e550b6fa2",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
+      "page": "terms",
+      "excerpt": "China has spent decades building dominant positions across mining, processing and refining, giving it the ability to keep prices below the cost of Western producers and squeeze competitors out of the market."
+    },
+    {
+      "id": "check-page-3979c052ed",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
+      "page": "terms",
+      "excerpt": "Projects that are strategically indispensable for Europe can therefore appear commercially unattractive, not because they are poorly managed, but because the market itself has been distorted."
+    },
+    {
+      "id": "check-page-1d1093aac4",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
+      "page": "terms",
+      "excerpt": "But governments have to ask whether an investment preserves capabilities that Europe cannot afford to lose, keeps production alive, and reduces dependence on suppliers that have already demonstrated their willingness to weaponise critical raw materials."
+    },
+    {
+      "id": "check-page-76e8280fe6",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
+      "page": "terms",
+      "excerpt": "The consequences of applying purely commercial logic are already visible across Europe."
+    },
+    {
+      "id": "check-page-8a072b2e90",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
+      "page": "terms",
+      "excerpt": "Since 2021, soaring energy costs have forced the closure or curtailment of nearly half of Europe's primary aluminium smelting capacity."
+    },
+    {
+      "id": "check-page-dbbe48c53c",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
+      "page": "terms",
+      "excerpt": "Lead smelters face similar pressures, despite producing antimony, an essential material for defence."
+    },
+    {
+      "id": "check-page-ecb6b55045",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
+      "page": "terms",
+      "excerpt": "Europe's first industrial-scale rare earth magnet factory in Narva, Estonia, illustrates the point."
+    },
+    {
+      "id": "check-page-11e7009e25",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
+      "page": "terms",
+      "excerpt": "It required public backing despite producing materials that are indispensable for electric vehicles, wind turbines and defence technologies."
+    },
+    {
+      "id": "check-page-1ad68f46ee",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
+      "page": "terms",
+      "excerpt": "The missing profit was not the project's failing—it was the consequence of competing against a market dominated by China."
+    },
+    {
+      "id": "check-page-f17961dc5d",
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
+      "page": "terms",
+      "excerpt": "Turning partnerships into investment Europe also needs to think differently about how it works with trusted partners."
     },
     {
       "id": "check-page-38e4bc379e",
@@ -406,10 +731,154 @@
       "excerpt": "EIT RawMaterials continues its longstanding collaboration with Greenland Resources through a new investment aimed at advancing low-carbon magnesium production in Europe. | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us"
     },
     {
+      "id": "check-page-d83e79ffa5",
+      "url": "https://eitrawmaterials.eu/press-releases/2025-greenland-resources-investment",
+      "page": "terms",
+      "excerpt": "EIT Raw Materials has invested €0.5 million in Greenland Resources to accelerate low-carbon magnesium production in Europe, aiming to reduce the continent's near-total dependence on China."
+    },
+    {
+      "id": "check-page-0446da15b7",
+      "url": "https://eitrawmaterials.eu/press-releases/2025-greenland-resources-investment",
+      "page": "terms",
+      "excerpt": "EIT RawMaterials has supported Greenland Resources from the outset in developing a sustainable source of molybdenum for Europe, strengthening the region’s resource security and industrial competitiveness."
+    },
+    {
+      "id": "check-page-9887bc18be",
+      "url": "https://eitrawmaterials.eu/press-releases/2025-greenland-resources-investment",
+      "page": "terms",
+      "excerpt": "Building on this partnership, the new financing under the Horizon Europe framework will enable the testing and scale-up of innovative, low-emission technologies to extract magnesium from saline process water at the company’s primary molybdenum operation."
+    },
+    {
+      "id": "check-page-0e17b31186",
+      "url": "https://eitrawmaterials.eu/press-releases/2025-greenland-resources-investment",
+      "page": "terms",
+      "excerpt": "Bernd Schäfer, CEO, Managing Director, EIT RawMaterials, said: “Magnesium is mission-critical for Europe’s competitiveness — from lightweight mobility to defence — and yet the EU depends on China for nearly all its supply."
+    },
+    {
+      "id": "check-page-96312bbdae",
+      "url": "https://eitrawmaterials.eu/press-releases/2025-greenland-resources-investment",
+      "page": "terms",
+      "excerpt": "This dependence threatens the stability of core industrial sectors such as aluminium, where magnesium is an essential alloying element that underpins our transport, energy and manufacturing value chains."
+    },
+    {
+      "id": "check-page-cb862c8bac",
+      "url": "https://eitrawmaterials.eu/press-releases/2025-greenland-resources-investment",
+      "page": "terms",
+      "excerpt": "As Europe’s flagship public–private partnership in the raw materials sector, we are backing practical innovations that add new European tonnage with a smaller carbon footprint."
+    },
+    {
+      "id": "check-page-06b52dd8fe",
+      "url": "https://eitrawmaterials.eu/press-releases/2025-greenland-resources-investment",
+      "page": "terms",
+      "excerpt": "Magnesium is an EU-designated critical and strategic raw material, and European industry remains highly exposed to supply concentration — China currently accounts for roughly 95%–97% of Europe’s magnesium imports."
+    },
+    {
+      "id": "check-page-4b7942d261",
+      "url": "https://eitrawmaterials.eu/press-releases/2025-greenland-resources-investment",
+      "page": "terms",
+      "excerpt": "By supporting technology to recover magnesium from both process water and primary ore, this project aims to unlock new, lower-carbon sources of a metal essential for lightweight alloys and advanced manufacturing."
+    },
+    {
+      "id": "check-page-7bce70eb6e",
+      "url": "https://eitrawmaterials.eu/press-releases/2025-greenland-resources-investment",
+      "page": "terms",
+      "excerpt": "The initiative complements the EU’s expanding portfolio of CRMA Strategic Projects and aligns with EIT RawMaterials’ role in mobilising investment and innovation across the raw materials value chain under Horizon Europe."
+    },
+    {
+      "id": "check-page-8b31a2206f",
+      "url": "https://eitrawmaterials.eu/press-releases/2025-greenland-resources-investment",
+      "page": "terms",
+      "excerpt": "EIT RawMaterials demonstrates its dedication to advancing and supporting a circular economy in Europe by fostering innovation, collaboration, and sustainable practices."
+    },
+    {
+      "id": "check-page-42a351ca91",
+      "url": "https://eitrawmaterials.eu/press-releases/2025-greenland-resources-investment",
+      "page": "terms",
+      "excerpt": "Mandated by the European Commission, EIT RawMaterials leads the European Raw Materials Alliance (ERMA), which includes 800 members representing an investment potential of more than €25 billion."
+    },
+    {
+      "id": "check-page-b39334aec1",
+      "url": "https://eitrawmaterials.eu/press-releases/2025-greenland-resources-investment",
+      "page": "terms",
+      "excerpt": "Since its founding, EIT RawMaterials has deployed over €700 million in direct strategic funding to support more than 800 projects and start-ups, leveraging approximately €8.3 billion in additional investment into critical raw materials projects and technologies across Europe and beyond."
+    },
+    {
       "id": "check-page-632c310259",
       "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon-recycling",
       "page": "terms",
       "excerpt": "EIT RawMaterials invests in German silicon recycling start up Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board Departments Committees RIS Country Representatives Careers Procurement Contact Us Press Release EIT RawMaterials"
+    },
+    {
+      "id": "check-page-029a0169ad",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon-recycling",
+      "page": "terms",
+      "excerpt": "September 2023 -- EIT RawMaterials, world’s largest network in raw and advanced materials has invested, as part of their mission to drive innovation in the raw materials value chain, in Circular Silicon Europe GmbH, an innovative clean-tech startup based in Braunschweig, Germany."
+    },
+    {
+      "id": "check-page-073b27393d",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon-recycling",
+      "page": "terms",
+      "excerpt": "The pre-seed capital enables the company to build the first industrial recycling line, with a capacity of 140 tons, dedicated to recovering silicon from solar panel waste."
+    },
+    {
+      "id": "check-page-f2185d915e",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon-recycling",
+      "page": "terms",
+      "excerpt": "This groundbreaking recycling process for a strategic raw material will propel the solar industry’s transition toward a circular economy."
+    },
+    {
+      "id": "check-page-4982b01b3c",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon-recycling",
+      "page": "terms",
+      "excerpt": "Silicon a crucial raw material for Europe’s transition to renewable energy Solar energy and silicon as its raw material play a crucial role in Europe's transition to renewable energy sources, and Europe has emerged as a world leader in solar panel installation."
+    },
+    {
+      "id": "check-page-bf64ab4afb",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon-recycling",
+      "page": "terms",
+      "excerpt": "However, with a lifespan of 25 to 30 years, solar panels will inevitably require disposal and replacement."
+    },
+    {
+      "id": "check-page-69c151f6e9",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon-recycling",
+      "page": "terms",
+      "excerpt": "This highlights the urgent need to manage solar power waste and recycle vital raw materials used in production."
+    },
+    {
+      "id": "check-page-f45fbcfdf5",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon-recycling",
+      "page": "terms",
+      "excerpt": "“For the green transition to a renewable energy system, millions more solar panels will need to be installed globally."
+    },
+    {
+      "id": "check-page-7f63704d26",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon-recycling",
+      "page": "terms",
+      "excerpt": "But this also means a surge in solar panel waste containing silicon."
+    },
+    {
+      "id": "check-page-e2cd4823dd",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon-recycling",
+      "page": "terms",
+      "excerpt": "The team at Circular Silicon has found an efficient process to recover silicon from various waste streams, turning waste into a strategic raw material for Europe."
+    },
+    {
+      "id": "check-page-b76956e5c4",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon-recycling",
+      "page": "terms",
+      "excerpt": "This exciting innovation aligns with Europe’s ambitious recycling targets set by the Critical Raw Materials Act."
+    },
+    {
+      "id": "check-page-7c382250a6",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon-recycling",
+      "page": "terms",
+      "excerpt": "We are thrilled to support the project, which marks our first direct investment in Northern Germany.” - Bernd Schäfer, CEO, Managing Director, EIT RawMaterials."
+    },
+    {
+      "id": "check-page-b02081f76d",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon-recycling",
+      "page": "terms",
+      "excerpt": "Circular Silicon is in total alignment with EU recommendations on recycling waste in the EU Given solar energy’s strategic importance to the energy transition, recycling solar panel waste is essential for reducing Europe’s reliance on other nations."
     },
     {
       "id": "check-page-c3c8280539",
@@ -418,10 +887,106 @@
       "excerpt": "EIT RawMaterials doubles investment in Novana low-carbon circular vanadium recovery project to €1m | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board"
     },
     {
+      "id": "check-page-7c0ff9d2b0",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-doubles-investment-novana-low-carbon-circular-vanadium-recovery",
+      "page": "terms",
+      "excerpt": "The investments aim to accelerate Novana’s progress towards becoming Europe’s first domestic producer of Vanadium Pentoxide (V 2 O 5 ), a critical raw material used in high-strength steel and Vanadium Flow Batteries (VFBs)."
+    },
+    {
+      "id": "check-page-56d510bdd5",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-doubles-investment-novana-low-carbon-circular-vanadium-recovery",
+      "page": "terms",
+      "excerpt": "This investment highlights EIT RawMaterials’ growing role as an impact investor in raw material innovation and industrialisation in Europe."
+    },
+    {
+      "id": "check-page-8c65cef014",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-doubles-investment-novana-low-carbon-circular-vanadium-recovery",
+      "page": "terms",
+      "excerpt": "This company is an outstanding example of our portfolio, where we foster innovative technologies and projects across the raw materials value chain with a strategic focus on securing Europe’s raw material supply chains and industrial competitiveness."
+    },
+    {
+      "id": "check-page-55657bddfa",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-doubles-investment-novana-low-carbon-circular-vanadium-recovery",
+      "page": "terms",
+      "excerpt": "We are proud to support Novana’s journey to become the first domestic European producer of high-purity vanadium, a vital resource for Europe’s leading industries.” Johanna Lamminen, CEO, Novana, added: \"This renewed investment from EIT RawMaterials is a significant boost to our project."
+    },
+    {
+      "id": "check-page-6d784023cd",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-doubles-investment-novana-low-carbon-circular-vanadium-recovery",
+      "page": "terms",
+      "excerpt": "It will accelerate our progress towards construction and, ultimately, the production of zero-carbon, high-purity vanadium in Europe."
+    },
+    {
+      "id": "check-page-477fb019fe",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-doubles-investment-novana-low-carbon-circular-vanadium-recovery",
+      "page": "terms",
+      "excerpt": "VRP1 is projected to produce 9,000 tonnes of vanadium pentoxide annually, equal to more than 40% of current European annual demand."
+    },
+    {
+      "id": "check-page-c1d6cfe5c6",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-doubles-investment-novana-low-carbon-circular-vanadium-recovery",
+      "page": "terms",
+      "excerpt": "EIT RawMaterials demonstrates its dedication to advancing and supporting a circular economy in Europe by fostering innovation, collaboration, and sustainable practices."
+    },
+    {
+      "id": "check-page-9c20957221",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-doubles-investment-novana-low-carbon-circular-vanadium-recovery",
+      "page": "terms",
+      "excerpt": "Mandated by the European Commission, EIT RawMaterials leads the European Raw Materials Alliance (ERMA), which includes more than 750 members and an advanced project pipeline of over 40 projects, representing an investment potential of more than €25 billion."
+    },
+    {
+      "id": "check-page-a1fd49f160",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-doubles-investment-novana-low-carbon-circular-vanadium-recovery",
+      "page": "terms",
+      "excerpt": "These initiatives, including ERMA projects, have leveraged additional funding of €5 billion from external sources, creating a cumulative impact of more than €5.5 billion in critical and strategic raw materials projects, technologies, and programmes across Europe and beyond."
+    },
+    {
+      "id": "check-page-56850c7b02",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-doubles-investment-novana-low-carbon-circular-vanadium-recovery",
+      "page": "terms",
+      "excerpt": "Supported by the European Institute of Innovation and Technology (EIT), a body of the European Union, EIT RawMaterials was established in 2015 to advance Europe’s transition to a sustainable economy."
+    },
+    {
+      "id": "check-page-277650aa0b",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-doubles-investment-novana-low-carbon-circular-vanadium-recovery",
+      "page": "terms",
+      "excerpt": "Its mission is to secure a sustainable supply of raw materials for Europe, close material loops, and design innovative product solutions, with the goal to position raw materials as a strategic strength for Europe through innovation, education, and entrepreneurship."
+    },
+    {
       "id": "check-page-5575e94119",
       "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-launches-new-investment-call-technology-start-ups-scale-ups-and",
       "page": "terms",
       "excerpt": "EIT RawMaterials launches new investment call for technology start-ups & scale-ups, and mining, processing and recycling projects | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization"
+    },
+    {
+      "id": "check-page-883ef2d69e",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-launches-new-investment-call-technology-start-ups-scale-ups-and",
+      "page": "terms",
+      "excerpt": "Bernd Schäfer, CEO, Managing Director, EIT RawMaterials, stated: “The ERMA Booster Call is a strategic initiative to reduce European reliance on imports for 80-100% of the critical raw materials essential to industrial resilience and competitiveness."
+    },
+    {
+      "id": "check-page-4298cfcb44",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-launches-new-investment-call-technology-start-ups-scale-ups-and",
+      "page": "terms",
+      "excerpt": "The Draghi Report identified access to CRMs as Europe’s second-largest challenge to competitiveness, following energy."
+    },
+    {
+      "id": "check-page-a122c9e71a",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-launches-new-investment-call-technology-start-ups-scale-ups-and",
+      "page": "terms",
+      "excerpt": "While policy efforts in Europe have increased focus on CRMs, financing remains a major bottleneck."
+    },
+    {
+      "id": "check-page-6bee705466",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-launches-new-investment-call-technology-start-ups-scale-ups-and",
+      "page": "terms",
+      "excerpt": "This expanded funding, covering early-stage innovation to Series-A companies, underscores EIT RawMaterials’ focus on promoting breakthrough innovation within Europe’s raw materials sector and helping European start-ups to successfully transition from innovation to commercialization in a sector vital to Europe’s long-term industrial competitiveness."
+    },
+    {
+      "id": "check-page-4e2ee28bcc",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-launches-new-investment-call-technology-start-ups-scale-ups-and",
+      "page": "terms",
+      "excerpt": "Building on EIT RawMaterials’ successful leadership of the European Raw Materials Alliance (ERMA) and development of a pipeline of strategic, high-potential projects, the new call will invest up to €2.5m per project into innovative extraction, processing and recycling projects with strategic potential for Europe."
     },
     {
       "id": "check-page-3d04232447",
@@ -430,10 +995,124 @@
       "excerpt": "Apply for funding up to €2.5m with ERMA Booster Call Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board Departments Committees RIS Country Representatives Careers Procurement Contact Us Scale up your startup, SME, or Critical Supply"
     },
     {
+      "id": "check-page-0f6dd8d0c8",
+      "url": "https://eitrawmaterials.eu/erma-booster-call",
+      "page": "application",
+      "excerpt": "Apply for funding up to €2.5m with ERMA Booster Call Call closed Calling on innovations, mining and recycling projects to strengthen the European economy and enhance its supply chains."
+    },
+    {
+      "id": "check-page-b626efb895",
+      "url": "https://eitrawmaterials.eu/erma-booster-call",
+      "page": "application",
+      "excerpt": "The call is aimed at start-ups, scale-ups, and mining projects active in the raw materials value chain."
+    },
+    {
+      "id": "check-page-446ac0f6b8",
+      "url": "https://eitrawmaterials.eu/erma-booster-call",
+      "page": "application",
+      "excerpt": "By participating, you will gain access to funding, expert guidance, and Europe’s largest network of industry leaders to help scale your business and solve Europe’s critical raw materials challenges."
+    },
+    {
+      "id": "check-page-b6092f57c4",
+      "url": "https://eitrawmaterials.eu/erma-booster-call",
+      "page": "application",
+      "excerpt": "Eligible Scale-Ups, and SMEs focusing on cutting-edge innovation in raw and advanced materials can receive up to €1.5m."
+    },
+    {
+      "id": "check-page-9553da3aa4",
+      "url": "https://eitrawmaterials.eu/erma-booster-call",
+      "page": "application",
+      "excerpt": "Start-ups Seed stage start-ups Innovative projects at TRL 4 or higher A strong founding/management team & 100% devoted time to the company for the next 5+ years."
+    },
+    {
+      "id": "check-page-2082419db1",
+      "url": "https://eitrawmaterials.eu/erma-booster-call",
+      "page": "application",
+      "excerpt": "EIT RawMaterials is well-equipped to support both Group 1—startups and scale-ups, as well as SMEs—and Group 2—advanced projects and companies focused on extraction, processing, and recycling."
+    },
+    {
+      "id": "check-page-ba3c528cba",
+      "url": "https://eitrawmaterials.eu/erma-booster-call",
+      "page": "application",
+      "excerpt": "Experts: Benefit from coaching, mentoring, and strategic guidance from EIT RawMaterials and community experts."
+    },
+    {
       "id": "check-page-3e903e038d",
       "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
       "page": "terms",
       "excerpt": "EIT RawMaterials makes €0.5m Seed Investment to propel Novana Vanadium Recovery Project growth | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board"
+    },
+    {
+      "id": "check-page-5d82f57b7e",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
+      "page": "terms",
+      "excerpt": "Strategic Importance of Vanadium for Europe Europe remains significantly import-dependent for vanadium, a designated Critical Raw Material crucial for producing high-strength steel alloys and emerging technologies like Vanadium Flow Batteries (VFBs)."
+    },
+    {
+      "id": "check-page-4ed050c7b9",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
+      "page": "terms",
+      "excerpt": "VRP1, with the help of this seed investment, is positioned to become Europe’s first domestic producer of Vanadium Pentoxide (V2O5) and is projected to produce 9,000 tonnes annually, equal to more than 40% of current European annual demand."
+    },
+    {
+      "id": "check-page-83e0510ad7",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
+      "page": "terms",
+      "excerpt": "Additionally, the project will eliminate up to 1.5 million tonnes of CO2 over the next decade, contributing to Europe’s green transition."
+    },
+    {
+      "id": "check-page-bde9448b0d",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
+      "page": "terms",
+      "excerpt": "Seed Investment to Catalyze Further Growth In addition to a €0.5 million seed investment, EIT RawMaterials is supporting Novana in securing the remaining financing needed to fully develop the project."
+    },
+    {
+      "id": "check-page-6783230426",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
+      "page": "terms",
+      "excerpt": "The total €400 million required will be raised through a combination of debt and equity financing, with leading Nordic bank SEB and Aventum, a leading corporate finance boutique, managing the fundraising process."
+    },
+    {
+      "id": "check-page-54a45d4cf2",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
+      "page": "terms",
+      "excerpt": "The European Investment Bank (EIB) has conditionally approved debt financing, recognising the project’s strategic importance for Europe’s resource independence."
+    },
+    {
+      "id": "check-page-41a8dd0740",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
+      "page": "terms",
+      "excerpt": "EIT RawMaterials’ seed investment secures a 1.1% stake in Novana, with an option to invest up to an additional €10 million in equity at a later stage, contingent upon further milestones in the project’s development."
+    },
+    {
+      "id": "check-page-79299ad167",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
+      "page": "terms",
+      "excerpt": "The project has all key permits in place as well as a take-or-pay offtake agreement and well-advanced discussions regarding slag supply agreements positioning it at the forefront of Europe’s raw materials independence and green transition."
+    },
+    {
+      "id": "check-page-567c8dbf6d",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
+      "page": "terms",
+      "excerpt": "EIT RawMaterials: Championing Circular Economy Innovation This investment highlights EIT RawMaterials’ commitment to making strategic seed investments that catalyse further growth and innovation in Europe’s raw materials sector."
+    },
+    {
+      "id": "check-page-735476666d",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
+      "page": "terms",
+      "excerpt": "Bernd Schäfer, CEO, Managing Director, EIT RawMaterials , stated: “This €0.5 million seed investment is designed to support Novana in laying the groundwork for further project growth."
+    },
+    {
+      "id": "check-page-ecdbde8b12",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
+      "page": "terms",
+      "excerpt": "EIT RawMaterials is mandated to lead the European Raw Materials Alliance (ERMA), with over 750 members and an advanced project pipeline of more than 40 projects with a potential of over €25 billion in investments."
+    },
+    {
+      "id": "check-page-3c9e781444",
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
+      "page": "terms",
+      "excerpt": "These have raised a further €500 million from the market, resulting in cumulative direct funding exceeding €1 billion into projects and programmes across Europe."
     },
     {
       "id": "check-page-41ce0b5384",
@@ -442,10 +1121,364 @@
       "excerpt": "European Competitiveness Requires Strategic Investment Commitment to Raw Materials Sector | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board Departments"
     },
     {
+      "id": "check-page-647327b040",
+      "url": "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
+      "page": "terms",
+      "excerpt": "Bernd Schäfer, CEO, Managing Director, EIT RawMaterials highlighted the urgency of the paper’s recommendations: “The crucial role of raw materials in Europe’s future has never been more apparent."
+    },
+    {
+      "id": "check-page-1e97a19069",
+      "url": "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
+      "page": "terms",
+      "excerpt": "The Draghi Report on European Competitiveness, which will form the foundation for the newEuropean Commission’s flagship Competitiveness Compass, ranks raw materials as the second most critical issue for Europe, closely following energy security."
+    },
+    {
+      "id": "check-page-8f7fffb404",
+      "url": "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
+      "page": "terms",
+      "excerpt": "This policy paper outlines a pathway to build a resilient and sustainable raw materials supply chain — essential for Europe’s competitiveness and industrial future."
+    },
+    {
+      "id": "check-page-eaa5b2bbc3",
+      "url": "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
+      "page": "terms",
+      "excerpt": "In response to these challenges, the European Union adopted the Critical Raw Materials Act (CRMA), setting ambitious targets including: Expanding Europe’s domestic raw materials production to 10%, Increasing processing capacity to 40%, and Recycling rates to 25% by 2030."
+    },
+    {
+      "id": "check-page-a7f2067858",
+      "url": "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
+      "page": "terms",
+      "excerpt": "As global demand rises, ensuring sustainable and reliable supplies has become crucial to Europe's strategic autonomy and industrial competitiveness."
+    },
+    {
+      "id": "check-page-aee81dbba8",
+      "url": "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
+      "page": "terms",
+      "excerpt": "Amid these challenges lies a transformative opportunity: a recent European Commission report highlights the potential for the raw materials sector to generate over €2 trillion in value and support 32 million jobs by 2030, underscoring the immense economic potential from strategic investment in this field."
+    },
+    {
+      "id": "check-page-56cf3c6d64",
+      "url": "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
+      "page": "terms",
+      "excerpt": "Recognising both the challenges and opportunities, EIT RawMaterials is calling for a commitment of €4 billion under Framework Programme 10 to deliver targeted, high-impact investments in research, innovation, and education across the raw materials value chain."
+    },
+    {
+      "id": "check-page-189ae3ec9f",
+      "url": "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
+      "page": "terms",
+      "excerpt": "This funding is essential to address Europe’s urgent priorities and strengthen its raw materials ecosystem."
+    },
+    {
+      "id": "check-page-661e7e9939",
+      "url": "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
+      "page": "terms",
+      "excerpt": "These efforts will enable Europe to establish a secure, self-sustaining supply chain for critical raw materials, positioning the continent as a global leader in the green and digital transitions, fostering economic growth, and ensuring Europe’s industrial resilience."
+    },
+    {
+      "id": "check-page-d95fdece1e",
+      "url": "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
+      "page": "terms",
+      "excerpt": "To achieve these goals, EIT RawMaterials will collaborate closely with its partners — the largest and most active Knowledge and Innovation Community in the raw materials sector, European and MemberState institutions, stakeholders, investors, researchers, and academic institutions."
+    },
+    {
+      "id": "check-page-528dddf7a9",
+      "url": "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
+      "page": "terms",
+      "excerpt": "Together, these efforts will attract significant private investment, develop breakthrough technologies, and cultivate the skilled workforce needed to secure Europe’s raw materials future."
+    },
+    {
+      "id": "check-page-19f85db2ec",
+      "url": "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
+      "page": "terms",
+      "excerpt": "EIT RawMaterials is supported by the European Institute of Innovation & Technology (EIT)."
+    },
+    {
       "id": "check-page-94e232f3fe",
       "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
       "page": "terms",
       "excerpt": "EIT RawMaterials invests €0.6 million in low-carbon CRM startup Nordic Bio-Graphite | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board Departments"
+    },
+    {
+      "id": "check-page-b185b5e790",
+      "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
+      "page": "terms",
+      "excerpt": "Download Jan 16, 2026 Berlin, 16.01.2026 – EIT RawMaterials has announced an investment of €0.6 million in Nordic Bio-Graphite, a Swedish startup developing high-purity graphite using renewable carbon sources."
+    },
+    {
+      "id": "check-page-f43ee3852c",
+      "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
+      "page": "terms",
+      "excerpt": "Conventional synthetic graphite is produced by heating carbon-based raw materials to 3,000°C, resulting in high energy consumption and significant CO2 emissions."
+    },
+    {
+      "id": "check-page-d6a5647b3e",
+      "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
+      "page": "terms",
+      "excerpt": "Nordic Bio-Graphite replaces these raw materials with forestry residues, which are converted into biochar and then into synthetic graphite through a catalyst-assisted heat treatment, with significantly lower energy requirements."
+    },
+    {
+      "id": "check-page-ce7563d9e5",
+      "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
+      "page": "terms",
+      "excerpt": "Speaking on the investment, Bernd Schäfer, CEO, Managing Director, EIT RawMaterials, said: “Securing a sustainable, domestic supply of CRMs is a vital issue for Europe’s industrial sovereignty."
+    },
+    {
+      "id": "check-page-871d2fdcaf",
+      "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
+      "page": "terms",
+      "excerpt": "China currently controls nearly 80% of global graphite production, and as demand surges, we cannot afford to continue to rely on fragile, high-carbon import chains."
+    },
+    {
+      "id": "check-page-76990919bb",
+      "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
+      "page": "terms",
+      "excerpt": "Nordic Bio-Graphite’s breakthrough represents exactly the kind of circular, fossil-free innovation Europe needs to meet its 2030 strategic benchmarks."
+    },
+    {
+      "id": "check-page-f82d285a90",
+      "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
+      "page": "terms",
+      "excerpt": "This combined funding supports Nordic Bio-Graphite to advance key technical and commercial development milestones."
+    },
+    {
+      "id": "check-page-fc5e09f6f8",
+      "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
+      "page": "terms",
+      "excerpt": "Europe remains highly import-dependent on graphite, leading to an EU designation as a critical and strategic raw material."
+    },
+    {
+      "id": "check-page-b5c1b472a5",
+      "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
+      "page": "terms",
+      "excerpt": "It is also essential for portable electronics, large-scale energy storage, and steelmaking."
+    },
+    {
+      "id": "check-page-5abc009c10",
+      "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
+      "page": "terms",
+      "excerpt": "Nordic Bio-Graphite produces ultra-high-purity synthetic graphite (>99.95%), enabling the company to meet the strict specifications of battery and steel manufacturers while offering a lower-carbon alternative to conventional synthetic graphite."
+    },
+    {
+      "id": "check-page-2a2fbdcb8c",
+      "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
+      "page": "terms",
+      "excerpt": "Notes to the Editor IEA, 2024 Global Critical Minerals Outlook 2024 *BNEF, BloombergNEF’s Transition Metals Outlook 2025 ECGA – European Carbon & Graphite Association, Graphite in Batteries,2023 Nordic Bio-Graphite was recognised as the 2024 winner of ‘Startup 4 Climate’, one of Europe’s largest innovation competitions focused on climate impact."
+    },
+    {
+      "id": "check-page-b08d3fbd2c",
+      "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
+      "page": "terms",
+      "excerpt": "EIT RawMaterials demonstrates its dedication to advancing and supporting a circular economy in Europe by fostering innovation, collaboration, and sustainable practices."
+    },
+    {
+      "id": "check-page-688c507e9e",
+      "url": "https://eitrawmaterials.eu/press-releases/weeefiner-investment-2025",
+      "page": "terms",
+      "excerpt": "EIT RawMaterials invests €0.5 million in Finnish circularity start-up Weeefiner | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board Departments Committees"
+    },
+    {
+      "id": "check-page-2caaf5125a",
+      "url": "https://eitrawmaterials.eu/press-releases/weeefiner-investment-2025",
+      "page": "terms",
+      "excerpt": "Bernd Schäfer, CEO, Managing Director, EIT RawMaterials, commented: “Weeefiner’s technology is an outstanding example of our focus on groundbreaking innovation that is helping Europe take the lead in creating a truly functioning circular economy."
+    },
+    {
+      "id": "check-page-c3af1936f9",
+      "url": "https://eitrawmaterials.eu/press-releases/weeefiner-investment-2025",
+      "page": "terms",
+      "excerpt": "The new funding will enable Weeefiner to refine its technology, optimise production processes, and establish a small-series manufacturing line to meet growing demand."
+    },
+    {
+      "id": "check-page-c1fc3cd504",
+      "url": "https://eitrawmaterials.eu/press-releases/weeefiner-investment-2025",
+      "page": "terms",
+      "excerpt": "EIT RawMaterials demonstrates its dedication to advancing and supporting a circular economy in Europe by fostering innovation, collaboration, and sustainable practices."
+    },
+    {
+      "id": "check-page-cf5a54ee6f",
+      "url": "https://eitrawmaterials.eu/press-releases/weeefiner-investment-2025",
+      "page": "terms",
+      "excerpt": "Mandated by the European Commission, EIT RawMaterials leads the European Raw Materials Alliance (ERMA), which includes more than 790 members and an advanced project pipeline of over 40 projects, representing an investment potential of more than €25 billion."
+    },
+    {
+      "id": "check-page-063dc5f39b",
+      "url": "https://eitrawmaterials.eu/press-releases/weeefiner-investment-2025",
+      "page": "terms",
+      "excerpt": "These initiatives, including ERMA projects, have leveraged additional funding of €5 billion from external sources, creating a cumulative impact of more than €5.5 billion in critical and strategic raw materials projects, technologies, and programmes across Europe and beyond."
+    },
+    {
+      "id": "check-page-7c9ee43bdc",
+      "url": "https://eitrawmaterials.eu/press-releases/weeefiner-investment-2025",
+      "page": "terms",
+      "excerpt": "Supported by the European Institute of Innovation and Technology (EIT), a body of the European Union, EIT RawMaterials was established in 2015 to advance Europe’s transition to a sustainable economy."
+    },
+    {
+      "id": "check-page-5e64b80884",
+      "url": "https://eitrawmaterials.eu/terms-and-conditions",
+      "page": "terms",
+      "excerpt": "Terms and Conditions | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board Departments Committees RIS Country Representatives Careers Procurement Contact Us"
+    },
+    {
+      "id": "check-page-5e01de8a5e",
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "page": "terms",
+      "excerpt": "EIT RawMaterials makes €0.5m Seed Investment to propel Novana Vanadium Recovery Project growth | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board"
+    },
+    {
+      "id": "check-page-a8b6e624be",
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "page": "terms",
+      "excerpt": "Strategic Importance of Vanadium for Europe Europe remains significantly import-dependent for vanadium, a designated Critical Raw Material crucial for producing high-strength steel alloys and emerging technologies like Vanadium Flow Batteries (VFBs)."
+    },
+    {
+      "id": "check-page-1b5b9f4d3f",
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "page": "terms",
+      "excerpt": "VRP1, with the help of this seed investment, is positioned to become Europe’s first domestic producer of Vanadium Pentoxide (V2O5) and is projected to produce 9,000 tonnes annually, equal to more than 40% of current European annual demand."
+    },
+    {
+      "id": "check-page-69d53a3367",
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "page": "terms",
+      "excerpt": "Additionally, the project will eliminate up to 1.5 million tonnes of CO2 over the next decade, contributing to Europe’s green transition."
+    },
+    {
+      "id": "check-page-7e66b87188",
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "page": "terms",
+      "excerpt": "Seed Investment to Catalyze Further Growth In addition to a €0.5 million seed investment, EIT RawMaterials is supporting Novana in securing the remaining financing needed to fully develop the project."
+    },
+    {
+      "id": "check-page-f34cb35195",
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "page": "terms",
+      "excerpt": "The total €400 million required will be raised through a combination of debt and equity financing, with leading Nordic bank SEB and Aventum, a leading corporate finance boutique, managing the fundraising process."
+    },
+    {
+      "id": "check-page-6171bd5fe2",
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "page": "terms",
+      "excerpt": "The European Investment Bank (EIB) has conditionally approved debt financing, recognising the project’s strategic importance for Europe’s resource independence."
+    },
+    {
+      "id": "check-page-739d6c25b0",
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "page": "terms",
+      "excerpt": "EIT RawMaterials’ seed investment secures a 1.1% stake in Novana, with an option to invest up to an additional €10 million in equity at a later stage, contingent upon further milestones in the project’s development."
+    },
+    {
+      "id": "check-page-bdbb3cb317",
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "page": "terms",
+      "excerpt": "The project has all key permits in place as well as a take-or-pay offtake agreement and well-advanced discussions regarding slag supply agreements positioning it at the forefront of Europe’s raw materials independence and green transition."
+    },
+    {
+      "id": "check-page-0c3971db72",
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "page": "terms",
+      "excerpt": "EIT RawMaterials: Championing Circular Economy Innovation This investment highlights EIT RawMaterials’ commitment to making strategic seed investments that catalyse further growth and innovation in Europe’s raw materials sector."
+    },
+    {
+      "id": "check-page-c4cecff088",
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "page": "terms",
+      "excerpt": "Bernd Schäfer, CEO, Managing Director, EIT RawMaterials , stated: “This €0.5 million seed investment is designed to support Novana in laying the groundwork for further project growth."
+    },
+    {
+      "id": "check-page-a6335e43e9",
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "page": "terms",
+      "excerpt": "EIT RawMaterials is mandated to lead the European Raw Materials Alliance (ERMA), with over 750 members and an advanced project pipeline of more than 40 projects with a potential of over €25 billion in investments."
+    },
+    {
+      "id": "check-page-cf798d1c5c",
+      "url": "https://eitrawmaterials.eu/node/2142",
+      "page": "terms",
+      "excerpt": "These have raised a further €500 million from the market, resulting in cumulative direct funding exceeding €1 billion into projects and programmes across Europe."
+    },
+    {
+      "id": "check-page-8a36ceb02b",
+      "url": "https://eitrawmaterials.eu/search?fulltext=&search_page%5B1%5D=topic%3A320&sort_bef_combine=search_api_relevance_DESC",
+      "page": "terms",
+      "excerpt": "Search | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board Departments Committees RIS Country Representatives Careers Procurement Contact Us Search results"
+    },
+    {
+      "id": "check-page-337459e61e",
+      "url": "https://eitrawmaterials.eu/about-finance-fundraising",
+      "page": "details",
+      "excerpt": "About Finance & Fundraising | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board Departments Committees RIS Country Representatives Careers Procurement"
+    },
+    {
+      "id": "check-page-06c3fb081c",
+      "url": "https://eitrawmaterials.eu/about-finance-fundraising",
+      "page": "details",
+      "excerpt": "Finance We're Bridging the Financial Gap From market access, to scale-up, to product launch, we help entrepreneurs solve their biggest challenge – access to finance and investment."
+    },
+    {
+      "id": "check-page-40d791727f",
+      "url": "https://eitrawmaterials.eu/about-finance-fundraising",
+      "page": "details",
+      "excerpt": "Access to Funding Gain access to private equity and venture capital via our partner institutions."
+    },
+    {
+      "id": "check-page-2958184b91",
+      "url": "https://eitrawmaterials.eu/about-finance-fundraising",
+      "page": "details",
+      "excerpt": "200M+ € in Start-Up Investment 600+ Start-Ups Supported 260+ Products & Services To-Market ERMA We are mandated by the EU Commission to lead the European Raw Materials Alliance (ERMA)."
+    },
+    {
+      "id": "check-page-d67ca1beb2",
+      "url": "https://eitrawmaterials.eu/about-finance-fundraising",
+      "page": "details",
+      "excerpt": "We focus on advancing sustainable projects across the metals and minerals value… Find out more Europe’s Leading Raw Materials Startups — In One Portfolio Meet the startups shaping Europe’s materials transition."
+    },
+    {
+      "id": "check-page-c3e99a3f97",
+      "url": "https://eitrawmaterials.eu/about-finance-fundraising",
+      "page": "details",
+      "excerpt": "Discover our Start-ups portfolio Strategic European Funding Under the Horizon Europe programme, we help deliver funding via open calls, grants and project-based initiatives designed to strengthen critical raw materials supply."
+    },
+    {
+      "id": "check-page-4a64a9cf0e",
+      "url": "https://eitrawmaterials.eu/about-finance-fundraising",
+      "page": "details",
+      "excerpt": "Recycling The Green & Circular Metals Expert Forum: What Europe needs to make circularity work November 11, 2026 Partner Spotlight Partner Day 2026: Partners at the heart of what comes next October 30, 2026 Education How Girls Go STEM helped Bulgarian student Maria Metodieva turn new skills into an award-winning… October 26, 2026 See more news Filter Content Reset all Filters Need more info?"
+    },
+    {
+      "id": "check-page-499d3fb28a",
+      "url": "https://eitrawmaterials.eu/about-us",
+      "page": "details",
+      "excerpt": "About EIT RawMaterials | EIT RawMaterials - Developing raw materials into a major strength for Europe Skip to main content Main navigation Knowledge & Innovation VEOLIA Open Innovation Challenge Apply by 16 Dec About Knowledge & Innovation Live Calls Innovation Projects Open Innovation Challenge Finance & Fundraising About Finance & Fundraising Live Calls Apply Now ERMA Startup Portfolio EIT Jumpstarter 2026 Education & Skills About Education and Skills European Raw Materials Academy About the Academy Our Trainings Become a Learning Content Provider European Advanced Materials Academy About the Academy Our Trainings Become a Learning Content Provider Strategic Education Initiative EIT Higher Education Initiative Girls Go STEM Advanced Education Master Programmes PhD Summer Schools Professional Courses Customized Services Custom Programmes Open Innovation Challenge for Talent SIGNs Sprint (Open Innovation Challenge for Talent) RACE (Raw & Circular Economy Expedition) Alumni Live Calls News & Events Position on FP10 Press Releases Publications Success Stories Events The EIT RawMaterials Summit Partners Become a Partner Our Partners Strategic Impact Network Groups M2i – Minerals & Metals Intelligence Platform About Us About Us Governance Our Mission Our Organization Executive Board Management Board Departments Committees RIS Country Representatives Careers Procurement Contact Us"
+    },
+    {
+      "id": "check-page-bec9f3472b",
+      "url": "https://eitrawmaterials.eu/about-us",
+      "page": "details",
+      "excerpt": "We’re Securing Raw Materials & the EU’s Competitive Edge Our mission is to foster growth and attractiveness for the European raw materials sector."
+    },
+    {
+      "id": "check-page-440bdd49fa",
+      "url": "https://eitrawmaterials.eu/about-us",
+      "page": "details",
+      "excerpt": "Through radical innovation, new education models and strategic advisory, we’re developing raw materials into a major strength for Europe."
+    },
+    {
+      "id": "check-page-bab358d5f0",
+      "url": "https://eitrawmaterials.eu/about-us",
+      "page": "details",
+      "excerpt": "They are committed to upholding our mission, enabling people to achieve their goals and inspiring the next generation of… Meet our team Our Locations Regional Innovation Scheme The EIT RawMaterials Regional Innovation Scheme (RIS) Hubs play a critical role in reducing regional innovation disparities and boosting innovation capacity in Europe’s raw materials sector."
+    },
+    {
+      "id": "check-page-b91503a0cc",
+      "url": "https://eitrawmaterials.eu/about-us",
+      "page": "details",
+      "excerpt": "RIS Hubs act as local innovation and knowledge centers, connecting stakeholders across industry, academia, and government to drive sustainable resource management and strengthen the raw materials value chain."
+    },
+    {
+      "id": "check-page-0e67069b95",
+      "url": "https://eitrawmaterials.eu/about-us",
+      "page": "details",
+      "excerpt": "Through this network, the EIT RawMaterials RIS initiative fosters regional economic growth while advancing Europe’s transition to a circular and sustainable economy."
     }
   ],
   "findings": {
@@ -491,8 +1524,8 @@
     "durationWeeks": [],
     "format": [
       {
-        "value": "in-person",
-        "evidenceId": "check-format-53f9311a35"
+        "value": "remote",
+        "evidenceId": "check-format-68e41ab305"
       }
     ],
     "location": [
@@ -580,6 +1613,30 @@
           "condition": null
         },
         "evidenceId": "check-deal-636345bdf1"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "500000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-cf0ef9f91c"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "900000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-7362388e03"
       }
     ],
     "portfolioPages": [

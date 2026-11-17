@@ -1,98 +1,18 @@
 {
   "programId": "climate-kic-accelerator",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
-    {
-      "url": "https://www.climate-kic.org/events/apply-for-accelerator-programme-in-germany-switzerland-austria/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/events/circular-investment-readiness-network-cirn-cities-enabling-local-start-ups/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/events/community-connect-unpacking-the-eu-clean-industrial-deal/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/events/eucirculartalks-industrial-symbiosis-a-tool-for-the-green-deal/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/events/idealab-our-future-after-coal/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/events/innovation-and-investment-in-the-energy-transition/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/events/innovation-entrepreneurship-investment-climate-solutions/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/events/masterclass-sales-hacking-deal-closing-with-steli-efti/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/events/msca-eu-green-deal-cluster-event/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
       "page": "terms",
       "anchor": "Invest with us",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/news/call-for-applications-climate-kic-accelerator-programme-recruits-new-start-ups-in-france/",
-      "page": "application",
-      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.climate-kic.org/news/climathon-opens-applications-2017-city-hosts/",
-      "page": "application",
+      "url": "https://www.climate-kic.org/open-call/climaccelerator-organisers-europe-deadline-extended/",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -109,6 +29,54 @@
     {
       "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
       "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/open-call/independent-experts-netzerocities-climate-city-contract-investment-plans-2/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/open-call/independent-experts-netzerocities-climate-city-contract-investment-plans/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/open-call/netzerocities-call-for-pilot-cities-cohort-2-2023/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/open-call/open-call-for-new-investment-partners-to-join-the-eit-climate-kic-investing-for-1-5c-initiative/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/open-call/pilot-cities-programme-call-for-pilot-cities-cohort-3-2024/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/open-call/pilot-cities-programme-cohort-3-2024/",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -142,7 +110,15 @@
       "url": "https://www.climate-kic.org/policies/",
       "page": "terms",
       "anchor": "Terms & Conditions",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -211,6 +187,54 @@
       "origin": "official"
     },
     {
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-aprrn/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-da/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-jfw/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-naled/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-pc/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.climate-kic.org/programmes/our-portfolio/",
       "page": "portfolio",
       "anchor": "Our portfolio",
@@ -240,22 +264,6 @@
       "anchor": "About Climate KIC",
       "fetched": false,
       "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/wp-content/uploads/2017/04/Call-for-Application_CO.doc",
-      "page": "application",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/wp-content/uploads/2017/04/Start-up-Acceleration-Application-Template-2017.docx",
-      "page": "application",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
       "origin": "official"
     }
   ]

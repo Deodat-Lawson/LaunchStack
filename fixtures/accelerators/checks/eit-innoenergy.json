@@ -1,6 +1,6 @@
 {
   "programId": "eit-innoenergy",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://innoenergy.com/",
     "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
@@ -12,11 +12,16 @@
     "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications/",
     "https://innoenergy.com/news-resources/webinar-battery-storage-applications/",
     "https://innoenergy.com/startups/apply-form/",
-    "https://innoenergy.com/uploads/2023/01/application-form-template_december_2020.docx",
-    "https://innoenergy.com/uploads/2023/01/application-scoreboard_decmber_2020.pdf",
-    "https://innoenergy.com/uploads/2023/01/webinar_battery-storage-applications_2020-03-04.pdf",
     "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
-    "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/"
+    "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+    "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+    "https://innoenergy.com/news-resources/altris-attracts-new-investments-to-support-scale-up-ambitions/",
+    "https://innoenergy.com/news-resources/aquabattery-secures-e6-million-in-seed-investment-to-drive-innovation-in-long-duration-energy-storage-ldes/",
+    "https://innoenergy.com/news-resources/battery-analytics-pioneer-volytica-diagnostics-closes-e5-5m-investment-round/",
+    "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments-madrid/",
+    "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments/",
+    "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-paris-feb10/",
+    "https://innoenergy.com/news-resources/corpower-secures-7-3-meur-investment-into-portuguese-wave-project/"
   ],
   "evidence": [
     {
@@ -69,6 +74,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-1ed67b6e21",
+      "url": "https://innoenergy.com/news-resources/corpower-secures-7-3-meur-investment-into-portuguese-wave-project/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-26998973c3",
       "url": "https://innoenergy.com/startups/apply-form/",
       "title": "EIT InnoEnergy — application page",
@@ -81,6 +93,13 @@
       "title": "EIT InnoEnergy — homepage",
       "excerpt": "Invest in and de-risk early-stage startups → https://innoenergy.com/portfolio/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-30d6438040",
+      "url": "https://innoenergy.com/news-resources/corpower-secures-7-3-meur-investment-into-portuguese-wave-project/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-3aa2ea452a",
@@ -97,6 +116,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-4dd2b4aa05",
+      "url": "https://innoenergy.com/news-resources/battery-analytics-pioneer-volytica-diagnostics-closes-e5-5m-investment-round/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-5186f70a70",
       "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
       "title": "EIT InnoEnergy — application page",
@@ -111,6 +137,27 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-5a12c38173",
+      "url": "https://innoenergy.com/news-resources/battery-analytics-pioneer-volytica-diagnostics-closes-e5-5m-investment-round/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5d74ae8378",
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5e9ac69f64",
+      "url": "https://innoenergy.com/news-resources/aquabattery-secures-e6-million-in-seed-investment-to-drive-innovation-in-long-duration-energy-storage-ldes/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-63ae8ed8ee",
       "url": "https://innoenergy.com/news-resources/eit-innoenergy-invests-in-tribonex-to-reduce-friction-losses-and-wear-in-industrial-applications/",
       "title": "EIT InnoEnergy — application page",
@@ -123,6 +170,13 @@
       "title": "EIT InnoEnergy — homepage",
       "excerpt": "For Startups → https://innoenergy.com/startups/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-73aedbe86d",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments-madrid/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-77f324df53",
@@ -146,6 +200,13 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-83097ee6e3",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-paris-feb10/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-856e2d5709",
       "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications-in-hungary-and-turkey/",
       "title": "EIT InnoEnergy — application page",
@@ -158,6 +219,13 @@
       "title": "EIT InnoEnergy — application page",
       "excerpt": "For Startups → https://innoenergy.com/startups/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-8a1da7a79e",
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-8acb81bccc",
@@ -195,6 +263,34 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-b0bac2dc26",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-paris-feb10/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b41da42957",
+      "url": "https://innoenergy.com/news-resources/altris-attracts-new-investments-to-support-scale-up-ambitions/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b5224351bc",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c59345aa57",
+      "url": "https://innoenergy.com/news-resources/aquabattery-secures-e6-million-in-seed-investment-to-drive-innovation-in-long-duration-energy-storage-ldes/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-ca964bf4ab",
       "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications/",
       "title": "EIT InnoEnergy — application page",
@@ -216,11 +312,32 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-e4bfcb06f5",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments-madrid/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-ef5084245b",
       "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications-in-hungary-and-turkey/",
       "title": "EIT InnoEnergy — application page",
       "excerpt": "For Startups → https://innoenergy.com/startups/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-f070e44d47",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f5ec6b9254",
+      "url": "https://innoenergy.com/news-resources/altris-attracts-new-investments-to-support-scale-up-ambitions/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-fe01885f94",
@@ -277,7 +394,79 @@
       "id": "check-page-46543f7b23",
       "url": "https://innoenergy.com/",
       "page": "details",
-      "excerpt": "InnoEnergy - Industrialising clean tech innovation Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Transitioning global energy Transforming every industry Contact us Head in the clouds. Feet on the ground. InnoEnergy is industrialising clean tech innovation to enable and grow a global net-zero economy We invest in early-stage companies and the current and future workforce, building resilient clean tech value chains that drive sustainable economic growth. Through the collective power of our ecosystem – with partners spanning industry, finance, public policy, and academia – we scale the energy transition at speed. We have been at the forefront of the clean energy transition since being initiated in 2010 by the European Institute of Innovation and Technology (EIT). Learn more about who we are 540 + Companies supported since 2010 160 + Active portfolio companies 2 .3 Gt Portfolio accumulated CO2e reduction potential by 2030 € 35 B+ Investment raised by portfolio companies through 2025 100 K+ Upskilled workers by end of 2024 2000 + Masters+ graduates We take a holistic approach to industrialising clean tech Invest in and de-risk early-stage startups Build new industrial champions Lead strategic industrial value chains Deliver upskilled talent for clean tech industries Prepare Masters graduates to lead the"
+      "excerpt": "InnoEnergy - Industrialising clean tech innovation Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Transitioning global energy Transforming every industry Contact us Head in the clouds. Feet on the ground. InnoEnergy is industrialising clean tech innovation to enable and grow a global net-zero economy We invest in early-stage companies and the current and future workforce, building resilient clean tech value chains that drive sustainable economic growth. Through the collective power of our ecosystem – with partners spanning industry, finance, public policy, and academia – we scale the energy transition at speed. We have been at the forefront of the clean energy transition since being initiated in 2010 by the European Institute of Innovation and Technology (EIT). Learn more about who we are 540 + Companies supported since 2010 145 + Active portfolio companies 2 .3 Gt Portfolio accumulated CO2e reduction potential by 2030 € 35 B+ Investment raised by portfolio companies through 2025 100 K+ Upskilled workers by end of 2024 2000 + Masters+ graduates We take a holistic approach to industrialising clean tech Invest in and de-risk early-stage startups Build new industrial champions Lead strategic industrial value chains Deliver upskilled talent for clean tech industries Prepare Masters graduates to lead the"
+    },
+    {
+      "id": "check-page-e03c4c126f",
+      "url": "https://innoenergy.com/",
+      "page": "details",
+      "excerpt": "With over 1400 partners spanning industry, finance, research, and academia across 21 EU countries and the United States, we foster collaboration and accelerate innovation."
+    },
+    {
+      "id": "check-page-dca83d5c51",
+      "url": "https://innoenergy.com/",
+      "page": "details",
+      "excerpt": "Our ecosystem Meet our ecosystem in action 110+ portfolio start-ups spanning the entire energy value chain, including the industrial scale-ups driving Europe’s energy transition."
+    },
+    {
+      "id": "check-page-a5f1f987f0",
+      "url": "https://innoenergy.com/",
+      "page": "details",
+      "excerpt": "Join us for our flagship event, The Business Booster that will take place on 22-23 October in Lisbon!"
+    },
+    {
+      "id": "check-page-5c3a32e0c9",
+      "url": "https://innoenergy.com/",
+      "page": "details",
+      "excerpt": "Hyperloop is a transportation system where vehicles float on magnetic fields and move through low-pressure tubes."
+    },
+    {
+      "id": "check-page-be422d3471",
+      "url": "https://innoenergy.com/",
+      "page": "details",
+      "excerpt": "It is highly energy-efficient, using only 10% of the energy needed for roads and aviation, and 50% less energy than rail."
+    },
+    {
+      "id": "check-page-e0ae23f79c",
+      "url": "https://innoenergy.com/",
+      "page": "details",
+      "excerpt": "Verkor is fast-tracking low‑carbon battery production in France, to serve the European market and meet the growing demand for electric vehicles."
+    },
+    {
+      "id": "check-page-bd52f69397",
+      "url": "https://innoenergy.com/",
+      "page": "details",
+      "excerpt": "CorPower Ocean’s wave energy converters harness clean energy from the world’s largest untapped energy source – our oceans."
+    },
+    {
+      "id": "check-page-ff5caa884e",
+      "url": "https://innoenergy.com/",
+      "page": "details",
+      "excerpt": "GravitHy produces low CO₂ direct reduced iron (DRI / HBI) using on-site production of renewable and low-carbon hydrogen."
+    },
+    {
+      "id": "check-page-9986fa79e5",
+      "url": "https://innoenergy.com/",
+      "page": "details",
+      "excerpt": "Energy​ storage solutions​ for a net-zero future."
+    },
+    {
+      "id": "check-page-1f0929495d",
+      "url": "https://innoenergy.com/",
+      "page": "details",
+      "excerpt": "No other product on the market has as high power and energy density as Skeleton’s supercapacitor cells, the building blocks for supercapacitor modules and energy storage systems."
+    },
+    {
+      "id": "check-page-9290b6b824",
+      "url": "https://innoenergy.com/",
+      "page": "details",
+      "excerpt": "Accelerating the heat transition to achieve the climate target. ecop has developed an efficient high temperature heat pump for industrial applications."
+    },
+    {
+      "id": "check-page-4abeba2c30",
+      "url": "https://innoenergy.com/",
+      "page": "details",
+      "excerpt": "The clean energy intelligence platform."
     },
     {
       "id": "check-page-a06cccb877",
@@ -286,10 +475,136 @@
       "excerpt": "Accelerate Skellefteå 2021 programme opens for applications for clean energy startups in Northern Sweden Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Jun 18, 2021 Accelerate Skellefteå 2021 programme opens for applications for clean energy startups in Northern Sweden Skellefteå, Sweden, is leading the green transformation in a region set to invest more than 70 billion Euros over the next 10 years and which has recently become a focal point for innovation in electrification and energy technology. To further propel the innovation process, the accelerator programme Accelerate Skellefteå is now issuing its second call to attract startups in clean energy technology to thrive and develop in a Scandinavian hotspot of energy, innovation, and growth. A growth opportunity for sustainable energy entrepreneurs Accelerate Skellefteå is a five-month long accelerator programme which aims to give startups with ideas in energy storage, mobility, and electrification the opportunity to further develop their concepts together with world-leading companies in Skellefteå, while also contributing to the momentum of innovation in existing industries. The initiative is operated jointly by EIT InnoEnergy, Skellefteå Kraft and Skellefteå Science City and this year also reinforced by the high-tech metals company Boliden and global"
     },
     {
+      "id": "check-page-2ed5339132",
+      "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+      "page": "application",
+      "excerpt": "Together with the new 2021 programme hosts Boliden Rönnskär and Data Ductus, our ambition is to identify tomorrow’s sustainable energy solutions” , says Ann-Christine Schmidt, RD&I Coordinator at Skellefteå Kraft."
+    },
+    {
+      "id": "check-page-ca4c7c1aa7",
+      "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+      "page": "application",
+      "excerpt": "“Skellefteå is in focus for Europe’s green energy transition and Accelerate Skellefteå is an important initiative to develop Skellefteå ecosystems in energy."
+    },
+    {
+      "id": "check-page-0037ae6151",
+      "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+      "page": "application",
+      "excerpt": "In the long run, we believe that the programme will lead to the development of new sustainable energy solutions in Skellefteå, which can then reach a global market” , says Kenneth Johansson, CEO of EIT InnoEnergy."
+    },
+    {
+      "id": "check-page-d0a4e9b792",
+      "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+      "page": "application",
+      "excerpt": "New corporate partners onboard For the new programme hosts of the 2021 programme, Accelerate Skellefteå is an opportunity to refine and develop the innovation process within their own organisations."
+    },
+    {
+      "id": "check-page-d46ac7f57a",
+      "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+      "page": "application",
+      "excerpt": "Boliden Rönnskär , whose long-term climate goal is to produce metals with a low carbon footprint, is actively working to find new solutions to achieve the goal of reducing its CO2 intensity by 40% by 2030."
+    },
+    {
+      "id": "check-page-2b6dc1f9ec",
+      "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+      "page": "application",
+      "excerpt": "“Through Accelerate Skellefteå, we see the opportunity to scan the European market for new innovative technologies to find ways to accelerate that process”, says Karin Ahnqvist, Corporate Responsibility Manager Boliden Rönnskär."
+    },
+    {
+      "id": "check-page-2c95176f5d",
+      "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+      "page": "application",
+      "excerpt": "Data Ductus has previously driven innovation development through its own incubators but sees great advantages in working across industries to accelerate even more innovative solutions in sustainability."
+    },
+    {
+      "id": "check-page-e404aa4b85",
+      "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+      "page": "application",
+      "excerpt": "The green energy transition feels obvious to contribute to, but also innovations that generally improve the conditions for us humans in a longer perspective."
+    },
+    {
+      "id": "check-page-ddc9948e85",
+      "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+      "page": "application",
+      "excerpt": "Sustainable relationships and sustainable IT solutions will be our keywords in Accelerate Skellefteå”, says AnnaCarin Falkman, Head of BU IoT / IT at Data Ductus."
+    },
+    {
+      "id": "check-page-464b8194df",
+      "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+      "page": "application",
+      "excerpt": "Applications open until 31 August 2021 The call for applications to Accelerate Skellefteå 2021 is now open for all startups in Europe until 31 August 2021."
+    },
+    {
+      "id": "check-page-88e596d1a3",
+      "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+      "page": "application",
+      "excerpt": "More information and application forms are available on Accelerate Skellefteå’s website. accelerateskelleftea.com About Accelerate Skellefteå Accelerate Skellefteå offers startups with ideas in energy storage, mobility, and electrification to participate in the development program."
+    },
+    {
       "id": "check-page-a1fdd598c1",
       "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
       "page": "application",
       "excerpt": "Applications for the second edition of the Hello CleanTech programme for cleantech innovators are open Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Nov 1, 2023 Applications for the second edition of the Hello CleanTech programme for cleantech innovators are open Start-ups, entrepreneurs, innovators and researchers who develop impactful tech solutions, accelerate the cleantech sector and make a real impact on the world’s energy industry can already apply for the Hello CleanTech 2.0 programme organised by EIT InnoEnergy alongside industry partners. In the first edition of the programme, over 250 applications were submitted, and 36 companies established cooperation with experienced market leaders, receiving business, technological and fundraising support. Hello CleanTech 2.0 The goal of the Hello CleanTech 2.0 programme is to create a platform that will enable start-ups, innovators and researchers to reach international corporations and establish potential cooperation. Among programme partners are: EIT InnoEnergy, Antler, Ciech Group, Commercialization Reactor, E44 ventures, EDP Renewables, Enea Innowacje, Enerco, Green Brother, Helve, Impact Prosper, South Poland Cleantech Cluster, World Fund, Cobin Angels, TDJ, Doral, Inci, Neurone, Boryszew, Sunly Startup, CofounderZone, Sabanci ARF, Warsaw Equity"
+    },
+    {
+      "id": "check-page-8e83aa6a71",
+      "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+      "page": "application",
+      "excerpt": "In addition, selected applicants will have the opportunity to present themselves to partners at the Demo Day."
+    },
+    {
+      "id": "check-page-861485d1a4",
+      "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+      "page": "application",
+      "excerpt": "Key benefits Key benefits for participants: Access to services provided by programme partners in specific tracks, Technology experts’ support and mentoring offered by partners, Fast Track to the investment process from EIT InnoEnergy and programme partners."
+    },
+    {
+      "id": "check-page-6528c33df1",
+      "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+      "page": "application",
+      "excerpt": "Potential access to relevant infrastructure through cooperation opportunities with leading industry leaders, Access to global VC funds and community partners Who can apply?"
+    },
+    {
+      "id": "check-page-cf2104bf9b",
+      "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+      "page": "application",
+      "excerpt": "Hello CleanTech 2.0 is a unique opportunity for companies, researchers and innovators who develop environmentally friendly technological solutions designed for the cleantech sector."
+    },
+    {
+      "id": "check-page-31e6ddc24f",
+      "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+      "page": "application",
+      "excerpt": "The organizers distinguished 9 areas in which participants can apply: Energy storage: innovative solutions aimed at effective and pro-ecological energy storage."
+    },
+    {
+      "id": "check-page-ce0b77c6dc",
+      "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+      "page": "application",
+      "excerpt": "Green hydrogen: solutions enabling ecological and innovative production, transport and storage of hydrogen."
+    },
+    {
+      "id": "check-page-0a8c67454d",
+      "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+      "page": "application",
+      "excerpt": "Carbon tech: in particular CCU and CCS technologies and technologies enabling the valorisation of off-grid renewable energy sources."
+    },
+    {
+      "id": "check-page-564ad257bd",
+      "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+      "page": "application",
+      "excerpt": "Heat decarbonisation: heat pumps, power-to-heat solutions, innovative solutions for HVAC."
+    },
+    {
+      "id": "check-page-033e37e7d2",
+      "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+      "page": "application",
+      "excerpt": "Smart grid: modern solutions that optimize the operation of energy networks, extend the service life and increase their flexibility."
+    },
+    {
+      "id": "check-page-482bd60cdb",
+      "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+      "page": "application",
+      "excerpt": "Renewables: photovoltaics, wind energy, solutions aimed at reducing the carbon footprint."
     },
     {
       "id": "check-page-c62a830e60",
@@ -304,10 +619,94 @@
       "excerpt": "EIT InnoEnergy invests in Tribonex to reduce friction losses and wear in industrial applications Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Sep 19, 2023 EIT InnoEnergy invests in Tribonex to reduce friction losses and wear in industrial applications EIT InnoEnergy, the innovation engine for sustainable energy across Europe, has invested in Tribonex, a Swedish scale-up offering surface treatment methods for friction and wear reduction in industrial applications. Estimates suggest that roughly 20% of the global energy use is lost to overcome friction in various applications such as EV drive trains, gearboxes, pumps and compressors. Friction not only results in significant energy losses, but also leads to wear, shortening both maintenance intervals and lifespan of industrial equipment. Additionally, friction generates heat, which often requires cooling systems. Tribonex provides patented, scalable and cost-effective surface treatments to reduce friction and wear – enabling their customers across various industries to cut operational expenses, prolong the lifespan of equipment and reduce failure rates. “We have during several years followed the progress by the Tribonex team and we are highly impressed by the accelerating market traction driven by their recent achievements in improving the technology to be"
     },
     {
+      "id": "check-page-8eca307be0",
+      "url": "https://innoenergy.com/news-resources/eit-innoenergy-invests-in-tribonex-to-reduce-friction-losses-and-wear-in-industrial-applications/",
+      "page": "application",
+      "excerpt": "Closing part of the remaining gap to 100% drive train efficiency in EV´s and decreasing both losses and failure rates in wind power turbines are only a few examples where we see Tribonex can make a difference”, says Markus Berglund, Investment Manager at EIT InnoEnergy in Stockholm."
+    },
+    {
+      "id": "check-page-62d38ef114",
+      "url": "https://innoenergy.com/news-resources/eit-innoenergy-invests-in-tribonex-to-reduce-friction-losses-and-wear-in-industrial-applications/",
+      "page": "application",
+      "excerpt": "We see great opportunities in the transition that the automotive and other industries are currently undergoing, where they strive for efficient solutions with minimized energy consumption and material waste."
+    },
+    {
       "id": "check-page-238924b349",
       "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
       "page": "application",
       "excerpt": "\"Impact Startups\": Le Village by CA calls for applications with InnoEnergy France, Credit Agricole CIB, makesense Seed I & Groupe PSA Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Jan 20, 2023 “Impact Startups”: Le Village by CA calls for applications with InnoEnergy France, Credit Agricole CIB, makesense Seed I & Groupe PSA Call for applications “Impact Startups”: [Press release] The Village by CA and Credit Agricole CIB , EIT InnoEnergy , makesense Seed I & Groupe PSA are launching a call for applications dedicated to social and environmental startups. Deadline to apply: March 31, 2020 Paris, March 9, 2020 The Village by CA Paris, a unique ecosystem where startups and large groups meet and cooperate to innovate together, launches a call for applications dedicated to social and environmental startups in partnership with Crédit Agricole CIB, EIT InnoEnergy , make s ense Seed I and Groupe PSA. A call dedicated to startups with a positive impact on the environment and society All startups presenting a technology that responds to sustainable development: environmental (circular economy, carbon footprint, preservation of resources, etc.), social (inclusion, disability, education, health, etc.), and societal (mobility, cyber security, etc.) are eligible. A call for applications from 9 March to 31 March 2020"
+    },
+    {
+      "id": "check-page-30a2328c23",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "page": "application",
+      "excerpt": "Finally, Le Village of Paris will organize, in partnership with the Village of Rouen, a Business Connect where startups and major accounts will meet during a “speed dating” on the theme “Impact”."
+    },
+    {
+      "id": "check-page-eb5d60c703",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "page": "application",
+      "excerpt": "Winning startups will be integrated into the Village by CA Paris for 2 years (for a fee)."
+    },
+    {
+      "id": "check-page-4cf19ddac3",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "page": "application",
+      "excerpt": "Recycling, access to education, renewable energies, sustainable finance… the field of action is very wide and innovation is part of the solution; but social and environmental startups still encounter obstacles in their development."
+    },
+    {
+      "id": "check-page-a5dd87450c",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "page": "application",
+      "excerpt": "The first Village by CA opened in Paris and the network now boasts 34 Villages across France (Lille, Bordeaux, Orléans, St-Brieuc, Nantes, Paris, Lyon, Toulouse etc.), as well as in Italy and Milan."
+    },
+    {
+      "id": "check-page-d77a3fc1b9",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "page": "application",
+      "excerpt": "It also has outposts in major cities worldwide, including London, New York, Moscow, Shanghai, Seoul, Tokyo, and Singapore, to help start-ups expand abroad."
+    },
+    {
+      "id": "check-page-79396927c8",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "page": "application",
+      "excerpt": "Offering the advantages of cutting-edge technologies and positioning in regional hubs, each Village by CA provides start-ups with an opportunity to grow in an innovative ecosystem bolstered by a host of private and public sector partners."
+    },
+    {
+      "id": "check-page-fdd4378ac8",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "page": "application",
+      "excerpt": "Nearly 8,000 employees across Europe, the Americas, Asia-Pacific, the Middle East and Africa support the Bank’s clients, meeting their financial needs throughout the world."
+    },
+    {
+      "id": "check-page-a88c615c73",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "page": "application",
+      "excerpt": "The Bank is a pioneer in the area of climate finance, and is currently a market leader in this segment with a complete offer for all its clients."
+    },
+    {
+      "id": "check-page-9a144333e4",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "page": "application",
+      "excerpt": "It has also been a pioneer in Green Bond markets with the arrangement of public transactions from 2012 for a wide array of issuers (supranational banks, corporates, local authorities, banks) and was one of the co-drafter of Green Bond Principles and of the Social Bond Guidance."
+    },
+    {
+      "id": "check-page-888b97f44a",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "page": "application",
+      "excerpt": "About EIT InnoEnergy EIT InnoEnergy is the innovation engine for sustainable energy across Europe."
+    },
+    {
+      "id": "check-page-43f07659ec",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "page": "application",
+      "excerpt": "EIT InnoEnergy supports and invests in innovation at every stage of the journey – from classroom to end-customer."
+    },
+    {
+      "id": "check-page-0b7bda5fa1",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "page": "application",
+      "excerpt": "With our network of partners, we build connections across Europe, bringing together inventors and industry, graduates and employers, researchers and entrepreneurs, businesses and markets."
     },
     {
       "id": "check-page-55aafa8f42",
@@ -334,34 +733,382 @@
       "excerpt": "Apply form Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Join our ecosystem Apply now Do you want to join the most dynamic innovation ecosystem in the field of sustainable energy? Fill in the application form below to enter our business creation programmes. After you submit your application you will be contacted by the nearest team. \" * \" indicates required fields Country * — Please select — Afghanistan Albania Algeria Andorra Angola Antigua and Barbuda Argentina Armenia Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bhutan Bolivia Bosnia and Herzegovina Botswana Brazil Brunei Bulgaria Burkina Faso Burundi Côte d'Ivoire Cabo Verde Cambodia Cameroon Canada Central African Republic Chad Chile China Colombia Comoros Congo (Congo-Brazzaville) Costa Rica Croatia Cuba Cyprus Czechia (Czech Republic) Democratic Republic of the Congo Denmark Djibouti Dominica Dominican Republic Ecuador Egypt El Salvador Equatorial Guinea Eritrea Estonia Eswatini (fmr. \"Swaziland\") Ethiopia Fiji Finland France Gabon Gambia Georgia Germany Ghana Greece Grenada Guatemala Guinea Guinea-Bissau Guyana Haiti Holy See Honduras Hungary Iceland India Indonesia Iran Iraq Ireland Israel Italy Jamaica Japan Jordan Kazakhstan Kenya Kiribati Kuwait Kyrgyzstan Laos Latvia Lebanon Lesotho Liberia"
     },
     {
-      "id": "check-page-a244d30294",
-      "url": "https://innoenergy.com/uploads/2023/01/application-form-template_december_2020.docx",
-      "page": "application",
-      "excerpt": "PK ! /� %� � [Content_Types].xml � (� ���N�0 E�H�C�-j\\X ���� $@b�ړ��/�Ӗ�=�>\"�RRQ�� {��c%3����X@Lڻ���CV��^i7������� �S�x [Ab7�ӓ��*@*H�R�f���$g`E*} G;��V ��) B~�)����K� 0{��� j17X� ��$�)+n7u9�b�f}^筊 &��� �� i�/���5�2��\\פ� � �$�� [� 53j ų��(,U񥏊+/疔��6-�����F��B� R�[��lv��n���!� �}��k � }H�G�4�� \"jhz�� nn' �����XwB$\\ H�O��� D � �u�DX��7�o� ��� < �q �u' 8� ����>@ < ��l� � �)OL �A���@ \"�y ߉��o�T�� �P� 8�n�d� � l ����A O TK6_��� �� PK ! � �� N _rels/.rels � (� ���j�0 @���ѽQ�� �N/c�� � [IL ��j��� < �� ]�aG��ӓ�zs�Fu��]� �U �� ��^�[��x ����1x�p� ���f��#I)ʃ�Y �� ������ �*D�� i\")��c$���qU���~3��1��jH[{ �=E�� �� ~ f?��3-���޲]�Tꓸ2�j)�, l0/%��b� ���z���ŉ�, � �/�|f\\ Z��� ?6�!Y�_�o �]A� �� PK ! ,h �| < �x word/document.xml�}��L��� � �9���g3��>��Q9g 0J��Ĥp������^�v7� i�e{�w�� `��P�����~���׿�|���q��� �3~S� 3��`��f4�>�7�$� K����r���� ��?�ǿ��Vhf� �%@\"Hn����f���-�%������q��N�� },t ״�m [ � 8���д� �Oփ\\On����uԬX߂ʐ ��K=N��= ⻉0��� �?@ ��$ ���� �A� � � �� %��(=�8��(��)q?F�zL��1J��� ��ad � c_O�c��|=^g�'@8�S�p=7� �8{\"���� 8 ��(���� 8� -ۣ� ���M ������C�o���˩F|M��*��8��c�� Y�A�t�� ��(5�� < �_jD�{�rۈ�r� �L 2$u�� _ [r|�� ��6�Z �P �x�/U3 f�E ��Þgy�A��� �#� Ql'v��7_K�1�W��� �* V ���K#�-ɹ �Q��^ih� �t�FA-��/ �P���Ф����,� ͙̎ ��-�� < %İ�k� �A7���n*Ҟ0 �Pq���$i��( �BG(�#IJ �_G^V M!xJ���� ~؛O �Q JV�k у��At��gI�Sy\\ X ;����pZ\"�R� ]sQ�g;� �d�_�7�� � �}�� e��9z�[ �����\"� ]�ȿ��ѷ ��*�Rt� �c Pr��e'�\"��R �t0kIҒ ��~����� �-|B"
-    },
-    {
-      "id": "check-page-302d4575ce",
-      "url": "https://innoenergy.com/uploads/2023/01/application-scoreboard_decmber_2020.pdf",
-      "page": "application",
-      "excerpt": "%PDF-1.7 %���� 1 0 obj < >/Metadata 247 0 R/ViewerPreferences 248 0 R>> endobj 2 0 obj < > endobj 3 0 obj < > endobj 4 0 obj < >/Font < >/ProcSet[/PDF/Text/ImageB/ImageC/ImageI] >>/MediaBox[ 0 0 1584 1224] /Contents 5 0 R/Group < >/Tabs/S/StructParents 0>> endobj 5 0 obj < > stream x��=�v 7��>���O{ԉ��n�5gv�q|�g6 o�� M�$Y���*�_� Rë^4|�'�x,z�e��z��Γ� ��z��\"K m������� _ ��U/ � IQ=��y!G���-� ��z���`�( m����e��#RA� 6IY= B$Z6�&I��d��R < � ]� ��i$[�\"��S� e�� ��B-�*-�����>{ �gw�ߵ����� ?M���>����7�p^ ��#\"Z4e�e>� ���:�ҳi\\ �W}�Di� �Ԩh� sӤIk )ːüC�� �m�d�g4��xvw �w��R�� r8�֎i�\"� ը m� �� � o�`4 z��UՆ� � O� � + �l� %-+ � (�4��ҢDv�B�-S ��^ ���� 6Թ�����I?I � P {��{J=��|� ��:�\"�3��.�|F�@�A�. R ��� �Z #j� �����F�oXl�1L|W b�Me1�6C �� RS�I�{�9 !�¸�\\% �Qp g�Q} ø���0�K Fx8 < ��RWf n\\h k� ��� >� � �W'�6�2Ő� ����q��R>� �� @ Ŕ Ll��F}i� K \"�ǉL I�K]�I�7 D�E�]� �� ���K?��NP��� 5q;;&[Rld� �0_s�@Y �1�0�m�JP�?L';,�;E �K�H(L(���nÏ��G����� �25��|��/� �W�M��1�n܎(� �N7D�{ ��5�E ��X�?��D �;�����dun��} d �xcC� ���߭A�w؟� �� ��� ��?�AIz��/� ��� �}���[�ή��\"��;6 Fw��7����֕-| �Nz�-'�� -�H! \\����AeN|gw� � y ޑ챠K� < �=�b�A�� } c��� �y����ȧi\"�����&�N|C� }���Mn�'���]��6Vᘻn�ͨ������p��!� ��L�̹��Kr76�c��M8qy �%} � �_�. ��k @ �P ?�c\\��� � p�8 OD P~ } d.�K�b��Q�+�3 ԧ _:* �� �N��'M�� �\"���#+ذ�` �c�b�|����ybW�MB �G]� \"��m \"˹e��DIf�.� ; < ���$R�6\\�]E < ¾���\" 2�g 3��r:� � �M@�yd$T�D � v��\\�w�4�}A� �Z��oiƃ�SA ���Ե4�WK�)FO�O5ߪy4�"
-    },
-    {
-      "id": "check-page-ef8304cf8f",
-      "url": "https://innoenergy.com/uploads/2023/01/webinar_battery-storage-applications_2020-03-04.pdf",
-      "page": "application",
-      "excerpt": "%PDF-1.7 %���� 1 0 obj < >/Metadata 1310 0 R/ViewerPreferences 1311 0 R>> endobj 2 0 obj < > endobj 3 0 obj < >/XObject < >/Pattern < >/Font < >/ProcSet[/PDF/Text/ImageB/ImageC/ImageI] >>/MediaBox[ 0 0 960 540] /Contents 4 0 R/Group < >/Tabs/S/StructParents 0>> endobj 4 0 obj < > stream x��]K�%���7��� � ��z�J ��c$����@ �Yt*�� �v�ݛ��Y�H~�X� � 1���'�$�/I��y����~�������� ����W� �!��RX/[ �����w�_��7� �_�������ׯ��1� C^ �������|���e���� ��U!ł�Z���h۲]k����i���^R̗��K�Ǘ����� ?]� a ���@ < ���kk� ʵ��>D�˵��P��]j���K��u����k.�T I�wY{���k �GA^7?�0]�GmtU� k��xIm��� S����v9 ����L� �µ���n��7����ܧ�ǎ�Q�}�qI׮j4�n�5]▯k���km� E�]#�p���t��yY�]���k ;.�܇� i@� D�9]� ��k�+r @1�^� ��r������_ , � � �R� C��IE&'����z9C�1�)�@ � S^�˄`ē�V0j\"c���kZ ��qCܺ����J���t���#�ws�Jѳ4�y�@���6׆��N�eF[�(��R�WQK�keL� M���5l�6C���$ ��*�e ��_ 13�e�n���V =��` �Ga^L�� /r��M�PGK��*b]������ں-�Aa�)Cܕ!��.!��*.9C��+. r��+�XX�*37�k$rb�T%�.�Wo��J:jאx�AP ���5�b��dn� �~p �c�̅򣑻 �@p��3�K άR *m�ܜ̽!ٌz�n�Ͷ����ް�� D� �c`1���#k��G +� $G�8a�HRa;�K fFs�EI Ea�j�H� Z� � Ѡ\"Q� f �+Yl Ӎ�aY �C(8Ő >�)u�E�m(�n -��37��#3i�K���Y T 3K�B �vGy�� m���Ь� � F���d�G�$]��%���� �� < 8dV ��%� r�c� �5S ����@��+O�&u��j!/� d�� 6ܜ rp����/gȅmW �-�j yG �o��'%���.}� 0��q�VZ��ؖ뒵W DW 7%S�oz� �m��]�� g� �1yA5 ly �+Y̢� ��^ڗ����+)��pbB� � �lLf��#� �� � z���2���O��Q�� �))y��[� � ]�} X�O ���A�#�,�>A� �9r�b�)���\" � p�:� �fW:��I��3��N� :�#�,� l���$G.z: �Ǟ = �m� �Ջ,{�����Fj"
-    },
-    {
       "id": "check-page-bbca2b31f0",
       "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
       "page": "terms",
       "excerpt": "A new industrial phase for the European Green Deal Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Sep 26, 2023 A new industrial phase for the European Green Deal By Baptiste Buet, EU Business Unit Director, EIT InnoEnergy. The European Union steps up efforts to accelerate clean tech with an industrial strategy that is Made in Europe – an ambition that EIT InnoEnergy will continue to deliver on. The EU’s ‘State of the Union’ speech Each year, the President of the Commission makes a much-anticipated speech entitled the ‘State of the Union’, in which the priorities for the European Union (EU) are outlined for the year ahead. This year, climate tech was front and centre of the EU’s priorities with particular focus on the industrial pillar of Europe’s flagship Green Deal. A robust green industrial policy is now needed to reap the socio-economic benefits of the Green Deal: both resilient industrial value chains in climate technologies – like batteries or solar PV – and accelerated pathways to decarbonize hard to abate industries. For over a decade, InnoEnergy has been accelerating and de-risking industrial frontrunners to deliver on the European Green Deal ambitions. Three main messages on the Green Deal from President von der Leyen’s address were key: The European climate agenda is also an economically viable"
     },
     {
+      "id": "check-page-74629b543f",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "page": "terms",
+      "excerpt": "Three main messages on the Green Deal from President von der Leyen’s address were key: The European climate agenda is also an economically viable one In the first years of the European Green Deal, the emphasis was put on setting international climate ambition and setting EU targets into law."
+    },
+    {
+      "id": "check-page-34dbd10cff",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "page": "terms",
+      "excerpt": "However, as implementation work for climate neutrality is now well underway, the Commission President’s message was clear: the Green Deal is also “ Europe’s growth strategy”."
+    },
+    {
+      "id": "check-page-40a7b22435",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "page": "terms",
+      "excerpt": "Europe now leads on investment in clean hydrogen with investment flows far higher than other regions and over the past five years, the number of clean steel factories in EU has gone from 0 to 38 factories."
+    },
+    {
+      "id": "check-page-d9df3ca319",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "page": "terms",
+      "excerpt": "European frontrunner H2 Green Steel , supported by InnoEnergy since its launch, will start operation of their green hydrogen steel plant in 2025 following a funding round of €1.5 billion."
+    },
+    {
+      "id": "check-page-3c8bf738b7",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "page": "terms",
+      "excerpt": "InnoEnergy’s full portfolio of 200 climate tech companies has raised more than €9.7 billion investment already."
+    },
+    {
+      "id": "check-page-f7747859b5",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "page": "terms",
+      "excerpt": "It is projected that by 2030, 14 million jobs will be created worldwide through clean energy technologies alone."
+    },
+    {
+      "id": "check-page-de143f199b",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "page": "terms",
+      "excerpt": "However, some 5 million jobs within fossil fuel sectors are expected to be lost, and in order to sustain long-term growth, the European workforce will need to be reskilled, retrained, reskilled or upskilled to work in new markets such as EVs."
+    },
+    {
+      "id": "check-page-2fdfe2a548",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "page": "terms",
+      "excerpt": "The InnoEnergy Skills Institute is set to answer that call, aiming to bridge the skills gap in industrial clean tech value chains."
+    },
+    {
+      "id": "check-page-af90eed7e3",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "page": "terms",
+      "excerpt": "The future of climate tech is Made in Europe Re-industrialising Europe to remain competitive in the global arena was also a major theme of President of the Commission’s address: “ From wind to steel, from batteries to electric vehicles, our ambition is crystal clear: the future of our cleantech industry has to be made in Europe “."
+    },
+    {
+      "id": "check-page-55867911af",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "page": "terms",
+      "excerpt": "The solar industry was cited as a prime example of a European value chain undercut and lost on the global market."
+    },
+    {
+      "id": "check-page-7c64a8b9a9",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "page": "terms",
+      "excerpt": "China currently dominates the global PV manufacturing value chain supplying between 75% and 98% of PV products and components."
+    },
+    {
+      "id": "check-page-d0b34c76ff",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "page": "terms",
+      "excerpt": "The European Solar PV Industry Alliance (ESIA), launched this year and co-led by InnoEnergy, aims to rebuild 30GW of EU manufacturing capacity by 2025 (representing around half of PV installed every year in Europe)."
+    },
+    {
       "id": "check-page-6d26bd8dec",
       "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
       "page": "terms",
       "excerpt": "A novel private-public fund to unlock €500bn for Europe’s Clean Industrial Deal Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Jan 15, 2025 A novel private-public fund to unlock €500bn for Europe’s Clean Industrial Deal Written by InnoEnergy CEO Diego Pavia and Member of the European Parliament Pascal Canfin. This article was originally written for and published on the FT’s Sustainable Views . The incoming US administration looks set to shift its climate strategy, casting doubt over the $369bn Inflation Reduction Act – the largest public support scheme for clean technologies in American history. This presents a rare and unique opportunity for Europe to position itself as the global hub for investment and deployment of clean technologies. But in the face of fierce competition from China, Europe must act decisively to create conditions that make investing in home-grown green industrial projects feasible and compelling. With strained public budgets and three years to wait for the next EU budget, securing the financial firepower of a public US-style IRA is not realistic. Mobilising private capital through a private fund is the only viable path to securing the financial muscle needed. Europe’s regulatory stability and robust policy framework are not to be overlooked. Demand-side measures, such as the ambitious"
+    },
+    {
+      "id": "check-page-14e53ec23a",
+      "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+      "page": "terms",
+      "excerpt": "Demand-side measures, such as the ambitious sectoral targets through the Fit for 55 package, have generated a strong pipeline of projects—from new projects and industrial incumbents—across value chains like batteries and green hydrogen."
+    },
+    {
+      "id": "check-page-5a01136d3b",
+      "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+      "page": "terms",
+      "excerpt": "New supply-side initiatives like the Net-Zero Industry Act are already strengthening the pool of projects."
+    },
+    {
+      "id": "check-page-fcc5596390",
+      "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+      "page": "terms",
+      "excerpt": "The private capital is available in Europe, but it remains largely untapped for clean tech projects."
+    },
+    {
+      "id": "check-page-f1c77f7a5a",
+      "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+      "page": "terms",
+      "excerpt": "Europe’s pensions and insurance savings schemes are valued at over €18tn, but less than 5 per cent of these assets are directed toward green investments."
+    },
+    {
+      "id": "check-page-264b8f38a3",
+      "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+      "page": "terms",
+      "excerpt": "A fund that is derisked with a public guarantee and is active across the lifecycle of projects—from early-stage to growth and infrastructure investments — can spread risks effectively enough to attract even risk-averse pensions and savings."
+    },
+    {
+      "id": "check-page-f587b291a0",
+      "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+      "page": "terms",
+      "excerpt": "The fund would drive high financial returns for European citizens and channel their money into the objective of building a sustainable and resilient Europe."
+    },
+    {
+      "id": "check-page-b1aff716f8",
+      "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+      "page": "terms",
+      "excerpt": "Equally, this instrument would enable pooling of cross-border capital at scale—something fragmented European markets have long struggled to achieve."
+    },
+    {
+      "id": "check-page-26d07685c9",
+      "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+      "page": "terms",
+      "excerpt": "The scale-up and supply chain risks of industrial projects in nascent sectors combined with high capital demands easily deter investors still unfamiliar with these projects."
+    },
+    {
+      "id": "check-page-503c56c8e6",
+      "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+      "page": "terms",
+      "excerpt": "A derisked private fund which acts as a lead investor in a round in a higher risk, often early-stage project can in turn remove the entry barriers for other investors to crowd into the funding round."
+    },
+    {
+      "id": "check-page-38a1e2f233",
+      "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+      "page": "terms",
+      "excerpt": "It’s clear that Europe needs a bold new approach to financing."
+    },
+    {
+      "id": "check-page-23a317b8b3",
+      "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+      "page": "terms",
+      "excerpt": "Such a fund would accelerate the industrialisation and deployment of critical technologies, deliver tangible benefits to Europeans in terms of growth and jobs, and cement Europe’s reputation as the global home for clean industries."
+    },
+    {
+      "id": "check-page-c608c90c94",
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "page": "terms",
+      "excerpt": "A successful 2nd edition of EGHAC’s Green Hydrogen Investment Day at the European Commission Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Nov 27, 2023 A successful 2nd edition of EGHAC’s Green Hydrogen Investment Day at the European Commission Following a successful edition last year, the second edition of the Green Hydrogen Investment Day took place at the European Commission this week as part of the wider European Hydrogen Week in Brussels. The Investment Day is a partnership between EIT InnoEnergy’s European Green Hydrogen Acceleration Center (EGHAC) and the European Commission’s European Clean Hydrogen Alliance (ECH2A). As a matchmaking event, the day aims to accelerate the commercialisation of hydrogen projects and de-risk European ventures to kick-start deals with leading investors. EU has set ambitious domestic green hydrogen to help accelerate Europe’s decarbonization efforts and strengthen industrial competitiveness. Mee ting this ambition requires innovative hydrogen projects to reach commercial scale faster. Reaching Final Investment Decision (FID) for early-stage hydrogen projects – often considered high-risk – can be challenging. In 2022, hydrogen accounted for less than 2% of energy consumption across the European Union. Focusing efforts on financing hydrogen ventures for hard-to-abate"
+    },
+    {
+      "id": "check-page-a42d0dc74d",
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "page": "terms",
+      "excerpt": "Focusing efforts on financing hydrogen ventures for hard-to-abate industries such as steel or fertilisers which are difficult to electrify, can help accelerate decarbonisation pathways."
+    },
+    {
+      "id": "check-page-34eb0d4cab",
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "page": "terms",
+      "excerpt": "11 hand-selected European hydrogen ventures pitch to 35 investors In partnership with the ECH2A, EGHAC launched a call for projects which provided a qualified pipeline of green hydrogen initiatives."
+    },
+    {
+      "id": "check-page-1c4904d17d",
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "page": "terms",
+      "excerpt": "The most relevant hydrogen ventures were chosen through a thorough due diligence and selection process."
+    },
+    {
+      "id": "check-page-5673e4f789",
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "page": "terms",
+      "excerpt": "This year, 113 applications from European hydrogen ventures were made with a final selection of 11 start-ups short-listed to pitch at the Green Hydrogen Investment Day."
+    },
+    {
+      "id": "check-page-326966689e",
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "page": "terms",
+      "excerpt": "35 investors attended the matchmaking event including both public and private firms such the European Investment Bank, Santander, ING, Société Générale, Siemens Financial Services and Allianz."
+    },
+    {
+      "id": "check-page-47ed9864a1",
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "page": "terms",
+      "excerpt": "Around half of hydrogen ventures present are developing projects to decarbonise hard-to-abate sectors for the steel, fertilisers, maritime and shipping, and aviation industries."
+    },
+    {
+      "id": "check-page-e8f0428b72",
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "page": "terms",
+      "excerpt": "Other startups pitching focus efforts on technological innovation for hydrogen production including for electrolysers and manufacturing components, storage and liquefaction."
+    },
+    {
+      "id": "check-page-35d2d154ce",
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "page": "terms",
+      "excerpt": "A strategic partnership between EGHAC and the European Commission Hydrogen continues to be of strategic importance to the EU, with the opening of the long-awaited Hydrogen Bank this week."
+    },
+    {
+      "id": "check-page-fad7b853ee",
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "page": "terms",
+      "excerpt": "The public financing instrument will make €800 million available aiming to kick-start a market in renewable hydrogen and unlock further private investments."
+    },
+    {
+      "id": "check-page-79e0116ce9",
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "page": "terms",
+      "excerpt": "The next auction in the spring of 2024, is set to total €3 billion the European Commission President von der Leyen also announced this week."
+    },
+    {
+      "id": "check-page-296f47aa37",
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "page": "terms",
+      "excerpt": "This follows ambitious targets set under REPowerEU to generate 10 million tonnes of domestic renewable hydrogen by 2030, doubling the target previously set in the European Hydrogen Strategy."
+    },
+    {
+      "id": "check-page-2029d8e70b",
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "page": "terms",
+      "excerpt": "Maive Rute, Deputy Director-General for Internal Market, Industry, Entrepreneurship and SMEs said at the event: “The European Commission and Member States have provided a supportive regulatory framework for clean hydrogen, creating clearer conditions for clean hydrogen projects to become investible."
+    },
+    {
+      "id": "check-page-90453e6bfe",
+      "url": "https://innoenergy.com/news-resources/altris-attracts-new-investments-to-support-scale-up-ambitions/",
+      "page": "terms",
+      "excerpt": "Altris attracts new investments to support scale-up ambitions Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Oct 6, 2020 Altris attracts new investments to support scale-up ambitions “Altris has chosen a business model that makes it possible to quickly scale up and capture the great potential that exists around this new battery chemistry”, says Torbjörn Sternsjö, investor in the company and newly appointed board member. The company creates an opportunity for the world’s producers of lithium-ion batteries to rapidly switch to producing sustainable sodium ion batteries. With Altris’ cathode material Fennac®, battery cell manufacturers can create competitive batteries from elements that are abundant on earth. Manufacturing requires no manganese, cobalt, lithium, phosphorus or copper, only common and non-toxic elements. Raw material cost will be reduced without the need for investment in new equipment. “Energy consumption is also reduced thanks to the fact that you can use water instead of the toxic and flammable chemical NMP in the manufacture of cathode”, says Ronnie Mogensen, materials expert at Altris. During the summer, three more battery cell manufacturers decided to manufacture cells with Fennac® as the cathode. “We have recruited engineers and doctors. We need that manpower. To deliver to new and"
+    },
+    {
+      "id": "check-page-b0c193d929",
+      "url": "https://innoenergy.com/news-resources/aquabattery-secures-e6-million-in-seed-investment-to-drive-innovation-in-long-duration-energy-storage-ldes/",
+      "page": "terms",
+      "excerpt": "AQUABATTERY Secures €6 million in Seed Investment to Drive Innovation in Long Duration Energy Storage (LDES) Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Apr 22, 2024 AQUABATTERY Secures €6 million in Seed Investment to Drive Innovation in Long Duration Energy Storage (LDES) AQUABATTERY, a Dutch climate tech startup developing a saltwater long duration energy storage (LDES) solution, is thrilled to announce the successful closing of a €6 million seed investment round. The round was led by EIT InnoEnergy and supported by InnovationQuarter, Invest-NL, Init Power, and a group of business angels. This is a significant milestone in the company’s roadmap to bring low-cost, sustainable LDES to the European market by 2026. Commenting on the use of the funds, Jiajun Cen, CEO and co-founder, said: “The capital will catalyze the development of our first standardized battery module and boost the hiring of top-tier talent to the team”. AQUABATTERY is developing a novel flow battery that can store clean electricity in table salt and water for 8 hours or longer. When charged, the battery converts saltwater into acid and base and reverses the process when discharged. The company is preparing to launch its fourth pilot battery in Delft later this autumn. Roel van Diepen, Investment Director EIT InnoEnergy Benelux,"
+    },
+    {
+      "id": "check-page-de1ee2adf7",
+      "url": "https://innoenergy.com/news-resources/battery-analytics-pioneer-volytica-diagnostics-closes-e5-5m-investment-round/",
+      "page": "terms",
+      "excerpt": "Battery analytics pioneer volytica diagnostics closes €5.5 million investment round Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Sep 20, 2023 Battery analytics pioneer volytica diagnostics closes €5.5 million investment round EIT InnoEnergy portfolio company volytica diagnostics, the German battery analytics pioneer, announced the successful closing of a €5.5 million investment round. The capital will be used to scale its operations, refine its battery analytics technology, and expand into global markets. As the demand for reliable and efficient energy storage solutions intensifies, the company is well-poised to deliver vital insights that can shape the future of electrification. volytica enables the sustainable and economical usage of batteries, like lifecycle management, usage optimization, risk and safety assessments. Second-life, remarketing or recycling of batteries would not be possible without the advanced battery health assessment solutions that volytica provides. The lifetime of millions of tons of currently prematurely scrapped Li-Ion batteries will be prolonged making batteries even more sustainable and reliable. This solution achieves a superior level of depth, thanks to more than 10 years of experience and outstanding data analysis capabilities. The highly efficient algorithms eliminate the"
+    },
+    {
+      "id": "check-page-10f86798e1",
+      "url": "https://innoenergy.com/news-resources/battery-analytics-pioneer-volytica-diagnostics-closes-e5-5m-investment-round/",
+      "page": "terms",
+      "excerpt": "The round was led by Netherlands-based SHIFT Invest and the investment arm of one of Germany’s largest utilities, EnBW New Ventures."
+    },
+    {
+      "id": "check-page-4010cd4033",
+      "url": "https://innoenergy.com/news-resources/battery-analytics-pioneer-volytica-diagnostics-closes-e5-5m-investment-round/",
+      "page": "terms",
+      "excerpt": "Further investors include Dutch TN Ventures (VC firm of founders of e-bus management company ViriCiti), FTTF (Fraunhofer Technology Transfer Fund) and existing shareholders as Technologiegründerfonds Sachsen (TGFS) und Atlantic Labs."
+    },
+    {
+      "id": "check-page-70440f6732",
+      "url": "https://innoenergy.com/news-resources/battery-analytics-pioneer-volytica-diagnostics-closes-e5-5m-investment-round/",
+      "page": "terms",
+      "excerpt": "“We see energy storage not merely as a complement, but as a central building block for the energy transition,” said Melanie Beyersdorf, Investment Manager at EnBW New Ventures."
+    },
+    {
+      "id": "check-page-8b7802257f",
+      "url": "https://innoenergy.com/news-resources/battery-analytics-pioneer-volytica-diagnostics-closes-e5-5m-investment-round/",
+      "page": "terms",
+      "excerpt": "We see this technology having a substantial impact across many industry segments and believe in the experienced team.” Thijs Gitmans, Investment partner at SHIFT: “volytica is a gateway to promoting a more sustainable and efficient use of energy storage assets in mobile and stationary applications."
+    },
+    {
+      "id": "check-page-830bed138e",
+      "url": "https://innoenergy.com/news-resources/battery-analytics-pioneer-volytica-diagnostics-closes-e5-5m-investment-round/",
+      "page": "terms",
+      "excerpt": "With the battery being the most expensive degrading component of the energy and mobility transition, it’s a big milestone to have a solution that helps to make battery performance more reliable and extend lifetime of the batteries, avoiding CO2 emissions and alleviating demand for critical natural resources."
+    },
+    {
+      "id": "check-page-dc3df71d0d",
+      "url": "https://innoenergy.com/news-resources/battery-analytics-pioneer-volytica-diagnostics-closes-e5-5m-investment-round/",
+      "page": "terms",
+      "excerpt": "The Dresden-based company has found itself at the forefront of the European battery analytics space, setting itself up for a central role in the emerging megatrend of electrification – in the field of all vehicles up to large battery storage systems of renewable energies."
+    },
+    {
+      "id": "check-page-51ca6e44d1",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments-madrid/",
+      "page": "terms",
+      "excerpt": "BIOGENIC CCU IN EUROPE: FROM EMISSIONS TO INVESTMENTS - MADRID FEB 19 Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Dec 19, 2025 BIOGENIC CCU IN EUROPE: FROM EMISSIONS TO INVESTMENTS – MADRID FEB 19 19 February 2026, 17:30 – 20:00 Madrid, Spain Carbon Capture and Utilisation (CCU) is becoming a core pillar of Europe’s path to climate neutrality and energy security. Within this space, biogenic CO₂ – captured from sustainable biomass and organic waste – offers a rare opportunity to deliver true carbon-negative emissions while powering a circular carbon economy. Unlike fossil-based carbon capture, biogenic CO₂ is renewable by nature . It can be used to produce e-fuels for hard-to-electrify sectors like aviation, shipping, and heavy industry. This makes it central to Europe’s efforts to scale domestic energy, cut fossil imports, and boost industrial resilience. Momentum is growing. The EU Green Deal Industrial Plan, Renewable Energy Directive (RED III), ReFuelEU Aviation, and national decarbonisation strategies are together shaping the policy environment for biogenic CCU. Yet despite their immediate and scalable climate benefits, biogenic projects remain largely overlooked due to persistent awareness gaps around viable business models, fragmented value chains, and unclear investment pathways that hinder"
+    },
+    {
+      "id": "check-page-5a352ac78c",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments-madrid/",
+      "page": "terms",
+      "excerpt": "Yet despite their immediate and scalable climate benefits, biogenic projects remain largely overlooked due to persistent awareness gaps around viable business models, fragmented value chains, and unclear investment pathways that hinder deployment at scale."
+    },
+    {
+      "id": "check-page-84ac7657d9",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments-madrid/",
+      "page": "terms",
+      "excerpt": "Biogenic CCU offers more than climate value – it provides a strategic advantage for those seeking to lead in a more resilient, energy-secure, and competitive Europe."
+    },
+    {
+      "id": "check-page-f685edb2fc",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments-madrid/",
+      "page": "terms",
+      "excerpt": "Whether you’re a technology provider, energy major, investor, or involved in shaping the public framework, your engagement is essential to unlocking this opportunity and helping shape a climate-positive industrial future."
+    },
+    {
+      "id": "check-page-7796fcc283",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments/",
+      "page": "terms",
+      "excerpt": "BIOGENIC CCU IN EUROPE: FROM EMISSIONS TO INVESTMENTS Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Oct 2, 2025 BIOGENIC CCU IN EUROPE: FROM EMISSIONS TO INVESTMENTS Register here 02 October 2025, 11:00 – 14:00 Stockholm, Sweden Carbon Capture and Utilisation (CCU) is becoming a core pillar of Europe’s path to climate neutrality and energy security. Within this space, biogenic CO₂ – captured from sustainable biomass and organic waste – offers a rare opportunity to deliver true carbon-negative emissions while powering a circular carbon economy. Unlike fossil-based carbon capture, biogenic CO₂ is renewable by nature . It can be used to produce e-fuels for hard-to-electrify sectors like aviation, shipping, and heavy industry. This makes it central to Europe’s efforts to scale domestic energy, cut fossil imports, and boost industrial resilience. Momentum is growing. The EU Green Deal Industrial Plan, Renewable Energy Directive (RED III), ReFuelEU Aviation, and national decarbonisation strategies are together shaping the policy environment for biogenic CCU. Yet despite their immediate and scalable climate benefits, biogenic projects remain largely overlooked due to persistent awareness gaps around viable business models, fragmented value chains, and unclear investment pathways that hinder deployment at scale."
+    },
+    {
+      "id": "check-page-9559ce1605",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments/",
+      "page": "terms",
+      "excerpt": "Biogenic CCU offers more than climate value – it provides a strategic advantage for those seeking to lead in a more resilient, energy-secure, and competitive Europe."
+    },
+    {
+      "id": "check-page-18af06984d",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments/",
+      "page": "terms",
+      "excerpt": "Whether you’re a technology provider, energy major, investor, or involved in shaping the public framework, your engagement is essential to unlocking this opportunity and helping shape a climate-positive industrial future."
+    },
+    {
+      "id": "check-page-03945b4f4f",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-paris-feb10/",
+      "page": "terms",
+      "excerpt": "BIOGENIC CCU IN EUROPE: FROM EMISSIONS TO INVESTMENTS - Paris FEB 10 Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Oct 2, 2025 BIOGENIC CCU IN EUROPE: FROM EMISSIONS TO INVESTMENTS – Paris FEB 10 Register here 10 February 2026, 9:00 – 14:00 Paris, France Carbon Capture and Utilisation (CCU) is becoming a core pillar of Europe’s path to climate neutrality and energy security. Within this space, biogenic CO₂ , captured from sustainable biomass and organic waste, offers a rare opportunity to deliver true carbon-negative emissions while powering a circular carbon economy. Unlike fossil-based carbon capture, biogenic CO₂ is renewable by nature . It can be used to produce e-fuels for hard-to-electrify sectors like aviation, shipping, and heavy industry. This makes it central to Europe’s efforts to scale domestic energy, cut fossil imports, and boost industrial resilience. Momentum is growing. The EU Green Deal Industrial Plan, Renewable Energy Directive (RED III), ReFuelEU Aviation, and national decarbonisation strategies are together shaping the policy environment for biogenic CCU. Yet despite their immediate and scalable climate benefits, biogenic projects remain largely overlooked due to persistent awareness gaps around viable business models, fragmented value chains, and unclear investment pathways that"
+    },
+    {
+      "id": "check-page-9771e68995",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-paris-feb10/",
+      "page": "terms",
+      "excerpt": "Yet despite their immediate and scalable climate benefits, biogenic projects remain largely overlooked due to persistent awareness gaps around viable business models, fragmented value chains, and unclear investment pathways that hinder deployment at scale."
+    },
+    {
+      "id": "check-page-1fa8d76fa9",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-paris-feb10/",
+      "page": "terms",
+      "excerpt": "Biogenic CCU offers more than climate value – it provides a strategic advantage for those seeking to lead in a more resilient, energy-secure, and competitive Europe."
+    },
+    {
+      "id": "check-page-b80ac87a82",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-paris-feb10/",
+      "page": "terms",
+      "excerpt": "Whether you’re a technology provider, energy major, investor, or involved in shaping the public framework, your engagement is essential to unlocking this opportunity and helping shape a climate-positive industrial future."
+    },
+    {
+      "id": "check-page-3883516396",
+      "url": "https://innoenergy.com/news-resources/corpower-secures-7-3-meur-investment-into-portuguese-wave-project/",
+      "page": "terms",
+      "excerpt": "CorPower secures 7.3 MEUR investment into Portuguese wave project Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Feb 2, 2021 CorPower secures 7.3 MEUR investment into Portuguese wave project Portuguese authorities have joined the Swedish Energy Agency, EIT InnoEnergy and private investors to support CorPower’s flagship HiWave-5 demonstration project in northern Portugal. The project The investment supported by the European Union is provided through the NORTE 2020 Program operated by aicep Portugal Global (Portuguese Trade & Investment Agency) and CCDR-N (Norte Portugal Regional Coordination and Development Commission). It forms part of the HiWave-5 demonstration project aimed at bringing CorPower’s wave technology to a bankable product offering by 2024, by proving the survivability, performance and economics of a grid-connected array of Wave Energy Converters. It is designed to unlock mainstream renewable project financing for subsequent commercial array projects developed by our customers. ​The investment will further build a world-class wave energy base in Viana do Castelo, northern Portugal, including R&D, Manufacturing & Servicing facilities. Proceeds will be used to demonstrate the first commercial scale WEC within CorPower’s flagship​ HiWave-5 project ​ -​ and for the long-term development of supply"
+    },
+    {
+      "id": "check-page-68b73e924d",
+      "url": "https://innoenergy.com/news-resources/corpower-secures-7-3-meur-investment-into-portuguese-wave-project/",
+      "page": "terms",
+      "excerpt": "Proceeds will be used to demonstrate the first commercial scale WEC within CorPower’s flagship​ HiWave-5 project ​ -​ and for the long-term development of supply and service capacity for commercial wave energy farms."
+    },
+    {
+      "id": "check-page-e938887cdf",
+      "url": "https://innoenergy.com/news-resources/corpower-secures-7-3-meur-investment-into-portuguese-wave-project/",
+      "page": "terms",
+      "excerpt": "Portuguese focus on ocean energy CorPower Ocean CEO Patrik Möller said the funding decision reaffirms Portugal’s commitment to the ocean energy sector: “We are pleased to announce this positive development which will allow us to further ramp up operations in Portugal,” he said."
+    },
+    {
+      "id": "check-page-7aa86af248",
+      "url": "https://innoenergy.com/news-resources/corpower-secures-7-3-meur-investment-into-portuguese-wave-project/",
+      "page": "terms",
+      "excerpt": "While Portugal offers ideal natural conditions for the demonstration project it also crucially shares our passion and vision for ocean energy."
+    },
+    {
+      "id": "check-page-0ee1fee58c",
+      "url": "https://innoenergy.com/news-resources/corpower-secures-7-3-meur-investment-into-portuguese-wave-project/",
+      "page": "terms",
+      "excerpt": "There is a firm political will to maintain its position as a leader in clean energy, which is reflected in this recent investment in CorPower."
     }
   ],
   "findings": {

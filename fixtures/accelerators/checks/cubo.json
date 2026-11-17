@@ -1,6 +1,6 @@
 {
   "programId": "cubo",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://cubo.itau/",
     "https://cubo.itau/corporates-apply",
@@ -16,7 +16,12 @@
     "https://cubo.itau/es/investors-apply",
     "https://cubo.itau/es/partners-apply",
     "https://cubo.itau/es/startups-apply",
-    "https://cubo.itau/events-apply"
+    "https://cubo.itau/events-apply",
+    "https://cubo.itau/events-sponsorship-apply",
+    "https://cubo.itau/investors-apply",
+    "https://cubo.itau/partners-apply",
+    "https://cubo.itau/startups-apply",
+    "https://cubo.itau/corporates-portfolio"
   ],
   "evidence": [
     {
@@ -62,6 +67,20 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-092ab6f389",
+      "url": "https://cubo.itau/startups-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Startups → https://cubo.itau/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-0ab804c23d",
+      "url": "https://cubo.itau/events-sponsorship-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Preços e planos → https://cubo.itau/startups/#precos-e-planos",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-0d6dbd3e62",
       "url": "https://cubo.itau/en/events-apply",
       "title": "Cubo — application page",
@@ -69,10 +88,24 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-0df948c500",
+      "url": "https://cubo.itau/corporates-portfolio",
+      "title": "Cubo — portfolio page",
+      "excerpt": "Preços e planos → https://cubo.itau/startups#precos-e-planos",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-0e6a6e05fe",
       "url": "https://cubo.itau/en/partners-apply",
       "title": "Cubo — application page",
       "excerpt": "Startups → https://cubo.itau/en/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-14601d14aa",
+      "url": "https://cubo.itau/events-sponsorship-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Benefícios → https://cubo.itau/startups/#beneficios",
       "page": "application"
     },
     {
@@ -90,6 +123,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-165576c096",
+      "url": "https://cubo.itau/events-sponsorship-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Cubo for Startups → https://cubo.itau/startups",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-165c5e4ab0",
       "url": "https://cubo.itau/es/startups-apply",
       "title": "Cubo — application page",
@@ -101,6 +141,13 @@
       "url": "https://cubo.itau/en/events-sponsorship-apply",
       "title": "Cubo — application page",
       "excerpt": "Our Startups → https://cubo.itau/en/startups-portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-180294dbf6",
+      "url": "https://cubo.itau/events-sponsorship-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Startups → https://cubo.itau/startups",
       "page": "application"
     },
     {
@@ -143,6 +190,20 @@
       "url": "https://cubo.itau/corporates-apply",
       "title": "Cubo — application page",
       "excerpt": "Startups → https://cubo.itau/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-25c18e4760",
+      "url": "https://cubo.itau/partners-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Nossos pilares → https://cubo.itau/startups/#nossos-pilares",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-25f6f40524",
+      "url": "https://cubo.itau/startups-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Preços e planos → https://cubo.itau/startups/#precos-e-planos",
       "page": "application"
     },
     {
@@ -216,10 +277,24 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-36300ed313",
+      "url": "https://cubo.itau/corporates-portfolio",
+      "title": "Cubo — portfolio page",
+      "excerpt": "Nossos pilares → https://cubo.itau/startups#nossos-pilares",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-3640a5f387",
       "url": "https://cubo.itau/es/corporates-apply",
       "title": "Cubo — application page",
       "excerpt": "Precios y planes → https://cubo.itau/startups/#precos-e-planos",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-376e12e97a",
+      "url": "https://cubo.itau/partners-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Processo Seletivo → https://cubo.itau/startups/#processo-seletivo",
       "page": "application"
     },
     {
@@ -265,6 +340,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-452a695620",
+      "url": "https://cubo.itau/corporates-portfolio",
+      "title": "Cubo — portfolio page",
+      "excerpt": "Nossos Benefícios → https://cubo.itau/startups#beneficios",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-457ee2a4d2",
       "url": "https://cubo.itau/en/startups-apply",
       "title": "Cubo — application page",
@@ -283,6 +365,13 @@
       "url": "https://cubo.itau/es/corporates-apply",
       "title": "Cubo — application page",
       "excerpt": "Startups → https://cubo.itau/es/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4b184cf4f6",
+      "url": "https://cubo.itau/partners-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Benefícios → https://cubo.itau/startups/#beneficios",
       "page": "application"
     },
     {
@@ -321,6 +410,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-5a47ab38fc",
+      "url": "https://cubo.itau/partners-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Cubo for Startups → https://cubo.itau/startups",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-5e4e8f4e9f",
       "url": "https://cubo.itau/es/corporates-apply",
       "title": "Cubo — application page",
@@ -335,10 +431,31 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-654563db18",
+      "url": "https://cubo.itau/startups-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Cubo for Startups → https://cubo.itau/startups",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-660b20f5d8",
       "url": "https://cubo.itau/es/investors-apply",
       "title": "Cubo — application page",
       "excerpt": "Proceso de selección → https://cubo.itau/es/startups/#processo-seletivo",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-683520be14",
+      "url": "https://cubo.itau/startups-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Nossos pilares → https://cubo.itau/startups/#nossos-pilares",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6863ba8d16",
+      "url": "https://cubo.itau/partners-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Preços e planos → https://cubo.itau/startups/#precos-e-planos",
       "page": "application"
     },
     {
@@ -382,6 +499,13 @@
       "title": "Cubo — homepage",
       "excerpt": "Benefícios → https://cubo.itau/startups/#beneficios",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-782bb57b17",
+      "url": "https://cubo.itau/corporates-portfolio",
+      "title": "Cubo — portfolio page",
+      "excerpt": "Benefícios → https://cubo.itau/startups#beneficios",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-7b2bc39b58",
@@ -440,6 +564,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-848902d8c7",
+      "url": "https://cubo.itau/corporates-portfolio",
+      "title": "Cubo — portfolio page",
+      "excerpt": "Processo Seletivo → https://cubo.itau/startups#processo-seletivo",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-8525db7976",
       "url": "https://cubo.itau/es/events-sponsorship-apply",
       "title": "Cubo — application page",
@@ -458,6 +589,13 @@
       "url": "https://cubo.itau/en/corporates-apply",
       "title": "Cubo — application page",
       "excerpt": "Our Companies → https://cubo.itau/en/corporates-portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-864debc652",
+      "url": "https://cubo.itau/partners-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Startups → https://cubo.itau/startups",
       "page": "application"
     },
     {
@@ -608,6 +746,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-af27b03b4b",
+      "url": "https://cubo.itau/investors-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Processo Seletivo → https://cubo.itau/startups/#processo-seletivo",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-b23036a7d9",
       "url": "https://cubo.itau/es/events-sponsorship-apply",
       "title": "Cubo — application page",
@@ -634,6 +779,20 @@
       "title": "Cubo — application page",
       "excerpt": "Proceso de selección → https://cubo.itau/startups/#processo-seletivo",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-b692f2e8bb",
+      "url": "https://cubo.itau/startups-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Conheça os benefícios → https://cubo.itau/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b71c59419b",
+      "url": "https://cubo.itau/corporates-portfolio",
+      "title": "Cubo — portfolio page",
+      "excerpt": "Softlanding → https://cubo.itau/startups#soft-landing",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-b81e059ebe",
@@ -671,6 +830,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-c15628f9fb",
+      "url": "https://cubo.itau/startups-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Processo Seletivo → https://cubo.itau/startups/#processo-seletivo",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-c1571a9011",
       "url": "https://cubo.itau/",
       "title": "Cubo — homepage",
@@ -703,6 +869,13 @@
       "url": "https://cubo.itau/en/events-apply",
       "title": "Cubo — application page",
       "excerpt": "Our Companies → https://cubo.itau/en/corporates-portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-c4e4479590",
+      "url": "https://cubo.itau/investors-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Benefícios → https://cubo.itau/startups/#beneficios",
       "page": "application"
     },
     {
@@ -762,11 +935,39 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-d1c39b7839",
+      "url": "https://cubo.itau/startups-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Benefícios → https://cubo.itau/startups/#beneficios",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-d3d9f70225",
       "url": "https://cubo.itau/es/partners-apply",
       "title": "Cubo — application page",
       "excerpt": "Proceso de selección → https://cubo.itau/startups/#processo-seletivo",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-d48239f9f6",
+      "url": "https://cubo.itau/corporates-portfolio",
+      "title": "Cubo — portfolio page",
+      "excerpt": "Preços e Planos → https://cubo.itau/startups#precos-e-planos",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-d5a062992c",
+      "url": "https://cubo.itau/events-sponsorship-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Processo Seletivo → https://cubo.itau/startups/#processo-seletivo",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d5aea6498d",
+      "url": "https://cubo.itau/corporates-portfolio",
+      "title": "Cubo — portfolio page",
+      "excerpt": "Startups → https://cubo.itau/startups",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-d5e5a7cb9b",
@@ -839,6 +1040,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-e85df7dcf3",
+      "url": "https://cubo.itau/investors-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Preços e planos → https://cubo.itau/startups/#precos-e-planos",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-e982da9a2d",
       "url": "https://cubo.itau/es/investors-apply",
       "title": "Cubo — application page",
@@ -867,6 +1075,20 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-edcd1ce201",
+      "url": "https://cubo.itau/corporates-portfolio",
+      "title": "Cubo — portfolio page",
+      "excerpt": "Cubo for Startups → https://cubo.itau/startups",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-eee274280d",
+      "url": "https://cubo.itau/investors-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Startups → https://cubo.itau/startups",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-ef98c040b1",
       "url": "https://cubo.itau/en/events-apply",
       "title": "Cubo — application page",
@@ -874,10 +1096,31 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-f25344297e",
+      "url": "https://cubo.itau/investors-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Cubo for Startups → https://cubo.itau/startups",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-f3b852ca51",
       "url": "https://cubo.itau/en/events-apply",
       "title": "Cubo — application page",
       "excerpt": "Our core values → https://cubo.itau/en/startups/#nossos-pilares",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f3fd491316",
+      "url": "https://cubo.itau/investors-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Nossos pilares → https://cubo.itau/startups/#nossos-pilares",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f69f9a965b",
+      "url": "https://cubo.itau/events-sponsorship-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Nossos pilares → https://cubo.itau/startups/#nossos-pilares",
       "page": "application"
     },
     {
@@ -899,6 +1142,34 @@
       "url": "https://cubo.itau/en/investors-apply",
       "title": "Cubo — application page",
       "excerpt": "Startups → https://cubo.itau/en/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0453931136",
+      "url": "https://cubo.itau/partners-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Solicite seu evento → https://cubo.itau/events-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-04c43d8661",
+      "url": "https://cubo.itau/startups-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Seja um patrocinador → https://cubo.itau/events-sponsorship-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0679e0419b",
+      "url": "https://cubo.itau/events-sponsorship-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Español → https://cubo.itau/es/events-sponsorship-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0b03407bac",
+      "url": "https://cubo.itau/partners-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Innovation Day → https://cubo.itau/corporates-apply",
       "page": "application"
     },
     {
@@ -951,6 +1222,20 @@
       "page": "application"
     },
     {
+      "id": "check-route-2e81d7ffb5",
+      "url": "https://cubo.itau/investors-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Solicite seu evento → https://cubo.itau/events-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-33740245dc",
+      "url": "https://cubo.itau/investors-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Español → https://cubo.itau/es/investors-apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-38a69a285f",
       "url": "https://cubo.itau/events-apply",
       "title": "Cubo — application page",
@@ -972,6 +1257,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-4fa2cb1941",
+      "url": "https://cubo.itau/partners-apply",
+      "title": "Cubo — application page",
+      "excerpt": "English → https://cubo.itau/en/partners-apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-50cb9eaf32",
       "url": "https://cubo.itau/en/events-sponsorship-apply",
       "title": "Cubo — application page",
@@ -990,6 +1282,20 @@
       "url": "https://cubo.itau/es/partners-apply",
       "title": "Cubo — application page",
       "excerpt": "Innovation Day → https://cubo.itau/es/corporates-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-679156c82d",
+      "url": "https://cubo.itau/startups-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Español → https://cubo.itau/es/startups-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6968f8ecf6",
+      "url": "https://cubo.itau/startups-apply",
+      "title": "Cubo — application page",
+      "excerpt": "English → https://cubo.itau/en/startups-apply",
       "page": "application"
     },
     {
@@ -1060,6 +1366,13 @@
       "url": "https://cubo.itau/es/events-apply",
       "title": "Cubo — application page",
       "excerpt": "Português → https://cubo.itau/events-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-83c012dfc5",
+      "url": "https://cubo.itau/events-sponsorship-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Innovation Day → https://cubo.itau/corporates-apply",
       "page": "application"
     },
     {
@@ -1140,6 +1453,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-99c52b3fdc",
+      "url": "https://cubo.itau/events-sponsorship-apply",
+      "title": "Cubo — application page",
+      "excerpt": "English → https://cubo.itau/en/events-sponsorship-apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-9b254c3b75",
       "url": "https://cubo.itau/en/partners-apply",
       "title": "Cubo — application page",
@@ -1147,10 +1467,24 @@
       "page": "application"
     },
     {
+      "id": "check-route-9d4a5fd819",
+      "url": "https://cubo.itau/investors-apply",
+      "title": "Cubo — application page",
+      "excerpt": "English → https://cubo.itau/en/investors-apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-a18b29dc79",
       "url": "https://cubo.itau/en/startups-apply",
       "title": "Cubo — application page",
       "excerpt": "Request your event → https://cubo.itau/en/events-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a49059b481",
+      "url": "https://cubo.itau/investors-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Innovation Day → https://cubo.itau/corporates-apply",
       "page": "application"
     },
     {
@@ -1203,6 +1537,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-b6b467d5fd",
+      "url": "https://cubo.itau/corporates-portfolio",
+      "title": "Cubo — portfolio page",
+      "excerpt": "Innovation Day → https://cubo.itau/corporates-apply",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-b70a6efc7f",
       "url": "https://cubo.itau/es/events-apply",
       "title": "Cubo — application page",
@@ -1210,10 +1551,24 @@
       "page": "application"
     },
     {
+      "id": "check-route-b897cf5dbd",
+      "url": "https://cubo.itau/startups-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Solicite seu evento → https://cubo.itau/events-apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-b94a724667",
       "url": "https://cubo.itau/es/investors-apply",
       "title": "Cubo — application page",
       "excerpt": "Innovation Day → https://cubo.itau/es/corporates-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b964159f69",
+      "url": "https://cubo.itau/events-sponsorship-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Solicite seu evento → https://cubo.itau/events-apply",
       "page": "application"
     },
     {
@@ -1235,6 +1590,13 @@
       "url": "https://cubo.itau/es/partners-apply",
       "title": "Cubo — application page",
       "excerpt": "Cotiza tu evento → https://cubo.itau/es/events-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c76918cfea",
+      "url": "https://cubo.itau/investors-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Seja um patrocinador → https://cubo.itau/events-sponsorship-apply",
       "page": "application"
     },
     {
@@ -1273,6 +1635,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-d8cb38a3b7",
+      "url": "https://cubo.itau/partners-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Seja um patrocinador → https://cubo.itau/events-sponsorship-apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-d8ea8326af",
       "url": "https://cubo.itau/es/startups-apply",
       "title": "Cubo — application page",
@@ -1284,6 +1653,20 @@
       "url": "https://cubo.itau/es/partners-apply",
       "title": "Cubo — application page",
       "excerpt": "Solicite tu evento → https://cubo.itau/es/events-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dd5d15a4c6",
+      "url": "https://cubo.itau/startups-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Innovation Day → https://cubo.itau/corporates-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e2afc020f3",
+      "url": "https://cubo.itau/partners-apply",
+      "title": "Cubo — application page",
+      "excerpt": "Español → https://cubo.itau/es/partners-apply",
       "page": "application"
     },
     {
@@ -1308,6 +1691,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-fa12a08796",
+      "url": "https://cubo.itau/corporates-portfolio",
+      "title": "Cubo — portfolio page",
+      "excerpt": "Solicite seu evento → https://cubo.itau/events-apply",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-fc3d5469cd",
       "url": "https://cubo.itau/events-apply",
       "title": "Cubo — application page",
@@ -1327,91 +1717,289 @@
       "id": "check-page-e8d09c936b",
       "url": "https://cubo.itau/",
       "page": "details",
-      "excerpt": "Cubo Itaú - O ecossistema de inovação da América Latina Startups Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Corporates Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Partners Cubo for Partners Nossos pilares Benefícios Processo seletivo Preços e planos Eventos e conteúdos Vitrine Partners Investors Cubo for Investors Nossos pilares Benefícios Eventos e conteúdos Vitrine Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Agenda de eventos Solicite seu evento Seja um patrocinador Os eventos Cubo: Cubo Conecta Brazil Climate Solutions Academy Área de membros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de membros Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Voltar Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Voltar Cubo for Partners Nossos pilares Benefícios Processo seletivo"
+      "excerpt": "Cubo Itaú - O ecossistema de inovação da América Latina Startups Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Corporates Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Partners Cubo for Partners Nossos pilares Benefícios Processo seletivo Preços e planos Eventos e conteúdos Vitrine Partners Investors Cubo for Investors Nossos pilares Benefícios Eventos e conteúdos Vitrine Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Agenda de eventos Solicite seu evento Seja um patrocinador Os eventos Cubo: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Área de membros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de membros Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Voltar Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Voltar Cubo for Partners Nossos pilares Benefícios"
+    },
+    {
+      "id": "check-page-ef9e4210c2",
+      "url": "https://cubo.itau/",
+      "page": "details",
+      "excerpt": "Cubo Itaú, onde a inovação vira negócio Desde 2015, conectamos startups e corporates para gerar oportunidades de negócios."
+    },
+    {
+      "id": "check-page-c0660650af",
+      "url": "https://cubo.itau/",
+      "page": "details",
+      "excerpt": "Conexão direta com grandes empresas Fundraising e oportunidades de negócio Espaço físico colaborativo e networking diário Participação em desafios de inovação corporativa Seja uma Startup Cubo Cubo for Corporates Um ambiente favorável à inovação, conexão com startups e soluções para desafios corporativos."
+    },
+    {
+      "id": "check-page-c9fb8efe80",
+      "url": "https://cubo.itau/",
+      "page": "details",
+      "excerpt": "Presença no ecossistema físico e digital Co-criação de projetos, eventos e iniciativas com o Cubo Conexão com startups, corporates e investors Visibilidade de marca dentro do ecossistema de inovação Seja um Partner Cubo Cubo for Investors Comunidade que reúne investors de capital de risco e facilita a entrada de fundos internacionais na América Latina."
+    },
+    {
+      "id": "check-page-c0660650af",
+      "url": "https://cubo.itau/",
+      "page": "details",
+      "excerpt": "Conexão direta com grandes empresas Fundraising e oportunidades de negócio Espaço físico colaborativo e networking diário Participação em desafios de inovação corporativa Seja uma Startup Cubo Cubo for Corporates Um ambiente favorável à inovação, conexão com startups e soluções para desafios corporativos."
+    },
+    {
+      "id": "check-page-c9fb8efe80",
+      "url": "https://cubo.itau/",
+      "page": "details",
+      "excerpt": "Presença no ecossistema físico e digital Co-criação de projetos, eventos e iniciativas com o Cubo Conexão com startups, corporates e investors Visibilidade de marca dentro do ecossistema de inovação Seja um Partner Cubo Cubo for Investors Comunidade que reúne investors de capital de risco e facilita a entrada de fundos internacionais na América Latina."
+    },
+    {
+      "id": "check-page-fba921980e",
+      "url": "https://cubo.itau/",
+      "page": "details",
+      "excerpt": "Desafios de negócios Uma base de + 30.000 startups LatAm e solução para as dores das corporates, de onde estiverem."
+    },
+    {
+      "id": "check-page-fba921980e",
+      "url": "https://cubo.itau/",
+      "page": "details",
+      "excerpt": "Desafios de negócios Uma base de + 30.000 startups LatAm e solução para as dores das corporates, de onde estiverem."
+    },
+    {
+      "id": "check-page-5319912734",
+      "url": "https://cubo.itau/",
+      "page": "details",
+      "excerpt": "Aqui, o que começou na conexão da Dexco com a CUBi Energia, culminou em monitoramento remoto via IoT e eficiência energética."
+    },
+    {
+      "id": "check-page-e65e4dcfdb",
+      "url": "https://cubo.itau/",
+      "page": "details",
+      "excerpt": "Raphael Ruffato CEO na Lead Energy Estar no Cubo nos abriu portas que dificilmente conseguiríamos sozinhos."
     },
     {
       "id": "check-page-1e9b8357cc",
       "url": "https://cubo.itau/corporates-apply",
       "page": "application",
-      "excerpt": "Jornada para Corporates - Sua empresa no Cubo Itaú Startups Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Corporates Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Partners Cubo for Partners Nossos pilares Benefícios Processo seletivo Preços e planos Eventos e conteúdos Vitrine Partners Investors Cubo for Investors Nossos pilares Benefícios Eventos e conteúdos Vitrine Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Agenda de eventos Solicite seu evento Seja um patrocinador Os eventos Cubo: Cubo Conecta Brazil Climate Solutions Academy Área de membros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de membros Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Voltar Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Voltar Cubo for Partners Nossos pilares Benefícios Processo seletivo Preços"
+      "excerpt": "Jornada para Corporates - Sua empresa no Cubo Itaú Startups Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Corporates Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Partners Cubo for Partners Nossos pilares Benefícios Processo seletivo Preços e planos Eventos e conteúdos Vitrine Partners Investors Cubo for Investors Nossos pilares Benefícios Eventos e conteúdos Vitrine Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Agenda de eventos Solicite seu evento Seja um patrocinador Os eventos Cubo: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Área de membros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de membros Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Voltar Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Voltar Cubo for Partners Nossos pilares Benefícios Processo"
+    },
+    {
+      "id": "check-page-7772d1edda",
+      "url": "https://cubo.itau/corporates-apply",
+      "page": "application",
+      "excerpt": "Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Voltar Jornada para corporates Leve a inovação aberta para a sua empresa com o apoio de um ecossistema diversificado de startups curadas pelo Cubo Itaú."
+    },
+    {
+      "id": "check-page-504ac6b5e5",
+      "url": "https://cubo.itau/corporates-apply",
+      "page": "application",
+      "excerpt": "Comece agora Conheça os benefícios Sobre o Cubo for Corporates Somos um ponto de encontro para facilitar o acesso a startups, criar soluções inovadoras e resolver desafios de negócios."
+    },
+    {
+      "id": "check-page-79f911d29d",
+      "url": "https://cubo.itau/corporates-apply",
+      "page": "application",
+      "excerpt": "Público-alvo Corporates em busca de conexões estratégicas, onde a inovação é traduzida em impacto real e sustentável."
+    },
+    {
+      "id": "check-page-30f2c6b59f",
+      "url": "https://cubo.itau/corporates-apply",
+      "page": "application",
+      "excerpt": "Plano inicial Cubo for Corporates a partir de R$ 125.000,00 por ano Proposta de valor Uma equipe dedicada à inovação, branding, visibilidade, eventos e networking para os nossos parceiros corporativos."
     },
     {
       "id": "check-page-ad48fef4be",
       "url": "https://cubo.itau/en/corporates-apply",
       "page": "application",
-      "excerpt": "Journey for Corporates - Your company at Cubo Itaú Startups Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Corporates Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Partners Cubo for Partners Our core values Benefits Recruitment process Prices and plans Events and Content Showcase of Partners Investors Cubo for Investors Our core values Beneficios Events and Content Showcase of Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institutional Events Eventos Events calendar Request your event Become a sponsor Cubo events: Cubo Conecta Brazil Climate Solutions Academy Member area Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institutional Events Academy Member area Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Voltar Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Voltar Cubo for Partners Our core values Benefits Recruitment process"
+      "excerpt": "Journey for Corporates - Your company at Cubo Itaú Startups Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Corporates Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Partners Cubo for Partners Our core values Benefits Recruitment process Prices and plans Events and Content Showcase of Partners Investors Cubo for Investors Our core values Beneficios Events and Content Showcase of Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institutional Events Eventos Events calendar Request your event Become a sponsor Cubo events: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Member area Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institutional Events Academy Member area Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Voltar Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Voltar Cubo for Partners Our core values Benefits"
+    },
+    {
+      "id": "check-page-ceae9b44a0",
+      "url": "https://cubo.itau/en/corporates-apply",
+      "page": "application",
+      "excerpt": "Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Voltar Journey for corporates Bring open innovation to your company with the support of a diverse ecosystem of startups curated by Cubo Itaú."
+    },
+    {
+      "id": "check-page-9d89b9edfe",
+      "url": "https://cubo.itau/en/corporates-apply",
+      "page": "application",
+      "excerpt": "Start now Discover the benefits About Cubo for Corporates We are a meeting point to facilitate access to startups, create innovative solutions, and solve business challenges."
+    },
+    {
+      "id": "check-page-989cb7a3de",
+      "url": "https://cubo.itau/en/corporates-apply",
+      "page": "application",
+      "excerpt": "Target audience Corporates seeking strategic connections, where innovation is translated into real and sustainable impact."
+    },
+    {
+      "id": "check-page-2dfb9fbe06",
+      "url": "https://cubo.itau/en/corporates-apply",
+      "page": "application",
+      "excerpt": "Value proposition A team dedicated to innovation, branding, visibility, events, and networking for our corporate partners."
+    },
+    {
+      "id": "check-page-ef6bc01b57",
+      "url": "https://cubo.itau/en/corporates-apply",
+      "page": "application",
+      "excerpt": "Initial plan Cubo for Corporates starts at R$ 125.000,00 per year Value proposition A team dedicated to innovation, branding, visibility, events, and networking for our corporate partners."
+    },
+    {
+      "id": "check-page-4e93faa0e9",
+      "url": "https://cubo.itau/en/corporates-apply",
+      "page": "application",
+      "excerpt": "Initial plan Cubo for Corporates starts at R$ 125.000,00 per year Application form Back to top Associação Cubo Coworking Itaú CNPJ 42.267.898/0001-09 Non-profit organization Alameda Vicente Pinzon, 54 Vila Olímpia – São Paulo, SP – 04547-130 And wherever you are!"
     },
     {
       "id": "check-page-4644e048a3",
       "url": "https://cubo.itau/en/events-apply",
       "page": "application",
-      "excerpt": "Request your event at Cubo Itaú - The stage for innovation Startups Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Corporates Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Partners Cubo for Partners Our core values Benefits Recruitment process Prices and plans Events and Content Showcase of Partners Investors Cubo for Investors Our core values Beneficios Events and Content Showcase of Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institutional Events Eventos Events calendar Request your event Become a sponsor Cubo events: Cubo Conecta Brazil Climate Solutions Academy Member area Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institutional Events Academy Member area Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Voltar Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Voltar Cubo for Partners Our core values Benefits Recruitment"
+      "excerpt": "Request your event at Cubo Itaú - The stage for innovation Startups Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Corporates Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Partners Cubo for Partners Our core values Benefits Recruitment process Prices and plans Events and Content Showcase of Partners Investors Cubo for Investors Our core values Beneficios Events and Content Showcase of Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institutional Events Eventos Events calendar Request your event Become a sponsor Cubo events: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Member area Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institutional Events Academy Member area Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Voltar Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Voltar Cubo for Partners Our core values Benefits"
+    },
+    {
+      "id": "check-page-337fbdbc79",
+      "url": "https://cubo.itau/en/events-apply",
+      "page": "application",
+      "excerpt": "Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Voltar Hold your event at Cubo Itaú, the largest innovation hub in Latin America!"
+    },
+    {
+      "id": "check-page-ed9a286c23",
+      "url": "https://cubo.itau/en/events-apply",
+      "page": "application",
+      "excerpt": "Application form Back to top Associação Cubo Coworking Itaú CNPJ 42.267.898/0001-09 Non-profit organization Alameda Vicente Pinzon, 54 Vila Olímpia – São Paulo, SP – 04547-130 And wherever you are!"
     },
     {
       "id": "check-page-0b6e12eeed",
       "url": "https://cubo.itau/en/events-sponsorship-apply",
       "page": "application",
-      "excerpt": "Become a sponsor for Cubo Itaú events Startups Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Corporates Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Partners Cubo for Partners Our core values Benefits Recruitment process Prices and plans Events and Content Showcase of Partners Investors Cubo for Investors Our core values Beneficios Events and Content Showcase of Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institutional Events Eventos Events calendar Request your event Become a sponsor Cubo events: Cubo Conecta Brazil Climate Solutions Academy Member area Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institutional Events Academy Member area Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Voltar Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Voltar Cubo for Partners Our core values Benefits Recruitment process Prices and plans"
+      "excerpt": "Become a sponsor for Cubo Itaú events Startups Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Corporates Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Partners Cubo for Partners Our core values Benefits Recruitment process Prices and plans Events and Content Showcase of Partners Investors Cubo for Investors Our core values Beneficios Events and Content Showcase of Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institutional Events Eventos Events calendar Request your event Become a sponsor Cubo events: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Member area Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institutional Events Academy Member area Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Voltar Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Voltar Cubo for Partners Our core values Benefits Recruitment process"
+    },
+    {
+      "id": "check-page-f96ddccf02",
+      "url": "https://cubo.itau/en/events-sponsorship-apply",
+      "page": "application",
+      "excerpt": "Discover the benefits Application form Voltar ao topo Associação Cubo Coworking Itaú CNPJ 42.267.898/0001-09 Non-profit organization Alameda Vicente Pinzon, 54 Vila Olímpia – São Paulo, SP – 04547-130 And wherever you are!"
     },
     {
       "id": "check-page-f877379bb5",
       "url": "https://cubo.itau/en/investors-apply",
       "page": "application",
-      "excerpt": "Investors Community - Come To Cubo Startups Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Corporates Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Partners Cubo for Partners Our core values Benefits Recruitment process Prices and plans Events and Content Showcase of Partners Investors Cubo for Investors Our core values Beneficios Events and Content Showcase of Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institutional Events Eventos Events calendar Request your event Become a sponsor Cubo events: Cubo Conecta Brazil Climate Solutions Academy Member area Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institutional Events Academy Member area Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Voltar Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Voltar Cubo for Partners Our core values Benefits Recruitment process Prices and plans"
+      "excerpt": "Investors Community - Come To Cubo Startups Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Corporates Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Partners Cubo for Partners Our core values Benefits Recruitment process Prices and plans Events and Content Showcase of Partners Investors Cubo for Investors Our core values Beneficios Events and Content Showcase of Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institutional Events Eventos Events calendar Request your event Become a sponsor Cubo events: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Member area Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institutional Events Academy Member area Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Voltar Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Voltar Cubo for Partners Our core values Benefits Recruitment process Prices"
+    },
+    {
+      "id": "check-page-c49da588cb",
+      "url": "https://cubo.itau/en/investors-apply",
+      "page": "application",
+      "excerpt": "Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Voltar Selection process for investors The community fosters venture capital investor success through a unique value proposition that fosters meaningful connections for managers and their portfolios."
+    },
+    {
+      "id": "check-page-f4e1fb924d",
+      "url": "https://cubo.itau/en/investors-apply",
+      "page": "application",
+      "excerpt": "Target audience Investors seeking strategic support and opportunities to access relevant businesses and connect with the ecosystem of Brazil and Latin America."
+    },
+    {
+      "id": "check-page-690a5b9eee",
+      "url": "https://cubo.itau/en/investors-apply",
+      "page": "application",
+      "excerpt": "Learn about our benefits for general partners and VC firms: Priority access to events and initiatives Networking Partner benefits Content, events, and meetups Physical and digital infrastructure Profiles we seek Cubo partners with leading venture capital funds willing to: Collaborate and engage Have a long-term vision Share and give back to the community Why Cubo?"
     },
     {
       "id": "check-page-c9acd2c76c",
       "url": "https://cubo.itau/en/partners-apply",
       "page": "application",
-      "excerpt": "Cubo for Partners - Be a Cubo Itaú partner Startups Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Corporates Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Partners Cubo for Partners Our core values Benefits Recruitment process Prices and plans Events and Content Showcase of Partners Investors Cubo for Investors Our core values Beneficios Events and Content Showcase of Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institutional Events Eventos Events calendar Request your event Become a sponsor Cubo events: Cubo Conecta Brazil Climate Solutions Academy Member area Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institutional Events Academy Member area Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Voltar Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Voltar Cubo for Partners Our core values Benefits Recruitment process Prices and"
+      "excerpt": "Cubo for Partners - Be a Cubo Itaú partner Startups Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Corporates Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Partners Cubo for Partners Our core values Benefits Recruitment process Prices and plans Events and Content Showcase of Partners Investors Cubo for Investors Our core values Beneficios Events and Content Showcase of Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institutional Events Eventos Events calendar Request your event Become a sponsor Cubo events: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Member area Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institutional Events Academy Member area Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Voltar Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Voltar Cubo for Partners Our core values Benefits Recruitment"
     },
     {
       "id": "check-page-32a4656189",
       "url": "https://cubo.itau/en/startups-apply",
       "page": "application",
-      "excerpt": "Startup Selection Process - Come To Cubo Startups Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Corporates Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Partners Cubo for Partners Our core values Benefits Recruitment process Prices and plans Events and Content Showcase of Partners Investors Cubo for Investors Our core values Beneficios Events and Content Showcase of Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institutional Events Eventos Events calendar Request your event Become a sponsor Cubo events: Cubo Conecta Brazil Climate Solutions Academy Member area Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institutional Events Academy Member area Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Voltar Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Voltar Cubo for Partners Our core values Benefits Recruitment process Prices and"
+      "excerpt": "Startup Selection Process - Come To Cubo Startups Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Corporates Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Partners Cubo for Partners Our core values Benefits Recruitment process Prices and plans Events and Content Showcase of Partners Investors Cubo for Investors Our core values Beneficios Events and Content Showcase of Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institutional Events Eventos Events calendar Request your event Become a sponsor Cubo events: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Member area Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institutional Events Academy Member area Cubo for Startups Our core values Benefits Recruitment process Prices and plans Softlanding in Brazil Events and Content Showcase of Startups Voltar Cubo for Corporates Our core values Benefits Corporate Journey Prices and plans Events and Content Showcase of Corporates Voltar Cubo for Partners Our core values Benefits Recruitment process"
+    },
+    {
+      "id": "check-page-ea56b36cb6",
+      "url": "https://cubo.itau/en/startups-apply",
+      "page": "application",
+      "excerpt": "Target audience Growth-stage startups, with validated product, active customers, and sufficient recurring revenue to demonstrate traction."
+    },
+    {
+      "id": "check-page-aad1594617",
+      "url": "https://cubo.itau/en/startups-apply",
+      "page": "application",
+      "excerpt": "Initial plan Cubo for Startups starting at R$ 1.680,00 per month Application form Back to top Associação Cubo Coworking Itaú CNPJ 42.267.898/0001-09 Non-profit organization Alameda Vicente Pinzon, 54 Vila Olímpia – São Paulo, SP – 04547-130 And wherever you are!"
     },
     {
       "id": "check-page-ddd5c9f3b0",
       "url": "https://cubo.itau/es/corporates-apply",
       "page": "application",
-      "excerpt": "Jornada de innovación abierta - Tu empresa en Cubo Itaú Startups Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Corporates Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Partners Cubo for Partners Nuestros pilares Beneficios Proceso de selección Precios y planes Eventos y contenidos Vitrina de Partners Investors Cubo for Investors Nuestros pilares Benefits Eventos y contenidos Vitrina de Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Calendario de eventos Solicite tu evento Sea un patrocinador Los eventos Cubo: Cubo Conecta Brazil Climate Solutions Academy Área de miembros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de miembros Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Voltar Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Voltar"
+      "excerpt": "Jornada de innovación abierta - Tu empresa en Cubo Itaú Startups Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Corporates Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Partners Cubo for Partners Nuestros pilares Beneficios Proceso de selección Precios y planes Eventos y contenidos Vitrina de Partners Investors Cubo for Investors Nuestros pilares Benefits Eventos y contenidos Vitrina de Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Calendario de eventos Solicite tu evento Sea un patrocinador Los eventos Cubo: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Área de miembros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de miembros Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Voltar Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de"
     },
     {
       "id": "check-page-5fe7a80ec9",
       "url": "https://cubo.itau/es/events-apply",
       "page": "application",
-      "excerpt": "Solicita tu evento en Cubo Itaú - El escenario de la innovación Startups Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Corporates Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Partners Cubo for Partners Nuestros pilares Beneficios Proceso de selección Precios y planes Eventos y contenidos Vitrina de Partners Investors Cubo for Investors Nuestros pilares Benefits Eventos y contenidos Vitrina de Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Calendario de eventos Solicite tu evento Sea un patrocinador Los eventos Cubo: Cubo Conecta Brazil Climate Solutions Academy Área de miembros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de miembros Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Voltar Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates"
+      "excerpt": "Solicita tu evento en Cubo Itaú - El escenario de la innovación Startups Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Corporates Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Partners Cubo for Partners Nuestros pilares Beneficios Proceso de selección Precios y planes Eventos y contenidos Vitrina de Partners Investors Cubo for Investors Nuestros pilares Benefits Eventos y contenidos Vitrina de Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Calendario de eventos Solicite tu evento Sea un patrocinador Los eventos Cubo: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Área de miembros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de miembros Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Voltar Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de"
     },
     {
       "id": "check-page-00cdc2b96e",
       "url": "https://cubo.itau/es/events-sponsorship-apply",
       "page": "application",
-      "excerpt": "Conviértete en patrocinador de los eventos de Cubo Itaú Startups Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Corporates Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Partners Cubo for Partners Nuestros pilares Beneficios Proceso de selección Precios y planes Eventos y contenidos Vitrina de Partners Investors Cubo for Investors Nuestros pilares Benefits Eventos y contenidos Vitrina de Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Calendario de eventos Solicite tu evento Sea un patrocinador Los eventos Cubo: Cubo Conecta Brazil Climate Solutions Academy Área de miembros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de miembros Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Voltar Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Voltar"
+      "excerpt": "Conviértete en patrocinador de los eventos de Cubo Itaú Startups Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Corporates Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Partners Cubo for Partners Nuestros pilares Beneficios Proceso de selección Precios y planes Eventos y contenidos Vitrina de Partners Investors Cubo for Investors Nuestros pilares Benefits Eventos y contenidos Vitrina de Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Calendario de eventos Solicite tu evento Sea un patrocinador Los eventos Cubo: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Área de miembros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de miembros Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Voltar Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de"
     },
     {
       "id": "check-page-0d015eb165",
       "url": "https://cubo.itau/es/investors-apply",
       "page": "application",
-      "excerpt": "Comunidad de Inversores - Vení a Cubo Startups Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Corporates Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Partners Cubo for Partners Nuestros pilares Beneficios Proceso de selección Precios y planes Eventos y contenidos Vitrina de Partners Investors Cubo for Investors Nuestros pilares Benefits Eventos y contenidos Vitrina de Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Calendario de eventos Solicite tu evento Sea un patrocinador Los eventos Cubo: Cubo Conecta Brazil Climate Solutions Academy Área de miembros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de miembros Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Voltar Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Voltar Cubo for Partners"
+      "excerpt": "Comunidad de Inversores - Vení a Cubo Startups Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Corporates Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Partners Cubo for Partners Nuestros pilares Beneficios Proceso de selección Precios y planes Eventos y contenidos Vitrina de Partners Investors Cubo for Investors Nuestros pilares Benefits Eventos y contenidos Vitrina de Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Calendario de eventos Solicite tu evento Sea un patrocinador Los eventos Cubo: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Área de miembros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de miembros Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Voltar Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Voltar Cubo"
     },
     {
       "id": "check-page-afc809d427",
       "url": "https://cubo.itau/es/partners-apply",
       "page": "application",
-      "excerpt": "Cubo for Partners - Sé un socio de Cubo Itaú Startups Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Corporates Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Partners Cubo for Partners Nuestros pilares Beneficios Proceso de selección Precios y planes Eventos y contenidos Vitrina de Partners Investors Cubo for Investors Nuestros pilares Benefits Eventos y contenidos Vitrina de Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Calendario de eventos Solicite tu evento Sea un patrocinador Los eventos Cubo: Cubo Conecta Brazil Climate Solutions Academy Área de miembros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de miembros Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Voltar Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Voltar Cubo for"
+      "excerpt": "Cubo for Partners - Sé un socio de Cubo Itaú Startups Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Corporates Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Partners Cubo for Partners Nuestros pilares Beneficios Proceso de selección Precios y planes Eventos y contenidos Vitrina de Partners Investors Cubo for Investors Nuestros pilares Benefits Eventos y contenidos Vitrina de Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Calendario de eventos Solicite tu evento Sea un patrocinador Los eventos Cubo: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Área de miembros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de miembros Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Voltar Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Voltar"
     },
     {
       "id": "check-page-3c87d963dd",
       "url": "https://cubo.itau/es/startups-apply",
       "page": "application",
-      "excerpt": "Proceso de Selección para Startups - Vení a Cubo Startups Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Corporates Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Partners Cubo for Partners Nuestros pilares Beneficios Proceso de selección Precios y planes Eventos y contenidos Vitrina de Partners Investors Cubo for Investors Nuestros pilares Benefits Eventos y contenidos Vitrina de Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Calendario de eventos Solicite tu evento Sea un patrocinador Los eventos Cubo: Cubo Conecta Brazil Climate Solutions Academy Área de miembros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de miembros Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Voltar Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Voltar Cubo for"
+      "excerpt": "Proceso de Selección para Startups - Vení a Cubo Startups Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Corporates Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates Partners Cubo for Partners Nuestros pilares Beneficios Proceso de selección Precios y planes Eventos y contenidos Vitrina de Partners Investors Cubo for Investors Nuestros pilares Benefits Eventos y contenidos Vitrina de Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Calendario de eventos Solicite tu evento Sea un patrocinador Los eventos Cubo: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Área de miembros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de miembros Cubo for Startups Nuestros pilares Beneficios Proceso de selección Precios y planes Aterrizaje suave en Brasil Eventos y contenidos Vitrina de Startups Voltar Cubo for Corporates Nuestros pilares Beneficios Viaje corporativo Precios y planes Eventos y contenidos Vitrina de Corporates"
     },
     {
       "id": "check-page-14a31c7029",
       "url": "https://cubo.itau/events-apply",
       "page": "application",
       "excerpt": "Solicite seu evento no Cubo Itaú - O palco da inovação Startups Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Corporates Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Partners Cubo for Partners Nossos pilares Benefícios Processo seletivo Preços e planos Eventos e conteúdos Vitrine Partners Investors Cubo for Investors Nossos pilares Benefícios Eventos e conteúdos Vitrine Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Agenda de eventos Solicite seu evento Seja um patrocinador Os eventos Cubo: Cubo Conecta Brazil Climate Solutions Academy Área de membros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de membros Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Voltar Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Voltar Cubo for Partners Nossos pilares Benefícios Processo seletivo"
+    },
+    {
+      "id": "check-page-f766a58c32",
+      "url": "https://cubo.itau/events-sponsorship-apply",
+      "page": "application",
+      "excerpt": "Seja um patrocinador dos eventos do Cubo Itaú Startups Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Corporates Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Partners Cubo for Partners Nossos pilares Benefícios Processo seletivo Preços e planos Eventos e conteúdos Vitrine Partners Investors Cubo for Investors Nossos pilares Benefícios Eventos e conteúdos Vitrine Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Agenda de eventos Solicite seu evento Seja um patrocinador Os eventos Cubo: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Área de membros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de membros Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Voltar Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Voltar Cubo for Partners Nossos pilares Benefícios Processo"
+    },
+    {
+      "id": "check-page-a4f5f4ed11",
+      "url": "https://cubo.itau/investors-apply",
+      "page": "application",
+      "excerpt": "Comunidade Investors - Vem pro Cubo Startups Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Corporates Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Partners Cubo for Partners Nossos pilares Benefícios Processo seletivo Preços e planos Eventos e conteúdos Vitrine Partners Investors Cubo for Investors Nossos pilares Benefícios Eventos e conteúdos Vitrine Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Agenda de eventos Solicite seu evento Seja um patrocinador Os eventos Cubo: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Área de membros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de membros Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Voltar Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Voltar Cubo for Partners Nossos pilares Benefícios Processo seletivo Preços e"
+    },
+    {
+      "id": "check-page-b935f24911",
+      "url": "https://cubo.itau/investors-apply",
+      "page": "application",
+      "excerpt": "Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Voltar Processo seletivo para investors A comunidade promove o sucesso de investidores de venture capital por meio de uma proposta de valor exclusiva, que impulsiona conexões significativas para gestores e seus portfólios."
+    },
+    {
+      "id": "check-page-64b19ba719",
+      "url": "https://cubo.itau/partners-apply",
+      "page": "application",
+      "excerpt": "Cubo for Partners - Seja um parceiro do Cubo Itaú Startups Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Corporates Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Partners Cubo for Partners Nossos pilares Benefícios Processo seletivo Preços e planos Eventos e conteúdos Vitrine Partners Investors Cubo for Investors Nossos pilares Benefícios Eventos e conteúdos Vitrine Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Agenda de eventos Solicite seu evento Seja um patrocinador Os eventos Cubo: Cubo Conecta Brazil Climate Solutions AfroCubo Day Academy Área de membros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de membros Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Voltar Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Voltar Cubo for Partners Nossos pilares Benefícios Processo"
+    },
+    {
+      "id": "check-page-2fe611127a",
+      "url": "https://cubo.itau/startups-apply",
+      "page": "application",
+      "excerpt": "Processo Seletivo para Startups - Vem pro Cubo Startups Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Corporates Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Partners Cubo for Partners Nossos pilares Benefícios Processo seletivo Preços e planos Eventos e conteúdos Vitrine Partners Investors Cubo for Investors Nossos pilares Benefícios Eventos e conteúdos Vitrine Investors Hubs Hubs Agro AI Construliving Consumer Education Energy ESG Fintech Health Legal Logistics Media & Entertainment Smart Mobility Institucional Eventos Eventos Agenda de eventos Solicite seu evento Seja um patrocinador Os eventos Cubo: Cubo Conecta Brazil Climate Solutions Academy Área de membros Brasil O Cubo está em todo lugar. Selecione o país e o idioma: Brasil Português English Español Uruguay Español English Brasil Startups Corporates Partners Investors Hubs Institucional Eventos Academy Área de membros Cubo for Startups Nossos pilares Benefícios Processo Seletivo Preços e planos Soft Landing no Brasil Eventos e conteúdos Vitrine Startups Voltar Cubo for Corporates Nossos pilares Benefícios Jornada Corporate Preços e planos Eventos e conteúdos Vitrine Corporates Voltar Cubo for Partners Nossos pilares Benefícios Processo seletivo Preços e"
+    },
+    {
+      "id": "check-page-cabda675c4",
+      "url": "https://cubo.itau/corporates-portfolio",
+      "page": "portfolio",
+      "excerpt": "Cubo Itaú Cubo Itaú | para Corporates Startups Cubo for Startups Nossos pilares Processo Seletivo Softlanding no Brasil Nossos Benefícios Preços e Planos Eventos e conteúdos Vitrine Startups Corporates Cubo for Corporates Nossos pilares Jornada Corporate Eventos e conteúdos Nossos Benefícios Preços e Planos Vitrine Corporates Parceiros Cubo for Partners Nossos pilares Processo Seletivo Eventos e conteúdos Nossos Benefícios Preços e Planos Vitrine Parceiros Investors Cubo for Investors Nossos pilares Nossos Benefícios Eventos e conteúdos Vitrine Investors Hubs Hubs Agro Consumer ESG Logística AI Education Fintech Maritime & Port Media & Entertainment Construliving Energy Health Legal Smart Mobility Institucional Eventos Eventos Agenda de Eventos Solicite seu evento Seja um patrocinador Academy Área de membros Brasil O Cubo está em todo lugar . Selecione o idioma: Brasil English Español Português Uruguai English Español Brasil O Cubo está em todo lugar . Selecione o idioma: Brasil English Español Português Uruguai English Español Startups Corporates Parceiros Investors Hubs Institucional Eventos Academy Área de membros Foram encontradas 0 empresas Ops, nenhum conteúdo encontrado! Tente ajustar os filtros ou veja todas as opções. Ver tudo Pré-visualização Associação Cubo Coworking Itaú CNPJ 42.267.898/0001-09 Organização sem fins lucrativos Alameda Vicente Pinzon, 54 – Vila"
     }
   ],
   "findings": {

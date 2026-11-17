@@ -1,54 +1,1028 @@
 {
   "programId": "hub-of-human-innovation",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "http://hubofhumaninnovation.org",
-    "http://hubofhumaninnovation.org/about-us/",
+    "http://hubofhumaninnovation.org/apply/",
+    "https://hubofhumaninnovation.org/apply/",
     "http://hubofhumaninnovation.org/about-us/faqs/",
-    "http://hubofhumaninnovation.org/apply/"
+    "https://hubofhumaninnovation.org/about-us/faqs/",
+    "http://hubofhumaninnovation.org/about-us/",
+    "http://hubofhumaninnovation.org/about-us/clients/",
+    "http://hubofhumaninnovation.org/about-us/contact-us/",
+    "http://hubofhumaninnovation.org/about-us/focus-areas/",
+    "http://hubofhumaninnovation.org/programas/",
+    "http://hubofhumaninnovation.org/programs",
+    "http://hubofhumaninnovation.org/programs/clean-energy-incubator-program/",
+    "http://hubofhumaninnovation.org/programs/clean-energy-partners-program/",
+    "http://hubofhumaninnovation.org/programs/manufacturing-partners-program/",
+    "http://hubofhumaninnovation.org/programs/service-providers-program/",
+    "http://hubofhumaninnovation.org/programs/shift-program/",
+    "http://hubofhumaninnovation.org/programs/soft-landing-pad/",
+    "http://hubofhumaninnovation.org/programs/team-mentor-program/",
+    "https://hubofhumaninnovation.org/about-us/",
+    "https://hubofhumaninnovation.org/about-us/clients/"
   ],
   "evidence": [
     {
+      "id": "check-duration-f8b90041b2",
+      "url": "http://hubofhumaninnovation.org/about-us/faqs/",
+      "title": "The Hub of Human Innovation — terms page",
+      "excerpt": "an annual basis. Typically clients incubate for 18 months up to a maximum of 3 years. Back to Top How do",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ff6c2c4bbc",
+      "url": "https://hubofhumaninnovation.org/about-us/faqs/",
+      "title": "The Hub of Human Innovation — terms page",
+      "excerpt": "an annual basis. Typically clients incubate for 18 months up to a maximum of 3 years. Back to Top How do",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0e73bb1475",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Energy Management under the ISO 50001:2011 standard. nSim Virtual Motorsport gaming. Please check back for more information",
+      "page": "details"
+    },
+    {
+      "id": "check-format-15f8763c2a",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-partners-program/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "storage. And of course it includes plug-in or non-plug-in hybrid electric vehicles and their associated infrastructure. The",
+      "page": "details"
+    },
+    {
+      "id": "check-format-22ace9fb00",
+      "url": "https://hubofhumaninnovation.org/apply/",
+      "title": "The Hub of Human Innovation — application page",
+      "excerpt": "you will be contacted by The Hub staff to schedule an in-person orientation . Our staff reviews The Hub’s expectations and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7414586083",
+      "url": "http://hubofhumaninnovation.org/apply/",
+      "title": "The Hub of Human Innovation — application page",
+      "excerpt": "you will be contacted by The Hub staff to schedule an in-person orientation . Our staff reviews The Hub’s expectations and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8ffe17cdfd",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Technologies: Lightweight Energy Solutions Disruptive hybrid energy storage and management platform technology. Spira",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c462670ae0",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Energy Management under the ISO 50001:2011 standard. nSim Virtual Motorsport gaming. Please check back for more information",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d545b0aab7",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Technologies: Lightweight Energy Solutions Disruptive hybrid energy storage and management platform technology. Spira",
+      "page": "details"
+    },
+    {
+      "id": "check-location-54ed4b4c61",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "fossil fuel sources. Heliotrop, based in Lyons, France, has developed concentrated",
+      "page": "details"
+    },
+    {
+      "id": "check-location-ef9f96d39c",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "fossil fuel sources. Heliotrop, based in Lyons, France, has developed concentrated",
+      "page": "details"
+    },
+    {
       "id": "check-name-a24ee4c704",
       "url": "http://hubofhumaninnovation.org",
-      "title": "The Hub of Human Innovation — homepage checked by scrape.py",
+      "title": "The Hub of Human Innovation — homepage",
       "excerpt": "The Hub of Human Innovation – The Hub of Human Innovation About Us Team Board of",
+      "page": "details"
+    },
+    {
+      "id": "check-route-17005bac7f",
+      "url": "http://hubofhumaninnovation.org/programas/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Apply → http://hubofhumaninnovation.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1fcca5be9d",
+      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Apply → http://hubofhumaninnovation.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-28b71870ce",
+      "url": "http://hubofhumaninnovation.org/about-us/contact-us/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Apply → http://hubofhumaninnovation.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3825e72b5a",
+      "url": "http://hubofhumaninnovation.org/programs/manufacturing-partners-program/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Apply → http://hubofhumaninnovation.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3ff103f6b7",
+      "url": "https://hubofhumaninnovation.org/about-us/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Apply → https://hubofhumaninnovation.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-52c71c46b0",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-incubator-program/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Apply → http://hubofhumaninnovation.org/apply/",
       "page": "details"
     },
     {
       "id": "check-route-55db98a56d",
       "url": "http://hubofhumaninnovation.org",
-      "title": "The Hub of Human Innovation — homepage checked by scrape.py",
+      "title": "The Hub of Human Innovation — homepage",
       "excerpt": "Read More → http://hubofhumaninnovation.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5b5b7e7df2",
+      "url": "http://hubofhumaninnovation.org/programs/soft-landing-pad/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Apply → http://hubofhumaninnovation.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-60efb7ce52",
+      "url": "https://hubofhumaninnovation.org/about-us/faqs/",
+      "title": "The Hub of Human Innovation — terms page",
+      "excerpt": "Apply → https://hubofhumaninnovation.org/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-7494361cd6",
+      "url": "http://hubofhumaninnovation.org/programs",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Apply → http://hubofhumaninnovation.org/apply/",
       "page": "details"
     },
     {
       "id": "check-route-77d0c7a717",
       "url": "http://hubofhumaninnovation.org",
-      "title": "The Hub of Human Innovation — homepage checked by scrape.py",
+      "title": "The Hub of Human Innovation — homepage",
       "excerpt": "The Hub of Human Innovation → http://hubofhumaninnovation.org/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-93042c383b",
+      "url": "http://hubofhumaninnovation.org/programs/service-providers-program/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Apply → http://hubofhumaninnovation.org/apply/",
       "page": "details"
     },
     {
       "id": "check-route-93571494eb",
       "url": "http://hubofhumaninnovation.org",
-      "title": "The Hub of Human Innovation — homepage checked by scrape.py",
+      "title": "The Hub of Human Innovation — homepage",
       "excerpt": "Apply → http://hubofhumaninnovation.org/apply/",
       "page": "details"
     },
     {
       "id": "check-route-9a66fba832",
       "url": "http://hubofhumaninnovation.org/about-us/faqs/",
-      "title": "The Hub of Human Innovation — terms page checked by scrape.py",
+      "title": "The Hub of Human Innovation — terms page",
       "excerpt": "Apply → http://hubofhumaninnovation.org/apply/",
       "page": "terms"
     },
     {
-      "id": "check-route-c9ed9a094a",
-      "url": "http://hubofhumaninnovation.org/about-us/",
-      "title": "The Hub of Human Innovation — details page checked by scrape.py",
+      "id": "check-route-a1f5946a3e",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Apply → https://hubofhumaninnovation.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a2dddf2242",
+      "url": "http://hubofhumaninnovation.org/programs/shift-program/",
+      "title": "The Hub of Human Innovation — program page",
       "excerpt": "Apply → http://hubofhumaninnovation.org/apply/",
       "page": "details"
+    },
+    {
+      "id": "check-route-ab931f0cf0",
+      "url": "http://hubofhumaninnovation.org/programs/team-mentor-program/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Apply → http://hubofhumaninnovation.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-be056e98ef",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Apply → http://hubofhumaninnovation.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c9ed9a094a",
+      "url": "http://hubofhumaninnovation.org/about-us/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Apply → http://hubofhumaninnovation.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-df99c6253d",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-partners-program/",
+      "title": "The Hub of Human Innovation — program page",
+      "excerpt": "Apply → http://hubofhumaninnovation.org/apply/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-9ab679bcf6",
+      "url": "http://hubofhumaninnovation.org",
+      "page": "details",
+      "excerpt": "The Hub of Human Innovation – The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar Incubate Your Startup: New Rate Structure! Effective April 1, 2016 The Hub's rate structure will now be based on your company revenue. … Continue Reading… Shift Program Use the “lean-startup model” to create and manage startups and get new products in customers' hands … Continue Reading… Hub Works 2016 Schedule The schedule of Hub workshops for 2016 is updated monthly. Make plans to attend! … Continue Reading… PDNVC+E 2016 Paso Del Norte Venture Competition and Expo was held March 4 and 5, 2016. Fifteen student teams and over 30 judges participated in this event. For results and photos check out https://?fref=photo Exponential Innovation Workshop A crash course in advancing"
+    },
+    {
+      "id": "check-page-8e9b6ea4f2",
+      "url": "http://hubofhumaninnovation.org",
+      "page": "details",
+      "excerpt": "Date: April 14-15, 2016 Time: all day Read More The Hub of Human Innovation – El Paso’s Technology Incubator Startups that launch on authoritative domains earn credibility and search rankings faster - domraider.com offers a marketplace of premium expired startup and tech domain names."
+    },
+    {
+      "id": "check-page-4953422e37",
+      "url": "http://hubofhumaninnovation.org",
+      "page": "details",
+      "excerpt": "Latest posts: Semantic SEO Podcast Awarded Best Topical Authority Podcast 2026 as Mad Hatter Awards 2026 Names Its Winners - 2026-11-13 Gamdom vs."
+    },
+    {
+      "id": "check-page-ad8e4e2f65",
+      "url": "http://hubofhumaninnovation.org",
+      "page": "details",
+      "excerpt": "Read More Mentoring The Hub’s advisory team will meet with your company using a formalized continuous improvement process to address your company’s established milestones and “gaps” in the business capabilities."
+    },
+    {
+      "id": "check-page-c3f6ccdbf7",
+      "url": "http://hubofhumaninnovation.org",
+      "page": "details",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2017 • The Hub of Human Innovation • Site by [email protected]"
+    },
+    {
+      "id": "check-page-06bdfa09ea",
+      "url": "http://hubofhumaninnovation.org/apply/",
+      "page": "application",
+      "excerpt": "Apply The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar Apply Ver esta página en español to download the Application and Background Check Release Form. Submit completed application by email to or by fax to . The Hub requires a $60.00 application processing fee. If your company is from outside the United States or requires special processing that fee may increase. Please contact us if you have questions. Applications will not be reviewed without payment. Use PayPal to submit your fee. Admission Criteria Application Process Timeline The Hub is a technology incubator that nurtures the development of technology-based businesses, helping them survive and grow especially during the start-up period when they are most vulnerable. We also assist technology-based"
+    },
+    {
+      "id": "check-page-d6edc41714",
+      "url": "http://hubofhumaninnovation.org/apply/",
+      "page": "application",
+      "excerpt": "This will enable the client to work with a mentor team of 2-4 experienced individuals in a dedicated mentoring environment."
+    },
+    {
+      "id": "check-page-342b41bff0",
+      "url": "http://hubofhumaninnovation.org/apply/",
+      "page": "application",
+      "excerpt": "The Hub will also help with referrals to qualified advisors, mentors and service providers for those companies that apply but are not selected to participate in The Hub’s acceleration program."
+    },
+    {
+      "id": "check-page-b7a6f965df",
+      "url": "http://hubofhumaninnovation.org/apply/",
+      "page": "application",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2016 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-12ec792cc0",
+      "url": "https://hubofhumaninnovation.org/apply/",
+      "page": "application",
+      "excerpt": "Apply The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar Apply Ver esta página en español to download the Application and Background Check Release Form. Submit completed application by email to or by fax to . The Hub requires a $60.00 application processing fee. If your company is from outside the United States or requires special processing that fee may increase. Please contact us if you have questions. Applications will not be reviewed without payment. Use PayPal to submit your fee. Admission Criteria Application Process Timeline The Hub is a technology incubator that nurtures the development of technology-based businesses, helping them survive and grow especially during the start-up period when they are most vulnerable. We also assist technology-based"
+    },
+    {
+      "id": "check-page-b861be2588",
+      "url": "https://hubofhumaninnovation.org/apply/",
+      "page": "application",
+      "excerpt": "This will enable the client to work with a mentor team of 2-4 experienced individuals in a dedicated mentoring environment."
+    },
+    {
+      "id": "check-page-5f761f1371",
+      "url": "https://hubofhumaninnovation.org/apply/",
+      "page": "application",
+      "excerpt": "The Hub will also help with referrals to qualified advisors, mentors and service providers for those companies that apply but are not selected to participate in The Hub’s acceleration program."
+    },
+    {
+      "id": "check-page-8486a1745c",
+      "url": "https://hubofhumaninnovation.org/apply/",
+      "page": "application",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2016 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-ceb251e635",
+      "url": "http://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "FAQ’s The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar FAQ’s Ver esta página en español Any questions other than those listed below? Contact Us What is Business Incubation? What incubation packages are available? How much does incubation cost? What kind of space does The Hub offer? How long does a business stay in The Hub? How do we help clients get funding? How do clients join the mentor program? How to sign up? What is Business Incubation? Business incubation is a business support process that accelerates the successful development of start-up and fledgling companies by providing entrepreneurs with an array of targeted resources and services. These services are usually developed or orchestrated by incubator management and offered both in the business"
+    },
+    {
+      "id": "check-page-74ab517c64",
+      "url": "http://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "These services are usually developed or orchestrated by incubator management and offered both in the business incubator and through its network of contacts."
+    },
+    {
+      "id": "check-page-9bd1923c73",
+      "url": "http://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "A business incubator’s main goal is to produce successful firms that will leave the program financially viable and freestanding."
+    },
+    {
+      "id": "check-page-270462104f",
+      "url": "http://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "These incubator graduates have the potential to create jobs, revitalize neighborhoods, commercialize new technologies, and strengthen local and national economies."
+    },
+    {
+      "id": "check-page-d78b0ec1a2",
+      "url": "http://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "Critical to the definition of an incubator is the provision of management guidance, technical assistance and consulting tailored to young growing companies."
+    },
+    {
+      "id": "check-page-dfb7619c9e",
+      "url": "http://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "Incubators usually also provide clients access to appropriate rental space and flexible leases, shared basic business services and equipment, technology support services and assistance in obtaining the financing necessary for company growth."
+    },
+    {
+      "id": "check-page-afe4ad055d",
+      "url": "http://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "Back to Top What incubation packages are available?"
+    },
+    {
+      "id": "check-page-e784a4dff8",
+      "url": "http://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "Physical Incubation Package Executive Offices 1-5 $675 per mo with a $385 Security Deposit Cubicle Offices 6-14 $600 per mo with a $320 Security Deposit Incubation Package for Affiliates $325 per mo Back to Top What kind of space does The Hub offer?"
+    },
+    {
+      "id": "check-page-0478bf9c53",
+      "url": "http://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "The Hub of Human Innovation Team Mentor Program (Hub TMP) consists of volunteer mentors who are recruited and selected for their experience in areas relevant to the needs of Hub Clients and for their enthusiasm for the program."
+    },
+    {
+      "id": "check-page-ff69107482",
+      "url": "http://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "Relationships between mentors and Hub Clients are formed based on the needs and preferences of the Client and the interests of the available mentors."
+    },
+    {
+      "id": "check-page-b2e7d2f8aa",
+      "url": "http://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "Hub staff work with each Client toward eligibility to enter the Hub TMP, which enables the Client to work with a volunteer mentor team of 2-4 experienced individuals in a dedicated team mentoring environment."
+    },
+    {
+      "id": "check-page-f70c368a48",
+      "url": "http://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2016 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-3baf7b58d3",
+      "url": "https://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "FAQ’s The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar FAQ’s Ver esta página en español Any questions other than those listed below? Contact Us What is Business Incubation? What incubation packages are available? How much does incubation cost? What kind of space does The Hub offer? How long does a business stay in The Hub? How do we help clients get funding? How do clients join the mentor program? How to sign up? What is Business Incubation? Business incubation is a business support process that accelerates the successful development of start-up and fledgling companies by providing entrepreneurs with an array of targeted resources and services. These services are usually developed or orchestrated by incubator management and offered both in the business"
+    },
+    {
+      "id": "check-page-39b900077a",
+      "url": "https://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "These services are usually developed or orchestrated by incubator management and offered both in the business incubator and through its network of contacts."
+    },
+    {
+      "id": "check-page-14c490ec97",
+      "url": "https://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "A business incubator’s main goal is to produce successful firms that will leave the program financially viable and freestanding."
+    },
+    {
+      "id": "check-page-8e21c506a3",
+      "url": "https://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "These incubator graduates have the potential to create jobs, revitalize neighborhoods, commercialize new technologies, and strengthen local and national economies."
+    },
+    {
+      "id": "check-page-1a542323a2",
+      "url": "https://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "Critical to the definition of an incubator is the provision of management guidance, technical assistance and consulting tailored to young growing companies."
+    },
+    {
+      "id": "check-page-fa4adabb9a",
+      "url": "https://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "Incubators usually also provide clients access to appropriate rental space and flexible leases, shared basic business services and equipment, technology support services and assistance in obtaining the financing necessary for company growth."
+    },
+    {
+      "id": "check-page-24a3be5940",
+      "url": "https://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "Back to Top What incubation packages are available?"
+    },
+    {
+      "id": "check-page-ba4b37c1b4",
+      "url": "https://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "Physical Incubation Package Executive Offices 1-5 $675 per mo with a $385 Security Deposit Cubicle Offices 6-14 $600 per mo with a $320 Security Deposit Incubation Package for Affiliates $325 per mo Back to Top What kind of space does The Hub offer?"
+    },
+    {
+      "id": "check-page-82720d8efc",
+      "url": "https://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "The Hub of Human Innovation Team Mentor Program (Hub TMP) consists of volunteer mentors who are recruited and selected for their experience in areas relevant to the needs of Hub Clients and for their enthusiasm for the program."
+    },
+    {
+      "id": "check-page-7efaf152de",
+      "url": "https://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "Relationships between mentors and Hub Clients are formed based on the needs and preferences of the Client and the interests of the available mentors."
+    },
+    {
+      "id": "check-page-338a1e39e4",
+      "url": "https://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "Hub staff work with each Client toward eligibility to enter the Hub TMP, which enables the Client to work with a volunteer mentor team of 2-4 experienced individuals in a dedicated team mentoring environment."
+    },
+    {
+      "id": "check-page-00f0dd0604",
+      "url": "https://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2016 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-fa44074cb1",
+      "url": "http://hubofhumaninnovation.org/about-us/",
+      "page": "details",
+      "excerpt": "About Us The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar About Us Ver esta página en español The Hub is a technology incubator that nurtures the development of small businesses, helping them survive and grow during the start-up period when they are most vulnerable. We also assist technology-based businesses that are expanding, relocating, or simply need direction to move their business forward. We provide clients with business support services and tailored resources. Our goals are to: Increase the number of jobs in the Paso del Norte region Enhance our regional community’s entrepreneurial climate Retain businesses Accelerate growth in our core industries Diversify the local economy Opportunities are available to be physically incubated at The Hub, or"
+    },
+    {
+      "id": "check-page-5198885bbf",
+      "url": "http://hubofhumaninnovation.org/about-us/",
+      "page": "details",
+      "excerpt": "Our goals are to: Increase the number of jobs in the Paso del Norte region Enhance our regional community’s entrepreneurial climate Retain businesses Accelerate growth in our core industries Diversify the local economy Opportunities are available to be physically incubated at The Hub, or to become an off-site affiliated member."
+    },
+    {
+      "id": "check-page-3a1c5650ca",
+      "url": "http://hubofhumaninnovation.org/about-us/",
+      "page": "details",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2016 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-297a13be3d",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Clients The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar Clients Ver esta página en español The Hub’s current clients: American Water Recycling American Water Recycling’s nanofiltration (NF) technology enables industries to discharge safe, clean, re-useable water using a process that is economically and environmentally sustainable. Once filtered the water can be then used for a variety of purposes, including agricultural irrigation. Their technology allows industries to eliminate expensive disposal fees, elaborate pretreatments and risky chemical treatments. Atlas Regeneration ATLAS Regeneration Technologies Inc.’s initial product is a patent pending UTEP developed technology featuring an external sensor called CalSensor II for water softeners. The"
+    },
+    {
+      "id": "check-page-2b43645f13",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Negawatt negawattindustries.com Negawatt Industries is a start-up energy efficiency and management company."
+    },
+    {
+      "id": "check-page-751a2392de",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Negawatt Industries maximizes clients’ energy savings (verifiable Negawatts) and emission reduction by providing a systematic approach to project implementation, utilizing calibrated industry leading measuring equipment and innovative process of Energy Management under the ISO 50001:2011 standard. nSim Virtual Motorsport gaming."
+    },
+    {
+      "id": "check-page-ee5caa6239",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Hospital-In-A-Box is a handheld device which can perform a myriad of health tests and was developed by a practicing ER doctor."
+    },
+    {
+      "id": "check-page-24205f42b0",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Health care providers can quickly and easily perform comprehensive medical examinations anywhere in the world and transmit the results via wireless technology using the portable Hospital-In-A-Box."
+    },
+    {
+      "id": "check-page-700bafc245",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Quickly sharing patient information including multiple examination results, and their corresponding digitized images with others, in order to properly and accurately evaluate the health of the patient."
+    },
+    {
+      "id": "check-page-040b6fb1a8",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "O&L is one of the largest intellectual property law firms in New Mexico and West Texas and represents a broad range of clients, including emerging and established companies, universities and individual inventors."
+    },
+    {
+      "id": "check-page-11a6945579",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "The initial products are the Alka Genesis, a health care supplement, and Permian Super Fuel (PSF), a fuel additive that in initial studies improves fuel efficiency by at least 15%."
+    },
+    {
+      "id": "check-page-4ff65ac891",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Butler Healthcare In response to the shortage of physicians and lack of advance diagnostic services in the Paso Del Norte region and the growing frustration among patients over long wait times, Butler Healthcare was formed."
+    },
+    {
+      "id": "check-page-67c9a16577",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Butler Healthcare is a one stop outpatient facility that specializes in Oncology, Internal Medicine, Alternative Medicine, and Urgent Care."
+    },
+    {
+      "id": "check-page-cf6dcc2797",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "El Paso Instuments Advanced additive manufacturing and design."
+    },
+    {
+      "id": "check-page-5c095d3f4a",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "The Company’s mission is to provide the general aviation industry with innovative products to enhance aircraft safety, performance, and overall luxury."
+    },
+    {
+      "id": "check-page-2c7824b98c",
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Green Ingredient The Green Ingredient is an organic food service that cares for your health."
+    },
+    {
+      "id": "check-page-ea3147c9a9",
+      "url": "http://hubofhumaninnovation.org/about-us/contact-us/",
+      "page": "details",
+      "excerpt": "Contact Us The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar Contact Us Ver esta página en español The Hub of Human Innovation, Inc. Click for a physical address map of The Hub. Main: Fax: Teri French Administrative Assistant p. Nancy Lowery Vice President of Operations p. Pancho Mangan Director Business Development p. Joe Wardy President|CEO p. Search Social Media Translate Powered by . Events Back Next November 2016 S M T W T F S 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 We value all of our supporters as we work together to make the Paso del Norte a better place to live, work and play. Get in Touch A:: P:: F:: E:: Social Media Latest News Campuslink tech event in El Paso The Hub elects board members UTEP, Texas"
+    },
+    {
+      "id": "check-page-e8aba0e69b",
+      "url": "http://hubofhumaninnovation.org/about-us/contact-us/",
+      "page": "details",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2016 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-6b4a12c3dd",
+      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
+      "page": "details",
+      "excerpt": "Focus Areas The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar Focus Areas Ver esta página en español Click on the following links for a description of each of our Focus Areas. If you have any questions Contact Us Clean Energy Life Science/Biomedical Defense/Homeland Security Aerospace Advanced Manufacturing Other Clean Energy Many assets of the Paso del Norte Region make this a place where innovation in the Clean Energy Sector is vibrant. The Clean Energy Industry sector encompasses a broad range of activities that offer significant opportunities for innovation, including: Renewable Energy Generation: e.g. wind, solar, biofuels, geothermal, tidal Efficiency/Conservation: e.g. green building, solid state lighting (LED’s) Transportation: e.g. electric"
+    },
+    {
+      "id": "check-page-f5fd2c9063",
+      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
+      "page": "details",
+      "excerpt": "The Paso del Norte Clean Energy Incubator enables the region to knit together many assets in the Clean Technology Sector."
+    },
+    {
+      "id": "check-page-74ac9a6f4f",
+      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
+      "page": "details",
+      "excerpt": "Back to Top Defense/Homeland Security We are currently working on this section."
+    },
+    {
+      "id": "check-page-6413a5d6e9",
+      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
+      "page": "details",
+      "excerpt": "Back to Top Aerospace We are currently working on this section."
+    },
+    {
+      "id": "check-page-d7d3290c3b",
+      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
+      "page": "details",
+      "excerpt": "Back to Top Advanced Manufacturing The Advanced Manufacturing sector, a world-class strength of the Paso del Norte Region, is crucial to global competitiveness in timely production and delivery of all modern, high quality innovative products."
+    },
+    {
+      "id": "check-page-173438492f",
+      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
+      "page": "details",
+      "excerpt": "The manufacturing sector continues to account for 14 percent of U.S."
+    },
+    {
+      "id": "check-page-22cb7439f5",
+      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
+      "page": "details",
+      "excerpt": "And manufacturing firms fund 60 percent of the $193 billion that the U.S. private sector invests annually in R&D (U.S."
+    },
+    {
+      "id": "check-page-978b15fc7e",
+      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
+      "page": "details",
+      "excerpt": "Some experts define advanced manufacturing as “implementing process improvements, increasing quality controls, and installing advanced robotics and other intelligent production systems.” (U.S."
+    },
+    {
+      "id": "check-page-e1579958ed",
+      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
+      "page": "details",
+      "excerpt": "The Council on Competitiveness emphasized that advanced manufacturing entails high‐performance computing (HPC) for modeling, simulation, and analysis (“U.S."
+    },
+    {
+      "id": "check-page-5338fc9af4",
+      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
+      "page": "details",
+      "excerpt": "Manufacturing — Global Leadership Through Modeling and Simulation”)."
+    },
+    {
+      "id": "check-page-873e94f845",
+      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
+      "page": "details",
+      "excerpt": "Along the same lines, the Office of Science and Technology Policy describes advanced manufacturing as new ways of accomplishing the “how to” of production, emphasis is customization and scalability, while advancing the technologies necessary to improve capabilities."
+    },
+    {
+      "id": "check-page-d992c8508b",
+      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
+      "page": "details",
+      "excerpt": "Advanced manufacturing, however defined, is dynamic with constant improvements often comprised of pre‐commoditized processes and products."
+    },
+    {
+      "id": "check-page-205e04bcda",
+      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
+      "page": "details",
+      "excerpt": "Manufacturing salaries and benefits average $65,000, higher than the average for the total private sector."
+    },
+    {
+      "id": "check-page-be5cef4445",
+      "url": "http://hubofhumaninnovation.org/programas/",
+      "page": "details",
+      "excerpt": "Programas The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar Programas View this page in English El Hub ofrece una variedad de programas, además de los otros servicios, con el fin de asistir de una mejor manera a las empresas de base tecnológica que se están expandiendo, reubicando, o simplemente necesitan dirección para mover su negocio hacia adelante. Nuestros programas incluyen: Programa de Emprendimiento Avanzado Programa de Incubación para Empresas de Energía Sustentable Programa de Afiliados para Empresas de Energía Sustentable Programa de Afiliados para Manufactura Programa de Proveedores de Servicios Plataforma de Aterrizaje Suave Programa de Equipo de Mentores Para obtener más información sobre cualquiera de nuestros programas, por favor póngase"
+    },
+    {
+      "id": "check-page-de05870ab5",
+      "url": "http://hubofhumaninnovation.org/programas/",
+      "page": "details",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2016 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-a76ddaa057",
+      "url": "http://hubofhumaninnovation.org/programs",
+      "page": "details",
+      "excerpt": "Programs The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar Programs Ver esta página en español The Hub offers a variety of programs in addition to the service we offer in order to better assist technology-based businesses that are expanding, relocating, or simply need direction to move their business forward. Our programs include: Shift Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program For more information about any of our programs please contact us . Search Social Media Translate Powered by . Contact Us Main: Fax: Events Back Next February 2017 S M T W T F S 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 We value"
+    },
+    {
+      "id": "check-page-4e34352255",
+      "url": "http://hubofhumaninnovation.org/programs",
+      "page": "details",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2017 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-cb525b35eb",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-incubator-program/",
+      "page": "details",
+      "excerpt": "Clean Energy Incubator Program The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar Clean Energy Incubator Program Ver esta página en español The Paso del Norte Clean Energy Incubator Program (PDN CEI) is a partnership of the University of Texas at El Paso and The Hub of Human Innovation, funded through support from the Texas State Energy Conservation Office (SECO) . The PDN CEI Program enables the region to knit together many assets in the Clean Technology Sector: Massive regional research programs in clean tech Entrepreneurial support infrastructure The maquiladora program in Juarez MX, eager and able to provide advanced manufacturing expertise and capacity (more than 340 manufacturing institutions). Enormous global Department of Defense opportunity-pull"
+    },
+    {
+      "id": "check-page-80d7f54fd5",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-incubator-program/",
+      "page": "details",
+      "excerpt": "The PDN CEI is working to interface with both Fort Bliss and the WSMR for identification and support of early-stage clean energy technologies that address clearly defined needs."
+    },
+    {
+      "id": "check-page-6cbd5575e0",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-incubator-program/",
+      "page": "details",
+      "excerpt": "The Clean Energy Partners Program is a key component of the PDN CEI."
+    },
+    {
+      "id": "check-page-cd36341cef",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-incubator-program/",
+      "page": "details",
+      "excerpt": "Some commercial business partners will take the lead in commercializing new technologies; others will test and evaluate the performance of products and services developed by companies associated with the Incubator, helping to accelerate product adoption and sales."
+    },
+    {
+      "id": "check-page-bf33da82ba",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-incubator-program/",
+      "page": "details",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2017 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-0fcab62dc1",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-partners-program/",
+      "page": "details",
+      "excerpt": "Clean Energy Partners Program The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar Clean Energy Partners Program Ver esta página en español The Hub Clean Energy Partners program seeks to leverage existing Paso del Norte regional opportunities, competencies, capabilities and interest in the development and commercialization of clean technologies. This program connects the various parts of the clean tech infrastructure which might not otherwise connect. Linking of these parts can lead to opportunities for accelerated growth of clean technology in our region. These parts include inventors, researchers, academia, public institutions, private companies, and any other interested stakeholders. The specific objectives are to identify existing businesses and"
+    },
+    {
+      "id": "check-page-0cfe64a4ca",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-partners-program/",
+      "page": "details",
+      "excerpt": "License clean technologies from HUB clients and / or partner with HUB clients to commercialize clean tech."
+    },
+    {
+      "id": "check-page-d9fc849756",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-partners-program/",
+      "page": "details",
+      "excerpt": "Clean energy products also promote, enhance or advance the diversity of renewable sources and transmission of energy such as solar, wind, biomass, geothermal, tidal, bio-fuels and hydro-technologies."
+    },
+    {
+      "id": "check-page-95b54a2caa",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-partners-program/",
+      "page": "details",
+      "excerpt": "Products also fall into this category if they promote energy efficiency or conservation, or if they provide an improved demand response."
+    },
+    {
+      "id": "check-page-15cd127a43",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-partners-program/",
+      "page": "details",
+      "excerpt": "This category includes technology using smart grids, power electronics, waste-to-energy systems, solid-state lighting, and advanced materials."
+    },
+    {
+      "id": "check-page-af34cf09ac",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-partners-program/",
+      "page": "details",
+      "excerpt": "It also includes green retail and green buildings that incorporate environmental controls or integrated system technologies that incorporate cleaner uses of coal, more environmentally friendly recovery of oil, or processes incorporating carbon dioxide removal, wastewater reduction or recycling, remediation of environmental hazards or nuclear energy."
+    },
+    {
+      "id": "check-page-f61c1e008e",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-partners-program/",
+      "page": "details",
+      "excerpt": "The definition of clean energy also takes into account diverse energy storage methods such as battery storage and compressed air energy storage."
+    },
+    {
+      "id": "check-page-5fb8286152",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-partners-program/",
+      "page": "details",
+      "excerpt": "The Clean Energy Partners program integrates with and is leveraged by the Hub’s Manufacturing Partners program."
+    },
+    {
+      "id": "check-page-d9d8fe9a94",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-partners-program/",
+      "page": "details",
+      "excerpt": "This program connects HUB clients with contract manufacturing and or joint venture manufacturing for clean technology products."
+    },
+    {
+      "id": "check-page-83400e2d9b",
+      "url": "http://hubofhumaninnovation.org/programs/clean-energy-partners-program/",
+      "page": "details",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2016 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-a4bb72e03f",
+      "url": "http://hubofhumaninnovation.org/programs/manufacturing-partners-program/",
+      "page": "details",
+      "excerpt": "Manufacturing Partners Program The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar Manufacturing Partners Program Ver esta página en español The Hub Manufacturing Partners program seeks to leverage existing Paso del Norte regional opportunities, competencies, capabilities and interest in the manufacturing of new technology products. Anecdotal and empirical evidence both suggest a huge opportunity for our region to become the destination of choice for small and medium sized manufacturers of all types. Thus, this program will connect the various parts of the manufacturing infrastructure (including the maquilas on the Mexican side of our region) with Hub client companies looking to begin, expand, or re-locate manufacturing. The specific objectives are to"
+    },
+    {
+      "id": "check-page-7b7799d0f3",
+      "url": "http://hubofhumaninnovation.org/programs/manufacturing-partners-program/",
+      "page": "details",
+      "excerpt": "Depending upon the type of collaboration, a written agreement may need to be entered, typically between the Hub client and the Manufacturing Partner."
+    },
+    {
+      "id": "check-page-0f919fcbd0",
+      "url": "http://hubofhumaninnovation.org/programs/manufacturing-partners-program/",
+      "page": "details",
+      "excerpt": "Roles The Hub will take the lead in informing partners of the manufacturing opportunities and will facilitate the connections between Hub clients and partners."
+    },
+    {
+      "id": "check-page-29cad0c88d",
+      "url": "http://hubofhumaninnovation.org/programs/manufacturing-partners-program/",
+      "page": "details",
+      "excerpt": "The program will compile and maintain a list of partners and their manufacturing capabilities."
+    },
+    {
+      "id": "check-page-f50ba58d4d",
+      "url": "http://hubofhumaninnovation.org/programs/manufacturing-partners-program/",
+      "page": "details",
+      "excerpt": "Disclaimer: This program is a guide to assist entrepreneurs in identifying manufacturing resources in the region and is provided for information purposes only and does not constitute advice."
+    },
+    {
+      "id": "check-page-6e9c74da6c",
+      "url": "http://hubofhumaninnovation.org/programs/manufacturing-partners-program/",
+      "page": "details",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2016 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-1be913842f",
+      "url": "http://hubofhumaninnovation.org/programs/service-providers-program/",
+      "page": "details",
+      "excerpt": "Service Providers Program The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar Service Providers Program Ver esta página en español The Hub’s Referral Network is under a selection process at the moment. In the mean time, we encourage you to take advantage of the Start-Up Guide tools available at . We have developed this unique guide for technology based companies and start-up entrepreneurs working with an incubator. If you have any questions when going through our Startup Guide, please Contact Us. Search Social Media Translate Powered by . Contact Us Main: Fax: Events Back Next November 2016 S M T W T F S 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 We value all of our supporters as we work together to make the Paso del"
+    },
+    {
+      "id": "check-page-c1ac5ebe0c",
+      "url": "http://hubofhumaninnovation.org/programs/service-providers-program/",
+      "page": "details",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2016 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-ca1fb7e43e",
+      "url": "http://hubofhumaninnovation.org/programs/shift-program/",
+      "page": "details",
+      "excerpt": "“Shift” Program The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar “Shift” Program ABOUT SHIFT The Hub’s Shift program is based on the business model generation canvas created by Alexander Osterwalder, and the “lean-startup model” popularized by Steve Blank. Lean-startup focuses on engaging potential customers and partners in the early stages of product development. By testing concepts early, entrepreneurs find out what customers and partners want – what works and what doesn’t – and use that information to build a product that is ready to launch faster with less risk. Shift is a hands-on, customer-centered model for people who are looking for an idea, have an idea or have a business. Even if you don’t have an idea but want to be an entrepreneur this"
+    },
+    {
+      "id": "check-page-50393d42a5",
+      "url": "http://hubofhumaninnovation.org/programs/shift-program/",
+      "page": "details",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2016 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-baac3f3291",
+      "url": "http://hubofhumaninnovation.org/programs/soft-landing-pad/",
+      "page": "details",
+      "excerpt": "Soft Landing Pad The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar Soft Landing Pad Ver esta página en español Overview Why Choose the Paso del Norte Region? Services Companies Helped Apply Regional Resources Soft Landing Pad Overview The Hub Soft Landing Pad is designed specifically to introduce international companies to American markets. We provide the assistance needed to take you business to the next level. If you are planning to start or expand your business in the United States, The Hub provides an array of services and connections that will help make your transition smoother, faster, and more successful. Forget the idea that it is impossible, we have the resources and networks to make it happen. To download the full program brochure, click . Back"
+    },
+    {
+      "id": "check-page-81a3c0584f",
+      "url": "http://hubofhumaninnovation.org/programs/soft-landing-pad/",
+      "page": "details",
+      "excerpt": "Trade Logistics Mecca More than 70 Fortune 500 companies are located in the region Global Shipping: 5 international crossings, more than 70 trucking companies, international railway system, 5 airports, and major highways connect Atlantic, Gulf of Mexico and Pacific coasts."
+    },
+    {
+      "id": "check-page-6f81663fdf",
+      "url": "http://hubofhumaninnovation.org/programs/soft-landing-pad/",
+      "page": "details",
+      "excerpt": "Manufacturing: 76 high tech manufacturing facilities, 360 maquiladoras, and more than 54,000 workers in the sector."
+    },
+    {
+      "id": "check-page-56a5aa78e2",
+      "url": "http://hubofhumaninnovation.org/programs/soft-landing-pad/",
+      "page": "details",
+      "excerpt": "Innovation Focus Areas: Clean Technology, Life Sciences and Biomedical, Defense and Homeland Security, Automotive, Aerospace, and Advanced Manufacturing."
+    },
+    {
+      "id": "check-page-f27c34f1e8",
+      "url": "http://hubofhumaninnovation.org/programs/soft-landing-pad/",
+      "page": "details",
+      "excerpt": "Back to Top Clients Helped – Mexico Heliotrop – France Sarkar Defence – Scotland, UK Back to Top Apply Back to Top Regional Resources Back to Top For further information please contact Nancy Lowery at or Search Social Media Translate Powered by ."
+    },
+    {
+      "id": "check-page-43b77912ed",
+      "url": "http://hubofhumaninnovation.org/programs/soft-landing-pad/",
+      "page": "details",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2016 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-d454353651",
+      "url": "http://hubofhumaninnovation.org/programs/team-mentor-program/",
+      "page": "details",
+      "excerpt": "Team Mentor Program The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar Team Mentor Program Ver esta página en español The Team Mentor Program (Hub TMP) furthers the mission of The Hub by supporting entrepreneurial activity within the El Paso community and the Paso Del Norte Region. The Hub TMP is modeled after the world class MIT Venture Mentoring Service (VMS) program. The Hub TMP, like the MIT VMS, is based on premises that: “A fledging venture is more likely to thrive when an idea, good business planning, and an entrepreneur are matched with mentors with proven skills and experience;” “Successful entrepreneurs can be motivated to ‘give back’ as mentors – and many find the experience compelling and rewarding.” The Hub TMP consists of volunteer mentors"
+    },
+    {
+      "id": "check-page-3be21566c4",
+      "url": "http://hubofhumaninnovation.org/programs/team-mentor-program/",
+      "page": "details",
+      "excerpt": "Mentors are recruited and selected for their experience in areas relevant to the needs of Hub Clients and for their enthusiasm for the program."
+    },
+    {
+      "id": "check-page-61a594bec4",
+      "url": "http://hubofhumaninnovation.org/programs/team-mentor-program/",
+      "page": "details",
+      "excerpt": "Relationships between mentors and Hub Clients are formed based on the needs and preferences of the Client and the interests of the available mentors."
+    },
+    {
+      "id": "check-page-57b6473996",
+      "url": "http://hubofhumaninnovation.org/programs/team-mentor-program/",
+      "page": "details",
+      "excerpt": "The Hub TMP is available for Resident and Affiliate Hub Clients who are determined by Hub Management to be “ready” for mentoring."
+    },
+    {
+      "id": "check-page-daa40dfc6f",
+      "url": "http://hubofhumaninnovation.org/programs/team-mentor-program/",
+      "page": "details",
+      "excerpt": "Hub Management and Board Members are eligible as Founding Mentors to launch the program this March."
+    },
+    {
+      "id": "check-page-229e0f5b87",
+      "url": "http://hubofhumaninnovation.org/programs/team-mentor-program/",
+      "page": "details",
+      "excerpt": "Additional high quality mentors will be recruited through referrals and rigorous screening by Founding Mentors and Hub Management."
+    },
+    {
+      "id": "check-page-aa0ff229b6",
+      "url": "http://hubofhumaninnovation.org/programs/team-mentor-program/",
+      "page": "details",
+      "excerpt": "Strict guidelines for mentors and entrepreneurs assure an unbiased process."
+    },
+    {
+      "id": "check-page-eec56f05ec",
+      "url": "http://hubofhumaninnovation.org/programs/team-mentor-program/",
+      "page": "details",
+      "excerpt": "Mentors offer guidance and coaching for Hub Clients to learn by doing."
+    },
+    {
+      "id": "check-page-ab68f6c581",
+      "url": "http://hubofhumaninnovation.org/programs/team-mentor-program/",
+      "page": "details",
+      "excerpt": "Team Mentoring builds a culture of quality, collegiality, trust, and flexibility."
+    },
+    {
+      "id": "check-page-d40f1f122f",
+      "url": "http://hubofhumaninnovation.org/programs/team-mentor-program/",
+      "page": "details",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2016 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-7f46f6e3e3",
+      "url": "https://hubofhumaninnovation.org/about-us/",
+      "page": "details",
+      "excerpt": "About Us The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar About Us Ver esta página en español The Hub is a technology incubator that nurtures the development of small businesses, helping them survive and grow during the start-up period when they are most vulnerable. We also assist technology-based businesses that are expanding, relocating, or simply need direction to move their business forward. We provide clients with business support services and tailored resources. Our goals are to: Increase the number of jobs in the Paso del Norte region Enhance our regional community’s entrepreneurial climate Retain businesses Accelerate growth in our core industries Diversify the local economy Opportunities are available to be physically incubated at The Hub, or"
+    },
+    {
+      "id": "check-page-1bbd82b1a5",
+      "url": "https://hubofhumaninnovation.org/about-us/",
+      "page": "details",
+      "excerpt": "Our goals are to: Increase the number of jobs in the Paso del Norte region Enhance our regional community’s entrepreneurial climate Retain businesses Accelerate growth in our core industries Diversify the local economy Opportunities are available to be physically incubated at The Hub, or to become an off-site affiliated member."
+    },
+    {
+      "id": "check-page-af54de0d56",
+      "url": "https://hubofhumaninnovation.org/about-us/",
+      "page": "details",
+      "excerpt": "Mexico Foundation for Science Border Office (FUMEC) Copyright © 2016 • The Hub of Human Innovation • Site by"
+    },
+    {
+      "id": "check-page-1db6b959df",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Clients The Hub of Human Innovation About Us Team Board of Directors Clients Partners and Sponsors Focus Areas Contact Us FAQ’s Apply Services Pay for Services Programs “Shift” Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service Providers Program Soft Landing Pad Team Mentor Program Resources Helpful Links Videos and Presentations Events Paso Del Norte Venture Competition + Expo 2016 Hub Calendar Regional Events and Community Calendars Gallery News Inside the Hub Spotlight Stories of Interest Newsletter Español Acerca de Nosotros Preguntas Frecuentes Aplicar Servicios Programas Recursos Videos y Presentaciones de Talleres. Donar Clients Ver esta página en español The Hub’s current clients: American Water Recycling American Water Recycling’s nanofiltration (NF) technology enables industries to discharge safe, clean, re-useable water using a process that is economically and environmentally sustainable. Once filtered the water can be then used for a variety of purposes, including agricultural irrigation. Their technology allows industries to eliminate expensive disposal fees, elaborate pretreatments and risky chemical treatments. Atlas Regeneration ATLAS Regeneration Technologies Inc.’s initial product is a patent pending UTEP developed technology featuring an external sensor called CalSensor II for water softeners. The"
+    },
+    {
+      "id": "check-page-bf73d91c54",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Negawatt negawattindustries.com Negawatt Industries is a start-up energy efficiency and management company."
+    },
+    {
+      "id": "check-page-4f7d42f69e",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Negawatt Industries maximizes clients’ energy savings (verifiable Negawatts) and emission reduction by providing a systematic approach to project implementation, utilizing calibrated industry leading measuring equipment and innovative process of Energy Management under the ISO 50001:2011 standard. nSim Virtual Motorsport gaming."
+    },
+    {
+      "id": "check-page-92e9cc8968",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Hospital-In-A-Box is a handheld device which can perform a myriad of health tests and was developed by a practicing ER doctor."
+    },
+    {
+      "id": "check-page-81e49301ed",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Health care providers can quickly and easily perform comprehensive medical examinations anywhere in the world and transmit the results via wireless technology using the portable Hospital-In-A-Box."
+    },
+    {
+      "id": "check-page-57a1579c7f",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Quickly sharing patient information including multiple examination results, and their corresponding digitized images with others, in order to properly and accurately evaluate the health of the patient."
+    },
+    {
+      "id": "check-page-09ac942ab6",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "O&L is one of the largest intellectual property law firms in New Mexico and West Texas and represents a broad range of clients, including emerging and established companies, universities and individual inventors."
+    },
+    {
+      "id": "check-page-fe97338270",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "The initial products are the Alka Genesis, a health care supplement, and Permian Super Fuel (PSF), a fuel additive that in initial studies improves fuel efficiency by at least 15%."
+    },
+    {
+      "id": "check-page-6e9a52bc94",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Butler Healthcare In response to the shortage of physicians and lack of advance diagnostic services in the Paso Del Norte region and the growing frustration among patients over long wait times, Butler Healthcare was formed."
+    },
+    {
+      "id": "check-page-d6bf6c63a0",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Butler Healthcare is a one stop outpatient facility that specializes in Oncology, Internal Medicine, Alternative Medicine, and Urgent Care."
+    },
+    {
+      "id": "check-page-1c54ddc08e",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "El Paso Instuments Advanced additive manufacturing and design."
+    },
+    {
+      "id": "check-page-ae3da64f49",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "The Company’s mission is to provide the general aviation industry with innovative products to enhance aircraft safety, performance, and overall luxury."
+    },
+    {
+      "id": "check-page-ec183ef8a3",
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "excerpt": "Green Ingredient The Green Ingredient is an organic food service that cares for your health."
     }
   ],
   "findings": {
@@ -58,6 +1032,10 @@
       {
         "value": "http://hubofhumaninnovation.org/apply/",
         "evidenceId": "check-route-93571494eb"
+      },
+      {
+        "value": "https://hubofhumaninnovation.org/apply/",
+        "evidenceId": "check-route-60efb7ce52"
       }
     ],
     "applicationUrl": [
@@ -69,8 +1047,38 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-f8b90041b2"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-7414586083"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-c462670ae0"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-d545b0aab7"
+      }
+    ],
+    "location": [
+      {
+        "value": "Lyons",
+        "evidenceId": "check-location-ef9f96d39c"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

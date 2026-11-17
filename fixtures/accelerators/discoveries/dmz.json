@@ -1,20 +1,12 @@
 {
   "programId": "dmz",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
-    {
-      "url": "http://mydmz.torontomu.ca/portal/apply/dmzyyz",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://dmz.torontomu.ca/about",
       "page": "details",
       "anchor": "About DMZ A tech incubator & global ecosystem helping startups grow & scale.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -22,7 +14,7 @@
       "url": "https://dmz.torontomu.ca/amexbackingsmall",
       "page": "details",
       "anchor": "Backing Canadian Small Businesses 15-week mentorship program with $10K grants from Amex Canada.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -30,7 +22,7 @@
       "url": "https://dmz.torontomu.ca/basecamp",
       "page": "details",
       "anchor": "Basecamp Summer programs for students to launch startups and win grants.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -38,7 +30,15 @@
       "url": "https://dmz.torontomu.ca/chi",
       "page": "details",
       "anchor": "Centre for Housing Innovation Accelerator program and skill building initiatives.",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/chi-accelerator",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -107,38 +107,6 @@
       "origin": "official"
     },
     {
-      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://dmz.torontomu.ca/pre-incubator",
       "page": "details",
       "anchor": "Pre-Incubator 9-month program to get your first customers and sell.",
@@ -151,6 +119,14 @@
       "page": "details",
       "anchor": "Press Stories showcasing our founders, programs, and global reach.",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-and-ps43-launch-second-siakam-edtech-engine-cohort-expanding-into-youth-upskilling-and-ai",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -181,6 +157,22 @@
     {
       "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/press-releases/pascal-siakams-ps43-and-dmz-celebrate-second-siakam-edtech-engine-cohort-with-50-000-awarded-to-startups-rethinking-education-and-ai-learning",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/press-releases/ryerson-university-consolidates-dmz-and-rfi-to-better-serve-and-support-start-ups",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -238,6 +230,22 @@
       "url": "https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
       "page": "application",
       "anchor": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form.",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://mydmz.torontomu.ca/portal/login",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://mydmz.torontomu.ca/portal/programs",
+      "page": "details",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

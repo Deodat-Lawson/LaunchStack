@@ -1,24 +1,112 @@
 {
   "programId": "accelerateh2o",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.accelerateh2o.org",
+    "https://www.accelerateh2o.org/terms-and-conditions/",
     "https://www.accelerateh2o.org/about/"
   ],
   "evidence": [
     {
+      "id": "check-duration-db8eb404c0",
+      "url": "https://www.accelerateh2o.org/terms-and-conditions/",
+      "title": "AccelerateH2O — terms page",
+      "excerpt": "our site to which you would like to link. Wait 2-3 weeks for a response. Approved organizations may",
+      "page": "terms"
+    },
+    {
       "id": "check-name-a637fdfe5e",
       "url": "https://www.accelerateh2o.org",
-      "title": "AccelerateH2O — homepage checked by scrape.py",
+      "title": "AccelerateH2O — homepage",
       "excerpt": "Texas Water Infrastructure at Risk from Extreme Weather - accelerateh2o.org Skip to content Home About Blog Harnessing Future H2O:",
       "page": "details"
     },
     {
       "id": "check-route-e8da8470a3",
       "url": "https://www.accelerateh2o.org",
-      "title": "AccelerateH2O — homepage checked by scrape.py",
+      "title": "AccelerateH2O — homepage",
       "excerpt": "Home → https://www.accelerateh2o.org/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-057239a64b",
+      "url": "https://www.accelerateh2o.org",
+      "page": "details",
+      "excerpt": "Texas Water Infrastructure at Risk from Extreme Weather - accelerateh2o.org Skip to content Home About Blog Harnessing Future H2O: Strategies for Building Water Resilience Keeping the Tap Flowing: Protecting Water Infrastructure from Wildfires Withstanding the Shaking: Lessons for Water Infrastructure from Earthquake Hotspots How Coastal Towns Can Prepare for Tsunamis Contact accelerateh2o.org Home About Blog Harnessing Future H2O: Strategies for Building Water Resilience Keeping the Tap Flowing: Protecting Water Infrastructure from Wildfires Withstanding the Shaking: Lessons for Water Infrastructure from Earthquake Hotspots How Coastal Towns Can Prepare for Tsunamis Contact accelerateh2o.org Texas Water Infrastructure at Risk from Extreme Weather Texas is prone to a wide range of natural disasters that pose significant risks to critical infrastructure, especially water systems. The state’s susceptibility to droughts, floods, hurricanes, tornadoes, wildfires, and winter storms threatens the ability to provide clean drinking water to millions of Texans. As climate change exacerbates extreme weather, Texas must adapt its water infrastructure to strengthen resilience. Unique Climate Makes Texas Vulnerable Texas has a highly variable climate with weather extremes. Much of the state is arid or semi-arid, making it vulnerable to drought. Yet the Gulf of Mexico provides abundant"
+    },
+    {
+      "id": "check-page-a929f37951",
+      "url": "https://www.accelerateh2o.org",
+      "page": "details",
+      "excerpt": "Yet the Gulf of Mexico provides abundant moisture fueling strong thunderstorms, tornadoes, and hurricanes."
+    },
+    {
+      "id": "check-page-ef08661862",
+      "url": "https://www.accelerateh2o.org",
+      "page": "details",
+      "excerpt": "According to a USA Today analysis, Texas led the nation in billion-dollar disaster events from 1980 through 2021 with 27."
+    },
+    {
+      "id": "check-page-a9f3404c94",
+      "url": "https://www.accelerateh2o.org",
+      "page": "details",
+      "excerpt": "This variable and extreme climate poses challenges for water infrastructure."
+    },
+    {
+      "id": "check-page-153d8ba44f",
+      "url": "https://www.accelerateh2o.org",
+      "page": "details",
+      "excerpt": "Hotter temperatures due to climate change will worsen drought impacts."
+    },
+    {
+      "id": "check-page-705248af09",
+      "url": "https://www.accelerateh2o.org",
+      "page": "details",
+      "excerpt": "Many utilities have added backup power capabilities and portable generators to keep pumping and treatment going when energy supplies are interrupted."
+    },
+    {
+      "id": "check-page-4023e529dd",
+      "url": "https://www.accelerateh2o.org",
+      "page": "details",
+      "excerpt": "Expanding diversity of both water sources and energy supplies is crucial."
+    },
+    {
+      "id": "check-page-5fa8e37c51",
+      "url": "https://www.accelerateh2o.org",
+      "page": "details",
+      "excerpt": "Ongoing conservation and public education are also key."
+    },
+    {
+      "id": "check-page-6eff0a6653",
+      "url": "https://www.accelerateh2o.org",
+      "page": "details",
+      "excerpt": "With its can-do attitude and wealth of resources, Texas has the capacity to become a model for water security in the age of climate change extremes."
+    },
+    {
+      "id": "check-page-e3078c08ed",
+      "url": "https://www.accelerateh2o.org/terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Terms and Conditions - accelerateh2o.org Skip to content Home About Blog Harnessing Future H2O: Strategies for Building Water Resilience Keeping the Tap Flowing: Protecting Water Infrastructure from Wildfires Withstanding the Shaking: Lessons for Water Infrastructure from Earthquake Hotspots How Coastal Towns Can Prepare for Tsunamis Contact accelerateh2o.org Home About Blog Harnessing Future H2O: Strategies for Building Water Resilience Keeping the Tap Flowing: Protecting Water Infrastructure from Wildfires Withstanding the Shaking: Lessons for Water Infrastructure from Earthquake Hotspots How Coastal Towns Can Prepare for Tsunamis Contact accelerateh2o.org Terms and Conditions Welcome to accelerateh2o.org! These terms and conditions outline the rules and regulations for the use of accelerateh2o.org’s Website, located at accelerateh2o.org. By accessing this website, we assume you accept these terms and conditions. Do not continue to use accelerateh2o.org if you do not agree to take all of the terms and conditions stated on this page. Cookies: The website uses cookies to help personalize your online experience. By accessing accelerateh2o.org, you agreed to use the required cookies. A cookie is a text file that is placed on your hard disk by a web page server. Cookies cannot be used to run programs or deliver viruses to your computer. Cookies are uniquely assigned to you and"
+    },
+    {
+      "id": "check-page-6a16f4c221",
+      "url": "https://www.accelerateh2o.org/about/",
+      "page": "details",
+      "excerpt": "Pioneering Water Resilience for Tomorrow - accelerateh2o.org Skip to content Home About Blog Harnessing Future H2O: Strategies for Building Water Resilience Keeping the Tap Flowing: Protecting Water Infrastructure from Wildfires Withstanding the Shaking: Lessons for Water Infrastructure from Earthquake Hotspots How Coastal Towns Can Prepare for Tsunamis Contact accelerateh2o.org Home About Blog Harnessing Future H2O: Strategies for Building Water Resilience Keeping the Tap Flowing: Protecting Water Infrastructure from Wildfires Withstanding the Shaking: Lessons for Water Infrastructure from Earthquake Hotspots How Coastal Towns Can Prepare for Tsunamis Contact accelerateh2o.org Pioneering Water Resilience for Tomorrow At AccelerateH2O.org, we recognize the paramount importance of water, not only as a basic necessity for life but also as a foundational element for communities, economies, and ecosystems. In an era marked by environmental shifts, evolving threats, and growing populations, safeguarding our water resources and infrastructures is more vital than ever. Here’s an insight into who we are and the mission we ardently pursue. In the face of adversities such as natural disasters, changing climate patterns, and unprecedented human interventions, we envision a future where every community, irrespective of its location and size, has access to resilient, safe, and sustainable"
+    },
+    {
+      "id": "check-page-ff00172727",
+      "url": "https://www.accelerateh2o.org/about/",
+      "page": "details",
+      "excerpt": "In the face of adversities such as natural disasters, changing climate patterns, and unprecedented human interventions, we envision a future where every community, irrespective of its location and size, has access to resilient, safe, and sustainable water systems."
+    },
+    {
+      "id": "check-page-efc14334ea",
+      "url": "https://www.accelerateh2o.org/about/",
+      "page": "details",
+      "excerpt": "Education & Advocacy: We believe that collective action stems from informed decisions."
     }
   ],
   "findings": {
@@ -34,8 +122,20 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "3",
+        "evidenceId": "check-duration-db8eb404c0"
+      }
+    ],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

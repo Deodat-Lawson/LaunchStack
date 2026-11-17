@@ -1,38 +1,240 @@
 {
   "programId": "hudson-river-eats",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.hudsonriverhousing.org/openkitchen",
-    "https://www.hudsonriverhousing.org/s/HowtoApplyFINAL72326.docx"
+    "https://www.hudsonriverhousing.org/apply",
+    "https://www.hudsonriverhousing.org/apply-online",
+    "https://www.hudsonriverhousing.org/s/HowtoApplyFINAL72326.docx",
+    "https://www.hudsonriverhousing.org/s/HRH-Universal-Rental-Application-6-12-2025-English.pdf",
+    "https://www.hudsonriverhousing.org/s/HRH-Universal-Rental-Application-6-12-2025-Spanish.pdf",
+    "https://www.hudsonriverhousing.org/plus-one-adu-program",
+    "https://www.hudsonriverhousing.org/blog/groundbreaking-celebrates-new-investment-in-first-time-homeownership-on-poughkeepsies-northside",
+    "https://www.hudsonriverhousing.org/blog/ahc-flood-assistance-program",
+    "https://www.hudsonriverhousing.org/s/AHC-Flood-Relief-Program-Application-10-2023.pdf"
   ],
   "evidence": [
     {
+      "id": "check-route-17a52223b6",
+      "url": "https://www.hudsonriverhousing.org/blog/ahc-flood-assistance-program",
+      "title": "Hudson River EATS — program page",
+      "excerpt": "APPLY FOR HOUSING → https://www.hudsonriverhousing.org/apply-online",
+      "page": "details"
+    },
+    {
+      "id": "check-route-193e8523c9",
+      "url": "https://www.hudsonriverhousing.org/blog/groundbreaking-celebrates-new-investment-in-first-time-homeownership-on-poughkeepsies-northside",
+      "title": "Hudson River EATS — terms page",
+      "excerpt": "Folder: APPLY FOR HOUSING → https://www.hudsonriverhousing.org/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-206c0ed6df",
+      "url": "https://www.hudsonriverhousing.org/blog/groundbreaking-celebrates-new-investment-in-first-time-homeownership-on-poughkeepsies-northside",
+      "title": "Hudson River EATS — terms page",
+      "excerpt": "How to Apply → https://www.hudsonriverhousing.org/s/HowtoApplyFINAL72326.docx",
+      "page": "terms"
+    },
+    {
       "id": "check-route-381c5224a6",
       "url": "https://www.hudsonriverhousing.org/openkitchen",
-      "title": "Hudson River EATS — homepage checked by scrape.py",
+      "title": "Hudson River EATS — homepage",
       "excerpt": "APPLY FOR HOUSING → https://www.hudsonriverhousing.org/apply-online",
+      "page": "details"
+    },
+    {
+      "id": "check-route-447c6c0fba",
+      "url": "https://www.hudsonriverhousing.org/blog/groundbreaking-celebrates-new-investment-in-first-time-homeownership-on-poughkeepsies-northside",
+      "title": "Hudson River EATS — terms page",
+      "excerpt": "APPLY FOR HOUSING → https://www.hudsonriverhousing.org/apply-online",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-59e0adda39",
+      "url": "https://www.hudsonriverhousing.org/blog/groundbreaking-celebrates-new-investment-in-first-time-homeownership-on-poughkeepsies-northside",
+      "title": "Hudson River EATS — terms page",
+      "excerpt": "Apply Online → https://www.hudsonriverhousing.org/apply-online",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-5bc86ee248",
+      "url": "https://www.hudsonriverhousing.org/apply-online",
+      "title": "Hudson River EATS — application page",
+      "excerpt": "English Application → https://www.hudsonriverhousing.org/s/HRH-Universal-Rental-Application-6-12-2025-English.pdf",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5cea78d8d3",
+      "url": "https://www.hudsonriverhousing.org/blog/ahc-flood-assistance-program",
+      "title": "Hudson River EATS — program page",
+      "excerpt": "Fill Out the Application Here → https://www.hudsonriverhousing.org/s/AHC-Flood-Relief-Program-Application-10-2023.pdf",
       "page": "details"
     },
     {
       "id": "check-route-7726e3c3cd",
       "url": "https://www.hudsonriverhousing.org/openkitchen",
-      "title": "Hudson River EATS — homepage checked by scrape.py",
+      "title": "Hudson River EATS — homepage",
       "excerpt": "Folder: APPLY FOR HOUSING → https://www.hudsonriverhousing.org/apply",
       "page": "details"
     },
     {
       "id": "check-route-78613f1f98",
       "url": "https://www.hudsonriverhousing.org/openkitchen",
-      "title": "Hudson River EATS — homepage checked by scrape.py",
+      "title": "Hudson River EATS — homepage",
       "excerpt": "Apply Online → https://www.hudsonriverhousing.org/apply-online",
       "page": "details"
     },
     {
+      "id": "check-route-860fd233bb",
+      "url": "https://www.hudsonriverhousing.org/apply-online",
+      "title": "Hudson River EATS — application page",
+      "excerpt": "Apply → https://www.hudsonriverhousing.org/https://www.hudsonriverhousing.org/https://fallkill-commons-on-rose-lihtc-rentcafewebsite.securecafe.com/onlineleasing/fallkill-commons-on-rose-lihtc/guestlogin.aspx",
+      "page": "application"
+    },
+    {
       "id": "check-route-b54b7202eb",
       "url": "https://www.hudsonriverhousing.org/openkitchen",
-      "title": "Hudson River EATS — homepage checked by scrape.py",
+      "title": "Hudson River EATS — homepage",
       "excerpt": "How to Apply → https://www.hudsonriverhousing.org/s/HowtoApplyFINAL72326.docx",
       "page": "details"
+    },
+    {
+      "id": "check-route-c06e513dff",
+      "url": "https://www.hudsonriverhousing.org/plus-one-adu-program",
+      "title": "Hudson River EATS — program page",
+      "excerpt": "Folder: APPLY FOR HOUSING → https://www.hudsonriverhousing.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c785f472c6",
+      "url": "https://www.hudsonriverhousing.org/plus-one-adu-program",
+      "title": "Hudson River EATS — program page",
+      "excerpt": "APPLY FOR HOUSING → https://www.hudsonriverhousing.org/apply-online",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d9295bb47c",
+      "url": "https://www.hudsonriverhousing.org/apply-online",
+      "title": "Hudson River EATS — application page",
+      "excerpt": "Folder: APPLY FOR HOUSING → https://www.hudsonriverhousing.org/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e9e9730d77",
+      "url": "https://www.hudsonriverhousing.org/blog/ahc-flood-assistance-program",
+      "title": "Hudson River EATS — program page",
+      "excerpt": "How to Apply → https://www.hudsonriverhousing.org/s/HowtoApplyFINAL72326.docx",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ea74306f75",
+      "url": "https://www.hudsonriverhousing.org/apply-online",
+      "title": "Hudson River EATS — application page",
+      "excerpt": "Spanish Application → https://www.hudsonriverhousing.org/s/HRH-Universal-Rental-Application-6-12-2025-Spanish.pdf",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ef6096bafc",
+      "url": "https://www.hudsonriverhousing.org/blog/ahc-flood-assistance-program",
+      "title": "Hudson River EATS — program page",
+      "excerpt": "Folder: APPLY FOR HOUSING → https://www.hudsonriverhousing.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f15d74bce0",
+      "url": "https://www.hudsonriverhousing.org/plus-one-adu-program",
+      "title": "Hudson River EATS — program page",
+      "excerpt": "Apply Online → https://www.hudsonriverhousing.org/apply-online",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f8424719cc",
+      "url": "https://www.hudsonriverhousing.org/blog/ahc-flood-assistance-program",
+      "title": "Hudson River EATS — program page",
+      "excerpt": "Apply Online → https://www.hudsonriverhousing.org/apply-online",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fd5a4397cb",
+      "url": "https://www.hudsonriverhousing.org/plus-one-adu-program",
+      "title": "Hudson River EATS — program page",
+      "excerpt": "How to Apply → https://www.hudsonriverhousing.org/s/HowtoApplyFINAL72326.docx",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fde5a66688",
+      "url": "https://www.hudsonriverhousing.org/apply-online",
+      "title": "Hudson River EATS — application page",
+      "excerpt": "How to Apply → https://www.hudsonriverhousing.org/s/HowtoApplyFINAL72326.docx",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-2dda766fbb",
+      "url": "https://www.hudsonriverhousing.org/openkitchen",
+      "page": "details",
+      "excerpt": "Open Kitchen | Join Now to Grow — Hudson River Housing Inc. 0 Skip to Content WHO WE ARE Mission Statement Leadership Team Our Impact Policies & Compliance Staff Archives Careers Press Releases WHAT WE DO Housing & Resident Services Real Estate Development NeighborWorks Homeownership Center Community Development Youth Empowered HOW TO HELP Donate Become a Sponsor Matching Gifts RESIDENT PORTAL Resident Portal APPLY FOR HOUSING How to Apply Apply Online 2025 Income Limits UPCOMING EVENTS DONATE Open Menu Close Menu WHO WE ARE Mission Statement Leadership Team Our Impact Policies & Compliance Staff Archives Careers Press Releases WHAT WE DO Housing & Resident Services Real Estate Development NeighborWorks Homeownership Center Community Development Youth Empowered HOW TO HELP Donate Become a Sponsor Matching Gifts RESIDENT PORTAL Resident Portal APPLY FOR HOUSING How to Apply Apply Online 2025 Income Limits UPCOMING EVENTS DONATE Open Menu Close Menu Folder: WHO WE ARE Back Mission Statement Leadership Team Our Impact Policies & Compliance Staff Archives Careers Press Releases Folder: WHAT WE DO Back Housing & Resident Services Real Estate Development NeighborWorks Homeownership Center Community Development Youth Empowered Folder: HOW TO HELP Back Donate Become a Sponsor Matching Gifts Folder: RESIDENT PORTAL Back Resident Portal Folder: APPLY FOR HOUSING Back How to Apply Apply"
+    },
+    {
+      "id": "check-page-9c6e0096c8",
+      "url": "https://www.hudsonriverhousing.org/apply",
+      "page": "application",
+      "excerpt": "PK ! 2�oWf � [Content_Types].xml � (� ���j�0 E����Ѷ�J�(��ɢ�e h� �4ND�B�����81�$14�� ��{� 1��ښl �w%� =���^i7+���- d &�0�A�6�l4�� L6 0#�Ò�S O���� X� �*��V$:� B~� ��^�K� ���ڃ /P��I��~7$ ��i��J&B0Z�Du�t�OJ�K(H���� xG � L�+� v� ��� dc ӻ���W>*��\\XR �m p��� Z}� ���HwnM�V��n� ��-� \")/ �ZwB`� �� 4��� � �s�DX���j ��;A*ʝ����c�֝ �� 4��� [�S��9�> ������{�V�4p����W�&����A�� � �|�d�? �� PK ! � �� N _rels/.rels � (� ���j�0 @���ѽQ�� �N/c�� � [IL ��j��� < �� ]�aG��ӓ�zs�Fu��]� �U �� ��^�[��x ����1x�p� ���f��#I)ʃ�Y �� ������ �*D�� i\")��c$���qU���~3��1��jH[{ �=E�� �� ~ f?��3-���޲]�Tꓸ2�j)�, l0/%��b� ���z���ŉ�, � �/�|f\\ Z��� ?6�!Y�_�o �]A� �� PK ! ��� � word/_rels/document.xml.rels � (� ���j�0 ���{-;mC �s)�\\[� d{�C�c�MZ�}EJ � Ӄ�3bg���z� ;��5 �$ ���uoZ ��� �'ij��A #z���w�7T������b���hXq� �� Є��:-)H��AV��E�H�%w� ȯ2ٮ �v�#�b �?ٶi� _m��h�F �H 6�!S� I��IB �� �� 4*� �\\} ���u�.l|!8[s ˘ f� p��f6�� ���� Y� �ٚ�x� �������' ~��� �� PK ! ;tQ� .] word/document.xml�\\�r�8 �ߪ} - [=UI� s� S �N��{�0SSs�%l��ؒW 8�վƾ�>��� pp s�t�܄ؖ>��d��'�Es� ���z�T �&� :������e�� ���]F�ueA��O����ǰm1s� * @Р ��u� �oW��i W�cr ���2�We�c�jȸU� U���93I �z=L�8�$p�S94�� &K�Zմ1 �i��n bT[��&�� p���P��P���j �� P��d솔�\\}7$m �� ����� iÜ�M g>��p̸� \\�I��|:�/ ��� 9�# ���S ��� ��%��[[#4� ���[) ���8m'�/��%��x~���e������ q^�� Y0 ؎��poW4xh� �\"&枛� }���� ���(W�e�O��1�ň�RB# b9� �5SJ < ����;�fM�j� � h u�)i�)F,M� f�� d; #� ���C ���|�l�М�� V� �,� Vbu� �G���>�"
+    },
+    {
+      "id": "check-page-95178ca338",
+      "url": "https://www.hudsonriverhousing.org/apply-online",
+      "page": "application",
+      "excerpt": "Apply Online | Start Your Application — Hudson River Housing Inc. 0 Skip to Content WHO WE ARE Mission Statement Leadership Team Our Impact Policies & Compliance Staff Archives Careers Press Releases WHAT WE DO Housing & Resident Services Real Estate Development NeighborWorks Homeownership Center Community Development Youth Empowered HOW TO HELP Donate Become a Sponsor Matching Gifts RESIDENT PORTAL Resident Portal APPLY FOR HOUSING How to Apply Apply Online 2025 Income Limits UPCOMING EVENTS DONATE Open Menu Close Menu WHO WE ARE Mission Statement Leadership Team Our Impact Policies & Compliance Staff Archives Careers Press Releases WHAT WE DO Housing & Resident Services Real Estate Development NeighborWorks Homeownership Center Community Development Youth Empowered HOW TO HELP Donate Become a Sponsor Matching Gifts RESIDENT PORTAL Resident Portal APPLY FOR HOUSING How to Apply Apply Online 2025 Income Limits UPCOMING EVENTS DONATE Open Menu Close Menu Folder: WHO WE ARE Back Mission Statement Leadership Team Our Impact Policies & Compliance Staff Archives Careers Press Releases Folder: WHAT WE DO Back Housing & Resident Services Real Estate Development NeighborWorks Homeownership Center Community Development Youth Empowered Folder: HOW TO HELP Back Donate Become a Sponsor Matching Gifts Folder: RESIDENT PORTAL Back Resident Portal Folder: APPLY FOR HOUSING Back How to Apply"
+    },
+    {
+      "id": "check-page-f045e4ca2d",
+      "url": "https://www.hudsonriverhousing.org/s/HowtoApplyFINAL72326.docx",
+      "page": "application",
+      "excerpt": "PK ! 2�oWf � [Content_Types].xml � (� ���j�0 E����Ѷ�J�(��ɢ�e h� �4ND�B�����81�$14�� ��{� 1��ښl �w%� =���^i7+���- d &�0�A�6�l4�� L6 0#�Ò�S O���� X� �*��V$:� B~� ��^�K� ���ڃ /P��I��~7$ ��i��J&B0Z�Du�t�OJ�K(H���� xG � L�+� v� ��� dc ӻ���W>*��\\XR �m p��� Z}� ���HwnM�V��n� ��-� \")/ �ZwB`� �� 4��� � �s�DX���j ��;A*ʝ����c�֝ �� 4��� [�S��9�> ������{�V�4p����W�&����A�� � �|�d�? �� PK ! � �� N _rels/.rels � (� ���j�0 @���ѽQ�� �N/c�� � [IL ��j��� < �� ]�aG��ӓ�zs�Fu��]� �U �� ��^�[��x ����1x�p� ���f��#I)ʃ�Y �� ������ �*D�� i\")��c$���qU���~3��1��jH[{ �=E�� �� ~ f?��3-���޲]�Tꓸ2�j)�, l0/%��b� ���z���ŉ�, � �/�|f\\ Z��� ?6�!Y�_�o �]A� �� PK ! ��� � word/_rels/document.xml.rels � (� ���j�0 ���{-;mC �s)�\\[� d{�C�c�MZ�}EJ � Ӄ�3bg���z� ;��5 �$ ���uoZ ��� �'ij��A #z���w�7T������b���hXq� �� Є��:-)H��AV��E�H�%w� ȯ2ٮ �v�#�b �?ٶi� _m��h�F �H 6�!S� I��IB �� �� 4*� �\\} ���u�.l|!8[s ˘ f� p��f6�� ���� Y� �ٚ�x� �������' ~��� �� PK ! ;tQ� .] word/document.xml�\\�r�8 �ߪ} - [=UI� s� S �N��{�0SSs�%l��ؒW 8�վƾ�>��� pp s�t�܄ؖ>��d��'�Es� ���z�T �&� :������e�� ���]F�ueA��O����ǰm1s� * @Р ��u� �oW��i W�cr ���2�We�c�jȸU� U���93I �z=L�8�$p�S94�� &K�Zմ1 �i��n bT[��&�� p���P��P���j �� P��d솔�\\}7$m �� ����� iÜ�M g>��p̸� \\�I��|:�/ ��� 9�# ���S ��� ��%��[[#4� ���[) ���8m'�/��%��x~���e������ q^�� Y0 ؎��poW4xh� �\"&枛� }���� ���(W�e�O��1�ň�RB# b9� �5SJ < ����;�fM�j� � h u�)i�)F,M� f�� d; #� ���C ���|�l�М�� V� �,� Vbu� �G���>�"
+    },
+    {
+      "id": "check-page-aa13cedaf5",
+      "url": "https://www.hudsonriverhousing.org/s/HRH-Universal-Rental-Application-6-12-2025-English.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.6 %���� 828 0 obj < > endobj 855 0 obj < >/Filter/FlateDecode/ID[ < 8BE7DAE6D4E7494E992E59E4984CFA9C> < 6A1754E044DBB74FBBF649F22476F172>]/Index[828 41]/Info 827 0 R/Length 123/Prev 362137/Root 829 0 R/Size 869/Type/XRef/W[1 3 1]>>stream h�bbd` ``b`` ��+��, �� �� �z�H�h�x < �d� ����o�٦`qo��*0� �� � q�} �� v�4X� ؖ� ��u`6 �� �����n� � ̧A\"`y �� �o| 0 �V m endstream endobj startxref 0 %%EOF 868 0 obj < >stream h�b``` �� � �& B cc`a����p��a�Ő' >�0i�f!��:�~�cq�;�Y�;�1� �`�}Q��� � �f;|q``��h �f� ͤ �a pc����E� HK �2X$�A�эy>� �oL�,�,fL� [� 2 gQcYƲ5���; }r�3�cH��Ű��9�>� �s�l�S���&p1J0\\g��� �d V��@� �_��b� < �9 � ��Vf`m-��bT 0 �.B� endstream endobj 829 0 obj < >/Metadata 33 0 R/Outlines 58 0 R/PageLayout/OneColumn/Pages 826 0 R/StructTreeRoot 61 0 R/Type/Catalog>> endobj 830 0 obj < >/ExtGState < >/Font < >/XObject < >>>/Rotate 0/StructParents 0/Tabs/S/Type/Page>> endobj 831 0 obj < >stream h޴V[o�0 �+~�Tu�&q�� ��� � �HU R� $(I����؉C q�&d�>7� �1�q A�� g0I�r�|DaH� �إ�c f�|O��A� X D=υ�� 󵋋� b�z =�x��� ��_�D�.�� � �l� 8 L��� w� �#\\d w x���p�{ D� |{Wjn� �⠃��M�` f?�4Vx��R��=� �0Wx �dU������D�9���� �.U4��� dT��9e�� g |%�O��Mޟ�  Q&� �b��p ->���E��F_ Y�P�,��2�a��T�{���Qij�A��|2��j�c�� _�`:�ĳ�B �Z> I�:���9�Vy�⧲ �z��n�)m�>� < �$�(���(��YT��Q��y�ڲ�� Ht%7aiB)\\��k� �-����} A4�$�K�W��i�|�=3� �? ��� Ϸ+ -' Hh; �^��q �q�a�\"F� �:� !&@ 1�h�24T��(Y�q 9n 9����͑q �p w��t0� $o �(ww#�i!iw � ˥-`9d7�� `9嵑�"
+    },
+    {
+      "id": "check-page-da7e288ded",
+      "url": "https://www.hudsonriverhousing.org/s/HRH-Universal-Rental-Application-6-12-2025-Spanish.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.6 %���� 940 0 obj < > endobj 967 0 obj < >/Filter/FlateDecode/ID[ < 58DCC842C8B8DC4B99FE8BC7342F21E5>]/Index[940 41]/Info 939 0 R/Length 123/Prev 366948/Root 941 0 R/Size 981/Type/XRef/W[1 3 1]>>stream h�bbd` ``b`` ��+��, �\" \"�R�d-XM X\\ Lf���`ٛ`Y6� /�dU ��`�3��� ����A��� ���`]`��[A����l& �i f ɿ V L� �` � < � ��i_ / k endstream endobj startxref 0 %%EOF 980 0 obj < >stream h�b``` �� � b� B cc`a����p���ʇQK |�a� �Bjх�� �VI�� s�]p��{��xR��� C��� mY ,: ��Y;� H3i i� �� | ,:�@Z ���\"! �ņ �4�$�o��3g3�2mb��r��0���/ _ n�Ne:ǐ�O�a �s�}�- W �3\\aԈ� fd`๜ �� s� k� < � J0� [� � �9 L~�����:� ��Q � �>: endstream endobj 941 0 obj < >/Metadata 34 0 R/Outlines 59 0 R/PageLayout/OneColumn/Pages 938 0 R/StructTreeRoot 62 0 R/Type/Catalog>> endobj 942 0 obj < >/ExtGState < >/Font < >/XObject < >>>/Rotate 0/StructParents 0/Tabs/S/Type/Page>> endobj 943 0 obj < >stream h���o�0 �� ��G� < $4�-+T�mZ �} ��\"ڤJ l�=wN� }l��@V�ǝ�w��|j����� �#H�1�:�q�U � N�˰f�p�] (� χ�K� (�� �:Br �ɀ{�N����K�Z�� ��͐ [\\ '_�l�K8��F�� LB�-Z� �� < ��ъ� ��d�Ⲓ\\\\N �� � M�i� �D���Fӳ��MXD�����K7��S��/tR ΄KG�歎o� � �� � :^E�9 G�iR �����b����Hf � �8Zǫ�g�h ����Z�� �r1,�r �5 �G��/*U� �. w6T\\��>I�� �� �]i�hX��G�2NTE��xS� �T�\"]� :�r�*�CϒE���[:��A���| gy1��2 vc�d F�>�T�P4��@Gf� �G��C �5M )�~�(��,��k!�J 5ż�ǎj� �)!k��PD �Y�01�k; c�A�����:|�m>�o��m>�odD0ƌ� �x�sr� ��t %]N�.'�G��MG/� �a6\\�'�t��� `����;�~nT���N ����H�� � �� t �� � �q���W W �� �P)"
+    },
+    {
+      "id": "check-page-fe04c36f8d",
+      "url": "https://www.hudsonriverhousing.org/plus-one-adu-program",
+      "page": "details",
+      "excerpt": "General 2 — Hudson River Housing Inc. 0 Skip to Content WHO WE ARE Mission Statement Leadership Team Our Impact Policies & Compliance Staff Archives Careers Press Releases WHAT WE DO Housing & Resident Services Real Estate Development NeighborWorks Homeownership Center Community Development Youth Empowered HOW TO HELP Donate Become a Sponsor Matching Gifts RESIDENT PORTAL Resident Portal APPLY FOR HOUSING How to Apply Apply Online 2025 Income Limits UPCOMING EVENTS DONATE Open Menu Close Menu WHO WE ARE Mission Statement Leadership Team Our Impact Policies & Compliance Staff Archives Careers Press Releases WHAT WE DO Housing & Resident Services Real Estate Development NeighborWorks Homeownership Center Community Development Youth Empowered HOW TO HELP Donate Become a Sponsor Matching Gifts RESIDENT PORTAL Resident Portal APPLY FOR HOUSING How to Apply Apply Online 2025 Income Limits UPCOMING EVENTS DONATE Open Menu Close Menu Folder: WHO WE ARE Back Mission Statement Leadership Team Our Impact Policies & Compliance Staff Archives Careers Press Releases Folder: WHAT WE DO Back Housing & Resident Services Real Estate Development NeighborWorks Homeownership Center Community Development Youth Empowered Folder: HOW TO HELP Back Donate Become a Sponsor Matching Gifts Folder: RESIDENT PORTAL Back Resident Portal Folder: APPLY FOR HOUSING Back How to Apply Apply Online 2025 Income"
+    },
+    {
+      "id": "check-page-35ecd257e9",
+      "url": "https://www.hudsonriverhousing.org/plus-one-adu-program",
+      "page": "details",
+      "excerpt": "Through the Plus One ADU Program , Hudson River Housing provides grants of up to $125,000 to help low- to moderate-income homeowners construct or renovate code-compliant ADUs—expanding affordable housing options in our community. 💡 Why it matters: More affordable housing in our community."
+    },
+    {
+      "id": "check-page-d21c65bcfe",
+      "url": "https://www.hudsonriverhousing.org/blog/groundbreaking-celebrates-new-investment-in-first-time-homeownership-on-poughkeepsies-northside",
+      "page": "terms",
+      "excerpt": "Groundbreaking Celebrates New Investment in First-Time Homeownership on Poughkeepsie’s Northside — Hudson River Housing Inc. 0 Skip to Content WHO WE ARE Mission Statement Leadership Team Our Impact Policies & Compliance Staff Archives Careers Press Releases WHAT WE DO Housing & Resident Services Real Estate Development NeighborWorks Homeownership Center Community Development Youth Empowered HOW TO HELP Donate Become a Sponsor Matching Gifts RESIDENT PORTAL Resident Portal APPLY FOR HOUSING How to Apply Apply Online 2025 Income Limits UPCOMING EVENTS DONATE Open Menu Close Menu WHO WE ARE Mission Statement Leadership Team Our Impact Policies & Compliance Staff Archives Careers Press Releases WHAT WE DO Housing & Resident Services Real Estate Development NeighborWorks Homeownership Center Community Development Youth Empowered HOW TO HELP Donate Become a Sponsor Matching Gifts RESIDENT PORTAL Resident Portal APPLY FOR HOUSING How to Apply Apply Online 2025 Income Limits UPCOMING EVENTS DONATE Open Menu Close Menu Folder: WHO WE ARE Back Mission Statement Leadership Team Our Impact Policies & Compliance Staff Archives Careers Press Releases Folder: WHAT WE DO Back Housing & Resident Services Real Estate Development NeighborWorks Homeownership Center Community Development Youth Empowered Folder: HOW TO HELP Back Donate Become a Sponsor Matching Gifts Folder: RESIDENT PORTAL Back"
+    },
+    {
+      "id": "check-page-a0b06b3f39",
+      "url": "https://www.hudsonriverhousing.org/blog/ahc-flood-assistance-program",
+      "page": "details",
+      "excerpt": "AHC Flood Assistance Program — Hudson River Housing Inc. 0 Skip to Content WHO WE ARE Mission Statement Leadership Team Our Impact Policies & Compliance Staff Archives Careers Press Releases WHAT WE DO Housing & Resident Services Real Estate Development NeighborWorks Homeownership Center Community Development Youth Empowered HOW TO HELP Donate Become a Sponsor Matching Gifts RESIDENT PORTAL Resident Portal APPLY FOR HOUSING How to Apply Apply Online 2025 Income Limits UPCOMING EVENTS DONATE Open Menu Close Menu WHO WE ARE Mission Statement Leadership Team Our Impact Policies & Compliance Staff Archives Careers Press Releases WHAT WE DO Housing & Resident Services Real Estate Development NeighborWorks Homeownership Center Community Development Youth Empowered HOW TO HELP Donate Become a Sponsor Matching Gifts RESIDENT PORTAL Resident Portal APPLY FOR HOUSING How to Apply Apply Online 2025 Income Limits UPCOMING EVENTS DONATE Open Menu Close Menu Folder: WHO WE ARE Back Mission Statement Leadership Team Our Impact Policies & Compliance Staff Archives Careers Press Releases Folder: WHAT WE DO Back Housing & Resident Services Real Estate Development NeighborWorks Homeownership Center Community Development Youth Empowered Folder: HOW TO HELP Back Donate Become a Sponsor Matching Gifts Folder: RESIDENT PORTAL Back Resident Portal Folder: APPLY FOR HOUSING Back How to Apply Apply"
+    },
+    {
+      "id": "check-page-4f00c20dee",
+      "url": "https://www.hudsonriverhousing.org/s/AHC-Flood-Relief-Program-Application-10-2023.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.6 %���� 662 0 obj < > endobj 684 0 obj < >/Filter/FlateDecode/ID[ < 60410AF232A3C446A6F244D14970CFD5> ]/Index[662 34]/Info 661 0 R/Length 107/Prev 329131/Root 663 0 R/Size 696/Type/XRef/W[1 3 1]>>stream h�bbd` ``b``� � 3@$�:�d� �K�d:�d� ����ۀ�F�H.�, � ���`v%�� &O�ȳY@�Q�$�]b \"�@��������� v #�� ��� �| M endstream endobj startxref 0 %%EOF 695 0 obj < >stream h�b``` �� � �� B ce`a��p ț �~Q@1�� �}�AʃuJ̴��yP�� #A�����>J�\\� � I,~(�������� h��G ���� \"�,FA $! �2 � �-`�2�� 2 ��AnbTg z� � � C(� < &Q�(F7F_FM� � F+��g�� ���3�����aw�OJq� �7POI2�\\� �� �������R 2 �� z�F^ endstream endobj 663 0 obj < >/Metadata 32 0 R/PageLayout/OneColumn/Pages 660 0 R/StructTreeRoot 44 0 R/Type/Catalog>> endobj 664 0 obj < >>>/Rotate 0/StructParents 0/Tabs/S/Type/Page>> endobj 665 0 obj < >stream h޴V�n�@ ��} U��~� R�RQ��%)ET}p[���ؕc �=3c;��Ć ��;޹����Xo g�[&���1�%̞ n� Lh �3a� B0ɹ B2)5�(&-j �d���z � #�G���m�>.Jf��N��u���N���) ��Yy|���94� �hK n�{ ���� �t���4��>�8{Y��e �� {�D+�x�D����� � �p1;��Ĭ,��~ M�b /i麊Rs ���2�?� � �ѬLV���D�O ��.���̋�K�9���װ��x���n�o���!� ��4;�����4-��d Lɞ H���}�k �C4�vWbH��[B���, k �kK���C�X�H� >�W�+Ŝ��{� �8��rH�,��ȏ ��Qy�Z��IH�u4� � ck y�� < \\�@�*�J ��Bn� 6Vy�Ao C{F��� �m�W M{� KMW;�� -� Ec�-���� C�@|x. �R �k�Am(����8[= )h���l ?��; �y�B������Z�|~X��Y � �t� ��}��p���b�>�p}���d`�迲 g�� �s���/�c�1g২� �:H \\�6�T�, ���l��\\ ���d��� @�H� ]�}� ]^}=�E���k{��9� O��'1�'� O� dX Ygˍ�a�4�6� n _te"
     }
   ],
   "findings": {
@@ -50,14 +252,38 @@
       {
         "value": "https://www.hudsonriverhousing.org/apply",
         "evidenceId": "check-route-7726e3c3cd"
+      },
+      {
+        "value": "https://www.hudsonriverhousing.org/https://www.hudsonriverhousing.org/https://fallkill-commons-on-rose-lihtc-rentcafewebsite.securecafe.com/onlineleasing/fallkill-commons-on-rose-lihtc/guestlogin.aspx",
+        "evidenceId": "check-route-860fd233bb"
+      },
+      {
+        "value": "https://www.hudsonriverhousing.org/s/HRH-Universal-Rental-Application-6-12-2025-English.pdf",
+        "evidenceId": "check-route-5bc86ee248"
+      },
+      {
+        "value": "https://www.hudsonriverhousing.org/s/HRH-Universal-Rental-Application-6-12-2025-Spanish.pdf",
+        "evidenceId": "check-route-ea74306f75"
       }
     ],
-    "applicationUrl": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.hudsonriverhousing.org/s/HowtoApplyFINAL72326.docx",
+        "evidenceId": "check-route-b54b7202eb"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

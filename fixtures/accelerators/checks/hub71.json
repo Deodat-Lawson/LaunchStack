@@ -1,6 +1,6 @@
 {
   "programId": "hub71",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.hub71.com/",
     "https://www.hub71.com/ar/partners/apply",
@@ -16,9 +16,21 @@
     "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
     "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
     "https://www.hub71.com/program/initiate/apply",
-    "https://www.hub71.com/ar/faqs"
+    "https://www.hub71.com/ar/faqs",
+    "https://www.hub71.com/faqs",
+    "https://www.hub71.com/ar/latest-news/press-release/hub71-selects-27-startups-for-cohort-18-in-first-all-international-intake-after-record-2453-applications",
+    "https://www.hub71.com/ar/startups/biotwin-cohort14",
+    "https://www.hub71.com/ar/startups/hyvegeo-cohort14",
+    "https://www.hub71.com/ar/startups/metric-cohort14"
   ],
   "evidence": [
+    {
+      "id": "check-deal-151fee7238",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "will be eligible to receive extensions and a top-up of up to AED 250,000 in exchange for additional equity, upon completion of the programme",
+      "page": "terms"
+    },
     {
       "id": "check-deal-18a2715713",
       "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
@@ -52,6 +64,13 @@
       "url": "https://www.hub71.com/ar/faqs",
       "title": "Hub71 — terms page",
       "excerpt": "worth of in-kind incentives in the form of support services, and AED 250,000 in cash in exchange for equity through a SAFE note. High-performing",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-3d98c0b9de",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "High-performing startups are eligible to receive a top-up of up to AED 250,000 in exchange for additional equity, upon completion of the programme",
       "page": "terms"
     },
     {
@@ -90,6 +109,13 @@
       "page": "application"
     },
     {
+      "id": "check-deal-6f85446299",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "If your startup has been selected to join Hub71, you will receive AED 250,000 in exchange for equity through a SAFE note. What is a SAFE note? A",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-7199ec1699",
       "url": "https://www.hub71.com/program/hub71-plus-ai",
       "title": "Hub71 — application page",
@@ -97,11 +123,32 @@
       "page": "application"
     },
     {
+      "id": "check-deal-750d8f736d",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "in-kind incentives for support services. Additionally, they receive AED 250,000 in cash in exchange for equity through a SAFE note, designed to",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-7d48e8251e",
       "url": "https://www.hub71.com/program/hub71-plus-ai",
       "title": "Hub71 — application page",
       "excerpt": "worth of in-kind incentives in the form of support services, and AED 250,000 in cash for exchange for equity through a SAFE note. High-performing",
       "page": "application"
+    },
+    {
+      "id": "check-deal-7da02ad86b",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "no discount, Future Looking MFN SAFE note that grants startups AED 250,000 in cash in exchange for equity. What are the terms of engagement",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-804ebebfc3",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "part of our programmes, are eligible to receive a top-up of up to AED 250,000 in exchange for additional equity upon completion of the programmes",
+      "page": "terms"
     },
     {
       "id": "check-deal-85ff5ea6ac",
@@ -130,6 +177,13 @@
       "title": "Hub71 — application page",
       "excerpt": "startups committed to Abu Dhabi are eligible to receive a top-up of AED 250,000 in exchange for additional equity by the end of the one year program.",
       "page": "application"
+    },
+    {
+      "id": "check-deal-d6b6773f3c",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "worth of in-kind incentives in the form of support services, and AED 250,000 in cash in exchange for equity through a SAFE note. High-performing",
+      "page": "terms"
     },
     {
       "id": "check-deal-e574cb32a4",
@@ -165,6 +219,13 @@
       "title": "Hub71 — application page",
       "excerpt": "4: Final selection committee Programme: Hub71’s 12-month programme starts in September 2027 Applications",
       "page": "application"
+    },
+    {
+      "id": "check-duration-286e462f15",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "How long are Hub71’s programmes? Access is a 12-month programme. During this time, your startup will",
+      "page": "terms"
     },
     {
       "id": "check-duration-2fad1c6c3f",
@@ -223,6 +284,13 @@
       "page": "application"
     },
     {
+      "id": "check-duration-84cdc3fcce",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Your startup will also be enrolled in our 3-month guided track, run by some of the industry’s",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-8662f882e3",
       "url": "https://www.hub71.com/ar/faqs",
       "title": "Hub71 — terms page",
@@ -230,10 +298,24 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-8c026d0e87",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Assets specialist ecosystem will enroll for 12-months, including a three-month guided track by Elixir",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-90f345fd4a",
       "url": "https://www.hub71.com/ar/faqs",
       "title": "Hub71 — terms page",
       "excerpt": "How long are Hub71’s programmes? Access is a 12-month programme. During this time, your startup will",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-9536a1df2e",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "ClimateTech specialist ecosystem will enroll for 12-months, including a three-month guided by New Energy",
       "page": "terms"
     },
     {
@@ -272,6 +354,13 @@
       "page": "application"
     },
     {
+      "id": "check-duration-abc14c5da5",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "across diverse sectors will enroll in a 12-month programme that provides a comprehensive support",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-ac869ad307",
       "url": "https://www.hub71.com/program/hub71-plus-ai",
       "title": "Hub71 — application page",
@@ -293,6 +382,13 @@
       "page": "application"
     },
     {
+      "id": "check-duration-b1a7546482",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "specialist ecosystem, startups will enroll in a 12-month programme that provides a comprehensive support",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-bf0e210700",
       "url": "https://www.hub71.com/program/hub71-plus-ai",
       "title": "Hub71 — application page",
@@ -304,6 +400,13 @@
       "url": "https://www.hub71.com/ar/faqs",
       "title": "Hub71 — terms page",
       "excerpt": "Assets specialist ecosystem will enroll for 12-months, including a three-month guided track by Elixir",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-cf6d568c48",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "What are the programme timelines? Access is a 12-month programme. High-performing startups will be",
       "page": "terms"
     },
     {
@@ -328,8 +431,29 @@
       "page": "application"
     },
     {
+      "id": "check-duration-e92d5e70ff",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Stay tuned for more details. Access: A 12-month programme that offers startups a structured",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-ecb34b3858",
       "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "will need to be present on-ground for the first 3-months of the programme. What is the structure of the",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ee2ca1f06d",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "about the status of your application within 3 months of applying. When will Hub71 be selecting its",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f016fb7f79",
+      "url": "https://www.hub71.com/faqs",
       "title": "Hub71 — terms page",
       "excerpt": "will need to be present on-ground for the first 3-months of the programme. What is the structure of the",
       "page": "terms"
@@ -342,11 +466,25 @@
       "page": "application"
     },
     {
+      "id": "check-duration-ffc68a9eeb",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "specialist ecosystem, startups will enrol in a 12-month programme that provides a comprehensive support",
+      "page": "terms"
+    },
+    {
       "id": "check-format-65ba3c2a64",
       "url": "https://www.hub71.com/program/hub71-plus-ai",
       "title": "Hub71 — application page",
       "excerpt": "of State for Artificial Intelligence, Digital Economy & Remote Work Applications Office Technology partners Amazon Web",
       "page": "application"
+    },
+    {
+      "id": "check-location-0ccb82691a",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Mubadala Investment Company, we are based in ADGM, where we connect high-growth startups",
+      "page": "terms"
     },
     {
       "id": "check-location-58fabd9b94",
@@ -363,6 +501,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-00b68ee7e6",
+      "url": "https://www.hub71.com/ar/latest-news/press-release/hub71-selects-27-startups-for-cohort-18-in-first-all-international-intake-after-record-2453-applications",
+      "title": "Hub71 — batches page",
+      "excerpt": "دليل المجتمع → https://www.hub71.com/ar/startups",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-0a4d4c4e64",
       "url": "https://www.hub71.com/ar/partners/apply",
       "title": "Hub71 — application page",
@@ -375,6 +520,13 @@
       "title": "Hub71 — application page",
       "excerpt": "Startup Directory → https://www.hub71.com/startups",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-123379da47",
+      "url": "https://www.hub71.com/ar/latest-news/press-release/hub71-selects-27-startups-for-cohort-18-in-first-all-international-intake-after-record-2453-applications",
+      "title": "Hub71 — batches page",
+      "excerpt": "دليل الشركات الناشئة → https://www.hub71.com/ar/startups",
+      "page": "batches"
     },
     {
       "id": "check-portfolio-1617de8db0",
@@ -419,6 +571,20 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-3781d76df7",
+      "url": "https://www.hub71.com/ar/startups/hyvegeo-cohort14",
+      "title": "Hub71 — batches page",
+      "excerpt": "دليل المجتمع → https://www.hub71.com/ar/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-39be7b3f27",
+      "url": "https://www.hub71.com/ar/startups/biotwin-cohort14",
+      "title": "Hub71 — batches page",
+      "excerpt": "جميع الشركات الناشئة → https://www.hub71.com/ar/startups",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-3c8f833687",
       "url": "https://www.hub71.com/ar/faqs",
       "title": "Hub71 — terms page",
@@ -445,6 +611,20 @@
       "title": "Hub71 — application page",
       "excerpt": "Community Directory → https://www.hub71.com/startups",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-494f611760",
+      "url": "https://www.hub71.com/ar/startups/metric-cohort14",
+      "title": "Hub71 — batches page",
+      "excerpt": "جميع الشركات الناشئة → https://www.hub71.com/ar/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-52c60436e6",
+      "url": "https://www.hub71.com/ar/startups/hyvegeo-cohort14",
+      "title": "Hub71 — batches page",
+      "excerpt": "جميع الشركات الناشئة → https://www.hub71.com/ar/startups",
+      "page": "batches"
     },
     {
       "id": "check-portfolio-5533d871d6",
@@ -545,6 +725,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-b46010433b",
+      "url": "https://www.hub71.com/ar/startups/hyvegeo-cohort14",
+      "title": "Hub71 — batches page",
+      "excerpt": "دليل الشركات الناشئة → https://www.hub71.com/ar/startups",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-b9708cb6b9",
       "url": "https://www.hub71.com/program/initiate/apply",
       "title": "Hub71 — application page",
@@ -566,6 +753,34 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-be40d86c29",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Startup Directory → https://www.hub71.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-bf02d2b29b",
+      "url": "https://www.hub71.com/ar/startups/metric-cohort14",
+      "title": "Hub71 — batches page",
+      "excerpt": "دليل المجتمع → https://www.hub71.com/ar/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-e1276a8c6c",
+      "url": "https://www.hub71.com/ar/startups/biotwin-cohort14",
+      "title": "Hub71 — batches page",
+      "excerpt": "دليل المجتمع → https://www.hub71.com/ar/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-e7da8cff9b",
+      "url": "https://www.hub71.com/ar/startups/biotwin-cohort14",
+      "title": "Hub71 — batches page",
+      "excerpt": "دليل الشركات الناشئة → https://www.hub71.com/ar/startups",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-eb1e4c2167",
       "url": "https://www.hub71.com/ar/partners/apply",
       "title": "Hub71 — application page",
@@ -578,6 +793,20 @@
       "title": "Hub71 — application page",
       "excerpt": "Startup Directory → https://www.hub71.com/startups",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-f4474a2e3c",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Community Directory → https://www.hub71.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f623712f53",
+      "url": "https://www.hub71.com/ar/startups/metric-cohort14",
+      "title": "Hub71 — batches page",
+      "excerpt": "دليل الشركات الناشئة → https://www.hub71.com/ar/startups",
+      "page": "batches"
     },
     {
       "id": "check-portfolio-f8b9b3e399",
@@ -678,6 +907,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-2f37240ff5",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Hub71+ ClimateTech → https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "page": "terms"
+    },
+    {
       "id": "check-route-312c1b915b",
       "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
       "title": "Hub71 — application page",
@@ -690,6 +926,13 @@
       "title": "Hub71 — application page",
       "excerpt": "الشراكات في Hub71 → https://www.hub71.com/ar/partners/apply",
       "page": "application"
+    },
+    {
+      "id": "check-route-3f966661d0",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "form → https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "page": "terms"
     },
     {
       "id": "check-route-4224089316",
@@ -776,6 +1019,13 @@
       "page": "details"
     },
     {
+      "id": "check-route-6932c6445a",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Apply → https://www.hub71.com/i-am-a-startup#programsSection",
+      "page": "terms"
+    },
+    {
       "id": "check-route-6b1c0e1383",
       "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
       "title": "Hub71 — application page",
@@ -802,6 +1052,13 @@
       "title": "Hub71 — application page",
       "excerpt": "AR → https://www.hub71.com/ar/program/hub71-plus-life-sciences/apply",
       "page": "application"
+    },
+    {
+      "id": "check-route-7478470b85",
+      "url": "https://www.hub71.com/ar/startups/hyvegeo-cohort14",
+      "title": "Hub71 — batches page",
+      "excerpt": "الشراكات في Hub71 → https://www.hub71.com/ar/partners/apply",
+      "page": "batches"
     },
     {
       "id": "check-route-7819643001",
@@ -844,6 +1101,13 @@
       "title": "Hub71 — application page",
       "excerpt": "Apply → https://www.hub71.com/i-am-a-startup#programsSection",
       "page": "application"
+    },
+    {
+      "id": "check-route-83a4338148",
+      "url": "https://www.hub71.com/ar/startups/biotwin-cohort14",
+      "title": "Hub71 — batches page",
+      "excerpt": "الشراكات في Hub71 → https://www.hub71.com/ar/partners/apply",
+      "page": "batches"
     },
     {
       "id": "check-route-8631bb1221",
@@ -930,8 +1194,22 @@
       "page": "terms"
     },
     {
+      "id": "check-route-b5efcc5810",
+      "url": "https://www.hub71.com/ar/latest-news/press-release/hub71-selects-27-startups-for-cohort-18-in-first-all-international-intake-after-record-2453-applications",
+      "title": "Hub71 — batches page",
+      "excerpt": "الشراكات في Hub71 → https://www.hub71.com/ar/partners/apply",
+      "page": "batches"
+    },
+    {
       "id": "check-route-b951c26528",
       "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "here → https://www.hub71.com/partners/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b999956e06",
+      "url": "https://www.hub71.com/faqs",
       "title": "Hub71 — terms page",
       "excerpt": "here → https://www.hub71.com/partners/apply",
       "page": "terms"
@@ -972,10 +1250,24 @@
       "page": "terms"
     },
     {
+      "id": "check-route-d0a6882a6e",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "here → https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "page": "terms"
+    },
+    {
       "id": "check-route-d4a840108e",
       "url": "https://www.hub71.com/ar/faqs",
       "title": "Hub71 — terms page",
       "excerpt": "Apply → https://www.hub71.com/i-am-a-startup#programsSection",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-e090d4b994",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Partnerships at Hub71 → https://www.hub71.com/partners/apply",
       "page": "terms"
     },
     {
@@ -984,6 +1276,13 @@
       "title": "Hub71 — application page",
       "excerpt": "Partnerships at Hub71 → https://www.hub71.com/partners/apply",
       "page": "application"
+    },
+    {
+      "id": "check-route-e3e6de8c10",
+      "url": "https://www.hub71.com/ar/startups/metric-cohort14",
+      "title": "Hub71 — batches page",
+      "excerpt": "الشراكات في Hub71 → https://www.hub71.com/ar/partners/apply",
+      "page": "batches"
     },
     {
       "id": "check-route-ecf1eafcbf",
@@ -1033,6 +1332,20 @@
       "title": "Hub71 — homepage",
       "excerpt": "Apply Now → https://www.hub71.com/program/access-programme/apply",
       "page": "details"
+    },
+    {
+      "id": "check-route-ff4507157a",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Hub71+ Digital Assets → https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-start-181f4e9a12",
+      "url": "https://www.hub71.com/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Application review: if you apply before the deadline, our",
+      "page": "terms"
     },
     {
       "id": "check-start-4fcd2ed046",
@@ -1117,7 +1430,79 @@
       "id": "check-page-c9f4d2c52f",
       "url": "https://www.hub71.com/",
       "page": "details",
-      "excerpt": "Hub71 | Abu Dhabi’s Unique Global Tech Ecosystem Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Abu Dhabi’s Global Tech Ecosystem 640+ Startups 240+ Partners I Am A Startup I Am An Investor I Am A Talent Abu Dhabi’s Global Tech Ecosystem is powering a cleaner climate 640+ Startups 240+ Partners I Am A Startup I Am An Investor I Am A Talent Abu Dhabi’s Global Tech Ecosystem is transforming finance 640+ Startups 240+ Partners I Am A Startup I Am An Investor I Am A Talent Abu Dhabi’s Global Tech Ecosystem is driving health breakthroughs 640+ Startups 240+ Partners I Am A Startup I Am An Investor I Am A Talent What's Happening? Press Release Hub71 Startup, Vivan Therapeutics set to Begin TuMatch™ Clinical Registration Study at Burjeel Cancer Institute, Abu Dhabi 12 Nov , 2026"
+      "excerpt": "Hub71 | Abu Dhabi’s Unique Global Tech Ecosystem Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Abu Dhabi’s Global Tech Ecosystem 640+ Startups 240+ Partners I Am A Startup I Am An Investor I Am A Talent Abu Dhabi’s Global Tech Ecosystem is powering a cleaner climate 640+ Startups 240+ Partners I Am A Startup I Am An Investor I Am A Talent Abu Dhabi’s Global Tech Ecosystem is transforming finance 640+ Startups 240+ Partners I Am A Startup I Am An Investor I Am A Talent Abu Dhabi’s Global Tech Ecosystem is driving health breakthroughs 640+ Startups 240+ Partners I Am A Startup I Am An Investor I Am A Talent What's Happening? Press Release Hub71 Partners with Unicorn Factory Lisboa, Q-Branch and Instituto Caldeira to Launch Global Scaling Up Programme Supporting Startups’"
+    },
+    {
+      "id": "check-page-221690c3ac",
+      "url": "https://www.hub71.com/",
+      "page": "details",
+      "excerpt": "Discover Hub71’s Programmes Initiate Initiate is Hub71’s early-stage programme that supports founders at the ideation or pre-MVP stage to turn their ideas into scalable startups."
+    },
+    {
+      "id": "check-page-beea746ece",
+      "url": "https://www.hub71.com/",
+      "page": "details",
+      "excerpt": "By joining, founders will be connected with experienced venture builders and gain the resources, mentorship, and ecosystem access needed to transform ideas into startups that can scale."
+    },
+    {
+      "id": "check-page-196028f8cc",
+      "url": "https://www.hub71.com/",
+      "page": "details",
+      "excerpt": "Apply Now Read More MZN x Hub71 Programme The MZN x Hub71 Programme is a three-month programme powered by Hub71 in partnership with the Khalifa Fund for Enterprise Development, designed to support Emirati founders in transforming innovative ideas into market-ready minimum viable products (MVPs)."
+    },
+    {
+      "id": "check-page-ea7a7e7381",
+      "url": "https://www.hub71.com/",
+      "page": "details",
+      "excerpt": "Apply Now Read More India The Hub71 Immersion Programme is a structured, in-market experience designed to support international startups as they explore and build connections within Abu Dhabi’s global tech ecosystem."
+    },
+    {
+      "id": "check-page-9d3c1f5577",
+      "url": "https://www.hub71.com/",
+      "page": "details",
+      "excerpt": "Delivered in partnership with the UAE–India CEPA Council, the programme provides founders with direct access to key market stakeholders, including investors, corporates and government entities, enabling startups to assess and accelerate their expansion into the region."
+    },
+    {
+      "id": "check-page-221193e948",
+      "url": "https://www.hub71.com/",
+      "page": "details",
+      "excerpt": "Apply Now Read More East Asia 2026 The Hub71 Immersion Programme is a structured, in-market experience designed to support international startups as they explore opportunities to establish and scale in Abu Dhabi."
+    },
+    {
+      "id": "check-page-e0438a1194",
+      "url": "https://www.hub71.com/",
+      "page": "details",
+      "excerpt": "Connect directly with investors, corporates, regulators and government entities across Abu Dhabi’s global tech ecosystem."
+    },
+    {
+      "id": "check-page-8e96590e5d",
+      "url": "https://www.hub71.com/",
+      "page": "details",
+      "excerpt": "Read More Access Programme Get the support you need to take your business to the next level in Abu Dhabi."
+    },
+    {
+      "id": "check-page-ec5ac84e6c",
+      "url": "https://www.hub71.com/",
+      "page": "details",
+      "excerpt": "Our Access Program offers a comprehensive support package and a route into the UAE capital’s marketplace."
+    },
+    {
+      "id": "check-page-b776c319d4",
+      "url": "https://www.hub71.com/",
+      "page": "details",
+      "excerpt": "The benefits include in-kind and cash incentives and access to our vibrant community of capital and corporate partners, and mentors."
+    },
+    {
+      "id": "check-page-2b334cd713",
+      "url": "https://www.hub71.com/",
+      "page": "details",
+      "excerpt": "Apply Now Read More ECA Anjal Z x Hub71 The ECA Anjal Z x Hub71 programme supports startups addressing challenges across early childhood development, from pregnancy through age eight, by providing direct access to government partners, pilot opportunities, and Hub71’s broader innovation ecosystem."
+    },
+    {
+      "id": "check-page-a569c906b6",
+      "url": "https://www.hub71.com/",
+      "page": "details",
+      "excerpt": "Apply Now Read More Your gateway to SAVI Hub71 is your startup’s gateway into Abu Dhabi’s SAVI cluster."
     },
     {
       "id": "check-page-86f8a62f97",
@@ -1156,6 +1541,78 @@
       "excerpt": "Hub71 | I Am A Startup Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Homepage I Am A Startup Grow your startup with Hub71 Are you a disruptive entrepreneur, or a pioneering problem-solver or innovative startup seeking investment options? You’re in the right place. We’re an ecosystem dedicated to driving real, lasting impact – a community of freethinkers who dare to challenge the status quo. Join us and bring your ideas to life. Startup Guide to Abu Dhabi explore A vibrant tech community Free housing, office space & health insurance Growth with Startup Accelerator programs Engage with our corporate partners Gain access to 40+ capital partners Favourable regulatory environment through ADGM Hub71+ AI A cross-programme ecosystem for startups building with AI. LEARN MORE Explore"
     },
     {
+      "id": "check-page-ff846b34c0",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "page": "application",
+      "excerpt": "Which category best describes your focus?\" For early-stage founders with a bold idea, Hub71 Initiate provides the support needed to validate, build, and launch a startup from Abu Dhabi."
+    },
+    {
+      "id": "check-page-24bb8f99cd",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "page": "application",
+      "excerpt": "In partnership with Venture Builders General Track Eligible for Hub71+ AI Ecosystem To gain access to the Hub71+ AI ecosystem benefits, select your programme of interest from the options on this page and answer the question as part of the selected programme's application form: \"Is your startup utilizing or building AI solutions as part of its core product offering?"
+    },
+    {
+      "id": "check-page-76524d3d32",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "page": "application",
+      "excerpt": "Which category best describes your focus?\" Our General Track connects early-stage founders with expert venture builders to validate ideas, build MVPs, and prepare for product-market fit."
+    },
+    {
+      "id": "check-page-76bf42b1b4",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "page": "application",
+      "excerpt": "Apply Now MZN x Hub71 Programme Emirati Founders Eligible for Hub71+ AI Ecosystem To gain access to the Hub71+ AI ecosystem benefits, select your programme of interest from the options on this page and answer the question as part of the selected programme's application form: \"Is your startup utilizing or building AI solutions as part of its core product offering?"
+    },
+    {
+      "id": "check-page-43704d7a62",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "page": "application",
+      "excerpt": "Learn More Access Eligible for Hub71+ AI Ecosystem To gain access to the Hub71+ AI ecosystem benefits, select your programme of interest from the options on this page and answer the question as part of the selected programme's application form: \"Is your startup utilizing or building AI solutions as part of its core product offering?"
+    },
+    {
+      "id": "check-page-8ebb7587e1",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "page": "application",
+      "excerpt": "Which category best describes your focus?\" For pre-seed to Series A startups, Access is a 12-month programme with a 3-month guided track to help founders grow, connect, and scale from Abu Dhabi."
+    },
+    {
+      "id": "check-page-d8e356368b",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "page": "application",
+      "excerpt": "Sector Agnostic General Track Eligible for Hub71+ AI Ecosystem To gain access to the Hub71+ AI ecosystem benefits, select your programme of interest from the options on this page and answer the question as part of the selected programme's application form: \"Is your startup utilizing or building AI solutions as part of its core product offering?"
+    },
+    {
+      "id": "check-page-dfaba7a521",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "page": "application",
+      "excerpt": "Which category best describes your focus?\" Our General Track offers a comprehensive support package and a route into the UAE capital’s marketplace."
+    },
+    {
+      "id": "check-page-6a4b201564",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "page": "application",
+      "excerpt": "Apply Now ECA Anjal Z x Hub71 Programme Early Childhood Development Eligible for Hub71+ AI Ecosystem To gain access to the Hub71+ AI ecosystem benefits, select your programme of interest from the options on this page and answer the question as part of the selected programme's application form: \"Is your startup utilizing or building AI solutions as part of its core product offering?"
+    },
+    {
+      "id": "check-page-4dfe6a5e19",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "page": "application",
+      "excerpt": "Which category best describes your focus?\" In partnership with the Abu Dhabi Early Childhood Authority (ECA), Hub71 brings Anjal Z into the Access Programme, creating a dedicated pathway for startups transforming early childhood outcomes."
+    },
+    {
+      "id": "check-page-b44158252a",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "page": "application",
+      "excerpt": "Apply Now SAVI x Hub71 Programme Smart and Autonomous Mobility Eligible for Hub71+ AI Ecosystem To gain access to the Hub71+ AI ecosystem benefits, select your programme of interest from the options on this page and answer the question as part of the selected programme's application form: \"Is your startup utilizing or building AI solutions as part of its core product offering?"
+    },
+    {
+      "id": "check-page-010fb6161d",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "page": "application",
+      "excerpt": "Which category best describes your focus?\" By joining Hub71’s Access programme, smart and autonomous mobility startups can gain access to Abu Dhabi’s SAVI cluster."
+    },
+    {
       "id": "check-page-ddd73d6ec9",
       "url": "https://www.hub71.com/partners/apply",
       "page": "application",
@@ -1168,10 +1625,94 @@
       "excerpt": "Hub71 | Access Programme Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Homepage Access Programme Application form Access Programme Application form Loading form... Application timeline and requirements Hub71 is currently accepting applications for Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Timelines for Cohort 21 Application review: if you apply before the deadline, our sourcing and selection team will review your application by April 2027 . You should be receiving feedback about the status of your application within 3 months of applying. Selection rounds: Round 1: Application review Round 2: Hub71 team meets shortlisted founders Round 3: Hub71 partners meet shortlisted founders Round 4: Final selection committee Programme:"
     },
     {
+      "id": "check-page-786b8785d2",
+      "url": "https://www.hub71.com/program/access-programme/apply",
+      "page": "application",
+      "excerpt": "High-performing startups committed to Abu Dhabi are eligible to receive a top-up of AED 250,000 in exchange for additional equity by the end of the one year program."
+    },
+    {
+      "id": "check-page-3f73016d31",
+      "url": "https://www.hub71.com/program/access-programme/apply",
+      "page": "application",
+      "excerpt": "2 Pitch presentations If your application is successful, you will be invited to the next stage, where you will be asked to deliver a series of pitch presentations to the Hub71 team and some of the tech ecosystem’s investment, corporate and government partners."
+    },
+    {
       "id": "check-page-223a32c713",
       "url": "https://www.hub71.com/program/hub71-plus-ai",
       "page": "application",
       "excerpt": "Hub71 | Program details Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Application timeline and requirements Hub71 is currently accepting applications for Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Timelines for Cohort 21 Application review: if you apply before the deadline, our sourcing and selection team will review your application by April 2027 . You should be receiving feedback about the status of your application within 3 months of applying. Selection rounds: Round 1: Application review Round 2: Hub71 team meets shortlisted founders Round 3: Hub71 partners meet shortlisted founders Round 4: Final selection committee Programme: Hub71’s 12-month programme starts in September 2027 Applications Applications do not close"
+    },
+    {
+      "id": "check-page-d2c353b950",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "page": "application",
+      "excerpt": "High-performing startups committed to Abu Dhabi are eligible to receive a top-up of AED 250,000 in exchange for additional equity by the end of the one year program."
+    },
+    {
+      "id": "check-page-2871338729",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "page": "application",
+      "excerpt": "2 Pitch presentations If your application is successful, you will be invited to the next stage, where you will be asked to deliver a series of pitch presentations to the Hub71 team and some of the tech ecosystem’s investment, corporate and government partners."
+    },
+    {
+      "id": "check-page-c9a956dc4d",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "page": "application",
+      "excerpt": "Homepage Programmes Hub71+ AI Hub71+ AI A dedicated cross-programme AI ecosystem by Hub71 Hub71+ AI is a specialist ecosystem designed to support startups at the forefront of AI innovation."
+    },
+    {
+      "id": "check-page-ab1dfd5fdb",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "page": "application",
+      "excerpt": "The ecosystem provides advanced technical resources, access to a robust network of AI researchers, industry practitioners, and strategic partners, and tailored expertise in AI-driven product development and scalability."
+    },
+    {
+      "id": "check-page-1418604819",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "page": "application",
+      "excerpt": "With a focus on fostering collaboration and accelerating AI integration across sectors, Hub71+ AI empowers startups to develop and deploy sophisticated AI solutions, enabling founders to achieve operational efficiency, drive industry disruption, and deliver sustainable impact."
+    },
+    {
+      "id": "check-page-f38f2a770d",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "page": "application",
+      "excerpt": "Programmes Community Partners PRE-SEED TO SERIES A Hub71+ AI Is your start-up harnessing innovative AI technologies to transform industries and drive meaningful impact within your sector?"
+    },
+    {
+      "id": "check-page-74605f65e8",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "page": "application",
+      "excerpt": "Hub71+ AI is a specialist ecosystem designed to empower start-ups harnessing AI to drive innovation across industries."
+    },
+    {
+      "id": "check-page-9efc4870eb",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "page": "application",
+      "excerpt": "The ecosystem provides AI start-ups with the resources, network, and expertise needed to scale effectively and achieve sustainable growth."
+    },
+    {
+      "id": "check-page-69488818c2",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "page": "application",
+      "excerpt": "Through this sector-agnostic specialist ecosystem, Hub71 offers start-ups in its programmes a comprehensive support package and a route into the UAE capital’s marketplace."
+    },
+    {
+      "id": "check-page-2bba8713e1",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "page": "application",
+      "excerpt": "Benefits include compute power and access to our network of leading regional and global government, market, and investment partners."
+    },
+    {
+      "id": "check-page-d2c353b950",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "page": "application",
+      "excerpt": "High-performing startups committed to Abu Dhabi are eligible to receive a top-up of AED 250,000 in exchange for additional equity by the end of the one year program."
+    },
+    {
+      "id": "check-page-2871338729",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "page": "application",
+      "excerpt": "2 Pitch presentations If your application is successful, you will be invited to the next stage, where you will be asked to deliver a series of pitch presentations to the Hub71 team and some of the tech ecosystem’s investment, corporate and government partners."
     },
     {
       "id": "check-page-ddead57b53",
@@ -1180,16 +1721,46 @@
       "excerpt": "Hub71 | Hub71+ ClimateTech Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Homepage Hub71+ ClimateTech Application form Hub71+ ClimateTech Application form Loading form... Application timeline and requirements Hub71 is currently accepting applications for Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Timelines for Cohort 21 Application review: if you apply before the deadline, our sourcing and selection team will review your application by April 2027 . You should be receiving feedback about the status of your application within 3 months of applying. Selection rounds: Round 1: Application review Round 2: Hub71 team meets shortlisted founders Round 3: Hub71 partners meet shortlisted founders Round 4: Final selection committee"
     },
     {
+      "id": "check-page-8c4ba7a663",
+      "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "page": "application",
+      "excerpt": "High-performing startups committed to Abu Dhabi are eligible to receive a top-up of AED 250,000 in exchange for additional equity by the end of the one year program."
+    },
+    {
+      "id": "check-page-e652a133a3",
+      "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "page": "application",
+      "excerpt": "2 Pitch presentations If your application is successful, you will be invited to the next stage, where you will be asked to deliver a series of pitch presentations to the Hub71 team and some of the tech ecosystem’s investment, corporate and government partners."
+    },
+    {
       "id": "check-page-50cee85438",
       "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
       "page": "application",
       "excerpt": "Hub71 | Hub71+ Digital Assets Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Homepage Hub71+ Digital Assets Application form Hub71+ Digital Assets Application form Loading form... Application timeline and requirements Hub71 is currently accepting applications for Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Timelines for Cohort 21 Application review: if you apply before the deadline, our sourcing and selection team will review your application by April 2027 . You should be receiving feedback about the status of your application within 3 months of applying. Selection rounds: Round 1: Application review Round 2: Hub71 team meets shortlisted founders Round 3: Hub71 partners meet shortlisted founders Round 4: Final selection"
     },
     {
+      "id": "check-page-d4d148f7a3",
+      "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "page": "application",
+      "excerpt": "High-performing startups committed to Abu Dhabi are eligible to receive a top-up of AED 250,000 in exchange for additional equity by the end of the one year program."
+    },
+    {
+      "id": "check-page-4bb1fbbbac",
+      "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "page": "application",
+      "excerpt": "2 Pitch presentations If your application is successful, you will be invited to the next stage, where you will be asked to deliver a series of pitch presentations to the Hub71 team and some of the tech ecosystem’s investment, corporate and government partners."
+    },
+    {
       "id": "check-page-17f44ab832",
       "url": "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
       "page": "application",
       "excerpt": "Hub71 | Hub71+ Life Sciences Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Homepage Hub71+ Life Sciences Application form Hub71+ Life Sciences Application form Loading form... Application timeline and requirements Hub71 is currently accepting applications for Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Timelines for Cohort 21 Application review: if you apply before the deadline, our sourcing and selection team will review your application by April 2027 . You should be receiving feedback about the status of your application within 3 months of applying. Selection rounds: Round 1: Application review Round 2: Hub71 team meets shortlisted founders Round 3: Hub71 partners meet shortlisted founders Round 4: Final selection"
+    },
+    {
+      "id": "check-page-b9644207ad",
+      "url": "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+      "page": "application",
+      "excerpt": "High-performing startups committed to Abu Dhabi are eligible to receive a top-up of AED 250,000 in exchange for additional equity by the end of the one year program."
     },
     {
       "id": "check-page-a60ded696c",
@@ -1202,6 +1773,198 @@
       "url": "https://www.hub71.com/ar/faqs",
       "page": "terms",
       "excerpt": "Hub71 | FAQs Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Homepage About FAQs FAQs Table of contents • What is Hub71? • Where is Hub71 located? • Who is part of the Hub71 ecosystem? • How does Hub71 support startups? • What benefits and incentives will startups receive upon joining Hub71? • What programs does Hub71 offer? • What is the difference between each program? • Which is the right programme for me? • How can I apply to join Hub71? • What information am I required to submit as part of my application? • What are the eligibility criteria for a startup to apply to Hub71? • Can I apply to more than one programme at the same time? • Do you accept startups at all stages of growth? • Can a startup from outside the United Arab Emirates apply to Hub71? • What criteria will a"
+    },
+    {
+      "id": "check-page-728c421a33",
+      "url": "https://www.hub71.com/ar/faqs",
+      "page": "terms",
+      "excerpt": "Onboarding and Operations ▶ I’ve been selected to join Hub71, what’s next? ▶ Can I opt out of the cash for equity incentives? ▶ How will Hub71 help me relocate to Abu Dhabi? ▶ Do I need to register my business in ADGM upon being accepted to the program? ▶ Is my entire team expected to relocate to Abu Dhabi? ▶ Will my operations be restricted to Abu Dhabi? ▶ Where will my startup be based?"
+    },
+    {
+      "id": "check-page-01b1aede4e",
+      "url": "https://www.hub71.com/ar/faqs",
+      "page": "terms",
+      "excerpt": "Graduating Startups ▶ Am I expected to continue to operate in Abu Dhabi after graduating from Hub71? ▶ How can I engage with Hub71 after I graduate from the programme?"
+    },
+    {
+      "id": "check-page-cce2032c6c",
+      "url": "https://www.hub71.com/ar/faqs",
+      "page": "terms",
+      "excerpt": "About the Hub71 Community ▶ What makes the Hub71 startup community unique? ▶ What kind of support do I get from being part of the community? ▶ Where can I access the community events calendar? ▶ Are Hub71 events open to non-community members?"
+    },
+    {
+      "id": "check-page-3565c54ffb",
+      "url": "https://www.hub71.com/ar/faqs",
+      "page": "terms",
+      "excerpt": "Facilitating Access to Funding ▶ Does Hub71 invest in startups? ▶ What is a SAFE note? ▶ Which version of the SAFE note does Hub71 use? ▶ What are the terms of engagement between Hub71 and selected startups? ▶ How can Hub71 help me raise funds? ▶ Will I get access to investors when being accepted to the program? ▶ Will I receive additional funding if I complete the programme successfully?"
+    },
+    {
+      "id": "check-page-2dd00b413f",
+      "url": "https://www.hub71.com/ar/faqs",
+      "page": "terms",
+      "excerpt": "Hub71 is Abu Dhabi’s global tech ecosystem, built to empower innovative tech startups to scale from the UAE capital to the world."
+    },
+    {
+      "id": "check-page-df1a5a597d",
+      "url": "https://www.hub71.com/ar/faqs",
+      "page": "terms",
+      "excerpt": "Backed by the Abu Dhabi Department of Economic Development and Mubadala Investment Company, we are based in ADGM, where we connect high-growth startups with investors, industry-leading corporations, government partners and enablers, removing friction so founders can grow faster."
+    },
+    {
+      "id": "check-page-537fb0d944",
+      "url": "https://www.hub71.com/ar/faqs",
+      "page": "terms",
+      "excerpt": "By connecting founders with investors, government entities and leading corporates, Hub71 facilitates access to capital, commercial traction and strategic collaborations to support startup growth."
+    },
+    {
+      "id": "check-page-df3a383f5b",
+      "url": "https://www.hub71.com/ar/faqs",
+      "page": "terms",
+      "excerpt": "By enabling ambitious teams to tackle challenges across diverse sectors, we are contributing to a more resilient and diversified economy, while positioning Abu Dhabi as a leading global tech hub."
+    },
+    {
+      "id": "check-page-053ccb99b1",
+      "url": "https://www.hub71.com/ar/faqs",
+      "page": "terms",
+      "excerpt": "Hub71 is located in Abu Dhabi, United Arab Emirates."
+    },
+    {
+      "id": "check-page-1c173ef2b1",
+      "url": "https://www.hub71.com/ar/faqs",
+      "page": "terms",
+      "excerpt": "We are based in Abu Dhabi Global Market (ADGM), the fastest-growing International Financial Center in the MENA region."
+    },
+    {
+      "id": "check-page-2930847d30",
+      "url": "https://www.hub71.com/ar/faqs",
+      "page": "terms",
+      "excerpt": "Our ecosystem connects industry leaders, government entities and investors with a curated pipeline of innovative startups, enabling collaboration and early access to transformative technologies."
+    },
+    {
+      "id": "check-page-5325668ae9",
+      "url": "https://www.hub71.com/ar/faqs",
+      "page": "terms",
+      "excerpt": "Our programmes are designed to equip startups with the tools, expert guidance and market insight to scale while providing streamlined access to capital, market opportunities and Abu Dhabi’s business-friendly regulatory environment."
+    },
+    {
+      "id": "check-page-c0740d2341",
+      "url": "https://www.hub71.com/faqs",
+      "page": "terms",
+      "excerpt": "Hub71 | FAQs Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Homepage About FAQs FAQs Table of contents • What is Hub71? • Where is Hub71 located? • Who is part of the Hub71 ecosystem? • How does Hub71 support startups? • What benefits and incentives will startups receive upon joining Hub71? • What programs does Hub71 offer? • What is the difference between each program? • Which is the right programme for me? • How can I apply to join Hub71? • What information am I required to submit as part of my application? • What are the eligibility criteria for a startup to apply to Hub71? • Can I apply to more than one programme at the same time? • Do you accept startups at all stages of growth? • Can a startup from outside the United Arab Emirates apply to Hub71? • What criteria will a"
+    },
+    {
+      "id": "check-page-ac72724dd4",
+      "url": "https://www.hub71.com/faqs",
+      "page": "terms",
+      "excerpt": "Onboarding and Operations ▶ I’ve been selected to join Hub71, what’s next? ▶ Can I opt out of the cash for equity incentives? ▶ How will Hub71 help me relocate to Abu Dhabi? ▶ Do I need to register my business in ADGM upon being accepted to the program? ▶ Is my entire team expected to relocate to Abu Dhabi? ▶ Will my operations be restricted to Abu Dhabi? ▶ Where will my startup be based?"
+    },
+    {
+      "id": "check-page-0096dacc2f",
+      "url": "https://www.hub71.com/faqs",
+      "page": "terms",
+      "excerpt": "Graduating Startups ▶ Am I expected to continue to operate in Abu Dhabi after graduating from Hub71? ▶ How can I engage with Hub71 after I graduate from the programme?"
+    },
+    {
+      "id": "check-page-ea213c7118",
+      "url": "https://www.hub71.com/faqs",
+      "page": "terms",
+      "excerpt": "About the Hub71 Community ▶ What makes the Hub71 startup community unique? ▶ What kind of support do I get from being part of the community? ▶ Where can I access the community events calendar? ▶ Are Hub71 events open to non-community members?"
+    },
+    {
+      "id": "check-page-5fcd692b75",
+      "url": "https://www.hub71.com/faqs",
+      "page": "terms",
+      "excerpt": "Facilitating Access to Funding ▶ Does Hub71 invest in startups? ▶ What is a SAFE note? ▶ Which version of the SAFE note does Hub71 use? ▶ What are the terms of engagement between Hub71 and selected startups? ▶ How can Hub71 help me raise funds? ▶ Will I get access to investors when being accepted to the program? ▶ Will I receive additional funding if I complete the programme successfully?"
+    },
+    {
+      "id": "check-page-9ae8bccbd6",
+      "url": "https://www.hub71.com/faqs",
+      "page": "terms",
+      "excerpt": "Hub71 is Abu Dhabi’s global tech ecosystem, built to empower innovative tech startups to scale from the UAE capital to the world."
+    },
+    {
+      "id": "check-page-d03409f6b1",
+      "url": "https://www.hub71.com/faqs",
+      "page": "terms",
+      "excerpt": "Backed by the Abu Dhabi Department of Economic Development and Mubadala Investment Company, we are based in ADGM, where we connect high-growth startups with investors, industry-leading corporations, government partners and enablers, removing friction so founders can grow faster."
+    },
+    {
+      "id": "check-page-0053d34368",
+      "url": "https://www.hub71.com/faqs",
+      "page": "terms",
+      "excerpt": "By connecting founders with investors, government entities and leading corporates, Hub71 facilitates access to capital, commercial traction and strategic collaborations to support startup growth."
+    },
+    {
+      "id": "check-page-e3a0e7dbb6",
+      "url": "https://www.hub71.com/faqs",
+      "page": "terms",
+      "excerpt": "By enabling ambitious teams to tackle challenges across diverse sectors, we are contributing to a more resilient and diversified economy, while positioning Abu Dhabi as a leading global tech hub."
+    },
+    {
+      "id": "check-page-de12ffacfd",
+      "url": "https://www.hub71.com/faqs",
+      "page": "terms",
+      "excerpt": "Hub71 is located in Abu Dhabi, United Arab Emirates."
+    },
+    {
+      "id": "check-page-594879ae5f",
+      "url": "https://www.hub71.com/faqs",
+      "page": "terms",
+      "excerpt": "We are based in Abu Dhabi Global Market (ADGM), the fastest-growing International Financial Center in the MENA region."
+    },
+    {
+      "id": "check-page-0e32d6c929",
+      "url": "https://www.hub71.com/faqs",
+      "page": "terms",
+      "excerpt": "Our ecosystem connects industry leaders, government entities and investors with a curated pipeline of innovative startups, enabling collaboration and early access to transformative technologies."
+    },
+    {
+      "id": "check-page-1092fe9e3e",
+      "url": "https://www.hub71.com/faqs",
+      "page": "terms",
+      "excerpt": "Our programmes are designed to equip startups with the tools, expert guidance and market insight to scale while providing streamlined access to capital, market opportunities and Abu Dhabi’s business-friendly regulatory environment."
+    },
+    {
+      "id": "check-page-4ce00b4277",
+      "url": "https://www.hub71.com/ar/latest-news/press-release/hub71-selects-27-startups-for-cohort-18-in-first-all-international-intake-after-record-2453-applications",
+      "page": "batches",
+      "excerpt": "Hub71 | HUB71 تستقبل27 شركة ناشئة للانضمام إلى المجموعة الـ 18 ضمن أول دفعة دولية بالكامل قائمة الوصول النص حجم الخط المساعدة البصرية التباين القراءة الصوتية استمع إلى الصفحة إعادة تعيين حضور جلسة تعريفية الشراكات في Hub71 تقرير الأثــــر EN تقرير الأثــــر IMPACT REPORT EN حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا إشعار الخصوصية شروط الاستخدام إشعار الخصوصية شروط الاستخدام الصفحة الرئيسية أحدث الأخبار بيان صحفي HUB71 تستقبل27 شركة ناشئة للانضمام إلى المجموعة الـ 18 ضمن أول دفعة دولية بالكامل أحدث الأخبار منظومة Hub71 تسجّل رقمًا قياسيًا جديدًا باستقبال 2,453 طلبًا HUB71 تستقبل27 شركة ناشئة للانضمام إلى المجموعة الـ 18 ضمن أول دفعة دولية بالكامل ٠٤ يونيو ٢٠٢٦ مشاركه مشاركه أعلنت Hub71، منظومة التكنولوجيا العالمية في أبوظبي، اختيار 27 شركة ناشئة للانضمام إلى برنامج Access ضمن المجموعة الـ 18، وذلك بعد تسجيل رقم قياسي في عدد الطلبات بلغ 2453 طلباً من 112 دولة. وبلغ متوسط التمويل الذي جمعته الشركات المختارة 31.2 مليون درهم إماراتي (8.5 مليون دولار أمريكي)، بإجمالي تمويلات تجاوزت 844.7 مليون درهم إماراتي (230 مليون دولار أمريكي)، ما يعكس"
+    },
+    {
+      "id": "check-page-e183bc8581",
+      "url": "https://www.hub71.com/ar/latest-news/press-release/hub71-selects-27-startups-for-cohort-18-in-first-all-international-intake-after-record-2453-applications",
+      "page": "batches",
+      "excerpt": "EchoTwin AI : منصة ذكاء اصطناعي فعلية تُحوّل أساطيل المركبات التابعة للبلديات إلى شبكات استشعار متنقلة، وتُنشئ توائم رقمية آنية تساعد المدن على الرصد والتحليل واتخاذ الإجراءات."
+    },
+    {
+      "id": "check-page-5aa3b3534e",
+      "url": "https://www.hub71.com/ar/latest-news/press-release/hub71-selects-27-startups-for-cohort-18-in-first-all-international-intake-after-record-2453-applications",
+      "page": "batches",
+      "excerpt": "Wingbits : شبكة عالمية من محطات التتبع تبث بيانات طيران عالية الجودة لتوفير رؤية آنية لحركة الملاحة الجوية لمختلف الشركات والجهات التنظيمية. منظومة التكنولوجيا المناخية Hub71+ ClimateTech Insight Solutions : منصة لإدارة النفايات مدعومة بالذكاء الاصطناعي تستخدم المستشعرات والتحليلات التنبؤية لتحسين عمليات الجمع وخفض التكاليف."
+    },
+    {
+      "id": "check-page-e085ec8cab",
+      "url": "https://www.hub71.com/ar/latest-news/press-release/hub71-selects-27-startups-for-cohort-18-in-first-all-international-intake-after-record-2453-applications",
+      "page": "batches",
+      "excerpt": "Rubedo Life Sciences : تستخدم منصتها المعتمدة على الذكاء الاصطناعي لرسم خرائط الخلايا التي تشيخ وتتسبب في الالتهاب المرتبط بالتقدم في العمر، وتطوير أدوية موجهة للتخلص منها دعمًا لإطالة العمر الصحي."
+    },
+    {
+      "id": "check-page-b3a34f6dce",
+      "url": "https://www.hub71.com/ar/startups/biotwin-cohort14",
+      "page": "batches",
+      "excerpt": "Hub71 | BioTwin قائمة الوصول النص حجم الخط المساعدة البصرية التباين القراءة الصوتية استمع إلى الصفحة إعادة تعيين حضور جلسة تعريفية الشراكات في Hub71 تقرير الأثــــر EN تقرير الأثــــر IMPACT REPORT EN حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا إشعار الخصوصية شروط الاستخدام إشعار الخصوصية شروط الاستخدام الصفحة الرئيسية أنا اريد ان استثمر جميع الشركات الناشئة BioTwin جميع الشركات الناشئة زيارة الموقع BioTwin BioTwin هي شركة ناشئة تعمل على تزويد المتخصّصين في المجال الصحي بأدوات دعم اتخاذ القرارات الطبية للكشف المبكر والمراقبة والعلاج في مجالات محددة مثل الأورام ومرض السكري. زيارة الموقع القطاع: الصحة وعلوم الحياة أسس في: كندا المرحلة : ما قبل التمويل الأولي البرنامج المسجل فيه: برنامج بناء الشركات Access اشترك في نشرتنا الإخبارية اشترك ساعات العمل من الاثنين إلى الجمعة من الساعة 9 صباحًا حتى 5 مساءً أنا شركة ناشئة أنا مستثمر أنا موهبة الشراكات في Hub71 الأسئلة الشائعة اتصل بنا حول من نحن قدّم طلبًا جلسة معلوماتية ملاحظات/اقتراح دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء ADGM TECH LICENSE من مجتمعنا الأخبار الأحداث الموارد"
+    },
+    {
+      "id": "check-page-37fb8c85d0",
+      "url": "https://www.hub71.com/ar/startups/hyvegeo-cohort14",
+      "page": "batches",
+      "excerpt": "Hub71 | HyveGeo قائمة الوصول النص حجم الخط المساعدة البصرية التباين القراءة الصوتية استمع إلى الصفحة إعادة تعيين حضور جلسة تعريفية الشراكات في Hub71 تقرير الأثــــر EN تقرير الأثــــر IMPACT REPORT EN حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا إشعار الخصوصية شروط الاستخدام إشعار الخصوصية شروط الاستخدام الصفحة الرئيسية أنا اريد ان استثمر جميع الشركات الناشئة HyveGeo جميع الشركات الناشئة زيارة الموقع HyveGeo HyveGeo هو حلّ شامل للحدّ من التصحّر، والتخفيف من آثار التغير المناخي، وتأمين الإمدادات الغذائية باستخدام الطحالب المجهرية في الفحم النباتي والأسمدة الحيوية لتحويل الصحراء إلى أراضٍ صالحة للزراعة. زيارة الموقع القطاع: التكنولوجيا المناخية أسس في: الإمارات العربية المتحدة المرحلة : ما قبل التمويل الأولي البرنامج المسجل فيه: Hub71+ ClimateTech اشترك في نشرتنا الإخبارية اشترك ساعات العمل من الاثنين إلى الجمعة من الساعة 9 صباحًا حتى 5 مساءً أنا شركة ناشئة أنا مستثمر أنا موهبة الشراكات في Hub71 الأسئلة الشائعة اتصل بنا حول من نحن قدّم طلبًا جلسة معلوماتية ملاحظات/اقتراح دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء ADGM TECH"
+    },
+    {
+      "id": "check-page-576c403335",
+      "url": "https://www.hub71.com/ar/startups/metric-cohort14",
+      "page": "batches",
+      "excerpt": "Hub71 | Metric قائمة الوصول النص حجم الخط المساعدة البصرية التباين القراءة الصوتية استمع إلى الصفحة إعادة تعيين حضور جلسة تعريفية الشراكات في Hub71 تقرير الأثــــر EN تقرير الأثــــر IMPACT REPORT EN حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا إشعار الخصوصية شروط الاستخدام إشعار الخصوصية شروط الاستخدام الصفحة الرئيسية أنا اريد ان استثمر جميع الشركات الناشئة Metric جميع الشركات الناشئة زيارة الموقع Metric Metric تتيح أمام أصحاب الشركات الصغيرة والمتوسطة في الأسواق الناشئة قدرة على اتخاذ قرارات عمل أفضل من خلال تبسيط وترجمة بياناتهم المالية بالاعتماد على الرؤى والمقترحات الداخلية والمعايير المرجعية للقطاعات، والاستشارات التفصيلية المدعومة بالذكاء الاصطناعي. زيارة الموقع القطاع: التكنولوجيا المالية أسس في: سنغافورة المرحلة : ما قبل التمويل الأولي البرنامج المسجل فيه: برنامج بناء الشركات Access اشترك في نشرتنا الإخبارية اشترك ساعات العمل من الاثنين إلى الجمعة من الساعة 9 صباحًا حتى 5 مساءً أنا شركة ناشئة أنا مستثمر أنا موهبة الشراكات في Hub71 الأسئلة الشائعة اتصل بنا حول من نحن قدّم طلبًا جلسة معلوماتية ملاحظات/اقتراح دليل المجتمع دليل الشركات"
     }
   ],
   "findings": {

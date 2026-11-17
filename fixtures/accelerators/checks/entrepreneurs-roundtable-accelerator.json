@@ -1,31 +1,17 @@
 {
   "programId": "entrepreneurs-roundtable-accelerator",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.eranyc.com/",
     "https://www.eranyc.com/apply/",
+    "https://www.eranyc.com/faq/",
+    "https://www.eranyc.com/why-era/",
+    "https://www.eranyc.com/company/alumni-spaces/",
     "https://www.eranyc.com/2016/11/01/pittsburghs-growth-real-estate-investment-opportunities/",
     "https://www.eranyc.com/2017/02/10/biometric-theft-big-deal-behavioral-biometrics-can-help/",
-    "https://www.eranyc.com/faq/",
-    "https://www.eranyc.com/press/ai-startup-ceo-pay-employee-18000-year-live-close-work-investment-worth/",
-    "https://www.eranyc.com/press/cardflight-receives-growth-investment-westview-capital-partners/",
-    "https://www.eranyc.com/press/exclusive-doubleverify-acquire-rockerbox-85m-deal/",
-    "https://www.eranyc.com/press/myro-receives-investment-serena-williams-carmelo-anthony-athletes-two-number-investors-contributed-7-million-seed-funding-round-refillable-deodorant-brand/",
-    "https://www.eranyc.com/press/nycs-entrepreneurs-roundtable-accelerator-announces-participants-winter-2017-program-increases-initial-investment-100000/",
-    "https://www.eranyc.com/press/real-estate-lending-investment-bankers-coming/",
-    "https://www.eranyc.com/press/demo-day-dispatches-meet-latest-batch-entrepreneurs-roundtable-accelerator-alums/",
-    "https://www.eranyc.com/press/entrepreneurs-roundtable-accelerator-demo-day-2017-presents-13th-cohort-silicon-alley/",
-    "https://www.eranyc.com/press/era-graduates-batch-8-demo-day-new-york/",
-    "https://www.eranyc.com/press/heymilo-secures-2-2-million-interview-evaluate-candidates-scale-ai-agents/"
+    "https://www.eranyc.com/press/ai-startup-ceo-pay-employee-18000-year-live-close-work-investment-worth/"
   ],
   "evidence": [
-    {
-      "id": "check-deal-0c0a76ac6f",
-      "url": "https://www.eranyc.com/press/real-estate-lending-investment-bankers-coming/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Real Estate Lending: The Investment Bankers are",
-      "page": "terms"
-    },
     {
       "id": "check-deal-115eb9f5a5",
       "url": "https://www.eranyc.com/press/ai-startup-ceo-pay-employee-18000-year-live-close-work-investment-worth/",
@@ -48,32 +34,11 @@
       "page": "terms"
     },
     {
-      "id": "check-deal-43bffc61e8",
-      "url": "https://www.eranyc.com/press/demo-day-dispatches-meet-latest-batch-entrepreneurs-roundtable-accelerator-alums/",
-      "title": "Entrepreneurs Roundtable Accelerator — batches page",
-      "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Demo Day Dispatches: Meet the Latest Batch of",
-      "page": "batches"
-    },
-    {
-      "id": "check-deal-4ee1089cee",
-      "url": "https://www.eranyc.com/press/nycs-entrepreneurs-roundtable-accelerator-announces-participants-winter-2017-program-increases-initial-investment-100000/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE NYC’s Entrepreneurs Roundtable Accelerator",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-68b7136c9a",
-      "url": "https://www.eranyc.com/press/cardflight-receives-growth-investment-westview-capital-partners/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE CardFlight Receives Growth Investment from",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-6e85cd06da",
-      "url": "https://www.eranyc.com/press/entrepreneurs-roundtable-accelerator-demo-day-2017-presents-13th-cohort-silicon-alley/",
-      "title": "Entrepreneurs Roundtable Accelerator — batches page",
-      "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Entrepreneurs Roundtable Accelerator Demo Day",
-      "page": "batches"
+      "id": "check-deal-6e961cc03d",
+      "url": "https://www.eranyc.com/why-era/",
+      "title": "Entrepreneurs Roundtable Accelerator — program page",
+      "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Why ERA Why ERA The Program ERA combines seed",
+      "page": "details"
     },
     {
       "id": "check-deal-772a12bc82",
@@ -88,13 +53,6 @@
       "title": "Entrepreneurs Roundtable Accelerator — application page",
       "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Apply Applications for our Winter 2027 Cohort are",
       "page": "application"
-    },
-    {
-      "id": "check-deal-88c5735dd5",
-      "url": "https://www.eranyc.com/press/era-graduates-batch-8-demo-day-new-york/",
-      "title": "Entrepreneurs Roundtable Accelerator — batches page",
-      "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE ERA Graduates Batch 8 At Demo Day In New York",
-      "page": "batches"
     },
     {
       "id": "check-deal-8e9e61a302",
@@ -118,18 +76,18 @@
       "page": "details"
     },
     {
-      "id": "check-deal-9aae70af7b",
-      "url": "https://www.eranyc.com/press/heymilo-secures-2-2-million-interview-evaluate-candidates-scale-ai-agents/",
-      "title": "Entrepreneurs Roundtable Accelerator — batches page",
-      "excerpt": "FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE HeyMilo Secures $2.2 Million to Interview and Evaluate Candidates at Scale with AI Agents HeyMilo",
-      "page": "batches"
+      "id": "check-deal-97da6a5ad8",
+      "url": "https://www.eranyc.com/company/alumni-spaces/",
+      "title": "Entrepreneurs Roundtable Accelerator — portfolio page",
+      "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Alumni Spaces Alumni Spaces is a platform for",
+      "page": "portfolio"
     },
     {
-      "id": "check-deal-a53e3fa39b",
-      "url": "https://www.eranyc.com/press/myro-receives-investment-serena-williams-carmelo-anthony-athletes-two-number-investors-contributed-7-million-seed-funding-round-refillable-deodorant-brand/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Myro Receives Investment From Serena Williams,",
-      "page": "terms"
+      "id": "check-deal-aac4b21e2a",
+      "url": "https://www.eranyc.com/why-era/",
+      "title": "Entrepreneurs Roundtable Accelerator — program page",
+      "excerpt": "in the four-month program will receive an initial investment of $150K on a 6% post-money SAFE and the potential for follow-on funding. ERA",
+      "page": "details"
     },
     {
       "id": "check-deal-b1e6423edf",
@@ -143,20 +101,6 @@
       "url": "https://www.eranyc.com/faq/",
       "title": "Entrepreneurs Roundtable Accelerator — terms page",
       "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE FAQ How do I apply? Click here to apply. How many",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-cae71b9985",
-      "url": "https://www.eranyc.com/press/heymilo-secures-2-2-million-interview-evaluate-candidates-scale-ai-agents/",
-      "title": "Entrepreneurs Roundtable Accelerator — batches page",
-      "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE HeyMilo Secures $2.2 Million to Interview and",
-      "page": "batches"
-    },
-    {
-      "id": "check-deal-cc54702cc2",
-      "url": "https://www.eranyc.com/press/exclusive-doubleverify-acquire-rockerbox-85m-deal/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Exclusive: DoubleVerify to acquire Rockerbox in",
       "page": "terms"
     },
     {
@@ -286,11 +230,18 @@
       "page": "terms"
     },
     {
-      "id": "check-name-94a62b8930",
+      "id": "check-name-bbc612996b",
       "url": "https://www.eranyc.com/",
       "title": "Entrepreneurs Roundtable Accelerator — homepage",
-      "excerpt": "Home - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best",
+      "excerpt": "Home - Entrepreneurs Roundtable Accelerator ER220 12/1 | ERA Named to TIME’s list of America’s Best",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-00295eb9ad",
+      "url": "https://www.eranyc.com/company/alumni-spaces/",
+      "title": "Entrepreneurs Roundtable Accelerator — portfolio page",
+      "excerpt": "Companies → https://www.eranyc.com/companies/",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-04dc5ffb9c",
@@ -314,20 +265,6 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-1406a5eb0f",
-      "url": "https://www.eranyc.com/press/heymilo-secures-2-2-million-interview-evaluate-candidates-scale-ai-agents/",
-      "title": "Entrepreneurs Roundtable Accelerator — batches page",
-      "excerpt": "Companies → https://www.eranyc.com/companies/",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-1425420a33",
-      "url": "https://www.eranyc.com/press/real-estate-lending-investment-bankers-coming/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "Upright (fka Fund That Flip) → https://www.eranyc.com/companies/#fund-that-flip",
-      "page": "terms"
-    },
-    {
       "id": "check-portfolio-1befaafc94",
       "url": "https://www.eranyc.com/",
       "title": "Entrepreneurs Roundtable Accelerator — homepage",
@@ -342,13 +279,6 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-1cfbc3613d",
-      "url": "https://www.eranyc.com/press/real-estate-lending-investment-bankers-coming/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "Companies → https://www.eranyc.com/companies/",
-      "page": "terms"
-    },
-    {
       "id": "check-portfolio-1f20969ea4",
       "url": "https://www.eranyc.com/",
       "title": "Entrepreneurs Roundtable Accelerator — homepage",
@@ -356,25 +286,11 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-26c2ffa742",
-      "url": "https://www.eranyc.com/press/exclusive-doubleverify-acquire-rockerbox-85m-deal/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "Companies → https://www.eranyc.com/companies/",
-      "page": "terms"
-    },
-    {
       "id": "check-portfolio-273e394e7f",
       "url": "https://www.eranyc.com/",
       "title": "Entrepreneurs Roundtable Accelerator — homepage",
       "excerpt": "See All Companies → https://www.eranyc.com/companies/",
       "page": "details"
-    },
-    {
-      "id": "check-portfolio-33b41bc775",
-      "url": "https://www.eranyc.com/press/era-graduates-batch-8-demo-day-new-york/",
-      "title": "Entrepreneurs Roundtable Accelerator — batches page",
-      "excerpt": "Companies → https://www.eranyc.com/companies/",
-      "page": "batches"
     },
     {
       "id": "check-portfolio-4a2c3c631a",
@@ -405,20 +321,6 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-97bde8cab5",
-      "url": "https://www.eranyc.com/press/exclusive-doubleverify-acquire-rockerbox-85m-deal/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "Rockerbox → https://www.eranyc.com/companies/#rockerbox",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-9f14dcf463",
-      "url": "https://www.eranyc.com/press/nycs-entrepreneurs-roundtable-accelerator-announces-participants-winter-2017-program-increases-initial-investment-100000/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "Companies → https://www.eranyc.com/companies/",
-      "page": "terms"
-    },
-    {
       "id": "check-portfolio-a12d4d6e01",
       "url": "https://www.eranyc.com/",
       "title": "Entrepreneurs Roundtable Accelerator — homepage",
@@ -431,6 +333,13 @@
       "title": "Entrepreneurs Roundtable Accelerator — terms page",
       "excerpt": "Companies → https://www.eranyc.com/companies/",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a2735c41d5",
+      "url": "https://www.eranyc.com/why-era/",
+      "title": "Entrepreneurs Roundtable Accelerator — program page",
+      "excerpt": "Companies → https://www.eranyc.com/companies/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-a52ba03dd4",
@@ -454,27 +363,6 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-cb8b1f42a7",
-      "url": "https://www.eranyc.com/press/myro-receives-investment-serena-williams-carmelo-anthony-athletes-two-number-investors-contributed-7-million-seed-funding-round-refillable-deodorant-brand/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "Myro → https://www.eranyc.com/companies/#serface-care",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-ce6d4ed8e3",
-      "url": "https://www.eranyc.com/press/demo-day-dispatches-meet-latest-batch-entrepreneurs-roundtable-accelerator-alums/",
-      "title": "Entrepreneurs Roundtable Accelerator — batches page",
-      "excerpt": "Companies → https://www.eranyc.com/companies/",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-d83674b7a5",
-      "url": "https://www.eranyc.com/press/cardflight-receives-growth-investment-westview-capital-partners/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "Companies → https://www.eranyc.com/companies/",
-      "page": "terms"
-    },
-    {
       "id": "check-portfolio-dd25e2a407",
       "url": "https://www.eranyc.com/",
       "title": "Entrepreneurs Roundtable Accelerator — homepage",
@@ -489,20 +377,6 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-e3944de2b9",
-      "url": "https://www.eranyc.com/press/myro-receives-investment-serena-williams-carmelo-anthony-athletes-two-number-investors-contributed-7-million-seed-funding-round-refillable-deodorant-brand/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "Companies → https://www.eranyc.com/companies/",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-e3f8048467",
-      "url": "https://www.eranyc.com/press/heymilo-secures-2-2-million-interview-evaluate-candidates-scale-ai-agents/",
-      "title": "Entrepreneurs Roundtable Accelerator — batches page",
-      "excerpt": "HeyMilo AI → https://www.eranyc.com/companies/#heymilo",
-      "page": "batches"
-    },
-    {
       "id": "check-portfolio-f499ef959e",
       "url": "https://www.eranyc.com/",
       "title": "Entrepreneurs Roundtable Accelerator — homepage",
@@ -510,43 +384,15 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-fd637c85bd",
-      "url": "https://www.eranyc.com/press/entrepreneurs-roundtable-accelerator-demo-day-2017-presents-13th-cohort-silicon-alley/",
-      "title": "Entrepreneurs Roundtable Accelerator — batches page",
-      "excerpt": "Companies → https://www.eranyc.com/companies/",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-ff4d1389b4",
-      "url": "https://www.eranyc.com/press/cardflight-receives-growth-investment-westview-capital-partners/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "SwipeSimple (fka CardFlight) → https://www.eranyc.com/companies/#cardflight",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-1af08d4014",
-      "url": "https://www.eranyc.com/press/heymilo-secures-2-2-million-interview-evaluate-candidates-scale-ai-agents/",
-      "title": "Entrepreneurs Roundtable Accelerator — batches page",
+      "id": "check-route-1f0c64acd2",
+      "url": "https://www.eranyc.com/why-era/",
+      "title": "Entrepreneurs Roundtable Accelerator — program page",
       "excerpt": "W'27 Open → https://www.eranyc.com/apply/",
-      "page": "batches"
-    },
-    {
-      "id": "check-route-24492cd5a5",
-      "url": "https://www.eranyc.com/press/real-estate-lending-investment-bankers-coming/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "W'27 Open → https://www.eranyc.com/apply/",
-      "page": "terms"
+      "page": "details"
     },
     {
       "id": "check-route-32fa404727",
       "url": "https://www.eranyc.com/2017/02/10/biometric-theft-big-deal-behavioral-biometrics-can-help/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "W'27 Open → https://www.eranyc.com/apply/",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-54a06d05bb",
-      "url": "https://www.eranyc.com/press/myro-receives-investment-serena-williams-carmelo-anthony-athletes-two-number-investors-contributed-7-million-seed-funding-round-refillable-deodorant-brand/",
       "title": "Entrepreneurs Roundtable Accelerator — terms page",
       "excerpt": "W'27 Open → https://www.eranyc.com/apply/",
       "page": "terms"
@@ -566,22 +412,8 @@
       "page": "terms"
     },
     {
-      "id": "check-route-6f258042ab",
-      "url": "https://www.eranyc.com/press/demo-day-dispatches-meet-latest-batch-entrepreneurs-roundtable-accelerator-alums/",
-      "title": "Entrepreneurs Roundtable Accelerator — batches page",
-      "excerpt": "W'27 Open → https://www.eranyc.com/apply/",
-      "page": "batches"
-    },
-    {
       "id": "check-route-750dbbab33",
       "url": "https://www.eranyc.com/2016/11/01/pittsburghs-growth-real-estate-investment-opportunities/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "W'27 Open → https://www.eranyc.com/apply/",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-92254c3b60",
-      "url": "https://www.eranyc.com/press/exclusive-doubleverify-acquire-rockerbox-85m-deal/",
       "title": "Entrepreneurs Roundtable Accelerator — terms page",
       "excerpt": "W'27 Open → https://www.eranyc.com/apply/",
       "page": "terms"
@@ -591,13 +423,6 @@
       "url": "https://www.eranyc.com/faq/",
       "title": "Entrepreneurs Roundtable Accelerator — terms page",
       "excerpt": "Click here to apply. → https://www.eranyc.com/apply/",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-9d7df0b1d1",
-      "url": "https://www.eranyc.com/press/cardflight-receives-growth-investment-westview-capital-partners/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "W'27 Open → https://www.eranyc.com/apply/",
       "page": "terms"
     },
     {
@@ -615,11 +440,11 @@
       "page": "details"
     },
     {
-      "id": "check-route-bbf8a696c1",
-      "url": "https://www.eranyc.com/press/nycs-entrepreneurs-roundtable-accelerator-announces-participants-winter-2017-program-increases-initial-investment-100000/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
+      "id": "check-route-cbb0f6dba4",
+      "url": "https://www.eranyc.com/company/alumni-spaces/",
+      "title": "Entrepreneurs Roundtable Accelerator — portfolio page",
       "excerpt": "W'27 Open → https://www.eranyc.com/apply/",
-      "page": "terms"
+      "page": "portfolio"
     },
     {
       "id": "check-route-e9019df561",
@@ -627,20 +452,6 @@
       "title": "Entrepreneurs Roundtable Accelerator — application page",
       "excerpt": "Apply Now → https://forms.gle/1BTk5xqDWi1Bm2kp6",
       "page": "application"
-    },
-    {
-      "id": "check-route-eb9070e16d",
-      "url": "https://www.eranyc.com/press/era-graduates-batch-8-demo-day-new-york/",
-      "title": "Entrepreneurs Roundtable Accelerator — batches page",
-      "excerpt": "W'27 Open → https://www.eranyc.com/apply/",
-      "page": "batches"
-    },
-    {
-      "id": "check-route-fa659b660a",
-      "url": "https://www.eranyc.com/press/entrepreneurs-roundtable-accelerator-demo-day-2017-presents-13th-cohort-silicon-alley/",
-      "title": "Entrepreneurs Roundtable Accelerator — batches page",
-      "excerpt": "W'27 Open → https://www.eranyc.com/apply/",
-      "page": "batches"
     }
   ],
   "pageQuotes": [
@@ -648,91 +459,193 @@
       "id": "check-page-5514cc4eb1",
       "url": "https://www.eranyc.com/",
       "page": "details",
-      "excerpt": "Home - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE NYC's leading tech accelerator S'27 Open Watch Video 400+ Startups $2.5B+ Raised $10B+ in Market Cap NYC's Strongest Network Hear from our Founders Yuni Sameshima Co-Founder, CEO, Chicory Tanya Van Court Founder, CEO, Goalsetter David Walker Co-Founder, CEO, Triplemint Jonathon Ende CEO, SeamlessDocs Karen Moon Co-Founder, CEO, Trendalytics Rishi Prabhu Co-Founder, CEO, Bespoke Post Dan Michaeli Co-Founder, CEO, Glia Mariya Nurislamova CEO, Co-Founder, Scentbird Eric Berry Co-Founder, CEO, TripleLift See All Companies 500+ Mentors Our network of serial entrepreneurs, corporate executives, industry experts, functional experts, technologists, and investors are all committed to your company’s success. Meet Our Mentors Featured News How a Swiss pharma got to Octozi’s cap table before any US VC did Jul 2026 Tech Funding News Read More Discernis raises $2.5M for AI that finds key evidence buried across millions of documents Aug 2026 Company News Release Read More Pathways raises $6m to automate manufacturers’ environmental reporting with AI Oct 2026 Company News Release Read More View All News Watch Our Demo Day Video Watch Video Join Our Mailing List Email * Subscribe Join Our Mailing"
+      "excerpt": "Home - Entrepreneurs Roundtable Accelerator ER220 12/1 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE NYC's leading tech accelerator S'27 Open Watch Video 400+ Startups $2.5B+ Raised $10B+ in Market Cap NYC's Strongest Network Hear from our Founders Yuni Sameshima Co-Founder, CEO, Chicory Tanya Van Court Founder, CEO, Goalsetter David Walker Co-Founder, CEO, Triplemint Jonathon Ende CEO, SeamlessDocs Karen Moon Co-Founder, CEO, Trendalytics Rishi Prabhu Co-Founder, CEO, Bespoke Post Dan Michaeli Co-Founder, CEO, Glia Mariya Nurislamova CEO, Co-Founder, Scentbird Eric Berry Co-Founder, CEO, TripleLift See All Companies 500+ Mentors Our network of serial entrepreneurs, corporate executives, industry experts, functional experts, technologists, and investors are all committed to your company’s success. Meet Our Mentors Featured News How a Swiss pharma got to Octozi’s cap table before any US VC did Jul 2026 Tech Funding News Read More Discernis raises $2.5M for AI that finds key evidence buried across millions of documents Aug 2026 Company News Release Read More Pathways raises $6m to automate manufacturers’ environmental reporting with AI Oct 2026 Company News Release Read More View All News Watch Our Demo Day Video Watch Video Join Our Mailing List Email * Subscribe Join Our Mailing"
     },
     {
       "id": "check-page-98068d8050",
       "url": "https://www.eranyc.com/apply/",
       "page": "application",
-      "excerpt": "Apply - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Apply Applications for our Winter 2027 Cohort are Open ERA invests $150,000 on a post-money SAFE in return for 6% of each company. Click here for more program details. Apply Now for the ERA Winter 2027 Program Apply Now The companies selected to participate in the four-month program will receive an initial investment of $150K on a 6% post-money SAFE and the potential for follow-on funding. Since its founding in 2011, ERA alumni companies have raised more than $2.5 billion in investor capital and collectively exceed $10 billion in market capitalization. Click here for more program details Application Deadline→ November 2, 2026 Program Start→ January 11, 2027 Learn About Our W’27 Progam/Meet Us At One of Our Upcoming Events ER 217 (9/8) In-Person → https://luma.com/bquh8hwu AI Founder Networking Happy Hour (9/15) In-Person → https://luma.com/ghpjxekj ER 218 (10/6) In-Person → https://luma.com/eg68zyho ERA Founders’ Panel & Startup Pitch Night (10/8) Virtual → https://luma.com/k3d84fid ERA Fintech Founders Pitch Night (10/13) Virtual → https://luma.com/l53ntaf4 ERA Female Founders Event (10/15) Virtual → https://luma.com/6k7bn9vm ERA Health Tech Founders Pitch (10/20) Virtual →"
-    },
-    {
-      "id": "check-page-506ce24329",
-      "url": "https://www.eranyc.com/2016/11/01/pittsburghs-growth-real-estate-investment-opportunities/",
-      "page": "terms",
-      "excerpt": "Pittsburgh's Growth and Real Estate Investment Opportunities - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Pittsburgh’s Growth and Real Estate Investment Opportunities Upright (fka Fund That Flip) Matt Rodak Learn whyA�we’re working hard to fund more projects in Pittsburgh. We took a trip this spring to Pittsburgh, PA and had the fortune of traveling around the city with an active developer and meeting with local government. Since then, we’ve started to make an effort to do more rehab loans in A�the Steel City . Learn why A�we’re working hard to fund more projects there! Takeaways High-tech companies like Google, Uber and Facebook are relocating core business units there. This has to do with strong engineering programs at schools like Carnegie Mellon. Pittsburgh is experiencing one of the biggest shifts in age demographics across the country. As the city becomes “younger” and the workforce more “high-tech,” average household income is rising. This has a direct impact on home values. The City has 88 distinct neighborhoods, each with its own “downtown” strip. These downtown areas provide a great starting point for gentrification as the infastructure is already in place and ready for upgrades. In addition to the new high-tech jobs,"
-    },
-    {
-      "id": "check-page-27c1ef0ece",
-      "url": "https://www.eranyc.com/2017/02/10/biometric-theft-big-deal-behavioral-biometrics-can-help/",
-      "page": "terms",
-      "excerpt": "Biometric Theft is a Big Deal and Behavioral Biometrics Can Help - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Biometric Theft is a Big Deal and Behavioral Biometrics Can Help TwoSense Dawud Gordon TL;DR Biometric theft is permanent, essentially rendering that biometric (e.g. thumbprint) useless for the lifetime of that user. Behavioral biometrics use ephemeral data, meaning theft would only be a temporary disability. Biometric authentication provides an attractive way of authenticating users into high-risk infrastructure. Think about the Touch ID on your phone, or face and eye-scanning technology As opposed to usernames, passwords and security questions, the patterns of your thumbprint are so complex that they are almost impossible to guess, and they cana��t be stolen through fake websites, and you never have to remember them. Your thumbprint is unique to you, remains the same over your lifetime, and cana��t be stolen on the web. Or can it? What happens when a fingerprint is stolen? Can we still count on it to uniquely identify ourselves? In the past, hardware flaws in some phones were exploited to allow attackers to steal the fingerprint images directly from the scanner on the device. Even scarier, hackers in Germany stole the"
+      "excerpt": "Apply - Entrepreneurs Roundtable Accelerator ER220 12/1 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Apply Applications for our Winter 2027 Cohort are Open ERA invests $150,000 on a post-money SAFE in return for 6% of each company. Click here for more program details. Apply Now for the ERA Winter 2027 Program Apply Now The companies selected to participate in the four-month program will receive an initial investment of $150K on a 6% post-money SAFE and the potential for follow-on funding. Since its founding in 2011, ERA alumni companies have raised more than $2.5 billion in investor capital and collectively exceed $10 billion in market capitalization. Click here for more program details Application Deadline→ November 2, 2026 Program Start→ January 11, 2027 Learn About Our W’27 Progam/Meet Us At One of Our Upcoming Events ER 217 (9/8) In-Person → https://luma.com/bquh8hwu AI Founder Networking Happy Hour (9/15) In-Person → https://luma.com/ghpjxekj ER 218 (10/6) In-Person → https://luma.com/eg68zyho ERA Founders’ Panel & Startup Pitch Night (10/8) Virtual → https://luma.com/k3d84fid ERA Fintech Founders Pitch Night (10/13) Virtual → https://luma.com/l53ntaf4 ERA Female Founders Event (10/15) Virtual → https://luma.com/6k7bn9vm ERA Health Tech Founders Pitch (10/20) Virtual →"
     },
     {
       "id": "check-page-05ba264909",
       "url": "https://www.eranyc.com/faq/",
       "page": "terms",
-      "excerpt": "FAQ - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE FAQ How do I apply? Click here to apply. How many programs does ERA run each year? ERA runs two four-month programs per year, starting in January and June. What does ERA do for me? ERA gives you a chance to grow your business with the help of our operating partners and mentors. All this support can’t make your company successful; that’s your job. But we are with you every step of the way, aligning you with our dream team of experts to help with your many challenges; product, functional or industry-related. We have assembled the most experienced group of entrepreneurial experts in NYC, all of whom are on deck to help solve every type of operating and strategic problem startups encounter. ERA’s partners are committed, passionate members of the New York tech community. As entrepreneurs with decades of experience in business, technology and early-stage venture capital; we have successfully founded, built, run, sold, and financed businesses. How much does ERA invest in each company? We invest $150,000 on a post-money SAFE in return for 6% of each company selected. We don’t vary the amount per founder. We invest in the company directly and the founders decide how to use the funds. In"
+      "excerpt": "FAQ - Entrepreneurs Roundtable Accelerator ER220 12/1 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE FAQ How do I apply? Click here to apply. How many programs does ERA run each year? ERA runs two four-month programs per year, starting in January and June. What does ERA do for me? ERA gives you a chance to grow your business with the help of our operating partners and mentors. All this support can’t make your company successful; that’s your job. But we are with you every step of the way, aligning you with our dream team of experts to help with your many challenges; product, functional or industry-related. We have assembled the most experienced group of entrepreneurial experts in NYC, all of whom are on deck to help solve every type of operating and strategic problem startups encounter. ERA’s partners are committed, passionate members of the New York tech community. As entrepreneurs with decades of experience in business, technology and early-stage venture capital; we have successfully founded, built, run, sold, and financed businesses. How much does ERA invest in each company? We invest $150,000 on a post-money SAFE in return for 6% of each company selected. We don’t vary the amount per founder. We invest in the company directly and the founders decide how to use the funds. In"
+    },
+    {
+      "id": "check-page-6e330768a8",
+      "url": "https://www.eranyc.com/faq/",
+      "page": "terms",
+      "excerpt": "We also provide free office space, free hosting credits with several major cloud providers, and additional benefits through our legal, finance, accounting, and other business-service partners."
+    },
+    {
+      "id": "check-page-0cbe14e0c2",
+      "url": "https://www.eranyc.com/faq/",
+      "page": "terms",
+      "excerpt": "We look for companies best able to take full advantage of the New York City opportunity as a starting point to successfully enter the market for their product, service or application."
+    },
+    {
+      "id": "check-page-2a88fe8f14",
+      "url": "https://www.eranyc.com/faq/",
+      "page": "terms",
+      "excerpt": "Our interests are as diverse as your ideas: Internet, Mobile, FinTech, Payments, SaaS, E-Commerce, Digital Health, Health Tech, Climate, Education, Real Estate, Logistics, IoT, Fashion Tech, Ad Tech, Media, Marketing, and many more."
+    },
+    {
+      "id": "check-page-c37a0e679a",
+      "url": "https://www.eranyc.com/faq/",
+      "page": "terms",
+      "excerpt": "My startup is not located in New York City."
+    },
+    {
+      "id": "check-page-1a8b15851c",
+      "url": "https://www.eranyc.com/faq/",
+      "page": "terms",
+      "excerpt": "Our startup is not based in the United States."
+    },
+    {
+      "id": "check-page-81d45476cc",
+      "url": "https://www.eranyc.com/faq/",
+      "page": "terms",
+      "excerpt": "Our startup is based outside the United States and none of us are U.S. citizens/residents."
+    },
+    {
+      "id": "check-page-6ac8addbe6",
+      "url": "https://www.eranyc.com/faq/",
+      "page": "terms",
+      "excerpt": "If I am a finalist living outside New York City, will you pay for my travel?"
+    },
+    {
+      "id": "check-page-d5544c7872",
+      "url": "https://www.eranyc.com/faq/",
+      "page": "terms",
+      "excerpt": "We are investors and want all the startups in the Accelerator to have the same basic relationship with us."
+    },
+    {
+      "id": "check-page-28183cadda",
+      "url": "https://www.eranyc.com/faq/",
+      "page": "terms",
+      "excerpt": "Will I get it during Demo Day?"
+    },
+    {
+      "id": "check-page-52c4bb225a",
+      "url": "https://www.eranyc.com/faq/",
+      "page": "terms",
+      "excerpt": "On Demo Day, you get the opportunity to present your company to hundreds of qualified investors, angels, super-angels and VCs."
+    },
+    {
+      "id": "check-page-d9f8c2f6ba",
+      "url": "https://www.eranyc.com/faq/",
+      "page": "terms",
+      "excerpt": "We can’t guarantee you’ll raise money, of course, but we can tell you that investors who are looking for the most promising new startups in New York City will hear your pitch."
+    },
+    {
+      "id": "check-page-2a7acb4c06",
+      "url": "https://www.eranyc.com/faq/",
+      "page": "terms",
+      "excerpt": "Do you invest in companies after the Accelerator Program?"
+    },
+    {
+      "id": "check-page-622207515a",
+      "url": "https://www.eranyc.com/why-era/",
+      "page": "details",
+      "excerpt": "Why ERA - Entrepreneurs Roundtable Accelerator ER220 12/1 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Why ERA Why ERA The Program ERA combines seed capital, hands-on help and a great co-working location with an expert team to positively impact the trajectory of early-stage startups. ERA runs two, four-month programs per year. We are New York City’s largest accelerator program. ERA has NYC’s deepest and strongest mentor network with 1,000 + expert investors, technologists, product specialists, marketers, customer acquisition strategists, sales execs, and more, across all major industries represented in NYC. ERA companies gain direct access to leading members of the New York City tech community through the ERA mentor network and are also given access to the right investors, sales prospects and partners. We look for companies from anywhere in the world that are able to take full advantage of the NYC opportunity as a starting point to successfully enter the market for their product, service or application. To date, our alumni companies have raised more than $2.5+B in investor capital and collectively exceed $10B in market capitalization. What’s the Deal? Located in New York City, ERA provides participant companies with an intensive four-month program with the goal of helping"
+    },
+    {
+      "id": "check-page-e3ec750e86",
+      "url": "https://www.eranyc.com/why-era/",
+      "page": "details",
+      "excerpt": "Located in New York City, ERA provides participant companies with an intensive four-month program with the goal of helping early-stage companies progress rapidly into exciting, viable, venture-scalable businesses."
+    },
+    {
+      "id": "check-page-9c75942e90",
+      "url": "https://www.eranyc.com/why-era/",
+      "page": "details",
+      "excerpt": "A Day in the Life A typical ERA week looks like this: Founder Speaker Series NYC’s most successful business builders from entrepreneurs to VCs discuss topics ranging from how they built their companies from idea to exit to details about acquiring customers and investment strategies to trends and what they mean–or don’t mean."
+    },
+    {
+      "id": "check-page-ee39e6a248",
+      "url": "https://www.eranyc.com/why-era/",
+      "page": "details",
+      "excerpt": "Sample workshops include: Enterprise Sales Tools and Tactics, User Optimization and Testing, Data Science and Decision Making, Digital Marketing Best Practices by Channel, IP and Patent Filing, and more."
+    },
+    {
+      "id": "check-page-5d7c32aac0",
+      "url": "https://www.eranyc.com/why-era/",
+      "page": "details",
+      "excerpt": "Mentor Meetings ERA’s 500+ mentors, who have expertise in every imaginable functional area."
+    },
+    {
+      "id": "check-page-0b6649fd6d",
+      "url": "https://www.eranyc.com/why-era/",
+      "page": "details",
+      "excerpt": "ERA mentors are generous with their time and resources, available to advise our companies for the duration of our program."
+    },
+    {
+      "id": "check-page-c9ab3161c6",
+      "url": "https://www.eranyc.com/why-era/",
+      "page": "details",
+      "excerpt": "Mentorship Mentorship is the heart of ERA’s program."
+    },
+    {
+      "id": "check-page-8553d0143a",
+      "url": "https://www.eranyc.com/why-era/",
+      "page": "details",
+      "excerpt": "ERA has the largest mentor network in New York, with more than 500 active for any one program."
+    },
+    {
+      "id": "check-page-ef6487e8f3",
+      "url": "https://www.eranyc.com/why-era/",
+      "page": "details",
+      "excerpt": "Apart from these “firsts,” ERA mentors work with our startups on areas like product engineering, building a sales funnel, user testing, hiring, SEO, Google analytics, branding, and more."
+    },
+    {
+      "id": "check-page-d54f03916f",
+      "url": "https://www.eranyc.com/why-era/",
+      "page": "details",
+      "excerpt": "Mentors in our program can help startups focus on the right metrics to help get to product market fit."
+    },
+    {
+      "id": "check-page-038ec3b046",
+      "url": "https://www.eranyc.com/why-era/",
+      "page": "details",
+      "excerpt": "Through our deep mentor network, we connect you with the partners you need and provide you with critical access to the industries that comprise the New York opportunity."
+    },
+    {
+      "id": "check-page-c0e711992f",
+      "url": "https://www.eranyc.com/why-era/",
+      "page": "details",
+      "excerpt": "We also pair our companies with one of our incredibly talented alumni mentors."
+    },
+    {
+      "id": "check-page-e65bb446c7",
+      "url": "https://www.eranyc.com/why-era/",
+      "page": "details",
+      "excerpt": "We formally pair you with alumni mentors; our 375+ alumni companies have created an active and engaged community, including the thousands of employees at companies in the ERA family."
+    },
+    {
+      "id": "check-page-cfd210a374",
+      "url": "https://www.eranyc.com/company/alumni-spaces/",
+      "page": "portfolio",
+      "excerpt": "Alumni Spaces - Entrepreneurs Roundtable Accelerator ER220 12/1 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Alumni Spaces Alumni Spaces is a platform for universities and their alumni associations to manage groups more effectively and expand their active donor base. We enable more coordinated engagement, allowing alumni communities on the national and local levels to better track their success, creating a superior solution for the $22B alumni relations market. Founders : Rachel Anderson, Andrew Cafourek, Nick Trusty Back to Blog Join Our Mailing List Email * Subscribe Join Our Mailing List Email * A Special Thanks Sponsors Jobs Press Contact Us Blog ERA Global Copyright ©2026 Entrepreneurs Roundtable Accelerator. Site by Barrel We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it. Ok"
+    },
+    {
+      "id": "check-page-506ce24329",
+      "url": "https://www.eranyc.com/2016/11/01/pittsburghs-growth-real-estate-investment-opportunities/",
+      "page": "terms",
+      "excerpt": "Pittsburgh's Growth and Real Estate Investment Opportunities - Entrepreneurs Roundtable Accelerator ER220 12/1 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Pittsburgh’s Growth and Real Estate Investment Opportunities Upright (fka Fund That Flip) Matt Rodak Learn whyA�we’re working hard to fund more projects in Pittsburgh. We took a trip this spring to Pittsburgh, PA and had the fortune of traveling around the city with an active developer and meeting with local government. Since then, we’ve started to make an effort to do more rehab loans in A�the Steel City . Learn why A�we’re working hard to fund more projects there! Takeaways High-tech companies like Google, Uber and Facebook are relocating core business units there. This has to do with strong engineering programs at schools like Carnegie Mellon. Pittsburgh is experiencing one of the biggest shifts in age demographics across the country. As the city becomes “younger” and the workforce more “high-tech,” average household income is rising. This has a direct impact on home values. The City has 88 distinct neighborhoods, each with its own “downtown” strip. These downtown areas provide a great starting point for gentrification as the infastructure is already in place and ready for upgrades. In addition to the new high-tech jobs, the"
+    },
+    {
+      "id": "check-page-27c1ef0ece",
+      "url": "https://www.eranyc.com/2017/02/10/biometric-theft-big-deal-behavioral-biometrics-can-help/",
+      "page": "terms",
+      "excerpt": "Biometric Theft is a Big Deal and Behavioral Biometrics Can Help - Entrepreneurs Roundtable Accelerator ER220 12/1 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Biometric Theft is a Big Deal and Behavioral Biometrics Can Help TwoSense Dawud Gordon TL;DR Biometric theft is permanent, essentially rendering that biometric (e.g. thumbprint) useless for the lifetime of that user. Behavioral biometrics use ephemeral data, meaning theft would only be a temporary disability. Biometric authentication provides an attractive way of authenticating users into high-risk infrastructure. Think about the Touch ID on your phone, or face and eye-scanning technology As opposed to usernames, passwords and security questions, the patterns of your thumbprint are so complex that they are almost impossible to guess, and they cana��t be stolen through fake websites, and you never have to remember them. Your thumbprint is unique to you, remains the same over your lifetime, and cana��t be stolen on the web. Or can it? What happens when a fingerprint is stolen? Can we still count on it to uniquely identify ourselves? In the past, hardware flaws in some phones were exploited to allow attackers to steal the fingerprint images directly from the scanner on the device. Even scarier, hackers in Germany stole the"
     },
     {
       "id": "check-page-9323c8c143",
       "url": "https://www.eranyc.com/press/ai-startup-ceo-pay-employee-18000-year-live-close-work-investment-worth/",
       "page": "terms",
-      "excerpt": "As an AI startup CEO, I pay each employee $18,000 a year to live close to work, and the investment is worth it - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE As an AI startup CEO, I pay each employee $18,000 a year to live close to work, and the investment is worth it Rilla (fka Rillavoice) Back to Blog Join Our Mailing List Email * Subscribe Join Our Mailing List Email * A Special Thanks Sponsors Jobs Press Contact Us Blog ERA Global Copyright ©2026 Entrepreneurs Roundtable Accelerator. Site by Barrel We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it. Ok"
-    },
-    {
-      "id": "check-page-02e79fd01d",
-      "url": "https://www.eranyc.com/press/cardflight-receives-growth-investment-westview-capital-partners/",
-      "page": "terms",
-      "excerpt": "CardFlight Receives Growth Investment from WestView Capital Partners - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE CardFlight Receives Growth Investment from WestView Capital Partners SwipeSimple (fka CardFlight) Back to Blog Join Our Mailing List Email * Subscribe Join Our Mailing List Email * A Special Thanks Sponsors Jobs Press Contact Us Blog ERA Global Copyright ©2026 Entrepreneurs Roundtable Accelerator. Site by Barrel We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it. Ok"
-    },
-    {
-      "id": "check-page-4ce054ed03",
-      "url": "https://www.eranyc.com/press/exclusive-doubleverify-acquire-rockerbox-85m-deal/",
-      "page": "terms",
-      "excerpt": "Exclusive: DoubleVerify to acquire Rockerbox in $85M deal - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Exclusive: DoubleVerify to acquire Rockerbox in $85M deal Rockerbox Back to Blog Join Our Mailing List Email * Subscribe Join Our Mailing List Email * A Special Thanks Sponsors Jobs Press Contact Us Blog ERA Global Copyright ©2026 Entrepreneurs Roundtable Accelerator. Site by Barrel We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it. Ok"
-    },
-    {
-      "id": "check-page-ce748f62ca",
-      "url": "https://www.eranyc.com/press/myro-receives-investment-serena-williams-carmelo-anthony-athletes-two-number-investors-contributed-7-million-seed-funding-round-refillable-deodorant-brand/",
-      "page": "terms",
-      "excerpt": "Myro Receives Investment From Serena Williams, Carmelo Anthony; The athletes are two of a number of investors that contributed to a $7 million seed funding round for the refillable deodorant brand. - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Myro Receives Investment From Serena Williams, Carmelo Anthony; The athletes are two of a number of investors that contributed to a $7 million seed funding round for the refillable deodorant brand. Myro Back to Blog Join Our Mailing List Email * Subscribe Join Our Mailing List Email * A Special Thanks Sponsors Jobs Press Contact Us Blog ERA Global Copyright ©2026 Entrepreneurs Roundtable Accelerator. Site by Barrel We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it. Ok"
-    },
-    {
-      "id": "check-page-99959d85ce",
-      "url": "https://www.eranyc.com/press/nycs-entrepreneurs-roundtable-accelerator-announces-participants-winter-2017-program-increases-initial-investment-100000/",
-      "page": "terms",
-      "excerpt": "NYC’s Entrepreneurs Roundtable Accelerator Announces Participants for its Winter 2017 Program; Increases Initial Investment to $100,000 - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE NYC’s Entrepreneurs Roundtable Accelerator Announces Participants for its Winter 2017 Program; Increases Initial Investment to $100,000 Back to Blog Join Our Mailing List Email * Subscribe Join Our Mailing List Email * A Special Thanks Sponsors Jobs Press Contact Us Blog ERA Global Copyright ©2026 Entrepreneurs Roundtable Accelerator. Site by Barrel We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it. Ok"
-    },
-    {
-      "id": "check-page-9af49d9e16",
-      "url": "https://www.eranyc.com/press/real-estate-lending-investment-bankers-coming/",
-      "page": "terms",
-      "excerpt": "Real Estate Lending: The Investment Bankers are Coming - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Real Estate Lending: The Investment Bankers are Coming Upright (fka Fund That Flip) Back to Blog Join Our Mailing List Email * Subscribe Join Our Mailing List Email * A Special Thanks Sponsors Jobs Press Contact Us Blog ERA Global Copyright ©2026 Entrepreneurs Roundtable Accelerator. Site by Barrel We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it. Ok"
-    },
-    {
-      "id": "check-page-929b72ba21",
-      "url": "https://www.eranyc.com/press/demo-day-dispatches-meet-latest-batch-entrepreneurs-roundtable-accelerator-alums/",
-      "page": "batches",
-      "excerpt": "Demo Day Dispatches: Meet the Latest Batch of Entrepreneurs Roundtable Accelerator Alums - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Demo Day Dispatches: Meet the Latest Batch of Entrepreneurs Roundtable Accelerator Alums Back to Blog Join Our Mailing List Email * Subscribe Join Our Mailing List Email * A Special Thanks Sponsors Jobs Press Contact Us Blog ERA Global Copyright ©2026 Entrepreneurs Roundtable Accelerator. Site by Barrel We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it. Ok"
-    },
-    {
-      "id": "check-page-0652f8f9ed",
-      "url": "https://www.eranyc.com/press/entrepreneurs-roundtable-accelerator-demo-day-2017-presents-13th-cohort-silicon-alley/",
-      "page": "batches",
-      "excerpt": "Entrepreneurs Roundtable Accelerator Demo Day 2017 Presents 13th Cohort to Silicon Alley - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Entrepreneurs Roundtable Accelerator Demo Day 2017 Presents 13th Cohort to Silicon Alley Back to Blog Join Our Mailing List Email * Subscribe Join Our Mailing List Email * A Special Thanks Sponsors Jobs Press Contact Us Blog ERA Global Copyright ©2026 Entrepreneurs Roundtable Accelerator. Site by Barrel We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it. Ok"
-    },
-    {
-      "id": "check-page-2e1a632a75",
-      "url": "https://www.eranyc.com/press/era-graduates-batch-8-demo-day-new-york/",
-      "page": "batches",
-      "excerpt": "ERA Graduates Batch 8 At Demo Day In New York - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE ERA Graduates Batch 8 At Demo Day In New York Back to Blog Join Our Mailing List Email * Subscribe Join Our Mailing List Email * A Special Thanks Sponsors Jobs Press Contact Us Blog ERA Global Copyright ©2026 Entrepreneurs Roundtable Accelerator. Site by Barrel We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it. Ok"
-    },
-    {
-      "id": "check-page-116a598f88",
-      "url": "https://www.eranyc.com/press/heymilo-secures-2-2-million-interview-evaluate-candidates-scale-ai-agents/",
-      "page": "batches",
-      "excerpt": "HeyMilo Secures $2.2 Million to Interview and Evaluate Candidates at Scale with AI Agents - Entrepreneurs Roundtable Accelerator ER219 11/10 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE HeyMilo Secures $2.2 Million to Interview and Evaluate Candidates at Scale with AI Agents HeyMilo AI Back to Blog Join Our Mailing List Email * Subscribe Join Our Mailing List Email * A Special Thanks Sponsors Jobs Press Contact Us Blog ERA Global Copyright ©2026 Entrepreneurs Roundtable Accelerator. Site by Barrel We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it. Ok"
+      "excerpt": "As an AI startup CEO, I pay each employee $18,000 a year to live close to work, and the investment is worth it - Entrepreneurs Roundtable Accelerator ER220 12/1 | ERA Named to TIME’s list of America’s Best Accelerators 2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE As an AI startup CEO, I pay each employee $18,000 a year to live close to work, and the investment is worth it Rilla (fka Rillavoice) Back to Blog Join Our Mailing List Email * Subscribe Join Our Mailing List Email * A Special Thanks Sponsors Jobs Press Contact Us Blog ERA Global Copyright ©2026 Entrepreneurs Roundtable Accelerator. Site by Barrel We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it. Ok"
     }
   ],
   "findings": {
@@ -796,12 +709,12 @@
         "evidenceId": "check-deal-8e9e61a302"
       },
       {
-        "value": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Pittsburgh’s Growth and Real Estate Investment",
-        "evidenceId": "check-deal-b1e6423edf"
+        "value": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE FAQ How do I apply? Click here to apply. How many",
+        "evidenceId": "check-deal-ca5ffb6898"
       },
       {
-        "value": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Biometric Theft is a Big Deal and Behavioral",
-        "evidenceId": "check-deal-2e631d2d16"
+        "value": "businesses. How much does ERA invest in each company? We invest $150,000 on a post-money SAFE in return for 6% of each company selected. We",
+        "evidenceId": "check-deal-772a12bc82"
       }
     ],
     "dealComponents": [
@@ -828,18 +741,6 @@
           "condition": null
         },
         "evidenceId": "check-deal-3611f0c388"
-      },
-      {
-        "value": {
-          "kind": "safe",
-          "amount": "2200000",
-          "currency": "USD",
-          "equity": "6%",
-          "label": "SAFE",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-9aae70af7b"
       }
     ],
     "portfolioPages": [
@@ -871,7 +772,7 @@
     "name": [
       {
         "value": "Entrepreneurs Roundtable Accelerator",
-        "evidenceId": "check-name-94a62b8930"
+        "evidenceId": "check-name-bbc612996b"
       }
     ],
     "examplePages": []

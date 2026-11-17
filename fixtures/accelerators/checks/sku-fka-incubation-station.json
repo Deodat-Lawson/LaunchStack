@@ -1,6 +1,6 @@
 {
   "programId": "sku-fka-incubation-station",
-  "checkedAt": "2026-11-14T20:04:58.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.sku.is",
     "https://sku.is/applications-open-for-dallas-and-beyondsku/",
@@ -16,7 +16,12 @@
     "https://sku.is/impactsku-unveils-21-cohort/",
     "https://sku.is/sku-selects-seven-consumer-brands-for-fall-2026-accelerator-cohort/",
     "https://sku.is/timeline/",
-    "https://sku.is/"
+    "https://sku.is/",
+    "https://sku.is/about/",
+    "https://sku.is/mentors/",
+    "https://sku.is/programs/",
+    "https://sku.is/seth-werner-talks-about-the-power-of-pricing/",
+    "https://sku.is/a-pup-above-founder-interview-sku-alumni/"
   ],
   "evidence": [
     {
@@ -76,6 +81,13 @@
       "page": "batches"
     },
     {
+      "id": "check-duration-127d4b0351",
+      "url": "https://sku.is/programs/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "consumer products accelerator. Curriculum: 12-week program Focus: Category agnostic. Looking for",
+      "page": "details"
+    },
+    {
       "id": "check-duration-19e876ce18",
       "url": "https://sku.is/impactsku-unveils-21-cohort/",
       "title": "SKU (FKA Incubation Station) — batches page",
@@ -111,6 +123,13 @@
       "page": "application"
     },
     {
+      "id": "check-duration-48b233f3ad",
+      "url": "https://sku.is/programs/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "Planet, Passion, Prosperity, People. Curriculum: 12-week program Focus: Startups in the natural space",
+      "page": "details"
+    },
+    {
       "id": "check-duration-48da664732",
       "url": "https://sku.is/impactsku-unveils-21-cohort/",
       "title": "SKU (FKA Incubation Station) — batches page",
@@ -125,6 +144,20 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-7867c94078",
+      "url": "https://sku.is/programs/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "field for minority CPG founders. Curriculum: 8-week program Focus: Minority-owned CPG Startups",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-842787628f",
+      "url": "https://sku.is/programs/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "Accepting SKU ATLANTA Atlanta, GA. Curriculum: 12-week program Focus: SKU Atlanta is dedicated to",
+      "page": "details"
+    },
+    {
       "id": "check-duration-882c6f8b6e",
       "url": "https://sku.is/applications-open-for-dallas-and-beyondsku/",
       "title": "SKU (FKA Incubation Station) — application page",
@@ -136,6 +169,20 @@
       "url": "https://sku.is/",
       "title": "SKU (FKA Incubation Station) — program page",
       "excerpt": "and skills necessary to scale. Founders SKU’s 12-week program includes a best-in-class curriculum and",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-a325ab4779",
+      "url": "https://sku.is/programs/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "by SKU and powered by DFW CPG. Curriculum: 12 -week program Focus: Later stage companies, over $500K",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-af4400c812",
+      "url": "https://sku.is/programs/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "$500K annual revenue Equity: Based on trailing 12-month revenue Timing: ’21 Track runs August-November",
       "page": "details"
     },
     {
@@ -202,6 +249,13 @@
       "page": "terms"
     },
     {
+      "id": "check-format-35cd66b99e",
+      "url": "https://sku.is/a-pup-above-founder-interview-sku-alumni/",
+      "title": "SKU (FKA Incubation Station) — portfolio page",
+      "excerpt": "year. We have about 22 employees today, and we’re a fully remote company. Javier and I are based in Austin, but most of our",
+      "page": "portfolio"
+    },
+    {
       "id": "check-format-41e6d2e1c9",
       "url": "https://sku.is/impactsku-unveils-21-cohort/",
       "title": "SKU (FKA Incubation Station) — batches page",
@@ -228,6 +282,13 @@
       "title": "SKU (FKA Incubation Station) — terms page",
       "excerpt": "designed to accelerate your growth: Kickoff in Austin: In-person connection with your cohort, Mentors, and the SKU Crew. 10",
       "page": "terms"
+    },
+    {
+      "id": "check-format-73e604f339",
+      "url": "https://sku.is/seth-werner-talks-about-the-power-of-pricing/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "Special Sauce Facebook X Linkedin 0 Read Next Gathering in Person Again: Tara Burkley Talks Expo East Home About Team Media",
+      "page": "details"
     },
     {
       "id": "check-format-7e4ac98925",
@@ -277,6 +338,13 @@
       "title": "SKU (FKA Incubation Station) — application page",
       "excerpt": "Nov. 30th. Companies need not be based in Dallas. Companies can apply here. If you’re a",
       "page": "application"
+    },
+    {
+      "id": "check-location-5ba356c096",
+      "url": "https://sku.is/a-pup-above-founder-interview-sku-alumni/",
+      "title": "SKU (FKA Incubation Station) — portfolio page",
+      "excerpt": "fully remote company. Javier and I are based in Austin, but most of our team is in the",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-085f059846",
@@ -335,6 +403,13 @@
       "page": "batches"
     },
     {
+      "id": "check-portfolio-32d242c6dc",
+      "url": "https://sku.is/about/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "Alumni Companies → https://sku.is/alumni/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-345d384b1c",
       "url": "https://sku.is/",
       "title": "SKU (FKA Incubation Station) — program page",
@@ -354,6 +429,27 @@
       "title": "SKU (FKA Incubation Station) — terms page",
       "excerpt": "Alumni Companies → https://sku.is/alumni/",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-3cc2ff07b3",
+      "url": "https://sku.is/about/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "Our Alumni → https://sku.is/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-411c4d9e87",
+      "url": "https://sku.is/a-pup-above-founder-interview-sku-alumni/",
+      "title": "SKU (FKA Incubation Station) — portfolio page",
+      "excerpt": "A-Z → https://sku.is/alumni/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-57e6ff7a96",
+      "url": "https://sku.is/mentors/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "A-Z → https://sku.is/alumni/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-5a17c98a88",
@@ -377,10 +473,31 @@
       "page": "batches"
     },
     {
+      "id": "check-portfolio-6ca2bb96c2",
+      "url": "https://sku.is/programs/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "Alumni Companies → https://sku.is/alumni/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-6ff67a9ff2",
       "url": "https://www.sku.is",
       "title": "SKU (FKA Incubation Station) — homepage",
       "excerpt": "https://sku.is/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-775ff7f788",
+      "url": "https://sku.is/seth-werner-talks-about-the-power-of-pricing/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "Alumni Companies → https://sku.is/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-780a24f2bf",
+      "url": "https://sku.is/seth-werner-talks-about-the-power-of-pricing/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "A-Z → https://sku.is/alumni/",
       "page": "details"
     },
     {
@@ -440,6 +557,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-9d112af8ec",
+      "url": "https://sku.is/a-pup-above-founder-interview-sku-alumni/",
+      "title": "SKU (FKA Incubation Station) — portfolio page",
+      "excerpt": "Alumni Companies → https://sku.is/alumni/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-9febaf897a",
       "url": "https://sku.is/dude-wipes-lands-major-investment-to-accelerate-growth/",
       "title": "SKU (FKA Incubation Station) — terms page",
@@ -447,11 +571,25 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-a173ebdf8b",
+      "url": "https://sku.is/mentors/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "Alumni Companies → https://sku.is/alumni/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-a44da14e95",
       "url": "http://sku.is/faq/",
       "title": "SKU (FKA Incubation Station) — terms page",
       "excerpt": "A-Z → https://sku.is/alumni/",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a62a76bffc",
+      "url": "https://sku.is/programs/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "A-Z → https://sku.is/alumni/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-b702d5b194",
@@ -487,6 +625,13 @@
       "title": "SKU (FKA Incubation Station) — terms page",
       "excerpt": "Alumni Companies → https://sku.is/alumni/",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e2416b83a3",
+      "url": "https://sku.is/about/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "A-Z → https://sku.is/alumni/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-f6a4ae5786",
@@ -580,11 +725,39 @@
       "page": "terms"
     },
     {
+      "id": "check-route-571b40e18b",
+      "url": "https://sku.is/programs/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "Apply Now → https://sku.is/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5c4c54203b",
+      "url": "https://sku.is/a-pup-above-founder-interview-sku-alumni/",
+      "title": "SKU (FKA Incubation Station) — portfolio page",
+      "excerpt": "Apply to SKU Spring 2027 → https://sku.is/apply/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-63fe53dcb9",
+      "url": "https://sku.is/seth-werner-talks-about-the-power-of-pricing/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "Apply to SKU Spring 2027 → https://sku.is/apply/",
+      "page": "details"
+    },
+    {
       "id": "check-route-65d5fd1001",
       "url": "https://sku.is/apply-sku-5/",
       "title": "SKU (FKA Incubation Station) — application page",
       "excerpt": "Apply → https://www.f6s.com/sku/apply",
       "page": "application"
+    },
+    {
+      "id": "check-route-68f7a6466b",
+      "url": "https://sku.is/programs/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "Apply to SKU Spring 2027 → https://sku.is/apply/",
+      "page": "details"
     },
     {
       "id": "check-route-70323afe5f",
@@ -599,6 +772,13 @@
       "title": "SKU (FKA Incubation Station) — terms page",
       "excerpt": "Apply to SKU Spring 2027 → https://sku.is/apply/",
       "page": "terms"
+    },
+    {
+      "id": "check-route-804cb7baf0",
+      "url": "https://sku.is/about/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "Apply to SKU Spring 2027 → https://sku.is/apply/",
+      "page": "details"
     },
     {
       "id": "check-route-8466c5ff30",
@@ -692,6 +872,13 @@
       "page": "terms"
     },
     {
+      "id": "check-route-e93ebb1696",
+      "url": "https://sku.is/mentors/",
+      "title": "SKU (FKA Incubation Station) — program page",
+      "excerpt": "Apply to SKU Spring 2027 → https://sku.is/apply/",
+      "page": "details"
+    },
+    {
       "id": "check-route-eba322341f",
       "url": "https://sku.is/faq/",
       "title": "SKU (FKA Incubation Station) — terms page",
@@ -770,10 +957,64 @@
       "excerpt": "Home - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Creating Lasting Change in CPG SKU: The Nation's Leading Consumer Products Accelerator Now Accepting Applications for Our Spring 2027 Program APPLY TODAY The SKU Ecosystem SKU surrounds stellar startups with a powerful ecosystem that provides the tools and skills necessary to scale. Founders SKU’s 12-week program includes a best-in-class curriculum and hand-picked teams of rock-star mentors to help brands successfully scale. > Apply Now Mentors Join SKU’s community of more than 700 industry experts, investors, successful entrepreneurs, all dedicated to helping passionate founders build their brands. > Become a SKU Mentor Partners Connect with SKU’s powerful community of CPG founders and industry leaders and stay on top of the latest trends in CPG. > Sponsor SKU What We Do SKU provides an ecosystem that creates lasting change in CPG by providing all the resources founders need to accelerate the growth of their brands. SKU’s world-class program is driven by a community of the nation’s top CPG leaders, successful founders and industry experts. Our"
     },
     {
+      "id": "check-page-c13a2cfc67",
+      "url": "https://www.sku.is",
+      "page": "details",
+      "excerpt": "Our intensive programs offer best-in-class education, hand-picked teams of mentors and access to retailers and investors, all dedicated to building brands that change lives."
+    },
+    {
+      "id": "check-page-96c8ed57ba",
+      "url": "https://www.sku.is",
+      "page": "details",
+      "excerpt": "The mentors are the bees knees and give a ton of the founders."
+    },
+    {
+      "id": "check-page-e92439ea2d",
+      "url": "https://www.sku.is",
+      "page": "details",
+      "excerpt": "Bergman is a seasoned innovation strategist, mentor and business development leader with extensive experience bridging the gap between emerging startups and enterprise corporations."
+    },
+    {
+      "id": "check-page-77fc6a9aea",
+      "url": "https://www.sku.is",
+      "page": "details",
+      "excerpt": "As a design-minded dog parent herself, she saw a major disconnect between what modern consumers wanted and what the industry offered — uninspired products that… read more Check out more posts Home About Team Media Contact SKU Fall ’26 Track SKU Mentors Sponsors Alumni Companies Preferred Providers FAQ Want to stay connected?"
+    },
+    {
+      "id": "check-page-f252e88272",
+      "url": "https://www.sku.is",
+      "page": "details",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
+    },
+    {
       "id": "check-page-1246ace218",
       "url": "https://sku.is/applications-open-for-dallas-and-beyondsku/",
       "page": "application",
       "excerpt": "Applications open for Dallas and BeyondSKU - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide May 15, 2021 Applications open for Dallas and BeyondSKU Applications open for Dallas and BeyondSKU Applications open for Dallas and BeyondSKU https://files.sku.is/wp-content/uploads/2021/05/Ross-Report-Featured-Image-Template-10-1.png?strip=all 700 500 Michelle Breyer Michelle Breyer https://secure.gravatar.com/avatar/21f99bc66faf2a4ebca063f6d649c1d8264023775077d95b4b1c6eb5c9698a46?s=96&d=mm&r=g May 15, 2021 August 2, 2024 A year ago, the folks from DFW CPG came to us with a proposition: They wanted to bring SKU to the DFW area to help create the same positive and nurturing environment for CPG startups that we created in Austin, New York and the Twin Cities. We launched in August with six amazing companies: All Ya’lls Foods , mmmPanadas , Meli’s Monster Cookies , Highwave, ReThink Ice Cream , and Sienna Sauce , a company run by a 17-year-old entrepreneurial phenom. We had an amazing group of mentors from such Dallas companies as Pepsico, Beyond Meat and 7-11 as well as some of our top veteran mentors. Despite COVID,"
+    },
+    {
+      "id": "check-page-24d14ab226",
+      "url": "https://sku.is/applications-open-for-dallas-and-beyondsku/",
+      "page": "application",
+      "excerpt": "We already have seen significant interest from both mentors and CPG founders."
+    },
+    {
+      "id": "check-page-338f83b2d7",
+      "url": "https://sku.is/applications-open-for-dallas-and-beyondsku/",
+      "page": "application",
+      "excerpt": "If you’re a mentor who would like to be a part of SKU Dallas, email us at mentors @sku.is."
+    },
+    {
+      "id": "check-page-35f2097bea",
+      "url": "https://sku.is/applications-open-for-dallas-and-beyondsku/",
+      "page": "application",
+      "excerpt": "Read Previous SKU M/O Track Selected Facebook X Linkedin 0 Read Next ImpactSKU Unveils ’21 Cohort Home About Team Media Contact SKU Fall ’26 Track SKU Mentors Sponsors Alumni Companies Preferred Providers FAQ Want to stay connected?"
+    },
+    {
+      "id": "check-page-8b4b06c520",
+      "url": "https://sku.is/applications-open-for-dallas-and-beyondsku/",
+      "page": "application",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
     },
     {
       "id": "check-page-eb4ff08da8",
@@ -782,10 +1023,70 @@
       "excerpt": "Apply now to Austin Track 10 - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide August 20, 2021 Apply now to Austin Track 10 Apply now to Austin Track 10 Apply now to Austin Track 10 https://files.sku.is/wp-content/uploads/2021/08/Ross-Report-Featured-Image-Template-14.png?strip=all 700 500 Michelle Breyer Michelle Breyer https://secure.gravatar.com/avatar/21f99bc66faf2a4ebca063f6d649c1d8264023775077d95b4b1c6eb5c9698a46?s=96&d=mm&r=g August 20, 2021 August 2, 2024 Austin-based SKU is accepting applications for its 10th Austin cohort through Oct. 17th. Interested brands can apply here. ‘We are looking for the products in hot categories that bring something new to the market,” says SKU Managing Director Kirstin Ross. “The ideal SKU company has traction in the market, a compelling founder story and annual revenues of $100K and greater.” SKU has worked with more than 90 brands in a wide range consumer product categories, including food and beverage, beauty and personal care, clothing and wellness. More than 90 percent are still in business. SKU companies have produced more than 1,200 product skus generating a"
     },
     {
+      "id": "check-page-f21d520102",
+      "url": "https://sku.is/apply-now-for-austin-track-10/",
+      "page": "application",
+      "excerpt": "SKU mentors include some of the top CPG experts, entrepreneurs and investors, including Scott Jensen, CEO of Rhythm Super foods, co-founder of Stubb’s Legendary Bar-B-Q , Matt O’Hayer, founder of Vital Farms and Clayton Christopher, founder of Sweet Leaf Tea, Deep Eddy Vodka and Waterloo Sparkling Water ."
+    },
+    {
+      "id": "check-page-7ef11321b4",
+      "url": "https://sku.is/apply-now-for-austin-track-10/",
+      "page": "application",
+      "excerpt": "Since SKU was founded, SKU mentors have represented more than 25 industries with more than 1,500 years of experience."
+    },
+    {
+      "id": "check-page-c60249f5be",
+      "url": "https://sku.is/apply-now-for-austin-track-10/",
+      "page": "application",
+      "excerpt": "Throughout the program, brands hone their investor pitch, culminating in a pitch showcase at attracting influential angels, venture capitalists and retail partners from around the country."
+    },
+    {
+      "id": "check-page-8b9f3090f8",
+      "url": "https://sku.is/apply-now-for-austin-track-10/",
+      "page": "application",
+      "excerpt": "In 2019, SKU expanded into New York with Beyond SKU."
+    },
+    {
+      "id": "check-page-af068dd738",
+      "url": "https://sku.is/apply-now-for-austin-track-10/",
+      "page": "application",
+      "excerpt": "This summer, the accelerator launched ImpactSKU in the Twin Cities, an accelerator focused on purpose-driven CPG startups."
+    },
+    {
+      "id": "check-page-c57c5dc508",
+      "url": "https://sku.is/apply-now-for-austin-track-10/",
+      "page": "application",
+      "excerpt": "SKU was named one of the nation’s top natural foods product accelerators in an August 2020 article by New Hope Media, which puts on Expo West and Expo East, the industry’s largest trade shows."
+    },
+    {
+      "id": "check-page-57d248aaa0",
+      "url": "https://sku.is/apply-now-for-austin-track-10/",
+      "page": "application",
+      "excerpt": "A 2016 Forbes magazine column identified SKU as one of the country’s top three accelerators."
+    },
+    {
+      "id": "check-page-efce710fff",
+      "url": "https://sku.is/apply-now-for-austin-track-10/",
+      "page": "application",
+      "excerpt": "Read Previous Gathering in Person Again: Tara Burkley Talks Expo East Facebook X Linkedin 0 Read Next The Art of Culinary Innovation: Q&A with Mark Crowell Home About Team Media Contact SKU Fall ’26 Track SKU Mentors Sponsors Alumni Companies Preferred Providers FAQ Want to stay connected?"
+    },
+    {
+      "id": "check-page-255fa40426",
+      "url": "https://sku.is/apply-now-for-austin-track-10/",
+      "page": "application",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
+    },
+    {
       "id": "check-page-659a7e598f",
       "url": "https://sku.is/apply-sku-5/",
       "page": "application",
       "excerpt": "Apply (SKU 5) - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Ready to accelerate? Review our Key Application Dates Below & Apply! Apply Applying to SKU - Key Dates February 10, 2017 SKU 5 Applications Deadline Apply online: https://www.f6s.com/sku/apply February 2-24, 2017 SKU Applicant Internal Review If your company is selected proceed to the next steps, someone from team SKU will contact you between February 2 nd and 24 th to schedule an person pitch and interview. February 28, 2017 Companies selected for SKU 5 Announcement Week of March 14th SXSW Launch Party March 21, 2017 First Day of SKU 5 Classes March 21 - June 20 SKU 5 Program Duration June 20, 2017 Showcase Day More Questions about SKU? Read our FAQ. FAQ Home About Team Media Contact SKU Fall ’26 Track SKU Mentors Sponsors Alumni Companies Preferred Providers FAQ Want to stay connected? Join our Newsletter to stay up-to-date with our latest cohorts, applications, and events! Follow Us on Instagram Copyright 2024 - All Rights Reserved. WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ"
+    },
+    {
+      "id": "check-page-e9aa898990",
+      "url": "https://sku.is/apply-sku-5/",
+      "page": "application",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
     },
     {
       "id": "check-page-ac9d6b5a84",
@@ -794,10 +1095,46 @@
       "excerpt": "Apply - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide APPLY TO SKU SKU accepts applications from consumer product startups for their accelerator programs across the nation. Apply to SKU We’re now accepting applications for our Spring 2027 program. Companies admitted into the program receive hands-on mentorship from industry experts, investors, and serial entrepreneurs in exchange for a small equity stake in each company. Selected companies meet face-to-face with a team of hand-picked SKU Mentors throughout the 12-week program, and often well after the completion of the track. As mentors and investors, we are laser-focused on providing the tools to help you successfully scale your company. Sign up to be the first to know when applications open for Spring ’27. We encourage applications from emerging brands across all categories of the consumer landscape, including food, beverage, beauty, personal care, wellness, pet care, and more. Curriculum : 12-week program Timeline: October 2026: Applications Open December: Application review period Early January: Finalist interviews Mid-January: Offers February:"
     },
     {
+      "id": "check-page-2f3fccf244",
+      "url": "https://sku.is/apply/",
+      "page": "application",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
+    },
+    {
       "id": "check-page-af8af12d0e",
       "url": "https://sku.is/dude-wipes-lands-major-investment-to-accelerate-growth/",
       "page": "terms",
       "excerpt": "DUDE Wipes Lands Major Investment to Accelerate Growth - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide June 23, 2025 DUDE Wipes Lands Major Investment to Accelerate Growth DUDE Wipes Lands Major Investment to Accelerate Growth DUDE Wipes Lands Major Investment to Accelerate Growth https://files.sku.is/wp-content/uploads/2025/06/Copy-of-Dude-Wipes-2-1024x537.jpg?strip=all 1024 537 Michelle Breyer Michelle Breyer https://secure.gravatar.com/avatar/21f99bc66faf2a4ebca063f6d649c1d8264023775077d95b4b1c6eb5c9698a46?s=96&d=mm&r=g June 23, 2025 June 23, 2025 SKU celebrates an investment in DUDE Wipes by TSG Consumer a global leader in consumer-focused investing Founders Sean Riley (Chief Executive Dude), Jeff Klimkowski (CFO) and Ryan Meegan (CMO) will retain significant ownership stakes and will continue to lead the company in their current executive roles. DUDE Wipes is an alumnus of SKU (then Incubation Station). Co-Founder and Chief Executive Dude Riley said participation in accelerator in 2013 played a key role in the early success of the company. “We were just starting out, no experience, we only had $10K,"
+    },
+    {
+      "id": "check-page-538af7c15c",
+      "url": "https://sku.is/dude-wipes-lands-major-investment-to-accelerate-growth/",
+      "page": "terms",
+      "excerpt": "“We came down to SKU and really got our retail MBA."
+    },
+    {
+      "id": "check-page-10221bf35d",
+      "url": "https://sku.is/dude-wipes-lands-major-investment-to-accelerate-growth/",
+      "page": "terms",
+      "excerpt": "What started in a Chicago apartment evolved into a cultural phenomenon."
+    },
+    {
+      "id": "check-page-7daa6dcb70",
+      "url": "https://sku.is/dude-wipes-lands-major-investment-to-accelerate-growth/",
+      "page": "terms",
+      "excerpt": "Betting on “Awesome DUDES” For SKU, the deal is a proud moment, exemplifying the accelerator’s mission to empower visionary founders and help them build brands that matter."
+    },
+    {
+      "id": "check-page-0e6fcbf632",
+      "url": "https://sku.is/dude-wipes-lands-major-investment-to-accelerate-growth/",
+      "page": "terms",
+      "excerpt": "You’ll figure the rest out.” For more information about SKU and its portfolio of brands, visit Read Previous Vegan Jerky Brand Balances Purpose and Profitability Facebook X Linkedin 0 Read Next Brewing a Better Cup of Coffee with Waka Coffee Home About Team Media Contact SKU Fall ’26 Track SKU Mentors Sponsors Alumni Companies Preferred Providers FAQ Want to stay connected?"
+    },
+    {
+      "id": "check-page-b798fc4c40",
+      "url": "https://sku.is/dude-wipes-lands-major-investment-to-accelerate-growth/",
+      "page": "terms",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
     },
     {
       "id": "check-page-e52a1218ae",
@@ -806,10 +1143,100 @@
       "excerpt": "FAQ - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Frequently Asked Questions FAQ Apply Now Want to Apply or Get Involved with SKU? Browse our Frequently Asked Questions ABOUT SKU FOR FOUNDERS FOR MENTORS Partners & Media ABOUT SKU What is SKU? SKU is the nation’s leading accelerator built exclusively for early-stage consumer product brands. For 15 years, we’ve helped consumer packaged goods founders go from scrappy operators to confident CEOs. Every fall and spring, 7-8 companies experience first-in-class, operator-led curriculum, pitch practice, and hands-on mentorship from CPG industry experts. By the end of 12 weeks, these brands are set up for scale and fundraising. What does “SKU” stand for? In CPG, a SKU (pronounced “skew”) is a Stock Keeping Unit, the barcode on every product on the shelf. Every great brand starts with one. We’re here to help you build the next one shoppers can’t live without. Who is SKU for? Brands that are in-market, have real traction, and are hungry for what’s next. If you’re building a consumer packaged goods brand, from food and beverage to beauty and pet, and you’re ready"
     },
     {
+      "id": "check-page-c34e1aadb6",
+      "url": "https://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "If you’re building a consumer packaged goods brand, from food and beverage to beauty and pet, and you’re ready to scale in both retail and DTC, we want to hear from you."
+    },
+    {
+      "id": "check-page-be5063446e",
+      "url": "https://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "We want to see that your brand has achieved some distribution, either DTC or retail, with real traction (sales)."
+    },
+    {
+      "id": "check-page-2cc4a19260",
+      "url": "https://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "Additionally, Mentors can be more helpful when Founders have already done the hard work of testing hypotheses."
+    },
+    {
+      "id": "check-page-17c19abca3",
+      "url": "https://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "Twelve weeks designed to accelerate your growth: Kickoff in Austin: In-person connection with your cohort, Mentors, and the SKU Crew."
+    },
+    {
+      "id": "check-page-d15ff1e081",
+      "url": "https://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "SKU Mentors and industry partners lead classes on the topics that make or break CPG brands: channel strategy, retail pitching, distribution, supply chain, and fundraising, to name a few."
+    },
+    {
+      "id": "check-page-d038e76b64",
+      "url": "https://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "Mentors bring context and real-life experience from the field, so you can see around corners."
+    },
+    {
+      "id": "check-page-271606452a",
+      "url": "https://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "We’ll use that information and Mentor preferences to match you with a team of 6-10 Mentors who are experts in your category and challenges."
+    },
+    {
+      "id": "check-page-db399c43c3",
+      "url": "https://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "Mentors have experience at industry leaders like Coca Cola, P&G, MARS, as well as high-growth startups like UNREAL Snacks and Seventh Generation."
+    },
+    {
+      "id": "check-page-3fd5f08cfd",
+      "url": "https://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "You will leave the program fundraise-ready and financially-prepared: A stage-ready pitch deck and story A clean Data Room A fundraise strategy and progress tracker 3-5 year Financial Projections Lifelong Mentors and friends How much time does SKU require?"
+    },
+    {
+      "id": "check-page-9d1c9a905b",
+      "url": "https://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "It will be intense, but that’s why we call it an accelerator."
+    },
+    {
+      "id": "check-page-b52fbe23bf",
+      "url": "https://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "In return, you get: A mini-MBA in CPG, taught by industry experts A dedicated Mentor team, plus access to our network of 500+ Mentors Pitch coaching and a spot on the Showcase stage Lifetime access to the SKU Founder, Mentor, and Alumni community Exclusive benefits from select partners such as free access to Byzzer from NielsenIQ, sign-on offers from Ramp , and more."
+    },
+    {
+      "id": "check-page-c1bc8d47f9",
+      "url": "https://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "The clearer your answers, the more you’ll get out of the program, and the better we can match you with the Mentors who can take you there."
+    },
+    {
       "id": "check-page-d6b266fe64",
       "url": "https://sku.is/hella-cocktail-lands-investment-to-further-fuel-growth/",
       "page": "terms",
       "excerpt": "HElla Cocktail lands investment To Further Fuel Growth - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide January 20, 2023 HElla Cocktail lands investment To Further Fuel Growth HElla Cocktail lands investment To Further Fuel Growth HElla Cocktail lands investment To Further Fuel Growth https://files.sku.is/wp-content/uploads/2023/01/SponsorBrand-logos-6-1.png?strip=all 500 300 Michelle Breyer Michelle Breyer https://secure.gravatar.com/avatar/21f99bc66faf2a4ebca063f6d649c1d8264023775077d95b4b1c6eb5c9698a46?s=96&d=mm&r=g January 20, 2023 August 2, 2024 Credit: Kevin Jean Jacques It was a big week for SKU alum Hella Cocktail Co . Pronghorn , an independent company dedicated to expanding diversity within the spirits industry, announced a capital investment in Hella. The investment, along with Pronghorn’s invaluable expertise and services, will accelerate the Hella’s growth. The size of the investment was not disclosed. Hella’s co-founder Jomaree Pinkard will transition to Chairman of Hella, and assume his appointment as Pronghorn’s new CEO and Managing Director. “We are excited at the overwhelming support"
+    },
+    {
+      "id": "check-page-acb8415a41",
+      "url": "https://sku.is/hella-cocktail-lands-investment-to-further-fuel-growth/",
+      "page": "terms",
+      "excerpt": "A toast to Hella To commemorate the executive appointment and the new union between Hella and Pronghorn, both entities have released a new cocktail recipe that industry friends and consumers alike can toast to the news with.= Bittersweet Hella Rum Cocktail 4.0oz Hella Cocktail Co."
+    },
+    {
+      "id": "check-page-b85dfcd7f8",
+      "url": "https://sku.is/hella-cocktail-lands-investment-to-further-fuel-growth/",
+      "page": "terms",
+      "excerpt": "Stir gently and garnish with a lime wedge Read Previous Blind Dog Coffee: A Rebrand With Bite Facebook X Linkedin 0 Read Next Topo Chico’s Leader Grows Brand Without Losing Authenticity Home About Team Media Contact SKU Fall ’26 Track SKU Mentors Sponsors Alumni Companies Preferred Providers FAQ Want to stay connected?"
+    },
+    {
+      "id": "check-page-3276b88add",
+      "url": "https://sku.is/hella-cocktail-lands-investment-to-further-fuel-growth/",
+      "page": "terms",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
     },
     {
       "id": "check-page-336822ea12",
@@ -818,10 +1245,112 @@
       "excerpt": "How will Siete deal impact CPG startups? Experts weigh in. - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide October 24, 2024 How will Siete deal impact CPG startups? Experts weigh in. How will Siete deal impact CPG startups? Experts weigh in. How will Siete deal impact CPG startups? Experts weigh in. https://files.sku.is/wp-content/uploads/2024/10/kize-10.png?strip=all 500 300 Michelle Breyer Michelle Breyer https://secure.gravatar.com/avatar/21f99bc66faf2a4ebca063f6d649c1d8264023775077d95b4b1c6eb5c9698a46?s=96&d=mm&r=g October 24, 2024 October 24, 2024 The big news that PepsiCo, Inc. has entered into a definitive agreement to acquire SKU alum Siete Foods for $1.2 billion rocked the CPG world. It was some much-needed positive news at a time when CPG investment and M&A activity have been slow. Alex Bodney, Midnight Ventures Many founders hope the Siete deal will jump start interest in emerging brands, both among investors and strategics. But how much impact will a deal like this have? Although it’s much too early to tell, we surveyed several investors in the SKU community to get their take on the effect of"
     },
     {
+      "id": "check-page-ac415dda68",
+      "url": "https://sku.is/how-will-siete-deal-impact-cpg-startups-experts-weigh-in/",
+      "page": "terms",
+      "excerpt": "The upcoming election and ongoing conflicts in the Middle East and Ukraine add layers of uncertainty, making many investors hesitant to act boldly."
+    },
+    {
+      "id": "check-page-9035d23f51",
+      "url": "https://sku.is/how-will-siete-deal-impact-cpg-startups-experts-weigh-in/",
+      "page": "terms",
+      "excerpt": "Siete is expected to hit $200 million in annual retail sales this year and its products are sold in more than 40K stores across the U.S. and Canada, including retail giants like Walmart, Target and Whole Foods."
+    },
+    {
+      "id": "check-page-e7b380501a",
+      "url": "https://sku.is/how-will-siete-deal-impact-cpg-startups-experts-weigh-in/",
+      "page": "terms",
+      "excerpt": "Matthew Mitchell “For the past several years, corporates have played it safe, and thus their internal efforts will always be challenged to connect with influencer consumers,” says Mitchell."
+    },
+    {
+      "id": "check-page-683649743b",
+      "url": "https://sku.is/how-will-siete-deal-impact-cpg-startups-experts-weigh-in/",
+      "page": "terms",
+      "excerpt": "“ Read Previous Two Smart Cookies Redefine Sweet Gluten-Free Indulgence Facebook X Linkedin 0 Read Next The 5 Biggest Mistakes Brands Make When Launching on Amazon Home About Team Media Contact SKU Fall ’26 Track SKU Mentors Sponsors Alumni Companies Preferred Providers FAQ Want to stay connected?"
+    },
+    {
+      "id": "check-page-ba91b2908a",
+      "url": "https://sku.is/how-will-siete-deal-impact-cpg-startups-experts-weigh-in/",
+      "page": "terms",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
+    },
+    {
       "id": "check-page-9804c2bc9c",
       "url": "http://sku.is/faq/",
       "page": "terms",
       "excerpt": "FAQ - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Frequently Asked Questions FAQ Apply Now Want to Apply or Get Involved with SKU? Browse our Frequently Asked Questions ABOUT SKU FOR FOUNDERS FOR MENTORS Partners & Media ABOUT SKU What is SKU? SKU is the nation’s leading accelerator built exclusively for early-stage consumer product brands. For 15 years, we’ve helped consumer packaged goods founders go from scrappy operators to confident CEOs. Every fall and spring, 7-8 companies experience first-in-class, operator-led curriculum, pitch practice, and hands-on mentorship from CPG industry experts. By the end of 12 weeks, these brands are set up for scale and fundraising. What does “SKU” stand for? In CPG, a SKU (pronounced “skew”) is a Stock Keeping Unit, the barcode on every product on the shelf. Every great brand starts with one. We’re here to help you build the next one shoppers can’t live without. Who is SKU for? Brands that are in-market, have real traction, and are hungry for what’s next. If you’re building a consumer packaged goods brand, from food and beverage to beauty and pet, and you’re ready"
+    },
+    {
+      "id": "check-page-606c31e2cf",
+      "url": "http://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "If you’re building a consumer packaged goods brand, from food and beverage to beauty and pet, and you’re ready to scale in both retail and DTC, we want to hear from you."
+    },
+    {
+      "id": "check-page-2d8417148f",
+      "url": "http://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "We want to see that your brand has achieved some distribution, either DTC or retail, with real traction (sales)."
+    },
+    {
+      "id": "check-page-ca422fc0b9",
+      "url": "http://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "Additionally, Mentors can be more helpful when Founders have already done the hard work of testing hypotheses."
+    },
+    {
+      "id": "check-page-5a22b32727",
+      "url": "http://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "Twelve weeks designed to accelerate your growth: Kickoff in Austin: In-person connection with your cohort, Mentors, and the SKU Crew."
+    },
+    {
+      "id": "check-page-b5ae48317d",
+      "url": "http://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "SKU Mentors and industry partners lead classes on the topics that make or break CPG brands: channel strategy, retail pitching, distribution, supply chain, and fundraising, to name a few."
+    },
+    {
+      "id": "check-page-3a5a763a43",
+      "url": "http://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "Mentors bring context and real-life experience from the field, so you can see around corners."
+    },
+    {
+      "id": "check-page-0478ea0e01",
+      "url": "http://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "We’ll use that information and Mentor preferences to match you with a team of 6-10 Mentors who are experts in your category and challenges."
+    },
+    {
+      "id": "check-page-42edca06d5",
+      "url": "http://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "Mentors have experience at industry leaders like Coca Cola, P&G, MARS, as well as high-growth startups like UNREAL Snacks and Seventh Generation."
+    },
+    {
+      "id": "check-page-cc99a1fb45",
+      "url": "http://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "You will leave the program fundraise-ready and financially-prepared: A stage-ready pitch deck and story A clean Data Room A fundraise strategy and progress tracker 3-5 year Financial Projections Lifelong Mentors and friends How much time does SKU require?"
+    },
+    {
+      "id": "check-page-10fb0e599c",
+      "url": "http://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "It will be intense, but that’s why we call it an accelerator."
+    },
+    {
+      "id": "check-page-88f42d437c",
+      "url": "http://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "In return, you get: A mini-MBA in CPG, taught by industry experts A dedicated Mentor team, plus access to our network of 500+ Mentors Pitch coaching and a spot on the Showcase stage Lifetime access to the SKU Founder, Mentor, and Alumni community Exclusive benefits from select partners such as free access to Byzzer from NielsenIQ, sign-on offers from Ramp , and more."
+    },
+    {
+      "id": "check-page-468c27e62f",
+      "url": "http://sku.is/faq/",
+      "page": "terms",
+      "excerpt": "The clearer your answers, the more you’ll get out of the program, and the better we can match you with the Mentors who can take you there."
     },
     {
       "id": "check-page-f0cb6128e7",
@@ -830,16 +1359,154 @@
       "excerpt": "Announcing Austin and Atlanta 2022 Cohorts - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide January 26, 2022 Announcing Austin and Atlanta 2022 Cohorts Announcing Austin and Atlanta 2022 Cohorts Announcing Austin and Atlanta 2022 Cohorts https://files.sku.is/wp-content/uploads/2022/01/Ross-Report-Featured-Image-Template-1.png?strip=all 700 500 Michelle Breyer Michelle Breyer https://secure.gravatar.com/avatar/21f99bc66faf2a4ebca063f6d649c1d8264023775077d95b4b1c6eb5c9698a46?s=96&d=mm&r=g January 26, 2022 August 2, 2024 SKU has selected the brands for companies for its two upcoming tracks in Austin and Atlanta. This is the first year that SKU will run two concurrent tracks, tapping into mentor talent in two regions and enabling a larger number of brands to participate in the accelerator’s acclaimed program. This is the 10th Austin track for SKU, which got its start in Austin in 2011. SKU Austin includes companies and mentors from Texas, the Midwest and the West Coast. This is the first cohort for SKU Atlanta. It draws from the region’s vibrant ecosystem of CPG talent. The companies and mentors participating"
     },
     {
+      "id": "check-page-d6c9b10f3e",
+      "url": "https://sku.is/announcing-austin-and-atlanta-2022-cohorts/",
+      "page": "batches",
+      "excerpt": "The companies and mentors participating in SKU Atlanta ’22 hail from the Southeast and Mid-Atlantic regions."
+    },
+    {
+      "id": "check-page-60bad4ce98",
+      "url": "https://sku.is/announcing-austin-and-atlanta-2022-cohorts/",
+      "page": "batches",
+      "excerpt": "Rollin’ and Bowlin ’: Founded by Austin Patry and Sophia Karbowski, Rollin’ n Bowlin’ is plant-based snack brand that is focused on simplicity, health and convenience."
+    },
+    {
+      "id": "check-page-041f0d5013",
+      "url": "https://sku.is/announcing-austin-and-atlanta-2022-cohorts/",
+      "page": "batches",
+      "excerpt": "SKU Atlanta ‘22 companies Beyond The Equator : Beyond the Equator makes seed butters, seed flours, and more from seeds like chia, pumpkin, hemp, sunflower, flax, watermelon, and cranberry."
+    },
+    {
+      "id": "check-page-6345bc271a",
+      "url": "https://sku.is/announcing-austin-and-atlanta-2022-cohorts/",
+      "page": "batches",
+      "excerpt": "Holmes Applesauce : At the age of 15, Ethan Holmes launched a company with his grandfather’s recipes to create all-natural, award-winning applesauces."
+    },
+    {
+      "id": "check-page-533f8cbdaa",
+      "url": "https://sku.is/announcing-austin-and-atlanta-2022-cohorts/",
+      "page": "batches",
+      "excerpt": "UP TO GOOD Energy : Founded by Lars Oltmanns, UP TO GOOD Energy uses upcycled cascara – the naturally caffeinated fruit of the coffee berry – to create a better-for-you energy beverage."
+    },
+    {
+      "id": "check-page-dbd2a286cf",
+      "url": "https://sku.is/announcing-austin-and-atlanta-2022-cohorts/",
+      "page": "batches",
+      "excerpt": "Why It Matters Home About Team Media Contact SKU Fall ’26 Track SKU Mentors Sponsors Alumni Companies Preferred Providers FAQ Want to stay connected?"
+    },
+    {
+      "id": "check-page-1c00bb0d93",
+      "url": "https://sku.is/announcing-austin-and-atlanta-2022-cohorts/",
+      "page": "batches",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
+    },
+    {
       "id": "check-page-992dd55b39",
       "url": "https://sku.is/impactsku-unveils-21-cohort/",
       "page": "batches",
       "excerpt": "ImpactSKU Unveils '21 Cohort - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide May 28, 2021 ImpactSKU Unveils ’21 Cohort ImpactSKU Unveils ’21 Cohort ImpactSKU Unveils ’21 Cohort https://files.sku.is/wp-content/uploads/2021/05/Ross-Report-Featured-Image-Template-11-1.png?strip=all 700 500 Michelle Breyer Michelle Breyer https://secure.gravatar.com/avatar/21f99bc66faf2a4ebca063f6d649c1d8264023775077d95b4b1c6eb5c9698a46?s=96&d=mm&r=g May 28, 2021 August 2, 2024 ImpactSKU has selected the five companies that will participate in the upcoming track of the Minneapolis program, ImpactSKU ’21. Each was selected based on the basis of product innovation, their traction in the market, and the passion of their founders. The newest cohort’s companies are Ancient Provisions , Chiki Chiki Boom Boom , Harmony Cricket Farm , KIZE and Maazah Chutney. This second track follows last year’s 8-week ImpactSKU Preview – a shortened virtual program created when COVID-19 forced a pivot. The ImpactSKU program is a collaboration between Minneapolis-based FINNOVATION Lab and Austin-based SKU, which is the nation’s first CPG accelerator"
     },
     {
+      "id": "check-page-fa2e5eaa5e",
+      "url": "https://sku.is/impactsku-unveils-21-cohort/",
+      "page": "batches",
+      "excerpt": "The ImpactSKU program is a collaboration between Minneapolis-based FINNOVATION Lab and Austin-based SKU, which is the nation’s first CPG accelerator celebrating its 10-year anniversary this year."
+    },
+    {
+      "id": "check-page-8e5a251ac5",
+      "url": "https://sku.is/impactsku-unveils-21-cohort/",
+      "page": "batches",
+      "excerpt": "It offers a best-in-class curriculum taught by the nation’s top CPG industry experts on topics ranging from supply chain to e-commerce strategy."
+    },
+    {
+      "id": "check-page-56b743cfb1",
+      "url": "https://sku.is/impactsku-unveils-21-cohort/",
+      "page": "batches",
+      "excerpt": "Over the course of 12 weeks, the founders will participate in a proven program that combines the best-in-class CPG curriculum with mentoring."
+    },
+    {
+      "id": "check-page-41ce24cd28",
+      "url": "https://sku.is/impactsku-unveils-21-cohort/",
+      "page": "batches",
+      "excerpt": "Past cohort members, like Mostly Made, have found immense value from the program, from mentorship to industry connections."
+    },
+    {
+      "id": "check-page-8ef713c859",
+      "url": "https://sku.is/impactsku-unveils-21-cohort/",
+      "page": "batches",
+      "excerpt": "We went from stagnating sales to explosive growth in 8 weeks.” Read Previous Applications open for Dallas and BeyondSKU Facebook X Linkedin 0 Read Next Tools for a Successful Product Launch Home About Team Media Contact SKU Fall ’26 Track SKU Mentors Sponsors Alumni Companies Preferred Providers FAQ Want to stay connected?"
+    },
+    {
+      "id": "check-page-6538d1ccce",
+      "url": "https://sku.is/impactsku-unveils-21-cohort/",
+      "page": "batches",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
+    },
+    {
       "id": "check-page-5255ed3086",
       "url": "https://sku.is/sku-selects-seven-consumer-brands-for-fall-2026-accelerator-cohort/",
       "page": "batches",
       "excerpt": "SKU Selects Seven Consumer Brands for Fall 2026 Accelerator Cohort - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide August 13, 2026 SKU Selects Seven Consumer Brands for Fall 2026 Accelerator Cohort SKU Selects Seven Consumer Brands for Fall 2026 Accelerator Cohort SKU Selects Seven Consumer Brands for Fall 2026 Accelerator Cohort https://files.sku.is/wp-content/uploads/2026/08/SKU-2026_Fall-1024x576.png?strip=all 1024 576 Julie Fabricant Julie Fabricant https://secure.gravatar.com/avatar/5c3e1699f1199a8f942dfe19a00c65acd3e59ec6beb28be9c35bf76952a0b83d?s=96&d=mm&r=g August 13, 2026 August 14, 2026 Twelve-week program culminates in Demo Day and Showcase in Austin on November 17 Photo: Consumer brands selected for the SKU Fall 2026 Accelerator Cohort AUSTIN, Texas — August 13, 2026 — SKU, the original accelerator for consumer brands, today named the seven companies joining its Fall 2026 cohort. The group spans food, beverage, supplements, hair care and oral care, with products including kulfi made from a hundred-year-old family recipe, agave-based Mexican soda, water lily seed snacks and a stainless steel"
+    },
+    {
+      "id": "check-page-7f908347fd",
+      "url": "https://sku.is/sku-selects-seven-consumer-brands-for-fall-2026-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "The group spans food, beverage, supplements, hair care and oral care, with products including kulfi made from a hundred-year-old family recipe, agave-based Mexican soda, water lily seed snacks and a stainless steel oral care system built to replace disposable plastic."
+    },
+    {
+      "id": "check-page-26edc8c7b6",
+      "url": "https://sku.is/sku-selects-seven-consumer-brands-for-fall-2026-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Our job over the next twelve weeks is to put the right operators, investors and specialists in the room with them so that conviction turns into a business that lasts.” The 12-week program begins September 1st and combines in-person workshops with virtual classes and hands-on mentorship from seasoned operators, investors, industry specialists and serial entrepreneurs."
+    },
+    {
+      "id": "check-page-2ef88088e6",
+      "url": "https://sku.is/sku-selects-seven-consumer-brands-for-fall-2026-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "It culminates in the SKU Demo Day and Showcase on November 17 in Austin, Texas."
+    },
+    {
+      "id": "check-page-4e293591fc",
+      "url": "https://sku.is/sku-selects-seven-consumer-brands-for-fall-2026-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "SKU has been a nationwide program since its inception, but Austin remains an important anchor for its community and a gathering place for the founders, mentors, investors and industry leaders who have helped shape the organization."
+    },
+    {
+      "id": "check-page-ba199cae35",
+      "url": "https://sku.is/sku-selects-seven-consumer-brands-for-fall-2026-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Water lily seeds, eaten in India for centuries, turned into a snack."
+    },
+    {
+      "id": "check-page-31714f1e64",
+      "url": "https://sku.is/sku-selects-seven-consumer-brands-for-fall-2026-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "A clinically tested hair repair system for women who bleach and won’t trade away length or hair health to do it."
+    },
+    {
+      "id": "check-page-e9ee232669",
+      "url": "https://sku.is/sku-selects-seven-consumer-brands-for-fall-2026-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Special Launch Offer: SKULAUNCH15 15% off About SKU SKU is the original accelerator for the next generation of consumer brands."
+    },
+    {
+      "id": "check-page-a01d5aaea3",
+      "url": "https://sku.is/sku-selects-seven-consumer-brands-for-fall-2026-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Great consumer brands aren’t built alone — they take founder grit, well-timed capital, honest mentorship and real access."
+    },
+    {
+      "id": "check-page-82085147c0",
+      "url": "https://sku.is/sku-selects-seven-consumer-brands-for-fall-2026-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Read Previous 5 Critical Formulation Considerations for Emerging Beverage Brands Facebook X Linkedin 0 Read Next From 20 Stores to 3,000: How A Pup Above Found Its Footing in Pet Food Home About Team Media Contact SKU Fall ’26 Track SKU Mentors Sponsors Alumni Companies Preferred Providers FAQ Want to stay connected?"
+    },
+    {
+      "id": "check-page-3f72118729",
+      "url": "https://sku.is/sku-selects-seven-consumer-brands-for-fall-2026-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
     },
     {
       "id": "check-page-1f157e1a82",
@@ -852,6 +1519,132 @@
       "url": "https://sku.is/",
       "page": "details",
       "excerpt": "Home - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Creating Lasting Change in CPG SKU: The Nation's Leading Consumer Products Accelerator Now Accepting Applications for Our Spring 2027 Program APPLY TODAY The SKU Ecosystem SKU surrounds stellar startups with a powerful ecosystem that provides the tools and skills necessary to scale. Founders SKU’s 12-week program includes a best-in-class curriculum and hand-picked teams of rock-star mentors to help brands successfully scale. > Apply Now Mentors Join SKU’s community of more than 700 industry experts, investors, successful entrepreneurs, all dedicated to helping passionate founders build their brands. > Become a SKU Mentor Partners Connect with SKU’s powerful community of CPG founders and industry leaders and stay on top of the latest trends in CPG. > Sponsor SKU What We Do SKU provides an ecosystem that creates lasting change in CPG by providing all the resources founders need to accelerate the growth of their brands. SKU’s world-class program is driven by a community of the nation’s top CPG leaders, successful founders and industry experts. Our"
+    },
+    {
+      "id": "check-page-ba3429def5",
+      "url": "https://sku.is/",
+      "page": "details",
+      "excerpt": "Our intensive programs offer best-in-class education, hand-picked teams of mentors and access to retailers and investors, all dedicated to building brands that change lives."
+    },
+    {
+      "id": "check-page-6b3c0332ff",
+      "url": "https://sku.is/",
+      "page": "details",
+      "excerpt": "The mentors are the bees knees and give a ton of the founders."
+    },
+    {
+      "id": "check-page-1eda844b64",
+      "url": "https://sku.is/",
+      "page": "details",
+      "excerpt": "Bergman is a seasoned innovation strategist, mentor and business development leader with extensive experience bridging the gap between emerging startups and enterprise corporations."
+    },
+    {
+      "id": "check-page-884304d45c",
+      "url": "https://sku.is/",
+      "page": "details",
+      "excerpt": "As a design-minded dog parent herself, she saw a major disconnect between what modern consumers wanted and what the industry offered — uninspired products that… read more Check out more posts Home About Team Media Contact SKU Fall ’26 Track SKU Mentors Sponsors Alumni Companies Preferred Providers FAQ Want to stay connected?"
+    },
+    {
+      "id": "check-page-a5791a56a4",
+      "url": "https://sku.is/",
+      "page": "details",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
+    },
+    {
+      "id": "check-page-d0d1bfb145",
+      "url": "https://sku.is/about/",
+      "page": "details",
+      "excerpt": "About - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide ABOUT SKU We educate and equip market-validated consumer product companies for growth into world class brands. Scroll down to meet our growing community! Mentors A powerful team of serial entrepreneurs, industry experts, and investors. SKU Mentors Sponsors Sponsor SKU and connect with our community of mentors and entrepreneurs. Learn More Alumni Meet the SKU grads! Our Alumni Team Meet the people that make SKU so great! Meet the Team Testimonials See what our mentors and alumni have to say about the program! Testimonials Media Read the latest mentions of SKU in the news. Read More Home About Team Media Contact SKU Fall ’26 Track SKU Mentors Sponsors Alumni Companies Preferred Providers FAQ Want to stay connected? Join our Newsletter to stay up-to-date with our latest cohorts, applications, and events! Follow Us on Instagram Copyright 2024 - All Rights Reserved. WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form"
+    },
+    {
+      "id": "check-page-95768f4748",
+      "url": "https://sku.is/about/",
+      "page": "details",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
+    },
+    {
+      "id": "check-page-19447df34a",
+      "url": "https://sku.is/mentors/",
+      "page": "details",
+      "excerpt": "SKU Mentors - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Serial Entrepreneurs, Industry Experts, & Investors SKU MENTORS Meet our Rockstar Mentor Network SKU mentors are a powerful team of serial entrepreneurs, industry experts, and investors Our mentor community has over... 0 Mentors 0 Represented Industries 0 Years Combined Experience MENTOR OPPORTUNITY SKU differs from other incubators and accelerators because mentorship goes deep. In addition to our intensive curriculum, our founders are surrounded by a team of mentors. We like to say that our mentors are our special sauce. Our Mentors all are united by a desire to help promising consumer product startups achieve maximum success, providing the expertise and connections that enable them to do that. In addition to the rewarding experience of working with entrepreneurs, mentors also enjoy the relationships they build with other mentors. Our mentor community includes a diverse group of successful entrepreneurs, top industry executives, subject matter experts and investors. When recruiting mentors, we look for the best of the best – people like the"
+    },
+    {
+      "id": "check-page-5af0a73fa2",
+      "url": "https://sku.is/mentors/",
+      "page": "details",
+      "excerpt": "When recruiting mentors, we look for the best of the best – people like the founder of Vital Farms , the director of content and creative excellence at The Coca-Cola Co . and editor-in-chief of Nosh/BevNET ."
+    },
+    {
+      "id": "check-page-f21d8615a7",
+      "url": "https://sku.is/mentors/",
+      "page": "details",
+      "excerpt": "Equity Mentors pay a membership fee to join the SKU equity mentor pool."
+    },
+    {
+      "id": "check-page-b4673ca0f4",
+      "url": "https://sku.is/mentors/",
+      "page": "details",
+      "excerpt": "We recruit mentors from around the world, looking for those exceptional people with the talent and experience to help build brands into the next household names."
+    },
+    {
+      "id": "check-page-9259163e40",
+      "url": "https://sku.is/mentors/",
+      "page": "details",
+      "excerpt": "If you would like to learn more about mentoring for SKU, please fill out the Mentor Interest Form and a SKU team member will contact you to set up an interview."
+    },
+    {
+      "id": "check-page-29b1836819",
+      "url": "https://sku.is/mentors/",
+      "page": "details",
+      "excerpt": "Pierre Julie Steinhagen Co-founder Tammy Tapp-Gentry Joshua Taylor Ben Thompson CEO Sabrina Valdez CEO Jodie Wing Shari Wynn Ressler Entrepreneur, Mentor, Investor Colin Yoder Yuting Zhang Home About Team Media Contact SKU Fall ’26 Track SKU Mentors Sponsors Alumni Companies Preferred Providers FAQ Want to stay connected?"
+    },
+    {
+      "id": "check-page-acdcb049b7",
+      "url": "https://sku.is/mentors/",
+      "page": "details",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
+    },
+    {
+      "id": "check-page-f2656a7dad",
+      "url": "https://sku.is/programs/",
+      "page": "details",
+      "excerpt": "Programs - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide SKU Programs SKU offers five different accelerator tracks. Read more below to find the best fit for your business! [BLURB HERE] Apply Now SKU ELEVATE SKU Elevate, formerly the SKU M/O Track, is a program designed to level the playing field for minority CPG founders. Curriculum: 8-week program Focus: Minority-owned CPG Startups Timing: June-August Apply Now SKU DALLAS Dallas/Fort Worth, TX. SKU Dallas is fully operated by SKU and powered by DFW CPG. Curriculum: 12 -week program Focus: Later stage companies, over $500K annual revenue Equity: Based on trailing 12-month revenue Timing: ’21 Track runs August-November SKU AUSTIN Austin, TX. The nation’s first and leading consumer products accelerator. Curriculum: 12-week program Focus: Category agnostic. Looking for startups with revenues of $100K or greater Timing: Track runs January-May. BEYOND SKU New York, NY. BeyondSKU is a SKU program run by BeyondBrands , which focuses on Purpose, Planet, Passion, Prosperity, People. Curriculum: 12-week program Focus: Startups in the natural space Timing:"
+    },
+    {
+      "id": "check-page-c01ea90157",
+      "url": "https://sku.is/programs/",
+      "page": "details",
+      "excerpt": "Home About Team Media Contact SKU Fall ’26 Track SKU Mentors Sponsors Alumni Companies Preferred Providers FAQ Want to stay connected?"
+    },
+    {
+      "id": "check-page-4ead1f7322",
+      "url": "https://sku.is/programs/",
+      "page": "details",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
+    },
+    {
+      "id": "check-page-ccb8d4481c",
+      "url": "https://sku.is/seth-werner-talks-about-the-power-of-pricing/",
+      "page": "details",
+      "excerpt": "Seth Werner Talks about the Power of Pricing - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide July 28, 2021 Seth Werner Talks about the Power of Pricing Seth Werner Talks about the Power of Pricing Seth Werner Talks about the Power of Pricing https://files.sku.is/wp-content/uploads/2021/07/Ross-Report-Featured-Image-Template-12.jpg?strip=all 700 500 Michelle Breyer Michelle Breyer https://secure.gravatar.com/avatar/21f99bc66faf2a4ebca063f6d649c1d8264023775077d95b4b1c6eb5c9698a46?s=96&d=mm&r=g July 28, 2021 August 2, 2024 Seth Werner SKU Mentor and presenter Seth Werner, a senior lecturer a the marketing department at the Carlson School of Management at the University of Minnesota, is a national expert on pricing. He provided us with some key insights into how to determine pricing strategy. Pricing is unique in that it is the one opportunity for the firm to capture value. Products and services, the places where they are sold and the ways that you promote them are all ways to create value, and these are costs. Pricing is revenue. To get pricing right, start with the customer, not the accountant Identify what"
+    },
+    {
+      "id": "check-page-d6491ff2a9",
+      "url": "https://sku.is/seth-werner-talks-about-the-power-of-pricing/",
+      "page": "details",
+      "excerpt": "Read Previous From Restaurant to CPG: How to Keep the Special Sauce Facebook X Linkedin 0 Read Next Gathering in Person Again: Tara Burkley Talks Expo East Home About Team Media Contact SKU Fall ’26 Track SKU Mentors Sponsors Alumni Companies Preferred Providers FAQ Want to stay connected?"
+    },
+    {
+      "id": "check-page-efbefc77a2",
+      "url": "https://sku.is/seth-werner-talks-about-the-power-of-pricing/",
+      "page": "details",
+      "excerpt": "WordPress web support from ebusinessWP About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Search"
+    },
+    {
+      "id": "check-page-96d4e1c856",
+      "url": "https://sku.is/a-pup-above-founder-interview-sku-alumni/",
+      "page": "portfolio",
+      "excerpt": "From 20 Stores to 3,000: How A Pup Above Found Its Footing in Pet Food - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide November 10, 2026 From 20 Stores to 3,000: How A Pup Above Found Its Footing in Pet Food How did A Pup Above grow from 20 to 3,000 pet stores? Founder Ruth Marriott shares lessons on rebranding, retail growth, hiring, and scaling a CPG business. From 20 Stores to 3,000: How A Pup Above Found Its Footing in Pet Food From 20 Stores to 3,000: How A Pup Above Found Its Footing in Pet Food https://files.sku.is/wp-content/uploads/2026/11/Ruth-Javier-Lola-2020_2-1024x683.jpg?strip=all 1024 683 Julie Fabricant Julie Fabricant https://secure.gravatar.com/avatar/5c3e1699f1199a8f942dfe19a00c65acd3e59ec6beb28be9c35bf76952a0b83d?s=96&d=mm&r=g November 10, 2026 November 10, 2026 SKU alum Ruth Marriott reflects on the rebrand that changed her company’s trajectory, the realities of scaling a CPG business, and why sustainable growth rarely happens overnight. When Ruth Marriott participated in SKU’s accelerator program in the spring of 2019, her pet food company, then called Grocery Pup, was selling in"
     }
   ],
   "findings": {
@@ -943,6 +1736,10 @@
       {
         "value": "8",
         "evidenceId": "check-duration-1b156d69eb"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-af4400c812"
       }
     ],
     "format": [
@@ -959,6 +1756,10 @@
       {
         "value": "Dallas",
         "evidenceId": "check-location-062d0c034f"
+      },
+      {
+        "value": "Austin",
+        "evidenceId": "check-location-5ba356c096"
       }
     ],
     "selectivity": [],

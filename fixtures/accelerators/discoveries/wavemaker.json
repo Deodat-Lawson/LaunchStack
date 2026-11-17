@@ -1,6 +1,6 @@
 {
   "programId": "wavemaker",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://wavemaker.vc/adb-lhoopa-sign-deal-to-expand-green-affordable-housing-in-the-philippines/",
@@ -46,7 +46,7 @@
       "url": "https://wavemaker.vc/portfolio/",
       "page": "portfolio",
       "anchor": "Our Portfolio",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -118,7 +118,7 @@
       "url": "https://wavemaker.vc/wavemaker-portfolio/livein/",
       "page": "portfolio",
       "anchor": "Learn more",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -126,7 +126,7 @@
       "url": "https://wavemaker.vc/wavemaker-portfolio/luxola/",
       "page": "portfolio",
       "anchor": "Learn more",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -134,7 +134,7 @@
       "url": "https://wavemaker.vc/wavemaker-portfolio/silent-eight/",
       "page": "portfolio",
       "anchor": "Learn more",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -142,7 +142,7 @@
       "url": "https://wavemaker.vc/wavemaker-portfolio/tradegecko/",
       "page": "portfolio",
       "anchor": "Learn more",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -150,7 +150,7 @@
       "url": "https://wavemaker.vc/wavemaker-portfolio/watchtowr/",
       "page": "portfolio",
       "anchor": "Learn more",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -158,7 +158,7 @@
       "url": "https://wavemaker.vc/wavemaker-portfolio/wavecell/",
       "page": "portfolio",
       "anchor": "Learn more",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

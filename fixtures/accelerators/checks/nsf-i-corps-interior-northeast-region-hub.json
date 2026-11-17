@@ -1,16 +1,150 @@
 {
   "programId": "nsf-i-corps-interior-northeast-region-hub",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
-    "https://www.in-icorps.org/"
+    "https://www.in-icorps.org/",
+    "https://www.in-icorps.org/i-corps-alumni-give-consumers-more-control-over-energy-use/",
+    "https://www.in-icorps.org/i-corps-alumni-make-humanitarian-impact-in-ukraine/",
+    "https://www.in-icorps.org/category/regional-i-corps-programming/",
+    "https://www.in-icorps.org/category/regional-i-corps-programming/page/2/",
+    "https://www.in-icorps.org/category/i-corps-alumni/"
   ],
   "evidence": [
     {
+      "id": "check-format-10e4e1f713",
+      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/",
+      "title": "NSF I-Corps Interior Northeast Region Hub — program page",
+      "excerpt": "Innovation Summit in Dallas, Texas, as members of a ‘hybrid’ National Science Foundation (NSF) I-Corps regional course",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3418cffabb",
+      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/",
+      "title": "NSF I-Corps Interior Northeast Region Hub — program page",
+      "excerpt": "Industry: Exploring Market Potential with the Battery Show Hybrid Course From Ideas to Industry: Exploring Market Potential",
+      "page": "details"
+    },
+    {
+      "id": "check-format-457eaf5b09",
+      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/page/2/",
+      "title": "NSF I-Corps Interior Northeast Region Hub — program page",
+      "excerpt": "energy researchers in March 2023 that involved tailored virtual entrepreneurship training, followed by sponsored travel to",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4c6bb01738",
+      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/",
+      "title": "NSF I-Corps Interior Northeast Region Hub — program page",
+      "excerpt": "Industry: Exploring Market Potential with the Battery Show Hybrid Course",
+      "page": "details"
+    },
+    {
+      "id": "check-format-89df0788ac",
+      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/",
+      "title": "NSF I-Corps Interior Northeast Region Hub — program page",
+      "excerpt": "Northeast I-Corps Hub. The course began with two weeks of virtual entrepreneurship training, then moved to an in-person",
+      "page": "details"
+    },
+    {
+      "id": "check-format-bfd0fd520c",
+      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/",
+      "title": "NSF I-Corps Interior Northeast Region Hub — program page",
+      "excerpt": "the Interior Northeast I-Corps Hub (IN I-Corps) led a hybrid I-Corps regional course that included a funded customer",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f7a89ccee7",
+      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/",
+      "title": "NSF I-Corps Interior Northeast Region Hub — program page",
+      "excerpt": "of virtual entrepreneurship training, then moved to an in-person format at the Battery Show conference in Detroit, MI. read",
+      "page": "details"
+    },
+    {
       "id": "check-route-c42592a0d0",
       "url": "https://www.in-icorps.org/",
-      "title": "NSF I-Corps Interior Northeast Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps Interior Northeast Region Hub — homepage",
       "excerpt": "https://www.in-icorps.org/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-e17c5a24e0",
+      "url": "https://www.in-icorps.org/",
+      "page": "details",
+      "excerpt": "Home - I-Corps Hub: Interior Northeast About Who We Are Leadership Faculty Leads Operations Group Instructors Programs Regional I-Corps Courses NSF I-Corps Teams Regional Instructor Training Technology Scouting NASA I-Corps Conference Courses Events Partners Binghamton University Cornell University Dartmouth College RIT Syracuse University University at Buffalo University of Pittsburgh University of Rochester University of Vermont West Virginia University News Hello, we’re IN I-Corps Taking innovation from the laboratory to the marketplace and launching new deep tech ventures in the regions where those innovations are discovered. View Upcoming Courses & Info Sessions The Interior Northeast I-Corps Hub (IN I-Corps) is representative of large portions of the US that are predominantly rural, economically underserved, and struggling to reduce out-migration and restore economic vitality after the decline of manufacturing and extractive industries. It is also rich in natural resources, open space, and strong research universities. The Interior Northeast I-Corps Hub aims to expand the nation’s geography of innovation by developing a regional I-Corps innovation network that can become a repeatable, effective model of education and workforce training designed for and by innovators based in rural regions and small cities. Intentional, Effective, Impactful What We Do Entrepreneurship"
+    },
+    {
+      "id": "check-page-205d4e817c",
+      "url": "https://www.in-icorps.org/",
+      "page": "details",
+      "excerpt": "Intentional, Effective, Impactful What We Do Entrepreneurship Training for Scientists and Engineers This Hub will offer frequent regional I-Corps training courses to members of the scientific community (students, postdocs, faculty, and other researchers) throughout the region."
+    },
+    {
+      "id": "check-page-22754be142",
+      "url": "https://www.in-icorps.org/",
+      "page": "details",
+      "excerpt": "Impactful Regional Outreach Championed by its faculty leads, the Hub will create a community of innovators among STEM faculty and researchers at the Hub institutions."
+    },
+    {
+      "id": "check-page-716a5d1e0c",
+      "url": "https://www.in-icorps.org/",
+      "page": "details",
+      "excerpt": "0 Hub Partners with deep technology expertise and I-Corps experience 0 State Regions New Hampshire, Vermont, upstate New York, western Pennsylvania and West Virginia 0 STEM Researchers enrolled at partner institutions A Hub of Hubs Hub Partners The Interior Northeast Hub Partners are rural and rural-serving academic anchor institutions that span from West Virginia to New Hampshire."
+    },
+    {
+      "id": "check-page-ef77362e7c",
+      "url": "https://www.in-icorps.org/",
+      "page": "details",
+      "excerpt": "These universities bring expertise in developing deep technologies and leading innovation in fields spanning from agriculture and food tech to robotics."
+    },
+    {
+      "id": "check-page-e83ae813ac",
+      "url": "https://www.in-icorps.org/",
+      "page": "details",
+      "excerpt": "They are deeply connected to regional research laboratories and smaller institutions of higher learning and bring direct experience supporting innovators who have chosen to launch new deep tech ventures in their home communities."
+    },
+    {
+      "id": "check-page-7c690a1eb6",
+      "url": "https://www.in-icorps.org/",
+      "page": "details",
+      "excerpt": "In 2020, NSF introduced I-Corps Hubs to bring together institutions of higher education within a distinct geographical region to collaborate and deliver a standardized curriculum."
+    },
+    {
+      "id": "check-page-f51195de28",
+      "url": "https://www.in-icorps.org/",
+      "page": "details",
+      "excerpt": "Through its national and regional training programs, Hubs train researchers to bring promising ideas from the laboratory to the marketplace."
+    },
+    {
+      "id": "check-page-9ec3f47914",
+      "url": "https://www.in-icorps.org/i-corps-alumni-give-consumers-more-control-over-energy-use/",
+      "page": "portfolio",
+      "excerpt": "I-Corps Alumni Give Consumers More Control Over Energy Use - I-Corps Hub: Interior Northeast About Who We Are Leadership Faculty Leads Operations Group Instructors Programs Regional I-Corps Courses NSF I-Corps Teams Regional Instructor Training Technology Scouting NASA I-Corps Conference Courses Events Partners Binghamton University Cornell University Dartmouth College RIT Syracuse University University at Buffalo University of Pittsburgh University of Rochester University of Vermont West Virginia University News Cornell University I-Corps Alumni I-Corps Alumni Give Consumers More Control Over Energy Use January 27, 2023 I-Corps Alumni Give Consumers More Control Over Energy Use I-Corps Alumni Give Consumers More Control Over Energy Use https://www.in-icorps.org/wp-content/uploads/2023/01/NYSEG_Cornell.png 1000 650 I-Corps Hub: Interior Northeast I-Corps Hub: Interior Northeast https://www.in-icorps.org/wp-content/uploads/2023/01/NYSEG_Cornell.png January 27, 2023 August 17, 2023 What if consumers had more control over their energy consumption and utility costs? A new app and subscription-based payment plan piloted by I-Corps alumni is designed to provide electricity users with information about – and incentives to reduce – their usage. “We have all been consuming electricity since we were born, but we don’t know how we consume electricity,” said Madhur Srivastava , assistant"
+    },
+    {
+      "id": "check-page-76431e0a0a",
+      "url": "https://www.in-icorps.org/i-corps-alumni-make-humanitarian-impact-in-ukraine/",
+      "page": "portfolio",
+      "excerpt": "I-Corps Alumni Make Humanitarian Impact in Ukraine - I-Corps Hub: Interior Northeast About Who We Are Leadership Faculty Leads Operations Group Instructors Programs Regional I-Corps Courses NSF I-Corps Teams Regional Instructor Training Technology Scouting NASA I-Corps Conference Courses Events Partners Binghamton University Cornell University Dartmouth College RIT Syracuse University University at Buffalo University of Pittsburgh University of Rochester University of Vermont West Virginia University News Binghamton University I-Corps Alumni I-Corps Alumni Make Humanitarian Impact in Ukraine February 12, 2024 I-Corps Alumni Make Humanitarian Impact in Ukraine I-Corps Alumni Make Humanitarian Impact in Ukraine https://www.in-icorps.org/wp-content/uploads/2024/02/Screenshot-2024-02-12-at-2.49.02 PM.png 963 583 I-Corps Hub: Interior Northeast I-Corps Hub: Interior Northeast https://www.in-icorps.org/wp-content/uploads/2024/02/Screenshot-2024-02-12-at-2.49.02 PM.png February 12, 2024 March 27, 2024 An I-Corps alumni startup is deploying its landmine-detecting AI technology for humanitarian demining in Ukraine. Safe Pro AI , co-founded by Binghamton University alumni Jasper Baur and Gabriel Steinberg, is a Safe Pro Group company leveraging AI and machine learning to detect, label, and map mines and unexploded ordnance (UXO). Mines have traditionally been detected through manual"
+    },
+    {
+      "id": "check-page-d0a8d6cd49",
+      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/",
+      "page": "details",
+      "excerpt": "Regional I-Corps Programming Archives - I-Corps Hub: Interior Northeast About Who We Are Leadership Faculty Leads Operations Group Instructors Programs Regional I-Corps Courses NSF I-Corps Teams Regional Instructor Training Technology Scouting NASA I-Corps Conference Courses Events Partners Binghamton University Cornell University Dartmouth College RIT Syracuse University University at Buffalo University of Pittsburgh University of Rochester University of Vermont West Virginia University News Regional I-Corps Programming October 19, 2026 Researchers explore potential impact of their small spacecraft innovations Researchers explore potential impact of their small spacecraft innovations https://www.in-icorps.org/wp-content/uploads/2026/10/IMG_5443-1-scaled-e1792420501912.jpg 2347 1306 I-Corps Hub: Interior Northeast I-Corps Hub: Interior Northeast https://www.in-icorps.org/wp-content/uploads/2026/10/IMG_5443-1-scaled-e1792420501912.jpg October 19, 2026 October 19, 2026 For researchers developing the next generation of small spacecraft technologies, understanding how those innovations could be used beyond the lab is an important part of the process. Through NASA I-Corps, a group of researchers spent the month of August exploring that question, culminating in conversations with industry experts and potential customers at the Small Satellite Conference in Salt Lake City, Utah. read"
+    },
+    {
+      "id": "check-page-f265cf2047",
+      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/page/2/",
+      "page": "details",
+      "excerpt": "Regional I-Corps Programming Archives - Page 2 of 2 - I-Corps Hub: Interior Northeast About Who We Are Leadership Faculty Leads Operations Group Instructors Programs Regional I-Corps Courses NSF I-Corps Teams Regional Instructor Training Technology Scouting NASA I-Corps Conference Courses Events Partners Binghamton University Cornell University Dartmouth College RIT Syracuse University University at Buffalo University of Pittsburgh University of Rochester University of Vermont West Virginia University News Regional I-Corps Programming September 20, 2023 GEM Fellows Course Aims to Broaden Impact of STEM Innovation GEM Fellows Course Aims to Broaden Impact of STEM Innovation https://www.in-icorps.org/wp-content/uploads/2023/09/GEM-edited-scaled.jpg 2560 1553 I-Corps Hub: Interior Northeast I-Corps Hub: Interior Northeast https://www.in-icorps.org/wp-content/uploads/2023/09/GEM-edited-scaled.jpg September 20, 2023 October 7, 2024 IN I-Corps hosted a regional course specifically for GEM Fellows as a part of the Inclusion in Innovation Initiative, which aims to increase participation in I-Corps and commercialization activity among STEM researchers across diverse backgrounds. read more August 17, 2023 BioTech Innovators Engage with Customers at BIO BioTech Innovators Engage with Customers at BIO https://www.in-icorps.org/wp-content/uploads/2023/08/IMG_2875-scaled.jpg 2560 1722"
+    },
+    {
+      "id": "check-page-290de82a4b",
+      "url": "https://www.in-icorps.org/category/i-corps-alumni/",
+      "page": "portfolio",
+      "excerpt": "I-Corps Alumni Archives - I-Corps Hub: Interior Northeast About Who We Are Leadership Faculty Leads Operations Group Instructors Programs Regional I-Corps Courses NSF I-Corps Teams Regional Instructor Training Technology Scouting NASA I-Corps Conference Courses Events Partners Binghamton University Cornell University Dartmouth College RIT Syracuse University University at Buffalo University of Pittsburgh University of Rochester University of Vermont West Virginia University News I-Corps Alumni June 2, 2026 Eutrobac Acquired by Agriment Services Inc. Eutrobac Acquired by Agriment Services Inc. https://www.in-icorps.org/wp-content/uploads/2026/06/eutrobac-team.png 764 1200 I-Corps Hub: Interior Northeast I-Corps Hub: Interior Northeast https://www.in-icorps.org/wp-content/uploads/2026/06/eutrobac-team.png June 2, 2026 June 2, 2026 Eutrobac, a New York-based agricultural technology startup acquired by Agriment Services, Inc. (ASI) in April, started as a research idea inspired by environmental issues on a family farm. read more May 4, 2026 Found Industries Among Five Selected for DOE Critical Minerals Funding Found Industries Among Five Selected for DOE Critical Minerals Funding https://www.in-icorps.org/wp-content/uploads/2026/05/image.png 1308 622 I-Corps Hub: Interior Northeast I-Corps Hub: Interior Northeast https://www.in-icorps.org/wp-content/uploads/2026/05/image.png May 4,"
     }
   ],
   "findings": {
@@ -26,8 +160,28 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-bfd0fd520c"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-89df0788ac"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-f7a89ccee7"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

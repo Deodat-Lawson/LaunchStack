@@ -1,6 +1,6 @@
 {
   "programId": "samsung-next",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.samsungnext.com/about",
@@ -38,7 +38,7 @@
       "url": "https://www.samsungnext.com/portfolio?sector=Health",
       "page": "portfolio",
       "anchor": "03 ↗ Digital Health & MedTech Bio-electronic integration, precision diagnostics, and next-gen wearables. Maven Clinic · Function Health · Signos",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -46,7 +46,7 @@
       "url": "https://www.samsungnext.com/portfolio?sector=Robotics",
       "page": "portfolio",
       "anchor": "02 ↗ Robotics Intelligent Machines Full-stack autonomy, advanced sensing, and human-machine interfaces. 1X · Field AI · Apptronik",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -54,7 +54,7 @@
       "url": "https://www.samsungnext.com/portfolio?sector=Services",
       "page": "portfolio",
       "anchor": "04 ↗ Services Stablecoin · Blockchain · Mediatech Decentralized finance infrastructure, on-chain economies, and next-gen media platforms. Bastion · LayerZero · Volley",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     }

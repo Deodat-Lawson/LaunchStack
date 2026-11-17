@@ -1,6 +1,6 @@
 {
   "programId": "tech-nexus",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.technexus.com/",
     "https://www.technexus.com/cracking-the-enterprise-code-how-startups-can-navigate-and-win-big-deals/",
@@ -16,14 +16,54 @@
     "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
     "https://www.technexus.com/kayla-dusing-hired-by-technexus-venture-collaborative-as-venture-program-manager/",
     "https://www.technexus.com/technexus-joins-venture-engine-program/",
-    "https://www.technexus.com/technexus-venture-collaborative-joins-istc-world-business-chicagos-venture-engine-program-as-innovation-partner/"
+    "https://www.technexus.com/technexus-venture-collaborative-joins-istc-world-business-chicagos-venture-engine-program-as-innovation-partner/",
+    "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+    "https://www.technexus.com/what-corporations-need-to-know-about-building-an-innovation-ecosystem/",
+    "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+    "https://www.technexus.com/what-corporations-need-to-know-about-strategic-and-financial-venture-returns/",
+    "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/"
   ],
   "evidence": [
+    {
+      "id": "check-duration-144d5f9430",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-building-an-innovation-ecosystem/",
+      "title": "TechNexus — program page",
+      "excerpt": "to know about venture investing Zero to Win in 24 Months What corporations need to know about generative",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2a3795d049",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "title": "TechNexus — program page",
+      "excerpt": "A custom-built technician co-pilot requires 18–24 months of development, sustained engineering",
+      "page": "details"
+    },
     {
       "id": "check-duration-2d6d05469d",
       "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
       "title": "TechNexus — program page",
       "excerpt": "to realize tangible growth Zero to Win in 24 Months TechNexus Venture Collaborative announces the",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-38ce978926",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "title": "TechNexus — program page",
+      "excerpt": "building an innovation ecosystem Zero to Win in 24 Months October 2021 Update from TechNexus Venture",
+      "page": "details"
+    },
+    {
+      "id": "check-format-004809afa9",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "title": "TechNexus — program page",
+      "excerpt": "areas, and to support renewable energy integration. Virtual Power Plants (VPPs). The industry will see growth of VPPs",
+      "page": "details"
+    },
+    {
+      "id": "check-format-326b7d4bc3",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "title": "TechNexus — program page",
+      "excerpt": "mobility market – Energy (including microgrids and virtual power plants, grid intelligence, and",
       "page": "details"
     },
     {
@@ -34,10 +74,31 @@
       "page": "details"
     },
     {
+      "id": "check-format-5e4ce8089f",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "title": "TechNexus — program page",
+      "excerpt": "and deployment of technologies such as microgrids, virtual power plants, and advanced grid intelligence to ensure a",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b5ebb74113",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "title": "TechNexus — program page",
+      "excerpt": "Improved customer service : We’ve all seen chatbots and virtual assistants powered by AI, and as the technology continues",
+      "page": "details"
+    },
+    {
       "id": "check-format-bde1ac1854",
       "url": "https://www.technexus.com/",
       "title": "TechNexus — homepage",
       "excerpt": "context, momentum, and the serendipity that only happens in person. Visit teamworking.vc Ready to build your venture",
+      "page": "details"
+    },
+    {
+      "id": "check-format-df618cf601",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "title": "TechNexus — program page",
+      "excerpt": "enhance energy resilience and reliability, particularly in remote or underserved areas, and to support renewable energy",
       "page": "details"
     },
     {
@@ -52,6 +113,13 @@
       "url": "https://www.technexus.com/",
       "title": "TechNexus — homepage",
       "excerpt": "TechNexus Venture Collaborative — Corporate Innovation Meets Startup",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1f3542fee0",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "title": "TechNexus — program page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
       "page": "details"
     },
     {
@@ -125,11 +193,25 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-5b548c38bc",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "title": "TechNexus — program page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-60d78d964e",
       "url": "https://www.technexus.com/decoding-corporate-investment-a-strategic-guide-for-early-stage-ventures/",
       "title": "TechNexus — terms page",
       "excerpt": "For Founders → https://www.technexus.com/ventures/",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-64a174bf08",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "title": "TechNexus — program page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-69d17de9a1",
@@ -144,6 +226,13 @@
       "title": "TechNexus — terms page",
       "excerpt": "For Founders → https://www.technexus.com/ventures/",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6c78079e5e",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-strategic-and-financial-venture-returns/",
+      "title": "TechNexus — program page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-6cb765c2c0",
@@ -167,6 +256,27 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-7b210adc0d",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-building-an-innovation-ecosystem/",
+      "title": "TechNexus — program page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7dec62b086",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "title": "TechNexus — program page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-81b8061963",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "title": "TechNexus — program page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-82e5bddeae",
       "url": "https://www.technexus.com/the-silent-deal-killer-why-enterprise-sales-stalls-beyond-the-champion/",
       "title": "TechNexus — terms page",
@@ -179,6 +289,20 @@
       "title": "TechNexus — terms page",
       "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8996273729",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-building-an-innovation-ecosystem/",
+      "title": "TechNexus — program page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8cf93573f4",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-strategic-and-financial-venture-returns/",
+      "title": "TechNexus — program page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-a3639bc4f1",
@@ -200,6 +324,13 @@
       "title": "TechNexus — terms page",
       "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c81617aa75",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "title": "TechNexus — program page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-cc75b2ee51",
@@ -301,10 +432,130 @@
       "excerpt": "TechNexus Venture Collaborative — Corporate Innovation Meets Startup Investment Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch Venture-Enabled Innovation™ We don't just invest in growth. We build it. Together. The first-of-its-kind venture collaborative — pioneered in 2007, with 150+ portfolio companies and $4B+ in tracked portfolio value. TechNexus partners with leading corporations and ambitious founders to invest in, build, and scale ventures that transform industries. Our insight comes from the connected entrepreneurial ecosystems . We have been mentoring, building and funding ventures since 2007, and putting our own capital and founder ethos to work alongside yours since 2017. 150+ Active Portfolio Investments More than a Dozen Corporate Partners Two Decades Curating Entrepreneurial Ecosystems $4B+ Follow-on Capital Raised by Portfolio Companies What We Do For Corporations Build and scale your venture ecosystem TechNexus invests our resources aligned with yours and coordinates co-investments where it matters Venture strategy through a startup & emerging-tech lens Venture building — co-creating new companies from scratch Turnarounds & CVC portfolio management Corporate spinouts from dormant R&D and IP Learn more For Ventures Strategic partners who actually get it Strategic capital with real corporate demand behind it Access"
     },
     {
+      "id": "check-page-d66bbf0fce",
+      "url": "https://www.technexus.com/",
+      "page": "details",
+      "excerpt": "TechNexus extends beyond venture capital through a family of specialized platforms — each designed to accelerate a different dimension of the innovation economy."
+    },
+    {
+      "id": "check-page-4b1165dcc4",
+      "url": "https://www.technexus.com/",
+      "page": "details",
+      "excerpt": "Specialized in revitalizing underperforming venture portfolios and corporate venture units — turning dormant assets into active value."
+    },
+    {
+      "id": "check-page-7e570b9b77",
+      "url": "https://www.technexus.com/",
+      "page": "details",
+      "excerpt": "TechNexus' deep tech collaboration platform — partnering with universities and research institutions to translate breakthrough science into venture-backed companies."
+    },
+    {
+      "id": "check-page-fa9ce06936",
+      "url": "https://www.technexus.com/",
+      "page": "details",
+      "excerpt": "Privileged access to co-invest alongside TechNexus in select portfolio companies — and serve as active mentors helping founders navigate growth, strategy, and scale."
+    },
+    {
+      "id": "check-page-c718080a01",
+      "url": "https://www.technexus.com/",
+      "page": "details",
+      "excerpt": "More than a newsroom — an active incubation tool that tells portfolio stories, drives collaboration between ventures and corporate partners, and accelerates growth across the ecosystem."
+    },
+    {
+      "id": "check-page-1c4f8b62b1",
+      "url": "https://www.technexus.com/",
+      "page": "details",
+      "excerpt": "Our collaboration center in Chicago — where portfolio founders, corporate partners, and innovators work side by side, sharing context and momentum."
+    },
+    {
+      "id": "check-page-2bf4bb866c",
+      "url": "https://www.technexus.com/",
+      "page": "details",
+      "excerpt": "Our Approach How we evaluate every portfolio company PRIME/X is TechNexus's AI-enabled portfolio intelligence product — a structured confidence assessment of how a portfolio company is positioned to execute against its plan and ultimately exit."
+    },
+    {
+      "id": "check-page-511c2f3553",
+      "url": "https://www.technexus.com/",
+      "page": "details",
+      "excerpt": "Where the /X measures strategic value for corporate venture investments."
+    },
+    {
+      "id": "check-page-8421f1af84",
+      "url": "https://www.technexus.com/",
+      "page": "details",
+      "excerpt": "Learn More News & Insights Latest thinking Read all articles Rooted in Chicago — 20 Years of Collaboration Where collaboration drives growth For twenty years, TechNexus has been rooted in the belief that being physically around each other drives collaboration — and collaboration drives growth."
+    },
+    {
+      "id": "check-page-ae3ea0adcf",
+      "url": "https://www.technexus.com/",
+      "page": "details",
+      "excerpt": "What started as a single room of founders has become the center of Chicago's tech and innovation community."
+    },
+    {
+      "id": "check-page-1ac38e9a7f",
+      "url": "https://www.technexus.com/",
+      "page": "details",
+      "excerpt": "Today it's where portfolio founders, corporate partners, and innovators work side by side — sharing context, momentum, and the serendipity that only happens in person."
+    },
+    {
+      "id": "check-page-7881940e5b",
+      "url": "https://www.technexus.com/",
+      "page": "details",
+      "excerpt": "Start a Conversation TechNexus Venture Collaborative was founded in Chicago in 2007 by Terry Howerton and Fred Hoch, making it the longest-operating venture collaborative in the United States."
+    },
+    {
       "id": "check-page-84df58df8d",
       "url": "https://www.technexus.com/cracking-the-enterprise-code-how-startups-can-navigate-and-win-big-deals/",
       "page": "terms",
       "excerpt": "Cracking the enterprise code: How startups can navigate (and win) big deals — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… Cracking the enterprise code: How startups can navigate (and win) big deals Selling to enterprises is a different game: endless procurement steps, tricky legal reviews, and the challenge of getting a dozen stakeholders aligned. This guide breaks down how startups can navigate corporate timelines, build internal champions, and close deals that transform their growth trajectory. We all know that selling to a big corporation feels like playing a completely different game than your standard B2B sale. When you are selling to a fellow startup or an SMB, decisions can happen over coffee. In the enterprise world, deals are governed by a unique corporate timeline, often involving endless procurement steps, tricky legal reviews, and the herculean task of getting a dozen different stakeholders on board. To succeed, you need more than a great product—you need a smart playbook to handle this complex, often drawn-out process. The enterprise sales process moves at a different pace and on a different calendar than you’re used to. At TechNexus, we sit right at the intersection of nimble startups and massive corporate partners. Here is what we’ve learned while helping our portfolio"
+    },
+    {
+      "id": "check-page-e1ac9e1a57",
+      "url": "https://www.technexus.com/cracking-the-enterprise-code-how-startups-can-navigate-and-win-big-deals/",
+      "page": "terms",
+      "excerpt": "Here is what we’ve learned while helping our portfolio navigate the complexities of enterprise deals."
+    },
+    {
+      "id": "check-page-bff5969754",
+      "url": "https://www.technexus.com/cracking-the-enterprise-code-how-startups-can-navigate-and-win-big-deals/",
+      "page": "terms",
+      "excerpt": "But in the enterprise, budget cycles dictate reality."
+    },
+    {
+      "id": "check-page-d88cb00eb7",
+      "url": "https://www.technexus.com/cracking-the-enterprise-code-how-startups-can-navigate-and-win-big-deals/",
+      "page": "terms",
+      "excerpt": "Madelyn Rutter, TechNexus Senior Director of Collaboration , emphasizes that the calendar is your most powerful tool: “One of the most overlooked levers in enterprise sales is knowing your customer’s fiscal calendar and aligning your outreach with their strategic planning cycle."
+    },
+    {
+      "id": "check-page-494c9dfbb0",
+      "url": "https://www.technexus.com/cracking-the-enterprise-code-how-startups-can-navigate-and-win-big-deals/",
+      "page": "terms",
+      "excerpt": "In enterprise, you are arguably only 30% of the way there."
+    },
+    {
+      "id": "check-page-48ba464e77",
+      "url": "https://www.technexus.com/cracking-the-enterprise-code-how-startups-can-navigate-and-win-big-deals/",
+      "page": "terms",
+      "excerpt": "Enterprise sales teams must engage their business unit champion to actively escort the deal through these challenges."
+    },
+    {
+      "id": "check-page-a5698e456b",
+      "url": "https://www.technexus.com/cracking-the-enterprise-code-how-startups-can-navigate-and-win-big-deals/",
+      "page": "terms",
+      "excerpt": "The Bottom Line Enterprise sales is a marathon, not a sprint."
+    },
+    {
+      "id": "check-page-8954a5cd33",
+      "url": "https://www.technexus.com/cracking-the-enterprise-code-how-startups-can-navigate-and-win-big-deals/",
+      "page": "terms",
+      "excerpt": "TechNexus invests across Clean Tech through its venture ecosystem model."
+    },
+    {
+      "id": "check-page-cf85873efd",
+      "url": "https://www.technexus.com/cracking-the-enterprise-code-how-startups-can-navigate-and-win-big-deals/",
+      "page": "terms",
+      "excerpt": "TechNexus is the longest-operating venture collaborative in the United States, founded in 2007 by Terry Howerton and Fred Hoch."
     },
     {
       "id": "check-page-cab5d10aee",
@@ -319,6 +570,30 @@
       "excerpt": "FedEx, THOR lead $160M Series C investment in Harbinger — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… FedEx, THOR lead $160M Series C investment in Harbinger FedEx selected TechNexus portfolio company Harbinger to accelerate its fleet electrification journey, co-leading a $160M Series C alongside THOR Industries and placing an initial order for 53 electric vehicles. The deal marks a major validation of Harbinger's medium-duty EV platform from two industry giants. FedEx has ambitions to electrify its entire pickup and delivery fleet over the next 15 years, and it has selected TechNexus Venture Collaborative portfolio company Harbinger to accelerate its electrification journey. FedEx announced Thursday it co-led Harbinger’s $160 million Series C round and placed an initial order for 53 Harbinger EVs. The funding round was also led by TechNexus corporate partner THOR Industries, along with Capricorn’s Technology Impact Fund. Harbinger, which has now raised $358 million to date, has worked closely with THOR and TechNexus to develop vehicles for the RV industry. Together, THOR and Harbinger created the world's first range extended electric Class A motorhome , a revolutionary invention that has received accolades including the Fast Company 2025 World Changing Ideas Award, a TIME Best Invention"
     },
     {
+      "id": "check-page-4731634734",
+      "url": "https://www.technexus.com/fedex-thor-lead-160m-series-c-investment-in-harbinger/",
+      "page": "terms",
+      "excerpt": "Together, THOR and Harbinger created the world's first range extended electric Class A motorhome , a revolutionary invention that has received accolades including the Fast Company 2025 World Changing Ideas Award, a TIME Best Invention of 2025 recognition, and RV Business’s 2026 RV of the Year award."
+    },
+    {
+      "id": "check-page-3312c9ab7e",
+      "url": "https://www.technexus.com/fedex-thor-lead-160m-series-c-investment-in-harbinger/",
+      "page": "terms",
+      "excerpt": "FedEx’s investment further exemplifies the demand for Harbinger’s technology as the logistics giant says it hopes to electrify its entire delivery fleet by 2040."
+    },
+    {
+      "id": "check-page-543bb10e9d",
+      "url": "https://www.technexus.com/fedex-thor-lead-160m-series-c-investment-in-harbinger/",
+      "page": "terms",
+      "excerpt": "“Any vehicle that holds up to our rigorous on-road testing and offers state-of-the-art safety features with lower total cost of ownership is win-win for drivers and for our business,” Paul Melander, FedEx’s Senior Vice President of Safety and Transportation, said."
+    },
+    {
+      "id": "check-page-08e690a9db",
+      "url": "https://www.technexus.com/fedex-thor-lead-160m-series-c-investment-in-harbinger/",
+      "page": "terms",
+      "excerpt": "TechNexus is the longest-operating venture collaborative in the United States, founded in 2007 by Terry Howerton and Fred Hoch."
+    },
+    {
       "id": "check-page-5ca75bbd94",
       "url": "https://www.technexus.com/investing-with-speed-powered-by-collaboration-announcing-our-investment-in-c360/",
       "page": "terms",
@@ -331,10 +606,82 @@
       "excerpt": "TechNexus Terms & Conditions Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch Legal Terms & Conditions Effective Date: April 24, 2023 · Last Updated: April 23, 2026 · For a plain-English summary, see SEC Disclosures By accessing and using this website (\"Site\"), you agree to be bound by these Terms and Conditions (\"Terms\"). If you do not agree with any part of these Terms, you should not access the Site. TechNexus LLC and its affiliates (\"TechNexus,\" \"we,\" \"us,\" or \"our\") is an Exempt Reporting Adviser (ERA) that files Form ADV with the U.S. Securities and Exchange Commission under Section 203(l) of the Investment Advisers Act of 1940, and is not a registered investment adviser. The Site provides educational and informational content only, not investment advice. All investments carry risk of loss, and past results do not guarantee future performance. 1. About TechNexus and Website Purpose TechNexus LLC operates as an exempt reporting adviser (ERA) under Section 203(l) of the Investment Advisers Act of 1940. TechNexus is a venture collaborative that builds innovation ecosystems connecting leading corporations with ambitious early-stage companies through co-investment, operational support, and partnership infrastructure. This Site serves informational and educational purposes exclusively. The content on this Site is intended to"
     },
     {
+      "id": "check-page-c7f51b3892",
+      "url": "https://www.technexus.com/terms/",
+      "page": "terms",
+      "excerpt": "Wacker Drive, Suite 1200, Chicago, IL 60606."
+    },
+    {
+      "id": "check-page-de3919f570",
+      "url": "https://www.technexus.com/terms/",
+      "page": "terms",
+      "excerpt": "Wacker Drive, Suite 1200 Chicago, IL 60606 Email: [email protected] TechNexus Venture Collaborative was founded in Chicago in 2007 by Terry Howerton and Fred Hoch, making it the longest-operating venture collaborative in the United States."
+    },
+    {
+      "id": "check-page-71dc379f0f",
+      "url": "https://www.technexus.com/terms/",
+      "page": "terms",
+      "excerpt": "The firm builds innovation ecosystems that connect Fortune 1000 corporations with ambitious early-stage companies through co-investment, operational support, and partnership infrastructure."
+    },
+    {
+      "id": "check-page-d7dc75a377",
+      "url": "https://www.technexus.com/terms/",
+      "page": "terms",
+      "excerpt": "TechNexus has invested in more than 150 portfolio companies across AI, clean technology, electrification, mobility, audio technology, outdoor recreation, and industrial technology, with portfolio companies raising over $4 billion in follow-on capital."
+    },
+    {
+      "id": "check-page-c8fdb49102",
+      "url": "https://www.technexus.com/terms/",
+      "page": "terms",
+      "excerpt": "The TechNexus ecosystem includes SecondWave (venture turnarounds), ForgeX (deep technology commercialization), Pulse Investment Network (accredited investor platform), TechNexus Connect (thought leadership), and TeamWorking (innovation-focused coworking)."
+    },
+    {
+      "id": "check-page-1ad28e026e",
+      "url": "https://www.technexus.com/terms/",
+      "page": "terms",
+      "excerpt": "Wacker Drive in Chicago, Illinois."
+    },
+    {
       "id": "check-page-45e387575d",
       "url": "https://www.technexus.com/the-most-expensive-decision-in-cvc-isn-t-a-bad-investment-it-s-inaction/",
       "page": "terms",
       "excerpt": "The Most Expensive Decision in CVC Isn't a Bad Investment. It's Inaction. — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… The Most Expensive Decision in CVC Isn't a Bad Investment. It's Inaction. The hidden cost of passive portfolio management — and why inaction is never neutral. There is a persistent myth in corporate venturing that if you \"pause\" investing, you are not taking on more risk, and simply holding steady. That doing nothing with a portfolio that no longer has internal champions, an active investment mandate, or dedicated management bandwidth is a conservative, low-risk position. It is not. It is one of the most reliably destructive choices an organization can make with a venture portfolio — and unlike a bad investment decision, it happens in slow motion, without a single moment you can point to as the mistake. We call it the “do nothing” tax. And it compounds. What Passive Holding Actually Costs When a venture portfolio goes unmanaged, the costs are wide ranging: fair market valuations go stale, complicating any eventual exit; capital dilution accumulates as new funding rounds close without the corporate investor exercising pro-rata rights; board seats sit vacant or are staffed by people without the mandate or knowledge to add value. Additional consequences of an unmanaged"
+    },
+    {
+      "id": "check-page-b9cd34242f",
+      "url": "https://www.technexus.com/the-most-expensive-decision-in-cvc-isn-t-a-bad-investment-it-s-inaction/",
+      "page": "terms",
+      "excerpt": "An initial position built at an attractive early-stage valuation gets eroded with each round until the corporate investor holds a fraction of what they originally negotiated."
+    },
+    {
+      "id": "check-page-b94f553a59",
+      "url": "https://www.technexus.com/the-most-expensive-decision-in-cvc-isn-t-a-bad-investment-it-s-inaction/",
+      "page": "terms",
+      "excerpt": "The solution doesn’t always require a total rewiring of a corporate venture fund’s resources."
+    },
+    {
+      "id": "check-page-e42e2e969c",
+      "url": "https://www.technexus.com/the-most-expensive-decision-in-cvc-isn-t-a-bad-investment-it-s-inaction/",
+      "page": "terms",
+      "excerpt": "Visit technexus.com/secondwave for a trusted partner in corporate venturing."
+    },
+    {
+      "id": "check-page-6980499777",
+      "url": "https://www.technexus.com/the-most-expensive-decision-in-cvc-isn-t-a-bad-investment-it-s-inaction/",
+      "page": "terms",
+      "excerpt": "By Ellie Schweska at TechNexus Venture Collaborative More from TechNexus This article is published by TechNexus Venture Collaborative, the longest-operating venture collaborative in the United States."
+    },
+    {
+      "id": "check-page-847e1fda60",
+      "url": "https://www.technexus.com/the-most-expensive-decision-in-cvc-isn-t-a-bad-investment-it-s-inaction/",
+      "page": "terms",
+      "excerpt": "Founded in 2007 by Terry Howerton and Fred Hoch, TechNexus builds innovation ecosystems connecting Fortune 1000 corporations with ambitious early-stage companies through co-investment, operational support, and partnership infrastructure."
+    },
+    {
+      "id": "check-page-9fe342f855",
+      "url": "https://www.technexus.com/the-most-expensive-decision-in-cvc-isn-t-a-bad-investment-it-s-inaction/",
+      "page": "terms",
+      "excerpt": "The firm has invested in more than 150 portfolio companies across AI, clean technology, electrification, mobility, audio technology, outdoor recreation, and industrial technology."
     },
     {
       "id": "check-page-e396e272f6",
@@ -343,10 +690,82 @@
       "excerpt": "The Silent Deal Killer: Why Enterprise Sales Stalls Beyond the Champion — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… The Silent Deal Killer: Why Enterprise Sales Stalls Beyond the Champion How to win enterprise deals by building relationships across every department that matters. Most sales organizations still measure deal health by one signal: does the champion like us? That signal was never wrong, exactly, it was just never sufficient. A champion can want you to win and still lose you the deal. Not through ill intentions, but through math. One person doesn’t have the authority, the calendar, or the political capital to carry a purchase through legal, security, finance, and whichever executive actually owns the budget line. If your sales organization is still staffed and trained to win over one person, you are optimized for a sale that stopped existing. The View From Inside Corporates TechNexus sits closer to this problem than most. We work with startups trying to close six- and seven-figure contracts with large corporations, and we work with the corporate partners on the other side of that table deciding next steps. From our vantage point, the pattern holds regardless of industry: the companies that break into large corporate accounts are not the ones with the strongest single"
     },
     {
+      "id": "check-page-4166cfc6b7",
+      "url": "https://www.technexus.com/the-silent-deal-killer-why-enterprise-sales-stalls-beyond-the-champion/",
+      "page": "terms",
+      "excerpt": "Metrics Nobody Tracks Ask a VP of Sales how many stakeholders were actually engaged on their last ten enterprise losses, and most can’t answer."
+    },
+    {
+      "id": "check-page-001c56aacb",
+      "url": "https://www.technexus.com/the-silent-deal-killer-why-enterprise-sales-stalls-beyond-the-champion/",
+      "page": "terms",
+      "excerpt": "For an early-stage company, that quiet failure is harder to absorb, not easier."
+    },
+    {
+      "id": "check-page-58a1802c8d",
+      "url": "https://www.technexus.com/the-silent-deal-killer-why-enterprise-sales-stalls-beyond-the-champion/",
+      "page": "terms",
+      "excerpt": "A single enterprise logo can be the difference between a strong quarter and a stalled one, and a founder juggling other things rarely has the distance to see that the deal died in a department they never spoke to."
+    },
+    {
+      "id": "check-page-c2bbcc7816",
+      "url": "https://www.technexus.com/the-silent-deal-killer-why-enterprise-sales-stalls-beyond-the-champion/",
+      "page": "terms",
+      "excerpt": "By Kayla Dusing at TechNexus Venture Collaborative More from TechNexus This article is published by TechNexus Venture Collaborative, the longest-operating venture collaborative in the United States."
+    },
+    {
+      "id": "check-page-2f5d1d3b5d",
+      "url": "https://www.technexus.com/the-silent-deal-killer-why-enterprise-sales-stalls-beyond-the-champion/",
+      "page": "terms",
+      "excerpt": "Founded in 2007 by Terry Howerton and Fred Hoch, TechNexus builds innovation ecosystems connecting Fortune 1000 corporations with ambitious early-stage companies through co-investment, operational support, and partnership infrastructure."
+    },
+    {
+      "id": "check-page-9a05044913",
+      "url": "https://www.technexus.com/the-silent-deal-killer-why-enterprise-sales-stalls-beyond-the-champion/",
+      "page": "terms",
+      "excerpt": "The firm has invested in more than 150 portfolio companies across AI, clean technology, electrification, mobility, audio technology, outdoor recreation, and industrial technology."
+    },
+    {
       "id": "check-page-18eecf53fb",
       "url": "https://www.technexus.com/with-new-355m-investment-first-due-is-revolutionizing-public-safety-with-ai-powered-tools/",
       "page": "terms",
       "excerpt": "With new $355M investment, First Due is revolutionizing public safety with AI-powered tools — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… With new $355M investment, First Due is revolutionizing public safety with AI-powered tools Fire and EMS agencies have been weighed down for decades by outdated processes and fragmented technology. A new $355M investment in TechNexus portfolio company First Due is powering AI-driven tools that unify the essential functions emergency crews depend on — in a profession where every second counts. Emergency response crews are in desperate need of innovation. For decades, the essential work of fire and EMS personnel have been weighed down by outdated processes and disjointed technology. What should be seamless, core operational functions have too often turned into time-consuming burdens. In a profession where every second counts, agencies continue to wrestle with fragmented systems that fail to work together. Leaders and responders are left juggling data across silos, spending valuable time on administration instead of decision-making and service. The result is a constant drag on efficiency that weakens focus where it matters most — protecting the community. To solve these pain points, TechNexus Venture Collaborative portfolio company First Due has built an"
+    },
+    {
+      "id": "check-page-ba1b782fba",
+      "url": "https://www.technexus.com/with-new-355m-investment-first-due-is-revolutionizing-public-safety-with-ai-powered-tools/",
+      "page": "terms",
+      "excerpt": "The new capital, a strategic minority growth investment from JMI Equity, TCV and Serent Capital, will be used to accelerate platform development and roll out new AI tools that help make departments even more efficient."
+    },
+    {
+      "id": "check-page-1fe3694927",
+      "url": "https://www.technexus.com/with-new-355m-investment-first-due-is-revolutionizing-public-safety-with-ai-powered-tools/",
+      "page": "terms",
+      "excerpt": "Partnering with JMI and TCV lets us take that mission further and make an even bigger impact.” First Due now works with more than 3,000 agencies across the United States and Canada."
+    },
+    {
+      "id": "check-page-e4d9335614",
+      "url": "https://www.technexus.com/with-new-355m-investment-first-due-is-revolutionizing-public-safety-with-ai-powered-tools/",
+      "page": "terms",
+      "excerpt": "First Due is redefining public safety technology by leading at the bleeding edge of AI — powering incident documentation, Scheduling Automation, QA/QI for EMS records, natural language report generation, and AI-driven onboarding and support in a single unified platform."
+    },
+    {
+      "id": "check-page-fd44850eb0",
+      "url": "https://www.technexus.com/with-new-355m-investment-first-due-is-revolutionizing-public-safety-with-ai-powered-tools/",
+      "page": "terms",
+      "excerpt": "“AI isn’t just another add-on — it’s a chance to give first responders and their leaders new, practical ways to work smarter and safer,” Huber said."
+    },
+    {
+      "id": "check-page-f300ce3d32",
+      "url": "https://www.technexus.com/with-new-355m-investment-first-due-is-revolutionizing-public-safety-with-ai-powered-tools/",
+      "page": "terms",
+      "excerpt": "TechNexus invests across Public Safety, B2B Software through its venture ecosystem model."
+    },
+    {
+      "id": "check-page-da86b8e0e3",
+      "url": "https://www.technexus.com/with-new-355m-investment-first-due-is-revolutionizing-public-safety-with-ai-powered-tools/",
+      "page": "terms",
+      "excerpt": "TechNexus is the longest-operating venture collaborative in the United States, founded in 2007 by Terry Howerton and Fred Hoch."
     },
     {
       "id": "check-page-cc78bb0c4d",
@@ -361,10 +780,142 @@
       "excerpt": "About TechNexus — Chicago's Venture Collaborative Since 2007 Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch About TechNexus Connecting corporations and entrepreneurs to drive growth. TechNexus pioneered the venture collaborative model in 2007 — the first-of-its-kind structure pairing corporate capital with startup execution at scale, and the longest-operating venture collaborative in the United States. We help leading corporations and ambitious entrepreneurs develop mutually beneficial relationships that accelerate growth opportunities by investing capital, incubating ventures, and collaborating across our ecosystem to create new business models, revenue streams, and products. 01 Entrepreneurs We attract bold problem-solvers who challenge conventional thinking and explore possibilities through calculated risk-taking. 02 Perspective Bringing together people with different experiences, backgrounds, and ideas is crucial to driving innovation. 03 Impactful Execution We are force multipliers supporting creators committed to action-based solutions addressing genuine market needs. 04 Community We build Chicago's technology ecosystem while fostering global partnerships — because future growth depends on interconnected business ecosystems. Our Team Dynamic, driven individuals Our Track Record Built to last. Built to deliver. Corporate"
     },
     {
+      "id": "check-page-f9c59387ea",
+      "url": "https://www.technexus.com/about/",
+      "page": "details",
+      "excerpt": "Corporate innovation is littered with firms that promised transformation and disappeared."
+    },
+    {
+      "id": "check-page-4bb6abf883",
+      "url": "https://www.technexus.com/about/",
+      "page": "details",
+      "excerpt": "We have been mentoring, building and funding ventures since 2007."
+    },
+    {
+      "id": "check-page-e891bea7ac",
+      "url": "https://www.technexus.com/about/",
+      "page": "details",
+      "excerpt": "Dozens Fortune 500 and major corporate partners What We Believe Built for builders."
+    },
+    {
+      "id": "check-page-5feffd5d26",
+      "url": "https://www.technexus.com/about/",
+      "page": "details",
+      "excerpt": "We have been mentoring, building and funding ventures since 2007, operating at the intersection of corporate innovation and startup ambition longer than any other venture collaborative in the country."
+    },
+    {
+      "id": "check-page-aa61aed609",
+      "url": "https://www.technexus.com/about/",
+      "page": "details",
+      "excerpt": "The best outcomes happen when the scale of enterprise meets the urgency of a founding team."
+    },
+    {
+      "id": "check-page-0a2be0f8b8",
+      "url": "https://www.technexus.com/about/",
+      "page": "details",
+      "excerpt": "Get in Touch TechNexus Venture Collaborative was founded in Chicago in 2007 by Terry Howerton and Fred Hoch, making it the longest-operating venture collaborative in the United States."
+    },
+    {
+      "id": "check-page-0d761aa591",
+      "url": "https://www.technexus.com/about/",
+      "page": "details",
+      "excerpt": "The firm builds innovation ecosystems that connect Fortune 1000 corporations with ambitious early-stage companies through co-investment, operational support, and partnership infrastructure."
+    },
+    {
+      "id": "check-page-53f2a14d0f",
+      "url": "https://www.technexus.com/about/",
+      "page": "details",
+      "excerpt": "TechNexus has invested in more than 150 portfolio companies across AI, clean technology, electrification, mobility, audio technology, outdoor recreation, and industrial technology, with portfolio companies raising over $4 billion in follow-on capital."
+    },
+    {
+      "id": "check-page-b1c37864fc",
+      "url": "https://www.technexus.com/about/",
+      "page": "details",
+      "excerpt": "The TechNexus ecosystem includes SecondWave (venture turnarounds), ForgeX (deep technology commercialization), Pulse Investment Network (accredited investor platform), TechNexus Connect (thought leadership), and TeamWorking (innovation-focused coworking)."
+    },
+    {
+      "id": "check-page-092457cc96",
+      "url": "https://www.technexus.com/about/",
+      "page": "details",
+      "excerpt": "Wacker Drive in Chicago, Illinois."
+    },
+    {
       "id": "check-page-30f894f426",
       "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
       "page": "details",
       "excerpt": "Haven Energy launches free solar and battery program for underserved California communities — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… Haven Energy launches free solar and battery program for underserved California communities Climate tech company Haven Energy is leveraging California's $280M Self-Generation Incentive Program to provide free home solar and battery systems to low and moderate income homeowners. The initiative aims to eliminate financial barriers to clean energy for communities that need it most. Haven Energy , a climate tech company focused on expanding access to renewable energy, announced a new initiative to provide free home solar and battery systems to low and moderate income homeowners in California. The program aims to eliminate financial barriers to clean energy by leveraging California’s $280 million Self-Generation Incentive Program Residential Solar & Storage Equity (SGIP RSSE) fund. Under the new initiative, Haven, a TechNexus Venture Collaborative portfolio company, will cover all costs associated with the purchase and installation of solar panels and home battery systems. The company will own the equipment and collect state rebates, tax credits, and demand response revenues, while homeowners benefit from lower monthly electric bills and backup power during"
+    },
+    {
+      "id": "check-page-8fb3adbb1e",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "page": "details",
+      "excerpt": "This approach addresses the significant upfront costs—averaging over $20,000 in 2025—that often deter homeowners from investing in renewable energy solutions."
+    },
+    {
+      "id": "check-page-cfde2d2fe4",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "page": "details",
+      "excerpt": "“Many homeowners simply don’t have the resources to cover the purchase and installation costs of the systems,” co-founder and CEO of Haven Energy Vinnie Campo (pictured, right) said in a statement."
+    },
+    {
+      "id": "check-page-df964b3ccf",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "page": "details",
+      "excerpt": "Participants in the program will be enrolled in a ten-year demand response (DR) program, allowing the state and utility companies to utilize stored energy during peak demand periods."
+    },
+    {
+      "id": "check-page-c354e0aec3",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "page": "details",
+      "excerpt": "The strategy not only stabilizes the grid but also contributes to lower energy prices statewide."
+    },
+    {
+      "id": "check-page-a7b528ca77",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "page": "details",
+      "excerpt": "“Rather than sending surplus electricity to the grid automatically, we strategically work with our customers to time battery-charging and discharging,” co-founder and CPO of Haven Energy Jeff Chapin (pictured, left) said in a statement."
+    },
+    {
+      "id": "check-page-7117c8281e",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "page": "details",
+      "excerpt": "Additionally, to maximize the program’s reach and impact, Haven Energy is collaborating with organizations such as The Energy Coalition (TEC) and the Clean Power Alliance (CPA) ."
+    },
+    {
+      "id": "check-page-11e8699cf8",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "page": "details",
+      "excerpt": "The partnerships will help Haven to identify qualifying households, streamline installations, and scale access to free solar and battery systems across underserved communities."
+    },
+    {
+      "id": "check-page-e5c225ed47",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "page": "details",
+      "excerpt": "Haven estimates that the SGIP RSSE program’s funding could support solar and battery installations for 8,000-10,000 qualifying California households."
+    },
+    {
+      "id": "check-page-c80bca2195",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "page": "details",
+      "excerpt": "By Jim Dallke at TechNexus Venture Collaborative Related Reading NanoGraf named one of the top greentech companies in the world by TIME The Energy Storage Solution for Homeowners Electrification: It’s not if, it’s when."
+    },
+    {
+      "id": "check-page-1b37e6b8ee",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "page": "details",
+      "excerpt": "Mapping Chicago's early-stage clean energy and sustainability startups Innovation at full charge: These startups are building a cleaner, more resilient future More from TechNexus This article features Haven Energy, a TechNexus portfolio company."
+    },
+    {
+      "id": "check-page-2c6f5dd7a5",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "page": "details",
+      "excerpt": "TechNexus invests across Clean Tech through its venture ecosystem model."
+    },
+    {
+      "id": "check-page-b2c35e8792",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "page": "details",
+      "excerpt": "TechNexus is the longest-operating venture collaborative in the United States, founded in 2007 by Terry Howerton and Fred Hoch."
     },
     {
       "id": "check-page-ca73dfd067",
@@ -373,16 +924,442 @@
       "excerpt": "Kayla Dusing hired by TechNexus Venture Collaborative as Venture Program Manager — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… Kayla Dusing hired by TechNexus Venture Collaborative as Venture Program Manager Kayla Dusing joins TechNexus as Venture Program Manager, working at the intersection of portfolio operations and strategic partnerships. Her role spans supporting startups, collaborating with corporate partners, and streamlining the operational backbone that connects the TechNexus ecosystem. TechNexus Venture Collaborative is excited to welcome Kayla Dusing to the role of Venture Program Manager, where she’ll work alongside our Venture Operations and Collaboration teams to support TechNexus portfolio companies. Dusing’s work is at the intersection of portfolio operations and strategic partnerships. Her duties include supporting startups, collaborating with corporate partners, and strengthening connections across TechNexus’s broader venture ecosystem, which includes more than 150 portfolio companies. The hire signals TechNexus’s continued commitment to supporting startups well beyond an initial investment. Our corporate joint venture model has allowed TechNexus to connect startups to large corporations, providing meaningful partnerships, pilot programs, and new revenue streams for our"
     },
     {
+      "id": "check-page-dd7e649099",
+      "url": "https://www.technexus.com/kayla-dusing-hired-by-technexus-venture-collaborative-as-venture-program-manager/",
+      "page": "details",
+      "excerpt": "“Our mission is to maximize value for our portfolio and corporate partners."
+    },
+    {
+      "id": "check-page-c623ef7390",
+      "url": "https://www.technexus.com/kayla-dusing-hired-by-technexus-venture-collaborative-as-venture-program-manager/",
+      "page": "details",
+      "excerpt": "TechNexus is the longest-operating venture collaborative in the United States, founded in 2007 by Terry Howerton and Fred Hoch."
+    },
+    {
       "id": "check-page-2f280132d6",
       "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
       "page": "details",
       "excerpt": "TechNexus Venture Collaborative Joins ISTC & World Business Chicago's Venture Engine Program as Innovation Partner — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… TechNexus Venture Collaborative Joins ISTC & World Business Chicago's Venture Engine Program as Innovation Partner TechNexus joined the Venture Engine program — powered by Illinois Science and Technology Coalition and World Business Chicago — as a sponsor and innovation partner. The program connects Illinois' most promising startups to the state's most innovative corporations. TechNexus Venture Collaborative has joined the Venture Engine program as a sponsor and innovation partner. Powered by Illinois Science and Technology Coalition (ISTC) and World Business Chicago (WBC) , Venture Engine connects Illinois' most promising startups to the state's most innovative, industry-leading corporations. As an innovation partner, TechNexus will leverage its experience, expertise, and network to help the program source startups, assist with innovation events, engage with members, and provide additional guidance for those new to navigating corporate-startup relationships. “Illinois has a vibrant startup ecosystem ready to be leveraged by forward-thinking corporations and TechNexus Venture Collaborative has been a leader in doing this work for"
     },
     {
+      "id": "check-page-51e4692f44",
+      "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
+      "page": "details",
+      "excerpt": "For startups, the program creates unique opportunities to engage with corporate partners as customers, investors, collaborators, to explore pilot or proof-of-concept, and more."
+    },
+    {
+      "id": "check-page-6c27097d4f",
+      "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
+      "page": "details",
+      "excerpt": "About ISTC The Illinois Science & Technology Coalition is a non-profit organization dedicated to expanding economic opportunity in the state through support for science, technology, innovation, entrepreneurship, and STEM education."
+    },
+    {
+      "id": "check-page-ffda8d6927",
+      "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
+      "page": "details",
+      "excerpt": "Its members include universities, corporations, federal labs, non-profits, and innovation partners from across the state and has a 30+ year history of impact through programming, data, education, policy, and advocacy."
+    },
+    {
+      "id": "check-page-000e4a145e",
+      "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
+      "page": "details",
+      "excerpt": "For more information, visit www.istcoalition.org About WBC World Business Chicago is a public-private, non-profit partnership that drives inclusive economic growth and job creation, supports business, and promotes Chicago as a leading global city."
+    },
+    {
+      "id": "check-page-8c194c2231",
+      "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
+      "page": "details",
+      "excerpt": "With the support of its council of 200+ local leaders, WBC's innovative & venture portfolio of programs drives inclusive growth and opportunity for Chicago's tech economy and innovation ecosystem."
+    },
+    {
+      "id": "check-page-e46994555a",
+      "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
+      "page": "details",
+      "excerpt": "Their flagship programs include the Chicago Venture Summit, Startup Chicago, ThinkChicago, and Venture Engine."
+    },
+    {
+      "id": "check-page-ef31f842d6",
+      "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
+      "page": "details",
+      "excerpt": "Calling all corporate leaders: An effective venture ecosystem is possible to realize tangible growth Zero to Win in 24 Months TechNexus Venture Collaborative announces the launch of TeamWorking - the Future of Work (via EIN) More from TechNexus This article is published by TechNexus Venture Collaborative as a resource for corporate venturing leaders."
+    },
+    {
+      "id": "check-page-1d75fd6248",
+      "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
+      "page": "details",
+      "excerpt": "TechNexus invests across B2B Software through its venture ecosystem model."
+    },
+    {
+      "id": "check-page-1615429b50",
+      "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
+      "page": "details",
+      "excerpt": "TechNexus is the longest-operating venture collaborative in the United States, founded in 2007 by Terry Howerton and Fred Hoch."
+    },
+    {
       "id": "check-page-00656da502",
       "url": "https://www.technexus.com/technexus-venture-collaborative-joins-istc-world-business-chicagos-venture-engine-program-as-innovation-partner/",
       "page": "details",
       "excerpt": "Power of Collaborative Disruption | Fireside Chat w/TechNexus founders Fred Hoch & Terry Howerton — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… Power of Collaborative Disruption | Fireside Chat w/TechNexus founders Fred Hoch & Terry Howerton TechNexus founders Fred Hoch and Terry Howerton took the stage together for the first time at the 2021 Chicago Venture Summit. The fireside chat revealed the secrets of successful industry-venture partnerships and their vision for Chicago as a hub for corporate-startup matchmaking. TechNexus founders Fred Hoch and Terry Howerton sat down with Alya Woods ( Cooley LLP ) during the 2021 Chicago Venture Summit to dive into the secrets of successful industry-venture partnerships and the future of Chicago as a hub for corporate-startup matchmaking magic. For the first time live on stage together, Fred & Terry discuss Chicago tech's ecosystem evolution over the past 20+ years and how this continued momentum will incite and inspire industry innovation for the next 20...30...50+ years! TechNexus Venture Collaborative helps leading corporations and entrepreneurs partner with each other to grow revenue, create new business models, and increase market share by discovering previously unseen threats, creating valuable partnerships, or taking advantage of"
+    },
+    {
+      "id": "check-page-70b74d6295",
+      "url": "https://www.technexus.com/technexus-venture-collaborative-joins-istc-world-business-chicagos-venture-engine-program-as-innovation-partner/",
+      "page": "details",
+      "excerpt": "TechNexus invests across B2B Software through its venture ecosystem model."
+    },
+    {
+      "id": "check-page-826da526a1",
+      "url": "https://www.technexus.com/technexus-venture-collaborative-joins-istc-world-business-chicagos-venture-engine-program-as-innovation-partner/",
+      "page": "details",
+      "excerpt": "TechNexus is the longest-operating venture collaborative in the United States, founded in 2007 by Terry Howerton and Fred Hoch."
+    },
+    {
+      "id": "check-page-64e53b4cd8",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "page": "details",
+      "excerpt": "The AI Imperative in MRO: Why Generative AI Changes Everything—and What To Do About It — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… The AI Imperative in MRO: Why Generative AI Changes Everything—and What To Do About It Only a few MRO operators have built durable competitive advantage from AI. Closing that gap requires moving from cautious pilots to a deliberate, ecosystem-led architecture. For more than a decade, the MRO industry has understood, in principle, the transformative potential of technology to improve operations: technician co-pilots that democratize expert knowledge, predictive systems that eliminate unplanned downtime, autonomous procurement agents that optimize supply chains in real time. The aspiration was never the problem. The technology was. Until now. The emergence of generative AI has fundamentally changed what is technically possible—and, crucially, what is commercially available today. A new generation of AI-native ventures has built production-ready solutions that directly address MRO’s most pressing operational challenges. These are not research projects or extended development programs. They are deployable products, proven in analogous environments, ready to deliver results within months. The companies that recognize this shift—and adapt their AI playbook"
+    },
+    {
+      "id": "check-page-f254c58c5a",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "page": "details",
+      "excerpt": "The companies that recognize this shift—and adapt their AI playbook accordingly—will build durable operational and competitive advantages."
+    },
+    {
+      "id": "check-page-1af888ea54",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "page": "details",
+      "excerpt": "The Conventional Approach is Limiting Most MRO organizations have approached AI the way most enterprises have: cautiously, incrementally, largely focused on back-office activities, and anchored to what their existing software partners—Microsoft, SAP, Salesforce—can already deliver."
+    },
+    {
+      "id": "check-page-c88d93ae46",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "page": "details",
+      "excerpt": "Finance teams are using AI for invoice processing."
+    },
+    {
+      "id": "check-page-3904d47ed4",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "page": "details",
+      "excerpt": "The results are real but modest, and the pattern reveals a costly blind spot: the largest pools of value lie upstream, in the hangars, on the flight line, and across the supply chain."
+    },
+    {
+      "id": "check-page-2c658cc32e",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "page": "details",
+      "excerpt": "The global commercial aerospace MRO market exceeds $84 billion and is growing at more than 5% annually."
+    },
+    {
+      "id": "check-page-dfc37d0db3",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "page": "details",
+      "excerpt": "Supply chain disruptions routinely delay aircraft-on-ground (AOG) resolution from hours to days."
+    },
+    {
+      "id": "check-page-e6dba03695",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "page": "details",
+      "excerpt": "They are operational crises—and they are precisely the terrain where AI creates its greatest leverage."
+    },
+    {
+      "id": "check-page-6687684670",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "page": "details",
+      "excerpt": "Back-office AI may trim 5–10% of overhead."
+    },
+    {
+      "id": "check-page-cc42843fa7",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "page": "details",
+      "excerpt": "Operations-focused AI can compress turnaround times, extend effective workforce capacity, reduce cost of quality, and directly protect revenue."
+    },
+    {
+      "id": "check-page-e058c967f2",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "page": "details",
+      "excerpt": "For MRO operators competing on speed, reliability, and price, the difference between these two bets is not incremental—it is strategic What Generative AI Changes The use cases are not new."
+    },
+    {
+      "id": "check-page-896ee039d3",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "page": "details",
+      "excerpt": "Earlier generations of AI—rule-based systems, narrow machine-learning classifiers, computer vision models—could solve pieces of these problems but could not work with the messy, unstructured, multi-modal reality of a maintenance hangar."
+    },
+    {
+      "id": "check-page-36c41e9df2",
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "page": "details",
+      "excerpt": "Generative AI changes that."
+    },
+    {
+      "id": "check-page-c7bd9d3a74",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-building-an-innovation-ecosystem/",
+      "page": "details",
+      "excerpt": "What corporations need to know about building an innovation ecosystem — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… What corporations need to know about building an innovation ecosystem TechNexus was founded on the principle of ecosystem building — creating support systems that connect entrepreneurs, investors, and corporations in ways that generate real value. This guide shows corporate leaders how to build their own innovation ecosystem rather than just watching from the sidelines. In this series, TechNexus outlines ways corporations can stay innovative, defend against disruption, and better connect with startups. At TechNexus, we talk a lot about building ecosystems. In fact, TechNexus originally began to create an ecosystem, or rather a support system for early stage technology founders that wanted to connect to others going through the same process. Now, we specialize in creating technology ecosystems around our corporate partners, leading Fortune 500 companies that want to invest in and collaborate with early stage startups. We believe that all corporations should build an innovation ecosystem. What is an ecosystem? Humor me for a minute, and think back to your high school science class. Your biology teacher likely spent an entire class talking about ecosystems, describing them as"
+    },
+    {
+      "id": "check-page-cdbaf55792",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-building-an-innovation-ecosystem/",
+      "page": "details",
+      "excerpt": "A healthy ecosystem can be described as “balanced,” where energy and nutrients flow, and various species contribute to the stability and growth of the ecosystem."
+    },
+    {
+      "id": "check-page-32d45d7505",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-building-an-innovation-ecosystem/",
+      "page": "details",
+      "excerpt": "Through this partnership, we have spent the last few years building an innovation ecosystem around Thor, focusing on mobility, electrification, and outdoor recreation."
+    },
+    {
+      "id": "check-page-3c32ff247e",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-building-an-innovation-ecosystem/",
+      "page": "details",
+      "excerpt": "Investments in companies like Harbinger , Lightship , Haven Energy , AmpUp , and BlueDot contribute to the balance in this ecosystem."
+    },
+    {
+      "id": "check-page-4c92553f19",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-building-an-innovation-ecosystem/",
+      "page": "details",
+      "excerpt": "Each year, TechNexus hosts a week of “Power Sessions” with our corporate partners, where we gather top corporate executives and the C-Suite of relevant startups in our ecosystem."
+    },
+    {
+      "id": "check-page-63eaf835d5",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-building-an-innovation-ecosystem/",
+      "page": "details",
+      "excerpt": "That is true of pre-seed stage startups and billion-dollar corporations."
+    },
+    {
+      "id": "check-page-caf6000e04",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-building-an-innovation-ecosystem/",
+      "page": "details",
+      "excerpt": "Building relationships with a diverse group of stakeholders—entrepreneurs, investors, academics, and professionals—will expand your network and foster collaboration."
+    },
+    {
+      "id": "check-page-ab1d31ebb6",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-building-an-innovation-ecosystem/",
+      "page": "details",
+      "excerpt": "TechNexus Venture Collaborative Joins ISTC & World Business Chicago's Venture Engine Program as Innovation Partner What corporations need to know about venture investing Zero to Win in 24 Months What corporations need to know about generative AI More from TechNexus This article is published by TechNexus Venture Collaborative as a resource for corporate venturing leaders."
+    },
+    {
+      "id": "check-page-f79f2515d9",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-building-an-innovation-ecosystem/",
+      "page": "details",
+      "excerpt": "TechNexus invests across B2B Software through its venture ecosystem model."
+    },
+    {
+      "id": "check-page-ef119c7501",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-building-an-innovation-ecosystem/",
+      "page": "details",
+      "excerpt": "TechNexus is the longest-operating venture collaborative in the United States, founded in 2007 by Terry Howerton and Fred Hoch."
+    },
+    {
+      "id": "check-page-2243f13e4b",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "page": "details",
+      "excerpt": "What corporations need to know about generative AI — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… What corporations need to know about generative AI AI is everywhere right now — but what does it actually mean for corporate strategy? This guide cuts through the hype to explain generative AI in practical terms: what it is, what it isn't, and how corporations should think about integrating it into their innovation roadmap. In this series, TechNexus outlines ways corporations can stay innovative, defend against disruption, and better connect with startups. Artificial Intelligence is all over the place right now. You can’t scan news headlines without seeing references to AI disrupting industries or someone using AI in a new and innovative way. But what exactly is AI? And what is generative AI? Most importantly, what do corporations need to know about how generative AI will impact their business? Read on for our second feature in our What Corporations Need To Know About series … this time, focused on Generative AI. What is Generative AI? Traditional artificial intelligence includes algorithms and models that analyze and classify existing data. Generative AI goes one step further, as it is designed to create (aka generate ) new content, whether that be text, images, audio, or even code based on"
+    },
+    {
+      "id": "check-page-b9e975bd45",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "page": "details",
+      "excerpt": "Generative AI goes one step further, as it is designed to create (aka generate ) new content, whether that be text, images, audio, or even code based on learned patterns."
+    },
+    {
+      "id": "check-page-61a4bbc113",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "page": "details",
+      "excerpt": "ChatGPT is currently the market leading and most well known GenAI tool; it was launched in June 2020 by OpenAI and immediately captured headlines based on its ability to quickly generate coherent and contextually relevant text."
+    },
+    {
+      "id": "check-page-1018200d5f",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "page": "details",
+      "excerpt": "GenAI models are trained on large datasets, including books, websites, and even user inputs for the technology to continuously improve its performance and output."
+    },
+    {
+      "id": "check-page-acad0cf3d6",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "page": "details",
+      "excerpt": "The use cases for GenAI are broad – from writing content and blog posts to creating a meal plan and grocery list, and even putting together a high level business strategy."
+    },
+    {
+      "id": "check-page-342aecc291",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "page": "details",
+      "excerpt": "What impact will GenAI have on corporations?"
+    },
+    {
+      "id": "check-page-d271858565",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "page": "details",
+      "excerpt": "With broad applicability, GenAI will undoubtedly have a big impact on how work is done within big corporations."
+    },
+    {
+      "id": "check-page-cf2b7e6b81",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "page": "details",
+      "excerpt": "Experts can point to several areas where GenAI is already disrupting corporations: enhanced content creation, product and service innovation, improved customer service, data analysis and decision making, and AI powered training and coaching."
+    },
+    {
+      "id": "check-page-123b4be79f",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "page": "details",
+      "excerpt": "Coca-Cola, for example , is using generative AI in its art and advertising, and it even hired a global head of generative AI to spearhead how the soda giant utilizes the new technology."
+    },
+    {
+      "id": "check-page-6f1a8e841a",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "page": "details",
+      "excerpt": "Product and service innovation : GenAI can play a big role in product development and service innovation."
+    },
+    {
+      "id": "check-page-f9114e463c",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "page": "details",
+      "excerpt": "By analyzing large amounts of data (including competitive analyses, market trends, and customer feedback), GenAI can suggest new product features or entirely new products, which can accelerate the innovation timeline and provide businesses with a competitive edge."
+    },
+    {
+      "id": "check-page-3c4a61c57a",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "page": "details",
+      "excerpt": "Toyota uses generative AI to help design new cars, using the technology to help account for factors like drag, handling and ergonomics."
+    },
+    {
+      "id": "check-page-680bbeb594",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "page": "details",
+      "excerpt": "More and more, corporations are also implementing AI capabilities into their own products; for example, Brunswick, a TechNexus partner, launched Boating Intelligence , an initiative to incorporate AI features into its products to deliver simpler, safer, smarter, and more sustainable boating."
+    },
+    {
+      "id": "check-page-434070ccf3",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-strategic-and-financial-venture-returns/",
+      "page": "details",
+      "excerpt": "What corporations need to know about strategic and financial venture returns — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… What corporations need to know about strategic and financial venture returns Beyond the strategic benefits, corporate venture investing can deliver measurable financial returns — but only if done with the right data-driven approach. This installment of the What Corporations Need to Know series digs into how to track and maximize both strategic and financial returns from venture portfolios. In our inaugural post in the What Corporations Need To Know series, I covered corporate venture capital – how common it is, why corporations should consider it, and how to develop an investment thesis and execute on it. In this post, let’s dig a bit deeper … What do corporations need to know about being data driven? Zooming out a bit, data is one of the main currencies of large businesses. Fortune 500 corporations generate more data in a day than they may know what to do with, and the most efficient corporations analyze data constantly in order to streamline operations, improve revenue, decrease costs, and optimize for employee retention. So when it comes to corporate venture capital, it should be no surprise, then, that one of the biggest questions we are asked is “How can we"
+    },
+    {
+      "id": "check-page-ea00819bcb",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-strategic-and-financial-venture-returns/",
+      "page": "details",
+      "excerpt": "So when it comes to corporate venture capital, it should be no surprise, then, that one of the biggest questions we are asked is “How can we measure success?” Corporations track metrics, OKRs, and KPIs across all business lines, and corporate venture capital and innovation need not be an exception."
+    },
+    {
+      "id": "check-page-371e2dc744",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-strategic-and-financial-venture-returns/",
+      "page": "details",
+      "excerpt": "In conversations with the C-Suite of prospective corporate partners, we address the question of measuring success with another question: “What do you want to achieve?” Corporations approach corporate venture capital for a variety of reasons, and each reason will have different results to measure."
+    },
+    {
+      "id": "check-page-cf17a8d4fb",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-strategic-and-financial-venture-returns/",
+      "page": "details",
+      "excerpt": "Strategic Rationale & Results Most corporations that invest in venture capital are doing it for some strategic reason – they want to be one step ahead of the innovation in their industry, and they recognize the need to invest in collaboration with early-stage companies."
+    },
+    {
+      "id": "check-page-4fa1fb590f",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-strategic-and-financial-venture-returns/",
+      "page": "details",
+      "excerpt": "Financial Rationale & Results Though strategic returns are certainly a consideration, most corporates who invest in venture capital are also cognizant of financial returns."
+    },
+    {
+      "id": "check-page-95207eb25a",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-strategic-and-financial-venture-returns/",
+      "page": "details",
+      "excerpt": "For traditional venture capital firms, the definition of success is the financial return on investment (ROI)."
+    },
+    {
+      "id": "check-page-cec48aa4cb",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-strategic-and-financial-venture-returns/",
+      "page": "details",
+      "excerpt": "If you are working to be more data-driven around your corporate venture capital efforts, or you’d like to learn more about the TechNexus approach, please reach out to Kaitlyn Doyle, VP at TechNexus."
+    },
+    {
+      "id": "check-page-3f9c7b98a5",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-strategic-and-financial-venture-returns/",
+      "page": "details",
+      "excerpt": "TechNexus invests across B2B Software through its venture ecosystem model."
+    },
+    {
+      "id": "check-page-21513dce0d",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-strategic-and-financial-venture-returns/",
+      "page": "details",
+      "excerpt": "TechNexus is the longest-operating venture collaborative in the United States, founded in 2007 by Terry Howerton and Fred Hoch."
+    },
+    {
+      "id": "check-page-f22f9ae2be",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "page": "details",
+      "excerpt": "What corporations need to know about sustainable mobility — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… What corporations need to know about sustainable mobility From fuel-efficient planes and bullet trains to electric vehicles and e-scooters, the mobility landscape is transforming faster than most corporations realize. This guide helps corporate leaders understand the strategic opportunities in sustainable mobility and how to engage with the startups driving the shift. In this series, TechNexus outlines ways corporations can stay innovative, defend against disruption, and better connect with startups. Planes, trains, and automobiles. Update that for 2024, and the new phrase might be fuel-efficient planes, bullet trains, electric vehicles, e-scooters, and e-bikes. Regardless of your mode of transportation, mobility is part of your everyday life. How to get from point A to point B is a decision each of us makes multiple times per day, often without even realizing it. TechNexus Venture Collaborative has been an active investor in the mobility space for the last several years, building on partnerships with corporations including Brunswick, Thor, and AAR. Through market research and conversations with thousands of founders and dozens of corporate executives, we learned that sustainable"
+    },
+    {
+      "id": "check-page-2fcdcf551e",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "page": "details",
+      "excerpt": "Through market research and conversations with thousands of founders and dozens of corporate executives, we learned that sustainable mobility is a crucial subset of the mobility space."
+    },
+    {
+      "id": "check-page-0e3cec1bdd",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "page": "details",
+      "excerpt": "Indeed, more and more, we talk with stakeholders about how all mobility needs to be sustainable."
+    },
+    {
+      "id": "check-page-58bb2de4d5",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "page": "details",
+      "excerpt": "So what do corporations need to know about sustainable mobility?"
+    },
+    {
+      "id": "check-page-760ee90466",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "page": "details",
+      "excerpt": "What do we mean by sustainable mobility?"
+    },
+    {
+      "id": "check-page-edac9d4e4f",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "page": "details",
+      "excerpt": "When TechNexus talks about sustainable mobility, we are referring to the industry sector focused on transportation solutions that aim to reduce environmental impact, improve efficiency, and promote social equity."
+    },
+    {
+      "id": "check-page-bd63b2a809",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "page": "details",
+      "excerpt": "It includes energy, electric vehicles (EVs), and charging infrastructure, and the market is undergoing rapid growth driven by regulatory changes, technological advancements, and significant investments."
+    },
+    {
+      "id": "check-page-761551ac75",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "page": "details",
+      "excerpt": "Governments are enforcing stricter emissions regulations and offering incentives for EV adoption, while the automotive industry shifts towards electric fleets with improved battery technology and alternative fuels."
+    },
+    {
+      "id": "check-page-55ad04692d",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "page": "details",
+      "excerpt": "Innovations in fast-charging networks and smart grids, including vehicle-to-grid (V2G) technology, are integrating EVs into the energy ecosystem and improving consumer convenience."
+    },
+    {
+      "id": "check-page-323a22e2b1",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "page": "details",
+      "excerpt": "Additionally, the emphasis on renewable energy sources for powering EVs and substantial investments in charging infrastructure by both governments and private entities are addressing adoption barriers."
+    },
+    {
+      "id": "check-page-a0d5ff10e8",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "page": "details",
+      "excerpt": "TechNexus, our corporate partners, and our portfolio companies care about this space because the trends collectively propel the market towards a more sustainable, efficient, and technologically advanced future."
+    },
+    {
+      "id": "check-page-2303c5f7f2",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "page": "details",
+      "excerpt": "What are the subsets of sustainable mobility?"
+    },
+    {
+      "id": "check-page-e80981ba8b",
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "page": "details",
+      "excerpt": "Energy The DOE's Grid Resilience and Innovation Partnerships (GRIP) Program aims to enhance grid resilience and reliability through $3.9 billion in strategic investments for innovative grid modernization projects."
     }
   ],
   "findings": {

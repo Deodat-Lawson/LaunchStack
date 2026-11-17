@@ -1,6 +1,6 @@
 {
   "programId": "villgro",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://villgro.org/",
     "https://villgro.org/apply-to-villgro/",
@@ -16,7 +16,12 @@
     "https://villgro.org/programs/edition-2-design-impact-awards/",
     "https://villgro.org/programs/empower-her-journey/",
     "https://villgro.org/programs/enabling-covid-resilience-an-accelerator-program-by-villgro-giz/",
-    "https://villgro.org/programs/enroute-a-mobility-as-a-service-challenge/"
+    "https://villgro.org/programs/enroute-a-mobility-as-a-service-challenge/",
+    "https://villgro.org/programs/fostering-innovation-sustainable-mobility-challenge/",
+    "https://villgro.org/programs/fpai-villgro-innovation-challenge/",
+    "https://villgro.org/programs/google-ai-for-agriculture/",
+    "https://villgro.org/programs/healthcare-accelerator-program-supported-by-ubs-optimus-foundation/",
+    "https://villgro.org/programs/immpact-program/"
   ],
   "evidence": [
     {
@@ -83,6 +88,13 @@
       "page": "details"
     },
     {
+      "id": "check-duration-3bae42b1ea",
+      "url": "https://villgro.org/programs/healthcare-accelerator-program-supported-by-ubs-optimus-foundation/",
+      "title": "Villgro — program page",
+      "excerpt": "partnerships and strong business advisory. 6 Months Apply Now End beneficiaries reached 0 Medical",
+      "page": "details"
+    },
+    {
       "id": "check-duration-3e5e5a7158",
       "url": "https://villgro.org/programs/",
       "title": "Villgro — program page",
@@ -101,6 +113,13 @@
       "url": "https://villgro.org/programs/",
       "title": "Villgro — program page",
       "excerpt": "Read more The Carbon Project 12 Months Read more 12 Months The Carbon Project Read more Healthcare",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-6b797d605a",
+      "url": "https://villgro.org/programs/healthcare-accelerator-program-supported-by-ubs-optimus-foundation/",
+      "title": "Villgro — program page",
+      "excerpt": "generated a cumulative revenue of INR 6.3Cr in 6 months. 1 0 0 Companies supported Onward Assist HRS",
       "page": "details"
     },
     {
@@ -146,6 +165,13 @@
       "page": "details"
     },
     {
+      "id": "check-duration-ea31ee3102",
+      "url": "https://villgro.org/programs/google-ai-for-agriculture/",
+      "title": "Villgro — program page",
+      "excerpt": "HUF joined hands to create AI for Agriculture, a 6-month pilot accelerator that developed and deployed",
+      "page": "details"
+    },
+    {
       "id": "check-format-0ea7291d69",
       "url": "https://villgro.org/programs/empower-her-journey/",
       "title": "Villgro — program page",
@@ -171,6 +197,13 @@
       "url": "https://villgro.org/programs/birac-bionest-in-partnership-with-msmf/",
       "title": "Villgro — program page",
       "excerpt": "ASVA WEARABLES → https://villgro.org/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-05d42a1722",
+      "url": "https://villgro.org/programs/fostering-innovation-sustainable-mobility-challenge/",
+      "title": "Villgro — program page",
+      "excerpt": "Portfolio → https://villgro.org/companies/",
       "page": "details"
     },
     {
@@ -272,10 +305,24 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-3ef14891a9",
+      "url": "https://villgro.org/programs/immpact-program/",
+      "title": "Villgro — program page",
+      "excerpt": "Portfolio → https://villgro.org/companies/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-3feb74e803",
       "url": "https://villgro.org/programs/climate-tech-incubator-fueling-innovation-for-a-greener-tomorrow/",
       "title": "Villgro — program page",
       "excerpt": "Our portfolio → https://villgro.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-418ff3402c",
+      "url": "https://villgro.org/programs/fpai-villgro-innovation-challenge/",
+      "title": "Villgro — program page",
+      "excerpt": "Portfolio → https://villgro.org/companies/",
       "page": "details"
     },
     {
@@ -295,6 +342,20 @@
     {
       "id": "check-portfolio-4c11755d33",
       "url": "https://villgro.org/programs/empower-her-journey/",
+      "title": "Villgro — program page",
+      "excerpt": "Our portfolio → https://villgro.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4d2728a000",
+      "url": "https://villgro.org/programs/fpai-villgro-innovation-challenge/",
+      "title": "Villgro — program page",
+      "excerpt": "Stand We Speak → https://villgro.org/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4ed65377a8",
+      "url": "https://villgro.org/programs/immpact-program/",
       "title": "Villgro — program page",
       "excerpt": "Our portfolio → https://villgro.org/companies/",
       "page": "details"
@@ -339,6 +400,20 @@
       "url": "https://villgro.org/programs/birac-bionest-in-partnership-with-msmf/",
       "title": "Villgro — program page",
       "excerpt": "SUNFOX → https://villgro.org/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-67882f389e",
+      "url": "https://villgro.org/programs/google-ai-for-agriculture/",
+      "title": "Villgro — program page",
+      "excerpt": "Our portfolio → https://villgro.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6f997a6847",
+      "url": "https://villgro.org/programs/fpai-villgro-innovation-challenge/",
+      "title": "Villgro — program page",
+      "excerpt": "Padcare Labs → https://villgro.org/companies",
       "page": "details"
     },
     {
@@ -400,6 +475,20 @@
     {
       "id": "check-portfolio-a31be8db65",
       "url": "https://villgro.org/about/",
+      "title": "Villgro — program page",
+      "excerpt": "Portfolio → https://villgro.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a5f9776562",
+      "url": "https://villgro.org/programs/healthcare-accelerator-program-supported-by-ubs-optimus-foundation/",
+      "title": "Villgro — program page",
+      "excerpt": "Our portfolio → https://villgro.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a72d061f59",
+      "url": "https://villgro.org/programs/healthcare-accelerator-program-supported-by-ubs-optimus-foundation/",
       "title": "Villgro — program page",
       "excerpt": "Portfolio → https://villgro.org/companies/",
       "page": "details"
@@ -524,6 +613,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-e2b2df93d2",
+      "url": "https://villgro.org/programs/google-ai-for-agriculture/",
+      "title": "Villgro — program page",
+      "excerpt": "Portfolio → https://villgro.org/companies/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-e90c6fae67",
       "url": "https://villgro.org/programs/agriculture-grand-challenge/",
       "title": "Villgro — program page",
@@ -543,6 +639,20 @@
       "title": "Villgro — application page",
       "excerpt": "Our portfolio → https://villgro.org/companies/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-eebd2a5a7e",
+      "url": "https://villgro.org/programs/fpai-villgro-innovation-challenge/",
+      "title": "Villgro — program page",
+      "excerpt": "Our portfolio → https://villgro.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f2f24c063c",
+      "url": "https://villgro.org/programs/fostering-innovation-sustainable-mobility-challenge/",
+      "title": "Villgro — program page",
+      "excerpt": "Our portfolio → https://villgro.org/companies/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-f8f3e968be",
@@ -581,6 +691,54 @@
       "excerpt": "Villgro | Making Innovative, Impactful Social Enterprises Succeed Skip to content About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship"
     },
     {
+      "id": "check-page-6aeab3624b",
+      "url": "https://villgro.org/",
+      "page": "details",
+      "excerpt": "Climate Action Cultivating a greener future by nurturing sustainable innovations."
+    },
+    {
+      "id": "check-page-29da4f8745",
+      "url": "https://villgro.org/",
+      "page": "details",
+      "excerpt": "Healthcare Advancing medical innovations and driving transformation to improve lives."
+    },
+    {
+      "id": "check-page-c6329086f9",
+      "url": "https://villgro.org/",
+      "page": "details",
+      "excerpt": "Rural Innovations Network was founded in 2001 by Paul Basil, with a mission to create impactful, innovative, and successful social enterprises."
+    },
+    {
+      "id": "check-page-84a0729438",
+      "url": "https://villgro.org/",
+      "page": "details",
+      "excerpt": "By capacitating these models with the right resources and knowledge, they are a sustainable way of creating lasting social impact."
+    },
+    {
+      "id": "check-page-1bed1e3f31",
+      "url": "https://villgro.org/",
+      "page": "details",
+      "excerpt": "Villgro has evolved to be more than an incubator; it develops markets, financial solutions and shares insights and learnings that inform our evolving understanding of what systems support innovation and entrepreneurship to have an impact."
+    },
+    {
+      "id": "check-page-ec2bf05a46",
+      "url": "https://villgro.org/",
+      "page": "details",
+      "excerpt": "This involves active engagement of market players, financing partners and policymakers, which no other programme has managed to do at scale in India.” DOEN Foundation Partner with us If you would like to share your experience and network to help social enterprises scale, we want to hear from you."
+    },
+    {
+      "id": "check-page-3fb4378ceb",
+      "url": "https://villgro.org/",
+      "page": "details",
+      "excerpt": "Partner with us → Mentor with us Join Villgro and empower the next generation of innovators by mentoring startups and shaping a brighter future for social impact ventures."
+    },
+    {
+      "id": "check-page-c003a6172b",
+      "url": "https://villgro.org/",
+      "page": "details",
+      "excerpt": "Partner with us → Mentor with Us Share your expertise and network to help social enterprises scale Mentor with us → Blogs India Doesn’t Lack Innovation."
+    },
+    {
       "id": "check-page-31e91a46dc",
       "url": "https://villgro.org/apply-to-villgro/",
       "page": "application",
@@ -599,10 +757,46 @@
       "excerpt": "About - Villgro | Making Innovative, Impactful Social Enterprises Succeed Skip to content About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship"
     },
     {
+      "id": "check-page-55677cda96",
+      "url": "https://villgro.org/about/",
+      "page": "details",
+      "excerpt": "We help social enterprises achieve sustainable impact at scale We help philanthropic foundations achieve their sustainability & impact goals We identify and scale social inventions to achieve policy objectives and support innovations for a self-reliant India Here’s how we work We help inventors and innovators working with under-served communities to get capital and unlock access to market."
+    },
+    {
+      "id": "check-page-fd808cd1ae",
+      "url": "https://villgro.org/about/",
+      "page": "details",
+      "excerpt": "We maximise the potential of social enterprises building disruptive solutions through our highly customised, hands-on approach to incubation."
+    },
+    {
       "id": "check-page-17cbda3765",
       "url": "https://villgro.org/programs/",
       "page": "details",
       "excerpt": "Programs - Villgro | Making Innovative, Impactful Social Enterprises Succeed Skip to content About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods &"
+    },
+    {
+      "id": "check-page-80ee7bccea",
+      "url": "https://villgro.org/programs/",
+      "page": "details",
+      "excerpt": "Read more Incubating Incubators The program will focus on the development of the incubation model through one-on-one mentoring, providing learning opportunities, and fundraising demos with donors to build joint partnerships."
+    },
+    {
+      "id": "check-page-80ee7bccea",
+      "url": "https://villgro.org/programs/",
+      "page": "details",
+      "excerpt": "Read more Incubating Incubators The program will focus on the development of the incubation model through one-on-one mentoring, providing learning opportunities, and fundraising demos with donors to build joint partnerships."
+    },
+    {
+      "id": "check-page-a94e2a6d94",
+      "url": "https://villgro.org/programs/",
+      "page": "details",
+      "excerpt": "Read more iPitch iPitch is Villgro’s annual deal discovery platform for impact investors & incubators to discover India’s best social entrepreneurs — rebuilding the lives of the underserved communities in Agriculture, Climate Action, Healthcare, Shelter-tech and Housing, Livelihood sectors, amongst others."
+    },
+    {
+      "id": "check-page-a94e2a6d94",
+      "url": "https://villgro.org/programs/",
+      "page": "details",
+      "excerpt": "Read more iPitch iPitch is Villgro’s annual deal discovery platform for impact investors & incubators to discover India’s best social entrepreneurs — rebuilding the lives of the underserved communities in Agriculture, Climate Action, Healthcare, Shelter-tech and Housing, Livelihood sectors, amongst others."
     },
     {
       "id": "check-page-7adcbd10bc",
@@ -617,10 +811,34 @@
       "excerpt": "BIRAC-BioNest (in partnership with MSMF) - Villgro | Making Innovative, Impactful Social Enterprises Succeed Skip to content About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action"
     },
     {
+      "id": "check-page-06ad9f6219",
+      "url": "https://villgro.org/programs/birac-bionest-in-partnership-with-msmf/",
+      "page": "details",
+      "excerpt": "Villgro also supported Janitri and iKure under the UBS Accelerator Program."
+    },
+    {
       "id": "check-page-9c690d745a",
       "url": "https://villgro.org/programs/capital-for-impact/",
       "page": "details",
       "excerpt": "Capital for Impact - Villgro | Making Innovative, Impactful Social Enterprises Succeed Skip to content About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods &"
+    },
+    {
+      "id": "check-page-f854760849",
+      "url": "https://villgro.org/programs/capital-for-impact/",
+      "page": "details",
+      "excerpt": "2024 – present Applications closed Incentives 01 Funding up to INR 25 Lakhs 02 Non-dilutive loans from financial institutions up to INR 1 CR."
+    },
+    {
+      "id": "check-page-60d56463d0",
+      "url": "https://villgro.org/programs/capital-for-impact/",
+      "page": "details",
+      "excerpt": "04 Access to our network of partners, receive business support & mentorship, and gain tech & product development assistance."
+    },
+    {
+      "id": "check-page-c65c44bc49",
+      "url": "https://villgro.org/programs/capital-for-impact/",
+      "page": "details",
+      "excerpt": "Focus Areas Agriculture Climate Action Eligibility Criteria 01 Revenue-stage entities in agriculture and climate-focused areas."
     },
     {
       "id": "check-page-1d80356f78",
@@ -641,10 +859,34 @@
       "excerpt": "E-Bikes for Rural E-Commerce Deliveries - Villgro | Making Innovative, Impactful Social Enterprises Succeed Skip to content About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action"
     },
     {
+      "id": "check-page-81b9b0681f",
+      "url": "https://villgro.org/programs/e-bikes-for-rural-e-commerce-deliveries/",
+      "page": "details",
+      "excerpt": "It aims to improve the environmental, social and the economic outcomes of E-commerce deliveries in rural India."
+    },
+    {
+      "id": "check-page-c5084c31c9",
+      "url": "https://villgro.org/programs/e-bikes-for-rural-e-commerce-deliveries/",
+      "page": "details",
+      "excerpt": "This is intended to drive rural economic growth, reduce greenhouse gas emissions, encourage clean energy, and create gender inclusive job opportunities."
+    },
+    {
+      "id": "check-page-79fbb2ef72",
+      "url": "https://villgro.org/programs/e-bikes-for-rural-e-commerce-deliveries/",
+      "page": "details",
+      "excerpt": "The project will develop scalable models and share insights to inform policymakers and engage stakeholders, fostering broader implementation and impact of e-bikes in rural India."
+    },
+    {
       "id": "check-page-d97a2cdc6d",
       "url": "https://villgro.org/programs/edition-2-design-impact-awards/",
       "page": "details",
       "excerpt": "Edition 2: Design Impact Awards - Villgro | Making Innovative, Impactful Social Enterprises Succeed Skip to content About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive"
+    },
+    {
+      "id": "check-page-51a00ab3a9",
+      "url": "https://villgro.org/programs/edition-2-design-impact-awards/",
+      "page": "details",
+      "excerpt": "Your significant design innovation could address any or more of these challenges surrounding water in India: climate change, potable water, inequity, accessibility, groundwater depletion, sustainable practices, education, water for agriculture, water management and conflicts over water."
     },
     {
       "id": "check-page-90b9db602c",
@@ -663,6 +905,54 @@
       "url": "https://villgro.org/programs/enroute-a-mobility-as-a-service-challenge/",
       "page": "details",
       "excerpt": "Enroute: A Mobility-As-A-Service Challenge - Villgro | Making Innovative, Impactful Social Enterprises Succeed Skip to content About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action"
+    },
+    {
+      "id": "check-page-5ffc9b71df",
+      "url": "https://villgro.org/programs/enroute-a-mobility-as-a-service-challenge/",
+      "page": "details",
+      "excerpt": "MaaS integrates public and private transportation services to offer comprehensive, user-centered travel options."
+    },
+    {
+      "id": "check-page-78d8235ff2",
+      "url": "https://villgro.org/programs/fostering-innovation-sustainable-mobility-challenge/",
+      "page": "details",
+      "excerpt": "Fostering Innovation: Sustainable Mobility Challenge - Villgro | Making Innovative, Impactful Social Enterprises Succeed Skip to content About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate"
+    },
+    {
+      "id": "check-page-f2bd00d197",
+      "url": "https://villgro.org/programs/fpai-villgro-innovation-challenge/",
+      "page": "details",
+      "excerpt": "FPAI- Villgro Innovation Challenge - Villgro | Making Innovative, Impactful Social Enterprises Succeed Skip to content About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive"
+    },
+    {
+      "id": "check-page-7082e7048e",
+      "url": "https://villgro.org/programs/fpai-villgro-innovation-challenge/",
+      "page": "details",
+      "excerpt": "2020 Apply Now 0 0 0 0 Key highlights Organized webinar sessions with subject matter experts in the SRH sector and start-up ecosystem Explored ways to refine ideas/solutions and build prototypes for the solutions Arranged one-to-one mentoring sessions for rapid prototyping support with portfolio managers from Villgro and SRH experts from FPA India."
+    },
+    {
+      "id": "check-page-1e3eb1c1eb",
+      "url": "https://villgro.org/programs/google-ai-for-agriculture/",
+      "page": "details",
+      "excerpt": "Google AI for Agriculture - Villgro | Making Innovative, Impactful Social Enterprises Succeed Skip to content About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive"
+    },
+    {
+      "id": "check-page-79d6ff04c0",
+      "url": "https://villgro.org/programs/healthcare-accelerator-program-supported-by-ubs-optimus-foundation/",
+      "page": "details",
+      "excerpt": "Healthcare Accelerator Program supported by UBS Optimus Foundation - Villgro | Making Innovative, Impactful Social Enterprises Succeed Skip to content About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture"
+    },
+    {
+      "id": "check-page-52b0fcd074",
+      "url": "https://villgro.org/programs/immpact-program/",
+      "page": "details",
+      "excerpt": "IMMpact Program - Villgro | Making Innovative, Impactful Social Enterprises Succeed Skip to content About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods & Entrepreneurship Programs Portfolio Resources Reports Blog Videos Archives News Newsletter Knowledge Contact Us Contact Partner with us Mentor with us Careers About About Us Our Team Our Impact Approach Incubation Market Partnerships & Channel Development Innovative financing Expertise Climate-Smart Agriculture Healthcare Climate Action Inclusive Livelihoods &"
+    },
+    {
+      "id": "check-page-a3edb4ba28",
+      "url": "https://villgro.org/programs/immpact-program/",
+      "page": "details",
+      "excerpt": "It is supported by the London School of Economics’ International Growth Centre (IGC) and aims to identify best practices in impact management and build the capacity of Small and Growing Businesses (SGBs) to measure and monitor their impact."
     }
   ],
   "findings": {

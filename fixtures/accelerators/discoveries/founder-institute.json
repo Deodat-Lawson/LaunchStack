@@ -1,6 +1,6 @@
 {
   "programId": "founder-institute",
-  "checkedAt": "2026-11-14T20:59:02.000Z",
+  "checkedAt": "2026-11-17T00:44:46.000Z",
   "pages": [
     {
       "url": "https://FI.co/join/faq",
@@ -30,6 +30,14 @@
       "url": "https://fi.co/aifounder",
       "page": "details",
       "anchor": "See the program",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/apply",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -75,9 +83,25 @@
       "origin": "official"
     },
     {
+      "url": "https://fi.co/event/from-first-idea-to-first-funding-global-alumni-stories-philadelphia-fall-2026",
+      "page": "portfolio",
+      "anchor": "Free event From First Idea to First Funding: Global Alumni Stories Dec 1, 2026 12:00 pm EST Online",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://fi.co/faq",
       "page": "terms",
       "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/insight/what-do-startup-accelerators-actually-look-for-16-years-of-founder-data-explains",
+      "page": "details",
+      "anchor": "Apr 23, 2026 What Do Startup Accelerators Actually Look For? 16 Years of Founder Data Explains Read article",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -133,7 +157,15 @@
     {
       "url": "https://fi.co/join/home",
       "page": "application",
-      "anchor": "Apply Now",
+      "anchor": "Apply now",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/join/overview",
+      "page": "details",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -142,7 +174,7 @@
       "url": "https://fi.co/overview",
       "page": "details",
       "anchor": "Our Methodology",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -158,7 +190,7 @@
       "url": "https://fi.co/program",
       "page": "details",
       "anchor": "Schedule",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

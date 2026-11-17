@@ -1,6 +1,6 @@
 {
   "programId": "accelerace",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://accelerace.io/about/",
@@ -99,14 +99,6 @@
       "origin": "official"
     },
     {
-      "url": "https://accelerace.io/category/investments/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://accelerace.io/dreamplan-raise-seed-round/",
       "page": "portfolio",
       "anchor": "Dreamplan raise seed-round Accelerace portfolio company, Dreamplan, have raised a seed round of DKK 20 mio. (approx. € 2,7 mio.) with leading investors and business angels. The fin",
@@ -171,6 +163,22 @@
       "origin": "official"
     },
     {
+      "url": "https://accelerace.io/new-investment-lexsee-are-cracking-the-dyslexia-code/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/new-investment-used-by-clubs-from-premier-league-and-champions-league/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://accelerace.io/partner-programs/",
       "page": "details",
       "anchor": "Get accelerated",
@@ -191,6 +199,38 @@
       "page": "portfolio",
       "anchor": "Portfolio",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/tinyfarms-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/tunebutler-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/umamamia-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/wudpecker_investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

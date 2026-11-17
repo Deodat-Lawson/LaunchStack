@@ -1,6 +1,6 @@
 {
   "programId": "startupbootcamp",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://startupbootcamp.org/",
     "https://startupbootcamp.org/accelerator-apply",
@@ -16,7 +16,12 @@
     "https://startupbootcamp.org/accelerator/energy-climate-ii",
     "https://startupbootcamp.org/accelerator/energy-sustainability",
     "https://startupbootcamp.org/accelerator/energyinc",
-    "https://startupbootcamp.org/accelerator/energynext"
+    "https://startupbootcamp.org/accelerator/energynext",
+    "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+    "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+    "https://startupbootcamp.org/accelerator/food-agritech",
+    "https://startupbootcamp.org/accelerator/food-agritech-ii",
+    "https://startupbootcamp.org/accelerator/foodtech-tasmania"
   ],
   "evidence": [
     {
@@ -118,6 +123,13 @@
       "page": "application"
     },
     {
+      "id": "check-duration-58455ee31b",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply here Hybrid Acceleration An intense 3-month accelerator designed to enable growth at speed.",
+      "page": "application"
+    },
+    {
       "id": "check-duration-5cddf10fb4",
       "url": "https://startupbootcamp.org/accelerator/afritech",
       "title": "Startupbootcamp — application page",
@@ -195,10 +207,24 @@
       "page": "application"
     },
     {
+      "id": "check-duration-a33323eacf",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "your startup's growth and success in just 3 months with our hybrid program, designed to drive",
+      "page": "application"
+    },
+    {
       "id": "check-duration-aaeb7f323a",
       "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
       "title": "Startupbootcamp — application page",
       "excerpt": "Program Kick-Off It’s time! Startups begin their 3-month program to accelerate and scale their business.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-b6ee439145",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply here Hybrid Acceleration An intense 3-month accelerator designed to enable growth at speed.",
       "page": "application"
     },
     {
@@ -223,6 +249,13 @@
       "page": "application"
     },
     {
+      "id": "check-duration-c3e2b2180e",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Mexico Apply here Hybrid Acceleration An intense 3-month accelerator designed to enable growth at speed.",
+      "page": "application"
+    },
+    {
       "id": "check-duration-c4746d32c3",
       "url": "https://startupbootcamp.org/accelerator/energynext",
       "title": "Startupbootcamp — application page",
@@ -237,10 +270,24 @@
       "page": "application"
     },
     {
+      "id": "check-duration-d08d492906",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "your startup's growth and success in just 3 months with our hybrid program, designed to drive",
+      "page": "application"
+    },
+    {
       "id": "check-duration-d75d34ff0e",
       "url": "https://startupbootcamp.org/accelerator/decarbonize",
       "title": "Startupbootcamp — application page",
       "excerpt": "Apply here Hybrid Acceleration An intense 3-month accelerator designed to enable growth at speed.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e5cc1b6101",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "up for our third generation. Our intensive 3 month program provides 10 selected FinTech startups",
       "page": "application"
     },
     {
@@ -249,6 +296,20 @@
       "title": "Startupbootcamp — homepage",
       "excerpt": "and shape the future of healthcare. Health & Lifescience I Hybrid | Amsterdam All-accelerators country-all years-all",
       "page": "details"
+    },
+    {
+      "id": "check-format-0a52e986a3",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "country-all All-accelerators country-all years-all Virtual Drive years-all All-accelerators country-all",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1781bb9573",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Applications close on: August 24, 2024 August 2024 Hybrid | The Netherlands Apply here Hybrid Acceleration",
+      "page": "application"
     },
     {
       "id": "check-format-1d21470657",
@@ -263,6 +324,13 @@
       "title": "Startupbootcamp — homepage",
       "excerpt": "innovations on a global scale. Energy & Climate II Hybrid | Amsterdam All-accelerators country-all years-all Food &",
       "page": "details"
+    },
+    {
+      "id": "check-format-2cb5015328",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "country-all All-accelerators country-all years-all Virtual Drive years-all All-accelerators country-all",
+      "page": "application"
     },
     {
       "id": "check-format-33daa257f3",
@@ -349,11 +417,25 @@
       "page": "details"
     },
     {
+      "id": "check-format-4bc7a2a6aa",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "startup's growth and success in just 3 months with our hybrid program, designed to drive sustainable results at speed.",
+      "page": "application"
+    },
+    {
       "id": "check-format-4cac4b60bb",
       "url": "https://startupbootcamp.org/",
       "title": "Startupbootcamp — homepage",
       "excerpt": "country-all years-all AIvolution III Applications Open Hybrid | The Netherlands An accelerator designed to ignite the",
       "page": "details"
+    },
+    {
+      "id": "check-format-4f126f5169",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Applications close on: March 7, 2025 7th March 2025 Hybrid | The Netherlands Apply here Hybrid Acceleration",
+      "page": "application"
     },
     {
       "id": "check-format-52eafb987e",
@@ -377,11 +459,25 @@
       "page": "details"
     },
     {
+      "id": "check-format-681283ea72",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "7, 2025 7th March 2025 Hybrid | The Netherlands Apply here Hybrid Acceleration Accelerate your startup's growth and success",
+      "page": "application"
+    },
+    {
       "id": "check-format-690872e3bc",
       "url": "https://startupbootcamp.org/",
       "title": "Startupbootcamp — homepage",
       "excerpt": "technologies. December 2, 2024 Water & Infrastructure Hybrid | The Netherlands December 2, 2024 September 2, 2024 2024",
       "page": "details"
+    },
+    {
+      "id": "check-format-72a0723b6f",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "startup's growth and success in just 3 months with our hybrid program, designed to drive sustainable results at speed.",
+      "page": "application"
     },
     {
       "id": "check-format-75c5e6c194",
@@ -461,6 +557,13 @@
       "page": "application"
     },
     {
+      "id": "check-format-982fa24f8c",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "2023 applications are currently closed. Mexico Apply here Hybrid Acceleration An intense 3-month accelerator designed to",
+      "page": "application"
+    },
+    {
       "id": "check-format-98be8a14c1",
       "url": "https://startupbootcamp.org/accelerator/energyinc",
       "title": "Startupbootcamp — application page",
@@ -517,6 +620,13 @@
       "page": "details"
     },
     {
+      "id": "check-format-b44d57afec",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "country-all All-accelerators country-all years-all Virtual Drive years-all All-accelerators country-all",
+      "page": "application"
+    },
+    {
       "id": "check-format-b6a79c29a0",
       "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
       "title": "Startupbootcamp — application page",
@@ -545,6 +655,20 @@
       "page": "application"
     },
     {
+      "id": "check-format-c7ddedb7f7",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "country-all All-accelerators country-all years-all Virtual Drive years-all All-accelerators country-all",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d05c0937ad",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "close on: June 14, 2024 14 June 2024 Australia Apply here Hybrid Acceleration An intense 3-month accelerator designed to",
+      "page": "application"
+    },
+    {
       "id": "check-format-d29e8feb07",
       "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
       "title": "Startupbootcamp — application page",
@@ -570,6 +694,13 @@
       "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
       "title": "Startupbootcamp — application page",
       "excerpt": "startup's growth and success in just 3 months with our hybrid program, designed to drive sustainable results at speed.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-df1a4a9c67",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "November 15, 2023 15 November 2021 Netherlands Apply here Hybrid Acceleration An intense 3-month accelerator designed to",
       "page": "application"
     },
     {
@@ -619,6 +750,20 @@
       "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
       "title": "Startupbootcamp — application page",
       "excerpt": "24, 2024 August 2024 Hybrid | The Netherlands Apply here Hybrid Acceleration Accelerate your startup's growth and success",
+      "page": "application"
+    },
+    {
+      "id": "check-format-eec45a7076",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "24, 2024 August 2024 Hybrid | The Netherlands Apply here Hybrid Acceleration Accelerate your startup's growth and success",
+      "page": "application"
+    },
+    {
+      "id": "check-format-ef0885f8f9",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "country-all All-accelerators country-all years-all Virtual Drive years-all All-accelerators country-all",
       "page": "application"
     },
     {
@@ -706,6 +851,20 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-0ce02992e2",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-109e110696",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-1258397f8a",
       "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
       "title": "Startupbootcamp — application page",
@@ -717,6 +876,13 @@
       "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
       "title": "Startupbootcamp — application page",
       "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-1586f53ba0",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
       "page": "application"
     },
     {
@@ -769,6 +935,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-2b4c78f368",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-326fd02817",
       "url": "https://startupbootcamp.org/accelerator/energynext",
       "title": "Startupbootcamp — application page",
@@ -808,6 +981,20 @@
       "url": "https://startupbootcamp.org/accelerator/aivolution",
       "title": "Startupbootcamp — application page",
       "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3d724c81fb",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3d9606fe50",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
       "page": "application"
     },
     {
@@ -867,6 +1054,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-5542f982a2",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-5a3122e6ed",
       "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
       "title": "Startupbootcamp — application page",
@@ -895,8 +1089,29 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-6915cb0504",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6dd4372ba2",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-725467b493",
       "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-726e76eb6c",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
       "title": "Startupbootcamp — application page",
       "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
       "page": "application"
@@ -920,6 +1135,13 @@
       "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
       "title": "Startupbootcamp — application page",
       "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-83f33d082a",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
       "page": "application"
     },
     {
@@ -958,6 +1180,20 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-9bd3ef3a84",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9ef345b659",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-a2fbf24eef",
       "url": "https://startupbootcamp.org/accelerator/energy-climate",
       "title": "Startupbootcamp — application page",
@@ -986,10 +1222,24 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-b262c6b9ae",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-b413881958",
       "url": "https://startupbootcamp.org/accelerator/decarbonize",
       "title": "Startupbootcamp — application page",
       "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b43a0858e5",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
       "page": "application"
     },
     {
@@ -1002,6 +1252,13 @@
     {
       "id": "check-portfolio-b6bd1ab871",
       "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-bd2c3730ec",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
       "title": "Startupbootcamp — application page",
       "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
       "page": "application"
@@ -1070,6 +1327,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-e0c7c93097",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-e3c4a352dc",
       "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
       "title": "Startupbootcamp — application page",
@@ -1084,6 +1348,20 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-e7db2cf3aa",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ecf8bc2f92",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-f0ba29d0b2",
       "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
       "title": "Startupbootcamp — application page",
@@ -1095,6 +1373,13 @@
       "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
       "title": "Startupbootcamp — application page",
       "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f8b83fdd0e",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
       "page": "application"
     },
     {
@@ -1217,6 +1502,13 @@
       "page": "details"
     },
     {
+      "id": "check-route-44acdd99cc",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Get started → https://www.f6s.com/sustainable-agriculture-food-2024/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-45285498df",
       "url": "https://startupbootcamp.org/",
       "title": "Startupbootcamp — homepage",
@@ -1308,6 +1600,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-8ff94dc166",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply here → https://form.typeform.com/to/uyGbouUs",
+      "page": "application"
+    },
+    {
       "id": "check-route-97ded023a2",
       "url": "https://startupbootcamp.org/",
       "title": "Startupbootcamp — homepage",
@@ -1320,6 +1619,13 @@
       "title": "Startupbootcamp — homepage",
       "excerpt": "Decarbonize Applications Open Australia An accelerator designed to empower startups decarbonizing the world, through an ambitious partnership wih Mitsubishi Corporation and NYK Line. August 1, 2023 Decarbonize Australia August 1, 2023 April 1, 2023 1 November 2023 Decarbonize All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/decarbonize",
       "page": "details"
+    },
+    {
+      "id": "check-route-a1aa190653",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply here → https://www.f6s.com/food-agritech-2/apply",
+      "page": "application"
     },
     {
       "id": "check-route-a56ee1be90",
@@ -1355,6 +1661,13 @@
       "title": "Startupbootcamp — homepage",
       "excerpt": "Water & Infrastructure Applications Open Hybrid | The Netherlands An accelerator designed to ensure access to clean water and resilient infrastructure while addressing climate-related vulnerabilities through innovative water technologies. December 2, 2024 Water & Infrastructure Hybrid | The Netherlands December 2, 2024 September 2, 2024 2024 Water & Infrastructure All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/water-infrastructure",
       "page": "details"
+    },
+    {
+      "id": "check-route-bd9fe2973e",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply here → https://www.f6s.com/sustainable-agriculture-food-2024/apply",
+      "page": "application"
     },
     {
       "id": "check-route-be97656109",
@@ -1420,6 +1733,13 @@
       "page": "details"
     },
     {
+      "id": "check-route-f1834bc8ad",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Get started → https://www.f6s.com/food-agritech-2/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-f568b13563",
       "url": "https://startupbootcamp.org/",
       "title": "Startupbootcamp — homepage",
@@ -1456,10 +1776,88 @@
       "excerpt": "Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events join our"
     },
     {
+      "id": "check-page-62bad0a6ba",
+      "url": "https://startupbootcamp.org/",
+      "page": "details",
+      "excerpt": "JOIN US at FUTURE XPO on December 4th at SugarFactory Amsterdam - Get your ticket now !"
+    },
+    {
+      "id": "check-page-9934d51fc1",
+      "url": "https://startupbootcamp.org/",
+      "page": "details",
+      "excerpt": "THE #1 STARTUP ACCELERATOR IN EUROPE Apply to an accelerator now Apply now: SBC Expand → Georgia I → Energy & Climate II Health & Lifescience I DeepTech & Robotics III STARTUPS INVESTORS MENTORS PARTNERS We help ambitious founders succeed."
+    },
+    {
+      "id": "check-page-148db46139",
+      "url": "https://startupbootcamp.org/",
+      "page": "details",
+      "excerpt": "Startupbootcamp is a global network of industry-focused accelerators.We ensure startups thrive by giving them direct access to an international network of the most relevant partners, investors, and mentors in their field."
+    },
+    {
+      "id": "check-page-9e83052bd5",
+      "url": "https://startupbootcamp.org/",
+      "page": "details",
+      "excerpt": "Learn more Industry-specific startup accelerators, available globally."
+    },
+    {
+      "id": "check-page-4a8a485915",
+      "url": "https://startupbootcamp.org/",
+      "page": "details",
+      "excerpt": "Designed by entrepreneurs, for entrepreneurs. < Swipe to see more reviews > Andrew Chong uPledge Co-Founder “We were only a team of founders when we joined Startupbootcamp’s accelerator, and we have since raised a round of funding, secured a grant, and have made considerable traction in both product and market-fit."
+    },
+    {
+      "id": "check-page-90dbf2e1eb",
+      "url": "https://startupbootcamp.org/",
+      "page": "details",
+      "excerpt": "However to be clear, the traction we gained wasn't giftwrapped to us by Startupbootcamp, that isn't their role.\" < Swipe to see more reviews > Federico Roviglioni Bufaga COO “I had the pleasure of participating in the Mobility and Transportation accelerator, which helped my team and I improve our value proposition and find the perfect product-market-fit."
+    },
+    {
+      "id": "check-page-45177ec9ec",
+      "url": "https://startupbootcamp.org/",
+      "page": "details",
+      "excerpt": "Thanks to the global network of clients, partners, and investors with whom we got in touch, we were able to expand our international network.\" < Swipe to see more reviews > Daniel Sand Wedio Co-Founder “We loved everything about Startupbootcamp’s accelerator program."
+    },
+    {
+      "id": "check-page-668186ee63",
+      "url": "https://startupbootcamp.org/",
+      "page": "details",
+      "excerpt": "It is a program that stands out from many others, due to the large network it has, that gathers fashion companies, top-level mentors, innovative startups and investors focused on this sector.\" < Swipe to see more reviews > Ezgi Kaplan EUTO Energy COO \"Participating in Startupbootcamp's Accelerator program was an incredible experience for us."
+    },
+    {
+      "id": "check-page-8c2092fbfa",
+      "url": "https://startupbootcamp.org/",
+      "page": "details",
+      "excerpt": "We found the directors, mentors, and advisors to be incredibly helpful in shaping our growth strategies and working towards our business's success.\" < Swipe to see more reviews > Dr."
+    },
+    {
+      "id": "check-page-3abd46a292",
+      "url": "https://startupbootcamp.org/",
+      "page": "details",
+      "excerpt": "Join hundreds of angel investors, family offices and corporates that invested in 1,600 startups through Startupbootcamp since 2010."
+    },
+    {
+      "id": "check-page-3d33040f5e",
+      "url": "https://startupbootcamp.org/",
+      "page": "details",
+      "excerpt": "Learn more < Swipe to see more reviews > Otto Graff Ignia Partner Startupbootcamp by Finnovista.vc has consolidated itself as one of the most important acceleration programs in the LATAM region."
+    },
+    {
+      "id": "check-page-c1d81f53e7",
+      "url": "https://startupbootcamp.org/",
+      "page": "details",
+      "excerpt": "As a fund, we looked at several of the companies that had completed the accelerator as candidates for follow-on investment."
+    },
+    {
       "id": "check-page-a7ad0e4ccb",
       "url": "https://startupbootcamp.org/accelerator-apply",
       "page": "application",
       "excerpt": "Accelerator Apply Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events join our"
+    },
+    {
+      "id": "check-page-f7d1b2a094",
+      "url": "https://startupbootcamp.org/accelerator-apply",
+      "page": "application",
+      "excerpt": "Apply to Startupbootcamp Menu Home About us FAQ Careers Our ecosystem Startups Investors Mentors Partners Follow us Get in touch Sign up for the newsletters Press inquiries: [email protected] Startupbootcamp | 2025 Copyright Cookies Privacy Policy"
     },
     {
       "id": "check-page-89393ba689",
@@ -1468,10 +1866,154 @@
       "excerpt": "AfriTech | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events"
     },
     {
+      "id": "check-page-15b556a6b3",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "page": "application",
+      "excerpt": "Application Open Application Closed AfriTech asip-accelerator-program FOR STARTUPS & SCALEUPS An accelerator designed to empower impact & sustainability startups Connecting visionary Founders with conscious global corporations, their corporate leaders, as well as experienced mentors and impact investors."
+    },
+    {
+      "id": "check-page-340e344a26",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "page": "application",
+      "excerpt": "Applications close on: September 8, 2023 8 September 2023 South Africa Apply here Hybrid Acceleration An intense 3-month accelerator designed to enable growth at speed."
+    },
+    {
+      "id": "check-page-9fa72d55c3",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "page": "application",
+      "excerpt": "Access to Mentorship Carefully selected mentors with industry-specific knowledge, who provide hands-on support and valuable introductions."
+    },
+    {
+      "id": "check-page-55c9c12838",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "page": "application",
+      "excerpt": "About the AfriTech Accelerator FOR STARTUPS & SCALEUPS Accelerator timeline Application Open 10 July 2023 Applications for our accelerator are open!"
+    },
+    {
+      "id": "check-page-2307870151",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "page": "application",
+      "excerpt": "Selection days 18 October 2023 The startups will pitch in front of an audience of Investors, Mentors, Corporate Leaders, Partners and the SBC team Startups Announcement 20 October 2023 On the last day of Selection Days we announce the 10 startups selected, which will take part in the accelerator."
+    },
+    {
+      "id": "check-page-feb4884cc6",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "page": "application",
+      "excerpt": "Accelerator Kick-off 14 November 2023 It’s time!"
+    },
+    {
+      "id": "check-page-c36e0d2838",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "page": "application",
+      "excerpt": "We officially kick-off the accelerator."
+    },
+    {
+      "id": "check-page-7946c1cd91",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "page": "application",
+      "excerpt": "Impact Day 8 February 2024 At the end of the accelerator we celebrate with Impact Day!"
+    },
+    {
+      "id": "check-page-2551d38d1d",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "page": "application",
+      "excerpt": "The founders will showcase their progress and solutions in our signature event. some Statistics About the cohorts of AfriTech 70% Women-led 9600+ Jobs created in Africa 90% Alumni still operating 1.6M Average funding by our alumni."
+    },
+    {
+      "id": "check-page-789e770a65",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "page": "application",
+      "excerpt": "FOCUS AREAS Get started AfriTech Digital Health InsureTech AI & Machine Learning AgriTech Food Supply IoT & Connectivity Fintech Clean & ClimateTech Blockchain Team Key players Philip Kiracofe Chief Disruptor - Startupbootcamp Africa Philip Kiracofe brings two decades of direct operational and venture financing experience spanning a diverse range of industries across three continents."
+    },
+    {
+      "id": "check-page-73ea3a8319",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "page": "application",
+      "excerpt": "Henry Ojuor Director of Programs - Startupbootcamp Africa Passionate Venture and ecosystem builder committed to scouting, skilling, and scaling the innovators and disruptors solving unique African Challenges."
+    },
+    {
+      "id": "check-page-bc0211d8a8",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "page": "application",
+      "excerpt": "Deep experience working with different stakeholders (Startups, Accelerators, incubators, Government, Institutions) across the African business environment to accelerate innovation and value creation while driving measurable growth of Portfolio Companies."
+    },
+    {
       "id": "check-page-d23cee8d4b",
       "url": "https://startupbootcamp.org/accelerator/aivolution",
       "page": "application",
       "excerpt": "AIvolution | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise."
+    },
+    {
+      "id": "check-page-5285bacf8d",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "page": "application",
+      "excerpt": "Application Open Application Closed AIvolution FOR STARTUPS & SCALEUPS An accelerator designed to empower AI & Web3 Connecting visionary Founders with conscious global corporations, their corporate leaders, as well as experienced mentors and impact investors."
+    },
+    {
+      "id": "check-page-9edbedc5d8",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "page": "application",
+      "excerpt": "Applications close on: May 8, 2024 Wednesday, 8 May 2024 Italy Apply here Hybrid Acceleration An intense 3-month accelerator designed to enable growth at speed."
+    },
+    {
+      "id": "check-page-1c6ebcdae3",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "page": "application",
+      "excerpt": "Access to Mentorship Carefully selected mentors with industry-specific knowledge, who provide hands-on support and valuable introductions."
+    },
+    {
+      "id": "check-page-230ad9ec29",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "page": "application",
+      "excerpt": "About the AIvolution Accelerator Our AI & Web3 accelerator looks toward a better tomorrow that brings innovation and passion."
+    },
+    {
+      "id": "check-page-4c221d3a19",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "page": "application",
+      "excerpt": "This opportunity strives to make an active change by reimagining and advancing around cybersecurity & fraud Detection, Data-driven decision making, Virtual personal assistance, AI driven process automation, Web3, Metaverse, digital wallets, etc, through an innovative startup engagement process."
+    },
+    {
+      "id": "check-page-a15d99a0cd",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "page": "application",
+      "excerpt": "If you lead a startup aiming to make an impact within the tech industries, challenges the status quo, shows passion about your innovation/technology, looks to scale, needing to raise capital/partner with corporates to build, and test and validate your hypothesis, then this program is for you."
+    },
+    {
+      "id": "check-page-9307a03f14",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "page": "application",
+      "excerpt": "FOR STARTUPS & SCALEUPS Accelerator timeline Application Open 21 February 2024 Applications for our accelerator are open!"
+    },
+    {
+      "id": "check-page-0f43a38755",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "page": "application",
+      "excerpt": "Selection days 21 May 2024 The startups will pitch in front of an audience of Investors, Mentors, Corporate Leaders, Partners and the SBC team Startups Announcement 23 May 2024 On the last day of Selection Days we announce the 10 startups selected, which will take part in the accelerator."
+    },
+    {
+      "id": "check-page-e03ea76c0e",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "page": "application",
+      "excerpt": "Accelerator Kick-off 27 May 2024 It’s time!"
+    },
+    {
+      "id": "check-page-682650b05e",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "page": "application",
+      "excerpt": "We officially kick-off the accelerator."
+    },
+    {
+      "id": "check-page-c62cfa4f02",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "page": "application",
+      "excerpt": "Impact Day 11 September 2024 At the end of the accelerator we celebrate with Impact Day!"
+    },
+    {
+      "id": "check-page-44174c11b4",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "page": "application",
+      "excerpt": "2nd Meeting Program Director During this meet we discuss your goals, what you wish to get out of the accelerator, how your company would benefit from the collaboration, and your fit with our network."
     },
     {
       "id": "check-page-8d12b5f6af",
@@ -1480,10 +2022,154 @@
       "excerpt": "AIvolution II | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise."
     },
     {
+      "id": "check-page-e50fe20c6d",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "page": "application",
+      "excerpt": "Application Open Application Closed AIvolution II FOR STARTUPS & SCALEUPS An accelerator designed to ignite the future of intelligent and decentralized innovation through AI and Web3."
+    },
+    {
+      "id": "check-page-47d22f19d7",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "page": "application",
+      "excerpt": "Connecting visionary founders with conscious global corporations, their corporate leaders, as well as experienced mentors and impact investors."
+    },
+    {
+      "id": "check-page-8574c0d4fb",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "page": "application",
+      "excerpt": "Applications close on: August 24, 2024 August 2024 Hybrid | The Netherlands Apply here Hybrid Acceleration Accelerate your startup's growth and success in just 3 months with our hybrid program, designed to drive sustainable results at speed."
+    },
+    {
+      "id": "check-page-39ad195192",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "page": "application",
+      "excerpt": "Access to Mentorship Get access to a vast network of over hundreds carefully selected mentors per program, offering industry-specific expertise, hands-on support, and valuable connections to accelerate your success."
+    },
+    {
+      "id": "check-page-6957dc3068",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "page": "application",
+      "excerpt": "About the AIvolution II Accelerator Our AI & Web3 Accelerator looks toward the startups igniting the future of intelligent and decentralized innovation through AI and Web3. ‍ AI breakthroughs like generative models and predictive analytics are enabling intelligent automation, data-driven decision-making, and human-like content creation capabilities."
+    },
+    {
+      "id": "check-page-cce18e9c2e",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "page": "application",
+      "excerpt": "Decentralized technologies such as blockchain, Web3 infrastructure, and DAOs are paving the way for transparent, secure digital ecosystems."
+    },
+    {
+      "id": "check-page-478886c8ba",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "page": "application",
+      "excerpt": "Web3 platforms, metaverse experiences, digital wallets, and NFTs represent new paradigms for ownership, governance, and value exchange."
+    },
+    {
+      "id": "check-page-690dcf7c09",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "page": "application",
+      "excerpt": "The convergence of AI and Web3 unlocks immense potential for innovative solutions in areas like cybersecurity, fraud detection, process automation, and virtual assistants. ‍ Do you lead an AI or Web3 startup that challenges the status quo?"
+    },
+    {
+      "id": "check-page-7bd598abc1",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "page": "application",
+      "excerpt": "Are you passionate about your innovation, are looking to scale and need to raise capital and partner with corporates to build, test, and validate your hypothesis?"
+    },
+    {
+      "id": "check-page-bd4aa45f64",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "page": "application",
+      "excerpt": "FOR STARTUPS & SCALEUPS Accelerator timeline Application Open 1st June 2024 Applications for our accelerator are open!"
+    },
+    {
+      "id": "check-page-8ed81b9453",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "page": "application",
+      "excerpt": "Selection days 26th - 29th August 2024 The startups will pitch in front of an audience of Investors, Mentors, Corporate Leaders, Partners and the SBC team Startups Announcement 30th August 2024 On the last day of Selection Days we announce the 10 startups selected, which will take part in the accelerator."
+    },
+    {
+      "id": "check-page-eb7aa6ddf8",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "page": "application",
+      "excerpt": "Accelerator Kick-off 9th September 2024 It’s time!"
+    },
+    {
       "id": "check-page-71b8ce5d6e",
       "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
       "page": "application",
       "excerpt": "AI & Web 3 III (2025) Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events join"
+    },
+    {
+      "id": "check-page-fb990255b2",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "page": "application",
+      "excerpt": "Looking for bold founders driving intelligent and decentralized innovation through AI and Web3 technologies to reshape industries and create transformative solutions."
+    },
+    {
+      "id": "check-page-56c9c126fe",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "page": "application",
+      "excerpt": "Access to Mentorship Get access to a vast network of over hundreds carefully selected mentors per program, offering industry-specific expertise, hands-on support, and valuable connections to accelerate your success."
+    },
+    {
+      "id": "check-page-1f76080c06",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "page": "application",
+      "excerpt": "April 1, 2, 3, 2025 Selection Days 20 startups pitch in front of our ecosystem audience - investors, mentors, corporate leaders, partners and the SBC Investment Committee."
+    },
+    {
+      "id": "check-page-03d5f25dbc",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "page": "application",
+      "excerpt": "April 24, 2025 Mentor Meet Startup Connect with expert mentors from diverse backgrounds, gain valuable insights, expand your network, and start collaborating to elevate the startup's potential."
+    },
+    {
+      "id": "check-page-045de20246",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "page": "application",
+      "excerpt": "July 3, 2025 FutureXPO Next The founders showcase their progress and solutions to a big crowd of corporate partners, investors and mentors in our signature event."
+    },
+    {
+      "id": "check-page-ae983a1d81",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "page": "application",
+      "excerpt": "Meet the Team Marc Jellema Global CTO & Program Director Elizabeth Kleinveld Head of Acceleration Adrian Alexandru Program Director Sabina Basariyeva Global Head of Startup Growth Giovanni Vaccari Managing Director Guided by World-Class Mentors Our mentors are seasoned industry experts, investors, entrepreneurs, and corporate leaders who bring their knowledge and connections to help you succeed."
+    },
+    {
+      "id": "check-page-962cb1d6be",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "page": "application",
+      "excerpt": "Apply Now A Gateway to a Global Community Joining a Startupbootcamp accelerator connects you to a worldwide community of founders, mentors, investors, and industry leaders.With a presence across multiple regions, our network empowers you to scale globally, tapping intoopportunities during the program and long after it ends."
+    },
+    {
+      "id": "check-page-1f28a1e7e5",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "page": "application",
+      "excerpt": "Startups Pixpel United Arab Emirates Pixpel is a Web3 launchpad and infrastructure platform that enables game studios and digital projects to raise capital with enforced tokenomics, automated vesting, and on-chain accountability."
+    },
+    {
+      "id": "check-page-cdb3047400",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "page": "application",
+      "excerpt": "Solvpro Technology Brazil We empower large retail entrepreneurs to focus on scaling their businesses rather than getting bogged down with manual tasks like price negotiations and operational inefficiencies."
+    },
+    {
+      "id": "check-page-27b40240fa",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "page": "application",
+      "excerpt": "Our generative AI eliminates costly, time-intensive photoshoots, letting brands showcase products on realistic, on-model images instantly."
+    },
+    {
+      "id": "check-page-94ed69d721",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "page": "application",
+      "excerpt": "Snap a photo—hippist AI does the rest."
+    },
+    {
+      "id": "check-page-b61cdcf042",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "page": "application",
+      "excerpt": "The Software Society United States We use AI to instantly generate a website, CRM, tasks, and invoicing, replacing fragmented SMB software."
     },
     {
       "id": "check-page-195e06bf71",
@@ -1492,10 +2178,154 @@
       "excerpt": "Decarbonize | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise."
     },
     {
+      "id": "check-page-36d17877a5",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "page": "application",
+      "excerpt": "Application Open Application Closed Decarbonize decarbonize FOR STARTUPS & SCALEUPS An accelerator designed to empower startups decarbonizing the world, through an ambitious partnership wih Mitsubishi Corporation and NYK Line."
+    },
+    {
+      "id": "check-page-45e5eb2747",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "page": "application",
+      "excerpt": "Connecting visionary Founders with conscious global corporations, their corporate leaders, as well as experienced mentors and impact investors. ‍ Our goal is to take “making impact” to the next level.We aim to support your business to develop and produce more sustainable products."
+    },
+    {
+      "id": "check-page-b374fd1482",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "page": "application",
+      "excerpt": "Applications close on: August 1, 2023 4/1/2023 Australia Apply here Hybrid Acceleration An intense 3-month accelerator designed to enable growth at speed."
+    },
+    {
+      "id": "check-page-9abf8cf7e9",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "page": "application",
+      "excerpt": "Access to Mentorship Carefully selected mentors with industry-specific knowledge, who provide hands-on support and valuable introductions."
+    },
+    {
+      "id": "check-page-e3514f49af",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "page": "application",
+      "excerpt": "About the Decarbonize Accelerator FOR STARTUPS & SCALEUPS Accelerator timeline Application Open April Applications for our accelerator are open!"
+    },
+    {
+      "id": "check-page-922be5e0b3",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "page": "application",
+      "excerpt": "Selection days August The startups will pitch in front of an audience of Investors, Mentors, Corporate Leaders, Partners and the SBC team Startups Announcement August On the last day of Selection Days we announce the 10 startups selected, which will take part in the accelerator."
+    },
+    {
+      "id": "check-page-f1d1954343",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "page": "application",
+      "excerpt": "Accelerator Kick-off September It’s time!"
+    },
+    {
+      "id": "check-page-1807f88b21",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "page": "application",
+      "excerpt": "We officially kick-off the accelerator."
+    },
+    {
+      "id": "check-page-e9aa87af24",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "page": "application",
+      "excerpt": "Impact Day November 2023 At the end of the accelerator we celebrate with Impact Day!"
+    },
+    {
+      "id": "check-page-21265d8fdb",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "page": "application",
+      "excerpt": "The founders will showcase their progress and solutions in our signature event. some Statistics About the cohorts of Decarbonize 1500+ Startups have completed an SBC accelerator 76% Alumni are still active 72% alumni have received funding 1.6M Average funding by our alumni."
+    },
+    {
+      "id": "check-page-e63e068640",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "page": "application",
+      "excerpt": "FOCUS AREAS Get started Decarbonize Future Energy Carbon Capture Repurpose Supply Chain Access to Carbon Offsets Nature-Based Solutions Waste Optimisation Digital & Visual Technologies Clean Hygrogen Team Key players Eddy Lee Program Director - Startupbootcamp Eddy's experience begins in Silicon Valley, where he was an investor."
+    },
+    {
+      "id": "check-page-18a137367b",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "page": "application",
+      "excerpt": "After relocating to Asia, he now is focused on supporting early-stage startups in succeeding with Startupbootcamp."
+    },
+    {
       "id": "check-page-a8f224ec3d",
       "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
       "page": "application",
       "excerpt": "DeepTech & Robotics | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and"
+    },
+    {
+      "id": "check-page-5c177efc19",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "page": "application",
+      "excerpt": "Application Open Application Closed DeepTech & Robotics FOR STARTUPS & SCALEUPS An accelerator designed to fuel startups pioneering scientific breakthroughs and disruptive engineering innovations."
+    },
+    {
+      "id": "check-page-2063ec199c",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "page": "application",
+      "excerpt": "Connecting visionary founders with conscious global corporations, their corporate leaders, as well as experienced mentors and impact investors."
+    },
+    {
+      "id": "check-page-eb0afef4f6",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "page": "application",
+      "excerpt": "Applications close on: August 24, 2024 August 2024 Hybrid | The Netherlands Apply here Hybrid Acceleration Accelerate your startup's growth and success in just 3 months with our hybrid program, designed to drive sustainable results at speed."
+    },
+    {
+      "id": "check-page-a0741d4595",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "page": "application",
+      "excerpt": "Access to Mentorship Get access to a vast network of over hundreds carefully selected mentors per program, offering industry-specific expertise, hands-on support, and valuable connections to accelerate your success."
+    },
+    {
+      "id": "check-page-07d952bf43",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "page": "application",
+      "excerpt": "About the DeepTech & Robotics Accelerator Our DeepTech & Robotics Accelerator fuels startups pioneering scientific breakthroughs and disruptive engineering innovations."
+    },
+    {
+      "id": "check-page-cedc5096f9",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "page": "application",
+      "excerpt": "DeepTech innovations are unlocking new frontiers in fields like artificial intelligence, robotics, quantum computing, biotechnology, and advanced materials."
+    },
+    {
+      "id": "check-page-9d19dfdcab",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "page": "application",
+      "excerpt": "These technologies hold immense potential to reshape sectors such as healthcare, energy, manufacturing, and transportation."
+    },
+    {
+      "id": "check-page-ab55888c93",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "page": "application",
+      "excerpt": "Bridging the gap between research and market-ready products requires specialized expertise, state-of-the-art facilities, and strategic collaborations. ‍ The DeepTech & Robotics landscape is marked by a shift towards developing disruptive solutions that can drive economic growth, address global challenges, and improve quality of life."
+    },
+    {
+      "id": "check-page-8491aff459",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "page": "application",
+      "excerpt": "The focus is not only on technological advancements but also on creating a sustainable and equitable future through responsible innovation. ‍ Do you lead a DeepTech or Robotics startup that challenges the status quo?"
+    },
+    {
+      "id": "check-page-d9199988e9",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "page": "application",
+      "excerpt": "Are you passionate about your innovation, are looking to scale and need to raise capital and partner with corporates to build, test, and validate your hypothesis?"
+    },
+    {
+      "id": "check-page-b0f0247e39",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "page": "application",
+      "excerpt": "FOR STARTUPS & SCALEUPS Accelerator timeline Application Open 1st June 2024 Applications for our accelerator are open!"
+    },
+    {
+      "id": "check-page-ea83e54931",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "page": "application",
+      "excerpt": "Selection days 26th - 29th August 2024 The startups will pitch in front of an audience of Investors, Mentors, Corporate Leaders, Partners and the SBC team Startups Announcement 30th August 2024 On the last day of Selection Days we announce the 10 startups selected, which will take part in the accelerator."
     },
     {
       "id": "check-page-1260fc3e4e",
@@ -1504,10 +2334,154 @@
       "excerpt": "DeepTech and Robotics II (2025) Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise."
     },
     {
+      "id": "check-page-d3a9d63c41",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "page": "application",
+      "excerpt": "Looking for bold founders driving scientific breakthroughs and engineering innovations to advance DeepTech and robotics for real-world impact across industries."
+    },
+    {
+      "id": "check-page-d90945e9b0",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "page": "application",
+      "excerpt": "Access to Mentorship Get access to a vast network of over hundreds carefully selected mentors per program, offering industry-specific expertise, hands-on support, and valuable connections to accelerate your success."
+    },
+    {
+      "id": "check-page-b398024f5c",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "page": "application",
+      "excerpt": "April 1, 2, 3, 2025 Selection Days 20 startups pitch in front of our ecosystem audience - investors, mentors, corporate leaders, partners and the SBC Investment Committee."
+    },
+    {
+      "id": "check-page-1adbd78d82",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "page": "application",
+      "excerpt": "April 24, 2025 Mentor Meet Startup Connect with expert mentors from diverse backgrounds, gain valuable insights, expand your network, and start collaborating to elevate the startup's potential."
+    },
+    {
+      "id": "check-page-21e80433f6",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "page": "application",
+      "excerpt": "July 3, 2025 FutureXPO Next The founders showcase their progress and solutions to a big crowd of corporate partners, investors and mentors in our signature event."
+    },
+    {
+      "id": "check-page-946a72e9fd",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "page": "application",
+      "excerpt": "Meet the Team Marc Jellema Global CTO & Program Director Elizabeth Kleinveld Head of Acceleration Adrian Alexandru Program Director Sabina Basariyeva Global Head of Startup Growth Giovanni Vaccari Managing Director Guided by World-Class Mentors Our mentors are seasoned industry experts, investors, entrepreneurs, and corporate leaders who bring their knowledge and connections to help you succeed."
+    },
+    {
+      "id": "check-page-a86bf5b899",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "page": "application",
+      "excerpt": "Apply Now A Gateway to a Global Community Joining a Startupbootcamp accelerator connects you to a worldwide community of founders, mentors, investors, and industry leaders.With a presence across multiple regions, our network empowers you to scale globally, tapping intoopportunities during the program and long after it ends."
+    },
+    {
+      "id": "check-page-5eab6d2038",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "page": "application",
+      "excerpt": "Startups Eight Vectors Pte Ltd Singapore We help businesses deploying robots eliminate downtime, reduce support costs and maximise ROI using AI-driven predictive maintenance - enabling robots to self-detect, self-diagnose and self-report their health."
+    },
+    {
+      "id": "check-page-e6da88088d",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "page": "application",
+      "excerpt": "Voece AI United States Meet the AI that Interviews like a Human!"
+    },
+    {
+      "id": "check-page-9ac7ddbac8",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "page": "application",
+      "excerpt": "Circlone United Kingdom The verified-only hub for schools PTTHEX The Netherlands PTTHEX: Secure, scalable, and intelligent Push-to-Talk technology for instant, encrypted, and global team communication."
+    },
+    {
+      "id": "check-page-f0e2f23868",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "page": "application",
+      "excerpt": "TheBrickLogic Spain We transform recycled plastic into sustainable, high-performance bricks for eco-friendly construction."
+    },
+    {
+      "id": "check-page-a8b2b14733",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "page": "application",
+      "excerpt": "VI SOLUTIONS Algeria The intelligent, AI-powered collaborative mobile robot transforming warehouse operations with seamless automation, real-time tracking, and optimized efficiency."
+    },
+    {
       "id": "check-page-7a0d3fc37a",
       "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
       "page": "application",
       "excerpt": "DeepTech and Robotics III Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events"
+    },
+    {
+      "id": "check-page-b2c5095e35",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "page": "application",
+      "excerpt": "Looking for bold founders driving scientific breakthroughs and engineering innovations to advance DeepTech and robotics for real-world impact across industries."
+    },
+    {
+      "id": "check-page-973f8afde9",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "page": "application",
+      "excerpt": "Access to Mentorship Get access to a vast network of over hundreds carefully selected mentors per program, offering industry-specific expertise, hands-on support, and valuable connections to accelerate your success."
+    },
+    {
+      "id": "check-page-b1fb52e909",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "page": "application",
+      "excerpt": "September 2, 3, 4, 2025 Selection Days 20 startups pitch in front of our ecosystem audience - investors, mentors, corporate leaders, partners and the SBC Investment Committee."
+    },
+    {
+      "id": "check-page-dd94ee4d41",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "page": "application",
+      "excerpt": "October 2, 2025 Mentor Meet Startup Connect with expert mentors from diverse backgrounds, gain valuable insights, expand your network, and start collaborating to elevate the startup's potential."
+    },
+    {
+      "id": "check-page-43ba0ee327",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "page": "application",
+      "excerpt": "December 4, 2025 FUTURE XPO The founders showcase their progress and solutions to a big crowd of corporate partners, investors and mentors in our signature event."
+    },
+    {
+      "id": "check-page-d2a45b9a32",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "page": "application",
+      "excerpt": "Apply Now A Gateway to a Global Community Joining a Startupbootcamp accelerator connects you to a worldwide community of founders, mentors, investors, and industry leaders.With a presence across multiple regions, our network empowers you to scale globally, tapping in to opportunities during the program and long after it ends."
+    },
+    {
+      "id": "check-page-8fe9d21a20",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "page": "application",
+      "excerpt": "Startups Decelect Protocol The Netherlands Decelect provides tamper-proof, verifiable randomness for the digital world."
+    },
+    {
+      "id": "check-page-3605ea5b34",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "page": "application",
+      "excerpt": "Serving industries such as biology, finance, cybersecurity, gaming, robotics, and AI, ensuring provable fairness in random selection to pursue Absolute Digital Trust."
+    },
+    {
+      "id": "check-page-bebb22da61",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "page": "application",
+      "excerpt": "Qluve Finland AI-powered companion robot helping seniors live independently, safely, and with dignity while reducing caregiver burden."
+    },
+    {
+      "id": "check-page-39b770ab0c",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "page": "application",
+      "excerpt": "Lightaceutics United States We have developed an EDGE AI-powered wearable vision assistive device to provide vision independence to people with various forms of vision impairment BridgeHex Lithuania BridgeHex is a zero-retention, enterprise-grade video protection platform that makes secure streaming simple, scalable, and affordable."
+    },
+    {
+      "id": "check-page-3cd0e9c4b3",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "page": "application",
+      "excerpt": "TrinovaQ Tunisia Reshaping automotive cybersecurity with proactive, AI-driven protection."
+    },
+    {
+      "id": "check-page-44383d6d22",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "page": "application",
+      "excerpt": "EcoGrid Electric Nigeria EcoGrid is a renewable energy company providing decentralized nano-grid solutions to deliver affordable, reliable, and clean electricity to underserved communities and small businesses in Nigeria."
     },
     {
       "id": "check-page-2c75cecc4f",
@@ -1516,10 +2490,154 @@
       "excerpt": "Energy (2025) Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events join our"
     },
     {
+      "id": "check-page-9b0842faf4",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "page": "application",
+      "excerpt": "An accelerator designed to drive the transition to renewable energy and combat climate change by fostering disruptive innovations on a global scale."
+    },
+    {
+      "id": "check-page-40f5ddb89f",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "page": "application",
+      "excerpt": "Access to Mentorship Get access to a vast network of over hundreds carefully selected mentors per program, offering industry-specific expertise, hands-on support, and valuable connections to accelerate your success."
+    },
+    {
+      "id": "check-page-959221787d",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "page": "application",
+      "excerpt": "9th - 12th December 2024 Selection Days 20 startups pitch in front of our ecosystem audience - investors, mentors, corporate leaders, partners and the SBC Investment Committee."
+    },
+    {
+      "id": "check-page-91377b8ec0",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "page": "application",
+      "excerpt": "October 2, 2025 Mentor Meet Startups Connect with expert mentors from diverse backgrounds, gain valuable insights, expand your network, and start collaborating to elevate the startup's potential."
+    },
+    {
+      "id": "check-page-5c66ba0780",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "page": "application",
+      "excerpt": "March 2025 FutureXPO Next The founders showcase their progress and solutions to a big crowd of corporate partners, investors and mentors in our signature event."
+    },
+    {
+      "id": "check-page-8b4210c23a",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "page": "application",
+      "excerpt": "Meet the Team Marc Jellema Global CTO & Program Director Elizabeth Kleinveld Head of Acceleration Adrian Alexandru Program Director Sabina Basariyeva Global Head of Startup Growth Giovanni Vaccari Managing Director Guided by World-Class Mentors Our mentors are seasoned industry experts, investors, entrepreneurs, and corporate leaders who bring their knowledge and connections to help you succeed."
+    },
+    {
+      "id": "check-page-cb858e45ba",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "page": "application",
+      "excerpt": "Apply Now A Gateway to a Global Community Joining a Startupbootcamp accelerator connects you to a worldwide community of founders, mentors, investors, and industry leaders.With a presence across multiple regions, our network empowers you to scale globally, tapping intoopportunities during the program and long after it ends."
+    },
+    {
+      "id": "check-page-7df534ad06",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "page": "application",
+      "excerpt": "Startups Verdion Energia Brazil Driving small-scale, distributed green hydrogen production in Brazil with a focus on local innovation and sustainability."
+    },
+    {
+      "id": "check-page-cdc3463b9c",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "page": "application",
+      "excerpt": "Zero Citizen UK Transforming renewable energy accessibility for communities and businesses by tokenizing solar panel projects.."
+    },
+    {
+      "id": "check-page-010574cc8b",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "page": "application",
+      "excerpt": "Sabbia Denmark Transforming cleaning and personal care with compact, eco-friendly dissolvable sheets."
+    },
+    {
+      "id": "check-page-fae1baecc5",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "page": "application",
+      "excerpt": "Ostras Estonia Europe’s first crowd-powered solution to reduce supermarket food waste."
+    },
+    {
+      "id": "check-page-89965465b1",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "page": "application",
+      "excerpt": "NoHarm USA AI-driven matching marketplace connecting buyers and sellers in the climate industry."
+    },
+    {
       "id": "check-page-05225a9541",
       "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
       "page": "application",
       "excerpt": "Energy & climate II Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events join"
+    },
+    {
+      "id": "check-page-da746138ef",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "page": "application",
+      "excerpt": "An accelerator designed to drive the transition to renewable energy and combat climate change by fostering disruptive innovations on a global scale."
+    },
+    {
+      "id": "check-page-898aa654d0",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "page": "application",
+      "excerpt": "Access to Mentorship Get access to a vast network of over hundreds carefully selected mentors per program, offering industry-specific expertise, hands-on support, and valuable connections to accelerate your success."
+    },
+    {
+      "id": "check-page-82ac6d3250",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "page": "application",
+      "excerpt": "September 2, 3, 4, 2025 Selection Days 20 startups pitch in front of our ecosystem audience - investors, mentors, corporate leaders, partners and the SBC Investment Committee."
+    },
+    {
+      "id": "check-page-f662de3e2f",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "page": "application",
+      "excerpt": "October 2, 2025 Mentor Meet Startups Connect with expert mentors from diverse backgrounds, gain valuable insights, expand your network, and start collaborating to elevate the startup's potential."
+    },
+    {
+      "id": "check-page-7b512ae4fb",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "page": "application",
+      "excerpt": "December 4, 2025 FUTURE XPO The founders showcase their progress and solutions to a big crowd of corporate partners, investors and mentors in our signature event."
+    },
+    {
+      "id": "check-page-86311b1a46",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "page": "application",
+      "excerpt": "Apply Now A Gateway to a Global Community Joining a Startupbootcamp accelerator connects you to a worldwide community of founders, mentors, investors, and industry leaders.With a presence across multiple regions, our network empowers you to scale globally, tapping intoopportunities during the program and long after it ends."
+    },
+    {
+      "id": "check-page-c4b64a7385",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "page": "application",
+      "excerpt": "Startups GreenGuard Tech Ireland Where Nature Meets Intelligence."
+    },
+    {
+      "id": "check-page-aba19c4544",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "page": "application",
+      "excerpt": "GrowCarbon United States GrowCarbon transforms every urban tree and every street corner into a live environmental asset by streaming meter-level CO₂ sequestration and pollutant exposure data directly into real estate, utilities, proptech, and planning tools - with zero hardware required."
+    },
+    {
+      "id": "check-page-6b9d08691b",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "page": "application",
+      "excerpt": "RECIV.net United Kingdom Empowering the Clean Energy future with streamlined Due Diligence."
+    },
+    {
+      "id": "check-page-1218dc32f6",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "page": "application",
+      "excerpt": "Signalton Resilience Technologies Turkey Smart Structural Health Monitoring for Buildings and Infrastructure Beaver Nexus Turkey Beaver Nexus deploys mobile, AI-optimized pyrolysis units to transform biomass waste into carbon-sequestering biochar and valuable bioproducts directly at the source."
+    },
+    {
+      "id": "check-page-22fb806ef9",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "page": "application",
+      "excerpt": "Green Balance Brazil Green Balance is a climate fintech for banks and acquirers, turning every transaction into measurable and offsettable carbon impact SoshoPay South Africa SoshoPay is a smart financing platform making clean energy and climate-smart tools affordable through pay-as-you-go access."
+    },
+    {
+      "id": "check-page-fe2a161860",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "page": "application",
+      "excerpt": "Atlantis AEMP Turkey Atlantis is an AI-powered platform that helps businesses optimize energy usage, reduce costs, and increase operational efficiency without requiring any new hardware Koovix LLC Nigeria Koovix–Bi is a solar- and pedal-powered portable fridge with IoT access, offering 10h cooling and 12h lighting for off-grid farmers, meat vendors, and clinics."
     },
     {
       "id": "check-page-bfac32c6e3",
@@ -1528,16 +2646,622 @@
       "excerpt": "Energy & Sustainability | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and"
     },
     {
+      "id": "check-page-e5f08ecec1",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "page": "application",
+      "excerpt": "Access to Mentorship Carefully selected mentors with industry-specific knowledge, who provide hands-on support and valuable introductions."
+    },
+    {
+      "id": "check-page-861856ee1a",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "page": "application",
+      "excerpt": "Events & Engagements 1:1 matchmaking with mentors, investors and partners."
+    },
+    {
+      "id": "check-page-fc0ad709ac",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "page": "application",
+      "excerpt": "About the Energy & Sustainability Accelerator The Startupbootcamp Energy and Sustainability Accelerator is powered by a strategic partnership between Startupbootcamp, a global network of industry-focused accelerators, and the Dhahran Techno Valley Company (DTVC), a key driver in the development of the Dhahran Techno Valley ecosystem."
+    },
+    {
+      "id": "check-page-a3e67235c9",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "page": "application",
+      "excerpt": "This collaboration leverages the strengths of Startupbootcamp’s global network and DTVC’s robust local ecosystem, including King Fahd University of Petroleum and Minerals (KFUPM), Saudi Aramco, SABIC, and other industry leaders.The accelerator is designed to support innovative startups specializing in energy and sustainability."
+    },
+    {
+      "id": "check-page-a2de081687",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "page": "application",
+      "excerpt": "The accelerator aims to drive global impact by supporting startups that are developing solutions with the potential to address some of the world’s most pressing challenges in energy and sustainability."
+    },
+    {
+      "id": "check-page-36cd7d945d",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "page": "application",
+      "excerpt": "FOR STARTUPS & SCALEUPS Accelerator timeline Application Open July 18th 2024 Applications for our accelerator are open!"
+    },
+    {
+      "id": "check-page-48a1055634",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "page": "application",
+      "excerpt": "Selection days August 28th - 29th 2024 The startups will pitch in front of an audience of Investors, Mentors, Corporate Leaders, Partners and the SBC team Startups Announcement September 1st 2024 On the last day of Selection Days we announce the 10 startups selected, which will take part in the accelerator."
+    },
+    {
+      "id": "check-page-23be6ab95c",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "page": "application",
+      "excerpt": "Accelerator Kick-off September 15th 2024 It’s time!"
+    },
+    {
+      "id": "check-page-fa227c99c1",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "page": "application",
+      "excerpt": "We officially kick-off the accelerator."
+    },
+    {
+      "id": "check-page-e7380d5167",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "page": "application",
+      "excerpt": "Impact Day December 5th 2024 At the end of the accelerator we celebrate with Impact Day!"
+    },
+    {
+      "id": "check-page-9958a468e8",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "page": "application",
+      "excerpt": "2nd Meeting Program Director During this meet we discuss your goals, what you wish to get out of the accelerator, how your company would benefit from the collaboration, and your fit with our network."
+    },
+    {
+      "id": "check-page-4e563b480d",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "page": "application",
+      "excerpt": "Based on ratings from the multiple jury rooms, we will select the companies joining the accelerator."
+    },
+    {
       "id": "check-page-937ae8a98b",
       "url": "https://startupbootcamp.org/accelerator/energyinc",
       "page": "application",
       "excerpt": "EnergyInc | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise."
     },
     {
+      "id": "check-page-ebfcdf6caf",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "page": "application",
+      "excerpt": "Application Open Application Closed EnergyInc energyinc FOR STARTUPS & SCALEUPS A pre-accelerator designed to fast-track sustainability business ideas towards being a startup."
+    },
+    {
+      "id": "check-page-db3fc469aa",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "page": "application",
+      "excerpt": "About the EnergyInc Accelerator FOR STARTUPS & SCALEUPS Accelerator timeline Application Open 21 November 2022 Applications for our accelerator are open!"
+    },
+    {
+      "id": "check-page-90bb289363",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "page": "application",
+      "excerpt": "Selection days - The startups will pitch in front of an audience of Investors, Mentors, Corporate Leaders, Partners and the SBC team Startups Announcement - On the last day of Selection Days we announce the 10 startups selected, which will take part in the accelerator."
+    },
+    {
+      "id": "check-page-b2162707eb",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "page": "application",
+      "excerpt": "Accelerator Kick-off 21 November 2023 It’s time!"
+    },
+    {
+      "id": "check-page-36cead4759",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "page": "application",
+      "excerpt": "We officially kick-off the accelerator."
+    },
+    {
+      "id": "check-page-74158dae77",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "page": "application",
+      "excerpt": "Impact Day 21 November 2023 At the end of the accelerator we celebrate with Impact Day!"
+    },
+    {
+      "id": "check-page-0126dd40f8",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "page": "application",
+      "excerpt": "When he was not riding one of his multiple bikes (you can never have too many) Richard managed three Startups in Fintech, Proptech and export sectors."
+    },
+    {
+      "id": "check-page-106a62041e",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "page": "application",
+      "excerpt": "His strong connections with corporate Australia have included executive roles in leading ASX and private companies in strategy, innovation, and technology roles."
+    },
+    {
+      "id": "check-page-6bc1beca3c",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "page": "application",
+      "excerpt": "Whilst running a corporate incubator Richard first started working with SBC as a mentor on one of the first EnergyNext programs several years ago whilst looking into investable opportunities in solar installations and renewable energy, which has led to his current role in running the program."
+    },
+    {
+      "id": "check-page-7d0820c8c7",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "page": "application",
+      "excerpt": "Richard Celm Executive Program Director - Startupbootcamp Australia Richard Celm is the cofounder and Executive Program Director at SBC Australia."
+    },
+    {
+      "id": "check-page-e66cfe95d7",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "page": "application",
+      "excerpt": "Having mentored in Startupbootcamp programs in Denmark, London, Barcelona and the University of Cambridge Queen's Young Leaders Programme, his expertise lies in building, promoting and supporting start-up founders, using experience gained working in Australia, Europe and the United States of America."
+    },
+    {
+      "id": "check-page-fee06ca31e",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "page": "application",
+      "excerpt": "Since returning to Australia in 2014, Mr."
+    },
+    {
       "id": "check-page-f376e936a6",
       "url": "https://startupbootcamp.org/accelerator/energynext",
       "page": "application",
       "excerpt": "EnergyNext | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise."
+    },
+    {
+      "id": "check-page-05ec5f287b",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "page": "application",
+      "excerpt": "Applications close on: July 8, 2021 8 July 2022 Australia Apply here Hybrid Acceleration An intense 3-month accelerator designed to enable growth at speed."
+    },
+    {
+      "id": "check-page-c07a15a957",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "page": "application",
+      "excerpt": "Access to Mentorship Carefully selected mentors with industry-specific knowledge, who provide hands-on support and valuable introductions."
+    },
+    {
+      "id": "check-page-034e20450f",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "page": "application",
+      "excerpt": "About the EnergyNext Accelerator FOR STARTUPS & SCALEUPS Accelerator timeline Application Open 6 December 2021 Applications for our accelerator are open!"
+    },
+    {
+      "id": "check-page-560f056571",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "page": "application",
+      "excerpt": "Selection days 8-12 august 2022 The startups will pitch in front of an audience of Investors, Mentors, Corporate Leaders, Partners and the SBC team Startups Announcement 12 August 2022 On the last day of Selection Days we announce the 10 startups selected, which will take part in the accelerator."
+    },
+    {
+      "id": "check-page-1b0b58229a",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "page": "application",
+      "excerpt": "Accelerator Kick-off 29 August 2022 It’s time!"
+    },
+    {
+      "id": "check-page-3b27d36e0c",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "page": "application",
+      "excerpt": "We officially kick-off the accelerator."
+    },
+    {
+      "id": "check-page-3ba84e82fc",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "page": "application",
+      "excerpt": "Impact Day 1 December 2022 At the end of the accelerator we celebrate with Impact Day!"
+    },
+    {
+      "id": "check-page-6bf21ba392",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "page": "application",
+      "excerpt": "When he was not riding one of his multiple bikes (you can never have too many) Richard managed three Startups in Fintech, Proptech and export sectors."
+    },
+    {
+      "id": "check-page-bced17b0b1",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "page": "application",
+      "excerpt": "His strong connections with corporate Australia have included executive roles in leading ASX and private companies in strategy, innovation, and technology roles."
+    },
+    {
+      "id": "check-page-aa209ceaac",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "page": "application",
+      "excerpt": "Whilst running a corporate incubator Richard first started working with SBC as a mentor on one of the first EnergyNext programs several years ago whilst looking into investable opportunities in solar installations and renewable energy, which has led to his current role in running the program."
+    },
+    {
+      "id": "check-page-59ba14d0f9",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "page": "application",
+      "excerpt": "Richard Celm Executive Program Director - Startupbootcamp Australia Richard Celm is the cofounder and Executive Program Director at SBC Australia."
+    },
+    {
+      "id": "check-page-ebda8d2278",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "page": "application",
+      "excerpt": "Having mentored in Startupbootcamp programs in Denmark, London, Barcelona and the University of Cambridge Queen's Young Leaders Programme, his expertise lies in building, promoting and supporting start-up founders, using experience gained working in Australia, Europe and the United States of America."
+    },
+    {
+      "id": "check-page-a1ec55e2d5",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "page": "application",
+      "excerpt": "FinTech & Cybersecurity | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and"
+    },
+    {
+      "id": "check-page-0d86934200",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "page": "application",
+      "excerpt": "Applications close on: November 15, 2023 15 November 2021 Netherlands Apply here Hybrid Acceleration An intense 3-month accelerator designed to enable growth at speed."
+    },
+    {
+      "id": "check-page-ff6156b988",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "page": "application",
+      "excerpt": "Access to Mentorship Carefully selected mentors with industry-specific knowledge, who provide hands-on support and valuable introductions."
+    },
+    {
+      "id": "check-page-b843e0535f",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "page": "application",
+      "excerpt": "About the FinTech & Cybersecurity Accelerator FOR STARTUPS & SCALEUPS Accelerator timeline Application Open 1 September 2021 Applications for our accelerator are open!"
+    },
+    {
+      "id": "check-page-cb886a129f",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "page": "application",
+      "excerpt": "Selection days 18 January 2022 The startups will pitch in front of an audience of Investors, Mentors, Corporate Leaders, Partners and the SBC team Startups Announcement 20 January 2022 On the last day of Selection Days we announce the 10 startups selected, which will take part in the accelerator."
+    },
+    {
+      "id": "check-page-274cf569e1",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "page": "application",
+      "excerpt": "Accelerator Kick-off 28th February 2022 It’s time!"
+    },
+    {
+      "id": "check-page-ead5638e35",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "page": "application",
+      "excerpt": "We officially kick-off the accelerator."
+    },
+    {
+      "id": "check-page-a417f09d87",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "page": "application",
+      "excerpt": "Impact Day until 2nd June 2022 At the end of the accelerator we celebrate with Impact Day!"
+    },
+    {
+      "id": "check-page-d625feface",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "page": "application",
+      "excerpt": "Adwoba identifies potholes in products and connects the dots to see how investors, corporates and mentors could support startups to scale in the long term."
+    },
+    {
+      "id": "check-page-1f25740514",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "page": "application",
+      "excerpt": "2nd Meeting Program Director During this meet we discuss your goals, what you wish to get out of the accelerator, how your company would benefit from the collaboration, and your fit with our network."
+    },
+    {
+      "id": "check-page-337011d0e4",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "page": "application",
+      "excerpt": "Based on ratings from the multiple jury rooms, we will select the companies joining the accelerator."
+    },
+    {
+      "id": "check-page-ea88aae5f8",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "page": "application",
+      "excerpt": "Welcome to Startupbootcamp’s accelerator!"
+    },
+    {
+      "id": "check-page-7fe464e0f2",
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "page": "application",
+      "excerpt": "Accelerator Alumni years-all All-accelerators country-all All-accelerators country-all years-all Terenz Co."
+    },
+    {
+      "id": "check-page-26db53a9d8",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "page": "application",
+      "excerpt": "FinTech Mexico City | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and"
+    },
+    {
+      "id": "check-page-fc01545d00",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "page": "application",
+      "excerpt": "Application Open Application Closed FinTech Mexico City FOR STARTUPS & SCALEUPS An accelerator designed to empower fintech startups Are you a high-potential and ambitious early-stage FinTech startup?"
+    },
+    {
+      "id": "check-page-e528bb4235",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "page": "application",
+      "excerpt": "Are you seeking to consolidate your business in Latin America?"
+    },
+    {
+      "id": "check-page-e5cee35aeb",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "page": "application",
+      "excerpt": "Startupbootcamp FinTech Mexico City is for you."
+    },
+    {
+      "id": "check-page-19c6777d23",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "page": "application",
+      "excerpt": "We are the leading accelerator supporting innovative companies in the financial services industry, and we’re gearing up for our third generation."
+    },
+    {
+      "id": "check-page-5ab8a53674",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "page": "application",
+      "excerpt": "Our intensive 3 month program provides 10 selected FinTech startups from around the world with hands-on mentorship from over 400+ industry experts, office space in the heart of Mexico City, seed funding, and access to a global network of investors and corporate partners from across the FinTech industry."
+    },
+    {
+      "id": "check-page-c3e2b2180e",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "page": "application",
+      "excerpt": "Mexico Apply here Hybrid Acceleration An intense 3-month accelerator designed to enable growth at speed."
+    },
+    {
+      "id": "check-page-b5c2e64564",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "page": "application",
+      "excerpt": "Access to Mentorship Carefully selected mentors with industry-specific knowledge, who provide hands-on support and valuable introductions."
+    },
+    {
+      "id": "check-page-9dc17111a0",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "page": "application",
+      "excerpt": "About the FinTech Mexico City Accelerator Are you a high-potential and ambitious early-stage FinTech startup?"
+    },
+    {
+      "id": "check-page-e528bb4235",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "page": "application",
+      "excerpt": "Are you seeking to consolidate your business in Latin America?"
+    },
+    {
+      "id": "check-page-e5cee35aeb",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "page": "application",
+      "excerpt": "Startupbootcamp FinTech Mexico City is for you."
+    },
+    {
+      "id": "check-page-36ac0fbbd7",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "page": "application",
+      "excerpt": "We are the leading program supporting innovative companies in the financial services industry, and we’re gearing up for our third generation."
+    },
+    {
+      "id": "check-page-5ab8a53674",
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "page": "application",
+      "excerpt": "Our intensive 3 month program provides 10 selected FinTech startups from around the world with hands-on mentorship from over 400+ industry experts, office space in the heart of Mexico City, seed funding, and access to a global network of investors and corporate partners from across the FinTech industry."
+    },
+    {
+      "id": "check-page-1b3024b343",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "page": "application",
+      "excerpt": "Food & AgriTech | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise."
+    },
+    {
+      "id": "check-page-6ae9e14edb",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "page": "application",
+      "excerpt": "Application Open Application Closed Food & AgriTech FOR STARTUPS & SCALEUPS An accelerator designed to new technologies along the food value chain to meet the growing demand for food safety, digitalization and sustainability."
+    },
+    {
+      "id": "check-page-ef2426ff27",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "page": "application",
+      "excerpt": "Connecting visionary founders with conscious global corporations, their corporate leaders, as well as experienced mentors and impact investors."
+    },
+    {
+      "id": "check-page-ec1c227be1",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "page": "application",
+      "excerpt": "Applications close on: August 24, 2024 August 2024 Hybrid | The Netherlands Apply here Hybrid Acceleration Accelerate your startup's growth and success in just 3 months with our hybrid program, designed to drive sustainable results at speed."
+    },
+    {
+      "id": "check-page-906055c139",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "page": "application",
+      "excerpt": "Access to Mentorship Get access to a vast network of over hundreds carefully selected mentors per program, offering industry-specific expertise, hands-on support, and valuable connections to accelerate your success."
+    },
+    {
+      "id": "check-page-442f7d4bb4",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "page": "application",
+      "excerpt": "About the Food & AgriTech Accelerator Our Food & AgriTech Accelerator looks towards new technologies along the food value chain to meet the growing demand for food safety, digitalization and sustainability. ‍ The food and agriculture sector is undergoing significant technological advancements, particularly in developed nations, developing countries are gradually making strides in this direction."
+    },
+    {
+      "id": "check-page-a6f59d6788",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "page": "application",
+      "excerpt": "Emerging food & agriculture trends are marking a shift towards smart farming and efficient utilization of time and resources while reducing crop losses as well as towards more sustainable and personalized food choices."
+    },
+    {
+      "id": "check-page-e7f8b0e5c8",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "page": "application",
+      "excerpt": "The focus is to not only improve the overall quality and quantity of the food value chain, but also to reach the ultimate goal of a sustainable future. ‍ Do you lead a Food or AgriTech startup that challenges the status quo?"
+    },
+    {
+      "id": "check-page-20116514c1",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "page": "application",
+      "excerpt": "Are you passionate about your innovation, are looking to scale and need to raise capital and partner with corporates to build, test, and validate your hypothesis?"
+    },
+    {
+      "id": "check-page-79521a61ed",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "page": "application",
+      "excerpt": "FOR STARTUPS & SCALEUPS Accelerator timeline Application Open 6th May 2024 Applications for our accelerator are open!"
+    },
+    {
+      "id": "check-page-244aba7477",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "page": "application",
+      "excerpt": "Selection days 26th - 29th August 2024 The startups will pitch in front of an audience of Investors, Mentors, Corporate Leaders, Partners and the SBC team Startups Announcement 30th August 2024 On the last day of Selection Days we announce the 10 startups selected, which will take part in the accelerator."
+    },
+    {
+      "id": "check-page-ded345eb99",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "page": "application",
+      "excerpt": "Accelerator Kick-off 9th September 2024 It’s time!"
+    },
+    {
+      "id": "check-page-a1b3a5193d",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "page": "application",
+      "excerpt": "We officially kick-off the accelerator."
+    },
+    {
+      "id": "check-page-d029146745",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "page": "application",
+      "excerpt": "Food & AgriTech II | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and"
+    },
+    {
+      "id": "check-page-361e637624",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "page": "application",
+      "excerpt": "Application Open Application Closed Food & AgriTech II FOR STARTUPS & SCALEUPS An accelerator designed to new technologies along the food value chain to meet the growing demand for food safety, digitalization and sustainability."
+    },
+    {
+      "id": "check-page-eb8d296bc7",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "page": "application",
+      "excerpt": "Connecting visionary founders with conscious global corporations, their corporate leaders, as well as experienced mentors and impact investors."
+    },
+    {
+      "id": "check-page-7e1dda01de",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "page": "application",
+      "excerpt": "Applications close on: March 7, 2025 7th March 2025 Hybrid | The Netherlands Apply here Hybrid Acceleration Accelerate your startup's growth and success in just 3 months with our hybrid program, designed to drive sustainable results at speed."
+    },
+    {
+      "id": "check-page-2dcadf3d17",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "page": "application",
+      "excerpt": "Access to Mentorship Get access to a vast network of over hundreds carefully selected mentors per program, offering industry-specific expertise, hands-on support, and valuable connections to accelerate your success."
+    },
+    {
+      "id": "check-page-7e2d337d6b",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "page": "application",
+      "excerpt": "Emerging food & agriculture trends are marking a shift towards smart farming and efficient utilization of time and resources while reducing crop losses as well as towards more sustainable and personalized food choices."
+    },
+    {
+      "id": "check-page-9da1906c8d",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "page": "application",
+      "excerpt": "The focus is to not only improve the overall quality and quantity of the food value chain, but also to reach the ultimate goal of a sustainable future. ‍ Do you lead a Food or AgriTech startup that challenges the status quo?"
+    },
+    {
+      "id": "check-page-781fe2009a",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "page": "application",
+      "excerpt": "Are you passionate about your innovation, are looking to scale and need to raise capital and partner with corporates to build, test, and validate your hypothesis?"
+    },
+    {
+      "id": "check-page-42a340d354",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "page": "application",
+      "excerpt": "FOR STARTUPS & SCALEUPS Accelerator timeline Application Open 12th December 2024 Applications for our accelerator are open!"
+    },
+    {
+      "id": "check-page-f7ab0fc7d9",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "page": "application",
+      "excerpt": "Selection days 18th March 2025 The startups will pitch in front of an audience of Investors, Mentors, Corporate Leaders, Partners and the SBC team Startups Announcement 4th April 2025 On the last day of Selection Days we announce the 10 startups selected, which will take part in the accelerator."
+    },
+    {
+      "id": "check-page-73192f41f1",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "page": "application",
+      "excerpt": "Accelerator Kick-off 14th April 2025 It’s time!"
+    },
+    {
+      "id": "check-page-e9dc403dd4",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "page": "application",
+      "excerpt": "We officially kick-off the accelerator."
+    },
+    {
+      "id": "check-page-21faafa813",
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "page": "application",
+      "excerpt": "Impact Day 3rd July 2025 At the end of the accelerator we celebrate with Impact Day!"
+    },
+    {
+      "id": "check-page-5d2c7e82e8",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "page": "application",
+      "excerpt": "FoodTech Tasmania | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and"
+    },
+    {
+      "id": "check-page-e78d0c600e",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "page": "application",
+      "excerpt": "Application Open Application Closed FoodTech Tasmania foodtech-tasmania FOR STARTUPS & SCALEUPS An accelerator designed to empower Food & AgriTech startups Connecting visionary Founders with conscious global corporations, their corporate leaders, as well as experienced mentors and impact investors."
+    },
+    {
+      "id": "check-page-1b8409f17d",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "page": "application",
+      "excerpt": "We aim to support your business to develop and produce more sustainable products. ‍ Applications close on: June 14, 2024 14 June 2024 Australia Apply here Hybrid Acceleration An intense 3-month accelerator designed to enable growth at speed."
+    },
+    {
+      "id": "check-page-506404e7fd",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "page": "application",
+      "excerpt": "Access to Mentorship Carefully selected mentors with industry-specific knowledge, who provide hands-on support and valuable introductions."
+    },
+    {
+      "id": "check-page-0eafe13d1c",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "page": "application",
+      "excerpt": "About the FoodTech Tasmania Accelerator Our FoodTech accelerator looks toward a better tomorrow that brings innovation and passion."
+    },
+    {
+      "id": "check-page-8891dc45da",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "page": "application",
+      "excerpt": "This opportunity strives to transform the Food & AgriTech sector through an innovative startup engagement process. ‍ FOR STARTUPS & SCALEUPS Accelerator timeline Application Open 2 April 2024 Applications for our accelerator are open!"
+    },
+    {
+      "id": "check-page-bdbbad589f",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "page": "application",
+      "excerpt": "Selection days 15 - 18 July 2024 The startups will pitch in front of an audience of Investors, Mentors, Corporate Leaders, Partners and the SBC team Startups Announcement 23 July 2024 On the last day of Selection Days we announce the 10 startups selected, which will take part in the accelerator."
+    },
+    {
+      "id": "check-page-664d1dde6e",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "page": "application",
+      "excerpt": "Accelerator Kick-off 26 August 2024 It’s time!"
+    },
+    {
+      "id": "check-page-8b9daf448e",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "page": "application",
+      "excerpt": "We officially kick-off the accelerator."
+    },
+    {
+      "id": "check-page-0cf7f28db8",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "page": "application",
+      "excerpt": "Impact Day 14 Nov 2024 At the end of the accelerator we celebrate with Impact Day!"
+    },
+    {
+      "id": "check-page-96ab084a9f",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "page": "application",
+      "excerpt": "The founders will showcase their progress and solutions in our signature event. some Statistics About the cohorts of FoodTech Tasmania 1500+ Startups have completed an SBC accelerator 76% Alumni are still active 72% alumni have received funding 1.6M Average funding by our alumni."
+    },
+    {
+      "id": "check-page-45413af955",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "page": "application",
+      "excerpt": "Anna leads the Food Innovation vertical for Startupbootcamp Australia, overseeing both the corporate innovation and startup programs. ‍ Tom Woolley FoodTech Tasmania Managing Director - Startupbootcamp Australia Tom is a food executive, start-up mentor, strategic advisor and experienced growth investor."
+    },
+    {
+      "id": "check-page-aefff9a4fd",
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "page": "application",
+      "excerpt": "He has a passion for guiding innovative early stage businesses through their growing pains and supporting founder development as they grow with their companies."
     }
   ],
   "findings": {

@@ -1,6 +1,6 @@
 {
   "programId": "hax",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
@@ -83,8 +83,48 @@
       "origin": "official"
     },
     {
+      "url": "https://hax.co/company_news/deals-in-brief-cube-and-pvx-partners-raise-series-a-funding-singapores-mpa-backs-six-firms/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/company_news/deals-in-brief-oladance-bintango-and-allozymes-secure-new-funding-and-more-krasia/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/company_news/dubai-based-safety-and-tracking-device-secures-300000-of-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/company_news/in-its-first-year-hax-newark-drives-deep-tech-growth-vc-investment-njbiz/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
       "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/company_news/leadoptik-receives-investment-from-applied-ventures-finsmes/",
+      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,

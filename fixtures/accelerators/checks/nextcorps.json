@@ -1,24 +1,43 @@
 {
   "programId": "nextcorps",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://nextcorps.org/",
     "https://nextcorps.org/apply-to-nextcorps/",
-    "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/",
     "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
     "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
     "https://nextcorps.org/venture-for-climatetech-opens-application-period/",
-    "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/?ical=1",
-    "https://nextcorps.org/podcast/navigating-investment/",
-    "https://nextcorps.org/podcast-download/4220/navigating-investment.m4a?ref=download",
-    "https://nextcorps.org/podcast-download/4220/navigating-investment.m4a?ref=new_window",
-    "https://nextcorps.org/podcast-player/4220/navigating-investment.m4a",
     "https://nextcorps.org/application-deadline-approaching-for-startups-to-participate-in-luminate-ny-competition-and-business-accelerator/",
     "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
-    "https://nextcorps.org/event/application-deadline-fuzehub-commercialization-competition/",
-    "https://nextcorps.org/event/application-deadline-i-corps-regional-course-for-startups-hosted-by-rochester-institute-of-technology/"
+    "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+    "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+    "https://nextcorps.org/9-tips-about-trade-shows-and-how-to-maximize-your-attendance/",
+    "https://nextcorps.org/about-us/",
+    "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+    "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+    "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+    "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+    "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+    "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+    "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+    "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+    "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/"
   ],
   "evidence": [
+    {
+      "id": "check-announced-0159ce982b",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — program page",
+      "excerpt": "startups bypass development pitfalls and scale to mass production; applications close April 10 Via GlobeNewswire ROCHESTER, NY, March 3, 2026 — Underestimating",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-1cbb520ff8",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "title": "NextCorps — program page",
+      "excerpt": "number of startups will be selected to participate in the first cohort, with programs starting in November. To apply to or learn more about NextCorps’ Hardware Scaleup",
+      "page": "details"
+    },
     {
       "id": "check-announced-600333a1bd",
       "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
@@ -27,11 +46,18 @@
       "page": "application"
     },
     {
-      "id": "check-announced-d17f2dbf7f",
-      "url": "https://nextcorps.org/event/application-deadline-fuzehub-commercialization-competition/",
-      "title": "NextCorps — batches page",
-      "excerpt": "Apply Search « All Events This event has passed. APPLICATION DEADLINE: FuzeHub Commercialization Competition August 10 Website: https://fuzehub.com/commercialization-competition/ As",
-      "page": "batches"
+      "id": "check-deal-069a05978f",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "funding upon program start in April 2025, with the expectation that $50,000 will be used to engage resources in the Finger Lakes region. Teams",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-0a87c4a7fb",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "by Optica, formerly The Optical Society. The company will receive $1 million in investment from New York State through the Finger Lakes Forward",
+      "page": "details"
     },
     {
       "id": "check-deal-2a3d44d21e",
@@ -41,11 +67,39 @@
       "page": "application"
     },
     {
+      "id": "check-deal-3a57200da3",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "locate to Rochester due to travel and Visa restrictions will receive $50,000 in funding upon program start and an additional $50,000 that must be",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-5ae0fd7d6a",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "locate to Rochester for the six-month program will receive $100,000 in funding upon program start in April 2021. Teams that are unable to",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-5b5ed1fd50",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "for Round Eight through January 10, 2025. Teams will receive $100,000 in funding upon program start in April 2025, with the expectation",
+      "page": "details"
+    },
+    {
       "id": "check-deal-62f0a236e7",
       "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
       "title": "NextCorps — application page",
       "excerpt": "development and business mentoring. Each member will receive a $100,000 initial convertible note investment, with a chance for follow-on",
       "page": "application"
+    },
+    {
+      "id": "check-deal-afcf56048a",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "Optics + Laser Science APS/DLS conference. The company will receive $1 million in investment from New York State through the Finger Lakes Forward",
+      "page": "details"
     },
     {
       "id": "check-deal-c5582a61b3",
@@ -55,6 +109,34 @@
       "page": "application"
     },
     {
+      "id": "check-deal-c9737eca35",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "will receive $50,000 in funding upon program start and an additional $50,000 that must be used to engage resources in the Finger Lakes region",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-d258ce57b8",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "downtown Rochester, and online on Sept. 26. The company will receive $1 million in investment from New York State through the Finger Lakes Forward",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-1ec92571aa",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "title": "NextCorps — program page",
+      "excerpt": "training and the necessary support over 12 to 18 months. The manufacturing readiness roadmap they",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-50010f68bd",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "title": "NextCorps — program page",
+      "excerpt": "Sibley Building in downtown Rochester. The 6-month program takes optics, photonics, and imaging",
+      "page": "details"
+    },
+    {
       "id": "check-duration-583fdb2516",
       "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
       "title": "NextCorps — batches page",
@@ -62,18 +144,46 @@
       "page": "batches"
     },
     {
-      "id": "check-email-01273b51c4",
-      "url": "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/",
-      "title": "NextCorps — application page",
-      "excerpt": "info@nextcorps.org",
-      "page": "application"
+      "id": "check-duration-631247046b",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "operations in the region for at least the next 18 months. Empire State Development President, CEO and",
+      "page": "details"
     },
     {
-      "id": "check-email-0f13a6eba5",
-      "url": "https://nextcorps.org/event/application-deadline-i-corps-regional-course-for-startups-hosted-by-rochester-institute-of-technology/",
+      "id": "check-duration-7212207f20",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "operations in Rochester for at least 18 months. Luminate NY round one winner, Colorado-based",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-881a33f93e",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "title": "NextCorps — program page",
+      "excerpt": "Sibley Building in downtown Rochester. The 6-month program will assist these teams with their ideas",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-95018e3dd4",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "operations in Rochester for at least the next 18 months. PreAct Technologies plans to establish",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9d24375231",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
       "title": "NextCorps — batches page",
-      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
+      "excerpt": "A celebration was indeed in order. “In the 18 months since the first group of eight startups began",
       "page": "batches"
+    },
+    {
+      "id": "check-duration-eab2b89036",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "operations in Rochester for at least the next 18 months. SunDensity—which originated from MIT—will be",
+      "page": "details"
     },
     {
       "id": "check-email-118430d74b",
@@ -83,11 +193,53 @@
       "page": "application"
     },
     {
+      "id": "check-email-1c7a189451",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "title": "NextCorps — program page",
+      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
+      "page": "details"
+    },
+    {
+      "id": "check-email-1e99d41cf7",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "title": "NextCorps — program page",
+      "excerpt": "info@nextcorps.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2463504683",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "title": "NextCorps — program page",
+      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2711f88cf0",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2a79d40cc4",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "title": "NextCorps — program page",
+      "excerpt": "info@nextcorps.org",
+      "page": "details"
+    },
+    {
       "id": "check-email-2c91ff2501",
       "url": "https://nextcorps.org/apply-to-nextcorps/",
       "title": "NextCorps — application page",
       "excerpt": "info@nextcorps.org",
       "page": "application"
+    },
+    {
+      "id": "check-email-2d46f5f68e",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — program page",
+      "excerpt": "info@nextcorps.org",
+      "page": "details"
     },
     {
       "id": "check-email-3a5fc91b86",
@@ -97,6 +249,13 @@
       "page": "batches"
     },
     {
+      "id": "check-email-51a7dab8e7",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "title": "NextCorps — program page",
+      "excerpt": "info@nextcorps.org",
+      "page": "details"
+    },
+    {
       "id": "check-email-5458834aca",
       "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
       "title": "NextCorps — batches page",
@@ -104,11 +263,18 @@
       "page": "batches"
     },
     {
-      "id": "check-email-586d8e66ef",
-      "url": "https://nextcorps.org/podcast/navigating-investment/",
-      "title": "NextCorps — terms page",
+      "id": "check-email-558c66c9f8",
+      "url": "https://nextcorps.org/9-tips-about-trade-shows-and-how-to-maximize-your-attendance/",
+      "title": "NextCorps — program page",
       "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
-      "page": "terms"
+      "page": "details"
+    },
+    {
+      "id": "check-email-64825b6377",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "title": "NextCorps — program page",
+      "excerpt": "info@nextcorps.org",
+      "page": "details"
     },
     {
       "id": "check-email-682a2ed36b",
@@ -116,13 +282,6 @@
       "title": "NextCorps — application page",
       "excerpt": "info@nextcorps.org",
       "page": "application"
-    },
-    {
-      "id": "check-email-6b5d9a7296",
-      "url": "https://nextcorps.org/podcast/navigating-investment/",
-      "title": "NextCorps — terms page",
-      "excerpt": "info@nextcorps.org",
-      "page": "terms"
     },
     {
       "id": "check-email-7023e46280",
@@ -146,13 +305,6 @@
       "page": "details"
     },
     {
-      "id": "check-email-7e2de5f9ad",
-      "url": "https://nextcorps.org/event/application-deadline-i-corps-regional-course-for-startups-hosted-by-rochester-institute-of-technology/",
-      "title": "NextCorps — batches page",
-      "excerpt": "info@nextcorps.org",
-      "page": "batches"
-    },
-    {
       "id": "check-email-7e7feeed8a",
       "url": "https://nextcorps.org/",
       "title": "NextCorps — homepage",
@@ -160,11 +312,39 @@
       "page": "details"
     },
     {
-      "id": "check-email-9724bba7a8",
-      "url": "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/",
-      "title": "NextCorps — application page",
-      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
-      "page": "application"
+      "id": "check-email-7eb06cf742",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "title": "NextCorps — batches page",
+      "excerpt": "info@nextcorps.org",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-7f96cb3a36",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "info@nextcorps.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-81d2884b47",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "info@nextcorps.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-85c3c4efb3",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "info@nextcorps.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8d188f15ea",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "info@nextcorps.org",
+      "page": "details"
     },
     {
       "id": "check-email-975ed58b0e",
@@ -174,6 +354,13 @@
       "page": "batches"
     },
     {
+      "id": "check-email-9a9d311343",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "info@nextcorps.org",
+      "page": "details"
+    },
+    {
       "id": "check-email-a0b8257b05",
       "url": "https://nextcorps.org/application-deadline-approaching-for-startups-to-participate-in-luminate-ny-competition-and-business-accelerator/",
       "title": "NextCorps — batches page",
@@ -181,18 +368,53 @@
       "page": "batches"
     },
     {
-      "id": "check-email-a1522097fa",
-      "url": "https://nextcorps.org/event/application-deadline-fuzehub-commercialization-competition/",
-      "title": "NextCorps — batches page",
+      "id": "check-email-a7cd831cd3",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — program page",
       "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
-      "page": "batches"
+      "page": "details"
     },
     {
-      "id": "check-email-b3bf718b5e",
-      "url": "https://nextcorps.org/event/application-deadline-fuzehub-commercialization-competition/",
-      "title": "NextCorps — batches page",
+      "id": "check-email-a82449c060",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — program page",
+      "excerpt": "reach out today (info@nextcorps.org)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a989ce3ea9",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "title": "NextCorps — program page",
+      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
+      "page": "details"
+    },
+    {
+      "id": "check-email-aeb045127e",
+      "url": "https://nextcorps.org/9-tips-about-trade-shows-and-how-to-maximize-your-attendance/",
+      "title": "NextCorps — program page",
       "excerpt": "info@nextcorps.org",
-      "page": "batches"
+      "page": "details"
+    },
+    {
+      "id": "check-email-af4c7c6711",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b698c85652",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "title": "NextCorps — program page",
+      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c643a79a58",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
+      "page": "details"
     },
     {
       "id": "check-email-c801d7278c",
@@ -202,11 +424,39 @@
       "page": "application"
     },
     {
+      "id": "check-email-c9cb0b8e6f",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "title": "NextCorps — program page",
+      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d4fc48b7d8",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "title": "NextCorps — program page",
+      "excerpt": "info@nextcorps.org",
+      "page": "details"
+    },
+    {
       "id": "check-email-e4c765caf8",
       "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
       "title": "NextCorps — application page",
       "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
       "page": "application"
+    },
+    {
+      "id": "check-email-e5d1c932bc",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "title": "NextCorps — batches page",
+      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-e685000033",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
+      "page": "details"
     },
     {
       "id": "check-email-ee6baeec6c",
@@ -216,18 +466,46 @@
       "page": "application"
     },
     {
-      "id": "check-format-0d9d0f693a",
-      "url": "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/",
-      "title": "NextCorps — application page",
-      "excerpt": "Google Calendar iCalendar Outlook 365 Outlook Live Venue: Virtual How Luminate Can Support Your Laser Startup AN AFFILIATE",
-      "page": "application"
+      "id": "check-email-fb64a29920",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
+      "page": "details"
     },
     {
-      "id": "check-format-297514dca2",
-      "url": "https://nextcorps.org/event/application-deadline-i-corps-regional-course-for-startups-hosted-by-rochester-institute-of-technology/",
-      "title": "NextCorps — batches page",
-      "excerpt": "https://www.tfaforms.com/5219044 In this month long virtual course (July 27 – August 26), researchers working on a",
-      "page": "batches"
+      "id": "check-format-15f961d4d3",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "in applying to Luminate can register for an upcoming virtual informational session here . The Finger Lakes Region is",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1826cc6355",
+      "url": "https://nextcorps.org/9-tips-about-trade-shows-and-how-to-maximize-your-attendance/",
+      "title": "NextCorps — program page",
+      "excerpt": "the most from attending a show, including both live and virtual formats. These nine tips will help you make sure your",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1abf54be96",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "biophotonics, security, surveillance, augmented and virtual reality, and autonomous vehicles. Funding for the Luminate",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1e020dd419",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "title": "NextCorps — program page",
+      "excerpt": "biophotonics, security, surveillance, augmented and virtual reality, and autonomous vehicles. Luminate NY is building",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2eb72c6363",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "and tools of our future—including augmented and virtual reality, autonomous vehicles, machine vision, and",
+      "page": "details"
     },
     {
       "id": "check-format-3634791307",
@@ -244,18 +522,18 @@
       "page": "application"
     },
     {
-      "id": "check-format-5749a09c80",
-      "url": "https://nextcorps.org/event/application-deadline-fuzehub-commercialization-competition/",
-      "title": "NextCorps — batches page",
-      "excerpt": "Google Calendar iCalendar Outlook 365 Outlook Live Venue: Virtual First Thursdays/Creative Collisions Unlock New",
-      "page": "batches"
+      "id": "check-format-4fe6492b19",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — program page",
+      "excerpt": "Applications for Free Hardware Manufacturing Accelerator Virtual program helps hardware startups bypass development",
+      "page": "details"
     },
     {
-      "id": "check-format-5f753826f0",
-      "url": "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/?ical=1",
-      "title": "NextCorps — application page",
-      "excerpt": "LOCATION:Virtual CATEGORIES:Info Session",
-      "page": "application"
+      "id": "check-format-53daf99ce9",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "title": "NextCorps — program page",
+      "excerpt": "NY Intelon Optics, Inc. – Boston, MA In Augmented and Virtual Reality, Sensors, Instrumentation, Image Recognition:",
+      "page": "details"
     },
     {
       "id": "check-format-815e6419dc",
@@ -293,6 +571,27 @@
       "page": "application"
     },
     {
+      "id": "check-format-a4c13439ad",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "to 12 promising companies each year to participate in its hybrid, six-month program. During this time, companies are",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b695209b29",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "biophotonics, security, surveillance, augmented and virtual reality, and autonomous vehicles. The 10 selected startups",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b816d8cff2",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "title": "NextCorps — program page",
+      "excerpt": "LighTopTech Corp. Rochester, NY In Augmented and Virtual Reality, Sensors, Instrumentation, Image Recognition:",
+      "page": "details"
+    },
+    {
       "id": "check-format-c740bfc5e7",
       "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
       "title": "NextCorps — application page",
@@ -305,6 +604,13 @@
       "title": "NextCorps — batches page",
       "excerpt": "including autonomous vehicles, augmented reality/virtual reality, climate tech, communications, defense,",
       "page": "batches"
+    },
+    {
+      "id": "check-format-e9ea8c6418",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "title": "NextCorps — program page",
+      "excerpt": "always test your microphones before recording and, during virtual interviews, consider using a smartphone as a backup",
+      "page": "details"
     },
     {
       "id": "check-format-f34e17feb5",
@@ -328,10 +634,59 @@
       "page": "batches"
     },
     {
+      "id": "check-location-5da948be4c",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "title": "NextCorps — program page",
+      "excerpt": "from New York State and will be based in Rochester at the state-of-the-art AIM",
+      "page": "details"
+    },
+    {
+      "id": "check-location-7ae00a5f82",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "commitment from New York and is based in Rochester at the state-of-the-art AIM",
+      "page": "details"
+    },
+    {
+      "id": "check-location-d3723eaf1f",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "The Luminate NY accelerator is based in Rochester and selects 10 to 12 promising",
+      "page": "details"
+    },
+    {
+      "id": "check-location-d7478551cf",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "instructing surgeon. Rubitection, based in Pittsburgh secured the Distinguished Graduate",
+      "page": "details"
+    },
+    {
       "id": "check-name-51d8b093d2",
       "url": "https://nextcorps.org/",
       "title": "NextCorps — homepage",
       "excerpt": "Home - NextCorps Skip to content About Us Facility Funders Board Staff News",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0b8b5040bb",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "Incubation Services → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-15d9728f48",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "Our Startups → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-166cb32172",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "Our Startups → https://nextcorps.org/startups/",
       "page": "details"
     },
     {
@@ -342,11 +697,25 @@
       "page": "batches"
     },
     {
-      "id": "check-portfolio-31fbfc4e7d",
-      "url": "https://nextcorps.org/event/application-deadline-i-corps-regional-course-for-startups-hosted-by-rochester-institute-of-technology/",
-      "title": "NextCorps — batches page",
+      "id": "check-portfolio-27725a0103",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
       "excerpt": "Incubation Services → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-27f8c363b4",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "title": "NextCorps — batches page",
+      "excerpt": "Our Startups → https://nextcorps.org/startups/",
       "page": "batches"
+    },
+    {
+      "id": "check-portfolio-31fd929cb5",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "Our Startups → https://nextcorps.org/startups/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-409a558182",
@@ -356,6 +725,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-44410bb13f",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "title": "NextCorps — program page",
+      "excerpt": "Incubation Services → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-460a7ddb9e",
       "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
       "title": "NextCorps — application page",
@@ -363,11 +739,11 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-4f0d3c7f85",
-      "url": "https://nextcorps.org/event/application-deadline-i-corps-regional-course-for-startups-hosted-by-rochester-institute-of-technology/",
-      "title": "NextCorps — batches page",
-      "excerpt": "Our Startups → https://nextcorps.org/startups/",
-      "page": "batches"
+      "id": "check-portfolio-4a3e433930",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "title": "NextCorps — program page",
+      "excerpt": "Incubation Services → https://nextcorps.org/startups/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-55086861e6",
@@ -375,6 +751,20 @@
       "title": "NextCorps — application page",
       "excerpt": "Our Startups → https://nextcorps.org/startups/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-555d4a4d6d",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "title": "NextCorps — program page",
+      "excerpt": "Our Startups → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-60dc1abf1e",
+      "url": "https://nextcorps.org/9-tips-about-trade-shows-and-how-to-maximize-your-attendance/",
+      "title": "NextCorps — program page",
+      "excerpt": "Incubation Services → https://nextcorps.org/startups/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-69376efeae",
@@ -398,18 +788,32 @@
       "page": "batches"
     },
     {
-      "id": "check-portfolio-722dc86341",
-      "url": "https://nextcorps.org/event/application-deadline-fuzehub-commercialization-competition/",
+      "id": "check-portfolio-711b595221",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — program page",
+      "excerpt": "Incubation Services → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7929a2d226",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "title": "NextCorps — program page",
+      "excerpt": "Our Startups → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7bff27ced1",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "Our Startups → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-89eaf10837",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
       "title": "NextCorps — batches page",
       "excerpt": "Incubation Services → https://nextcorps.org/startups/",
       "page": "batches"
-    },
-    {
-      "id": "check-portfolio-8da771bf73",
-      "url": "https://nextcorps.org/podcast/navigating-investment/",
-      "title": "NextCorps — terms page",
-      "excerpt": "Our Startups → https://nextcorps.org/startups/",
-      "page": "terms"
     },
     {
       "id": "check-portfolio-9732591c64",
@@ -426,6 +830,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-a8dbbbfbd7",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "Our Startups → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-b24f38fac9",
       "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
       "title": "NextCorps — batches page",
@@ -433,11 +844,25 @@
       "page": "batches"
     },
     {
-      "id": "check-portfolio-b6fcead760",
-      "url": "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/",
-      "title": "NextCorps — application page",
+      "id": "check-portfolio-b5dd7b3377",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "Incubation Services → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b70efb608f",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "Incubation Services → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b91199376b",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "title": "NextCorps — program page",
       "excerpt": "Our Startups → https://nextcorps.org/startups/",
-      "page": "application"
+      "page": "details"
     },
     {
       "id": "check-portfolio-c1c862d77e",
@@ -447,18 +872,32 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-ca64bc7826",
-      "url": "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/",
-      "title": "NextCorps — application page",
-      "excerpt": "Incubation Services → https://nextcorps.org/startups/",
-      "page": "application"
+      "id": "check-portfolio-cd2e65a37f",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "title": "NextCorps — program page",
+      "excerpt": "Our Startups → https://nextcorps.org/startups/",
+      "page": "details"
     },
     {
-      "id": "check-portfolio-d9c66aca96",
-      "url": "https://nextcorps.org/podcast/navigating-investment/",
-      "title": "NextCorps — terms page",
+      "id": "check-portfolio-dd200d3290",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "title": "NextCorps — program page",
       "excerpt": "Incubation Services → https://nextcorps.org/startups/",
-      "page": "terms"
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-dd3f4cede3",
+      "url": "https://nextcorps.org/9-tips-about-trade-shows-and-how-to-maximize-your-attendance/",
+      "title": "NextCorps — program page",
+      "excerpt": "Our Startups → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-dfebdbb9a7",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "title": "NextCorps — program page",
+      "excerpt": "Our Startups → https://nextcorps.org/startups/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-e142f8c8fa",
@@ -482,11 +921,25 @@
       "page": "batches"
     },
     {
-      "id": "check-portfolio-f5d34b28f0",
-      "url": "https://nextcorps.org/event/application-deadline-fuzehub-commercialization-competition/",
-      "title": "NextCorps — batches page",
+      "id": "check-portfolio-e79348b34c",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — program page",
       "excerpt": "Our Startups → https://nextcorps.org/startups/",
-      "page": "batches"
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e92c471775",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "title": "NextCorps — program page",
+      "excerpt": "Incubation Services → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f34857e50f",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "title": "NextCorps — program page",
+      "excerpt": "Incubation Services → https://nextcorps.org/startups/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-f6bc576ac8",
@@ -494,6 +947,13 @@
       "title": "NextCorps — application page",
       "excerpt": "Our Startups → https://nextcorps.org/startups/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-fd62bfef6f",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "Incubation Services → https://nextcorps.org/startups/",
+      "page": "details"
     },
     {
       "id": "check-route-128e5445d0",
@@ -510,25 +970,11 @@
       "page": "batches"
     },
     {
-      "id": "check-route-1c7c6dbdb0",
-      "url": "https://nextcorps.org/event/application-deadline-i-corps-regional-course-for-startups-hosted-by-rochester-institute-of-technology/",
-      "title": "NextCorps — batches page",
+      "id": "check-route-35b6a27948",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "title": "NextCorps — program page",
       "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
-      "page": "batches"
-    },
-    {
-      "id": "check-route-391df9522c",
-      "url": "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/",
-      "title": "NextCorps — application page",
-      "excerpt": "iCalendar → https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/?ical=1",
-      "page": "application"
-    },
-    {
-      "id": "check-route-3947562f79",
-      "url": "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/",
-      "title": "NextCorps — application page",
-      "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
-      "page": "application"
+      "page": "details"
     },
     {
       "id": "check-route-41463748c5",
@@ -545,11 +991,11 @@
       "page": "details"
     },
     {
-      "id": "check-route-49f53b0539",
-      "url": "https://nextcorps.org/event/application-deadline-fuzehub-commercialization-competition/",
-      "title": "NextCorps — batches page",
+      "id": "check-route-4715fdf13e",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
       "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
-      "page": "batches"
+      "page": "details"
     },
     {
       "id": "check-route-4a29018c94",
@@ -566,11 +1012,81 @@
       "page": "application"
     },
     {
-      "id": "check-route-5e48b4a666",
-      "url": "https://nextcorps.org/podcast/navigating-investment/",
-      "title": "NextCorps — terms page",
+      "id": "check-route-5d3b453199",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — program page",
+      "excerpt": "From Prototype to Profits: NextCorps Opens Applications for Free Hardware Manufacturing Accelerator → https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-835a025645",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "title": "NextCorps — program page",
       "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
-      "page": "terms"
+      "page": "details"
+    },
+    {
+      "id": "check-route-8f6575cff0",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-92d79da57e",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "Applications are now being accepted for Round 4 through January 7, 2021. → https://www.f6s.com/luminateny2021",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a0fd805fda",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "title": "NextCorps — batches page",
+      "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-a10dc3e1b1",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a912c3f18c",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "title": "NextCorps — program page",
+      "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b459f2236f",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "title": "NextCorps — program page",
+      "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c50f40bc97",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — program page",
+      "excerpt": "Read More » → https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c8d99b06d1",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "title": "NextCorps — program page",
+      "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cee83527f9",
+      "url": "https://nextcorps.org/9-tips-about-trade-shows-and-how-to-maximize-your-attendance/",
+      "title": "NextCorps — program page",
+      "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
+      "page": "details"
     },
     {
       "id": "check-route-d6b7c305b3",
@@ -578,6 +1094,27 @@
       "title": "NextCorps — batches page",
       "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
       "page": "batches"
+    },
+    {
+      "id": "check-route-dd2a74f1d6",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — program page",
+      "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-df8af1bef9",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "title": "NextCorps — program page",
+      "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ffec02e747",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "title": "NextCorps — program page",
+      "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
+      "page": "details"
     },
     {
       "id": "check-status-0289b8853a",
@@ -602,16 +1139,76 @@
       "excerpt": "Home - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Startup Week has something for every entrepreneur. Sign up for free sessions Be Next to Tap into Rochester’s Largest Resource for Startup Programming to Move Forward Faster Get Startup Help We’re here to help entrepreneurs who are ready to start or expand their businesses. Explore our programs to see which is right"
     },
     {
+      "id": "check-page-0f8a1b1418",
+      "url": "https://nextcorps.org/",
+      "page": "details",
+      "excerpt": "Launch Grow Manufacturing If you’re a manufacturer or production-related company in the Finger Lakes Region, we can connect you to funding opportunities and resources to help you expand and thrive."
+    },
+    {
+      "id": "check-page-bbb9884dab",
+      "url": "https://nextcorps.org/",
+      "page": "details",
+      "excerpt": "Luminate can connect you with an immediate $100K, six months of expert mentorship and business support, potential investors and industry partners, and much more."
+    },
+    {
+      "id": "check-page-d02e05643f",
+      "url": "https://nextcorps.org/",
+      "page": "details",
+      "excerpt": "Learn more and apply Free Workshop 12/3 Early decisions about contracts, hiring, intellectual property, insurance, and data security can have lasting consequences."
+    },
+    {
+      "id": "check-page-98c5e6ce8c",
+      "url": "https://nextcorps.org/",
+      "page": "details",
+      "excerpt": "Register by 12/1 Inside the Incubator Meet Developer Squad, a NextCorps incubator startup helping businesses build, modernize, and get more from their technology."
+    },
+    {
+      "id": "check-page-10a7ed263f",
+      "url": "https://nextcorps.org/",
+      "page": "details",
+      "excerpt": "Read the blog Software Licensing for Startups Learn what founders should know about open-source software, AI-assisted development, and software licensing in takeaways from a NextCorps lunch & learn with Steven Smith, co-founder & CEO of Perdix Software."
+    },
+    {
+      "id": "check-page-d15dd79b4c",
+      "url": "https://nextcorps.org/",
+      "page": "details",
+      "excerpt": "Subscribe to NextCorps communications to stay up-to-date on what’s happening in the region’s startup community, including info on upcoming events and opportunities that can help forward your business."
+    },
+    {
       "id": "check-page-34d092a308",
       "url": "https://nextcorps.org/apply-to-nextcorps/",
       "page": "application",
       "excerpt": "Apply to NextCorps - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Apply for support Finding the right support can be confusing. Take the first step by completing the form. We’ll take it from there. About You What is your first name? * What is your last name? * Which of the following statements best describes you? * I am a startup founder I am an employee at a startup"
     },
     {
-      "id": "check-page-412a7ebfa0",
-      "url": "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/",
+      "id": "check-page-f42e49b2f4",
+      "url": "https://nextcorps.org/apply-to-nextcorps/",
       "page": "application",
-      "excerpt": "Tips for Applying to Luminate: Increase Your Chances for Consideration - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search « All Events Tips for Applying to Luminate: Increase Your Chances for Consideration January 7 @ 1:00 pm - 2:00 pm Free Website:"
+      "excerpt": "Exploring market potential of a technology or idea Building a prototype Finding customers for your product Scaling a defined product Help pursuing investment opportunities *Note: NextCorps's incubation program offers educational opportunities, mentoring, and membership in a vibrant community, but is not a funding source."
+    },
+    {
+      "id": "check-page-412fd343ad",
+      "url": "https://nextcorps.org/apply-to-nextcorps/",
+      "page": "application",
+      "excerpt": "Other NextCorps accelerator programs facilitate connections to potential investors, with Luminate providing direct investment."
+    },
+    {
+      "id": "check-page-72ac04481e",
+      "url": "https://nextcorps.org/apply-to-nextcorps/",
+      "page": "application",
+      "excerpt": "Virgin Islands Vermont Virginia Washington West Virginia Wisconsin Wyoming Armed Forces Americas Armed Forces Europe Armed Forces Pacific State ZIP Code How did you hear about us?"
+    },
+    {
+      "id": "check-page-d67c3f78d3",
+      "url": "https://nextcorps.org/apply-to-nextcorps/",
+      "page": "application",
+      "excerpt": "AN AFFILIATE OF PROGRAM FUNDERS NEXTCORPS NextCorps is a non-profit helping innovative technology companies launch and grow. © NextCorps 2026 Privacy Policy Client Directory SUBSCRIBE Subscribe to NextCorps communications to stay up-to-date on what’s happening in the region’s startup community, including info on upcoming events and opportunities that can help forward your business."
+    },
+    {
+      "id": "check-page-df471c8100",
+      "url": "https://nextcorps.org/apply-to-nextcorps/",
+      "page": "application",
+      "excerpt": "Subscribe to NextCorps communications to stay up-to-date on what’s happening in the region’s startup community, including info on upcoming events and opportunities that can help forward your business."
     },
     {
       "id": "check-page-e9005fb0fd",
@@ -620,10 +1217,154 @@
       "excerpt": "From Prototype to Profits: NextCorps Opens Applications for Free Hardware Manufacturing Accelerator - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search From Prototype to Profits: NextCorps Opens Applications for Free Hardware Manufacturing Accelerator March 3, 2026 Virtual program helps hardware startups bypass development pitfalls and scale to mass production;"
     },
     {
+      "id": "check-page-a6db86be11",
+      "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "application",
+      "excerpt": "To bridge this gap, NextCorps is now accepting applications for its Manufacturing Accelerator , a free, nine-week virtual program designed to move entrepreneurs from “works-like” prototypes to mass production."
+    },
+    {
+      "id": "check-page-a0ae6bf8bf",
+      "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "application",
+      "excerpt": "The program provides early-stage companies with a simplified roadmap to manufacturing, offering hands-on guidance from industry experts, connections to trusted vendors, and access to funding opportunities."
+    },
+    {
+      "id": "check-page-fb36d51ea2",
+      "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "application",
+      "excerpt": "“We went from a drawing on graph paper to an actual product in the world in a very short time thanks to this program,” said Dan Fucich, PhD, Co-founder of AlgenAir and a former accelerator participant that uses algae to improve indoor air quality."
+    },
+    {
+      "id": "check-page-dbf453bb4c",
+      "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "application",
+      "excerpt": "Bridging the Gap to Mass Production The Manufacturing Accelerator is specifically designed for startups working on advanced materials, medical devices, lab-based hardware innovations, or any company with a hardware prototype."
+    },
+    {
+      "id": "check-page-51d1c73d84",
+      "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "application",
+      "excerpt": "Participants gain access to: Technical Readiness: Perform Manufacturing Readiness Level (MRL) assessments and build comprehensive Product Requirements Documents (PRD)."
+    },
+    {
+      "id": "check-page-26f9258381",
+      "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "application",
+      "excerpt": "Direct Connections: Virtual or in-person manufacturing site tours and individualized vendor engagement."
+    },
+    {
+      "id": "check-page-cb73a87a89",
+      "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "application",
+      "excerpt": "Operational Blueprints: Development of Design for Manufacturing (DFM), Bill of Materials (BOM), and a customized Manufacturing Roadmap toward MRL 8."
+    },
+    {
+      "id": "check-page-88e81c0c84",
+      "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "application",
+      "excerpt": "Ongoing Support: Technical assistance through Manufacturing Extension Partnership centers."
+    },
+    {
+      "id": "check-page-7059f7e313",
+      "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "application",
+      "excerpt": "Eligibility & Key Dates To qualify, companies can be located anywhere—except for those residing in countries subject to U.S. sanctions—must possess a hardware prototype, and commit to four hours of weekly instruction and assignments."
+    },
+    {
+      "id": "check-page-26097a27bd",
+      "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "application",
+      "excerpt": "For more information about NextCorps Manufacturing Accelerator, visit: https://manufacturingaccelerator.org/ ."
+    },
+    {
+      "id": "check-page-05bc0840f5",
+      "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "application",
+      "excerpt": "About NextCorps Manufacturing Accelerator The Manufacturing Accelerator utilizes the U.S."
+    },
+    {
+      "id": "check-page-fed40cf501",
+      "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "application",
+      "excerpt": "Department of Defense Manufacturing Readiness Level metrics, along with materials derived from the U.S."
+    },
+    {
       "id": "check-page-3d3a6f8d0b",
       "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
       "page": "application",
       "excerpt": "Governor Cuomo Announces Applications are Now Being Accepted for Round II of Luminate NY - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Governor Cuomo Announces Applications are Now Being Accepted for Round II of Luminate NY June 13, 2018 Innovative Competition Aims to Bring Visionary Optics, Photonics and Imaging Companies and Latest Industry Technologies to the"
+    },
+    {
+      "id": "check-page-caf1df90ec",
+      "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
+      "page": "application",
+      "excerpt": "Cuomo today announced that the world’s largest business accelerator for startup firms in the optics, photonics and imaging industries, Luminate NY, is now accepting applications for Round II of the innovative competition."
+    },
+    {
+      "id": "check-page-1fccf3bf57",
+      "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
+      "page": "application",
+      "excerpt": "The Luminate NY accelerator, located in Rochester, helps promising optics and photonics companies advance their technologies and businesses through a community of resources, including financial support."
+    },
+    {
+      "id": "check-page-4702171723",
+      "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
+      "page": "application",
+      "excerpt": "“The Luminate NY accelerator extends the region’s reputation as an imaging and optics epicenter and complements New York’s strategic investments in photonics and advanced manufacturing to support commercialization capabilities,” Governor Cuomo said."
+    },
+    {
+      "id": "check-page-6f11695b2f",
+      "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
+      "page": "application",
+      "excerpt": "The free Light Tomorrow with Today Demo Day event will be held on June 28, 2018 at the Big Tent at the Rochester International Jazz Festival."
+    },
+    {
+      "id": "check-page-efda4c50a9",
+      "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
+      "page": "application",
+      "excerpt": "Once admitted, companies will receive assistance with capital, technology development and business mentoring."
+    },
+    {
+      "id": "check-page-4302250f11",
+      "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
+      "page": "application",
+      "excerpt": "Each member will receive a $100,000 initial convertible note investment, with a chance for follow-on funding at the end of the rigorous six-month entrepreneurship training program."
+    },
+    {
+      "id": "check-page-7d13783870",
+      "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
+      "page": "application",
+      "excerpt": "Department of Defense-led American Institute for Manufacturing Integrated Photonics, which is supported by a $250 million commitment from New York State and will be based in Rochester at the state-of-the-art AIM manufacturing facility located in Eastman Business Park."
+    },
+    {
+      "id": "check-page-484c76bed1",
+      "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
+      "page": "application",
+      "excerpt": "The facility will be used to test, assemble and package chips that use photons in place of electrons for increased performance of semiconductor circuits."
+    },
+    {
+      "id": "check-page-2e2819850a",
+      "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
+      "page": "application",
+      "excerpt": "First announced by Governor Cuomo and Vice President Joe Biden in July 2015, AIM Photonics will help secure the Finger Lakes region and nation’s leadership position in emerging technology research, development, and manufacturing."
+    },
+    {
+      "id": "check-page-8bb3ad0ca3",
+      "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
+      "page": "application",
+      "excerpt": "Morelle said, “Luminate New York is investing in the limitless potential and promise of high-tech entrepreneurs who will further strengthen and propel our region’s growing economy."
+    },
+    {
+      "id": "check-page-db23b35f6b",
+      "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
+      "page": "application",
+      "excerpt": "Warren said, “The incredible progress underway at Luminate NY clearly demonstrates the wisdom of Governor Cuomo’s decision to locate this business incubator in Rochester and help position our region as the photonics and optics capital of the world."
+    },
+    {
+      "id": "check-page-c5afa6c9ca",
+      "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
+      "page": "application",
+      "excerpt": "Luminate NY gives business leaders a platform to bring their innovative ideas to the marketplace, which accelerates the growth of Rochester’s knowledge economy."
     },
     {
       "id": "check-page-c671e0a03d",
@@ -632,34 +1373,76 @@
       "excerpt": "Venture For ClimateTech Opens Application Period to Help Innovators Get Climate Tech Ideas Off the Ground - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Venture For ClimateTech Opens Application Period to Help Innovators Get Climate Tech Ideas Off the Ground January 14, 2021 New program is now recruiting its first cohort of innovators to help them accelerate ideas"
     },
     {
-      "id": "check-page-f6002e32d4",
-      "url": "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/?ical=1",
+      "id": "check-page-f4e8fef66a",
+      "url": "https://nextcorps.org/venture-for-climatetech-opens-application-period/",
       "page": "application",
-      "excerpt": "BEGIN:VCALENDAR VERSION:2.0 PRODID:-//NextCorps - ECPv6.18.3.1//NONSGML v1.0//EN CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:NextCorps X-ORIGINAL-URL:https://nextcorps.org X-WR-CALDESC:Events for NextCorps REFRESH-INTERVAL;VALUE=DURATION:PT1H X-Robots-Tag:noindex X-PUBLISHED-TTL:PT1H BEGIN:VTIMEZONE TZID:America/New_York BEGIN:DAYLIGHT TZOFFSETFROM:-0500 TZOFFSETTO:-0400 TZNAME:EDT DTSTART:20260308T070000 END:DAYLIGHT BEGIN:STANDARD TZOFFSETFROM:-0400 TZOFFSETTO:-0500 TZNAME:EST DTSTART:20261101T060000 END:STANDARD BEGIN:DAYLIGHT TZOFFSETFROM:-0500 TZOFFSETTO:-0400 TZNAME:EDT DTSTART:20270314T070000 END:DAYLIGHT BEGIN:STANDARD TZOFFSETFROM:-0400 TZOFFSETTO:-0500 TZNAME:EST DTSTART:20271107T060000 END:STANDARD BEGIN:DAYLIGHT TZOFFSETFROM:-0500 TZOFFSETTO:-0400 TZNAME:EDT DTSTART:20280312T070000 END:DAYLIGHT BEGIN:STANDARD TZOFFSETFROM:-0400 TZOFFSETTO:-0500 TZNAME:EST DTSTART:20281105T060000 END:STANDARD END:VTIMEZONE BEGIN:VEVENT DTSTART;TZID=America/New_York:20270107T130000 DTEND;TZID=America/New_York:20270107T140000 DTSTAMP:20261026T193555Z CREATED:20261026T193555Z LAST-MODIFIED:20261026T193555Z UID:24132-1799326800-1799330400@nextcorps.org SUMMARY:Tips for Applying to Luminate: Increase Your Chances for Consideration DESCRIPTION:Thinking about applying to Luminate? \\nLuminate is looking for its next cohort of startups who are solving industry challenges with technologies"
+      "excerpt": "Venture for ClimateTech is a new global non-profit venture studio + accelerator providing innovators with the non-dilutive funding they need to de-risk their opportunity, as well as the tools, training, and talent to begin building and launching a company around their impactful climate tech solution."
     },
     {
-      "id": "check-page-ad3026a14f",
-      "url": "https://nextcorps.org/podcast/navigating-investment/",
-      "page": "terms",
-      "excerpt": "Navigating Investment - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Navigating Investment January 8, 2020 Forward Faster Navigating Investment Play Episode Pause Episode 1x 00:00 / 13:08 Subscribe Share RSS Feed Share Link Embed <blockquote class=\"wp-embedded-content\" data-secret=\"PpF8Wxrw3W\"><a href=\"https://nextcorps.org/podcast/navigating-investment/\">Navigating"
+      "id": "check-page-aaeeda6739",
+      "url": "https://nextcorps.org/venture-for-climatetech-opens-application-period/",
+      "page": "application",
+      "excerpt": "Applicants can be located anywhere in the world and should be interested in benefiting the climate tech ecosystem, including in New York State."
     },
     {
-      "id": "check-page-0c348cdf07",
-      "url": "https://nextcorps.org/podcast-download/4220/navigating-investment.m4a?ref=download",
-      "page": "terms",
-      "excerpt": "ftypM4A M4A mp42isom mdat |� ! E P F�� ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ]�� ����������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������ۄ)iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiix! E P F�� ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ]�� �����������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������D)iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiix! E P F��"
+      "id": "check-page-e21f35322c",
+      "url": "https://nextcorps.org/venture-for-climatetech-opens-application-period/",
+      "page": "application",
+      "excerpt": "Particular segments of interest include hardware, software, or business model solutions for buildings, transportation, energy storage, grid, fintech, food and agtech."
     },
     {
-      "id": "check-page-6a068c70be",
-      "url": "https://nextcorps.org/podcast-download/4220/navigating-investment.m4a?ref=new_window",
-      "page": "terms",
-      "excerpt": "ftypM4A M4A mp42isom mdat |� ! E P F�� ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ]�� ����������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������ۄ)iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiix! E P F�� ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ]�� �����������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������D)iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiix! E P F��"
+      "id": "check-page-a850b0c219",
+      "url": "https://nextcorps.org/venture-for-climatetech-opens-application-period/",
+      "page": "application",
+      "excerpt": "Solutions that reach, are designed by, and/or positively impact the communities most impacted by climate change also have strong appeal."
     },
     {
-      "id": "check-page-a3cac76e10",
-      "url": "https://nextcorps.org/podcast-player/4220/navigating-investment.m4a",
-      "page": "terms",
-      "excerpt": "ftypM4A M4A mp42isom mdat |� ! E P F�� ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ]�� ����������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������ۄ)iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiix! E P F�� ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ]�� �����������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������D)iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiix! E P F��"
+      "id": "check-page-e7b7239f96",
+      "url": "https://nextcorps.org/venture-for-climatetech-opens-application-period/",
+      "page": "application",
+      "excerpt": "Session options and topics include: January 28, 2021, 11:00 AM – 12:00 PM EST – Overview of Venture For ClimateTech, its benefits, and how to apply with Managing Director, Jacqueline Ros Amable."
+    },
+    {
+      "id": "check-page-050c11c5c4",
+      "url": "https://nextcorps.org/venture-for-climatetech-opens-application-period/",
+      "page": "application",
+      "excerpt": "February 9, 2021, 11:00 AM – 12:00 PM EST – How support and funding at the very early stage can accelerate businesses, with Venture For ClimateTech Sr."
+    },
+    {
+      "id": "check-page-d24e1bda67",
+      "url": "https://nextcorps.org/venture-for-climatetech-opens-application-period/",
+      "page": "application",
+      "excerpt": "Manager, Chante Harris, and CEOs of climate tech companies who took advantage of similar programming."
+    },
+    {
+      "id": "check-page-f834ca48b5",
+      "url": "https://nextcorps.org/venture-for-climatetech-opens-application-period/",
+      "page": "application",
+      "excerpt": "Select applicants will be invited to participate in a Bootcamp For ClimateTech that will result in the final selection of 10 companies for Cohort 1."
+    },
+    {
+      "id": "check-page-994ee31386",
+      "url": "https://nextcorps.org/venture-for-climatetech-opens-application-period/",
+      "page": "application",
+      "excerpt": "For more information on For ClimateTech, including Venture For ClimateTech and Scale For ClimateTech, and to sign up to receive program updates and news, visit ForClimateTech.org ."
+    },
+    {
+      "id": "check-page-72e4c79baf",
+      "url": "https://nextcorps.org/venture-for-climatetech-opens-application-period/",
+      "page": "application",
+      "excerpt": "About For ClimateTech The For ClimateTech initiative, which includes Venture For ClimateTech and Scale For ClimateTech, is supported by the New York State Research and Development Authority (NYSERDA), and is administered by non-profit entrepreneurship catalyst NextCorps and impact innovation company SecondMuse ."
+    },
+    {
+      "id": "check-page-30cdf9a9a8",
+      "url": "https://nextcorps.org/venture-for-climatetech-opens-application-period/",
+      "page": "application",
+      "excerpt": "The goal of For ClimateTech initiatives is to accelerate innovations likely to have substantial climate impacts for all, and limit greenhouse gas emissions to 40% of 1990 levels by 2030 as established by The Climate Leadership and Community Protection Act of New York State."
+    },
+    {
+      "id": "check-page-e997d39f26",
+      "url": "https://nextcorps.org/venture-for-climatetech-opens-application-period/",
+      "page": "application",
+      "excerpt": "Venture For ClimateTech Leadership Jacqueline Ros Amable , Managing Director – Amable is a former founder in the hardware space via Revolar."
     },
     {
       "id": "check-page-962a52ee29",
@@ -668,22 +1451,916 @@
       "excerpt": "Application Deadline Approaching for Startups to Participate in Luminate NY Competition and Business Accelerator - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Application Deadline Approaching for Startups to Participate in Luminate NY Competition and Business Accelerator January 6, 2022 Applications Due Jan. 17 for Accelerator Offering Immediate Funding and the"
     },
     {
+      "id": "check-page-904da55ea8",
+      "url": "https://nextcorps.org/application-deadline-approaching-for-startups-to-participate-in-luminate-ny-competition-and-business-accelerator/",
+      "page": "batches",
+      "excerpt": "17 for Accelerator Offering Immediate Funding and the Chance to Compete for up to $2 Million in Follow-On Investment January 06, 2022 08:00 ET ROCHESTER, N.Y., Jan."
+    },
+    {
+      "id": "check-page-cfbc5758d6",
+      "url": "https://nextcorps.org/application-deadline-approaching-for-startups-to-participate-in-luminate-ny-competition-and-business-accelerator/",
+      "page": "batches",
+      "excerpt": "06, 2022 ( GLOBE NEWSWIRE ) — NextCorps today issued a reminder that the deadline is just days away to apply for Cohort 5 of Luminate NY —the world’s largest business accelerator and investment fund for early-stage companies working on solutions that are enabled by optics, photonics, or imaging (OPI)."
+    },
+    {
+      "id": "check-page-c41592aa30",
+      "url": "https://nextcorps.org/application-deadline-approaching-for-startups-to-participate-in-luminate-ny-competition-and-business-accelerator/",
+      "page": "batches",
+      "excerpt": "This year, participation in the Rochester, NY based accelerator will be mostly remote, with select weeks in person for pitches to investor groups."
+    },
+    {
+      "id": "check-page-d556770ffc",
+      "url": "https://nextcorps.org/application-deadline-approaching-for-startups-to-participate-in-luminate-ny-competition-and-business-accelerator/",
+      "page": "batches",
+      "excerpt": "Companies accepted into Luminate’s portfolio in the past have been from diverse industries, including autonomous vehicles, augmented reality/virtual reality, climate tech, communications, defense, entertainment, medical device, quantum computing, security, and more."
+    },
+    {
+      "id": "check-page-cd724f4972",
+      "url": "https://nextcorps.org/application-deadline-approaching-for-startups-to-participate-in-luminate-ny-competition-and-business-accelerator/",
+      "page": "batches",
+      "excerpt": "Subscribe to NextCorps communications to stay up-to-date on what’s happening in the region’s startup community, including info on upcoming events and opportunities that can help forward your business."
+    },
+    {
       "id": "check-page-843f099aac",
       "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
       "page": "batches",
       "excerpt": "Empire State Development Announces 10 Startups Selected to Take Part in Cohort II of Luminate NY - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Empire State Development Announces 10 Startups Selected to Take Part in Cohort II of Luminate NY November 19, 2018 $10 Million Luminate NY Initiative is the World’s Largest Startup Accelerator Program for Optics, Photonics"
     },
     {
-      "id": "check-page-9a3ff83cee",
-      "url": "https://nextcorps.org/event/application-deadline-fuzehub-commercialization-competition/",
+      "id": "check-page-a8df0f2111",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
       "page": "batches",
-      "excerpt": "APPLICATION DEADLINE: FuzeHub Commercialization Competition - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search « All Events This event has passed. APPLICATION DEADLINE: FuzeHub Commercialization Competition August 10 Website: https://fuzehub.com/commercialization-competition/ As part of the Jeff Lawrence Innovation Fund, FuzeHub holds an annual Commercialization"
+      "excerpt": "The finalists selected include optics, photonics and imaging startups who were selected after pitching their innovative ideas to an advisory panel comprised of industry experts at the Luminate NY Lightning Awards at the Dryden Theatre at the George Eastman House."
     },
     {
-      "id": "check-page-89b74695d6",
-      "url": "https://nextcorps.org/event/application-deadline-i-corps-regional-course-for-startups-hosted-by-rochester-institute-of-technology/",
+      "id": "check-page-a88172281b",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
       "page": "batches",
-      "excerpt": "APPLICATION DEADLINE: I-Corps Regional Course for Startups hosted by Rochester Institute of Technology - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search « All Events This event has passed. APPLICATION DEADLINE: I-Corps Regional Course for Startups hosted by Rochester Institute of Technology July 8 Website: https://www.tfaforms.com/5219044 In this month long virtual"
+      "excerpt": "The teams will then compete on Demo Day, where they will vie for $2 million in follow-on funding."
+    },
+    {
+      "id": "check-page-47e53317f8",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
+      "page": "batches",
+      "excerpt": "Funding for the $10 million program is being provided through the Finger Lakes Forward Upstate Revitalization Initiative award and is being administered by Nextcorps."
+    },
+    {
+      "id": "check-page-22358e15b5",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
+      "page": "batches",
+      "excerpt": "The program aims to assist entrepreneurs who are interested in solving challenging industry problems, including, but not limited to: machine vision, inspection, biophotonics, security, surveillance, augmented and virtual reality, and autonomous vehicles."
+    },
+    {
+      "id": "check-page-f88568cae0",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
+      "page": "batches",
+      "excerpt": "Sixteen companies from New York State applied, with the remaining coming from U.S. cities including, Boston, San Francisco, Orlando, San Jose, Indianapolis, New Orleans, Fort Collins, Santa Clara, St."
+    },
+    {
+      "id": "check-page-7955237877",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
+      "page": "batches",
+      "excerpt": "Louis, Durham, Columbus, Chicago, Providence, and Philadelphia."
+    },
+    {
+      "id": "check-page-de009f13af",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
+      "page": "batches",
+      "excerpt": "We’re already seeing the interest in what Luminate NY and our region has to offer, with 30% of our applicants coming from around the world and 48 percent from U.S. states other than New York.” Luminate NY is building on the U.S."
+    },
+    {
+      "id": "check-page-ff17e32553",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
+      "page": "batches",
+      "excerpt": "Department of Defense-led American Institute for Manufacturing Integrated Photonics, which is supported by a $250 million commitment from New York State and is based in Rochester at the state-of-the-art AIM manufacturing facility located in On Semiconductor at Eastman Business Park."
+    },
+    {
+      "id": "check-page-7b179599d0",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
+      "page": "batches",
+      "excerpt": "The facility will be used to test, assemble and package chips that use photons in place of electrons for increased performance of semiconductor circuits."
+    },
+    {
+      "id": "check-page-e852a512ec",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
+      "page": "batches",
+      "excerpt": "First announced by Governor Cuomo and Vice President Joe Biden in July 2015, AIM Photonics will help secure the Finger Lakes region and nation’s leadership position in emerging technology research, development, and manufacturing."
+    },
+    {
+      "id": "check-page-e980a39dfe",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
+      "page": "batches",
+      "excerpt": "Finger Lakes Regional Economic Development Council Co-Chairs, Monroe Community College President Anne Kress and Greater Rochester Chamber of Commerce President and CEO Bob Duffy said, “Congratulations to these innovative teams on their selection to take part in the second cohort of the groundbreaking Luminate NY accelerator program in Rochester."
+    },
+    {
+      "id": "check-page-01d49f3bbc",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
+      "page": "batches",
+      "excerpt": "The results of this program will create opportunities and grow jobs right here in our community.” Assembly member Harry Bronson said, “ Congratulations to today’s winners of the second Luminate New York Lightning Awards."
+    },
+    {
+      "id": "check-page-dc431174cd",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "page": "batches",
+      "excerpt": "Hardware Scaleup Celebrates Accomplishments of Cohort I and II - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Hardware Scaleup Celebrates Accomplishments of Cohort I and II June 20, 2020 By Nicole Mauro On June 10, NextCorps and Rev: Ithaca Startup Works hosted a virtual event to celebrate the accomplishments made by the 18 cleantech startup companies enrolled in"
+    },
+    {
+      "id": "check-page-14ef34e2c5",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "page": "batches",
+      "excerpt": "The program is funded by the New York State Energy Research and Development Authority (NYSERDA) to help speed the delivery of cleantech products that can reduce greenhouse gas emissions, provide for more sustainable energy development and use, and foster economic growth."
+    },
+    {
+      "id": "check-page-a8a0cbb152",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "page": "batches",
+      "excerpt": "Launched less than two years ago, Hardware Scaleup provides a unique combination of education, mentoring, networking, and funding opportunities to help startups move their cleantech product from an early prototype to mass production, and reduce the risks that often accompany the scaling process."
+    },
+    {
+      "id": "check-page-34fa959c1a",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "page": "batches",
+      "excerpt": "“Celebrations are all about the joyful experience of achieving a goal that has presented challenges and adversities as part of the journey,” said Mike Riedlinger, Hardware Scaleup program director."
+    },
+    {
+      "id": "check-page-d737f5389c",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "page": "batches",
+      "excerpt": "“New products are now on the market from these startups, which now have sustainable manufacturing processes in place to continue scaling.” Due to event restrictions from the Covid-19 pandemic, the event was held virtually."
+    },
+    {
+      "id": "check-page-5352038167",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "page": "batches",
+      "excerpt": "However, more than 70 mentors, manufacturers, partner organizations, and program participants joined the celebration to watch videos featuring testimonials from many of those involved in the program, listen to speeches, recognize people for their contributions, and make new contacts through improv and breakout room activities."
+    },
+    {
+      "id": "check-page-6ce13b9992",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "page": "batches",
+      "excerpt": "Much of this progress was focused on the difficult task of reworking a prototype into a design that is easy to manufacture and mass produce, and developing a comprehensive roadmap that can be used to scale manufacturing."
+    },
+    {
+      "id": "check-page-e94adcd612",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "page": "batches",
+      "excerpt": "“Working to get a startup team to the point of readiness to begin manufacturing products at scale requires them to learn a “new language” for communicating with manufacturers,” said Riedlinger."
+    },
+    {
+      "id": "check-page-0bd25e701e",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "page": "batches",
+      "excerpt": "“At the program level, we’re now on to engaging more startups, contract manufacturers, investors, partners, and customers to advance the aggressive goals set in New York State to keep improving our climate and economy.” You can view the progress snapshots of each company here ."
+    },
+    {
+      "id": "check-page-50c809f5d1",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "page": "batches",
+      "excerpt": "Visit https://scaleup.nextcorps.org/ to learn more about the program and the emerging technologies that are being developed by companies in Hardware Scaleup."
+    },
+    {
+      "id": "check-page-2c5f675917",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "page": "batches",
+      "excerpt": "Subscribe to NextCorps communications to stay up-to-date on what’s happening in the region’s startup community, including info on upcoming events and opportunities that can help forward your business."
+    },
+    {
+      "id": "check-page-09f827852e",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "page": "details",
+      "excerpt": "10 Winners Selected for Luminate Accelerator - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search 10 Winners Selected for Luminate Accelerator November 10, 2017 $10 Million Luminate NY Initiative is the World’s Largest Start-up Accelerator Program for Optics, Photonics and Imaging Technologies OPI Innovation is a Key Part of “Finger Lakes Forward” – the Region’s"
+    },
+    {
+      "id": "check-page-a3a992c0d3",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "page": "details",
+      "excerpt": "Cuomo announced the first 10 companies selected to take part in New York State’s first-ever Luminate NY accelerator competition."
+    },
+    {
+      "id": "check-page-c8e03e1674",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "page": "details",
+      "excerpt": "The inaugural class of finalists include optics, photonics and imaging start-ups, which were selected after pitching ideas to an advisory panel comprised of industry experts at the Luminate NY Lighting Awards in Rochester on Wednesday, November 8."
+    },
+    {
+      "id": "check-page-96825dcd16",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "page": "details",
+      "excerpt": "“New York is proud to invest in and support the growth of these new advanced technology companies,” Governor Cuomo said ."
+    },
+    {
+      "id": "check-page-802afff348",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "page": "details",
+      "excerpt": "At the end of the program, the teams will compete on Demo Day, where they will vie for over $2 million in follow-on funding."
+    },
+    {
+      "id": "check-page-3e6aa59a03",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "page": "details",
+      "excerpt": "Funding for the $10 million program is being provided through the Finger Lakes Forward Upstate Revitalization Initiative award, and is being administered by High Tech Rochester."
+    },
+    {
+      "id": "check-page-6ac9567250",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "page": "details",
+      "excerpt": "The program aims to assist entrepreneurs who are interested in solving challenging industry problems, including, but not limited to: machine vision, inspection, biophotonics, security, surveillance, augmented and virtual reality, and autonomous vehicles."
+    },
+    {
+      "id": "check-page-973246ee4f",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "page": "details",
+      "excerpt": "Department of Defense-led American Institute for Manufacturing Integrated Photonics, which is supported by a $250 million commitment from New York State and will be based in Rochester at the state-of-the-art AIM manufacturing facility located in Eastman Business Park."
+    },
+    {
+      "id": "check-page-f685f756b9",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "page": "details",
+      "excerpt": "The facility will be used to test, assemble and package chips that use photons in place of electrons for increased performance of semiconductor circuits."
+    },
+    {
+      "id": "check-page-bfecfe044c",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "page": "details",
+      "excerpt": "First announced by Governor Cuomo and Vice President Joe Biden in July 2015, AIM Photonics will help secure the Finger Lakes region and nation’s leadership position in emerging technology research, development, and manufacturing."
+    },
+    {
+      "id": "check-page-48ab94ae29",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "page": "details",
+      "excerpt": "With the creativity, energy, and capabilities of these start-ups and the guidance and support of the optics industry headquartered in Rochester, NY, we expect great success from the Luminate NY cohort."
+    },
+    {
+      "id": "check-page-e9fadf18ca",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "page": "details",
+      "excerpt": "I thank Governor Cuomo for continuing to invest in the potential of the many hardworking innovators who are helping to build a stronger New York.” Monroe County Executive Cheryl Dinolfo said, “This innovative competition builds on our community’s historic strength in optics and has the potential to attract jobs and investment here now and in the future."
+    },
+    {
+      "id": "check-page-4eaede0c91",
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "page": "details",
+      "excerpt": "These ten finalists are best positioned to lead our local economy into the next generation thanks to Governor Cuomo and the State’s continued investments in our city.” For additional information about the Luminate NY accelerator, click here."
+    },
+    {
+      "id": "check-page-3f88fc9da3",
+      "url": "https://nextcorps.org/9-tips-about-trade-shows-and-how-to-maximize-your-attendance/",
+      "page": "details",
+      "excerpt": "9 Tips About Trade Shows and How to Maximize Your Attendance - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search 9 Tips About Trade Shows and How to Maximize Your Attendance June 15, 2020 By Sandy Sloane On June 3, Holly Barrett, Marketing Director of NextCorps, and Sandy Sloane, President of Solutions by Sloane and events consultant for Luminate, presented a workshop on"
+    },
+    {
+      "id": "check-page-4f437bf397",
+      "url": "https://nextcorps.org/9-tips-about-trade-shows-and-how-to-maximize-your-attendance/",
+      "page": "details",
+      "excerpt": "Subscribe to NextCorps communications to stay up-to-date on what’s happening in the region’s startup community, including info on upcoming events and opportunities that can help forward your business."
+    },
+    {
+      "id": "check-page-83295a2bc7",
+      "url": "https://nextcorps.org/about-us/",
+      "page": "details",
+      "excerpt": "About Us - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search NextCorps is a nationally recognized hub for innovation and economic development. Since 1987, we’ve been the most sought after environment where entrepreneurs and businesses connect with experts, capital, customers, and community. OUR MISSION: NextCorps is a non-profit helping innovative technology companies"
+    },
+    {
+      "id": "check-page-8b731392d0",
+      "url": "https://nextcorps.org/about-us/",
+      "page": "details",
+      "excerpt": "Explore all our facility has to offer — from open coworking space, private and group meeting areas, and offices of all sizes, to fully equipped labs where you can further develop your innovation."
+    },
+    {
+      "id": "check-page-0dd0b64587",
+      "url": "https://nextcorps.org/about-us/",
+      "page": "details",
+      "excerpt": "Join the Catalyst Club As a 501C non-profit, NextCorps relies on the generous support of program funders, corporate partners, and individual donors."
+    },
+    {
+      "id": "check-page-c922d0695e",
+      "url": "https://nextcorps.org/about-us/",
+      "page": "details",
+      "excerpt": "Subscribe to NextCorps communications to stay up-to-date on what’s happening in the region’s startup community, including info on upcoming events and opportunities that can help forward your business."
+    },
+    {
+      "id": "check-page-dfac40b2ec",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "Empire State Development Announces 10 Finalists Selected to Take Part in Round III of Luminate NY Accelerator Competition - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Empire State Development Announces 10 Finalists Selected to Take Part in Round III of Luminate NY Accelerator Competition November 8, 2019 $25 Million Luminate NY Initiative is the World’s Largest"
+    },
+    {
+      "id": "check-page-65e5d8d8e7",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "The finalists selected include optics, photonics, and imaging startups which were selected after pitching their innovative ideas to an advisory panel comprised of industry experts during the Lightning Awards at the Strong National Museum of Play ."
+    },
+    {
+      "id": "check-page-f526ad5a1e",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "In June, the teams will compete during Demo Day for $2 million in follow-on funding."
+    },
+    {
+      "id": "check-page-54b38cd60d",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "Funding for the $25 million program is being provided through the Finger Lakes Forward Upstate Revitalization Initiative award and is being administered by NextCorps ."
+    },
+    {
+      "id": "check-page-d08ae7d4a8",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "These optics, photonics, and imaging startups will continue to drive innovation and opportunity in the Finger Lakes region and throughout New York State.” Luminate NY supports innovators as they grow their ideas in Rochester with help from industry experts, businesses, and local universities."
+    },
+    {
+      "id": "check-page-2b4f9a9ef3",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "The program aims to assist entrepreneurs who are interested in solving challenging industry problems, including, but not limited to: machine vision, inspection, biophotonics, security, surveillance, augmented and virtual reality, and autonomous vehicles."
+    },
+    {
+      "id": "check-page-29f222b653",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "In New York, 15 startups applied, with the remaining coming from U.S. cities including Austin, Berkeley, Boston, Los Angeles, and Orlando."
+    },
+    {
+      "id": "check-page-49d695bd67",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "Finger Lakes Regional Economic Development Council Co-Chairs, Monroe Community College President Anne Kress, and Greater Rochester Chamber of Commerce President and CEO Bob Duffy said, “Congratulations to these innovative teams on their selection to take part in the third round of the groundbreaking Luminate NY accelerator program in Rochester."
+    },
+    {
+      "id": "check-page-d873a143d8",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "This unique competition is helping the region further establish itself as a global leader in the burgeoning light-based products and services industry, helping to move the Finger Lakes forward for years to come.” State Senator Joe Robach said, “Congratulations to the 10 finalists for Round III of New York’s Luminate NY accelerator competition."
+    },
+    {
+      "id": "check-page-ad2a4ac57e",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "Warren said, “The City of Rochester has long been the optics and imaging capital of the United States."
+    },
+    {
+      "id": "check-page-c49a264442",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "Next generation optics, imaging, and photonics will play a vital role in our economy and in the innovative technologies and tools of our future—including augmented and virtual reality, autonomous vehicles, machine vision, and biophotonic devices—with Luminate, the State of New York, and the City of Rochester championing and remaining at the forefront of these emerging developments."
+    },
+    {
+      "id": "check-page-927f2faeed",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "Congratulations to the 10 companies selected to advance in this completion.” For additional information about the Luminate NY accelerator, click here."
+    },
+    {
+      "id": "check-page-6ca8a559bf",
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "The State has already invested more than $6.1 billion in the region since 2012 to lay the groundwork for the plan—investing in key industries including photonics, agriculture‎ and food production, and advanced manufacturing."
+    },
+    {
+      "id": "check-page-485b77ce41",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "Empire State Development Announces Round Seven Winners of Luminate NY Accelerator Competition - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Empire State Development Announces Round Seven Winners of Luminate NY Accelerator Competition September 27, 2024 Nicslab Receives $1 Million in Investment; Five Additional Companies Secure Follow-on Investments Applications Now"
+    },
+    {
+      "id": "check-page-2af80f3f3a",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "27, 2024 —Empire State Development (ESD) today announced Nicslab as the winner of Round Seven of the Luminate NY optics, photonics, and imaging startup accelerator competition."
+    },
+    {
+      "id": "check-page-623cbbc61b",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "The Silicon Valley, Calif. based Nicslab received the “Company of the Year” Award at Luminate Finals 2024, which was held live at Innovation Square in downtown Rochester, and online on Sept."
+    },
+    {
+      "id": "check-page-d848f037cc",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "The company will receive $1 million in investment from New York State through the Finger Lakes Forward Upstate Revitalization Initiative."
+    },
+    {
+      "id": "check-page-f64a8f6423",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "Nicslab will use the follow-on funding to manufacture and package its next generation of electronics and photonics integrated circuits at AIM Photonics facilities in New York."
+    },
+    {
+      "id": "check-page-456d0f4c3e",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "Luminate NY, which is administered by NextCorps , is the world’s largest business accelerator for emerging companies that have technologies enabled by optics, photonics, and imaging (OPI)."
+    },
+    {
+      "id": "check-page-b33dfad568",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "As required by the award, all winners of the competition will commit to establishing operations in the region for at least the next 18 months."
+    },
+    {
+      "id": "check-page-1e0279dda0",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "This accelerator’s laser focus on advancing innovation and investment in New York’s world-renowned optics, photonics, and imaging industries has firmly established the Finger Lakes as an OPI hub."
+    },
+    {
+      "id": "check-page-125fc60087",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "We are incredibly excited to see what is next for these forward-thinking companies, especially the high-wattage talent and economic energy they will bring to the region.” Nicslab is a fabless chip company developing integrated circuits for future optical solutions, including Artificial Intelligence (AI), data centers, autonomous vehicle, space, and semiconductor applications."
+    },
+    {
+      "id": "check-page-82db4266d2",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "By partnering with AIM Photonics, Global Foundries, and other New York State vendors, we aim to drive the development of our next-generation chips.” United Kingdom and Portugal based iLoF was awarded the Outstanding Graduate Award and $500,000 in follow-on investment."
+    },
+    {
+      "id": "check-page-8b03093205",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "There was a two-way tie for the Distinguished Graduate Award, with each company receiving $200,000 in follow-on funding."
+    },
+    {
+      "id": "check-page-47e9f0860b",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "New York City based AI Optics is implementing handheld imaging technology that integrates AI to provide a new standard of care for disease screening."
+    },
+    {
+      "id": "check-page-202837ed68",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "VoxelSensors from Brussels, Belgium, is creating PERCEPT, a fast, low-power, sensing module for wearable devices designed to seamlessly integrate AI with sensor data to provide real-time contextual analysis of users’ attention."
+    },
+    {
+      "id": "check-page-4011391ac2",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "page": "details",
+      "excerpt": "Good video marketing is about the plan, not the production - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Good video marketing is about the plan, not the production July 31, 2026 Takeaways from a lunch & learn with Chris Carpenter, marketing & community relations manager for NextCorps’ For ClimateTech accelerator programs TL;DR Effective video starts with strategy,"
+    },
+    {
+      "id": "check-page-3a1248a022",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "page": "details",
+      "excerpt": "AI can streamline editing and repetitive tasks, but authentic storytelling still delivers the greatest impact."
+    },
+    {
+      "id": "check-page-8ba065a4fd",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "page": "details",
+      "excerpt": "Chris Carpenter At a recent lunch & learn, marketing & community relations manager for NextCorps’ For ClimateTech programs, Chris Carpenter, shared practical advice for creating compelling video content without a Hollywood-sized budget."
+    },
+    {
+      "id": "check-page-c7b7b6f887",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "page": "details",
+      "excerpt": "For Rochester-based startup founders looking to expand beyond DIY production, Carpenter highlighted the NextCorps Media Lab, which gives members of our startup incubator access to cameras, podcast equipment, lighting, editing software, and other production resources."
+    },
+    {
+      "id": "check-page-76b962bed1",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "page": "details",
+      "excerpt": "A longer interview can become social media clips, website content, customer education materials, investor presentations, promotional videos, and more."
+    },
+    {
+      "id": "check-page-2151c07ed3",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "page": "details",
+      "excerpt": "Let AI help, but authenticity lead Artificial intelligence has become a valuable addition to many video editing workflows, but Carpenter encouraged founders to think of it as a supporting tool rather than a creative replacement."
+    },
+    {
+      "id": "check-page-aec09e3dec",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "page": "details",
+      "excerpt": "Generating captions, removing backgrounds, and creating rough edits are repetitive production tasks where AI can improve efficiency."
+    },
+    {
+      "id": "check-page-aa5070b4b8",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "page": "details",
+      "excerpt": "Like any tool, AI delivers the best results when paired with thoughtful planning and clear creative direction."
+    },
+    {
+      "id": "check-page-f9261bf869",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "page": "details",
+      "excerpt": "While AI will continue to evolve alongside video production tools, Carpenter reminded attendees that technology alone won’t create content people connect with."
+    },
+    {
+      "id": "check-page-92653faaa3",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "page": "details",
+      "excerpt": "Whether you’re filming with a smartphone, recording a customer testimonial, or experimenting with AI-assisted editing, the fundamentals remain the same."
+    },
+    {
+      "id": "check-page-984bca667b",
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "page": "details",
+      "excerpt": "Subscribe to NextCorps communications to stay up-to-date on what’s happening in the region’s startup community, including info on upcoming events and opportunities that can help forward your business."
+    },
+    {
+      "id": "check-page-27568acc34",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "Governor Cuomo Announces $15 Million in Funding for the Luminate NY Accelerator Competition in Rochester - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Governor Cuomo Announces $15 Million in Funding for the Luminate NY Accelerator Competition in Rochester February 7, 2019 Additional Backing Will Support Three More Rounds of Innovative Optics, Photonics and Imaging"
+    },
+    {
+      "id": "check-page-31c2b34d88",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "Cuomo today announced $15 million in additional funding is being made available to support three more rounds of the Luminate NY business accelerator competition in the City of Rochester."
+    },
+    {
+      "id": "check-page-4bc0692265",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "The program aims to assist entrepreneurs who are interested in solving challenging industry problems, including, but not limited to: machine vision, inspection, biophotonics, security, surveillance, augmented and virtual reality, and autonomous vehicles."
+    },
+    {
+      "id": "check-page-568b760de9",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "“The Luminate NY accelerator is further cementing the region’s reputation as an imaging and optics epicenter for the entire country,” Governor Cuomo said."
+    },
+    {
+      "id": "check-page-90cf31c2ce",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "We are committed to continuing our investments in the photonics industry and moving the Finger Lakes Forward.” The second round of the Luminate NY accelerator competition began in January."
+    },
+    {
+      "id": "check-page-81ddde4fee",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "The teams will then compete on Demo Day on June 27, 2019 for over $2 million in follow-up funding."
+    },
+    {
+      "id": "check-page-785bf31f43",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "Sujatha Ramanujan, Managing Director, Luminate NY said, “Luminate provides the early-stage funding, expertise and mentoring that startups need to bring emerging technologies to market."
+    },
+    {
+      "id": "check-page-d6b0ec3c29",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "Department of Defense-led American Institute for Manufacturing Integrated Photonics, which is supported by a $250 million commitment from New York and is based in Rochester at the state-of-the-art AIM manufacturing facility located in On Semiconductor at Eastman Business Park."
+    },
+    {
+      "id": "check-page-9942d94377",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "First announced by Governor Cuomo and Vice President Joe Biden in July 2015, AIM Photonics will help to further secure the Finger Lakes region and nation’s leadership position in emerging technology research, development, and manufacturing."
+    },
+    {
+      "id": "check-page-e07087e441",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "The Finger Lakes Regional Economic Development Council has also established the $30 Million Photonics Attraction Fund which aims to attract integrated photonics companies to set up manufacturing operations in the greater Rochester area."
+    },
+    {
+      "id": "check-page-909c57cad5",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "The Luminate NY accelerator and the Photonics Attraction Fund are working to further establish the region as a global leader in the burgeoning light-based products and services industry which we believe will help move the Finger Lakes forward for years to come.” Congressman Joseph D."
+    },
+    {
+      "id": "check-page-f13afb01e3",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "The funding provided by Luminate NY is critical to the growing companies that it invests in and has helped promote job growth for our skilled workforce."
+    },
+    {
+      "id": "check-page-a505eed675",
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "As a member of the Finger Lakes Regional Economic Development Council, I am proud to see this investment being made to a critical sector of our local economy.” Assembly Member Harry Bronson said, “I am pleased to see the Governor’s announcement of Luminate New York Optics funding."
+    },
+    {
+      "id": "check-page-8ea97a2522",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "Governor Cuomo Announces Round 3 Winners of Luminate NY Accelerator Competition in Rochester - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Governor Cuomo Announces Round 3 Winners of Luminate NY Accelerator Competition in Rochester September 14, 2020 Via New York State SunDensity Awarded Top Honors and $1 Million in Investment Four Additional Visionary Optics,"
+    },
+    {
+      "id": "check-page-676d2d2401",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "SunDensity received the “Company of the Year” award at Luminate’s Finals 2020 competition, held at The Optical Society’s international Frontiers in Optics + Laser Science APS/DLS conference."
+    },
+    {
+      "id": "check-page-b46874f464",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "The company will receive $1 million in investment from New York State through the Finger Lakes Forward Upstate Revitalization Initiative."
+    },
+    {
+      "id": "check-page-9c25261e71",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "As required by the award, all winners of the competition will commit to establishing operations in Rochester for at least the next 18 months."
+    },
+    {
+      "id": "check-page-d966e937e6",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "SunDensity—which originated from MIT—will be locating its operations and manufacturing in Rochester."
+    },
+    {
+      "id": "check-page-a354583eeb",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "Luminate NY, which is administered by NextCorps, is the world’s largest business accelerator for startup firms that have optics, photonics and imaging enabled technologies."
+    },
+    {
+      "id": "check-page-b429035a97",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "“Luminate NY’s strategic investments in these emerging companies have upheld New York as a worldwide leader in optics, photonics, and imaging,” Governor Cuomo said."
+    },
+    {
+      "id": "check-page-b08b3bb51c",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "Our investments in innovative photonics companies are continuing to move the Finger Lakes Forward.” Finals 2020 marked the half-way point of the five-year, $25 million Luminate accelerator program."
+    },
+    {
+      "id": "check-page-aacd9c2a22",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "In addition to providing an estimated 1.5 to 2 times return on investment, many of the companies are establishing U.S. operations or some aspect of research and manufacturing in the Rochester region—which continues to be the epicenter of the OPI industry in North America."
+    },
+    {
+      "id": "check-page-2bb5bfb006",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "SunDensity can enhance the energy output of solar panels by 20% with their Photonic Smart Coating (PSC)."
+    },
+    {
+      "id": "check-page-eff313a6fb",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "PSC improves the efficiency of opto-electronic devices, such as solar cells by enhancing and shaping the spectrum of photons, transforming wasted visible light into infrared light that many devices can more easily use."
+    },
+    {
+      "id": "check-page-d1570a85eb",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "For utility scale solar power producers/glass manufacturing companies that want to lower their levelized cost of energy (LCOE) to win power bids, the PSC provides increases in the panel output while decreasing the LCOE significantly, unlike AR coating."
+    },
+    {
+      "id": "check-page-21639d8549",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "excerpt": "Rochester-based Simulated Inanimate Models was awarded the Outstanding Graduate Award and $400,000."
+    },
+    {
+      "id": "check-page-76d4c4f9b9",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "Governor Hochul Announces Round 4 Winners of Luminate NY Accelerator Competition - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Governor Hochul Announces Round 4 Winners of Luminate NY Accelerator Competition September 30, 2021 Via New York State Governor Kathy Hochul today announced PreAct Technologies as the winner of Round 4 of the Luminate NY optics, photonics,"
+    },
+    {
+      "id": "check-page-dface2af7e",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "The Portland, Oregon-based PreAct Technologies received the “Company of the Year” award at Luminate Finals 2021, which was held virtually and sponsored by Optica, formerly The Optical Society."
+    },
+    {
+      "id": "check-page-35e24d19ed",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "The company will receive $1 million in investment from New York State through the Finger Lakes Forward Upstate Revitalization Initiative."
+    },
+    {
+      "id": "check-page-1bf45b9404",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "As required by the award, all winners of the competition will commit to establishing operations in Rochester for at least the next 18 months."
+    },
+    {
+      "id": "check-page-c296c24f56",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "PreAct Technologies plans to establish manufacturing in New York State."
+    },
+    {
+      "id": "check-page-32135750e4",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "Luminate NY , which is administered by NextCorps , is the world’s largest business accelerator for emerging companies that have optics, photonics, and imaging (OPI) enabled technologies."
+    },
+    {
+      "id": "check-page-86bec468d6",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "“Luminate NY’s investments reflect our commitment to retaining New York’s distinction as a worldwide leader in optics, photonics, and imaging,” Governor Hochul said ."
+    },
+    {
+      "id": "check-page-31d7c8abfb",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "excerpt": "Subscribe to NextCorps communications to stay up-to-date on what’s happening in the region’s startup community, including info on upcoming events and opportunities that can help forward your business."
+    },
+    {
+      "id": "check-page-e778901110",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "page": "details",
+      "excerpt": "Luminate Accelerator Announces Finalists - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Luminate Accelerator Announces Finalists October 26, 2017 Luminate NY, the world’s largest optics, photonics, and imaging accelerator, today announced the finalists who are set to compete in the Lightning Awards in Rochester in November. The selected finalists will pitch their"
+    },
+    {
+      "id": "check-page-daa862a2be",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "page": "details",
+      "excerpt": "Following those presentations, 10 teams will be given a spot in the accelerator, awarded $100,000 each and will get the chance at over $1,000,000 of follow-on funding."
+    },
+    {
+      "id": "check-page-22349cc2d0",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "page": "details",
+      "excerpt": "Boston, MA Accuret LLC Rochester, NY Persistence Data Mining, Inc."
+    },
+    {
+      "id": "check-page-8d8cbc59e9",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "page": "details",
+      "excerpt": "Rochester, NY In Augmented and Virtual Reality, Sensors, Instrumentation, Image Recognition: Bounce Imaging Boston, MA, USA SphereVis LLC Philadelphia, PA, US Double Helix LLC Boulder, CO, USA Think Biosolution Dublin, Ireland Maverick Photonics, LLC Rochester, NY, US MotionSavvy Rochester, NY, US Positive Science Rochester, NY, US Tarsier Optics, Inc."
+    },
+    {
+      "id": "check-page-a7df747efd",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "page": "details",
+      "excerpt": "Baltimore, MD, US Lumenora San Francisco, CA, US The Lightning Awards is a free event open to the public on Wednesday, November 8, 2017 , and being held at the Hyatt Regency Hotel from 4:00-6:30pm."
+    },
+    {
+      "id": "check-page-56e478ff64",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "page": "details",
+      "excerpt": "At the end of the program, teams compete at Demo Day, vying for over $2,000,000 in follow-on funding."
+    },
+    {
+      "id": "check-page-4912d08751",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "page": "details",
+      "excerpt": "The State has already invested more than $5.2 billion in the region since 2012 to lay the groundwork for the plan – investing in key industries including photonics, agriculture‎ and food production, and advanced manufacturing."
+    },
+    {
+      "id": "check-page-a2ca5e46ec",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "page": "details",
+      "excerpt": "Subscribe to NextCorps communications to stay up-to-date on what’s happening in the region’s startup community, including info on upcoming events and opportunities that can help forward your business."
+    },
+    {
+      "id": "check-page-6a3317b85a",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "page": "details",
+      "excerpt": "NextCorps and SecondMuse Launch Programs to Help Clean Energy Startups Accelerate Hardware Manufacturing - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search NextCorps and SecondMuse Launch Programs to Help Clean Energy Startups Accelerate Hardware Manufacturing September 10, 2018 Programs Help Bridge the Gap Between Startups and Manufacturers to Speed New Clean Energy"
+    },
+    {
+      "id": "check-page-fd2d3832b3",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "page": "details",
+      "excerpt": "10, NEW YORK STATE– NextCorps and SecondMuse today launched programs that will help clean energy hardware innovators successfully scale their technology, from product prototype to mass production."
+    },
+    {
+      "id": "check-page-db811019a7",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "page": "details",
+      "excerpt": "The programs will ensure startups and local manufacturers have the resources to produce emerging clean energy technologies in New York State."
+    },
+    {
+      "id": "check-page-9fae63f6a9",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "page": "details",
+      "excerpt": "Rochester-based NextCorps’ Hardware Scaleup program will serve businesses in upstate New York, while New York City-based SecondMuse’s M-Corps program will serve businesses downstate."
+    },
+    {
+      "id": "check-page-fbfbf60b96",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "page": "details",
+      "excerpt": "Manufacturing is the most misunderstood step in launching a new hardware product."
+    },
+    {
+      "id": "check-page-3d19aa8987",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "page": "details",
+      "excerpt": "The Hardware Scaleup and M-Corps programs will help startups and manufacturers work closely together to overcome the manufacturing obstacles that keep emerging technologies from fulfilling untapped market demands for cleaner, more efficient, and less-costly energy use."
+    },
+    {
+      "id": "check-page-e62bbd9f44",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "page": "details",
+      "excerpt": "The New York State Energy Research and Development Authority (NYSERDA) has provided $4 million in support for the programs, which will help develop, launch, and scale innovation among startups while helping advance the state’s clean energy and emission reduction goals."
+    },
+    {
+      "id": "check-page-4a1801f8f1",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "page": "details",
+      "excerpt": "Inspired by the National Sciences Foundation I-Corps program and world-class hardware accelerators, Hardware Scaleup and M-Corps will provide entrepreneurs with a rigorous process, immersive training and the necessary support over 12 to 18 months."
+    },
+    {
+      "id": "check-page-4c191093f8",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "page": "details",
+      "excerpt": "The manufacturing readiness roadmap they develop will allow startup teams to quickly and cost-effectively move their clean energy hardware into production."
+    },
+    {
+      "id": "check-page-44d1ebc167",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "page": "details",
+      "excerpt": "Startups with clean energy hardware prototypes are encouraged to apply to the program nearest to their location by Oct."
+    },
+    {
+      "id": "check-page-2fa8186901",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "page": "details",
+      "excerpt": "11, 2018 (by 11:59 EDT) for Hardware Scaleup and Oct."
+    },
+    {
+      "id": "check-page-8e4c4ab1ed",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "page": "details",
+      "excerpt": "To apply to or learn more about NextCorps’ Hardware Scaleup program, go to scaleup.nextcorps.org ."
+    },
+    {
+      "id": "check-page-3ac652a950",
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "page": "details",
+      "excerpt": "About NextCorps NextCorps provides a suite of services, including technology commercialization support for very early-stage opportunities, business incubation for high-growth potential startups, and growth services, for manufacturing companies seeking to improve their top- and bottom-line performance."
+    },
+    {
+      "id": "check-page-963c4dbc22",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "page": "details",
+      "excerpt": "NextCorps’ Embark Accelerator positions Rochester as no-code software development hub - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search NextCorps’ Embark Accelerator positions Rochester as no-code software development hub November 18, 2022 Special to the Rochester Business Journal In its first year, NextCorps’ Embark — a business accelerator program that fosters the"
+    },
+    {
+      "id": "check-page-c484eb808d",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "page": "details",
+      "excerpt": "These companies, many of them founded by entrepreneurs who have little to no coding skills, provide software and apps that address real-world problems, such as offering mental health assistance and business development tools."
+    },
+    {
+      "id": "check-page-7e2d54fd58",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "page": "details",
+      "excerpt": "Foley “The launch of these startups illustrates the power that a supportive ecosystem can offer inspired people who are interested in creating a new business in our region,” says Matt Foley, Managing Director, Startup Incubation & Embark at NextCorps."
+    },
+    {
+      "id": "check-page-03cafe9ff9",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "page": "details",
+      "excerpt": "During the accelerator program, 40 students supported the startups by helping founders complete over 130 projects, from market research and customer discovery to business planning."
+    },
+    {
+      "id": "check-page-80d623ed7f",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "page": "details",
+      "excerpt": "Local software, professional services, and investment companies also played a critical role by mentoring founders on a pro-bono basis, providing a rich support ecosystem."
+    },
+    {
+      "id": "check-page-0d8222b900",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "page": "details",
+      "excerpt": "Embark finalists bring new business to Rochester Three of the 10 finalists from Embark’s first cohort include Kannect, focused on mental health prevention strategies for college students; DataCicada, that provides machine learning and consulting for scientists and engineers; and First Class Coach, with an app that provides leadership coaching to executives and companies."
+    },
+    {
+      "id": "check-page-b719931970",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "page": "details",
+      "excerpt": "Also invaluable were the mentorship and coaching Embark provided to help us more accurately define our offering, and the collaboration and encouragement we received from others in the cohort.” A supportive community that fosters accountability was commonly cited by Embark participants as a top benefit of the program."
+    },
+    {
+      "id": "check-page-ebec7d9831",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "page": "details",
+      "excerpt": "Department of Energy."
+    },
+    {
+      "id": "check-page-c1b3b59ef4",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "page": "details",
+      "excerpt": "“As bootstrapping entrepreneurs, we took advantage of everything Embark had to offer, including a community of entrepreneurs, and advisors and mentorship that guide our ideas and serve as a sounding board,” says Yacci."
+    },
+    {
+      "id": "check-page-3701a5e246",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "page": "details",
+      "excerpt": "While we have technical training, the Embark no-code bootcamp has helped us create a more professional interface for our product.” James Lopata, a long-time coaching consultant and founder of First Class Coach, concurs with the game-changing benefits of the program, including no-code training and a supportive ecosystem."
+    },
+    {
+      "id": "check-page-18e7acc608",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "page": "details",
+      "excerpt": "Many are working to grow and scale their business through NextCorps’ incubation program that now supports more than 70 area startups."
+    },
+    {
+      "id": "check-page-0a96ad5a71",
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "page": "details",
+      "excerpt": "Subscribe to NextCorps communications to stay up-to-date on what’s happening in the region’s startup community, including info on upcoming events and opportunities that can help forward your business."
     }
   ],
   "findings": {
@@ -700,8 +2377,12 @@
         "evidenceId": "check-route-46aae85dca"
       },
       {
-        "value": "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/?ical=1",
-        "evidenceId": "check-route-391df9522c"
+        "value": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+        "evidenceId": "check-route-5d3b453199"
+      },
+      {
+        "value": "https://www.f6s.com/luminateny2021",
+        "evidenceId": "check-route-92d79da57e"
       }
     ],
     "applicationUrl": [
@@ -725,8 +2406,8 @@
         "evidenceId": "check-announced-600333a1bd"
       },
       {
-        "value": "August",
-        "evidenceId": "check-announced-d17f2dbf7f"
+        "value": "November",
+        "evidenceId": "check-announced-1cbb520ff8"
       }
     ],
     "cohortStarts": [],
@@ -734,6 +2415,10 @@
       {
         "value": "6 months",
         "evidenceId": "check-duration-583fdb2516"
+      },
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-9d24375231"
       }
     ],
     "format": [
@@ -743,7 +2428,7 @@
       },
       {
         "value": "remote",
-        "evidenceId": "check-format-0d9d0f693a"
+        "evidenceId": "check-format-815e6419dc"
       },
       {
         "value": "in-person",
@@ -754,6 +2439,10 @@
       {
         "value": "Rochester",
         "evidenceId": "check-location-016625cbdc"
+      },
+      {
+        "value": "Pittsburgh",
+        "evidenceId": "check-location-d7478551cf"
       }
     ],
     "selectivity": [],
@@ -769,6 +2458,18 @@
       {
         "value": "include: Non-dilutive funding: Initial investment of $25k and up to $100k of an investment-matched grant Access to a network of mentors, EIR’s",
         "evidenceId": "check-deal-2a3d44d21e"
+      },
+      {
+        "value": "downtown Rochester, and online on Sept. 26. The company will receive $1 million in investment from New York State through the Finger Lakes Forward",
+        "evidenceId": "check-deal-d258ce57b8"
+      },
+      {
+        "value": "for Round Eight through January 10, 2025. Teams will receive $100,000 in funding upon program start in April 2025, with the expectation",
+        "evidenceId": "check-deal-5b5ed1fd50"
+      },
+      {
+        "value": "funding upon program start in April 2025, with the expectation that $50,000 will be used to engage resources in the Finger Lakes region. Teams",
+        "evidenceId": "check-deal-069a05978f"
       }
     ],
     "dealComponents": [
@@ -807,6 +2508,42 @@
           "condition": "up to"
         },
         "evidenceId": "check-deal-2a3d44d21e"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-d258ce57b8"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-5b5ed1fd50"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "50000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-069a05978f"
       }
     ],
     "portfolioPages": [

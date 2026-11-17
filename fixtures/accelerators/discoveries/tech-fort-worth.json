@@ -1,6 +1,6 @@
 {
   "programId": "tech-fort-worth",
-  "checkedAt": "2026-11-14T20:04:58.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.techfortworth.org/about",
@@ -46,29 +46,13 @@
       "url": "https://www.techfortworth.org/portfolio",
       "page": "portfolio",
       "anchor": "Portfolio",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.techfortworth.org/post/emerging-technology-companies-to-be-honored-at-techfw-s-10th-annual-impact-awards",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://www.techfortworth.org/post/made-new-dfw-accelerator-aims-to-bolster-manufacturers-amid-reshoring-workforce-pressures",
       "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.techfortworth.org/post/seven-female-founded-companies-were-selected-for-joint-techfw-texas-woman-s-program",
-      "page": "portfolio",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -83,27 +67,11 @@
       "origin": "official"
     },
     {
-      "url": "https://www.techfortworth.org/post/thinklab-startup-accelerator-spring-2021-graduates",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.techfortworth.org/programs",
       "page": "details",
       "anchor": "Programs",
       "fetched": true,
       "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.techfortworth.org/thinklab-startup-accelerator",
-      "page": "details",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
       "origin": "official"
     }
   ]

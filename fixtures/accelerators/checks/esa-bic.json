@@ -1,6 +1,6 @@
 {
   "programId": "esa-bic",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://commercialisation.esa.int/esa-business-incubation-centres/",
     "https://commercialisation.esa.int/call-for-applications-epic-european-uae-space-startup-competition-2025/",
@@ -16,7 +16,12 @@
     "https://commercialisation.esa.int/winners-of-the-esa-push-2023-unlocking-innovative-space-services-for-european-ecosystem-apply-today/",
     "https://commercialisation.esa.int/capacity-building-for-family-offices-encouraging-late-stage-investment-in-the-european-space-industry/",
     "https://commercialisation.esa.int/capacity-building-programme-for-fund-managers-episode-5-fund-setup-investment-strategy-investment-team-exit-strategy/",
-    "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/"
+    "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
+    "https://commercialisation.esa.int/esa-comm-faq/6136/",
+    "https://commercialisation.esa.int/esa-comm-faq/auto-draft-10/",
+    "https://commercialisation.esa.int/esa-comm-faq/auto-draft-11/",
+    "https://commercialisation.esa.int/esa-comm-faq/auto-draft-12/",
+    "https://commercialisation.esa.int/esa-comm-faq/auto-draft-13/"
   ],
   "evidence": [
     {
@@ -41,11 +46,25 @@
       "page": "application"
     },
     {
+      "id": "check-format-1009268f2d",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-12/",
+      "title": "ESA BIC — terms page",
+      "excerpt": "and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in",
+      "page": "terms"
+    },
+    {
       "id": "check-format-1610390e06",
       "url": "https://commercialisation.esa.int/space-borne-remote-sensing-and-green-applications/",
       "title": "ESA BIC — application page",
       "excerpt": "remote sensing and green applications News Space-borne remote sensing and green applications Satellites have become an",
       "page": "application"
+    },
+    {
+      "id": "check-format-2154af753c",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-10/",
+      "title": "ESA BIC — terms page",
+      "excerpt": "and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in",
+      "page": "terms"
     },
     {
       "id": "check-format-232879a618",
@@ -88,6 +107,13 @@
       "title": "ESA BIC — application page",
       "excerpt": "and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in",
       "page": "application"
+    },
+    {
+      "id": "check-format-3afbc39ff4",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/6136/",
+      "title": "ESA BIC — terms page",
+      "excerpt": "and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in",
+      "page": "terms"
     },
     {
       "id": "check-format-3ec24d5a08",
@@ -195,11 +221,25 @@
       "page": "application"
     },
     {
+      "id": "check-format-c306ddabca",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-13/",
+      "title": "ESA BIC — terms page",
+      "excerpt": "and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in",
+      "page": "terms"
+    },
+    {
       "id": "check-format-c506811d94",
       "url": "https://commercialisation.esa.int/space-borne-remote-sensing-and-green-applications/",
       "title": "ESA BIC — application page",
       "excerpt": "part of modern life in numerous ways, with space-borne remote sensing becoming an indispensable tool for the",
       "page": "application"
+    },
+    {
+      "id": "check-format-c7b7fd2f64",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-11/",
+      "title": "ESA BIC — terms page",
+      "excerpt": "and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in",
+      "page": "terms"
     },
     {
       "id": "check-format-e1298a7fbe",
@@ -266,10 +306,154 @@
       "excerpt": "ESA BUSINESS INCUBATION CENTRES - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING ESA's matchmaking platform, designed to connect"
     },
     {
+      "id": "check-page-23cd9c2746",
+      "url": "https://commercialisation.esa.int/esa-business-incubation-centres/",
+      "page": "details",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-585dba5d49",
+      "url": "https://commercialisation.esa.int/esa-business-incubation-centres/",
+      "page": "details",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-b909ae1530",
+      "url": "https://commercialisation.esa.int/esa-business-incubation-centres/",
+      "page": "details",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-5c90ba98ca",
+      "url": "https://commercialisation.esa.int/esa-business-incubation-centres/",
+      "page": "details",
+      "excerpt": "In the process, they create and grow clusters of space-related startups across Europe."
+    },
+    {
+      "id": "check-page-a9bf632639",
+      "url": "https://commercialisation.esa.int/esa-business-incubation-centres/",
+      "page": "details",
+      "excerpt": "Each incubation centre is managed by local champions who connect their ESA BIC to local industry, universities, research organisations, government, and investor communities."
+    },
+    {
+      "id": "check-page-afcdedbf72",
+      "url": "https://commercialisation.esa.int/esa-business-incubation-centres/",
+      "page": "details",
+      "excerpt": "The network provides excellent opportunities to connect startups with new business partners across Europe."
+    },
+    {
+      "id": "check-page-a6f028b01b",
+      "url": "https://commercialisation.esa.int/esa-business-incubation-centres/",
+      "page": "details",
+      "excerpt": "The ESA BIC will assist you in determining whether the business idea is suitable for incubation and explain what is needed from the applicant."
+    },
+    {
+      "id": "check-page-6388a93d0e",
+      "url": "https://commercialisation.esa.int/esa-business-incubation-centres/",
+      "page": "details",
+      "excerpt": "3 Write and submit the application Fill in the templates for the cover letter, the business plan, the incubation proposal, and related appendices."
+    },
+    {
+      "id": "check-page-1e9b5c902f",
+      "url": "https://commercialisation.esa.int/esa-business-incubation-centres/",
+      "page": "details",
+      "excerpt": "The TEB will evaluate your application and, if successful, you will be invited to sign an incubation contract."
+    },
+    {
+      "id": "check-page-46e2696e5b",
+      "url": "https://commercialisation.esa.int/esa-business-incubation-centres/",
+      "page": "details",
+      "excerpt": "6 Review and sign the incubation contract From the ESA BIC you will receive the incubation contract and possibly a service/rental agreement."
+    },
+    {
+      "id": "check-page-35614eb41e",
+      "url": "https://commercialisation.esa.int/esa-business-incubation-centres/",
+      "page": "details",
+      "excerpt": "ESA Business Incubation Centres Network Business opportunities by country Filter by a Country {{ country.name }} OPPORTUNITY COUNTRY BIC LOCATION {{ selectedCountry.name }} {{ bic.bic_city || bic.title }} {{ errorMessage }} Loading..."
+    },
+    {
+      "id": "check-page-619ff0a595",
+      "url": "https://commercialisation.esa.int/esa-business-incubation-centres/",
+      "page": "details",
+      "excerpt": "Select a Country from the filter to view related Opportunities No Opportunities for {{ selectedCountry.name }} Keep updated on all ESA opportunities Subscribe to our newsletter or visit our Help page for quick answers Subscribe to newsletter Get Help European Space Agency Privacy Policy Cookie notice Smart Assistant Help"
+    },
+    {
       "id": "check-page-4f36668939",
       "url": "https://commercialisation.esa.int/call-for-applications-epic-european-uae-space-startup-competition-2025/",
       "page": "application",
       "excerpt": "Call for Applications: EPIC European-UAE Space Startup Competition 2025 - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING ESA's"
+    },
+    {
+      "id": "check-page-1b29e5eb10",
+      "url": "https://commercialisation.esa.int/call-for-applications-epic-european-uae-space-startup-competition-2025/",
+      "page": "application",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-3bd26a4d46",
+      "url": "https://commercialisation.esa.int/call-for-applications-epic-european-uae-space-startup-competition-2025/",
+      "page": "application",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-a62baaff97",
+      "url": "https://commercialisation.esa.int/call-for-applications-epic-european-uae-space-startup-competition-2025/",
+      "page": "application",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-7b529d43b9",
+      "url": "https://commercialisation.esa.int/call-for-applications-epic-european-uae-space-startup-competition-2025/",
+      "page": "application",
+      "excerpt": "This landmark initiative aims to foster transnational innovation and entrepreneurship within the global space economy by building strategic commercial bridges between Europe and the UAE."
+    },
+    {
+      "id": "check-page-9425d2eee5",
+      "url": "https://commercialisation.esa.int/call-for-applications-epic-european-uae-space-startup-competition-2025/",
+      "page": "application",
+      "excerpt": "Competition Objectives: Encourage partnerships between European and UAE entities for joint space-related commercial ventures."
+    },
+    {
+      "id": "check-page-cd900873e3",
+      "url": "https://commercialisation.esa.int/call-for-applications-epic-european-uae-space-startup-competition-2025/",
+      "page": "application",
+      "excerpt": "Provide tailored support for companies aiming to establish a long-term presence in the UAE or broader EMEA space markets."
+    },
+    {
+      "id": "check-page-0444b9da21",
+      "url": "https://commercialisation.esa.int/call-for-applications-epic-european-uae-space-startup-competition-2025/",
+      "page": "application",
+      "excerpt": "The consultancy will assist in developing a business presence in the UAE and evaluating entry strategies for UAE/EMEA markets."
+    },
+    {
+      "id": "check-page-31537f4a74",
+      "url": "https://commercialisation.esa.int/call-for-applications-epic-european-uae-space-startup-competition-2025/",
+      "page": "application",
+      "excerpt": "One complementary Vista Pod (booth) (sponsored by VISTA Startup, the leading aerospace startup platform in the UAE) to showcase the company at the Dubai Airshow (includes branding, access to the investor meetings , and networking events)."
+    },
+    {
+      "id": "check-page-bc8bff47ae",
+      "url": "https://commercialisation.esa.int/call-for-applications-epic-european-uae-space-startup-competition-2025/",
+      "page": "application",
+      "excerpt": "ESA sponsorship of €1,500 to offset travel costs for a single company representative at the Dubai Airshow."
+    },
+    {
+      "id": "check-page-bde30a4637",
+      "url": "https://commercialisation.esa.int/call-for-applications-epic-european-uae-space-startup-competition-2025/",
+      "page": "application",
+      "excerpt": "Complementary entry ticket to attend the Dubai Airshow (17–21 November 2025) — one of the world’s premier aerospace events (sponsored by VISTA)."
+    },
+    {
+      "id": "check-page-0444b9da21",
+      "url": "https://commercialisation.esa.int/call-for-applications-epic-european-uae-space-startup-competition-2025/",
+      "page": "application",
+      "excerpt": "The consultancy will assist in developing a business presence in the UAE and evaluating entry strategies for UAE/EMEA markets."
+    },
+    {
+      "id": "check-page-daddfff6f0",
+      "url": "https://commercialisation.esa.int/call-for-applications-epic-european-uae-space-startup-competition-2025/",
+      "page": "application",
+      "excerpt": "ESA sponsorship of €2,000 to contribute to entry ticket to attend the Dubai Airshow (17–21 November 2025), accommodation and travel for at least one company’s representative at the Dubai Airshow."
     },
     {
       "id": "check-page-21225782f9",
@@ -278,10 +462,112 @@
       "excerpt": "Earth Observation applications and machine learning for cultural heritage preservation - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING"
     },
     {
+      "id": "check-page-86be18e37d",
+      "url": "https://commercialisation.esa.int/earth-observation-applications-and-machine-learning-for-cultural-heritage-preservation/",
+      "page": "application",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-e77d5daa31",
+      "url": "https://commercialisation.esa.int/earth-observation-applications-and-machine-learning-for-cultural-heritage-preservation/",
+      "page": "application",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-9c104e8fd7",
+      "url": "https://commercialisation.esa.int/earth-observation-applications-and-machine-learning-for-cultural-heritage-preservation/",
+      "page": "application",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-abbbb64902",
+      "url": "https://commercialisation.esa.int/earth-observation-applications-and-machine-learning-for-cultural-heritage-preservation/",
+      "page": "application",
+      "excerpt": "Many other factors have an effect on our cultural heritage and need to be monitored in order to preserve it: natural phenomena, such as subsidence and ground motion, and anthropic ones such as urban sprawl and climate change."
+    },
+    {
+      "id": "check-page-bbd560d0b3",
+      "url": "https://commercialisation.esa.int/earth-observation-applications-and-machine-learning-for-cultural-heritage-preservation/",
+      "page": "application",
+      "excerpt": "The European Space Agency (ESA) is committed in providing cutting edge space technologies to European governments and organisations through the Copernicus constellation, a fleet of Sentinel satellites managed on behalf of the European Union, and a constant flow of high resolution images and data to improve the management of the environment."
+    },
+    {
+      "id": "check-page-61284e9b85",
+      "url": "https://commercialisation.esa.int/earth-observation-applications-and-machine-learning-for-cultural-heritage-preservation/",
+      "page": "application",
+      "excerpt": "Today, EO data has the potential to provide enhanced cultural areas monitoring over time leveraging on several technologies and techniques: ground penetrating radars (GPR), global navigation satellite systems (GNSS), unmanned aerial vehicles (UAV), artificial intelligence, machine learning and deep learning."
+    },
+    {
+      "id": "check-page-b8d5aa2fca",
+      "url": "https://commercialisation.esa.int/earth-observation-applications-and-machine-learning-for-cultural-heritage-preservation/",
+      "page": "application",
+      "excerpt": "The use of artificial intelligence The use of artificial intelligence in the last few years has been applied to find new dig sites and make new discoveries, such as the historical settlements in Madagascar, the earthen mounds created by prehistoric North American populations, the archaeological mounds in Cholistan (Pakistan) and the ancient capital of Egypt Tanis."
+    },
+    {
+      "id": "check-page-2e19ad08bb",
+      "url": "https://commercialisation.esa.int/earth-observation-applications-and-machine-learning-for-cultural-heritage-preservation/",
+      "page": "application",
+      "excerpt": "The traditional methods that archaeologists employ to discover new sites can require long time, in terms of months or years, while machine learning can reduce drastically those times."
+    },
+    {
+      "id": "check-page-fae69b7b12",
+      "url": "https://commercialisation.esa.int/earth-observation-applications-and-machine-learning-for-cultural-heritage-preservation/",
+      "page": "application",
+      "excerpt": "Thanks to the huge availability of high resolution images provided by satellites, planes and drones, there is less need for the archaeologists to make visits in situ in the early stages."
+    },
+    {
+      "id": "check-page-701276951e",
+      "url": "https://commercialisation.esa.int/earth-observation-applications-and-machine-learning-for-cultural-heritage-preservation/",
+      "page": "application",
+      "excerpt": "While examining thousands of images can be a hard task for humans, artificial intelligence algorithms can scan quickly a vast amount of data to identify potential areas of interests."
+    },
+    {
+      "id": "check-page-85dc4af481",
+      "url": "https://commercialisation.esa.int/earth-observation-applications-and-machine-learning-for-cultural-heritage-preservation/",
+      "page": "application",
+      "excerpt": "The combined use of remote sensing and machine learning Remote sensing (RS) techniques have been used in the past to detect archaeological mounds, characteristic elements of permanent and semi-permanent settlements of past cultures."
+    },
+    {
+      "id": "check-page-4f1ca49894",
+      "url": "https://commercialisation.esa.int/earth-observation-applications-and-machine-learning-for-cultural-heritage-preservation/",
+      "page": "application",
+      "excerpt": "In recent years, RS-based archaeological research has incorporated machine learning technology and algorithms to automate the detection of those sites using high resolution images (e.g. see figure 1)."
+    },
+    {
       "id": "check-page-88b7735c60",
       "url": "https://commercialisation.esa.int/esa-activity/disruptive-gnss-receiver-technologies-for-future-railway-signalling-applications/",
       "page": "application",
       "excerpt": "Disruptive GNSS Receiver Technologies for Future Railway Signalling Applications - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING ESA's"
+    },
+    {
+      "id": "check-page-b7b6aae3c5",
+      "url": "https://commercialisation.esa.int/esa-activity/disruptive-gnss-receiver-technologies-for-future-railway-signalling-applications/",
+      "page": "application",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-617a4b273a",
+      "url": "https://commercialisation.esa.int/esa-activity/disruptive-gnss-receiver-technologies-for-future-railway-signalling-applications/",
+      "page": "application",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-70176ef0bd",
+      "url": "https://commercialisation.esa.int/esa-activity/disruptive-gnss-receiver-technologies-for-future-railway-signalling-applications/",
+      "page": "application",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-40d5f52847",
+      "url": "https://commercialisation.esa.int/esa-activity/disruptive-gnss-receiver-technologies-for-future-railway-signalling-applications/",
+      "page": "application",
+      "excerpt": "The planned activities include investigating and defining candidate architectures and high-level system designs, based around 2 paradigms, Innovative application of existing technologies and techniques, either being utilised in a Rail environment currently or from other sectors, such as aviation."
+    },
+    {
+      "id": "check-page-feb84fc5a1",
+      "url": "https://commercialisation.esa.int/esa-activity/disruptive-gnss-receiver-technologies-for-future-railway-signalling-applications/",
+      "page": "application",
+      "excerpt": "The focus must be on actual deployments rather than theoretical exercises that has led guidance papers from organisations such as the RSSB in the UK."
     },
     {
       "id": "check-page-ff6a0a3b4a",
@@ -290,10 +576,88 @@
       "excerpt": "VOLIERA - Video Odometry with LIDAR and EGNSS for ERTMS Applications - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING ESA's matchmaking"
     },
     {
+      "id": "check-page-4bbbdef846",
+      "url": "https://commercialisation.esa.int/esa-activity/voliera-video-odometry-with-lidar-and-egnss-for-ertms-applications/",
+      "page": "application",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-38500e2024",
+      "url": "https://commercialisation.esa.int/esa-activity/voliera-video-odometry-with-lidar-and-egnss-for-ertms-applications/",
+      "page": "application",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-d0d25c7255",
+      "url": "https://commercialisation.esa.int/esa-activity/voliera-video-odometry-with-lidar-and-egnss-for-ertms-applications/",
+      "page": "application",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-d553b79b0a",
+      "url": "https://commercialisation.esa.int/esa-activity/voliera-video-odometry-with-lidar-and-egnss-for-ertms-applications/",
+      "page": "application",
+      "excerpt": "See the project details PROJECT DETAILS Thematic Area Signalling Space Asset Satellite Navigation STATUS completed RELATED PROGRAMME NAVISP Element 2 Last update: 22 Jun 2022 Keep updated on all ESA opportunities Subscribe to our newsletter or visit our Help page for quick answers Subscribe to newsletter Get Help European Space Agency Privacy Policy Cookie notice Smart Assistant Help"
+    },
+    {
       "id": "check-page-479a5a2aa8",
       "url": "https://commercialisation.esa.int/esa-patent/commercial-aviation-platform-for-earth-observation-applications/",
       "page": "application",
       "excerpt": "Commercial aviation platform for Earth observation applications ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING ESA's matchmaking platform, designed to connect"
+    },
+    {
+      "id": "check-page-3660202300",
+      "url": "https://commercialisation.esa.int/esa-patent/commercial-aviation-platform-for-earth-observation-applications/",
+      "page": "application",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-86e382ee4b",
+      "url": "https://commercialisation.esa.int/esa-patent/commercial-aviation-platform-for-earth-observation-applications/",
+      "page": "application",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-64f7c00d78",
+      "url": "https://commercialisation.esa.int/esa-patent/commercial-aviation-platform-for-earth-observation-applications/",
+      "page": "application",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-501e839e90",
+      "url": "https://commercialisation.esa.int/esa-patent/commercial-aviation-platform-for-earth-observation-applications/",
+      "page": "application",
+      "excerpt": "For this purpose, it is proposed to use commercial aviation planes as platforms to carry Smallsats-like payloads as they are well suited to host such payloads, providing stable environment and power supply."
+    },
+    {
+      "id": "check-page-b2d9ca92a5",
+      "url": "https://commercialisation.esa.int/esa-patent/commercial-aviation-platform-for-earth-observation-applications/",
+      "page": "application",
+      "excerpt": "There is a dense network of commercial aircraft flying over land and seas, in particular over Europe, USA and SE Asia."
+    },
+    {
+      "id": "check-page-93bebb1113",
+      "url": "https://commercialisation.esa.int/esa-patent/commercial-aviation-platform-for-earth-observation-applications/",
+      "page": "application",
+      "excerpt": "On a typical day, there are about 30.000 flights across European airspace."
+    },
+    {
+      "id": "check-page-23bb7e5f1c",
+      "url": "https://commercialisation.esa.int/esa-patent/commercial-aviation-platform-for-earth-observation-applications/",
+      "page": "application",
+      "excerpt": "A plane flying over Brussels could ‘cover’ all Belgium, while a plane flying over Utrecht would cover all the Netherlands."
+    },
+    {
+      "id": "check-page-13ef87275d",
+      "url": "https://commercialisation.esa.int/esa-patent/commercial-aviation-platform-for-earth-observation-applications/",
+      "page": "application",
+      "excerpt": "Taking into account the frequency and large number of flights and routes, in particular over continental and transoceanic routes, commercial aviation may provide the basis for a wide range of applications."
+    },
+    {
+      "id": "check-page-237bc08d41",
+      "url": "https://commercialisation.esa.int/esa-patent/commercial-aviation-platform-for-earth-observation-applications/",
+      "page": "application",
+      "excerpt": "Keep updated on all ESA opportunities Subscribe to our newsletter or visit our Help page for quick answers Subscribe to newsletter Get Help European Space Agency Privacy Policy Cookie notice Smart Assistant Help"
     },
     {
       "id": "check-page-390c3bf024",
@@ -302,10 +666,136 @@
       "excerpt": "Flight Ticket Initiative – apply now to launch your satellite - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING ESA's matchmaking"
     },
     {
+      "id": "check-page-8d4b3283e5",
+      "url": "https://commercialisation.esa.int/flight-ticket-initiative-apply-now-to-launch-your-satellite/",
+      "page": "application",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-7a49b429d2",
+      "url": "https://commercialisation.esa.int/flight-ticket-initiative-apply-now-to-launch-your-satellite/",
+      "page": "application",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-103903b17e",
+      "url": "https://commercialisation.esa.int/flight-ticket-initiative-apply-now-to-launch-your-satellite/",
+      "page": "application",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-66befd6e3a",
+      "url": "https://commercialisation.esa.int/flight-ticket-initiative-apply-now-to-launch-your-satellite/",
+      "page": "application",
+      "excerpt": "Under this initiative, ESA and the EU will co-fund European launch services selected on a competitive basis to demonstrate and qualify in-orbit technologies or sub-systems on “ready-to-fly” satellites."
+    },
+    {
+      "id": "check-page-400342bde8",
+      "url": "https://commercialisation.esa.int/flight-ticket-initiative-apply-now-to-launch-your-satellite/",
+      "page": "application",
+      "excerpt": "28 October 2026 Aiming high: ESA launches new ISAM Club to connect Europe’s in-space ecosystem Stakeholders from across Europe came together in Paris on 14 October for the inauguration of the ISAM Club, where ESA presented its ambition to accelerate the deployment of a coordinated,..."
+    },
+    {
+      "id": "check-page-a16e3a5d45",
+      "url": "https://commercialisation.esa.int/flight-ticket-initiative-apply-now-to-launch-your-satellite/",
+      "page": "application",
+      "excerpt": "08 October 2026 Investor Workshop at ESA explores the next chapter of growth for Europe’s space sector On 17 September, a select group of investors, institutional representatives and space-sector experts gathered at the European Space Agency (ESA) Headquarters in Paris to discuss a common challenge: how to..."
+    },
+    {
+      "id": "check-page-e4991c5196",
+      "url": "https://commercialisation.esa.int/flight-ticket-initiative-apply-now-to-launch-your-satellite/",
+      "page": "application",
+      "excerpt": "02 October 2026 ESA expands access to finance for European space companies with new Space Debt Catalogue To support the growth and competitiveness of European space companies, ESA is broadening its access-to-finance activities beyond equity investment to include debt and project financing The new Space Debt Catalogue..."
+    },
+    {
+      "id": "check-page-0e7856b7ca",
+      "url": "https://commercialisation.esa.int/flight-ticket-initiative-apply-now-to-launch-your-satellite/",
+      "page": "application",
+      "excerpt": "09 July 2026 Intesa Sanpaolo, the European Investment Bank (EIB) and the European Space Agency (ESA) launch the first Space Lending Facility agreement to support Italian space SMEs Intesa Sanpaolo, the European Investment Bank (EIB) and the European Space Agency (ESA) have signed an agreement designed to improve access to finance for small and medium-sized enterprises (SMEs) operating..."
+    },
+    {
+      "id": "check-page-e4e7e105d9",
+      "url": "https://commercialisation.esa.int/flight-ticket-initiative-apply-now-to-launch-your-satellite/",
+      "page": "application",
+      "excerpt": "More NEWS Keep updated on all ESA opportunities Subscribe to our newsletter or visit our Help page for quick answers Subscribe to newsletter Get Help European Space Agency Privacy Policy Cookie notice Smart Assistant Help"
+    },
+    {
       "id": "check-page-e170f345f5",
       "url": "https://commercialisation.esa.int/semilla-from-waste-to-resource-with-the-application-of-space-technology/",
       "page": "application",
       "excerpt": "SEMiLLA: From Waste to Resource with the Application of Space Technology - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING ESA's"
+    },
+    {
+      "id": "check-page-7b3ec22745",
+      "url": "https://commercialisation.esa.int/semilla-from-waste-to-resource-with-the-application-of-space-technology/",
+      "page": "application",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-71b86d5076",
+      "url": "https://commercialisation.esa.int/semilla-from-waste-to-resource-with-the-application-of-space-technology/",
+      "page": "application",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-7777bcfbbf",
+      "url": "https://commercialisation.esa.int/semilla-from-waste-to-resource-with-the-application-of-space-technology/",
+      "page": "application",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-22a258cf2f",
+      "url": "https://commercialisation.esa.int/semilla-from-waste-to-resource-with-the-application-of-space-technology/",
+      "page": "application",
+      "excerpt": "THE MELISSA PROJECT MELiSSA (Micro-Ecological Life Support System Alternative) is a European project running for more than 30 years within the European Space Agency (ESA), bringing many research institutes and organisations together to develop circular life support systems for the ISS and beyond."
+    },
+    {
+      "id": "check-page-189b44683b",
+      "url": "https://commercialisation.esa.int/semilla-from-waste-to-resource-with-the-application-of-space-technology/",
+      "page": "application",
+      "excerpt": "HELPING AMSTERDAM BECOME FULLY CIRCULAR BY 2050 Municipal wastewater is a great resource for nutrients and water reuse."
+    },
+    {
+      "id": "check-page-647ef5e553",
+      "url": "https://commercialisation.esa.int/semilla-from-waste-to-resource-with-the-application-of-space-technology/",
+      "page": "application",
+      "excerpt": "ESA are helping to tackle urban waste and food production challenges by helping leverage the photoheterotrophic compartment (C-II) of the MELiSSA loop, responsible for the elimination of the terminal products of the liquefying compartment of the system, for use as an urban waste solution for the Municipality of Amsterdam."
+    },
+    {
+      "id": "check-page-4193ac2855",
+      "url": "https://commercialisation.esa.int/semilla-from-waste-to-resource-with-the-application-of-space-technology/",
+      "page": "application",
+      "excerpt": "The Amsterdam Institute for Advanced Metropolitan Solutions (AMS Institute) is working with SEMiLLA on this project."
+    },
+    {
+      "id": "check-page-892a80b577",
+      "url": "https://commercialisation.esa.int/semilla-from-waste-to-resource-with-the-application-of-space-technology/",
+      "page": "application",
+      "excerpt": "Amsterdam’s living labs initiative provides a testbed for developing new solutions, including SEMiLLA’s IPStar Circular System at the recently opened Marineterrein lab, which helps the city of Amsterdam quickly adopt new technologies to enable the city to reach the goal of becoming a fully circular city by 2050."
+    },
+    {
+      "id": "check-page-ef0c05a937",
+      "url": "https://commercialisation.esa.int/semilla-from-waste-to-resource-with-the-application-of-space-technology/",
+      "page": "application",
+      "excerpt": "The technology is a non-biological system, and it can be an alternative to the technical solution from the MELiSSA project, however, the SEMiLLA biological raceway reactor is different in the way it handles waste and the commercial viability is assumed higher due to lower energy needed to operate the system."
+    },
+    {
+      "id": "check-page-97a210d184",
+      "url": "https://commercialisation.esa.int/semilla-from-waste-to-resource-with-the-application-of-space-technology/",
+      "page": "application",
+      "excerpt": "Another project that is piloting in Amsterdam is the SEMiLLA Sanitation, which is a spin-off of SEMiLLA IPStar."
+    },
+    {
+      "id": "check-page-88e994761b",
+      "url": "https://commercialisation.esa.int/semilla-from-waste-to-resource-with-the-application-of-space-technology/",
+      "page": "application",
+      "excerpt": "This is again not a competitor but actually a gateway to including a higher range of solutions for wastewater treatment and nutrient recovery to be used in Amsterdam."
+    },
+    {
+      "id": "check-page-ed285a2a7e",
+      "url": "https://commercialisation.esa.int/semilla-from-waste-to-resource-with-the-application-of-space-technology/",
+      "page": "application",
+      "excerpt": "Crucially the system does not interfere with existing wastewater systems, which is crucial for future implementation in cities at scale, such as in Amsterdam."
     },
     {
       "id": "check-page-4ab31624ac",
@@ -314,10 +804,94 @@
       "excerpt": "Space-borne remote sensing and green applications - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING ESA's matchmaking platform, designed"
     },
     {
+      "id": "check-page-6d6c99ef00",
+      "url": "https://commercialisation.esa.int/space-borne-remote-sensing-and-green-applications/",
+      "page": "application",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-3f05926d3b",
+      "url": "https://commercialisation.esa.int/space-borne-remote-sensing-and-green-applications/",
+      "page": "application",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-7e00e782eb",
+      "url": "https://commercialisation.esa.int/space-borne-remote-sensing-and-green-applications/",
+      "page": "application",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-ffbf393802",
+      "url": "https://commercialisation.esa.int/space-borne-remote-sensing-and-green-applications/",
+      "page": "application",
+      "excerpt": "The newest episode of the European Patent Office (EPO) podcast “ Talk innovation ” dives into the global patent trends and commercial opportunities of ‘green applications’ through space-borne remote sensing."
+    },
+    {
+      "id": "check-page-2b81b034c4",
+      "url": "https://commercialisation.esa.int/space-borne-remote-sensing-and-green-applications/",
+      "page": "application",
+      "excerpt": "Further findings and details of these developments are compiled in the corresponding patent insight report , jointly prepared by the EPO , the European Space Policy Institute (ESPI) and ESA ."
+    },
+    {
+      "id": "check-page-5381da4313",
+      "url": "https://commercialisation.esa.int/space-borne-remote-sensing-and-green-applications/",
+      "page": "application",
+      "excerpt": "Image source: European Patent Organisation (EPO) Related news 12 May 2026 Czech Satellite Atmosphere Monitoring Project (EARS) started its definition under ESA InCubed programme The European Space Agency is supporting the Czech company Stellar Exploration, within the framework of the ESA InCubed programme, for the implementation of the Earth Remote Sensing via GNSS Radio..."
+    },
+    {
+      "id": "check-page-d880db2896",
+      "url": "https://commercialisation.esa.int/space-borne-remote-sensing-and-green-applications/",
+      "page": "application",
+      "excerpt": "27 April 2026 ESA Third Party Missions programme for fostering R&D, entrepreneurship and Earth science in Europe A strong space sector can play an important role in supporting innovation, competitiveness, and sustainable economic growth in Europe."
+    },
+    {
+      "id": "check-page-43f65c7e7e",
+      "url": "https://commercialisation.esa.int/space-borne-remote-sensing-and-green-applications/",
+      "page": "application",
+      "excerpt": "At the heart of this effort is the European Space Agency’s..."
+    },
+    {
+      "id": "check-page-7a4ea8cdb3",
+      "url": "https://commercialisation.esa.int/space-borne-remote-sensing-and-green-applications/",
+      "page": "application",
+      "excerpt": "30 October 2025 Accelerating Commercialisation and Competitiveness of the European Space Sector (ACCESS) – Programme Proposal ACCESS is a new programme proposed from the European Space Agency (ESA), designed to accelerate the commercialisation and competitiveness of Europe’s space sector."
+    },
+    {
+      "id": "check-page-5b287c77b3",
+      "url": "https://commercialisation.esa.int/space-borne-remote-sensing-and-green-applications/",
+      "page": "application",
+      "excerpt": "17 September 2025 ESA Acceleration Days: Accelerate Urban Green Transition Held between September 8-12 in Brussels, the ESA Acceleration Days: Accelerate Urban Green Transition was organised in collaboration with the European Commission’s DG CLIMA and supported by a diverse group..."
+    },
+    {
+      "id": "check-page-85ba3afa70",
+      "url": "https://commercialisation.esa.int/space-borne-remote-sensing-and-green-applications/",
+      "page": "application",
+      "excerpt": "More NEWS Keep updated on all ESA opportunities Subscribe to our newsletter or visit our Help page for quick answers Subscribe to newsletter Get Help European Space Agency Privacy Policy Cookie notice Smart Assistant Help"
+    },
+    {
       "id": "check-page-2e3f6e531b",
       "url": "https://commercialisation.esa.int/space4rail/ao11026-space4rail-downstream-applications-in-artes-4-0-documents/",
       "page": "application",
       "excerpt": "AO11026 - Space4Rail Downstream Applications in ARTES 4.0 - Documents - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING ESA's matchmaking"
+    },
+    {
+      "id": "check-page-ec6a115157",
+      "url": "https://commercialisation.esa.int/space4rail/ao11026-space4rail-downstream-applications-in-artes-4-0-documents/",
+      "page": "application",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-bcdfcf6d8b",
+      "url": "https://commercialisation.esa.int/space4rail/ao11026-space4rail-downstream-applications-in-artes-4-0-documents/",
+      "page": "application",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-eba8285b53",
+      "url": "https://commercialisation.esa.int/space4rail/ao11026-space4rail-downstream-applications-in-artes-4-0-documents/",
+      "page": "application",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
     },
     {
       "id": "check-page-7a3f14d4a2",
@@ -326,10 +900,154 @@
       "excerpt": "Taking our experience from cooling in Space and applying it innovatively to ground applications - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe."
     },
     {
+      "id": "check-page-cb1b25da8c",
+      "url": "https://commercialisation.esa.int/taking-our-experience-from-cooling-in-space-and-applying-it-innovatively-to-ground-applications/",
+      "page": "application",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-356f3d0880",
+      "url": "https://commercialisation.esa.int/taking-our-experience-from-cooling-in-space-and-applying-it-innovatively-to-ground-applications/",
+      "page": "application",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-ccbae4bde0",
+      "url": "https://commercialisation.esa.int/taking-our-experience-from-cooling-in-space-and-applying-it-innovatively-to-ground-applications/",
+      "page": "application",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-0310572edf",
+      "url": "https://commercialisation.esa.int/taking-our-experience-from-cooling-in-space-and-applying-it-innovatively-to-ground-applications/",
+      "page": "application",
+      "excerpt": "Key actors from the transportation and space sectors will come together to develop new synergies."
+    },
+    {
+      "id": "check-page-2b10cc89e4",
+      "url": "https://commercialisation.esa.int/taking-our-experience-from-cooling-in-space-and-applying-it-innovatively-to-ground-applications/",
+      "page": "application",
+      "excerpt": "Background + problem to solve for In the realm of technological advancements, where power-packed electronics drive progress and innovation, effective thermal management has become a pivotal challenge."
+    },
+    {
+      "id": "check-page-922a16a8f5",
+      "url": "https://commercialisation.esa.int/taking-our-experience-from-cooling-in-space-and-applying-it-innovatively-to-ground-applications/",
+      "page": "application",
+      "excerpt": "Enter Calyos , a trailblazer in passive cooling technologies, with its roots deeply spawning from the space industry as they spun-off from Euro Heat Pipes (EHP) in 2014."
+    },
+    {
+      "id": "check-page-dad83fbd41",
+      "url": "https://commercialisation.esa.int/taking-our-experience-from-cooling-in-space-and-applying-it-innovatively-to-ground-applications/",
+      "page": "application",
+      "excerpt": "However, in the space industry, this approach was rendered ineffective due to the lack of air or cooling mediums/fluids."
+    },
+    {
+      "id": "check-page-12bce3a06d",
+      "url": "https://commercialisation.esa.int/taking-our-experience-from-cooling-in-space-and-applying-it-innovatively-to-ground-applications/",
+      "page": "application",
+      "excerpt": "In a world driven by sustainability goals, high-power electronics play a critical role."
+    },
+    {
+      "id": "check-page-542fb48aeb",
+      "url": "https://commercialisation.esa.int/taking-our-experience-from-cooling-in-space-and-applying-it-innovatively-to-ground-applications/",
+      "page": "application",
+      "excerpt": "From cutting-edge computer processors propelling human advancements to power electronic inverters shaping the energy sector."
+    },
+    {
+      "id": "check-page-835cd83c3b",
+      "url": "https://commercialisation.esa.int/taking-our-experience-from-cooling-in-space-and-applying-it-innovatively-to-ground-applications/",
+      "page": "application",
+      "excerpt": "Today, the same principles used for cooling electronics in space finds resonance in ground applications."
+    },
+    {
+      "id": "check-page-aed2d03a0d",
+      "url": "https://commercialisation.esa.int/taking-our-experience-from-cooling-in-space-and-applying-it-innovatively-to-ground-applications/",
+      "page": "application",
+      "excerpt": "With a mastery over two-phase (liquid to vapor) passive cooling technologies, such as Loop Heat Pipes, Micro Channel Heat Pipes and Pulsating Heat Pipes, Calyos delivers effective cooling systems for these electronics with the notable benefit of being 100% passive and pump free."
+    },
+    {
+      "id": "check-page-ac6610dc34",
+      "url": "https://commercialisation.esa.int/taking-our-experience-from-cooling-in-space-and-applying-it-innovatively-to-ground-applications/",
+      "page": "application",
+      "excerpt": "A compelling illustration of Calyos’ prowess emerges in their collaboration with a leading American automotive OEM."
+    },
+    {
       "id": "check-page-0645c98994",
       "url": "https://commercialisation.esa.int/winners-of-the-esa-push-2023-unlocking-innovative-space-services-for-european-ecosystem-apply-today/",
       "page": "application",
       "excerpt": "Winners of the ESA PUSH 2023: Unlocking Innovative Space Services for European Ecosystem, Apply Today! - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in"
+    },
+    {
+      "id": "check-page-a34181b03b",
+      "url": "https://commercialisation.esa.int/winners-of-the-esa-push-2023-unlocking-innovative-space-services-for-european-ecosystem-apply-today/",
+      "page": "application",
+      "excerpt": "EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe."
+    },
+    {
+      "id": "check-page-a8dd1f2f72",
+      "url": "https://commercialisation.esa.int/winners-of-the-esa-push-2023-unlocking-innovative-space-services-for-european-ecosystem-apply-today/",
+      "page": "application",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-2b6adb8c57",
+      "url": "https://commercialisation.esa.int/winners-of-the-esa-push-2023-unlocking-innovative-space-services-for-european-ecosystem-apply-today/",
+      "page": "application",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-b16472fbbc",
+      "url": "https://commercialisation.esa.int/winners-of-the-esa-push-2023-unlocking-innovative-space-services-for-european-ecosystem-apply-today/",
+      "page": "application",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-7c87bf12e2",
+      "url": "https://commercialisation.esa.int/winners-of-the-esa-push-2023-unlocking-innovative-space-services-for-european-ecosystem-apply-today/",
+      "page": "application",
+      "excerpt": "News Winners of the ESA PUSH 2023: Unlocking Innovative Space Services for European Ecosystem, Apply Today!"
+    },
+    {
+      "id": "check-page-23bbd57e6b",
+      "url": "https://commercialisation.esa.int/winners-of-the-esa-push-2023-unlocking-innovative-space-services-for-european-ecosystem-apply-today/",
+      "page": "application",
+      "excerpt": "ESA’s commitment to fostering innovation and growth within the commercial space ecosystem has reached a new milestone as we unveil the pioneering companies that have been selected to provide space-related products and services to fellow European companies."
+    },
+    {
+      "id": "check-page-a5eed8ec5e",
+      "url": "https://commercialisation.esa.int/winners-of-the-esa-push-2023-unlocking-innovative-space-services-for-european-ecosystem-apply-today/",
+      "page": "application",
+      "excerpt": "The PUSH Program: PUSH, a platform initiated by ESA, enables companies to offer their innovative space-related products and services to other European companies within the New Space ecosystem."
+    },
+    {
+      "id": "check-page-920df63260",
+      "url": "https://commercialisation.esa.int/winners-of-the-esa-push-2023-unlocking-innovative-space-services-for-european-ecosystem-apply-today/",
+      "page": "application",
+      "excerpt": "ESA provides allocated funding to procure these services, and the winners will, in turn, offer them for free or at discounted prices to other European companies through a competitive process."
+    },
+    {
+      "id": "check-page-ba6d83deba",
+      "url": "https://commercialisation.esa.int/winners-of-the-esa-push-2023-unlocking-innovative-space-services-for-european-ecosystem-apply-today/",
+      "page": "application",
+      "excerpt": "CYSEC, a European data security company, based in Lausanne and Paris, providing a Confidential Computing software solution which enables companies to secure workloads execution."
+    },
+    {
+      "id": "check-page-db9e3bcc19",
+      "url": "https://commercialisation.esa.int/winners-of-the-esa-push-2023-unlocking-innovative-space-services-for-european-ecosystem-apply-today/",
+      "page": "application",
+      "excerpt": "A Finish company with deep roots in R&D, software development and AI."
+    },
+    {
+      "id": "check-page-846c1f3487",
+      "url": "https://commercialisation.esa.int/winners-of-the-esa-push-2023-unlocking-innovative-space-services-for-european-ecosystem-apply-today/",
+      "page": "application",
+      "excerpt": "Their product, UrbanAI is a data fusion tool developed by Zero Gravity Oy to model close to real time city states in terms of environment, emissions, energy consumption, traffic, using satellite imagery data and other datasets, all in one place."
+    },
+    {
+      "id": "check-page-08650358ea",
+      "url": "https://commercialisation.esa.int/winners-of-the-esa-push-2023-unlocking-innovative-space-services-for-european-ecosystem-apply-today/",
+      "page": "application",
+      "excerpt": "Benefiting from the Services: Businesses across Europe now have the opportunity to participate in the competitions organized by these winning companies."
     },
     {
       "id": "check-page-4b803740b5",
@@ -338,16 +1056,346 @@
       "excerpt": "Capacity Building for Family Offices - Encouraging late-stage investment in the European space industry - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in"
     },
     {
+      "id": "check-page-8801d654e8",
+      "url": "https://commercialisation.esa.int/capacity-building-for-family-offices-encouraging-late-stage-investment-in-the-european-space-industry/",
+      "page": "terms",
+      "excerpt": "EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe."
+    },
+    {
+      "id": "check-page-1df035826b",
+      "url": "https://commercialisation.esa.int/capacity-building-for-family-offices-encouraging-late-stage-investment-in-the-european-space-industry/",
+      "page": "terms",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-c33130f3a4",
+      "url": "https://commercialisation.esa.int/capacity-building-for-family-offices-encouraging-late-stage-investment-in-the-european-space-industry/",
+      "page": "terms",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-9470c1f454",
+      "url": "https://commercialisation.esa.int/capacity-building-for-family-offices-encouraging-late-stage-investment-in-the-european-space-industry/",
+      "page": "terms",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-04e3986943",
+      "url": "https://commercialisation.esa.int/capacity-building-for-family-offices-encouraging-late-stage-investment-in-the-european-space-industry/",
+      "page": "terms",
+      "excerpt": "Currently, European ventures are significantly undervalued compared to their counterparts in the US."
+    },
+    {
+      "id": "check-page-1db8084301",
+      "url": "https://commercialisation.esa.int/capacity-building-for-family-offices-encouraging-late-stage-investment-in-the-european-space-industry/",
+      "page": "terms",
+      "excerpt": "To encourage private investment of Family Offices in the sector, the European Commission, the European Investment Fund, the European Space Agency, and the European Union Agency for Space Programme are inviting Family Offices to learn more about the space market growth, conditions, technology development, and business models offer through a series of workshops."
+    },
+    {
+      "id": "check-page-a8661738cf",
+      "url": "https://commercialisation.esa.int/capacity-building-for-family-offices-encouraging-late-stage-investment-in-the-european-space-industry/",
+      "page": "terms",
+      "excerpt": "By participating in these online workshops , you will gain access to: Expert knowledge and insights into the space industry."
+    },
+    {
+      "id": "check-page-183a2c0c5a",
+      "url": "https://commercialisation.esa.int/capacity-building-for-family-offices-encouraging-late-stage-investment-in-the-european-space-industry/",
+      "page": "terms",
+      "excerpt": "Don’t miss out on this opportunity to stay informed and take advantage of the growing space industry!"
+    },
+    {
+      "id": "check-page-cf2d051a1b",
+      "url": "https://commercialisation.esa.int/capacity-building-for-family-offices-encouraging-late-stage-investment-in-the-european-space-industry/",
+      "page": "terms",
+      "excerpt": "09 July 2026 Intesa Sanpaolo, the European Investment Bank (EIB) and the European Space Agency (ESA) launch the first Space Lending Facility agreement to support Italian space SMEs Intesa Sanpaolo, the European Investment Bank (EIB) and the European Space Agency (ESA) have signed an agreement designed to improve access to finance for small and medium-sized enterprises (SMEs) operating..."
+    },
+    {
+      "id": "check-page-1e16052bc5",
+      "url": "https://commercialisation.esa.int/capacity-building-for-family-offices-encouraging-late-stage-investment-in-the-european-space-industry/",
+      "page": "terms",
+      "excerpt": "19 June 2026 ESA contributes to discussions on financing and growth at ILA Berlin and SuperReturn Tech Sovereignty 2026 As part of the European Space Agency (ESA)’s wider engagement with industry and investors, ESA contributed to key discussions on the future of Europe’s space economy at ILA Berlin 2026..."
+    },
+    {
+      "id": "check-page-75f0c2265f",
+      "url": "https://commercialisation.esa.int/capacity-building-for-family-offices-encouraging-late-stage-investment-in-the-european-space-industry/",
+      "page": "terms",
+      "excerpt": "05 June 2026 ESA at Deep Tech Momentum 2026: advancing commercialisation and cross-sector innovation The European Space Agency, in partnership with the German Space Agency at DLR, participated in Deep Tech Momentum 2026, held on 20–21 May in Berlin."
+    },
+    {
+      "id": "check-page-7f237c7a11",
+      "url": "https://commercialisation.esa.int/capacity-building-for-family-offices-encouraging-late-stage-investment-in-the-european-space-industry/",
+      "page": "terms",
+      "excerpt": "07 April 2026 Ad Astra Summit Spotlights Commercial Space Opportunities in Germany Last week at ESA’s European Space Operations Centre (ESOC) in Darmstadt German companies gathered for the Ad Astra Summit."
+    },
+    {
       "id": "check-page-0aeb144ad0",
       "url": "https://commercialisation.esa.int/capacity-building-programme-for-fund-managers-episode-5-fund-setup-investment-strategy-investment-team-exit-strategy/",
       "page": "terms",
       "excerpt": "Capacity Building Programme for Fund Managers – Episode 5 – Fund setup, investment strategy, investment team, exit strategy - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded"
     },
     {
+      "id": "check-page-265faf092b",
+      "url": "https://commercialisation.esa.int/capacity-building-programme-for-fund-managers-episode-5-fund-setup-investment-strategy-investment-team-exit-strategy/",
+      "page": "terms",
+      "excerpt": "EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe."
+    },
+    {
+      "id": "check-page-13d16c01ee",
+      "url": "https://commercialisation.esa.int/capacity-building-programme-for-fund-managers-episode-5-fund-setup-investment-strategy-investment-team-exit-strategy/",
+      "page": "terms",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-f842e2bad4",
+      "url": "https://commercialisation.esa.int/capacity-building-programme-for-fund-managers-episode-5-fund-setup-investment-strategy-investment-team-exit-strategy/",
+      "page": "terms",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-5ea9e41115",
+      "url": "https://commercialisation.esa.int/capacity-building-programme-for-fund-managers-episode-5-fund-setup-investment-strategy-investment-team-exit-strategy/",
+      "page": "terms",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-5db4536880",
+      "url": "https://commercialisation.esa.int/capacity-building-programme-for-fund-managers-episode-5-fund-setup-investment-strategy-investment-team-exit-strategy/",
+      "page": "terms",
+      "excerpt": "In the coming years, European companies will find new business opportunities coming from the launching of satellite constellations and new digital services."
+    },
+    {
+      "id": "check-page-38130458a7",
+      "url": "https://commercialisation.esa.int/capacity-building-programme-for-fund-managers-episode-5-fund-setup-investment-strategy-investment-team-exit-strategy/",
+      "page": "terms",
+      "excerpt": "In this context, the Commission together with EIF will launch the CASSINI Facility in Q2 2022, an InvestEU facility offering capital to VC funds aiming to set up a new space-focused fund, with a total investment capacity of €1 billion."
+    },
+    {
+      "id": "check-page-798cfa73fc",
+      "url": "https://commercialisation.esa.int/capacity-building-programme-for-fund-managers-episode-5-fund-setup-investment-strategy-investment-team-exit-strategy/",
+      "page": "terms",
+      "excerpt": "If you are interested in space investments, but want to find out more about market growth and conditions, technology development and business models, the European Commission, EIF, ESA and EUSPA offer a series of workshops tailored to your needs."
+    },
+    {
+      "id": "check-page-2120fbc4c4",
+      "url": "https://commercialisation.esa.int/capacity-building-programme-for-fund-managers-episode-5-fund-setup-investment-strategy-investment-team-exit-strategy/",
+      "page": "terms",
+      "excerpt": "Here the agenda of the event: VIP breakfast “Meet the market: how to accelerate investments in EU Space SMEs?” (EIF CEO, EIB VP, ESA DG, EUSPA DG, EC) – 8.30-9.30 Welcome (EIF CEO, EIB VP, ESA DG, EUSPA DG, EC) – 9.30-10.00 Presentation of InvestEU Space (incl."
+    },
+    {
+      "id": "check-page-1989e35295",
+      "url": "https://commercialisation.esa.int/capacity-building-programme-for-fund-managers-episode-5-fund-setup-investment-strategy-investment-team-exit-strategy/",
+      "page": "terms",
+      "excerpt": "08 October 2026 Investor Workshop at ESA explores the next chapter of growth for Europe’s space sector On 17 September, a select group of investors, institutional representatives and space-sector experts gathered at the European Space Agency (ESA) Headquarters in Paris to discuss a common challenge: how to..."
+    },
+    {
+      "id": "check-page-0021140b19",
+      "url": "https://commercialisation.esa.int/capacity-building-programme-for-fund-managers-episode-5-fund-setup-investment-strategy-investment-team-exit-strategy/",
+      "page": "terms",
+      "excerpt": "02 October 2026 ESA expands access to finance for European space companies with new Space Debt Catalogue To support the growth and competitiveness of European space companies, ESA is broadening its access-to-finance activities beyond equity investment to include debt and project financing The new Space Debt Catalogue..."
+    },
+    {
+      "id": "check-page-7db5515174",
+      "url": "https://commercialisation.esa.int/capacity-building-programme-for-fund-managers-episode-5-fund-setup-investment-strategy-investment-team-exit-strategy/",
+      "page": "terms",
+      "excerpt": "09 July 2026 Intesa Sanpaolo, the European Investment Bank (EIB) and the European Space Agency (ESA) launch the first Space Lending Facility agreement to support Italian space SMEs Intesa Sanpaolo, the European Investment Bank (EIB) and the European Space Agency (ESA) have signed an agreement designed to improve access to finance for small and medium-sized enterprises (SMEs) operating..."
+    },
+    {
+      "id": "check-page-d16555b04b",
+      "url": "https://commercialisation.esa.int/capacity-building-programme-for-fund-managers-episode-5-fund-setup-investment-strategy-investment-team-exit-strategy/",
+      "page": "terms",
+      "excerpt": "19 June 2026 ESA contributes to discussions on financing and growth at ILA Berlin and SuperReturn Tech Sovereignty 2026 As part of the European Space Agency (ESA)’s wider engagement with industry and investors, ESA contributed to key discussions on the future of Europe’s space economy at ILA Berlin 2026..."
+    },
+    {
       "id": "check-page-8e34a41a72",
       "url": "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
       "page": "terms",
       "excerpt": "ESA and Audacia sign an agreement with the Expansion investment fund - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING ESA's matchmaking"
+    },
+    {
+      "id": "check-page-f7e41c2e2c",
+      "url": "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
+      "page": "terms",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-731bcc13f2",
+      "url": "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
+      "page": "terms",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-86118287c2",
+      "url": "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
+      "page": "terms",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-f4d37d3105",
+      "url": "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
+      "page": "terms",
+      "excerpt": "Audacia is an independent management company founded in 2006 that has invested nearly €750 million structuring innovative investment solutions in private equity, real estate and venture capital for individual and institutional investors and providing access to value-added and resilient assets."
+    },
+    {
+      "id": "check-page-d9fd87aa95",
+      "url": "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
+      "page": "terms",
+      "excerpt": "Audacia would like to stimulate the emergence of European Technological and industrial start-ups and created two deep tech venture funds: 1."
+    },
+    {
+      "id": "check-page-9497cd343f",
+      "url": "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
+      "page": "terms",
+      "excerpt": "Quantonation, dedicated to investments in quantum technologies 2."
+    },
+    {
+      "id": "check-page-910101d8d0",
+      "url": "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
+      "page": "terms",
+      "excerpt": "Geodesic, dedicated to investments in New Space The Expansion fund will also benefit from a unique DNA, thanks to its team composed by people of the Startburst Accelerator (Blast) and Geodesic Venture Fund in support to Aerospace and Defence start-ups."
+    },
+    {
+      "id": "check-page-0c80ab26a9",
+      "url": "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
+      "page": "terms",
+      "excerpt": "Related news 02 October 2026 ESA expands access to finance for European space companies with new Space Debt Catalogue To support the growth and competitiveness of European space companies, ESA is broadening its access-to-finance activities beyond equity investment to include debt and project financing The new Space Debt Catalogue..."
+    },
+    {
+      "id": "check-page-21428c97a0",
+      "url": "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
+      "page": "terms",
+      "excerpt": "09 July 2026 Intesa Sanpaolo, the European Investment Bank (EIB) and the European Space Agency (ESA) launch the first Space Lending Facility agreement to support Italian space SMEs Intesa Sanpaolo, the European Investment Bank (EIB) and the European Space Agency (ESA) have signed an agreement designed to improve access to finance for small and medium-sized enterprises (SMEs) operating..."
+    },
+    {
+      "id": "check-page-10ca30a9b1",
+      "url": "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
+      "page": "terms",
+      "excerpt": "19 June 2026 ESA contributes to discussions on financing and growth at ILA Berlin and SuperReturn Tech Sovereignty 2026 As part of the European Space Agency (ESA)’s wider engagement with industry and investors, ESA contributed to key discussions on the future of Europe’s space economy at ILA Berlin 2026..."
+    },
+    {
+      "id": "check-page-db611a192b",
+      "url": "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
+      "page": "terms",
+      "excerpt": "05 June 2026 ESA at Deep Tech Momentum 2026: advancing commercialisation and cross-sector innovation The European Space Agency, in partnership with the German Space Agency at DLR, participated in Deep Tech Momentum 2026, held on 20–21 May in Berlin."
+    },
+    {
+      "id": "check-page-0decd6f4b5",
+      "url": "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
+      "page": "terms",
+      "excerpt": "07 April 2026 Ad Astra Summit Spotlights Commercial Space Opportunities in Germany Last week at ESA’s European Space Operations Centre (ESOC) in Darmstadt German companies gathered for the Ad Astra Summit."
+    },
+    {
+      "id": "check-page-d29631801f",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/6136/",
+      "page": "terms",
+      "excerpt": "- ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-2d0748c4ba",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/6136/",
+      "page": "terms",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-62cb29de1e",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/6136/",
+      "page": "terms",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-f810621295",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-10/",
+      "page": "terms",
+      "excerpt": "Auto Draft - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and"
+    },
+    {
+      "id": "check-page-2b53afdcd3",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-10/",
+      "page": "terms",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-3fa399a38d",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-10/",
+      "page": "terms",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-baf6a81fcc",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-10/",
+      "page": "terms",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-6d441ed5df",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-11/",
+      "page": "terms",
+      "excerpt": "Auto Draft - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and"
+    },
+    {
+      "id": "check-page-6c8abe83f3",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-11/",
+      "page": "terms",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-47b40c1cfd",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-11/",
+      "page": "terms",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-0152630d13",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-11/",
+      "page": "terms",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-815cc14174",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-12/",
+      "page": "terms",
+      "excerpt": "Auto Draft - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and"
+    },
+    {
+      "id": "check-page-8d6292eb89",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-12/",
+      "page": "terms",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-bf6521888d",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-12/",
+      "page": "terms",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-8dc519beda",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-12/",
+      "page": "terms",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
+    },
+    {
+      "id": "check-page-3f3802655d",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-13/",
+      "page": "terms",
+      "excerpt": "Auto Draft - ESA Commercialisation Gateway ESA Commercialisation Gateway SEARCH START YOUR BUSINESS JOURNEY OPPORTUNITIES NETWORKS Business Networks ESA COMMERCIALISATION NETWORKS A single overview of ESA commercialisation networks to turn space ideas into market impact. INVESTOR NETWORK Brings together space startups, forward-thinking investors and ESA programmes to accelerate innovation in Europe. ESA BUSINESS INCUBATION CENTRES A network of incubators that nurture startups, providing technical and business support. TECHNOLOGY BROKER Facilitating transfer between space and non-space sectors. PHI-LABNET Innovative labs fostering collaboration between ESA, industry and researchers. ESA LABS Partnerships between ESA and Universities in the Engineering and Business domains. SERVICES Our Services ESA COMMERCIALISATION SERVICES An overview of ESA services supporting the commercialisation of space technologies and applications. SPACE TECH PLATFORM Digital platform providing insights into the global space innovation ecosystem. ESA SPACE HPC High‑Performance Computing services supporting space research, development, and commercial applications. TECHNICAL SUPPORT Guidance and testing in ESA's laboratories. EUROPEAN SPACE INDEX Virtual portfolio showcasing publicly traded space companies in Europe. MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and"
+    },
+    {
+      "id": "check-page-71d3e95445",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-13/",
+      "page": "terms",
+      "excerpt": "MATCHMAKING ESA's matchmaking platform, designed to connect companies, SMEs, and organisations."
+    },
+    {
+      "id": "check-page-c22bc299da",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-13/",
+      "page": "terms",
+      "excerpt": "INTELLECTUAL PROPERTY Over 500 patents covering robotics, optics, propulsion, materials, and more."
+    },
+    {
+      "id": "check-page-984f2b3b1b",
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-13/",
+      "page": "terms",
+      "excerpt": "SPACE DEBT CATALOGUE An overview of financial institutions actively providing debt services to European space companies."
     }
   ],
   "findings": {

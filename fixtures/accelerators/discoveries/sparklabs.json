@@ -1,6 +1,6 @@
 {
   "programId": "sparklabs",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://sparklabs.co.kr/en/bbs/login.php?url=%2Fen%2Fvisit_program",
@@ -67,6 +67,22 @@
       "origin": "official"
     },
     {
+      "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fportfolio",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fportfolio%2Fallganize%2F",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fprogram",
       "page": "details",
       "anchor": "",
@@ -102,7 +118,7 @@
       "url": "https://sparklabs.co.kr/kr/portfolio",
       "page": "portfolio",
       "anchor": "Our Companies",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -110,7 +126,7 @@
       "url": "https://sparklabs.co.kr/kr/portfolio/allganize/",
       "page": "portfolio",
       "anchor": "",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -118,7 +134,7 @@
       "url": "https://sparklabs.co.kr/kr/portfolio/bemyfriends-co-ltd/",
       "page": "portfolio",
       "anchor": "",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

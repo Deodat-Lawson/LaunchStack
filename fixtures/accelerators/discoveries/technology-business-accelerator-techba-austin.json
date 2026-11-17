@@ -1,5 +1,166 @@
 {
   "programId": "technology-business-accelerator-techba-austin",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
-  "pages": []
+  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "pages": [
+    {
+      "url": "https://ic2.utexas.edu/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/about-ic%c2%b2-institute/",
+      "page": "details",
+      "anchor": "About IC² Institute",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/about-ic²-institute/",
+      "page": "details",
+      "anchor": "Learn more about IC 2",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/about/",
+      "page": "details",
+      "anchor": "Overview",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/history/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/news/bbr-study-quantifies-economic-impact-of-lauded-ut-teacher-preparation-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/program/",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/program/%20",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/programs-latest-bkup/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/programs/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/programs/george-kozmetsky-student-challenge/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/programs/home-to-texas/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/programs/march-economic-madness/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/programs/regional-economic-recovery-initiative/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/programs/student-challenge/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/readiness-training-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/ready-for-change-the-value-of-thinking-about-whats-next/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/regional-xlr8-program-continues-to-generate-excitement-among-community-leaders/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/video-why-texas-is-the-ideal-research-laboratory/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ic2.utexas.edu/xlr8/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

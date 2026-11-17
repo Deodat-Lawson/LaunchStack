@@ -1,6 +1,6 @@
 {
   "programId": "capital-factory",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://apply.workable.com/capital-factory/",
@@ -326,6 +326,14 @@
       "url": "https://capitalfactory.com/terms",
       "page": "terms",
       "anchor": "Terms",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/texas",
+      "page": "other",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

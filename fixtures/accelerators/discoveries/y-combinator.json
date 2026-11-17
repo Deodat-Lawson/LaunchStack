@@ -1,13 +1,13 @@
 {
   "programId": "y-combinator",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
-      "url": "http://www.ycombinator.com/apply/",
-      "page": "application",
+      "url": "https://account.ycombinator.com/?continue=https://www.ycombinator.com/about",
+      "page": "details",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "robots",
       "origin": "official"
     },
     {
@@ -19,24 +19,8 @@
       "origin": "official"
     },
     {
-      "url": "https://account.ycombinator.com/?continue=https://www.ycombinator.com/apply/reminder",
-      "page": "application",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "robots",
-      "origin": "official"
-    },
-    {
-      "url": "https://account.ycombinator.com/?continue=https://www.ycombinator.com/deal",
-      "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "robots",
-      "origin": "official"
-    },
-    {
-      "url": "https://account.ycombinator.com/?continue=https://www.ycombinator.com/demoday/faq",
-      "page": "terms",
+      "url": "https://account.ycombinator.com/?continue=https://www.ycombinator.com/companies",
+      "page": "portfolio",
       "anchor": "",
       "fetched": false,
       "blocked": "robots",
@@ -45,22 +29,6 @@
     {
       "url": "https://account.ycombinator.com/?continue=https://www.ycombinator.com/faq",
       "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "robots",
-      "origin": "official"
-    },
-    {
-      "url": "https://account.ycombinator.com/?continue=https://www.ycombinator.com/howtoapply",
-      "page": "application",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "robots",
-      "origin": "official"
-    },
-    {
-      "url": "https://account.ycombinator.com/authenticate?continue=https%3A%2F%2Fwww.ycombinator.com%2Fapply%2Freminder",
-      "page": "application",
       "anchor": "",
       "fetched": false,
       "blocked": "robots",
@@ -115,23 +83,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.ycombinator.com/apply/dropbox",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.ycombinator.com/apply/reminder",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.ycombinator.com/apply/unsubscribe-reminder",
       "page": "application",
       "anchor": "",
       "fetched": true,
@@ -142,22 +94,6 @@
       "url": "https://www.ycombinator.com/companies",
       "page": "portfolio",
       "anchor": "Companies",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.ycombinator.com/deal",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.ycombinator.com/demoday/faq",
-      "page": "terms",
-      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -171,25 +107,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.ycombinator.com/growth-program",
-      "page": "details",
+      "url": "https://www.ycombinator.com/jobs",
+      "page": "other",
       "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.ycombinator.com/howtoapply",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.ycombinator.com/library/ks-how-to-build-the-future-paul-graham-amjad-masad",
-      "page": "details",
-      "anchor": "Video How To Build The Future: Paul Graham & Amjad Masad Replit co-founder and CEO Amjad Masad talks with Paul Graham about why Replit was so well positioned when coding agents arr",
       "fetched": true,
       "blocked": null,
       "origin": "official"

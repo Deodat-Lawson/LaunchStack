@@ -1,24 +1,280 @@
 {
   "programId": "western-new-york-win-wny-incubator-network",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.wnyincubators.com/",
+    "https://www.wnyincubators.com/sandboxapplication",
+    "https://www.wnyincubators.com/deals-discounts",
+    "https://www.wnyincubators.com/sandboxfaq",
+    "https://www.wnyincubators.com/sandbox",
     "https://www.wnyincubators.com/about-us",
-    "https://www.wnyincubators.com/deals-discounts"
+    "https://www.wnyincubators.com/programs",
+    "https://www.wnyincubators.com/test-about-us",
+    "https://www.wnyincubators.com/TaxIncentives",
+    "https://www.wnyincubators.com/UB",
+    "https://www.wnyincubators.com/cultivator",
+    "https://www.wnyincubators.com/pitch-prep"
   ],
   "evidence": [
     {
+      "id": "check-deal-ef68083ee8",
+      "url": "https://www.wnyincubators.com/sandboxfaq",
+      "title": "WIN: WNY Incubator Network — terms page",
+      "excerpt": "Tell me about the money? Up to three team members will receive $300 stipends for each week in the program. At several milestones during",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-04e5f8778e",
+      "url": "https://www.wnyincubators.com/pitch-prep",
+      "title": "WIN: WNY Incubator Network — program page",
+      "excerpt": "on term sheets and valuation. Sessions are held both in person and online and draw upon WIN's network of experienced",
+      "page": "details"
+    },
+    {
+      "id": "check-format-529046217f",
+      "url": "https://www.wnyincubators.com/about-us",
+      "title": "WIN: WNY Incubator Network — program page",
+      "excerpt": "Buffalo Buffalo, NY Jacobs Institute Buffalo, NY launch ny Virtual Incubator Olean Business Incubator Olean, NY Rookery Labs",
+      "page": "details"
+    },
+    {
+      "id": "check-rolling-cc8356702f",
+      "url": "https://www.wnyincubators.com/sandboxapplication",
+      "title": "WIN: WNY Incubator Network — application page",
+      "excerpt": "for the 2016 Buffalo Student Sandbox program. Applications will be considered on a rolling basis from March 1 - May 1, 2016 or until all spots are filled. Please note: This",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-e3dc18e2fd",
+      "url": "https://www.wnyincubators.com/sandboxfaq",
+      "title": "WIN: WNY Incubator Network — terms page",
+      "excerpt": "for the whole team). After March 1, applications will be considered on a rolling basis, and the final deadline is May 1, 2016. Please apply early as we receive many",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-2b482c16ee",
+      "url": "https://www.wnyincubators.com/sandboxfaq",
+      "title": "WIN: WNY Incubator Network — terms page",
+      "excerpt": "(back to Sandbox application page) → https://www.wnyincubators.com/sandbox",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-5a5d300dc1",
+      "url": "https://www.wnyincubators.com/sandbox",
+      "title": "WIN: WNY Incubator Network — application page",
+      "excerpt": "2016 PROGRAM APPLICATION → https://www.wnyincubators.com/sandboxapplication",
+      "page": "application"
+    },
+    {
       "id": "check-route-d78261ee97",
       "url": "https://www.wnyincubators.com/",
-      "title": "WIN: WNY Incubator Network — homepage checked by scrape.py",
+      "title": "WIN: WNY Incubator Network — homepage",
       "excerpt": "https://www.wnyincubators.com/",
       "page": "details"
+    },
+    {
+      "id": "check-start-efcb3c7415",
+      "url": "https://www.wnyincubators.com/sandboxfaq",
+      "title": "WIN: WNY Incubator Network — terms page",
+      "excerpt": "visit several other entrepreneurial spots around WNY. The program runs June 6 - August 5, 2016. Will this be like a normal internship",
+      "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-c2d099351e",
+      "url": "https://www.wnyincubators.com/",
+      "page": "details",
+      "excerpt": "WNY Incubator Network | WNY Incubator Network / WNY Innovation Hot Spot Menu Startup Week About Us Contact Us Incubation Programs Access UB Cultivator Deals & Discounts SBIR / STTR Assistance Tax Incentives News Innovate. Incubate. Accelerate. WIN is a collaborative network of business incubators helping Western New York founders grow faster, strengthen their companies, and become more attractive to investors. Managed by University at Buffalo Business & Entrepreneur Partnerships, WIN connects startups to university talent, entrepreneurial support programs, and world-class facilities. Explore Incubators Get Support 0 Companies Served 0 Jobs Created $ 0 Million+ Funding Raised 0 Network Members Supported by UB Business & Entrepreneur Partnerships, funded through NYSTAR Innovation Hot Spot, and chartered by the WNY Regional Economic Development Council. Serving entrepreneurs across Allegany, Cattaraugus, Chautauqua, Erie, and Niagara counties. What WIN does Incubate WIN helps startups move from concept to traction with access to incubator spaces, mentors, and regional support. Support Founders can tap commercialization help, business guidance, and a broader ecosystem of talent and partners. Connect WIN links companies to UB resources, entrepreneurial networks, and funding-adjacent opportunities across Western New York. Why it Matters Incubation is more than space. WIN supports"
+    },
+    {
+      "id": "check-page-88a441a4e1",
+      "url": "https://www.wnyincubators.com/",
+      "page": "details",
+      "excerpt": "The mentorship, connections, and resources gave us the confidence to expand faster than we could have on our own."
+    },
+    {
+      "id": "check-page-e23effae71",
+      "url": "https://www.wnyincubators.com/",
+      "page": "details",
+      "excerpt": "WIN introduced us to mentors, fellow entrepreneurs, and opportunities that helped turn our vision into a thriving business.\" Alex Morgan, Founder, NextGen Ventures The University at Buffalo serves as the managing entity for WIN, a NYSTAR Innovation Hot Spot ."
+    },
+    {
+      "id": "check-page-5570af10cb",
+      "url": "https://www.wnyincubators.com/",
+      "page": "details",
+      "excerpt": "Startup Week About Us Incubation Programs News Copyright © 2025-2026 WNY Incubator Network / WNY Innovation Hot Spot."
+    },
+    {
+      "id": "check-page-8cbb5391be",
+      "url": "https://www.wnyincubators.com/sandboxapplication",
+      "page": "application",
+      "excerpt": "SandboxApplication | WNY Incubator Network / WNY Innovation Hot Spot Menu Startup Week About Us Contact Us Incubation Programs Access UB Cultivator Deals & Discounts SBIR / STTR Assistance Tax Incentives News This is the application for the 2016 Buffalo Student Sandbox program. Applications will be considered on a rolling basis from March 1 - May 1, 2016 or until all spots are filled. Please note: This program is for teams working to build businesses; individuals working on their own will not be considered. This form should be completed by your venture's CEO. Individuals may only apply as a part of one team. Questions? E-mail [email protected] . Your Name E-mail Hometown Phone Number What school are you affiliated with? Graduation year and degree Company Name Describe your company’s unique value proposition in 140 characters or less. Do you have a formal business plan in writing? Yes No Something similar to a formal plan Have you formed a legal entity yet? No Yes - LLC Yes - C Yes - S Yes - LLP Yes - other If you have a company website, what is it? How does/will your company make money? Have you invested any of your own money into the business yet? How much? Who is involved with your business? Which team members will be present this summer? What other commitments will your team members have this summer? What are you going to accomplish this summer? How did you hear about this"
+    },
+    {
+      "id": "check-page-bb59f7d0a1",
+      "url": "https://www.wnyincubators.com/sandboxapplication",
+      "page": "application",
+      "excerpt": "Startup Week About Us Incubation Programs News Copyright © 2025-2026 WNY Incubator Network / WNY Innovation Hot Spot."
+    },
+    {
+      "id": "check-page-596831c349",
+      "url": "https://www.wnyincubators.com/deals-discounts",
+      "page": "terms",
+      "excerpt": "Deals & Discounts | WNY Incubator Network / WNY Innovation Hot Spot Menu Startup Week About Us Contact Us Incubation Programs Access UB Cultivator Deals & Discounts SBIR / STTR Assistance Tax Incentives News Professional Services Deals & Discounts We maintain a network of vetted, trusted service providers who are experienced and skilled in working with startup companies and have agreed to extend pre-negotiated rates to incubator companies as part of their affiliation with the WNY Incubator Network (WIN). This package helps incubator companies by: Introducing them to best-in-class resources for accounting, HR, insurance, legal, marketing, and recruiting Saving the time of finding qualified service providers and negotiating with them Saving on expenses by extending pre-negotiated rates We include several providers in each service category and encourage startups to evaluate 2-3 options. As this program includes sensitive pricing information, it is not posted online. Please contact your incubator manager for introductions. The University at Buffalo serves as the managing entity for WIN, a NYSTAR Innovation Hot Spot . Startup Week About Us Incubation Programs News Copyright © 2025-2026 WNY Incubator Network / WNY Innovation Hot Spot. Buffalo Web Design by 360PSG | Powered by 360CMS"
+    },
+    {
+      "id": "check-page-14451aa0d8",
+      "url": "https://www.wnyincubators.com/sandboxfaq",
+      "page": "terms",
+      "excerpt": "SandboxFAQ | WNY Incubator Network / WNY Innovation Hot Spot Menu Startup Week About Us Contact Us Incubation Programs Access UB Cultivator Deals & Discounts SBIR / STTR Assistance Tax Incentives News Sandbox - FAQs (back to Sandbox application page) What is unique about Buffalo Student Sandbox? For a select group of talented student entrepreneurs, we are turning the summer internship on its head. In place of an ordinary internship, students selected will receive weekly stipends and compete for additional cash awards as they launch a business. In addition, you’ll have access to mentors, investors, business, and social events. The program will end with a Pitch & Demo Day involving stakeholders from across WNY. Who can apply? Buffalo Student Sandbox is accepting applications from teams led by current undergrad or graduate students and ’14 - ‘16 grads. It is required that your CEO meet these criteria. What if I’m from WNY but attend school elsewhere? If you’re planning to be in town this summer, please apply! What if I’m an international student at a school in WNY? If you’re planning to be in town this summer, please apply! Procedures surrounding tax withholdings for international students will be slightly different, but the program will otherwise be the same. What type of companies are you looking for? We are looking for scalable, disruptive student-run ventures , from any"
+    },
+    {
+      "id": "check-page-2f02c0dfad",
+      "url": "https://www.wnyincubators.com/sandboxfaq",
+      "page": "terms",
+      "excerpt": "Buffalo Student Sandbox will operate out of the dig coworking space on Buffalo Niagara Medical Campus."
+    },
+    {
+      "id": "check-page-2e28b9acaf",
+      "url": "https://www.wnyincubators.com/sandboxfaq",
+      "page": "terms",
+      "excerpt": "In addition to the stipend and potential for cash prizes, you will be immersed in mentoring and gain significant access to entrepreneurial movers and shakers from across WNY and beyond."
+    },
+    {
+      "id": "check-page-e90934daa6",
+      "url": "https://www.wnyincubators.com/sandboxfaq",
+      "page": "terms",
+      "excerpt": "Expect to meet mentors, successful entrepreneurs, design, marketing, accounting, and legal professionals, strategic partners, and investors."
+    },
+    {
+      "id": "check-page-2037ea54e7",
+      "url": "https://www.wnyincubators.com/sandboxfaq",
+      "page": "terms",
+      "excerpt": "Startup Week About Us Incubation Programs News Copyright © 2025-2026 WNY Incubator Network / WNY Innovation Hot Spot."
+    },
+    {
+      "id": "check-page-02d2836c1b",
+      "url": "https://www.wnyincubators.com/sandbox",
+      "page": "application",
+      "excerpt": "Sandbox | WNY Incubator Network / WNY Innovation Hot Spot Menu Startup Week About Us Contact Us Incubation Programs Access UB Cultivator Deals & Discounts SBIR / STTR Assistance Tax Incentives News Student Sandbox Buffalo Student Sandbox pairs talented student-run ventures with the opportunity of a lifetime: Commit to spending your summer with us, and you’ll receive a stipend and the chance to compete for additional resources to start your business. You’ll have 24 hour access to the dig coworking space, and participate in eight facilitated learning sessions based on StartUp CEL. We’ll surround you with other big thinkers, seasoned mentors, experienced entrepreneurs, and guest speakers to help you along the way. Buffalo Student Sandbox runs June 6 - August 5, 2016 in Buffalo, NY. PROGRAM FAQs for 2016 applications 2016 PROGRAM APPLICATION - Final deadline is May 1, 2016 The University at Buffalo serves as the managing entity for WIN, a NYSTAR Innovation Hot Spot . Startup Week About Us Incubation Programs News Copyright © 2025-2026 WNY Incubator Network / WNY Innovation Hot Spot. Buffalo Web Design by 360PSG | Powered by 360CMS"
+    },
+    {
+      "id": "check-page-a1e53ca841",
+      "url": "https://www.wnyincubators.com/about-us",
+      "page": "details",
+      "excerpt": "About Us | WNY Incubator Network / WNY Innovation Hot Spot Menu Startup Week About Us Contact Us Incubation Programs Access UB Cultivator Deals & Discounts SBIR / STTR Assistance Tax Incentives News About Us Collaborating to help start ups thrive in WNY Starting a business is never easy, but access to the right tools can make a world of difference. The Western New York Incubator Network is a collaborative effort of incubators and entrepreneurial service providers from New York's Allegany, Cattaraugus, Chautauqua, Erie, and Niagara Counties, working together to turn our region into a hotbed of entrepreneurial activity. We share best practices, networking, mentoring, educational, and financial resources to better assist incubator client companies. We are designated as the WNY Innovation Hot Spot , a NYSTAR program enabling program funding and a unique set of tax incentives for companies in their earliest stages. Our program is managed via the University at Buffalo . Incubators 43North Buffalo, NY 43North Foundation + Radial Ventures Buffalo, NY BNMC Innovation Center Buffalo, NY Endeavor Northeast Buffalo, NY Fredonia Technology Incubator Dunkirk, NY Harrison Place Business Center Lockport, NY INCUBATORWORKS Alfred, NY Intersect Buffalo Buffalo, NY Jacobs Institute Buffalo, NY launch ny Virtual Incubator Olean Business Incubator Olean, NY Rookery Labs Buffalo, NY The Exchange"
+    },
+    {
+      "id": "check-page-35eb9feed8",
+      "url": "https://www.wnyincubators.com/about-us",
+      "page": "details",
+      "excerpt": "Startup Week About Us Incubation Programs News Copyright © 2025-2026 WNY Incubator Network / WNY Innovation Hot Spot."
+    },
+    {
+      "id": "check-page-8495840280",
+      "url": "https://www.wnyincubators.com/programs",
+      "page": "details",
+      "excerpt": "Programs 2026 | WNY Incubator Network / WNY Innovation Hot Spot Menu Startup Week About Us Contact Us Incubation Programs Access UB Cultivator Deals & Discounts SBIR / STTR Assistance Tax Incentives News Programs How We Help Every startup journey is different—but you don't have to navigate it alone. Whether you're exploring a new business idea, launching your first company or preparing to raise investment, the Western New York Incubator Network (WIN) connects entrepreneurs with the programs, expertise and resources to move forward with confidence. Our network supports founders at every stage, helping transform promising ideas into thriving companies. Where Can We Help? Cultivator Validate your business concept before investing significant time and resources. Through customer discovery, one-on-one mentoring and entrepreneur education, Cultivator helps founders understand their market, refine their value proposition and build a stronger foundation for growth. Learn about Cultivator WIN Incubator Network Find the right environment to grow your company. WIN's network of incubators provides workspace, industry expertise, mentorship and connections tailored to your company's stage and sector. Explore the Incubator Network Access UB Through WIN's partnership with the University at Buffalo, entrepreneurs can connect with one of New York's leading research universities to accelerate"
+    },
+    {
+      "id": "check-page-1fc84a4894",
+      "url": "https://www.wnyincubators.com/programs",
+      "page": "details",
+      "excerpt": "Explore the Incubator Network Access UB Through WIN's partnership with the University at Buffalo, entrepreneurs can connect with one of New York's leading research universities to accelerate innovation and business growth."
+    },
+    {
+      "id": "check-page-f54d15180b",
+      "url": "https://www.wnyincubators.com/programs",
+      "page": "details",
+      "excerpt": "Learn about Pitch Prep Innovation Hot Spot Tax Incentives Eligible companies located within a WIN incubator may qualify for New York State Innovation Hot Spot tax incentives that help reduce operating costs during the critical early stages of company growth."
+    },
+    {
+      "id": "check-page-29893e3f31",
+      "url": "https://www.wnyincubators.com/programs",
+      "page": "details",
+      "excerpt": "Startup Week About Us Incubation Programs News Copyright © 2025-2026 WNY Incubator Network / WNY Innovation Hot Spot."
+    },
+    {
+      "id": "check-page-4968ac5a4f",
+      "url": "https://www.wnyincubators.com/test-about-us",
+      "page": "details",
+      "excerpt": "Test About Us | WNY Incubator Network / WNY Innovation Hot Spot Menu Startup Week About Us Contact Us Incubation Programs Access UB Cultivator Deals & Discounts SBIR / STTR Assistance Tax Incentives News The University at Buffalo serves as the managing entity for WIN, a NYSTAR Innovation Hot Spot . Startup Week About Us Incubation Programs News Copyright © 2025-2026 WNY Incubator Network / WNY Innovation Hot Spot. Buffalo Web Design by 360PSG | Powered by 360CMS"
+    },
+    {
+      "id": "check-page-5794605063",
+      "url": "https://www.wnyincubators.com/TaxIncentives",
+      "page": "details",
+      "excerpt": "Tax Incentives for Incubator Companies | WNY Incubator Network / WNY Innovation Hot Spot Menu Startup Week About Us Contact Us Incubation Programs Access UB Cultivator Deals & Discounts SBIR / STTR Assistance Tax Incentives News Tax Incentives for Incubator Companies In 2013, New York State created the Innovation Hot Spot program to fund operations in business incubators and extend tax incentives to qualified ventures in participating incubators. WIN serves as the Innovation Hot Spot in the WNY economic development region , and can certify companies for eligibility. To be certified, companies must be: Enrolled and in good standing with a WIN incubator In their first five years of operations (or seven years for life sciences ventures) In the formative stages of development (defined as one of the following): Still in the testing/development phase of of the product being produced Has raised less than $1M equity capital Has not yet earned profits from sales Once qualified, a company enters into a five year window of exemption from state corporate income tax and state sales tax on purchases. In that period, partners in the company are also eligible to deduct their income from the incubator company. This window lasts for five years, regardless of company age when entering the program, provided the company remains in good standing as a resident or graduate of its incubator. Is this"
+    },
+    {
+      "id": "check-page-8d11ba7415",
+      "url": "https://www.wnyincubators.com/TaxIncentives",
+      "page": "details",
+      "excerpt": "START-UP NY was designed as a tax program that incubator companies can ‘graduate’ into."
+    },
+    {
+      "id": "check-page-9cf46ba2c6",
+      "url": "https://www.wnyincubators.com/TaxIncentives",
+      "page": "details",
+      "excerpt": "START-UP NY requires an application and a campus to sponsor the company; the Hot Spot only requires that the company is an incubator client."
+    },
+    {
+      "id": "check-page-436dfd2fad",
+      "url": "https://www.wnyincubators.com/TaxIncentives",
+      "page": "details",
+      "excerpt": "IHS benefits are available regardless of physical location, as long as they are an incubator client."
+    },
+    {
+      "id": "check-page-12e51713f6",
+      "url": "https://www.wnyincubators.com/TaxIncentives",
+      "page": "details",
+      "excerpt": "Official NYS documentation on this program: Innovation Hot Spot Technical Memorandum Form CT-223 Form IT-223 Form AU-11 START-UP NY / IHS Comparison To be certified for participation by WIN: Please review the READ ME FIRST file and contact your incubator director for next steps."
+    },
+    {
+      "id": "check-page-6e9637bf18",
+      "url": "https://www.wnyincubators.com/TaxIncentives",
+      "page": "details",
+      "excerpt": "Startup Week About Us Incubation Programs News Copyright © 2025-2026 WNY Incubator Network / WNY Innovation Hot Spot."
+    },
+    {
+      "id": "check-page-7c3d9a965c",
+      "url": "https://www.wnyincubators.com/UB",
+      "page": "details",
+      "excerpt": "Access UB | WNY Incubator Network / WNY Innovation Hot Spot Menu Startup Week About Us Contact Us Incubation Programs Access UB Cultivator Deals & Discounts SBIR / STTR Assistance Tax Incentives News Get Access to the University at Buffalo The University at Buffalo is both big - the largest and most comprehensive campus in the 64-campus SUNY system - and bright, ranking among the top 2% of American universities as a member of the Association of American Universities. UB's three campuses, 110 degree programs, 30,000 students, and $400M annual research spend combine to create a wealth of opportunities for partnering startups. WIN collaborates with on-campus partners to produce a series of programs that help early stage companies connect with UB faculty, students, and facilities in ways that encourage partnerships and drive economic growth in the region. Programs include: Inclusive Launch: links startup companies with minority and female students for internship opportunities Reverse Pitch: brings startup companies on campus to pitch students on their innovative business models, culture, and career oppportunities Startup Alley: creates a cohesive, well marketed presence of incubator companies at on-campus career fairs WIN regularly connects startups seeking to access UB and professors/student clubs looking to partner with early stage companies. To help startups navigate the vast"
+    },
+    {
+      "id": "check-page-aea9c2a20e",
+      "url": "https://www.wnyincubators.com/UB",
+      "page": "details",
+      "excerpt": "Startup Week About Us Incubation Programs News Copyright © 2025-2026 WNY Incubator Network / WNY Innovation Hot Spot."
+    },
+    {
+      "id": "check-page-cca2aeac35",
+      "url": "https://www.wnyincubators.com/cultivator",
+      "page": "details",
+      "excerpt": "Cultivator | WNY Incubator Network / WNY Innovation Hot Spot Menu Startup Week About Us Contact Us Incubation Programs Access UB Cultivator Deals & Discounts SBIR / STTR Assistance Tax Incentives News UB Cultivator The Cultivator surrounds early stage startup founders in WNY with mentorship and support to build our region's next great companies. Founders are paired with entrepreneurs-in-residence and subject matter experts to help new ventures validate market potential, establish marketing plans, gear up to fundraise, and connect with investors and customers. A two-phased program, the Cultivator engages founders to identity and reach product-market fit through a six month Phase 1, before graduating to Phase 2. In Phase 2, ventures earn $100,000 in startup funding and access to free coworking space. As a WIN program, the Cultivator extends beyond UB and is available to companies in WIN's region of Allegany, Cattaraugus, Chautauqua, Erie, and Niagara Counties. The program does not require a prior affiliaion with UB. You can read more about the Cultivator program here and begin your formal application process here . The University at Buffalo serves as the managing entity for WIN, a NYSTAR Innovation Hot Spot . Startup Week About Us Incubation Programs News Copyright © 2025-2026 WNY Incubator Network / WNY Innovation Hot Spot. Buffalo Web Design by 360PSG | Powered by 360CMS"
+    },
+    {
+      "id": "check-page-8d0afbdc51",
+      "url": "https://www.wnyincubators.com/pitch-prep",
+      "page": "details",
+      "excerpt": "Pitch Prep | WNY Incubator Network / WNY Innovation Hot Spot Menu Startup Week About Us Contact Us Incubation Programs Access UB Cultivator Deals & Discounts SBIR / STTR Assistance Tax Incentives News Pitch Prep WIN's Pitch Prep series assists incubator companies raise outside capital. Each year, we organize a multi-session course which includes the motivations and preferences of different investor types, how to develop a successful pitch, opportunities to present to & be critiqued by a friendly panel of investors, and coaching on term sheets and valuation. Sessions are held both in person and online and draw upon WIN's network of experienced investors outside of Western New York. When appropriate, the program is deployed in real time to help companies presenting in programs including Bright Buffalo Niagara, 43North, the NYS Business Plan Competition, and for individual meetings with investors. Since 2014, participating companies have since raised more than $20M in outside funding from numerous sources including angels, private equity firms, state and federal programs, institutional, and other investors. The University at Buffalo serves as the managing entity for WIN, a NYSTAR Innovation Hot Spot . Startup Week About Us Incubation Programs News Copyright © 2025-2026 WNY Incubator Network / WNY Innovation Hot Spot. Buffalo Web Design by 360PSG | Powered by 360CMS"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://www.wnyincubators.com/sandbox",
+        "evidenceId": "check-route-2b482c16ee"
+      },
+      {
+        "value": "https://www.wnyincubators.com/sandboxapplication",
+        "evidenceId": "check-route-5a5d300dc1"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.wnyincubators.com/",
@@ -28,8 +284,52 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-cc8356702f"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [
+      {
+        "value": "June",
+        "evidenceId": "check-start-efcb3c7415"
+      }
+    ],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-529046217f"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-04e5f8778e"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "Tell me about the money? Up to three team members will receive $300 stipends for each week in the program. At several milestones during",
+        "evidenceId": "check-deal-ef68083ee8"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "300",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-ef68083ee8"
+      }
+    ],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

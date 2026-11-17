@@ -1,6 +1,6 @@
 {
   "programId": "eit-innoenergy",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://innoenergy.com/about-us/",
@@ -51,8 +51,24 @@
       "origin": "official"
     },
     {
+      "url": "https://innoenergy.com/news-resources/a-successful-2nd-edition-of-eghacs-green-hydrogen-investment-day-at-the-european-commission/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
       "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/altris-attracts-new-investments-to-support-scale-up-ambitions/",
+      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -67,10 +83,34 @@
       "origin": "official"
     },
     {
+      "url": "https://innoenergy.com/news-resources/aquabattery-secures-e6-million-in-seed-investment-to-drive-innovation-in-long-duration-energy-storage-ldes/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/battery-analytics-pioneer-volytica-diagnostics-closes-e5-5m-investment-round/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments-madrid/",
       "page": "terms",
       "anchor": "BIOGENIC CCU IN EUROPE: FROM EMISSIONS TO INVESTMENTS – MADRID FEB 19 Events",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -78,7 +118,15 @@
       "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-paris-feb10/",
       "page": "terms",
       "anchor": "BIOGENIC CCU IN EUROPE: FROM EMISSIONS TO INVESTMENTS – Paris FEB 10 Events",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/corpower-secures-7-3-meur-investment-into-portuguese-wave-project/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -223,30 +271,6 @@
       "page": "terms",
       "anchor": "Terms and Conditions",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://innoenergy.com/uploads/2023/01/application-form-template_december_2020.docx",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://innoenergy.com/uploads/2023/01/application-scoreboard_decmber_2020.pdf",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://innoenergy.com/uploads/2023/01/webinar_battery-storage-applications_2020-03-04.pdf",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

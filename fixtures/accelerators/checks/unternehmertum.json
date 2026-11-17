@@ -1,22 +1,27 @@
 {
   "programId": "unternehmertum",
-  "checkedAt": "2026-11-14T20:59:02.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.unternehmertum.de/en",
-    "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
-    "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
-    "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
-    "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
-    "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
-    "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/calendar.ics",
     "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
     "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
     "https://www.unternehmertum.de/presse/investment-in-wire-uvc-partners-leitet-serie-b-finanzierungsrunde-mit-ueber-17-mio-euro/",
     "https://www.unternehmertum.de/presse/q-ant-sichert-62-millionen-euro-investment-fuer-photonische-prozessoren/",
     "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
     "https://www.unternehmertum.de/presse/xplore-by-unternehmertum-ideale-unterstuetzung-fuer-early-stage-start-ups/",
-    "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
-    "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/"
+    "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+    "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-11-batch/",
+    "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+    "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+    "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+    "https://www.unternehmertum.de/about/",
+    "https://www.unternehmertum.de/about/daten-fakten/",
+    "https://www.unternehmertum.de/about/karriere/",
+    "https://www.unternehmertum.de/about/netzwerk/",
+    "https://www.unternehmertum.de/about/presse/",
+    "https://www.unternehmertum.de/about/presse/pressemitteilungen/",
+    "https://www.unternehmertum.de/about/pro-unternehmertum/",
+    "https://www.unternehmertum.de/about/standorte/"
   ],
   "evidence": [
     {
@@ -27,13 +32,6 @@
       "page": "terms"
     },
     {
-      "id": "check-deal-b4a77f58df",
-      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
-      "title": "UnternehmerTUM — terms page",
-      "excerpt": "management, UVC Partners typically invests between € 500,000 and € 10 million initially and up to € 30 million per company. The portfolio includes",
-      "page": "terms"
-    },
-    {
       "id": "check-deal-bc6aaf7893",
       "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
       "title": "UnternehmerTUM — terms page",
@@ -41,11 +39,11 @@
       "page": "terms"
     },
     {
-      "id": "check-deal-e5c3a69cec",
-      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
-      "title": "UnternehmerTUM — terms page",
-      "excerpt": "assets under management, UVC Partners typically invests between € 500,000 and € 10 million initially and up to € 30 million per company. The",
-      "page": "terms"
+      "id": "check-duration-08c86a7e1d",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "title": "UnternehmerTUM — batches page",
+      "excerpt": "will be held virtually. During the upcoming 20 weeks, TechFounders will support the start-ups with",
+      "page": "batches"
     },
     {
       "id": "check-duration-0ae7f683ba",
@@ -55,25 +53,18 @@
       "page": "terms"
     },
     {
-      "id": "check-duration-2b2aada5a8",
-      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
-      "title": "UnternehmerTUM — terms page",
-      "excerpt": "Garching & München Full- or part-time Permanent 3-month Training & Internship Program @ Digital Product",
-      "page": "terms"
+      "id": "check-duration-3b77259e56",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "title": "UnternehmerTUM — batches page",
+      "excerpt": "(Corporate partner: Festo) At the end of the 20-week program on November 30, the start-ups will",
+      "page": "batches"
     },
     {
-      "id": "check-duration-3a769b4495",
-      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
-      "title": "UnternehmerTUM — terms page",
-      "excerpt": "or our Berlin Office Duration: Internship: 5-6 month full-time Your mission Deal sourcing Great",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-5f35c1b75d",
-      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
-      "title": "UnternehmerTUM — terms page",
-      "excerpt": "VC Trainee Program – Take part in our unique 10-month venture capital traineeship program covering all",
-      "page": "terms"
+      "id": "check-duration-92cfee30bf",
+      "url": "https://www.unternehmertum.de/about/karriere/",
+      "title": "UnternehmerTUM — program page",
+      "excerpt": "& München Voll- oder Teilzeit Festanstellung 3-month Training Program @ Digital Product School",
+      "page": "details"
     },
     {
       "id": "check-duration-9c04f93100",
@@ -81,6 +72,13 @@
       "title": "UnternehmerTUM — terms page",
       "excerpt": "& München Voll- oder Teilzeit Festanstellung 3-month Training Program @ Digital Product School",
       "page": "terms"
+    },
+    {
+      "id": "check-duration-eb2daf3eac",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "title": "UnternehmerTUM — batches page",
+      "excerpt": "innovative technology start-ups over the next 20 weeks. Due to the current situation and regulations,",
+      "page": "batches"
     },
     {
       "id": "check-duration-eec219ce51",
@@ -104,25 +102,11 @@
       "page": "terms"
     },
     {
-      "id": "check-format-19cae6ecd4",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "out more about the application process ? Then join our Virtual Info Session on June 2, 6:00 – 7:00 pm (CEST). Agenda",
-      "page": "application"
-    },
-    {
-      "id": "check-format-3c0e2360db",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/calendar.ics",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "SUMMARY:Application Advice for the Executive MBAs - Virtual Info Session DESCRIPTION:Take the opportunity to learn",
-      "page": "application"
-    },
-    {
-      "id": "check-format-4f745e5c57",
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn",
-      "page": "application"
+      "id": "check-format-3be17ffb7d",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "title": "UnternehmerTUM — batches page",
+      "excerpt": "that can be used anywhere, from highly specialized to remote hospitals. EComply Ecomply offers an all-in-one GDPR",
+      "page": "batches"
     },
     {
       "id": "check-format-5158b62296",
@@ -132,81 +116,18 @@
       "page": "terms"
     },
     {
-      "id": "check-format-73025c6035",
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "out more about the application process ? Then join our Virtual Info Session on May 2, 6:00 – 7:00 pm (CEST). Agenda",
-      "page": "application"
+      "id": "check-format-5576e4c7b6",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "title": "UnternehmerTUM — batches page",
+      "excerpt": "provides the user with an instant error analysis and remote video consultations from the local repair services",
+      "page": "batches"
     },
     {
-      "id": "check-format-821567555e",
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn",
-      "page": "application"
-    },
-    {
-      "id": "check-format-8f7d96f7bb",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn",
-      "page": "application"
-    },
-    {
-      "id": "check-format-9613429b6b",
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Skip to content Offering",
-      "page": "application"
-    },
-    {
-      "id": "check-format-99433c27f4",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Zum Inhalt springen Angebot",
-      "page": "application"
-    },
-    {
-      "id": "check-format-a889c51f7a",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "out more about the application process ? Then join our Virtual Info Session on May 2, 6:00 – 7:00 pm (CEST). Agenda",
-      "page": "application"
-    },
-    {
-      "id": "check-format-a977a959f5",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "SUMMARY:Application Advice for the Executive MBAs - Virtual Info Session DESCRIPTION:Take the opportunity to learn",
-      "page": "application"
-    },
-    {
-      "id": "check-format-ae449d3a8b",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn",
-      "page": "application"
-    },
-    {
-      "id": "check-format-bfadb10af2",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Zum Inhalt springen Angebot",
-      "page": "application"
-    },
-    {
-      "id": "check-format-c552fc0587",
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Skip to content Offering",
-      "page": "application"
-    },
-    {
-      "id": "check-format-f00cba071c",
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "out more about the application process ? Then join our Virtual Info Session on June 2, 6:00 – 7:00 pm (CEST). Agenda",
-      "page": "application"
+      "id": "check-format-77d3e00190",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "title": "UnternehmerTUM — batches page",
+      "excerpt": "uses computed tomography and machine learning to create a virtual, patient-specific digital twin of the lungs. This enables",
+      "page": "batches"
     },
     {
       "id": "check-name-f05b8d3b8e",
@@ -214,6 +135,20 @@
       "title": "UnternehmerTUM — homepage",
       "excerpt": "UnternehmerTUM | Europe’s Leading Center for Innovation and Business",
       "page": "details"
+    },
+    {
+      "id": "check-phone-1ad2423370",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "title": "UnternehmerTUM — batches page",
+      "excerpt": "(+49895419869903)",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-4fc805efb4",
+      "url": "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+      "title": "UnternehmerTUM — batches page",
+      "excerpt": "(+49895419869903)",
+      "page": "batches"
     },
     {
       "id": "check-phone-93e6cc2575",
@@ -230,6 +165,20 @@
       "page": "terms"
     },
     {
+      "id": "check-phone-c082f5bc2f",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-11-batch/",
+      "title": "UnternehmerTUM — batches page",
+      "excerpt": "(+49895419869903)",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-d04c5d5d59",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+      "title": "UnternehmerTUM — batches page",
+      "excerpt": "(+49895419869903)",
+      "page": "batches"
+    },
+    {
       "id": "check-phone-d67d0357ed",
       "url": "https://www.unternehmertum.de/presse/investment-in-wire-uvc-partners-leitet-serie-b-finanzierungsrunde-mit-ueber-17-mio-euro/",
       "title": "UnternehmerTUM — terms page",
@@ -244,10 +193,10 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-4119c913a3",
+      "id": "check-portfolio-3b88b2a674",
       "url": "https://www.unternehmertum.de/en",
       "title": "UnternehmerTUM — homepage",
-      "excerpt": "Companies icons / arrow-right icons / arrow-right → https://www.unternehmertum.de/en/offering/companies/",
+      "excerpt": "Companies → https://www.unternehmertum.de/en/offering/companies/",
       "page": "details"
     },
     {
@@ -258,88 +207,11 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-b4b51ee88e",
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "Companies icons / arrow-right icons / arrow-right → https://www.unternehmertum.de/en/offering/companies/",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-bef0e3f398",
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "Companies icons / arrow-right icons / arrow-right → https://www.unternehmertum.de/en/offering/companies/",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-d83a7b9901",
-      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
-      "title": "UnternehmerTUM — terms page",
-      "excerpt": "Companies icons / arrow-right icons / arrow-right → https://www.unternehmertum.de/en/offering/companies/",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-06c6992daa",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "2. Mai 2022 (Im Kalender speichern) → https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
-      "page": "application"
-    },
-    {
-      "id": "check-route-5f9c5e5d67",
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "DE → https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
-      "page": "application"
-    },
-    {
-      "id": "check-route-8790c8e228",
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "DE → https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
-      "page": "application"
-    },
-    {
       "id": "check-route-ab3ec6a14f",
       "url": "https://www.unternehmertum.de/en",
       "title": "UnternehmerTUM — homepage",
       "excerpt": "UnternehmerTUM Logo → https://www.unternehmertum.de/en/",
       "page": "details"
-    },
-    {
-      "id": "check-route-b0abe2fc9a",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "EN → https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
-      "page": "application"
-    },
-    {
-      "id": "check-route-c043623ac2",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "2. Juni 2022 (Im Kalender speichern) → https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/calendar.ics",
-      "page": "application"
-    },
-    {
-      "id": "check-route-e4d12eb1d5",
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "May 2, 2022 (Save to calendar) → https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
-      "page": "application"
-    },
-    {
-      "id": "check-route-e543ac05ba",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "EN → https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
-      "page": "application"
-    },
-    {
-      "id": "check-route-f7b70d10ce",
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
-      "title": "UnternehmerTUM — application page",
-      "excerpt": "June 2, 2022 (Save to calendar) → https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/calendar.ics",
-      "page": "application"
     }
   ],
   "pageQuotes": [
@@ -347,43 +219,31 @@
       "id": "check-page-d34d271b4b",
       "url": "https://www.unternehmertum.de/en",
       "page": "details",
-      "excerpt": "UnternehmerTUM | Europe’s Leading Center for Innovation and Business Creation | UnternehmerTUM Skip to content Offering Offering submenu Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (opens in a new window) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Facts & Figures Locations Careers Press Network Insights Events Open search Open menu Search term Search DE EN Close menu Offering Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center Women Start-up About Facts & Figures Locations Careers Press Insights Events We’re Europe’s Leading Center for Innovation and Business Creation Learn more Physical AI Growth Lab: A new accelerator program with Microsoft, Infineon, and NVIDIA Read now MSC Frontier Tech Hub 2027: Frontier technologies shaping security and resilience Read now Podcast: Gordon Gorski on family businesses and the AI future Listen now In a Nutshell Great ideas need the right foundation. UnternehmerTUM builds"
+      "excerpt": "UnternehmerTUM | Europe’s Leading Center for Innovation and Business Creation | UnternehmerTUM Skip to content Offering Offering submenu Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (opens in a new window) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Facts & Figures Locations Careers Press Network Insights Events Open search Open menu Search term Search DE EN Close menu Offering Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center Women Start-up About Facts & Figures Locations Careers Press Insights Events UnternehmerTUM | Europe’s Leading Center for Innovation and Business Creation We’re Europe’s Leading Center for Innovation and Business Creation Learn more Physical AI Growth Lab: A new accelerator program with Microsoft, Infineon, and NVIDIA Read now MSC Frontier Tech Hub 2027: Frontier technologies shaping security and resilience Read now Podcast: Gordon Gorski on family businesses and the AI future Listen"
     },
     {
-      "id": "check-page-812b38a72a",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
-      "page": "application",
-      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn more about the admissions process for the entire Executive MBA program collection offered by TUM Institut of LifeLong Learning. Zum Artikel springen Datum 2. Mai 2022 (Im Kalender speichern) Uhrzeit 18:00 → bis 19:00 Im"
+      "id": "check-page-848890640d",
+      "url": "https://www.unternehmertum.de/en",
+      "page": "details",
+      "excerpt": "As Europe’s leading center for innovation and business creation, we bring people, knowledge, and capital together."
     },
     {
-      "id": "check-page-bbceee981d",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
-      "page": "application",
-      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn more about the admissions process for the entire Executive MBA program collection offered by TUM Institut of LifeLong Learning. Zum Artikel springen Datum 2. Juni 2022 (Im Kalender speichern) Uhrzeit 18:00 → bis 19:00 Im"
+      "id": "check-page-2e47631961",
+      "url": "https://www.unternehmertum.de/en",
+      "page": "details",
+      "excerpt": "We drive innovation in established companies, SMEs, and family businesses, and help secure their future, including through succession."
     },
     {
-      "id": "check-page-ffd9454a46",
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
-      "page": "application",
-      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Skip to content Offering Offering submenu Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (opens in a new window) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Facts & Figures Locations Careers Press Network Insights Events Open search Open menu Search term Search DE EN Close menu Offering Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center Women Start-up About Facts & Figures Locations Careers Press Insights Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn more about the admissions process for the entire Executive MBA program collection offered by TUM Institut of LifeLong Learning. Skip to article Date May 2, 2022 (Save to calendar) Time 6:00 PM → to 7:00 PM Save to calendar Location Online Are you planning to apply for our Executive MBA in Innovation and"
+      "id": "check-page-05ee6d82b6",
+      "url": "https://www.unternehmertum.de/en",
+      "page": "details",
+      "excerpt": "Irene Bader, Vorständin bei DMG MORI 10 of 10 entries Upcoming Events Women Startup Pitch Night & Award Ceremony 2026 Nov 19, 2026 Wettbewerb 5:30 PM – 9:30 PM Ultimate Demo Day 2026 Dec 10, 2026 Pitch Event 1:30 PM – 9:00 PM 2 of 2 entries Unternehmenspartnerschaften Strong Connection."
     },
     {
-      "id": "check-page-c65e2b1631",
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
-      "page": "application",
-      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Skip to content Offering Offering submenu Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (opens in a new window) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Facts & Figures Locations Careers Press Network Insights Events Open search Open menu Search term Search DE EN Close menu Offering Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center Women Start-up About Facts & Figures Locations Careers Press Insights Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn more about the admissions process for the entire Executive MBA program collection offered by TUM Institut of LifeLong Learning. Skip to article Date June 2, 2022 (Save to calendar) Time 6:00 PM → to 7:00 PM Save to calendar Location Online Are you planning to apply for our Executive MBA in Innovation and"
-    },
-    {
-      "id": "check-page-248527af89",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
-      "page": "application",
-      "excerpt": "BEGIN:VCALENDAR VERSION:2.0 PRODID:-//UnternehmerTUM//Website//DE CALSCALE:GREGORIAN METHOD:PUBLISH BEGIN:VEVENT UID:event-14550-14551@www.unternehmertum.de DTSTAMP:20261114T211207Z DTSTART:20220502T160000Z DTEND:20220502T170000Z SUMMARY:Application Advice for the Executive MBAs - Virtual Info Session DESCRIPTION:Take the opportunity to learn more about the admissions process for the entire Executive MBA program collection offered by TUM Institut of LifeLong Learning. LOCATION:Online URL:https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/ END:VEVENT END:VCALENDAR"
-    },
-    {
-      "id": "check-page-4d83441382",
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/calendar.ics",
-      "page": "application",
-      "excerpt": "BEGIN:VCALENDAR VERSION:2.0 PRODID:-//UnternehmerTUM//Website//DE CALSCALE:GREGORIAN METHOD:PUBLISH BEGIN:VEVENT UID:event-14748-14749@www.unternehmertum.de DTSTAMP:20261114T211209Z DTSTART:20220602T160000Z DTEND:20220602T170000Z SUMMARY:Application Advice for the Executive MBAs - Virtual Info Session DESCRIPTION:Take the opportunity to learn more about the admissions process for the entire Executive MBA program collection offered by TUM Institut of LifeLong Learning. LOCATION:Online URL:https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/ END:VEVENT END:VCALENDAR"
+      "id": "check-page-0f0e67dac9",
+      "url": "https://www.unternehmertum.de/en",
+      "page": "details",
+      "excerpt": "TUM and TUM Venture Labs UnternehmerTUM, the Technical University of Munich, and TUM Venture Labs work closely together to turn research into entrepreneurial practice."
     },
     {
       "id": "check-page-a03cb554ec",
@@ -392,10 +252,136 @@
       "excerpt": "Teilnahmebedingungen Women Startup Award | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Women Startup Award Teilnahmebedingungen für den Women Startup Award Präambel Der Women Startup Award ist ein Wettbewerb für (angehende) Gründerinnen aus Bayern im Tech- und Innovationsbereich. Ziel ist es, Frauen in der Startup-Szene sichtbarer zu machen und ihre unternehmerischen Kompetenzen zu stärken. Mit einer Kombination aus Pitch-Wettbewerb,"
     },
     {
+      "id": "check-page-faf4f64ef1",
+      "url": "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Der Women Startup Award wird von der UnternehmerTUM GmbH veranstaltet und vom Bayerischen Staatsministerium für Wirtschaft, Landesentwicklung und Energie sowie von Gründerland Bayern unterstützt."
+    },
+    {
+      "id": "check-page-4ecd8ff0e2",
+      "url": "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Veranstalter Veranstalter des Women Startup Award ist die UnternehmerTUM GmbH, Lichtenbergstr."
+    },
+    {
+      "id": "check-page-2ff9269260",
+      "url": "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Teilnahmeberechtigung und Teilnahmebedingungen Der Women Startup Award richtet sich an Gründerinnen in einer frühen Phase."
+    },
+    {
+      "id": "check-page-345de95a4f",
+      "url": "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Bewerbungs- und Auswahlverfahren Bewerbungen sind ausschließlich über das Bewerbungsformular des Veranstalters einzureichen, das auf der Website des Awards zu finden ist."
+    },
+    {
+      "id": "check-page-12c0ff687a",
+      "url": "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Preise / Auszeichnung Die 8–10 ausgewählten Finalistinnen des Women Startup Award erhalten ein umfassendes Förderpaket, darunter: Persönliche Sparring-Sessions: individuelle Begleitung und Feedback durch unsere erfahrenen „Angels“."
+    },
+    {
+      "id": "check-page-73ba6bc43e",
+      "url": "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Den Abschluss des Programms bildet die Pitch Night und Award Ceremony am 19."
+    },
+    {
+      "id": "check-page-5b8fcbf11d",
+      "url": "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "November im Munich Urban Colab in München."
+    },
+    {
+      "id": "check-page-7a51b6bfa3",
+      "url": "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "November 2026 im Munich Urban Colab ausgezeichnet."
+    },
+    {
+      "id": "check-page-d6b0750541",
+      "url": "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Der Veranstalter haftet nicht für Beratungsleistungen oder für Tiefe, Umfang, Qualität und/oder Menge der Leistungen, die im Rahmen des Förderpakets des Women Startup Award erbracht werden."
+    },
+    {
+      "id": "check-page-a74e9e0a29",
+      "url": "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Die Teilnehmenden erkennen ferner an, dass die im Rahmen des Women Startup Award erbrachten Leistungen lediglich beratender Natur und für sie nicht bindend sind."
+    },
+    {
+      "id": "check-page-5d4beb2528",
+      "url": "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Soweit im Rahmen des Women Startup Award Bildaufnahmen entstehen, werden diese ausschließlich zur internen Dokumentation des Programms verwendet und können im Einzelfall für Marketing- und PR-Zwecke in sozialen Medien veröffentlicht werden."
+    },
+    {
       "id": "check-page-3b5711be9a",
       "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
       "page": "terms",
       "excerpt": "Unsolicited Application: Intern or Working Student for our Investment Team at UVC | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Karriere Unsolicited Application : Intern or Working Student for our Investment Team at UVC Arbeitszeit Teilzeit Art der Anstellung Werkstudent:in Arbeitsort München Kreativquartier Über uns UVC Partners is a leading Munich- and Berlin-based early-stage venture capital firm that invests in European B2B tech start-ups"
+    },
+    {
+      "id": "check-page-e893600d84",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "page": "terms",
+      "excerpt": "The portfolio includes category leaders in deep tech, climate tech, hard- and software, and mobility with various technologies and business models."
+    },
+    {
+      "id": "check-page-8484826c2a",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "page": "terms",
+      "excerpt": "As an independent partner of UnternehmerTUM, Europe's most extensive innovation and startup center, UVC Partners has access to proprietary deal flow, an industrial network of more than 1,000 corporates, and access to talent from the leading European technical university."
+    },
+    {
+      "id": "check-page-c52b2013f9",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "page": "terms",
+      "excerpt": "The investments include Flix, Vimcar, planqc, Tacto, Isar Aerospace, TWAICE, DeepDrive, Finn, Aleph Alpha, and many more."
+    },
+    {
+      "id": "check-page-383ea31531",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "page": "terms",
+      "excerpt": "Apply now to be part of our talentpool and become our new Junior Investment Analyst Workplace: Munich Urban Colab or our Berlin Office Duration: Internship: 3-6 month full-time Deine Aufgaben Deal sourcing Great companies often come from unexpected sources – help us find new sources You will identify, contact, and meet entrepreneurs we should get to know."
+    },
+    {
+      "id": "check-page-896a2dd901",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "page": "terms",
+      "excerpt": "Practical work experience in startups and/or venture capital, private equity or consulting is preferred."
+    },
+    {
+      "id": "check-page-7824e2b585",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "page": "terms",
+      "excerpt": "Deine Vorteile Mentorship – Be paired with one senior member of our investment team over the course of the program with regular 1-to-1 sessions."
+    },
+    {
+      "id": "check-page-dfcca3b060",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "page": "terms",
+      "excerpt": "VC Trainee Program – Take part in our unique 10-month venture capital traineeship program covering all aspects of the job of a venture capital investor."
+    },
+    {
+      "id": "check-page-f5d2fc89f9",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "page": "terms",
+      "excerpt": "Ownership – You will own the outbound deal sourcing process that is essential to our daily work and build the core of a VC fund."
+    },
+    {
+      "id": "check-page-742a87a09b",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "page": "terms",
+      "excerpt": "Network – Work from the coolest office space, the Munich Urban Colab, and be part of Europe’s largest entrepreneurship center, UnternehmerTUM, to equip you with perspectives to advance your career."
+    },
+    {
+      "id": "check-page-660e71e915",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "page": "terms",
+      "excerpt": "Perks – Join our free sports classes in the Munich office and our monthly team dinners."
     },
     {
       "id": "check-page-fe0096376f",
@@ -404,10 +390,100 @@
       "excerpt": "Investment in Wire: UVC Partners leitet Serie-B-Finanzierungsrunde mit über 17 Mio. Euro | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Presse Investment in Wire: UVC Partners leitet Serie-B-Finanzierungsrunde mit über 17 Mio. Euro Zum Artikel springen Veröffentlicht am 14. April 2021 Teilen Wire, die weltweit sicherste Kollaborationsplattform, erhält nach Abschluss der Serie-B-Finanzierungsrunde ein Investment in Höhe von 17,4 Mio. Euro,"
     },
     {
+      "id": "check-page-e8008614a6",
+      "url": "https://www.unternehmertum.de/presse/investment-in-wire-uvc-partners-leitet-serie-b-finanzierungsrunde-mit-ueber-17-mio-euro/",
+      "page": "terms",
+      "excerpt": "Euro, angeführt von der Venture Capital-Gesellschaft UVC Partners."
+    },
+    {
+      "id": "check-page-667dd12bb1",
+      "url": "https://www.unternehmertum.de/presse/investment-in-wire-uvc-partners-leitet-serie-b-finanzierungsrunde-mit-ueber-17-mio-euro/",
+      "page": "terms",
+      "excerpt": "Euro, angeführt von der Venture Capital-Gesellschaft UVC Partners ."
+    },
+    {
+      "id": "check-page-d1e72159c3",
+      "url": "https://www.unternehmertum.de/presse/investment-in-wire-uvc-partners-leitet-serie-b-finanzierungsrunde-mit-ueber-17-mio-euro/",
+      "page": "terms",
+      "excerpt": "Wire sucht außerdem aktiv nach neuen Mitarbeitenden, um sein branchenführendes Team von derzeit etwas mehr als 90 Mitarbeitenden zu verstärken, die am Hauptsitz in Berlin und in den Büros in der Schweiz sowie in San Francisco tätig sind."
+    },
+    {
+      "id": "check-page-1b0ca70e14",
+      "url": "https://www.unternehmertum.de/presse/investment-in-wire-uvc-partners-leitet-serie-b-finanzierungsrunde-mit-ueber-17-mio-euro/",
+      "page": "terms",
+      "excerpt": "Presse Persönlicher Kontakt Markus Bosch Head of Public Relations UnternehmerTUM – Europe’s Leading Center for Innovation and Business Creation UnternehmerTUM is a unique platform for the development of innovations."
+    },
+    {
+      "id": "check-page-eff6b3268b",
+      "url": "https://www.unternehmertum.de/presse/investment-in-wire-uvc-partners-leitet-serie-b-finanzierungsrunde-mit-ueber-17-mio-euro/",
+      "page": "terms",
+      "excerpt": "A team of over 500 experienced entrepreneurs, including scientists and investors, supports start-ups with business creation, market entry and financing – also with venture capital."
+    },
+    {
+      "id": "check-page-743f7479d4",
+      "url": "https://www.unternehmertum.de/presse/investment-in-wire-uvc-partners-leitet-serie-b-finanzierungsrunde-mit-ueber-17-mio-euro/",
+      "page": "terms",
+      "excerpt": "Founded in 2002 by the entrepreneur Susanne Klatten, the non-profit oriented UnternehmerTUM GmbH is the leading center for innovation and business creation in Europe with more than 100 high-growth technology startups every year - including Celonis, Proxima Fusion and Isar Aerospace."
+    },
+    {
       "id": "check-page-209593db76",
       "url": "https://www.unternehmertum.de/presse/q-ant-sichert-62-millionen-euro-investment-fuer-photonische-prozessoren/",
       "page": "terms",
       "excerpt": "Q.ANT sichert 62 Millionen Euro Investment für photonische Prozessoren | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Presse Q.ANT sichert 62 Millionen Euro Investment für photonische Prozessoren Zum Artikel springen Veröffentlicht am 17. Juli 2025 Teilen Europas größte Serie-A-Finanzierung für photonisches Computing beschleunigt die Markteinführung lichtbasierter Prozessoren – zur Lösung der Energie- und Skalierungsprobleme der KI. München,"
+    },
+    {
+      "id": "check-page-eb225707dd",
+      "url": "https://www.unternehmertum.de/presse/q-ant-sichert-62-millionen-euro-investment-fuer-photonische-prozessoren/",
+      "page": "terms",
+      "excerpt": "Juli 2025 – Das DeepTech-Start-up Q.ANT hat 62 Millionen Euro in einer Serie-A-Finanzierungsrunde eingeworben, um die Markteinführung seiner energieeffizienten photonischen Prozessoren für Künstliche Intelligenz (KI) und Hochleistungsrechner (HPC) zu beschleunigen."
+    },
+    {
+      "id": "check-page-f7aaa6e6db",
+      "url": "https://www.unternehmertum.de/presse/q-ant-sichert-62-millionen-euro-investment-fuer-photonische-prozessoren/",
+      "page": "terms",
+      "excerpt": "Weitere DeepTech-Investoren beteiligen sich, wie die L-Bank, Verve Ventures, Grazia Equity, EXF Alpha, LEA Partners, Onsight Ventures, and TRUMPF."
+    },
+    {
+      "id": "check-page-3f59a7a3f8",
+      "url": "https://www.unternehmertum.de/presse/q-ant-sichert-62-millionen-euro-investment-fuer-photonische-prozessoren/",
+      "page": "terms",
+      "excerpt": "Diese Investition zählt zu den bedeutendsten DeepTech-Finanzierungsrunden Europas und schafft die Voraussetzung für einen grundlegenden Wandel in der Berechnung von KI."
+    },
+    {
+      "id": "check-page-91a7b50519",
+      "url": "https://www.unternehmertum.de/presse/q-ant-sichert-62-millionen-euro-investment-fuer-photonische-prozessoren/",
+      "page": "terms",
+      "excerpt": "Aufbauend auf einer breiten wissenschaftlichen Basis, finanziert von europäischen DeepTech-Investoren und unterstützt durch die Politik auf Landes-, Bundes- und europäischer Ebene bringt Q.ANT entscheidende Akteure aus ganz Europa zusammen."
+    },
+    {
+      "id": "check-page-60183beb45",
+      "url": "https://www.unternehmertum.de/presse/q-ant-sichert-62-millionen-euro-investment-fuer-photonische-prozessoren/",
+      "page": "terms",
+      "excerpt": "Mit einer starken europäischen Lieferkette und einer eigenen Pilotlinie in Deutschland bildet dies das Rückgrat für die Zukunft des Hochleistungsrechnens „Made in Europe“ für die Welt."
+    },
+    {
+      "id": "check-page-5b7a8d9659",
+      "url": "https://www.unternehmertum.de/presse/q-ant-sichert-62-millionen-euro-investment-fuer-photonische-prozessoren/",
+      "page": "terms",
+      "excerpt": "Strategische Allianz für internationale Expansion Diese Finanzierung ermöglicht es Q.ANT, die Entwicklung von Photonik-Prozessoren der nächsten Generation voranzutreiben, die Produktion zu skalieren, sein interdisziplinäres Team zu vergrößern und seine Geschäftsaktivitäten in die USA und Asien auszudehnen, um weitere Kundenimplementierungen zu unterstützen."
+    },
+    {
+      "id": "check-page-815750722f",
+      "url": "https://www.unternehmertum.de/presse/q-ant-sichert-62-millionen-euro-investment-fuer-photonische-prozessoren/",
+      "page": "terms",
+      "excerpt": "Presse Persönlicher Kontakt Markus Bosch Head of Public Relations UnternehmerTUM – Europe’s Leading Center for Innovation and Business Creation UnternehmerTUM is a unique platform for the development of innovations."
+    },
+    {
+      "id": "check-page-951f7b0f06",
+      "url": "https://www.unternehmertum.de/presse/q-ant-sichert-62-millionen-euro-investment-fuer-photonische-prozessoren/",
+      "page": "terms",
+      "excerpt": "A team of over 500 experienced entrepreneurs, including scientists and investors, supports start-ups with business creation, market entry and financing – also with venture capital."
+    },
+    {
+      "id": "check-page-d726360b83",
+      "url": "https://www.unternehmertum.de/presse/q-ant-sichert-62-millionen-euro-investment-fuer-photonische-prozessoren/",
+      "page": "terms",
+      "excerpt": "Founded in 2002 by the entrepreneur Susanne Klatten, the non-profit oriented UnternehmerTUM GmbH is the leading center for innovation and business creation in Europe with more than 100 high-growth technology startups every year - including Celonis, Proxima Fusion and Isar Aerospace."
     },
     {
       "id": "check-page-4feb43cee6",
@@ -416,22 +492,712 @@
       "excerpt": "Studie “FutureMadeInGermany.de” vergleicht Innovations-Investments | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Presse Studie “FutureMadeInGermany.de” vergleicht Innovations-Investments Zum Artikel springen Veröffentlicht am 22. November 2019 Teilen Garching bei München, 22. November 2019. Die marktführenden Positionen, die sich deutsche DAX-Unternehmen über Jahrzehnte hinweg erarbeitet haben, sind das Ergebnis leistungsfähiger interner"
     },
     {
+      "id": "check-page-1171298f3a",
+      "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+      "page": "terms",
+      "excerpt": "Die dadurch errungenen Innovationen und deren Qualität sind der Grund, weshalb „Made in Germany“ ein internationales Qualitätssiegel darstellt."
+    },
+    {
+      "id": "check-page-059b694d1c",
+      "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+      "page": "terms",
+      "excerpt": "Die Analyse der Innovationsaktivitäten, die von den DAX-Unternehmen sowie deren Pendants in den USA und China in den letzten Jahren verfolgt wurden, ergab, dass im Zeitraum von 2008 bis 2017 764 Innovationsprojekte realisiert und mehr als 1,1 Billionen Euro investiert wurden."
+    },
+    {
+      "id": "check-page-c6a71c4d9a",
+      "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+      "page": "terms",
+      "excerpt": "In den USA waren es 5,6 Prozent, in China 2,6 Prozent."
+    },
+    {
+      "id": "check-page-b47077797d",
+      "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+      "page": "terms",
+      "excerpt": "Interne R&D-Teams konzentrieren sich auf die Entwicklung und Verbesserung existierender Produkte und Prozesse, während M&A sowie Corporate Venture Capital im externen Innovationsbereich radikale Umbrüche fördern und das Wachstum anregen."
+    },
+    {
+      "id": "check-page-7246276ad6",
+      "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+      "page": "terms",
+      "excerpt": "Ein signifikanter Kontrast zu den USA und China: Die größten Unternehmen Chinas führen über 50 Prozent ihres Budgets externen Innovationen zu – das entspricht mehr als dem Zwölffachen der DAX-Firmen."
+    },
+    {
+      "id": "check-page-50d078e0dd",
+      "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+      "page": "terms",
+      "excerpt": "Unternehmen in den USA investieren mit 9 Prozent mehr als den doppelten Betrag in disruptive Projekte."
+    },
+    {
+      "id": "check-page-571179c006",
+      "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+      "page": "terms",
+      "excerpt": "In den USA erreicht Facebook 37 Prozent, in Deutschland steht SAP mit 17 Prozent an erster Stelle."
+    },
+    {
+      "id": "check-page-c4ab064021",
+      "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+      "page": "terms",
+      "excerpt": "Hauptsächlich fließen diese in M&A sowie Corporate Venture Capital."
+    },
+    {
+      "id": "check-page-e99e1f6c1a",
+      "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+      "page": "terms",
+      "excerpt": "Externe Innovationen: 80 Prozent des entsprechenden Budgets sollten M&A und die verbleibenden 20 Prozent in Corporate Venture Capital fließen."
+    },
+    {
+      "id": "check-page-70e831f9b4",
+      "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+      "page": "terms",
+      "excerpt": "Corporate Venture Capital: Investitionen in Start-ups indirekt über unabhängige Venture Capital Fonds in der Frühphase."
+    },
+    {
+      "id": "check-page-e2f27fde5b",
+      "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+      "page": "terms",
+      "excerpt": "Investitionen direkt über eigenen Corporate Venture Capital Fonds in Scale-ups in der Spätphase M&A: Akquisition von Unternehmen im Spätstadium, um in bestehenden Märkten zu wachsen und in benachbarte Märkte zu expandieren."
+    },
+    {
+      "id": "check-page-33e3fabb29",
+      "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+      "page": "terms",
+      "excerpt": "Eigenständigkeit der akquirierten Unternehmen. „Es freut uns sehr, dass wir mit unseren Erkenntnissen im Rahmen der ‚Future made in Germany‘-Studie zum breiteren öffentlichen Diskurs hinsichtlich Innovation und der Konkurrenzfähigkeit Europas mit den USA und China beitragen können."
+    },
+    {
       "id": "check-page-e1ea68d071",
       "url": "https://www.unternehmertum.de/presse/xplore-by-unternehmertum-ideale-unterstuetzung-fuer-early-stage-start-ups/",
       "page": "terms",
       "excerpt": "XPLORE by UnternehmerTUM: Ideale Unterstützung für early-stage Start-ups | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Presse XPLORE by UnternehmerTUM: Ideale Unterstützung für early-stage Start-ups Zum Artikel springen Veröffentlicht am 14. Juni 2023 Teilen Das neu konzipierte Angebot von XPLORE schließt mit seinem Netzwerk, bestehend aus Coaches, Business Angels und Mentoren, eine Lücke zwischen klassischen Bildungs- und Inkubationsformaten"
     },
     {
-      "id": "check-page-b91c5b9a9d",
-      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "id": "check-page-b52c9790a0",
+      "url": "https://www.unternehmertum.de/presse/xplore-by-unternehmertum-ideale-unterstuetzung-fuer-early-stage-start-ups/",
       "page": "terms",
-      "excerpt": "Unsolicited Application: Intern or Working Student for our Investment Team at UVC | UnternehmerTUM Skip to content Offering Offering submenu Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (opens in a new window) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Facts & Figures Locations Careers Press Network Insights Events Open search Open menu Search term Search DE EN Close menu Offering Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center Women Start-up About Facts & Figures Locations Careers Press Insights Events Careers Unsolicited Application : Intern or Working Student for our Investment Team at UVC Working hours Part-time Employment type Working student Location München Kreativquartier About us UVC Partners is a leading Munich- and Berlin-based early-stage venture capital firm that invests in European B2B tech start-ups from pre-seed to series A. With about € 400 million assets under management, UVC Partners"
+      "excerpt": "Weitere Informationen finden Sie unter: https://xplore.unternehmertum.de/ Presse Persönlicher Kontakt Markus Bosch Head of Public Relations UnternehmerTUM – Europe’s Leading Center for Innovation and Business Creation UnternehmerTUM is a unique platform for the development of innovations."
+    },
+    {
+      "id": "check-page-914ed3c67a",
+      "url": "https://www.unternehmertum.de/presse/xplore-by-unternehmertum-ideale-unterstuetzung-fuer-early-stage-start-ups/",
+      "page": "terms",
+      "excerpt": "A team of over 500 experienced entrepreneurs, including scientists and investors, supports start-ups with business creation, market entry and financing – also with venture capital."
+    },
+    {
+      "id": "check-page-a90ac2a3b0",
+      "url": "https://www.unternehmertum.de/presse/xplore-by-unternehmertum-ideale-unterstuetzung-fuer-early-stage-start-ups/",
+      "page": "terms",
+      "excerpt": "Founded in 2002 by the entrepreneur Susanne Klatten, the non-profit oriented UnternehmerTUM GmbH is the leading center for innovation and business creation in Europe with more than 100 high-growth technology startups every year - including Celonis, Proxima Fusion and Isar Aerospace."
     },
     {
       "id": "check-page-57e797a2cb",
       "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
       "page": "terms",
       "excerpt": "Women Startup Award Terms and Conditions | UnternehmerTUM Skip to content Offering Offering submenu Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (opens in a new window) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Facts & Figures Locations Careers Press Network Insights Events Open search Open menu Search term Search DE EN Close menu Offering Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center Women Start-up About Facts & Figures Locations Careers Press Insights Events Women Startup Award Terms and Conditions for the Women Startup Award Preamble The Women Startup Award is a competition for Bavarian (prospective) female founders in the tech and innovation sector. The aim is to make women more visible in the startup scene and to strengthen their entrepreneurial skills. With a mix of pitch competition, practical knowledge building, individual coaching, mentor matching and media attention, we create a comprehensive"
+    },
+    {
+      "id": "check-page-b43fbf2f7e",
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "With a mix of pitch competition, practical knowledge building, individual coaching, mentor matching and media attention, we create a comprehensive support program for female founders."
+    },
+    {
+      "id": "check-page-279f65a5f0",
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "The Women Startup Award is organized by UnternehmerTUM GmbH and is supported by Bayerisches Staatsministerium für Wirtschaft, Landesentwicklung und Energie und Gründerland Bayern."
+    },
+    {
+      "id": "check-page-64e723a590",
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Organizer The organizer of the Women Startup Award is the UnternehmerTUM GmbH, Lichtenbergstr."
+    },
+    {
+      "id": "check-page-161e96256a",
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Eligibility & Conditions for Participation The Women Startup Award is aimed at early stage founders."
+    },
+    {
+      "id": "check-page-e084fb1010",
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Application and selection process Applications must be submitted exclusively via the application form by the Organizer which can be found on the Award website."
+    },
+    {
+      "id": "check-page-3b7d925517",
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Prizes / Award The 8-10 selected finalists of the Women Startup Award will receive a comprehensive support package, including: Dedicated Sparring Sessions: Personalized guidance and feedback from our experienced \"Angels.\" Exclusive Trainings & Workshops: Focused sessions on key startup areas such as Value Proposition and Product Design, Pitching, Team Building and Financing."
+    },
+    {
+      "id": "check-page-d64f7c041d",
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "As the culmination of this program, finalists will have the opportunity to present and showcase their startups to a broad audience and the jury at the Pitch Night and Award Ceremony on November 19 in the Munich Urban Colab in Munich."
+    },
+    {
+      "id": "check-page-a9d279758c",
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Final Award Evaluation Process The evaluation of finalists for the final awards will be conducted by an external jury based on the following categories: Pitch and Presentation, Customer Problem and Market, Technology, Business Model, Team, Funding, IP, Sustainability and Role and Impact of the Female Founder within the team."
+    },
+    {
+      "id": "check-page-087af9833a",
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Main Awards: The top three startup ideas will be recognized at the public Pitch Night on November 19, 2026, at the Munich Urban Colab."
+    },
+    {
+      "id": "check-page-c8ee720a80",
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "The Organizer reserves the right to change the prize(s) or not to award them in the event of important reasons (e.g., failure to reach a minimum number of qualified applications)."
+    },
+    {
+      "id": "check-page-19b7823aa5",
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "The limitations do not apply for damages resulting from injury to life, limb, or health The Organizer shall not be liable for any advice or the depth, extent, quality, and/or quantity of services provided as part of the support package granted under the Women Start-up Award."
+    },
+    {
+      "id": "check-page-0599dabc55",
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Furthermore, the Organizer assumes no liability for the correctness of the statements made by judges and other persons participating in the competition The participants agree further that the services provided under the competition of the Women Start-up Award are merely advisory in nature, without any binding effect on the participant."
+    },
+    {
+      "id": "check-page-cd9c912aaf",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-11-batch/",
+      "page": "batches",
+      "excerpt": "Das Accelerator-Programm TechFounders startet 11. Batch | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Presse Das Accelerator-Programm TechFounders startet 11. Batch Zum Artikel springen Veröffentlicht am 21. Januar 2020 Teilen Heute fällt der Startschuss für den 11. Batch des Accelerator Programms TechFounders. Das Programm der UnternehmerTUM, Deutschlands führendem Zentrum für Innovation und Gründung, wird in den nächsten 20 Wochen acht"
+    },
+    {
+      "id": "check-page-e5f1e9f1b8",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-11-batch/",
+      "page": "batches",
+      "excerpt": "Während dieser Zeit werden die Startups durch individuelles Training, Coaching und Mentoring auf die Skalierung ihres Unternehmens und ihre nächste Finanzierungsrunde vorbereitet."
+    },
+    {
+      "id": "check-page-fa4ade57a1",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-11-batch/",
+      "page": "batches",
+      "excerpt": "Das Orbitless-Getriebe wurde bereits in den USA, China und Europa patentiert und ist auf dem besten Weg, ein neuer Standard in der Getriebekonstruktion zu werden."
+    },
+    {
+      "id": "check-page-51b37282f2",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-11-batch/",
+      "page": "batches",
+      "excerpt": "(Unternehmenspartner: Knorr-Bremse) qbound Das Münchner Startup qbound bietet eine Lösung, die auf die aktuellen und zukünftigen Herausforderungen der Cybersicherheit im Bereich Cloud und IoT ausgerichtet ist."
+    },
+    {
+      "id": "check-page-4924bb2e3f",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-11-batch/",
+      "page": "batches",
+      "excerpt": "Das Sicherheitssystem der Plattform basiert auf einem Software-definierten Parameter und einer Blockchain-Infrastruktur, die volle Transparenz und Kontrolle über den Datenaustausch und die Nutzung gewährleistet."
+    },
+    {
+      "id": "check-page-db13459595",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-11-batch/",
+      "page": "batches",
+      "excerpt": "(Unternehmenspartner: ALDI) Am Ende des 20-wöchigen Programms präsentieren sich die Startups beim TechFounders Demo Day am 28."
+    },
+    {
+      "id": "check-page-8f07c0b558",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-11-batch/",
+      "page": "batches",
+      "excerpt": "Mai vor einem Publikum bestehend aus Venture Capital Firmen, Business Angels, Industriepartnern, Interessenten und Medien."
+    },
+    {
+      "id": "check-page-c5111c51da",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-11-batch/",
+      "page": "batches",
+      "excerpt": "Presse Persönlicher Kontakt Markus Bosch Head of Public Relations UnternehmerTUM – Europe’s Leading Center for Innovation and Business Creation UnternehmerTUM is a unique platform for the development of innovations."
+    },
+    {
+      "id": "check-page-5e10259272",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-11-batch/",
+      "page": "batches",
+      "excerpt": "A team of over 500 experienced entrepreneurs, including scientists and investors, supports start-ups with business creation, market entry and financing – also with venture capital."
+    },
+    {
+      "id": "check-page-611992f5b0",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-11-batch/",
+      "page": "batches",
+      "excerpt": "Founded in 2002 by the entrepreneur Susanne Klatten, the non-profit oriented UnternehmerTUM GmbH is the leading center for innovation and business creation in Europe with more than 100 high-growth technology startups every year - including Celonis, Proxima Fusion and Isar Aerospace."
+    },
+    {
+      "id": "check-page-a28c65a9c1",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+      "page": "batches",
+      "excerpt": "Das Accelerator-Programm TechFounders startet neuen 10. Batch | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Presse Das Accelerator-Programm TechFounders startet neuen 10. Batch Zum Artikel springen Veröffentlicht am 16. Juli 2019 Teilen München, 16. Juli 2019. Heute fällt der Startschuss für den 10. Batch des Accelerator-Programms TechFounders. Das Accelerator-Programm der UnternehmerTUM, Deutschlands führendem Zentrum für Innovation und"
+    },
+    {
+      "id": "check-page-4fd110d9b2",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+      "page": "batches",
+      "excerpt": "Das Accelerator-Programm der UnternehmerTUM, Deutschlands führendem Zentrum für Innovation und Gründung, wird in den nächsten 20 Wochen 10 innovative Tech-Startups in München betreuen."
+    },
+    {
+      "id": "check-page-6e03f8be73",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+      "page": "batches",
+      "excerpt": "Während dieser Zeit werden die Startups durch individuelles Training, Coaching und Mentoring auf die Skalierung ihres Unternehmens und ihre nächste Finanzierungsrunde vorbereitet."
+    },
+    {
+      "id": "check-page-421c819adc",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+      "page": "batches",
+      "excerpt": "Am Ende des 20-wöchigen Programms präsentieren sich die Startups beim TechFounders Demo Day am 13."
+    },
+    {
+      "id": "check-page-9cf6a11d74",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+      "page": "batches",
+      "excerpt": "November vor einem Publikum bestehend aus Venture Capital Firmen, Business Angels, Industriepartnern, Interessenten und Medien."
+    },
+    {
+      "id": "check-page-90c0fbf16c",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+      "page": "batches",
+      "excerpt": "Die Startups von Batch #10 sind: AIPark mit Sitz in Berlin bietet eine KI-gestützte Plattform, die eine dynamische Karte der städtischen Parkplätze sowohl für einzelne Nutzer als auch für Mobilitätsanbieter oder Städte liefert."
+    },
+    {
+      "id": "check-page-1d43aa6594",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+      "page": "batches",
+      "excerpt": "Julian Glaab und Johannes Riedel haben das Unternehmen 2017 gegründet und konnten in ihren bisherigen Tätigkeiten bei der MAN Truck & Bus SE und Siemens Mobility umfangreiche Mobilitätserfahrung sammeln."
+    },
+    {
+      "id": "check-page-e91778e6a0",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+      "page": "batches",
+      "excerpt": "Das Startup hat bereits Auszeichnungen wie den VDI-Innovationslogistikpreis 2019 und den Digital Logistics Award 2017 erhalten und arbeitet mit etablierten Unternehmen wie Škoda Auto oder Rhenus Logistics zusammen."
+    },
+    {
+      "id": "check-page-b688f05c66",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+      "page": "batches",
+      "excerpt": "Im Accelerator-Programm von TechFounders testet das deutsche Startup seine Lösung mit Knorr-Bremse."
+    },
+    {
+      "id": "check-page-58178c969a",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+      "page": "batches",
+      "excerpt": "(Unternehmenspartner: Miele) ReVibe Energy wandelt Vibrationen in Strom um, um IoT- Anwendungen/Sensorsysteme zu betreiben."
+    },
+    {
+      "id": "check-page-df1596b643",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+      "page": "batches",
+      "excerpt": "Der Superstraw von Wisefood wird bereits in verschiedenen Hotels und Restaurants wie dem ibis in Berlin oder LeBurger in Wien eingesetzt."
+    },
+    {
+      "id": "check-page-bb2be6dc62",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+      "page": "batches",
+      "excerpt": "(Unternehmenspartner: ALDI Nord & ALDI SÜD) Presse Persönlicher Kontakt Markus Bosch Head of Public Relations UnternehmerTUM – Europe’s Leading Center for Innovation and Business Creation UnternehmerTUM is a unique platform for the development of innovations."
+    },
+    {
+      "id": "check-page-d7a262aa50",
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+      "page": "batches",
+      "excerpt": "A team of over 500 experienced entrepreneurs, including scientists and investors, supports start-ups with business creation, market entry and financing – also with venture capital."
+    },
+    {
+      "id": "check-page-da27a6e8cb",
+      "url": "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+      "page": "batches",
+      "excerpt": "Startschuss für TechFounders Batch 13 | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Presse Startschuss für TechFounders Batch 13 Zum Artikel springen Veröffentlicht am 18. Januar 2021 Teilen Das TechFounders Accelerator Programm startet das Jahr 2021 mit sieben vielversprechenden Start-ups, die Innovationen für die Zukunft vorantreiben Garching bei München, 18. Januar 2021. Heute fällt der Startschuss für den 13. Batch des Start-up Accelerator"
+    },
+    {
+      "id": "check-page-256a5466cf",
+      "url": "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+      "page": "batches",
+      "excerpt": "Batch des Start-up Accelerator Programms TechFounders."
+    },
+    {
+      "id": "check-page-a5ab8da599",
+      "url": "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+      "page": "batches",
+      "excerpt": "Das in München ansässige Accelerator-Programm von UnternehmerTUM, Europas führendem Zentrum für Innovation und Gründung, wird in den nächsten 20 Wochen sieben nationale und internationale Start-ups begleiten."
+    },
+    {
+      "id": "check-page-6dcd2cdd33",
+      "url": "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+      "page": "batches",
+      "excerpt": "Für den Zeitraum von 20 Wochen unterstützt TechFounders die Start-ups mit individuellem Training und Mentoring, um sie auf die Skalierungsphase und die nächste Finanzierungsrunde vorzubereiten."
+    },
+    {
+      "id": "check-page-11a71c2979",
+      "url": "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+      "page": "batches",
+      "excerpt": "Diese Technologie ermöglicht Unternehmen, ihre Kunden bei jedem Schritt, von der Diagnose bis zur erfolgreichen Lösung, mit Hilfe von augmented reality Tools zu begleiten."
+    },
+    {
+      "id": "check-page-79abbc37fd",
+      "url": "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+      "page": "batches",
+      "excerpt": "STABL Energy STABL Energy aus München hat ein Batteriespeichersystem entwickelt, das wirtschaftlicher und umweltfreundlicher ist als bestehende Alternativen auf dem Markt."
+    },
+    {
+      "id": "check-page-ce39757781",
+      "url": "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+      "page": "batches",
+      "excerpt": "Sternum Sternum ist ein in Israel ansässiges Start-up, das eine einzigartige Sicherheits- und Überwachungslösung für IoT-Geräte entwickelt hat."
+    },
+    {
+      "id": "check-page-849ea4cfa4",
+      "url": "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+      "page": "batches",
+      "excerpt": "Die Technologie lässt sich nahtlos in die bestehende Entwicklungsumgebung des Unternehmens integrieren und erfordert keine zusätzliche Hardware."
+    },
+    {
+      "id": "check-page-130b841304",
+      "url": "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+      "page": "batches",
+      "excerpt": "Die Produktreihe passt zu den Bedürfnissen von IoT-Geräteherstellern in verschiedenen Bereichen wie Medizin, Industrie 4.0 und Energie."
+    },
+    {
+      "id": "check-page-8797946b51",
+      "url": "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+      "page": "batches",
+      "excerpt": "Terra Vegane kreiert die handwerklich hergestellten Bio-Lebensmittel in ihrer veganen Produktionsküche in Berlin."
+    },
+    {
+      "id": "check-page-9629f69966",
+      "url": "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+      "page": "batches",
+      "excerpt": "Mai 2021 beim Demo Day vor Investoren, Business Angels, Branchenvertretern, erfahrenen Gründern und Medien."
+    },
+    {
+      "id": "check-page-8e04faf53a",
+      "url": "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+      "page": "batches",
+      "excerpt": "Presse Persönlicher Kontakt Markus Bosch Head of Public Relations UnternehmerTUM – Europe’s Leading Center for Innovation and Business Creation UnternehmerTUM is a unique platform for the development of innovations."
+    },
+    {
+      "id": "check-page-f0e9acf286",
+      "url": "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+      "page": "batches",
+      "excerpt": "A team of over 500 experienced entrepreneurs, including scientists and investors, supports start-ups with business creation, market entry and financing – also with venture capital."
+    },
+    {
+      "id": "check-page-7ed6318a48",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "page": "batches",
+      "excerpt": "The TechFounders Accelerator Program Starts with its 12th Batch | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Presse The TechFounders Accelerator Program Starts with its 12th Batch Zum Artikel springen Veröffentlicht am 13. Juli 2020 Teilen Munich, July 13, 2020. Today is the kick-off of the 12th batch of the start-up accelerator program TechFounders. The Munich-based accelerator program of UnternehmerTUM, Europe's leading center for"
+    },
+    {
+      "id": "check-page-73277438ff",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "page": "batches",
+      "excerpt": "The Munich-based accelerator program of UnternehmerTUM, Europe's leading center for innovation and business creation, will host ten innovative technology start-ups over the next 20 weeks."
+    },
+    {
+      "id": "check-page-c91d5c8323",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "page": "batches",
+      "excerpt": "During the upcoming 20 weeks, TechFounders will support the start-ups with individual training, coaching and mentoring to scale their companies and prepare them for their next financing round."
+    },
+    {
+      "id": "check-page-dd549ea9cc",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "page": "batches",
+      "excerpt": "In addition, the selected start-ups will conduct a pilot project with one of the TechFounders’ corporate partners ALDI, Nord & ALDI SÜD, DATEV eG, Festo, Knorr-Bremse and Miele."
+    },
+    {
+      "id": "check-page-a8b004bc8f",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "page": "batches",
+      "excerpt": "The selected start-up joins the program without a collaboration with one of the corporate partners, but with an overall support from TechFounders to develop their product ready-to-use and to further distribution."
+    },
+    {
+      "id": "check-page-baaaa4220d",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "page": "batches",
+      "excerpt": "The combination of highly individual coaching, projects with industry leaders on real use cases and a rich network of experienced mentors and investors give start-ups a massive boost at an early stage."
+    },
+    {
+      "id": "check-page-9e918cf290",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "page": "batches",
+      "excerpt": "The TechFounders Batch #12 Start-ups Are: Ebenbuild Munich-based Ebenbuild offers a solution that can be lifesaving to patients suffering from Acute Respiratory Distress Syndrome (ARDS), a condition that can be caused by severe illnesses such as COVID-19."
+    },
+    {
+      "id": "check-page-c5a85307e9",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "page": "batches",
+      "excerpt": "The start-up founded by Kei Müller has developed a software that uses computed tomography and machine learning to create a virtual, patient-specific digital twin of the lungs."
+    },
+    {
+      "id": "check-page-8f1d497edf",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "page": "batches",
+      "excerpt": "The Munich-based start-up’s solution strips down the complexity of GDPR and guides companies step by step down the process of complying with national data legislation."
+    },
+    {
+      "id": "check-page-44a29446f8",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "page": "batches",
+      "excerpt": "(Corporate partner: Datev eG) FixFirst FixFirst from Berlin keeps home appliances healthy and supports global change towards a circular economy."
+    },
+    {
+      "id": "check-page-08d97ed42f",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "page": "batches",
+      "excerpt": "The start-up’s AI-powered software provides the user with an instant error analysis and remote video consultations from the local repair services providers, manufacturers, retailers, and insurances."
+    },
+    {
+      "id": "check-page-535b3be8f0",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "page": "batches",
+      "excerpt": "The start-up was founded by Sebastian Daus and aligns with the ambitions of the European Commission Circular Economy Action Plan."
+    },
+    {
+      "id": "check-page-a5fea8ca42",
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "page": "batches",
+      "excerpt": "(Corporate partner: Miele) FotoNow FotoNow helps to identify a wide range of typical manufacturing quality issues with their AIpowered visual manufacturing inspection system."
+    },
+    {
+      "id": "check-page-6b758cf19d",
+      "url": "https://www.unternehmertum.de/about/",
+      "page": "details",
+      "excerpt": "Über UnternehmerTUM | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Über UnternehmerTUM Europas führendes Zentrum für Innovation und Gründung Daten & Fakten Karriere Presse Netzwerk Standorte Wer wir sind Geschichte, Zahlen und Haltung Seit 2002 gemeinnützig, gegründet mit Susanne Klatten Mehr als 17.000 Teilnehmende pro Jahr Mehr als 140 skalierbare Startups pro Jahr Mehr zu Daten & Fakten Karriere bei UnternehmerTUM Gestaltet mit uns die"
+    },
+    {
+      "id": "check-page-43e607504a",
+      "url": "https://www.unternehmertum.de/about/daten-fakten/",
+      "page": "details",
+      "excerpt": "Daten & Fakten | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events About Wir sind UnternehmerTUM Europas führendes Zentrum für Innovation und Gründung Was wir tun Aufsichtsrat und Management Angebot Gesellschaften Standorte Über uns UnternehmerTUM ist Europas führendes Zentrum für Innovation und Gründung. Wir fördern nachhaltiges Unternehmertum auf allen Ebenen: von der ersten Idee bis zum skalierbaren Startup, bei etablierten Unternehmen und bei"
+    },
+    {
+      "id": "check-page-12cb58bfc2",
+      "url": "https://www.unternehmertum.de/about/daten-fakten/",
+      "page": "details",
+      "excerpt": "Als Teil von Rise Europe fördern wir gemeinsam mit Partnern aus 14 Ländern europäische Startup-Teams und stärken so die technologische Souveränität Europas."
+    },
+    {
+      "id": "check-page-2ff1627fd7",
+      "url": "https://www.unternehmertum.de/about/daten-fakten/",
+      "page": "details",
+      "excerpt": "UnternehmerTUM Venture Capital Partners GmbH Venture Capital für junge Technologieunternehmen mit internationalem Marktpotenzial."
+    },
+    {
+      "id": "check-page-f97e28afa6",
+      "url": "https://www.unternehmertum.de/about/daten-fakten/",
+      "page": "details",
+      "excerpt": "Munich Urban Colab GmbH UnternehmerTUM und die Landeshauptstadt München betreiben gemeinsam ein Joint Venture für Smart City Solutions – das Munich Urban Colab."
+    },
+    {
+      "id": "check-page-e74e03c974",
+      "url": "https://www.unternehmertum.de/about/daten-fakten/",
+      "page": "details",
+      "excerpt": "Unsere Standorte Zwei Orte, zwei Stärken In Garching verbinden wir Forschung, Ausbildung und Prototyping."
+    },
+    {
+      "id": "check-page-efbbbe57ff",
+      "url": "https://www.unternehmertum.de/about/karriere/",
+      "page": "details",
+      "excerpt": "Karriere | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events About Gestaltet mit uns die Zukunft von UnternehmerTUM Bei UnternehmerTUM arbeitet ihr daran, dass aus Ideen Unternehmen werden. Mit Gründerinnen und Gründern, Forschenden, Studierenden und etablierten Unternehmen. Über uns Offene Stellen Ablauf Kurz gesagt UnternehmerTUM ist Europas führendes Zentrum für Innovation und Gründung und seit 2002 gemeinnützig. UnternehmerTUM steht für"
+    },
+    {
+      "id": "check-page-194ee202e7",
+      "url": "https://www.unternehmertum.de/about/netzwerk/",
+      "page": "details",
+      "excerpt": "Unser Netzwerk | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events About Unser Netzwerk Innovation entsteht gemeinsam. UnternehmerTUM verbindet Wissenschaft, Hochschulen, Politik, Stiftungen und Förderer, damit aus Ideen Unternehmen werden. TUM Universitäten Politik Stiftungen Förderkreis Technische Universität München Gemeinsam mit der Technischen Universität München (TUM) unterstützen wir Studierende, Forschende, Gründungsinteressierte und"
+    },
+    {
+      "id": "check-page-8745e5a323",
+      "url": "https://www.unternehmertum.de/about/netzwerk/",
+      "page": "details",
+      "excerpt": "Universitäten und Entrepreneurship-Zentren Wir arbeiten mit Hochschulen und Entrepreneurship-Zentren weltweit zusammen, von Stockholm bis Singapur."
+    },
+    {
+      "id": "check-page-f2b6db3648",
+      "url": "https://www.unternehmertum.de/about/netzwerk/",
+      "page": "details",
+      "excerpt": "Diese Fragen gehen wir gemeinsam mit Ministerien, Institutionen und Kommunen an, etwa mit der Bayerischen Staatsregierung, dem European Institute of Innovation & Technology (EIT) und der Landeshauptstadt München, mit der wir das Munich Urban Colab betreiben."
+    },
+    {
+      "id": "check-page-7553314f73",
+      "url": "https://www.unternehmertum.de/about/netzwerk/",
+      "page": "details",
+      "excerpt": "Beispiele: Im XLab CleanTech Track des XPRENEURS Incubators unterstützen wir mit der Vector Stiftung Forschende dabei, CleanTech-Technologien aus dem Labor in den Markt zu bringen."
+    },
+    {
+      "id": "check-page-1e92f02ebd",
+      "url": "https://www.unternehmertum.de/about/presse/",
+      "page": "details",
+      "excerpt": "Presse | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events About Presse Hier findet ihr aktuelle Presseinformationen und Material zu allen Programmen und Angeboten von UnternehmerTUM. Kontakt Unternehmensprofil Pressematerial Euer Kontakt Wir informieren zu Themen aus Gründung und Innovation, Digitalisierung und Mittelstand, Künstlicher Intelligenz, Mobilität und Biotechnologie. Gerne vermitteln wir euch auch den Kontakt zu Startups und"
+    },
+    {
+      "id": "check-page-f8f802c9a4",
+      "url": "https://www.unternehmertum.de/about/presse/",
+      "page": "details",
+      "excerpt": "Ein Team aus über 500 Mitarbeitenden unterstützt beim Aufbau des Unternehmens, beim Markteintritt und bei der Finanzierung – auch mit Venture Capital."
+    },
+    {
+      "id": "check-page-1d987cc1c1",
+      "url": "https://www.unternehmertum.de/about/presse/",
+      "page": "details",
+      "excerpt": "Celonis, Proxima Fusion und Isar Aerospace – das führende Zentrum für Gründung und Innovation in Europa."
+    },
+    {
+      "id": "check-page-73ab50198e",
+      "url": "https://www.unternehmertum.de/about/presse/",
+      "page": "details",
+      "excerpt": "Pressemitteilungen 225 Einträge 12.11.2026 Europäische Chip-Ökosysteme bündeln ihre Kräfte: München, Eindhoven und Dresden starten das European Future Chips Launchpad Europäische Chip-Ökosysteme bündeln ihre Kräfte: München, Eindhoven und Dresden starten das European Future Chips Launchpad."
+    },
+    {
+      "id": "check-page-21e0e5c237",
+      "url": "https://www.unternehmertum.de/about/presse/",
+      "page": "details",
+      "excerpt": "Pressemitteilung lesen Link kopieren 06.10.2026 MSC Frontier Tech Hub 2027: Europas Zukunftstechnologien für Sicherheit, Resilienz und Wettbewerbsfähigkeit Die weltweit führende Konferenz für Sicherheitspolitik (MSC) und Europas größtes Deep-Tech-Ökosystem (UnternehmerTUM und TUM Venture Labs) bauen die Plattform für strategischen Dialog zwischen Politik, Industrie und Innovation weiter aus."
+    },
+    {
+      "id": "check-page-6880909c08",
+      "url": "https://www.unternehmertum.de/about/presse/",
+      "page": "details",
+      "excerpt": "Pressemitteilung lesen Link kopieren 01.09.2026 INLEAP Photonics sammelt 20 Mio. € für die laserbasierte Drohnenabwehr ein Das deutsche Deep-Tech-Unternehmen INLEAP Photonics hat unter Führung von UVC Partners eine Seed-Finanzierungsrunde abgeschlossen Pressemitteilung lesen Link kopieren 23.07.2026 KI-Startup kausable sammelt 12 Mio."
+    },
+    {
+      "id": "check-page-db75628db5",
+      "url": "https://www.unternehmertum.de/about/presse/",
+      "page": "details",
+      "excerpt": "EUR Seed-Finanzierung ein KI-Startup Kausable sammelt 12 Mio."
+    },
+    {
+      "id": "check-page-ba7cfadb48",
+      "url": "https://www.unternehmertum.de/about/presse/",
+      "page": "details",
+      "excerpt": "Euro Seed-Finanzierung für die Entwicklung einer kausalen KI ein, die sich an wechselnde Kontexte anpasst."
+    },
+    {
+      "id": "check-page-cc739bb44b",
+      "url": "https://www.unternehmertum.de/about/presse/",
+      "page": "details",
+      "excerpt": "Artikel bei Bayerischer Rundfunk lesen Link kopieren 04.06.2026 Securing the future of German entrepreneurship Deutsche Welle Germany is good at developing cutting-edge technologies."
+    },
+    {
+      "id": "check-page-7c69b078eb",
+      "url": "https://www.unternehmertum.de/about/presse/",
+      "page": "details",
+      "excerpt": "But how can it keep creative startups behind quantum computers, nuclear fusion or other breakthrough technologies from leaving the country for the US?"
+    },
+    {
+      "id": "check-page-21067724e5",
+      "url": "https://www.unternehmertum.de/about/presse/pressemitteilungen/",
+      "page": "details",
+      "excerpt": "Presse | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Presse Pressemitteilungen Pressemitteilungen 225 Einträge 12.11.2026 Europäische Chip-Ökosysteme bündeln ihre Kräfte: München, Eindhoven und Dresden starten das European Future Chips Launchpad Europäische Chip-Ökosysteme bündeln ihre Kräfte: München, Eindhoven und Dresden starten das European Future Chips Launchpad. Pressemitteilung lesen Link kopieren 12.11.2026 Biomatter schließt Series A"
+    },
+    {
+      "id": "check-page-a00d87dcc4",
+      "url": "https://www.unternehmertum.de/about/presse/pressemitteilungen/",
+      "page": "details",
+      "excerpt": "Pressemitteilung lesen Link kopieren 06.10.2026 MSC Frontier Tech Hub 2027: Europas Zukunftstechnologien für Sicherheit, Resilienz und Wettbewerbsfähigkeit Die weltweit führende Konferenz für Sicherheitspolitik (MSC) und Europas größtes Deep-Tech-Ökosystem (UnternehmerTUM und TUM Venture Labs) bauen die Plattform für strategischen Dialog zwischen Politik, Industrie und Innovation weiter aus."
+    },
+    {
+      "id": "check-page-497f4b3f82",
+      "url": "https://www.unternehmertum.de/about/presse/pressemitteilungen/",
+      "page": "details",
+      "excerpt": "Pressemitteilung lesen Link kopieren 01.09.2026 INLEAP Photonics sammelt 20 Mio. € für die laserbasierte Drohnenabwehr ein Das deutsche Deep-Tech-Unternehmen INLEAP Photonics hat unter Führung von UVC Partners eine Seed-Finanzierungsrunde abgeschlossen Pressemitteilung lesen Link kopieren 23.07.2026 KI-Startup kausable sammelt 12 Mio."
+    },
+    {
+      "id": "check-page-542bf08d1d",
+      "url": "https://www.unternehmertum.de/about/presse/pressemitteilungen/",
+      "page": "details",
+      "excerpt": "EUR Seed-Finanzierung ein KI-Startup Kausable sammelt 12 Mio."
+    },
+    {
+      "id": "check-page-69945497da",
+      "url": "https://www.unternehmertum.de/about/presse/pressemitteilungen/",
+      "page": "details",
+      "excerpt": "Euro Seed-Finanzierung für die Entwicklung einer kausalen KI ein, die sich an wechselnde Kontexte anpasst."
+    },
+    {
+      "id": "check-page-c969d4d234",
+      "url": "https://www.unternehmertum.de/about/presse/pressemitteilungen/",
+      "page": "details",
+      "excerpt": "EUR für KI-gestützte Materialforschung DeepTech-Startup alqem hat eine Pre-Seed-Finanzierungsrunde über 8 Mio."
+    },
+    {
+      "id": "check-page-b4b224a612",
+      "url": "https://www.unternehmertum.de/about/presse/pressemitteilungen/",
+      "page": "details",
+      "excerpt": "Pressemitteilung lesen Link kopieren 17.06.2026 UnternehmerTUM schärft seine Marken: Incubator und Accelerator für Europas beste Deep-Tech-Teams XPLORE und XPRENEURS heißen ab sofort UnternehmerTUM Incubator und UnternehmerTUM Accelerator – mit substanziell ausgebautem Curriculum, Netzwerk und Industriepartnerschaften."
+    },
+    {
+      "id": "check-page-8ed69545a0",
+      "url": "https://www.unternehmertum.de/about/presse/pressemitteilungen/",
+      "page": "details",
+      "excerpt": "Pressemitteilung lesen Link kopieren 09.06.2026 UVC Partners beteiligt sich an der Series D von Isar Aerospace über 270 Mio."
+    },
+    {
+      "id": "check-page-9953ef699d",
+      "url": "https://www.unternehmertum.de/about/presse/pressemitteilungen/",
+      "page": "details",
+      "excerpt": "EUR Der DeepTech-Investor UVC Partners beteiligt sich mit 38 Mio."
+    },
+    {
+      "id": "check-page-604642cbd3",
+      "url": "https://www.unternehmertum.de/about/presse/pressemitteilungen/",
+      "page": "details",
+      "excerpt": "EUR an der Series D von Isar Aerospace über 270 Mio."
+    },
+    {
+      "id": "check-page-60818df5f7",
+      "url": "https://www.unternehmertum.de/about/presse/pressemitteilungen/",
+      "page": "details",
+      "excerpt": "EUR Pressemitteilung lesen Link kopieren 11.05.2026 Women Startup Award 2026 öffnet Bewerbungsphase für Bayerns Tech-Gründerinnen Women Startup sucht erneut vielversprechende frühphasige Techgründungen bayerischer Gründerinnen."
+    },
+    {
+      "id": "check-page-16dd461c35",
+      "url": "https://www.unternehmertum.de/about/presse/pressemitteilungen/",
+      "page": "details",
+      "excerpt": "EUR Seed-Finanzierung für Enterprise-KI mit Geschäftskontext Cirql One entwickelt Business Context Layer für Enterprise-KI und sichert sich 5 Mio."
+    },
+    {
+      "id": "check-page-2f10d4d95e",
+      "url": "https://www.unternehmertum.de/about/presse/pressemitteilungen/",
+      "page": "details",
+      "excerpt": "EUR Seed-Finanzierung."
+    },
+    {
+      "id": "check-page-4918c0c1eb",
+      "url": "https://www.unternehmertum.de/about/pro-unternehmertum/",
+      "page": "details",
+      "excerpt": "Pro Unternehmertum | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events About Pro Unternehmertum UnternehmerTUM Freundeskreis Engagement für eine lebendige Gründungskultur Pro Unternehmertum steht für herausragende unternehmerische Persönlichkeiten – Unternehmerinnen und Unternehmer, Führungskräfte sowie Expertinnen und Experten –, die sich aktiv bei UnternehmerTUM engagieren und einen wesentlichen inhaltlichen Beitrag zu Lehre und Praxis leisten."
+    },
+    {
+      "id": "check-page-c533549b6e",
+      "url": "https://www.unternehmertum.de/about/standorte/",
+      "page": "details",
+      "excerpt": "Standorte | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events About Standorte Zwei Orte, zwei Stärken In Garching verbinden wir Forschung, Ausbildung und Prototyping. Mitten in München bringen wir Startups, Unternehmen, Wissenschaft und Stadt zusammen. Entrepreneurship Center Garching Munich Urban Colab Entrepreneurship Center Garching Seit wir 2002 gegründet wurden, ist hier unser Hauptsitz: auf dem Forschungscampus der Technischen Universität"
+    },
+    {
+      "id": "check-page-f12ab559cd",
+      "url": "https://www.unternehmertum.de/about/standorte/",
+      "page": "details",
+      "excerpt": "Entrepreneurship Center Garching Munich Urban Colab Entrepreneurship Center Garching Seit wir 2002 gegründet wurden, ist hier unser Hauptsitz: auf dem Forschungscampus der Technischen Universität München (TUM), dem naturwissenschaftlich-technischen Zentrum der TUM nördlich von München."
+    },
+    {
+      "id": "check-page-5839d5ccfb",
+      "url": "https://www.unternehmertum.de/about/standorte/",
+      "page": "details",
+      "excerpt": "Munich Urban Colab im Münchner Kreativquartier Wie bleibt das Leben in der Stadt der Zukunft lebenswert?"
+    },
+    {
+      "id": "check-page-0ff999039e",
+      "url": "https://www.unternehmertum.de/about/standorte/",
+      "page": "details",
+      "excerpt": "Daran arbeiten wir im Munich Urban Colab in der Freddie-Mercury-Straße 5, unserem Joint Venture mit der Landeshauptstadt München."
+    },
+    {
+      "id": "check-page-c0be2aad45",
+      "url": "https://www.unternehmertum.de/about/standorte/",
+      "page": "details",
+      "excerpt": "Das Munich Urban Colab liegt im Münchner Kreativquartier."
     }
   ],
   "findings": {
@@ -447,32 +1213,7 @@
         "evidenceId": "check-phone-d67d0357ed"
       }
     ],
-    "routes": [
-      {
-        "value": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
-        "evidenceId": "check-route-e543ac05ba"
-      },
-      {
-        "value": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
-        "evidenceId": "check-route-06c6992daa"
-      },
-      {
-        "value": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
-        "evidenceId": "check-route-b0abe2fc9a"
-      },
-      {
-        "value": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/calendar.ics",
-        "evidenceId": "check-route-c043623ac2"
-      },
-      {
-        "value": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
-        "evidenceId": "check-route-8790c8e228"
-      },
-      {
-        "value": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
-        "evidenceId": "check-route-e4d12eb1d5"
-      }
-    ],
+    "routes": [],
     "applicationUrl": [
       {
         "value": "https://www.unternehmertum.de/en/",
@@ -497,12 +1238,16 @@
       {
         "value": "3 months",
         "evidenceId": "check-duration-9c04f93100"
+      },
+      {
+        "value": "20",
+        "evidenceId": "check-duration-eb2daf3eac"
       }
     ],
     "format": [
       {
         "value": "remote",
-        "evidenceId": "check-format-bfadb10af2"
+        "evidenceId": "check-format-5158b62296"
       },
       {
         "value": "hybrid",
@@ -550,7 +1295,7 @@
     "portfolioPages": [
       {
         "value": "https://www.unternehmertum.de/en/offering/companies/",
-        "evidenceId": "check-portfolio-4119c913a3"
+        "evidenceId": "check-portfolio-3b88b2a674"
       }
     ],
     "name": [

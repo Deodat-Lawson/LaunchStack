@@ -1,33 +1,396 @@
 {
   "programId": "csi-tech-incubator",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.csiinnovationhub.com/techincubator",
-    "https://www.csiinnovationhub.com/about",
+    "https://www.csiinnovationhub.com/event-details/investment-research-101-workshop",
+    "https://www.csiinnovationhub.com/event-details/tech-talks-stephen-deberry-founding-partner-at-bronze-investments",
+    "https://www.csiinnovationhub.com/faq",
+    "https://www.csiinnovationhub.com/single-post/tech-talks-stephen-deberry-bronze-investments-december-2-2020",
     "https://www.csiinnovationhub.com/emerging-tech",
-    "https://www.csiinnovationhub.com/faq"
+    "https://www.csiinnovationhub.com/single-post/fall-winter-2021-cohort-week-5-november-16-2021",
+    "https://www.csiinnovationhub.com/single-post/ttp-residency-bootcamp-demo-day-cohort-2-january-28-2021",
+    "https://www.csiinnovationhub.com/single-post/verizon-business-mentorship-program-cohort-6-orientation-may-25-2021",
+    "https://www.csiinnovationhub.com/single-post/verizon-business-mentorship-program-cohort-6-session-1-june-1-2021",
+    "https://www.csiinnovationhub.com/single-post/verizon-business-mentorship-program-cohort-6-session-2-june-8-2021",
+    "https://www.csiinnovationhub.com/single-post/verizon-business-mentorship-program-cohort-6-session-3-june-14-2021",
+    "https://www.csiinnovationhub.com/single-post/verizon-business-mentorship-program-cohort-6-session-4-june-22-2021",
+    "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2020-cohort-week-3-january-25-2021",
+    "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2020-cohort-week-4-february-1-2021",
+    "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2020-cohort-week-5-february-8-2021",
+    "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-1-october-18-2021",
+    "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-2-october-25-2021",
+    "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-3-november-2-2021",
+    "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-4-november-8-2021"
   ],
   "evidence": [
     {
-      "id": "check-deal-64c90a0212",
+      "id": "check-deal-ec505ee13a",
       "url": "https://www.csiinnovationhub.com/emerging-tech",
-      "title": "CSI Tech Incubator — batches page checked by scrape.py",
-      "excerpt": "Strong interpersonal and teamwork skills Willingness to create progress reports Passion for mentorship, innovation, and giving back Requirements: Earn a $1,000 stipend for your time Apply your skills in a real-world, community program Gain mentorship experience , leadership, communication, and teamwork skills Create",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "for mentorship, innovation, and giving back Requirements: Earn a $1,000 stipend for your time Apply your skills in a real-world, community",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-02ca313c13",
+      "url": "https://www.csiinnovationhub.com/techincubator",
+      "title": "CSI Tech Incubator — homepage",
+      "excerpt": "incubator program The CSI Tech Incubator is a 9-week intensive program designed to support startups",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-cef2898ef6",
+      "url": "https://www.csiinnovationhub.com/emerging-tech",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "Cohort The Emerging Tech Impact Cohort is a 7-week, hybrid learning experience that equips Staten",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-1667bae6ca",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2020-cohort-week-3-january-25-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "Virtual Fall/Winter 2020 Cohort | Week 3 | January 25, 2021 top of",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-2836197bd4",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2020-cohort-week-3-january-25-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2020 Cohort | Week 3 | January 25, 2021 Jan",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-3236ac12f0",
+      "url": "https://www.csiinnovationhub.com/emerging-tech",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "Impact Cohort The Emerging Tech Impact Cohort is a 7-week, hybrid learning experience that equips Staten Island high school",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-336e6eb3a2",
+      "url": "https://www.csiinnovationhub.com/single-post/fall-winter-2021-cohort-week-5-november-16-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2021 Cohort | Week 5 | November 16, 2021 Feb",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-3bf7689f7d",
+      "url": "https://www.csiinnovationhub.com/event-details/tech-talks-stephen-deberry-founding-partner-at-bronze-investments",
+      "title": "CSI Tech Incubator — terms page",
+      "excerpt": "Founding Partner at Bronze Investments Wed, Dec 02 | Zoom Virtual Meeting Leveraging Venture Capital for Social Good Stephen",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3c3cd1d52c",
+      "url": "https://www.csiinnovationhub.com/single-post/tech-talks-stephen-deberry-bronze-investments-december-2-2020",
+      "title": "CSI Tech Incubator — terms page",
+      "excerpt": "Investments | December 2, 2020 Dec 8, 2020 1 min read Virtual Fireside Chat with Stephen Deberry, Founding Partner at",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-432e082b96",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-4-november-8-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2021 Cohort | Week 4 | November 8, 2021 Feb 8,",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-5190169cc1",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2020-cohort-week-4-february-1-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2020 Cohort | Week 4 | February 1, 2021 Feb 1,",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-5bb2c31a5e",
+      "url": "https://www.csiinnovationhub.com/event-details/investment-research-101-workshop",
+      "title": "CSI Tech Incubator — terms page",
+      "excerpt": "Time & Location May 03, 2022, 2:30 PM – 4:00 PM Zoom Virtual Meeting About the Event Investment Research 101 Workshop",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-5c07a379c3",
+      "url": "https://www.csiinnovationhub.com/event-details/tech-talks-stephen-deberry-founding-partner-at-bronze-investments",
+      "title": "CSI Tech Incubator — terms page",
+      "excerpt": "Time & Location Dec 02, 2020, 6:30 PM – 8:00 PM Zoom Virtual Meeting About the Event Virtual Fireside Chat with Stephen",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6960c98e8f",
+      "url": "https://www.csiinnovationhub.com/event-details/tech-talks-stephen-deberry-founding-partner-at-bronze-investments",
+      "title": "CSI Tech Incubator — terms page",
+      "excerpt": "6:30 PM – 8:00 PM Zoom Virtual Meeting About the Event Virtual Fireside Chat with Stephen Deberry, Founding Partner at",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-72d6b3ae0b",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-3-november-2-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2021 Cohort | Week 3 | November 2, 2021 Feb 7,",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-83b12abc27",
+      "url": "https://www.csiinnovationhub.com/event-details/investment-research-101-workshop",
+      "title": "CSI Tech Incubator — terms page",
+      "excerpt": "items. Investment Research 101 Workshop Tue, May 03 | Zoom Virtual Meeting You will learn about each style of investing, how",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-85df77d56a",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-4-november-8-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "Virtual Fall/Winter 2021 Cohort | Week 4 | November 8, 2021 top of",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-86a65161c0",
+      "url": "https://www.csiinnovationhub.com/single-post/fall-winter-2021-cohort-week-5-november-16-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "Virtual Fall/Winter 2021 Cohort | Week 5 | November 16, 2021 top",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-899cf3f52c",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-3-november-2-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "Virtual Fall/Winter 2021 Cohort | Week 3 | November 2, 2021 top of",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-8fa66cfd94",
+      "url": "https://www.csiinnovationhub.com/emerging-tech",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "Start: May 12, 2026 Timeframe: 4:30pm to 6:30pm Weekly in-person session Location: 35B Bay Street Build a real project with",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-97d539a660",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-1-october-18-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "Virtual Fall/Winter 2021 Cohort | Week 1 | October 18, 2021 top of",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-a96a0ee024",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-2-october-25-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "Virtual Fall/Winter 2021 Cohort | Week 2 | October 25, 2021 top of",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-c7e4251b9b",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-2-october-25-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2021 Cohort | Week 2 | October 25, 2021 Feb 7,",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-ce0b60c882",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2020-cohort-week-5-february-8-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "Virtual Fall/Winter 2020 Cohort | Week 5 | February 8, 2021 top of",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-d3bcce1e94",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-1-october-18-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "7, 2022 1 min read We officially launched our Fall 2021 Virtual Cohort! We had a great kick off session today with",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-e3f4ccd2d9",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2020-cohort-week-4-february-1-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "Virtual Fall/Winter 2020 Cohort | Week 4 | February 1, 2021 top of",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-f3647defc0",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-1-october-18-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2021 Cohort | Week 1 | October 18, 2021 Feb 7,",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-fc92642824",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2020-cohort-week-5-february-8-2021",
+      "title": "CSI Tech Incubator — batches page",
+      "excerpt": "More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2020 Cohort | Week 5 | February 8, 2021 Feb 9,",
       "page": "batches"
     },
     {
       "id": "check-name-087ac9a268",
       "url": "https://www.csiinnovationhub.com/techincubator",
-      "title": "CSI Tech Incubator — homepage checked by scrape.py",
+      "title": "CSI Tech Incubator — homepage",
       "excerpt": "through the menu items. tech incubator program The CSI Tech Incubator is a 9-week intensive program designed to support startups",
       "page": "details"
     },
     {
       "id": "check-route-d3414d8d85",
       "url": "https://www.csiinnovationhub.com/techincubator",
-      "title": "CSI Tech Incubator — homepage checked by scrape.py",
+      "title": "CSI Tech Incubator — homepage",
       "excerpt": "Tech Incubator → https://www.csiinnovationhub.com/techincubator",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-9b24f63ff3",
+      "url": "https://www.csiinnovationhub.com/techincubator",
+      "page": "details",
+      "excerpt": "Tech Incubator | CSI Innovation Hub top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. tech incubator program The CSI Tech Incubator is a 9-week intensive program designed to support startups with emerging technologies as they prepare to raise a Seed or Series A round. Our program provides a comprehensive curriculum focused on investment readiness, scaling strategies, and market positioning. In addition, participants gain access to a powerful network of experienced tech founders, investors, and industry experts, ensuring they have the guidance, resources, and connections needed to secure funding and accelerate growth. ​ Our hands-on incubator program is designed to provide tailored support to startups with emerging technologies as they prepare to raise a Seed or Series A round. Our team of experienced mentors, investors, and industry leaders works closely with each founder to understand their unique business challenges and develop actionable solutions. Unlike a one-size-fits-all approach, our consultative model ensures that startups receive the personalized guidance and strategic insights needed to refine their business model, strengthen their"
+    },
+    {
+      "id": "check-page-c16759e666",
+      "url": "https://www.csiinnovationhub.com/techincubator",
+      "page": "details",
+      "excerpt": "We are deeply committed to the success of all our companies to make sure you’re new venture is getting the support and resources it needs. mentors Sheena Allen Founder CapWay Eric Augustyn Managing Partner August Hill Partners Ashley Aydin Principal Vamos Ventures Linda M."
+    },
+    {
+      "id": "check-page-3b9c46979a",
+      "url": "https://www.csiinnovationhub.com/techincubator",
+      "page": "details",
+      "excerpt": "Email Submit By clicking submit, you are agreeing to receive communications from The College of Staten Island Innovation Hub."
+    },
+    {
+      "id": "check-page-29d53c2d62",
+      "url": "https://www.csiinnovationhub.com/techincubator",
+      "page": "details",
+      "excerpt": "Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-b0222d49f8",
+      "url": "https://www.csiinnovationhub.com/event-details/investment-research-101-workshop",
+      "page": "terms",
+      "excerpt": "Investment Research 101 Workshop | CSI Innovation Hub top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. Investment Research 101 Workshop Tue, May 03 | Zoom Virtual Meeting You will learn about each style of investing, how to research a company and explore which approach works best for you as an individual. Registration is Closed See other events Time & Location May 03, 2022, 2:30 PM – 4:00 PM Zoom Virtual Meeting About the Event Investment Research 101 Workshop Jeffrey Derose will give a presentation on the 4 main investment strategies; Value Investing, Growth Investing, Technical Trading, and Global Macro Trading. In this workshop you will learn about each style of investing, how to research a company and explore which approach works best for you as an individual. Jeffrey has had experience working in a hedge fund, wealth management firm, and most recently became a member of the Economic Club of NY. Zoom details to be provided upon registration. This Event will be recorded and will be made available to the public. By signing up and attending the event you consent to being recorded. Read More > Share This Event Founders Inside CSI Tech"
+    },
+    {
+      "id": "check-page-10c24e669d",
+      "url": "https://www.csiinnovationhub.com/event-details/investment-research-101-workshop",
+      "page": "terms",
+      "excerpt": "Read More > Share This Event Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-8fd66e0ca4",
+      "url": "https://www.csiinnovationhub.com/event-details/tech-talks-stephen-deberry-founding-partner-at-bronze-investments",
+      "page": "terms",
+      "excerpt": "Tech Talks | Stephen Deberry, Founding Partner at Bronze Investments | CSI Innovation Hub top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. Tech Talks | Stephen Deberry, Founding Partner at Bronze Investments Wed, Dec 02 | Zoom Virtual Meeting Leveraging Venture Capital for Social Good Stephen DeBerry, founding partner at Bronze Investments will be joining us to discuss how he is leveraging his position as a VC to convert disparity to prosperity in Eastside communities; places on the social, economic, and environmental margin. Registration is Closed See other events Time & Location Dec 02, 2020, 6:30 PM – 8:00 PM Zoom Virtual Meeting About the Event Virtual Fireside Chat with Stephen Deberry, Founding Partner at Bronze Investments Leveraging Venture Capital for Social Good Stephen DeBerry, founding partner at Bronze Investments will be joining us to discuss how he is leveraging his position as a VC to convert disparity to prosperity in Eastside communities; places on the social, economic, and environmental margin. Stephen will talk about how inequities have developed over time and why now is a special time to make positive impact in communities"
+    },
+    {
+      "id": "check-page-a9000015c4",
+      "url": "https://www.csiinnovationhub.com/faq",
+      "page": "terms",
+      "excerpt": "FAQ | CSI Innovation Hub top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. frequently asked questions Inquiry Form Contact Us Please send us a message with any of your questions or comments. ​ We will get back to you as soon as possible. Send Success! Message received. Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-bc5e8c568d",
+      "url": "https://www.csiinnovationhub.com/single-post/tech-talks-stephen-deberry-bronze-investments-december-2-2020",
+      "page": "terms",
+      "excerpt": "Tech Talks | Stephen Deberry, Bronze Investments | December 2, 2020 top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. News Tech Talks | Stephen Deberry, Bronze Investments | December 2, 2020 Dec 8, 2020 1 min read Virtual Fireside Chat with Stephen Deberry, Founding Partner at Bronze Investments Leveraging Venture Capital for Social Good Stephen DeBerry, founding partner at Bronze Investments will be joining us to discuss how he is leveraging his position as a VC to convert disparity to prosperity in Eastside communities; places on the social, economic, and environmental margin. Stephen will talk about how inequities have developed over time and why now is a special time to make positive impact in communities of color across the US. In Partnership with NY EDC Communitas America If you missed part of the event or want to see it again, you can view the recording of last night's event here ​ . If you would like to connect with Stephen privately, please visit www. bronzevc.com Please stay tuned on our events page for upcoming Tech Talks! www.bronze.vc www.edc.nyc www.communitasamerica.org Founders Inside CSI Tech Incubator Mentors Cohort Alumni"
+    },
+    {
+      "id": "check-page-eeadd7dd5a",
+      "url": "https://www.csiinnovationhub.com/emerging-tech",
+      "page": "batches",
+      "excerpt": "Emerging Tech Impact Cohort | CSI Innovation Hub top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. The Emerging Tech Impact Cohort The Emerging Tech Impact Cohort is a 7-week, hybrid learning experience that equips Staten Island high school students with foundational AI literacy, problem-solving skills, and hands-on project experience. Students work in teams to identify real community challenges and design responsible, tech-informed solutions, culminating in a public Tech Showcase at CSI’s new Innovation Hub space. Program Start: May 12, 2026 Timeframe: 4:30pm to 6:30pm Weekly in-person session Location: 35B Bay Street Build a real project with a team Learn how AI actually works Create a pitch de ck like startups do Present at a Tech Showcase Walk away with a certificate of completion What you will do Week 1: Team formation Week 2: AI introduction Week 3: Coding basics Week 4: Design thinking Weeks 5–7: Pitch deck development Final event: Tech Showcase Students gain practical, future-ready skills while building confidence. Your partnership is the difference-maker in recruiting strong student teams. APPLY NOW become a college mentor CSI or CUNY"
+    },
+    {
+      "id": "check-page-233490fc10",
+      "url": "https://www.csiinnovationhub.com/emerging-tech",
+      "page": "batches",
+      "excerpt": "Email Submit By clicking submit, you are agreeing to receive communications from The College of Staten Island Innovation Hub."
+    },
+    {
+      "id": "check-page-12c8d8c527",
+      "url": "https://www.csiinnovationhub.com/emerging-tech",
+      "page": "batches",
+      "excerpt": "Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-c39b86b83a",
+      "url": "https://www.csiinnovationhub.com/single-post/fall-winter-2021-cohort-week-5-november-16-2021",
+      "page": "batches",
+      "excerpt": "Virtual Fall/Winter 2021 Cohort | Week 5 | November 16, 2021 top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2021 Cohort | Week 5 | November 16, 2021 Feb 8, 2022 1 min read Automation, sales, communication, service, support, and marketing infrastructures are key elements needed to properly scale your business. We had a great business development discussion during yesterday's batch meeting. Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-6ed1dd9cf0",
+      "url": "https://www.csiinnovationhub.com/single-post/ttp-residency-bootcamp-demo-day-cohort-2-january-28-2021",
+      "page": "batches",
+      "excerpt": "TTP Residency Bootcamp Demo Day | Cohort #2 | January 28, 2021 top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. News TTP Residency Bootcamp Demo Day | Cohort #2 | January 28, 2021 Jan 28, 2021 1 min read Remarkable showcase of CSI student frontend development and web development projects at the TTP Residency Bootcamp demo day! Our TTP Residents have phenomenally implemented the knowledge gained during their web development bootcamp. Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-e0ce61f26e",
+      "url": "https://www.csiinnovationhub.com/single-post/verizon-business-mentorship-program-cohort-6-orientation-may-25-2021",
+      "page": "batches",
+      "excerpt": "Verizon Business Mentorship Program Cohort #6 | Orientation | May 25, 2021 top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. News Verizon Business Mentorship Program Cohort #6 | Orientation | May 25, 2021 May 24, 2021 1 min read We're super excited to welcome our next cohort for the Verizon Business Mentorship Program which will focus on Digital Marketing solutions, leveraging technologies to reconnect with and find new clients, and help finding new sources of revenue. For more info & to apply for the next cohort: http://csitechincubator.com/verizon Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-17bf224e35",
+      "url": "https://www.csiinnovationhub.com/single-post/verizon-business-mentorship-program-cohort-6-session-1-june-1-2021",
+      "page": "batches",
+      "excerpt": "Verizon Business Mentorship Program Cohort #6 | Session 1 | June 1, 2021 top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. News Verizon Business Mentorship Program Cohort #6 | Session 1 | June 1, 2021 May 31, 2021 1 min read Our Verizon Business Mentorship Program cohort had a riveting session today as we covered: 1) Marketing & growing a business during COVID-19 2) Leveraging technology & innovative thought to reconnect with clients 3) Identifying & approaching opportunities and gaps to fill For more info & to apply for the next cohort: http://csitechincubator.com/verizon Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-cf63334474",
+      "url": "https://www.csiinnovationhub.com/single-post/verizon-business-mentorship-program-cohort-6-session-2-june-8-2021",
+      "page": "batches",
+      "excerpt": "Verizon Business Mentorship Program Cohort #6 | Session 2 | June 8, 2021 top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. News Verizon Business Mentorship Program Cohort #6 | Session 2 | June 8, 2021 Jun 7, 2021 1 min read We had another crucial business development session for the Verizon Business Mentorship Program focused on customer lifecycle and prioritizing your market. Knowing your buyers + innovative thought & determination + technology = opportunity. For more info & to apply for the next cohort: http://csitechincubator.com/verizon Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-5d9d7a514a",
+      "url": "https://www.csiinnovationhub.com/single-post/verizon-business-mentorship-program-cohort-6-session-3-june-14-2021",
+      "page": "batches",
+      "excerpt": "Verizon Business Mentorship Program Cohort #6 | Session 3 | June 14, 2021 top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. News Verizon Business Mentorship Program Cohort #6 | Session 3 | June 14, 2021 Jun 13, 2021 1 min read We had super insightful session today as metrics, data, and analytics took over our 3rd instruction session for the Verizon Business Mentorship Program. For more info & to apply for the next cohort: http://csitechincubator.com/verizon Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-8908188749",
+      "url": "https://www.csiinnovationhub.com/single-post/verizon-business-mentorship-program-cohort-6-session-4-june-22-2021",
+      "page": "batches",
+      "excerpt": "Verizon Business Mentorship Program Cohort #6 | Session 4 | June 22, 2021 top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. News Verizon Business Mentorship Program Cohort #6 | Session 4 | June 22, 2021 Jun 21, 2021 1 min read We want to give a special thanks and huge shoutout to the excellent volunteer mentors guiding our cohort of entrepreneurs and small business owners towards polishing their digital strategy and business development for the mentorship portion of the Verizon Business Mentorship Program. For more info & to apply for the next cohort: http://csitechincubator.com/verizon Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-27164ce039",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2020-cohort-week-3-january-25-2021",
+      "page": "batches",
+      "excerpt": "Virtual Fall/Winter 2020 Cohort | Week 3 | January 25, 2021 top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2020 Cohort | Week 3 | January 25, 2021 Jan 26, 2021 1 min read The Incubator Business Development Manager, Jeffrey Derose, facilitated value driven discussions during the 3rd Fall/Winter batch meeting which focused on brand development, content strategy, content execution, content distribution, and business development. Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-e71f091c27",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2020-cohort-week-4-february-1-2021",
+      "page": "batches",
+      "excerpt": "Virtual Fall/Winter 2020 Cohort | Week 4 | February 1, 2021 top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2020 Cohort | Week 4 | February 1, 2021 Feb 1, 2021 1 min read Sylvester Omuemu, Founder of O mucloud Strategies & former Partnerships Lead at Google Cloud joined the 4th Fall/Winter batch meeting to discuss strategic partnerships, sales strategy, scaling product, and negotiating deals. Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-975deae044",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2020-cohort-week-5-february-8-2021",
+      "page": "batches",
+      "excerpt": "Virtual Fall/Winter 2020 Cohort | Week 5 | February 8, 2021 top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2020 Cohort | Week 5 | February 8, 2021 Feb 9, 2021 1 min read Shawn Hill, of Moderne Ventures joined the 5th Fall/Winter batch meeting to discuss fundraising , networking with investors, creating a pitchdeck , pitching investors , and negotiating termsheets . Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-0272cd71f8",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-1-october-18-2021",
+      "page": "batches",
+      "excerpt": "Virtual Fall/Winter 2021 Cohort | Week 1 | October 18, 2021 top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2021 Cohort | Week 1 | October 18, 2021 Feb 7, 2022 1 min read We officially launched our Fall 2021 Virtual Cohort! We had a great kick off session today with conversations around building customer personas and digital strategy. Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-6420112a1f",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-2-october-25-2021",
+      "page": "batches",
+      "excerpt": "Virtual Fall/Winter 2021 Cohort | Week 2 | October 25, 2021 top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2021 Cohort | Week 2 | October 25, 2021 Feb 7, 2022 1 min read \"Chop it down\" and \"make your customers part of the company\" were some key takeaways from today's weekly batch meeting which focused on product market fit. Shoutout to Chris from @chetapp for always mentoring & supporting our entrepreneurial community! Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-6e201de77e",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-3-november-2-2021",
+      "page": "batches",
+      "excerpt": "Virtual Fall/Winter 2021 Cohort | Week 3 | November 2, 2021 top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2021 Cohort | Week 3 | November 2, 2021 Feb 7, 2022 1 min read \"Trial & Review\" is one of the most important steps in creating a marketing plan. In today's world content is king! Being successful digitally begins with content strategy. Awesome session today as we discussed all the layers of influencer marketing and content marketing. Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
+    },
+    {
+      "id": "check-page-a8cc34bebb",
+      "url": "https://www.csiinnovationhub.com/single-post/virtual-fall-winter-2021-cohort-week-4-november-8-2021",
+      "page": "batches",
+      "excerpt": "Virtual Fall/Winter 2021 Cohort | Week 4 | November 8, 2021 top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home About Resources Programs Tech Incubator Incubator Cohort Alumni Emerging Tech Impact Cohort VR Powered by Glimpse Group Thrive Program Partners Events FAQ Directions Contact Us More... Use tab to navigate through the menu items. News Virtual Fall/Winter 2021 Cohort | Week 4 | November 8, 2021 Feb 8, 2022 1 min read Shoutout to Adaku for educating our Fall 2021 cohort on Intellectual Property and Data Privacy during today's batch meeting. We're excited to have Adaku join us again on Nov 10 at 6pm to discuss the legalities around data and compliance. Founders Inside CSI Tech Incubator Mentors Cohort Alumni Apply Now Partners Incubator Partners Incubator Mentors About Mission The Team News FAQs Contact 35B Bay Street Staten Island, NY 10301 csitechincubator@csi.cuny.edu Tel: (646) 766 - 9554 Fax: (646) 766 - 9558 Copyright © 2021 CSI Tech Incubator - All rights reserved - Security/Privacy Policy bottom of page"
     }
   ],
   "findings": {
@@ -43,11 +406,53 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "9",
+        "evidenceId": "check-duration-02ca313c13"
+      },
+      {
+        "value": "7",
+        "evidenceId": "check-duration-cef2898ef6"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-83b12abc27"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-3236ac12f0"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-8fa66cfd94"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "Strong interpersonal and teamwork skills Willingness to create progress reports Passion for mentorship, innovation, and giving back Requirements: Earn a $1,000 stipend for your time Apply your skills in a real-world, community program Gain mentorship experience , leadership, communication, and teamwork skills Create",
-        "evidenceId": "check-deal-64c90a0212"
+        "value": "for mentorship, innovation, and giving back Requirements: Earn a $1,000 stipend for your time Apply your skills in a real-world, community",
+        "evidenceId": "check-deal-ec505ee13a"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-ec505ee13a"
       }
     ],
     "portfolioPages": [],

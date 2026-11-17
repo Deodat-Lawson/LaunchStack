@@ -1,22 +1,27 @@
 {
   "programId": "climate-kic",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.climate-kic.org/",
-    "https://www.climate-kic.org/events/apply-for-accelerator-programme-in-germany-switzerland-austria/",
-    "https://www.climate-kic.org/news/call-for-applications-climate-kic-accelerator-programme-recruits-new-start-ups-in-france/",
-    "https://www.climate-kic.org/news/climathon-opens-applications-2017-city-hosts/",
     "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
     "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
     "https://www.climate-kic.org/open-call/start-ups-applications-for-climatelaunchpad-2026/",
-    "https://www.climate-kic.org/events/circular-investment-readiness-network-cirn-cities-enabling-local-start-ups/",
-    "https://www.climate-kic.org/events/community-connect-unpacking-the-eu-clean-industrial-deal/",
-    "https://www.climate-kic.org/events/eucirculartalks-industrial-symbiosis-a-tool-for-the-green-deal/",
-    "https://www.climate-kic.org/events/idealab-our-future-after-coal/",
-    "https://www.climate-kic.org/events/innovation-and-investment-in-the-energy-transition/",
-    "https://www.climate-kic.org/events/innovation-entrepreneurship-investment-climate-solutions/",
-    "https://www.climate-kic.org/events/masterclass-sales-hacking-deal-closing-with-steli-efti/",
-    "https://www.climate-kic.org/events/msca-eu-green-deal-cluster-event/"
+    "https://www.climate-kic.org/get-involved/investment-opportunities/",
+    "https://www.climate-kic.org/open-call/independent-experts-netzerocities-climate-city-contract-investment-plans-2/",
+    "https://www.climate-kic.org/open-call/independent-experts-netzerocities-climate-city-contract-investment-plans/",
+    "https://www.climate-kic.org/open-call/open-call-for-new-investment-partners-to-join-the-eit-climate-kic-investing-for-1-5c-initiative/",
+    "https://www.climate-kic.org/policies/",
+    "https://www.climate-kic.org/policies/terms-and-conditions/",
+    "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+    "https://www.climate-kic.org/open-call/climaccelerator-organisers-europe-deadline-extended/",
+    "https://www.climate-kic.org/open-call/netzerocities-call-for-pilot-cities-cohort-2-2023/",
+    "https://www.climate-kic.org/open-call/pilot-cities-programme-call-for-pilot-cities-cohort-3-2024/",
+    "https://www.climate-kic.org/open-call/pilot-cities-programme-cohort-3-2024/",
+    "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-aprrn/",
+    "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-da/",
+    "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-jfw/",
+    "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-naled/",
+    "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-pc/"
   ],
   "evidence": [
     {
@@ -34,6 +39,97 @@
       "page": "application"
     },
     {
+      "id": "check-duration-6c2d138257",
+      "url": "https://www.climate-kic.org/open-call/netzerocities-call-for-pilot-cities-cohort-2-2023/",
+      "title": "Climate-KIC — batches page",
+      "excerpt": "Cohort 2 (2023) will run for two years (24 months) from 1 May 2024 to 30 April 2026. The decisions",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-04aaaaa275",
+      "url": "https://www.climate-kic.org/open-call/open-call-for-new-investment-partners-to-join-the-eit-climate-kic-investing-for-1-5c-initiative/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "via email following the instructions in the call to investments@climate-kic.org. Important dates Deadline: 14 April 2024 17:00 CET",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-28b0d9e467",
+      "url": "https://www.climate-kic.org/open-call/open-call-for-new-investment-partners-to-join-the-eit-climate-kic-investing-for-1-5c-initiative/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "of Interest DEADLINE 2024-04-14 17:00: CET CONTACT investments@climate-kic.org HOW TO APPLY Details Climate KIC is conducting an open",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-63e9f755de",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "Middenlaan 45 1018 DC Amsterdam The Netherlands Email: media@climate-kic.org Website changes We may update the website from time to",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-8ab6567444",
+      "url": "https://www.climate-kic.org/open-call/open-call-for-new-investment-partners-to-join-the-eit-climate-kic-investing-for-1-5c-initiative/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "investments@climate-kic.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9dda253372",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "material which appears on the website, please contact media@climate-kic.org . Hyperlinking to the website You may link to our home",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-b12ca155aa",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "than that set out above, please address your request to media@climate-kic.org . Hyperlinks to other Websites Where the website contains",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-dddacfa058",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "media@climate-kic.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-e9bacb3bd6",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "code or password, you must promptly notify us at media@climate-kic.org . You are responsible for making all arrangements",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-fa99166130",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "of Climate-KIC or third party logos should be emailed to media@climate-kic.org . Please ensure that you tell us how and why you wish to",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-398c115806",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "approach through live workshop experiences (online or in-person) complemented by self-paced e-learning training modules.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-48894db48a",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "weeks for some of our programmes, encompassing both in-person and online components. Participants are expected to engage",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-52c5de509b",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "the Climate KIC Academy is delivered primarily following a hybrid approach through live workshop experiences (online or",
+      "page": "terms"
+    },
+    {
       "id": "check-format-5d3ff36795",
       "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
       "title": "Climate-KIC — application page",
@@ -48,13 +144,6 @@
       "page": "application"
     },
     {
-      "id": "check-format-dd095eabdc",
-      "url": "https://www.climate-kic.org/events/msca-eu-green-deal-cluster-event/",
-      "title": "Climate-KIC — terms page",
-      "excerpt": "pollution, climate action and green transport. A Virtual Exhibition will showcase a great variety of additional R&I",
-      "page": "terms"
-    },
-    {
       "id": "check-name-c68c7a8e9f",
       "url": "https://www.climate-kic.org/",
       "title": "Climate-KIC — homepage",
@@ -62,11 +151,18 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-20fc9e710f",
-      "url": "https://www.climate-kic.org/events/eucirculartalks-industrial-symbiosis-a-tool-for-the-green-deal/",
+      "id": "check-portfolio-1857ef6539",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
       "title": "Climate-KIC — terms page",
       "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1a093da652",
+      "url": "https://www.climate-kic.org/open-call/climaccelerator-organisers-europe-deadline-extended/",
+      "title": "Climate-KIC — batches page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "batches"
     },
     {
       "id": "check-portfolio-333f6870ba",
@@ -76,6 +172,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-38d63fe96f",
+      "url": "https://www.climate-kic.org/open-call/netzerocities-call-for-pilot-cities-cohort-2-2023/",
+      "title": "Climate-KIC — batches page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-428c485678",
       "url": "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
       "title": "Climate-KIC — application page",
@@ -83,25 +186,11 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-4e6f584d64",
-      "url": "https://www.climate-kic.org/events/innovation-entrepreneurship-investment-climate-solutions/",
-      "title": "Climate-KIC — terms page",
+      "id": "check-portfolio-4b65c2f79b",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-naled/",
+      "title": "Climate-KIC — batches page",
       "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-52da33d7d2",
-      "url": "https://www.climate-kic.org/events/circular-investment-readiness-network-cirn-cities-enabling-local-start-ups/",
-      "title": "Climate-KIC — terms page",
-      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-5f5859e325",
-      "url": "https://www.climate-kic.org/events/community-connect-unpacking-the-eu-clean-industrial-deal/",
-      "title": "Climate-KIC — terms page",
-      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
-      "page": "terms"
+      "page": "batches"
     },
     {
       "id": "check-portfolio-605d0a95ac",
@@ -111,25 +200,18 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-71982c8405",
-      "url": "https://www.climate-kic.org/events/innovation-and-investment-in-the-energy-transition/",
-      "title": "Climate-KIC — terms page",
+      "id": "check-portfolio-77dfd81be3",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-aprrn/",
+      "title": "Climate-KIC — batches page",
       "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
-      "page": "terms"
+      "page": "batches"
     },
     {
-      "id": "check-portfolio-851b93a373",
-      "url": "https://www.climate-kic.org/news/climathon-opens-applications-2017-city-hosts/",
-      "title": "Climate-KIC — application page",
+      "id": "check-portfolio-84e8916719",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-pc/",
+      "title": "Climate-KIC — batches page",
       "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-861a19274f",
-      "url": "https://www.climate-kic.org/news/call-for-applications-climate-kic-accelerator-programme-recruits-new-start-ups-in-france/",
-      "title": "Climate-KIC — application page",
-      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
-      "page": "application"
+      "page": "batches"
     },
     {
       "id": "check-portfolio-882952764b",
@@ -139,39 +221,81 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-ab7f0776ad",
-      "url": "https://www.climate-kic.org/events/apply-for-accelerator-programme-in-germany-switzerland-austria/",
-      "title": "Climate-KIC — application page",
-      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-af57cfc725",
-      "url": "https://www.climate-kic.org/events/masterclass-sales-hacking-deal-closing-with-steli-efti/",
+      "id": "check-portfolio-985578b011",
+      "url": "https://www.climate-kic.org/policies/",
       "title": "Climate-KIC — terms page",
       "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-ba5120e142",
-      "url": "https://www.climate-kic.org/events/msca-eu-green-deal-cluster-event/",
+      "id": "check-portfolio-a29513cb6b",
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
       "title": "Climate-KIC — terms page",
       "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-d070d8022a",
-      "url": "https://www.climate-kic.org/events/idealab-our-future-after-coal/",
+      "id": "check-portfolio-b6a0630efc",
+      "url": "https://www.climate-kic.org/open-call/pilot-cities-programme-call-for-pilot-cities-cohort-3-2024/",
+      "title": "Climate-KIC — batches page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-cb9a95476a",
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "View more → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-cf4e5e97c9",
+      "url": "https://www.climate-kic.org/open-call/open-call-for-new-investment-partners-to-join-the-eit-climate-kic-investing-for-1-5c-initiative/",
       "title": "Climate-KIC — terms page",
       "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
       "page": "terms"
     },
     {
-      "id": "check-route-6921d5c7db",
-      "url": "https://www.climate-kic.org/news/call-for-applications-climate-kic-accelerator-programme-recruits-new-start-ups-in-france/",
-      "title": "Climate-KIC — application page",
-      "excerpt": "Call for Application → https://www.climate-kic.org/wp-content/uploads/2017/04/Call-for-Application_CO.doc",
-      "page": "application"
+      "id": "check-portfolio-d05fd51470",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d430f4fa45",
+      "url": "https://www.climate-kic.org/open-call/pilot-cities-programme-cohort-3-2024/",
+      "title": "Climate-KIC — batches page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-e1929c8a2d",
+      "url": "https://www.climate-kic.org/open-call/independent-experts-netzerocities-climate-city-contract-investment-plans/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e36edcde29",
+      "url": "https://www.climate-kic.org/open-call/independent-experts-netzerocities-climate-city-contract-investment-plans-2/",
+      "title": "Climate-KIC — terms page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e771caacbc",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-jfw/",
+      "title": "Climate-KIC — batches page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-eb624951f9",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-da/",
+      "title": "Climate-KIC — batches page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "batches"
     },
     {
       "id": "check-route-87453d28ba",
@@ -179,13 +303,6 @@
       "title": "Climate-KIC — homepage",
       "excerpt": "https://www.climate-kic.org",
       "page": "details"
-    },
-    {
-      "id": "check-route-e6cd0508ee",
-      "url": "https://www.climate-kic.org/news/call-for-applications-climate-kic-accelerator-programme-recruits-new-start-ups-in-france/",
-      "title": "Climate-KIC — application page",
-      "excerpt": "Application template → https://www.climate-kic.org/wp-content/uploads/2017/04/Start-up-Acceleration-Application-Template-2017.docx",
-      "page": "application"
     }
   ],
   "pageQuotes": [
@@ -196,22 +313,40 @@
       "excerpt": "Climate KIC | Europe’s leading climate innovation agency and community Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Europe’s leading climate innovation agency and community Learn more News & stories View all news Featured Climate KIC co-leads CO-WATERS project to support waterfront cities, regions, islands and ports in achieving the EU Ocean and Water Mission objectives Featured Changing tides: a shared vision for climate innovation for the Port of Piraeus in Greece Featured Seaweed, fisheries and coastal eco-tourism: how Zanzibar’s innovators are rethinking the blue economy Featured Romania Recycllux is making marine plastic accountability real Featured Unlocking climate innovation in Tanzania: why access to finance is the missing link 09 Nov 2026 NetZeroCities: From paper to pavement. Europe’s"
     },
     {
-      "id": "check-page-648ff3c103",
-      "url": "https://www.climate-kic.org/events/apply-for-accelerator-programme-in-germany-switzerland-austria/",
-      "page": "application",
-      "excerpt": "Apply for our Accelerator Programme in Germany, Switzerland and Austria! | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event Apply for our Accelerator Programme in Germany, Switzerland and Austria! LOCATION Germany, Switzerland, Austria DATE 29 Jul 2018 REGISTER FOR THIS EVENT Our Call for Applications for a new intake of cleantech start-ups into the Climate KIC Accelerator Winter 2018 Programme is now open. Are you a cleantech or green technology start-up? If so, you are encouraged to visit our new website and apply to the next critical stage of your start-up journey. You have from now until 29 July 23:59 CET 2018 to apply. Alternatively, do you know of good cleantech or green technology start-ups within your network? If so, please share the details of the call with them – our website is"
+      "id": "check-page-a1fd5631fb",
+      "url": "https://www.climate-kic.org/",
+      "page": "details",
+      "excerpt": "How we work 2/3 Our Community The power of community Our Community is a transformational force that supports the most ambitious climate leaders to create change at the speed and scale required for systemic transformation."
     },
     {
-      "id": "check-page-c6bc473f82",
-      "url": "https://www.climate-kic.org/news/call-for-applications-climate-kic-accelerator-programme-recruits-new-start-ups-in-france/",
-      "page": "application",
-      "excerpt": "Call for applications: Climate-KIC Accelerator Programme recruits new start-ups in France | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Call for applications: Climate-KIC Accelerator Programme recruits new start-ups in France News 02 May 2017 Climate-KIC France is seeking highly motivated and committed climate entrepreneurs for its start-up Accelerator programme . Cleantech and greentech projects are welcome. Candidates to this call just need to have a breakthrough business idea with a substantial impact on climate mitigation and/or adaptation. The Climate-KIC France Accelerator Programme offers support to start-ups development towards their first customers, during one year. The selected entrepreneurs benefit from coaching, consulting, networking and financial support. Through the"
+      "id": "check-page-e5b147afea",
+      "url": "https://www.climate-kic.org/",
+      "page": "details",
+      "excerpt": "For investors Our open calls Join our team How we work Bridging the 'messy middle' To bridge the gap between climate ambition and current reality, we must embrace the complexity and unpredictability of the ‘messy middle:’ the place of on-going tensions and altering timeframes between where we are and where we need to be."
     },
     {
-      "id": "check-page-07f336320c",
-      "url": "https://www.climate-kic.org/news/climathon-opens-applications-2017-city-hosts/",
-      "page": "application",
-      "excerpt": "Climathon opens applications for 2017 city hosts | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Climathon opens applications for 2017 city hosts News 19 Apr 2017 Climate-KIC’s hugely successful Climathon programme opens for city host applications this week. Climate-KIC is looking for city’s around the world to join the climathon movement, and drive climate action. [xyz-ihs snippet=”Climathon-2017-CTA”] What is Climathon? Climathon is a global 24-hour climate change hackathon which will take place simultaneously in major cities around the world on 27 October 2017. It brings together the challenges of the world’s cities with the people who have the passion and ability to solve them. Climathon attracts innovators, entrepreneurs, students and professionals to create innovative solutions to"
+      "id": "check-page-656759f8a8",
+      "url": "https://www.climate-kic.org/",
+      "page": "details",
+      "excerpt": "How we work Our Community The power of community Our Community is a transformational force that supports the most ambitious climate leaders to create change at the speed and scale required for systemic transformation."
+    },
+    {
+      "id": "check-page-1fd29a0fd8",
+      "url": "https://www.climate-kic.org/",
+      "page": "details",
+      "excerpt": "For investors Our open calls Join our team Europe’s leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit with public benefit status (ANBI)."
+    },
+    {
+      "id": "check-page-1aee21edf0",
+      "url": "https://www.climate-kic.org/",
+      "page": "details",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
+    },
+    {
+      "id": "check-page-07be4d67c4",
+      "url": "https://www.climate-kic.org/",
+      "page": "details",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
     },
     {
       "id": "check-page-e32ce78d64",
@@ -220,10 +355,118 @@
       "excerpt": "Design and run your own circular economy programme; applications open for Entrepreneurship Support Organisations (ESOs) in India and Kenya | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content OPEN CALL Design and run your own circular economy programme; applications open for Entrepreneurship Support Organisations (ESOs) in India and Kenya CALL FOR Entrepreneurship Support Organisations in India and Kenya DEADLINE 2026-04-16 00:00: Midnight, CET CONTACT eva.ros@climate-kic.org HOW TO APPLY Details The Circular Economy Innovation Cluster (CEIC) is a multi-year programme led by Climate KIC and partners GrowthAfrica (Nairobi, Kenya) and SecondMuse (Bengaluru, India) and funded by IKEA Foundation. We are inviting Entrepreneurship Support Organisations (ESOs) in Bengaluru, India, and Nairobi, Kenya, to"
     },
     {
+      "id": "check-page-ae60505538",
+      "url": "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
+      "page": "application",
+      "excerpt": "We are inviting Entrepreneurship Support Organisations (ESOs) in Bengaluru, India, and Nairobi, Kenya, to apply for the Circular Economy & Social Impact Programme for ESOs and the opportunity to design and run their own circular economy programme for entrepreneurs."
+    },
+    {
+      "id": "check-page-26fb3e4103",
+      "url": "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
+      "page": "application",
+      "excerpt": "Programme activities Selected organisations will join the Circular Economy & Social Impact Masterclasses running between late April and July 2026."
+    },
+    {
+      "id": "check-page-b7a581e68c",
+      "url": "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
+      "page": "application",
+      "excerpt": "The learning modules draw on Climate KIC’s technical expertise and three years of hands-on experience supporting circular ventures in both ecosystems between 2023 and 2025."
+    },
+    {
+      "id": "check-page-865af0858d",
+      "url": "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
+      "page": "application",
+      "excerpt": "Upon successful completion of the masterclasses, the ESOs are eligible to apply for a grant of up to 50.000 EUR (per city) to design and run a dedicated entrepreneurship programme focused on circular economy and social impact."
+    },
+    {
+      "id": "check-page-378e0e4df2",
+      "url": "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
+      "page": "application",
+      "excerpt": "We accept applications from organisations (both for profit and non-profit), that actively support ventures and entrepreneurs through support programmes such as incubators and accelerators."
+    },
+    {
+      "id": "check-page-5afe903822",
+      "url": "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
+      "page": "application",
+      "excerpt": "Eligible organisations need to showcase a strong motivation to work on climate innovation, circular economy and social impact and a strategic vision on how these aspects are being (or will be) implemented in the organisation."
+    },
+    {
+      "id": "check-page-aebb536779",
+      "url": "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
+      "page": "application",
+      "excerpt": "Geographic eligibility: We welcome applications from India and Kenya with a specific focus on ESO’s supporting ventures in Bengaluru and Nairobi. *More details on eligibility criteria can be found in the open-call documen t."
+    },
+    {
+      "id": "check-page-82a57f3156",
+      "url": "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
+      "page": "application",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
+    },
+    {
+      "id": "check-page-608ae337fa",
+      "url": "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
+      "page": "application",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
+    },
+    {
       "id": "check-page-5f562fa676",
       "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
       "page": "application",
       "excerpt": "EIT Community New European Bauhaus Call for Applications: 2027 Catalyse NEB | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content OPEN CALL EIT Community New European Bauhaus Call for Applications: 2027 Catalyse NEB CALL FOR Start-ups DEADLINE 2027-01-15 17:00: CET CONTACT neb@eitcommunity.eu HOW TO APPLY Details This is a call for applicants to be part of the 2027 cohort of the EIT Community New European Bauhaus (NEB)’s Catalyse NEB programme, a start-up accelerator for ventures working to implement NEB values across Europe. Catalyse NEB is the EIT Community New European Bauhaus accelerator for start-ups integrating sustainability, aesthetics and inclusion into their businesses, products and services. Built on the foundation of the New European Bauhaus (NEB) – Europe’s creative engine for turning"
+    },
+    {
+      "id": "check-page-e30a96e780",
+      "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
+      "page": "application",
+      "excerpt": "Built on the foundation of the New European Bauhaus (NEB) – Europe’s creative engine for turning the Green Deal into everyday reality, rethinking how we build our cities, produce materials, and shape communities – Catalyse NEB helps you scale your business and your purpose, while connecting you to Europe’s most vibrant innovation community."
+    },
+    {
+      "id": "check-page-544a703f69",
+      "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
+      "page": "application",
+      "excerpt": "Each selected start-up receives a €22,000 grant and a range of accelerator services: Tailored one-to-one business and design mentoring."
+    },
+    {
+      "id": "check-page-a80d3c551c",
+      "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
+      "page": "application",
+      "excerpt": "Workshops covering business development, communications and New European Bauhaus values."
+    },
+    {
+      "id": "check-page-fabc877db3",
+      "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
+      "page": "application",
+      "excerpt": "Have received, or be seeking, venture funding and be at pre-seed, seed or, exceptionally, Series A stage, with no more than €1 million raised in total."
+    },
+    {
+      "id": "check-page-c581ae1b9e",
+      "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
+      "page": "application",
+      "excerpt": "Address at least one strategic focus area of a participating KIC (Climate KIC, EIT Food or EIT Urban Mobility )."
+    },
+    {
+      "id": "check-page-d6797d9ff9",
+      "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
+      "page": "application",
+      "excerpt": "Complete the application form on the Awards Platform , select at least one strategic focus area, and submit: Proof of incorporation."
+    },
+    {
+      "id": "check-page-7333a561fe",
+      "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
+      "page": "application",
+      "excerpt": "Register and join us at the upcoming info session on 25 November 2026: https://events.teams.microsoft.com/event/143d4a18-6701-4056-a31d-a1f78f9730cd@28818939-0afb-44b2-b6c2-8eb0a57cca64?source=copyLinkLegacyShareLinkDialog Europe’s leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit with public benefit status (ANBI)."
+    },
+    {
+      "id": "check-page-ce23a3224b",
+      "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
+      "page": "application",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
+    },
+    {
+      "id": "check-page-fe9c76fa32",
+      "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
+      "page": "application",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
     },
     {
       "id": "check-page-90ad89f179",
@@ -232,67 +475,661 @@
       "excerpt": "Start-ups: Applications for ClimateLaunchpad 2026 | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content OPEN CALL Start-ups: Applications for ClimateLaunchpad 2026 CALL FOR Start-ups DEADLINE 2026-05-15 23:59: CET CONTACT info@climatelaunchpad.org HOW TO APPLY Details Since 2014, ClimateLaunchpad has operated across 97 countries as the world’s largest green business ideas competition. We do not just talk about change; we are actively co-creating the next economy by providing the expertise, skills, and validation required to turn climate concepts into formidable ventures. Through our year-round programme and global pitching events, we have helped over 5,000 teams perfect their business models and sharpen their pitches. Our track record is defined by real world impact, with 500 training bootcamps"
     },
     {
-      "id": "check-page-b394b4dc76",
-      "url": "https://www.climate-kic.org/events/circular-investment-readiness-network-cirn-cities-enabling-local-start-ups/",
-      "page": "terms",
-      "excerpt": "Circular Investment Readiness Network (CIRN) – Cities enabling local start-ups | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event Circular Investment Readiness Network (CIRN) – Cities enabling local start-ups LOCATION Online DATE 12 Jun 2025 REGISTER FOR THIS EVENT Cities have the power to shape the future of circular entrepreneurship, but how can they turn ambition into real support? Join us on 12 June for the next session of the Circular Investment Readiness Network: Cities enabling local start-ups 10:00–11:30 CEST | Online | Free to join In this session, we’ll explore how local governments, incubators, and entrepreneurs can work together to build stronger circular ecosystems — from funding and policy frameworks to practical incubation strategies. Hear real stories, share challenges,"
+      "id": "check-page-cdc7f66d68",
+      "url": "https://www.climate-kic.org/open-call/start-ups-applications-for-climatelaunchpad-2026/",
+      "page": "application",
+      "excerpt": "By offering early stage startups the necessary avenues for funding and exposure, we continue to empower a global movement of entrepreneurs who are pitching in for the planet."
     },
     {
-      "id": "check-page-8bb85fc226",
-      "url": "https://www.climate-kic.org/events/community-connect-unpacking-the-eu-clean-industrial-deal/",
-      "page": "terms",
-      "excerpt": "Community CONNECT: Unpacking the EU Clean Industrial Deal | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event Community CONNECT: Unpacking the EU Clean Industrial Deal LOCATION Zoom DATE 16h-17h30 CET REGISTER FOR THIS EVENT The European Commission has just unveiled two proposals meant to impact the European industrial landscape: the Clean Industrial Deal and the Omnibus Simplification Package . Both highly anticipated, they propose a shift in direction of Europe and the EU Commission’s work in years to come. Being a community of climate action, we ask ourselves how this will affect our work and impact? Where does this leave businesses, innovators, universities and key stakeholders who are committed to the green transformation of Europe? Join our Community CONNECT on Thursday 20 March! We"
+      "id": "check-page-b01b225a05",
+      "url": "https://www.climate-kic.org/open-call/start-ups-applications-for-climatelaunchpad-2026/",
+      "page": "application",
+      "excerpt": "Apply to the 2026 cohort and get a chance to: Receive expert coaching and mentors to advance your idea."
     },
     {
-      "id": "check-page-955793441f",
-      "url": "https://www.climate-kic.org/events/eucirculartalks-industrial-symbiosis-a-tool-for-the-green-deal/",
-      "page": "terms",
-      "excerpt": "#EUCircularTalks: Industrial symbiosis: A tool for the Green Deal | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event #EUCircularTalks: Industrial symbiosis: A tool for the Green Deal LOCATION Online DATE 16 Jun 2021 REGISTER FOR THIS EVENT Moving to more circular economy models is one of the European circular economic community’s main objectives today. This transition promises a brighter future for the European economy. By helping to decouple economic growth from resource use and its impacts, the circular economy offers the prospect of real sustainable development. Industrial Symbiosis is a way to achieve a more sustainable and integrated industrial system, which identifies business opportunities that leverage underutilised resources. Stakeholders in related sectors collaborate in order"
+      "id": "check-page-896e14b42a",
+      "url": "https://www.climate-kic.org/open-call/start-ups-applications-for-climatelaunchpad-2026/",
+      "page": "application",
+      "excerpt": "To pitch live at the Global Grand Final in Singapore and compete for top prizes."
     },
     {
-      "id": "check-page-660f718fdf",
-      "url": "https://www.climate-kic.org/events/idealab-our-future-after-coal/",
-      "page": "terms",
-      "excerpt": "IdeaLab: Our Future After Coal | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event IdeaLab: Our Future After Coal LOCATION Online DATE 24-26 November from 10:00 to 16:00 CET REGISTER FOR THIS EVENT Ideation of experiments for coal regions – online sandpit workshop & funding competition The IdeaLab is a highly interactive 3-day online workshop with ideation of experiments for coal regions and a funding competition for grants. The event is organized as part of the CEE Climate Community Lab. During this event, participants will form international teams and collaborate with the help of experienced facilitators and mentors to co-develop projects that: Build positive attitudes towards the decarbonisation process in coal regions, Help coal region residents define a new identity that meets to the"
+      "id": "check-page-5a70236d8b",
+      "url": "https://www.climate-kic.org/open-call/start-ups-applications-for-climatelaunchpad-2026/",
+      "page": "application",
+      "excerpt": "The programme Step 0 – Start learning: Mini-course Step 1 – Build your idea: Boot Camp Step 2 – Test and refine: Follow-up coaching and National Finals Step 3 – Compete internationally: Regional Finals Step 4 – The global stage: Global Grand Final More information here ."
     },
     {
-      "id": "check-page-04d93d05b7",
-      "url": "https://www.climate-kic.org/events/innovation-and-investment-in-the-energy-transition/",
-      "page": "terms",
-      "excerpt": "Innovation and Investment in the Energy Transition | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event Innovation and Investment in the Energy Transition LOCATION Helsinki DATE 20 November, 8:30 - 11:00 (GMT+2) REGISTER FOR THIS EVENT Climate KIC will be co-hosting an official Slush side event: Innovation and Investment in the Energy Transition at the Energy Shift Forum Helsinki . The event brings together a global room of investors, innovators, and energy operators to explore how collaboration between scale-ups, corporates, and capital can accelerate innovation in the clean energy transition. ​Participants gain behind-the-scenes insights into how energy scale-ups secure transformative investment and meet the leading investors shaping the future of the energy transition. ​​The program"
+      "id": "check-page-d025ec1d1c",
+      "url": "https://www.climate-kic.org/open-call/start-ups-applications-for-climatelaunchpad-2026/",
+      "page": "application",
+      "excerpt": "Europe’s leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit with public benefit status (ANBI)."
     },
     {
-      "id": "check-page-960aa994a5",
-      "url": "https://www.climate-kic.org/events/innovation-entrepreneurship-investment-climate-solutions/",
-      "page": "terms",
-      "excerpt": "Innovation, Entrepreneurship and Investment for Climate Solutions | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event Innovation, Entrepreneurship and Investment for Climate Solutions DATE 11 Nov 2017 11 November | 9.30am – 10.30am Fiji Pavilion Innovation is integral to building a greater resilience of vulnerable nations to the impacts of climate change, and infusing entrepreneurship and investment with the right climate innovations will fast-track the development and deployment of climate solutions. The international community is working together to further strengthen the innovation & entrepreneurship “ecosystems” that have the potential to not only provide climate solutions but further catalyze next steps to future economies with net zero greenhouse gas emissions, in an effort to limit"
+      "id": "check-page-33f389e20f",
+      "url": "https://www.climate-kic.org/open-call/start-ups-applications-for-climatelaunchpad-2026/",
+      "page": "application",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
     },
     {
-      "id": "check-page-0fb6cf6da0",
-      "url": "https://www.climate-kic.org/events/masterclass-sales-hacking-deal-closing-with-steli-efti/",
-      "page": "terms",
-      "excerpt": "FULLY BOOKED Masterclass: Sales Hacking & Deal Closing with Steli Efti | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event FULLY BOOKED Masterclass: Sales Hacking & Deal Closing with Steli Efti DATE 28 Sep 2015 This masterclass is fully booked, so registration is closed! Close more deals & make more sales! Programme Outline What you will learn in this workshop: Why engineers speak a different language than sales people; How one can get over the reluctance to do sales to sell more software (without selling their souls); Tactics for getting over the pain of rejection when doing sales calls (and sales generally); How to qualify prospects so they don’t waste time pursuing deals which they’d never, ever close and can instead concentrate on the deals which their personal attention will cause to"
+      "id": "check-page-c14c07f56a",
+      "url": "https://www.climate-kic.org/open-call/start-ups-applications-for-climatelaunchpad-2026/",
+      "page": "application",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
     },
     {
-      "id": "check-page-800f24bd64",
-      "url": "https://www.climate-kic.org/events/msca-eu-green-deal-cluster-event/",
+      "id": "check-page-496b912da0",
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
       "page": "terms",
-      "excerpt": "MSCA - EU Green Deal Cluster event | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event MSCA – EU Green Deal Cluster event LOCATION Online DATE 6-7 July 2021 REGISTER FOR THIS EVENT The European Commission and the European Research Executive Agency (REA) are organising a “European Green Deal Cluster Event” on 6-7 July 2021 . The event will bring together projects and researchers funded under the Marie Skłodowska-Curie Actions (MSCA), as well as other research and innovation initiatives under the remit of the European Commission’s Directorate-General for Education, Culture, Youth and Sport. These include the European Institute of Innovation and Technology (EIT), European University Alliances , Erasmus+ and Creative Europe projects. The Green Deal cluster event is part of the EU’s"
+      "excerpt": "Invest with us | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Get involved Invest with us Get involved Invest with us Climate KIC welcomes investors who want to work together on building a climate-positive new normal. That includes angel investors looking to invest in our start-ups, corporates looking for novel solutions to their challenges and institutional investors looking to invest in large-scale city transformations. Register your interest with us via this form so our investment team can understand your priorities. Register here Investing for 1.5C To solve complex problems, you need to look at things differently. Climate KIC is bringing systems thinking to our investment activity to develop a new way of thinking about investing in a better tomorrow. Climate KIC partners closely with a"
+    },
+    {
+      "id": "check-page-3f4d077c8a",
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
+      "page": "terms",
+      "excerpt": "Climate KIC partners closely with a select group of committed impact investment funds via our Investing for 1.5C initiative."
+    },
+    {
+      "id": "check-page-64d514a4d0",
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
+      "page": "terms",
+      "excerpt": "Almanac Ventures and UnaTerra are founding partners in the initiative and work with us daily to advance climate action."
+    },
+    {
+      "id": "check-page-450b3ad186",
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
+      "page": "terms",
+      "excerpt": "Climate KIC leads the initiative and provides the partners with deal flow, strategy support, climate impact services, and growth support to portfolio companies."
+    },
+    {
+      "id": "check-page-e79794c207",
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
+      "page": "terms",
+      "excerpt": "At the same time, Almanac Ventures and UnaTerra each bring a unique focus on a different aspect of the climate innovation journey by looking at a particular sector, geography, or stage of development."
+    },
+    {
+      "id": "check-page-cced7770a7",
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
+      "page": "terms",
+      "excerpt": "Our founding partners Almanac Ventures are on the hunt for bold Deeptech solutions — real scientific breakthroughs — that can decarbonise industrial sectors and supply chains."
+    },
+    {
+      "id": "check-page-924aaab728",
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
+      "page": "terms",
+      "excerpt": "Almanac Ventures mission is to make a real, positive impact on the climate while backing ventures that are financially sustainable, wildly scalable, and primed for killer returns in the future economy."
+    },
+    {
+      "id": "check-page-28ac3fa97f",
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
+      "page": "terms",
+      "excerpt": "Since its inception – using the UN’s Sustainable Development Goals (SDGs) as a blueprint for our investment strategy – they have been helping to create the next generation of industry leading impact businesses dedicated to solving the world’s toughest challenges, starting with preserving and restoring biodiversity while also mitigating climate change."
+    },
+    {
+      "id": "check-page-653e55e2a2",
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
+      "page": "terms",
+      "excerpt": "Una Terra’s ambition is to not only invest capital, but also provide direct support and capabilities, education and leadership to companies that want to transform entire industries with commercial technology and innovation, with asset-light models that can be scaled through marketing, commercial introductions, partnerships, new market entry and accelerated go to market."
+    },
+    {
+      "id": "check-page-c1cea37b57",
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
+      "page": "terms",
+      "excerpt": "Visit Una Terra Open call for investment partners Climate KIC has a rolling open call for investment partners."
+    },
+    {
+      "id": "check-page-227588be75",
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
+      "page": "terms",
+      "excerpt": "Community Member – the Climate KIC community is a network of members interested in deep collaboration interested in climate action and deep decarbonisation through systems innovation."
+    },
+    {
+      "id": "check-page-59dd9c676c",
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
+      "page": "terms",
+      "excerpt": "Investing for 1.5C partner – a full scale and long-term partnership between Climate KIC and investment fund managers interested in strategic decarbonisation opportunities."
+    },
+    {
+      "id": "check-page-7575ca5c4d",
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
+      "page": "terms",
+      "excerpt": "Register here Seeking investment Start-ups seeking investment are invited to submit their pitch deck to the Climate KIC Investment team for review."
+    },
+    {
+      "id": "check-page-894b1b7032",
+      "url": "https://www.climate-kic.org/open-call/independent-experts-netzerocities-climate-city-contract-investment-plans-2/",
+      "page": "terms",
+      "excerpt": "Independent Experts NetZeroCities Climate City Contract Investment Plans | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content OPEN CALL Independent Experts NetZeroCities Climate City Contract Investment Plans CALL FOR Applications DEADLINE 2023-11-06 17:00: CET HOW TO APPLY Details The purpose of this call is to extend the Climate KIC pool of Independent Experts (Experts) to support the evaluation of NetZeroCities (NZC) Climate City Contract (CCC) Investment Plans, which are submitted by Mission Cities as part of the Climate City Contracting process. Selected Experts from this call will be placed in the Climate KIC Experts pool and receive a three-year term Framework Agreement Contract that covers the general terms and conditions for providing Expert services to Climate KIC. How to apply Read the"
+    },
+    {
+      "id": "check-page-63ab284c88",
+      "url": "https://www.climate-kic.org/open-call/independent-experts-netzerocities-climate-city-contract-investment-plans-2/",
+      "page": "terms",
+      "excerpt": "Europe’s leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit with public benefit status (ANBI)."
+    },
+    {
+      "id": "check-page-d8407bad9a",
+      "url": "https://www.climate-kic.org/open-call/independent-experts-netzerocities-climate-city-contract-investment-plans-2/",
+      "page": "terms",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
+    },
+    {
+      "id": "check-page-deb09a0df4",
+      "url": "https://www.climate-kic.org/open-call/independent-experts-netzerocities-climate-city-contract-investment-plans-2/",
+      "page": "terms",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
+    },
+    {
+      "id": "check-page-9e8058c2d5",
+      "url": "https://www.climate-kic.org/open-call/independent-experts-netzerocities-climate-city-contract-investment-plans/",
+      "page": "terms",
+      "excerpt": "Independent Experts NetZeroCities Climate City Contract Investment Plans | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content OPEN CALL Independent Experts NetZeroCities Climate City Contract Investment Plans CALL FOR Applications Re-release DEADLINE 2023-10-31 00:00: CET HOW TO APPLY Details The purpose of this re-released call is to extend the Climate KIC pool of Independent Experts (Experts) to support the evaluation of NetZeroCities (NZC) Climate City Contract (CCC) Investment Plans, which are submitted by Mission Cities as part of the Climate City Contracting process. Selected Experts from this call will be placed in the Climate KIC Experts pool and receive a three-year term Framework Agreement Contract that covers the general terms and conditions for providing Expert services to Climate"
+    },
+    {
+      "id": "check-page-92c7add204",
+      "url": "https://www.climate-kic.org/open-call/independent-experts-netzerocities-climate-city-contract-investment-plans/",
+      "page": "terms",
+      "excerpt": "Selected Experts from this call will be placed in the Climate KIC Experts pool and receive a three-year term Framework Agreement Contract that covers the general terms and conditions for providing Expert services to Climate KIC."
+    },
+    {
+      "id": "check-page-024cf5f468",
+      "url": "https://www.climate-kic.org/open-call/independent-experts-netzerocities-climate-city-contract-investment-plans/",
+      "page": "terms",
+      "excerpt": "Europe’s leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit with public benefit status (ANBI)."
+    },
+    {
+      "id": "check-page-dad692d0e2",
+      "url": "https://www.climate-kic.org/open-call/independent-experts-netzerocities-climate-city-contract-investment-plans/",
+      "page": "terms",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
+    },
+    {
+      "id": "check-page-ecae1aff08",
+      "url": "https://www.climate-kic.org/open-call/independent-experts-netzerocities-climate-city-contract-investment-plans/",
+      "page": "terms",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
+    },
+    {
+      "id": "check-page-8b7c7e2be9",
+      "url": "https://www.climate-kic.org/open-call/open-call-for-new-investment-partners-to-join-the-eit-climate-kic-investing-for-1-5c-initiative/",
+      "page": "terms",
+      "excerpt": "Open call for new investment partners to join the Climate KIC Investing for 1.5C initiative | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content OPEN CALL Open call for new investment partners to join the Climate KIC Investing for 1.5C initiative CALL FOR Expression of Interest DEADLINE 2024-04-14 17:00: CET CONTACT investments@climate-kic.org HOW TO APPLY Details Climate KIC is conducting an open search for new investment partners to further expand the scope of our investment activities under the Investing for 1.5C initiative. This call for expressions of interest (EOI) is seeking to identify new commercial partners who are one of the following: A Venture Capital fund interested in investing in start-ups through a strategic innovation lens. A Venture Debt provider with the ability to support the"
+    },
+    {
+      "id": "check-page-ea782783c1",
+      "url": "https://www.climate-kic.org/open-call/open-call-for-new-investment-partners-to-join-the-eit-climate-kic-investing-for-1-5c-initiative/",
+      "page": "terms",
+      "excerpt": "A Venture Debt provider with the ability to support the scaling of novel solutions at an early stage."
+    },
+    {
+      "id": "check-page-70621b71f9",
+      "url": "https://www.climate-kic.org/open-call/open-call-for-new-investment-partners-to-join-the-eit-climate-kic-investing-for-1-5c-initiative/",
+      "page": "terms",
+      "excerpt": "A Corporate Venture Capital team with a strategic interest in decarbonisation of a particular value chain."
+    },
+    {
+      "id": "check-page-994f772580",
+      "url": "https://www.climate-kic.org/open-call/open-call-for-new-investment-partners-to-join-the-eit-climate-kic-investing-for-1-5c-initiative/",
+      "page": "terms",
+      "excerpt": "Call documents Call for Expression of Interest How to apply Applications may be submitted via email following the instructions in the call to investments@climate-kic.org."
+    },
+    {
+      "id": "check-page-7c87ab9dc1",
+      "url": "https://www.climate-kic.org/open-call/open-call-for-new-investment-partners-to-join-the-eit-climate-kic-investing-for-1-5c-initiative/",
+      "page": "terms",
+      "excerpt": "Important dates Deadline: 14 April 2024 17:00 CET Europe’s leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit with public benefit status (ANBI)."
+    },
+    {
+      "id": "check-page-bae6d68f03",
+      "url": "https://www.climate-kic.org/open-call/open-call-for-new-investment-partners-to-join-the-eit-climate-kic-investing-for-1-5c-initiative/",
+      "page": "terms",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
+    },
+    {
+      "id": "check-page-aa53d7290b",
+      "url": "https://www.climate-kic.org/open-call/open-call-for-new-investment-partners-to-join-the-eit-climate-kic-investing-for-1-5c-initiative/",
+      "page": "terms",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
+    },
+    {
+      "id": "check-page-85b9a8e646",
+      "url": "https://www.climate-kic.org/policies/",
+      "page": "terms",
+      "excerpt": "Terms & Conditions | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Below is a complete list of Climate-KIC terms and conditions, as well as an overview of its mandatory policies: 1. Website Terms and Conditions Full Terms and Conditions of Use Acceptable Use Policy Cookie Policy Privacy Policy 2. Other Terms and Conditions PA/GA Pass Through Terms for Service Providers to CKIC PA/GA Pass Through Terms for Recipients of Financial Support to Third Parties (Prizes) PA/GA Pass Through Terms for Recipients of Financial Support to Third Parties (Non-Prizes) EIT KIC Partnership Agreement General Model Grant Agreement Standard Terms and Conditions For Supply of Goods Or Services to Climate-KIC Rules on the eligibility of costs and contributions for EIT grant recipients General provisions of the"
+    },
+    {
+      "id": "check-page-9bb52c12b2",
+      "url": "https://www.climate-kic.org/policies/",
+      "page": "terms",
+      "excerpt": "Europe’s leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit with public benefit status (ANBI)."
+    },
+    {
+      "id": "check-page-c93b558d43",
+      "url": "https://www.climate-kic.org/policies/",
+      "page": "terms",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
+    },
+    {
+      "id": "check-page-94c26e9605",
+      "url": "https://www.climate-kic.org/policies/",
+      "page": "terms",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
+    },
+    {
+      "id": "check-page-7e92a9bbbb",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Terms and Conditions | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Terms & Conditions Terms and Conditions Terms and Conditions This page (together with the documents referred to in it) sets out the terms and conditions (“Terms & Conditions”) on which you may make use of the website at www.climate-kic.org (the “website”) whether as a guest or registered user. Use of our website includes accessing, browsing or registering to use our site. Please read these terms of use carefully before you start to use the website as these will apply to your use of the website. We recommend that you print a copy of this for future reference. Access and use by you of the website constitutes acceptance by you of these Terms & Conditions. If you do not agree to these Terms & Conditions, please refrain from"
+    },
+    {
+      "id": "check-page-abf22be4ba",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "About us and the website The website is a site operated by Climate-KIC Holding B.V. with its registered office located at Plantage Middenlaan 45, 1018 DC Amsterdam, registered with the Dutch Data Protection Authority under registration number 1644350."
+    },
+    {
+      "id": "check-page-be2e028f6b",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "These Terms & Conditions operate for the benefit of Climate-KIC and its affiliated entities."
+    },
+    {
+      "id": "check-page-e555a98f19",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "References to “we” “us” and “our” in these Terms & Conditions shall refer to Climate-KIC and its affiliated entities."
+    },
+    {
+      "id": "check-page-929a36a855",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Contact information Climate-KIC Holding B.V."
+    },
+    {
+      "id": "check-page-d89fb7d5eb",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Plantage Middenlaan 45 1018 DC Amsterdam The Netherlands Email: media@climate-kic.org Website changes We may update the website from time to time and may change the content at any time."
+    },
+    {
+      "id": "check-page-239bb347df",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "If you know or suspect that anyone other than you knows your user identification code or password, you must promptly notify us at media@climate-kic.org ."
+    },
+    {
+      "id": "check-page-3349157345",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Copyright and Intellectual Property Rights Climate-KIC either owns or has the right to use or licence all intellectual property rights in the website, and the material published on it."
+    },
+    {
+      "id": "check-page-401de6ca35",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "These works (including the website www.climate-kic.org ) are protected by copyright laws and treaties around the world."
+    },
+    {
+      "id": "check-page-d6d7d80047",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "You must not use any part of the materials on the website for commercial purposes without obtaining a licence to do so from Climate-KIC or its licensors."
+    },
+    {
+      "id": "check-page-201427af7b",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "The status of Climate-KIC (and that of any identified contributors) as the authors of material on the website must always be acknowledged."
+    },
+    {
+      "id": "check-page-a9c65fa037",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Any names, images and logos identifying Climate-KIC are proprietary marks of Climate-KIC."
+    },
+    {
+      "id": "check-page-1f6e1e618e",
+      "url": "https://www.climate-kic.org/policies/terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Requests for permission to use the logos of Climate-KIC or third party logos should be emailed to media@climate-kic.org ."
+    },
+    {
+      "id": "check-page-04111d08f5",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "page": "terms",
+      "excerpt": "FAQs | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Climate KIC Academy Frequently asked questions Overview About the Academy Learning partners Learning for teams Learning for individuals FAQs General FAQs What is the Climate KIC Academy? The Climate KIC Academy is our capability-building arm under which we build the skills, mindsets and networks necessary to drive the green transition towards a fair and just future within planetary boundaries. It aims to equip leaders with both technical and transversal skills needed to navigate the complex challenges of climate change. Why does it exist? The Climate KIC Academy exists to address the critical shortage of skilled leaders who can effectively collaborate, innovate, and lead in the climate sector. While the technology and ideas are available,"
+    },
+    {
+      "id": "check-page-12eda297c2",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "page": "terms",
+      "excerpt": "The academy is designed to fill this gap and prepare individuals to lead the global climate movement."
+    },
+    {
+      "id": "check-page-b05eaaf516",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "page": "terms",
+      "excerpt": "The duration of the Climate KIC Academy programme varies depending on the specific course or pathway chosen."
+    },
+    {
+      "id": "check-page-2c0d0e4ec2",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "page": "terms",
+      "excerpt": "Partially yes, the Climate KIC Academy is delivered primarily following a hybrid approach through live workshop experiences (online or in-person) complemented by self-paced e-learning training modules."
+    },
+    {
+      "id": "check-page-60a031940a",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "page": "terms",
+      "excerpt": "We do have self-paced courses, mini-courses and micro-credentials as part of Climate KIC Academy wider offering, together with more lengthy and interactive services."
+    },
+    {
+      "id": "check-page-807917a11a",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "page": "terms",
+      "excerpt": "The primary language of delivery for the Climate KIC Academy is English."
+    },
+    {
+      "id": "check-page-9d02ae2198",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "page": "terms",
+      "excerpt": "The EIT Label is the European Institute of Innovation and Technology’s quality certificate for education."
+    },
+    {
+      "id": "check-page-8cc5b32dab",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "page": "terms",
+      "excerpt": "The Climate KIC Academy has been awarded the EIT Label for non-degree programmes."
+    },
+    {
+      "id": "check-page-59ab65250f",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "page": "terms",
+      "excerpt": "FAQs for Learning Partners How can our organisation partner with the Climate KIC Academy?"
+    },
+    {
+      "id": "check-page-6e97957f33",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "page": "terms",
+      "excerpt": "Partners benefit from early access to innovative solutions and enhanced visibility within the climate action community."
+    },
+    {
+      "id": "check-page-dc6e301c87",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "page": "terms",
+      "excerpt": "What benefits do partners gain by collaborating with the Climate KIC Academy?"
+    },
+    {
+      "id": "check-page-a3a52dc554",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "page": "terms",
+      "excerpt": "Climate KIC is Europe’s leading climate innovation agency and community, bridging the gap between climate commitments and current reality."
+    },
+    {
+      "id": "check-page-685f507753",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/faqs/",
+      "page": "terms",
+      "excerpt": "By collaborating with the Climate KIC Academy, partners gain the opportunity to be at the forefront of climate innovation together, engaging with a global network of leaders and experts dedicated to driving meaningful climate action."
+    },
+    {
+      "id": "check-page-215b3c1f92",
+      "url": "https://www.climate-kic.org/open-call/climaccelerator-organisers-europe-deadline-extended/",
+      "page": "batches",
+      "excerpt": "ClimAccelerator Organisers (Europe) – DEADLINE EXTENDED | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content OPEN CALL ClimAccelerator Organisers (Europe) – DEADLINE EXTENDED CALL FOR Expression of Interest DEADLINE 2024-04-01 20:00: CET CONTACT alexandros.nikopoulos@climate-kic.org HOW TO APPLY Details ClimAccelerator is a global programme for start-ups to innovate, catalyse and scale the potential of their climate solutions. We are looking for new Climate KIC partners (impact hubs, incubator and accelerators) to collaborate with us on the European ClimAccelerator programme. Partners must operate within one of the following countries: The Member States (MS) of the European Union (EU) including their outermost regions Third countries associated to Horizon Europe Call documents Call for Expression"
+    },
+    {
+      "id": "check-page-b227874ee6",
+      "url": "https://www.climate-kic.org/open-call/climaccelerator-organisers-europe-deadline-extended/",
+      "page": "batches",
+      "excerpt": "Partners must operate within one of the following countries: The Member States (MS) of the European Union (EU) including their outermost regions Third countries associated to Horizon Europe Call documents Call for Expression of Interest Submission form How to apply Applications may be submitted online via this form ."
+    },
+    {
+      "id": "check-page-99a1fa398c",
+      "url": "https://www.climate-kic.org/open-call/climaccelerator-organisers-europe-deadline-extended/",
+      "page": "batches",
+      "excerpt": "NEW Deadline: 1 April 2024, 20:00 CET Europe’s leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit with public benefit status (ANBI)."
+    },
+    {
+      "id": "check-page-39e802aba1",
+      "url": "https://www.climate-kic.org/open-call/climaccelerator-organisers-europe-deadline-extended/",
+      "page": "batches",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
+    },
+    {
+      "id": "check-page-19ff5c4b8b",
+      "url": "https://www.climate-kic.org/open-call/climaccelerator-organisers-europe-deadline-extended/",
+      "page": "batches",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
+    },
+    {
+      "id": "check-page-81e23c9803",
+      "url": "https://www.climate-kic.org/open-call/netzerocities-call-for-pilot-cities-cohort-2-2023/",
+      "page": "batches",
+      "excerpt": "NetZeroCities – Call for Pilot Cities, Cohort 2 (2023) | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content OPEN CALL NetZeroCities – Call for Pilot Cities, Cohort 2 (2023) CALL FOR Proposals DEADLINE 2023-11-06 12:00: CEST HOW TO APPLY Details The Pilot Cities Programme, Cohort 2 (2023) will run for two years (24 months) from 1 May 2024 to 30 April 2026. The decisions shall be announced on the 22 January 2024. Contracting is expected to take place between 1st February and 1 May 2024. The aim of this call is to select from Mission Cities a cohort of Pilot Cities, which will explore and test pathways to accelerated change towards 2030 climate neutrality goals — relevant to a city’s key emission domains — and to generate accelerated learning that can inform subsequent replication and scaling"
+    },
+    {
+      "id": "check-page-5b4527773c",
+      "url": "https://www.climate-kic.org/open-call/netzerocities-call-for-pilot-cities-cohort-2-2023/",
+      "page": "batches",
+      "excerpt": "The aim of this call is to select from Mission Cities a cohort of Pilot Cities, which will explore and test pathways to accelerated change towards 2030 climate neutrality goals — relevant to a city’s key emission domains — and to generate accelerated learning that can inform subsequent replication and scaling efforts in all other EU cities."
+    },
+    {
+      "id": "check-page-9ea852bbaa",
+      "url": "https://www.climate-kic.org/open-call/netzerocities-call-for-pilot-cities-cohort-2-2023/",
+      "page": "batches",
+      "excerpt": "Only local authorities or city administrations selected to be part of EU Mission for climate-neutral and smart cities by 2030 (Mission Cities) are eligible to apply to, and receive funding under, this Call."
+    },
+    {
+      "id": "check-page-84f808fdf1",
+      "url": "https://www.climate-kic.org/open-call/netzerocities-call-for-pilot-cities-cohort-2-2023/",
+      "page": "batches",
+      "excerpt": "In the case of a group of cities applying together in one proposal, the size of the requested subgrant must follow the award amounts as stated in the Call Guidelines."
+    },
+    {
+      "id": "check-page-f13bedea71",
+      "url": "https://www.climate-kic.org/open-call/netzerocities-call-for-pilot-cities-cohort-2-2023/",
+      "page": "batches",
+      "excerpt": "These organisations could be, for example: research institutions, universities, SMEs, NGOs, associations, citizen groups or other relevant stakeholders involved in the implementation of the climate ambitions of a Mission City participating in the consortium."
+    },
+    {
+      "id": "check-page-7f9b6d5b4c",
+      "url": "https://www.climate-kic.org/open-call/netzerocities-call-for-pilot-cities-cohort-2-2023/",
+      "page": "batches",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
+    },
+    {
+      "id": "check-page-e04037cf15",
+      "url": "https://www.climate-kic.org/open-call/netzerocities-call-for-pilot-cities-cohort-2-2023/",
+      "page": "batches",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
+    },
+    {
+      "id": "check-page-61806419d2",
+      "url": "https://www.climate-kic.org/open-call/pilot-cities-programme-call-for-pilot-cities-cohort-3-2024/",
+      "page": "batches",
+      "excerpt": "Pilot Cities Programme – Call for Pilot Cities, Cohort 3 (2024) | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content OPEN CALL Pilot Cities Programme – Call for Pilot Cities, Cohort 3 (2024) CALL FOR Propsals DEADLINE 2024-03-18 17:00: CET CONTACT pilotcities@netzerocities.eu HOW TO APPLY Details The aim of this call is to select from Mission Cities a cohort of Pilot Cities, which will explore and test pathways to accelerated change towards 2030 climate neutrality goals — relevant to a city’s key emission domains — and to generate accelerated learning that can inform subsequent replication and scaling efforts in all other EU cities. Activities eligible for funding are: Pioneering activities to support climate-neutrality, including the deployment of innovative (new or improved) technology,"
+    },
+    {
+      "id": "check-page-d3f6ec9671",
+      "url": "https://www.climate-kic.org/open-call/pilot-cities-programme-call-for-pilot-cities-cohort-3-2024/",
+      "page": "batches",
+      "excerpt": "Activities eligible for funding are: Pioneering activities to support climate-neutrality, including the deployment of innovative (new or improved) technology, product, process, service, solution, policy, or governance model at city level, explored in a cross-sectoral and systemic manner."
+    },
+    {
+      "id": "check-page-8fc0eaed4d",
+      "url": "https://www.climate-kic.org/open-call/pilot-cities-programme-call-for-pilot-cities-cohort-3-2024/",
+      "page": "batches",
+      "excerpt": "These innovations shall account for co-benefits (e.g., health promotion) and the “Do No Significant Harm” (DNSH) principle."
+    },
+    {
+      "id": "check-page-4177bf4726",
+      "url": "https://www.climate-kic.org/open-call/pilot-cities-programme-call-for-pilot-cities-cohort-3-2024/",
+      "page": "batches",
+      "excerpt": "Activities to support climate-neutrality to establish new knowledge and build capacity and capabilities of city government and associated local actors through training, workshops, and other forms of learning."
+    },
+    {
+      "id": "check-page-bd3ee9d3a8",
+      "url": "https://www.climate-kic.org/open-call/pilot-cities-programme-call-for-pilot-cities-cohort-3-2024/",
+      "page": "batches",
+      "excerpt": "Activities aiming to build more collaborative communities, to advance new governance models at city level, and to engage citizens (including vulnerable/marginalised groups) and enable them to act on climate change in a systemic and cross-sectoral manner."
+    },
+    {
+      "id": "check-page-c3cf5caef1",
+      "url": "https://www.climate-kic.org/open-call/pilot-cities-programme-call-for-pilot-cities-cohort-3-2024/",
+      "page": "batches",
+      "excerpt": "Important dates Deadline:18 March 2024, 17:00 CET Europe’s leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit with public benefit status (ANBI)."
+    },
+    {
+      "id": "check-page-1a437b8968",
+      "url": "https://www.climate-kic.org/open-call/pilot-cities-programme-call-for-pilot-cities-cohort-3-2024/",
+      "page": "batches",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
+    },
+    {
+      "id": "check-page-013b3d40a4",
+      "url": "https://www.climate-kic.org/open-call/pilot-cities-programme-call-for-pilot-cities-cohort-3-2024/",
+      "page": "batches",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
+    },
+    {
+      "id": "check-page-b7e36beab1",
+      "url": "https://www.climate-kic.org/open-call/pilot-cities-programme-cohort-3-2024/",
+      "page": "batches",
+      "excerpt": "Pilot Cities Programme Cohort 3 (2024) | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content OPEN CALL Pilot Cities Programme Cohort 3 (2024) DEADLINE 2024-05-10 00:00: CET Europe’s leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit with public benefit status (ANBI). It is registered in the Netherlands, with branches in several European countries and operating across the world. The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts. Its objective is to contribute to the protection of nature and the environment via innovation of climate change mitigation and adaptation. © Climate KIC 2026 Privacy Policy Terms &"
+    },
+    {
+      "id": "check-page-37f9d928c5",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-aprrn/",
+      "page": "batches",
+      "excerpt": "SILP Experimentation Fund Cohort - Asia Pacific Refugee Rights Network | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Experimentation Fund Cohort 2023-2024 The Asia Pacific Refugee Rights Network The Asia Pacific Refugee Rights Network (APRRN) is a regional advocacy network of 270 members in 28 countries across Asia and the Pacific that brings together diverse local, national, regional and global civil society organisations to protect and promote the rights of refugees and other displaced people, as well as working to facilitate unhindered access to services and livelihood opportunities. Currently, the human rights and humanitarian system – with its top-down structure of policy, decision-making and programming – largely excludes local civil society and refugee-led organisations from shaping"
+    },
+    {
+      "id": "check-page-4a1cb80c3b",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-aprrn/",
+      "page": "batches",
+      "excerpt": "Learn more Europe’s leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit with public benefit status (ANBI)."
+    },
+    {
+      "id": "check-page-67b08e9dbf",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-aprrn/",
+      "page": "batches",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
+    },
+    {
+      "id": "check-page-52fd82f98d",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-aprrn/",
+      "page": "batches",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
+    },
+    {
+      "id": "check-page-8a49cf9f6b",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-da/",
+      "page": "batches",
+      "excerpt": "SILP Experimentation Fund Cohort - Development Alternatives | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Experimentation Fund Cohort 2023-2024 Development Alternatives Development Alternatives is looking at safe and green mobility in India through a Network of women-led e-rickshaws. The experiment aims to address the economic and social disempowerment of women due to the lack of mobility by exploring the impact of e-mobility solutions on their lives and the factors that can make the e-mobility network robust by strengthening the local ecosystem. The project seeks to experiment with the e-mobility network as an investible model for replication in other districts or states across India. Learn more Europe’s leading climate innovation agency and community Stichting Climate-KIC International"
+    },
+    {
+      "id": "check-page-42136acaf8",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-da/",
+      "page": "batches",
+      "excerpt": "Learn more Europe’s leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit with public benefit status (ANBI)."
+    },
+    {
+      "id": "check-page-3c2de9452d",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-da/",
+      "page": "batches",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
+    },
+    {
+      "id": "check-page-863a6014d7",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-da/",
+      "page": "batches",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
+    },
+    {
+      "id": "check-page-d2a3799028",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-jfw/",
+      "page": "batches",
+      "excerpt": "SILP Experimentation Fund Cohort - Join For Water | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Experimentation Fund Cohort 2023-2024 Join For Water Join for Water, from Uganda, is looking at Women River Ambassadors (WORIAs) as drivers of change in sustainably managing the land-river interface (LRI), specifically of the Mpanga catchment in Uganda. It aims to explore the potential of strengthening the capacity of women to participate in knowledge development and conservation planning through the WORIAs initiative – helping them become drivers of positive change in sustainably managing the LRI. It seeks to experiment with establishing WORIA-groups and identifying the boundary conditions under which they can operate. The experiment also aims to investigate how knowledge development and"
+    },
+    {
+      "id": "check-page-892b4643d9",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-jfw/",
+      "page": "batches",
+      "excerpt": "Learn more Europe’s leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit with public benefit status (ANBI)."
+    },
+    {
+      "id": "check-page-f1f02cf35c",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-jfw/",
+      "page": "batches",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
+    },
+    {
+      "id": "check-page-1b5e12ec48",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-jfw/",
+      "page": "batches",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
+    },
+    {
+      "id": "check-page-81c77ac4ef",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-naled/",
+      "page": "batches",
+      "excerpt": "SILP Experimentation Fund Cohort - NALED | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Experimentation Fund Cohort 2023-2024 NALED NALED, from Serbia and the Western Balkans, has discovered a significant issue facing citizens and the economy: a lack of familiarity with the planning process implemented in their environment. This lack of information leads to their late inclusion in the planning process, resulting in street protests. Furthermore, citizens are not adequately educated on how to formulate a remark on an adopted plan and ensure its validity and consideration by the plan maker. The experiment focused on understanding how to involve citizens more effectively and efficiently in the planning process, empowering them to express their needs and generate comments that will ensure that"
+    },
+    {
+      "id": "check-page-c8036d73a6",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-naled/",
+      "page": "batches",
+      "excerpt": "Learn more Europe’s leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit with public benefit status (ANBI)."
+    },
+    {
+      "id": "check-page-13399c73bb",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-naled/",
+      "page": "batches",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
+    },
+    {
+      "id": "check-page-83f76c2d55",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-naled/",
+      "page": "batches",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
+    },
+    {
+      "id": "check-page-8732c37a16",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-pc/",
+      "page": "batches",
+      "excerpt": "SILP Experimentation Fund Cohort - Power Compost | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Experimentation Fund Cohort 2023-2024 Power Compost Power Compost is exploring how collective learning approaches can transform the organic waste system in the city of Chía, Colombia. The experiment aims to combine inclusive participation, community-led communication, and diverse social, digital, and agro-ecological technologies to promote transformational change in the organic waste systems of municipalities. It also seeks to connect existing initiatives and inspire collaboration for sustained change. Additionally, the project aims to investigate how this learning experiment can connect with the cycles of other systems, particularly the local electoral system, to support transformational change."
+    },
+    {
+      "id": "check-page-e90a72300f",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-pc/",
+      "page": "batches",
+      "excerpt": "Learn more Europe’s leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit with public benefit status (ANBI)."
+    },
+    {
+      "id": "check-page-a27349a4bb",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-pc/",
+      "page": "batches",
+      "excerpt": "It is registered in the Netherlands, with branches in several European countries and operating across the world."
+    },
+    {
+      "id": "check-page-113b47562b",
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/silp/fund/cohort-pc/",
+      "page": "batches",
+      "excerpt": "The foundation is focused on implementing the Climate KIC strategy by delivering our projects and programmes, and building our community and collaborative efforts."
     }
   ],
   "findings": {
-    "emails": [],
-    "phones": [],
-    "routes": [
+    "emails": [
       {
-        "value": "https://www.climate-kic.org/wp-content/uploads/2017/04/Start-up-Acceleration-Application-Template-2017.docx",
-        "evidenceId": "check-route-e6cd0508ee"
+        "value": "investments@climate-kic.org",
+        "evidenceId": "check-email-8ab6567444"
       },
       {
-        "value": "https://www.climate-kic.org/wp-content/uploads/2017/04/Call-for-Application_CO.doc",
-        "evidenceId": "check-route-6921d5c7db"
+        "value": "media@climate-kic.org",
+        "evidenceId": "check-email-dddacfa058"
       }
     ],
+    "phones": [],
+    "routes": [],
     "applicationUrl": [
       {
         "value": "https://www.climate-kic.org",
@@ -310,7 +1147,12 @@
     "rolling": [],
     "announcedIntake": [],
     "cohortStarts": [],
-    "durationWeeks": [],
+    "durationWeeks": [
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-6c2d138257"
+      }
+    ],
     "format": [
       {
         "value": "remote",
@@ -319,6 +1161,10 @@
       {
         "value": "in-person",
         "evidenceId": "check-format-5d3ff36795"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-52c5de509b"
       }
     ],
     "location": [],

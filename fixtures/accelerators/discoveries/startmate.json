@@ -1,6 +1,6 @@
 {
   "programId": "startmate",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.startmate.com/about-us",
@@ -108,6 +108,46 @@
     },
     {
       "url": "https://www.startmate.com/writing/investment-notes-eggy",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/investment-notes-femmi",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/investment-notes-soundsmith",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/investment-notes-storipress",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/investment-notes-xylo-systems",
       "page": "terms",
       "anchor": "",
       "fetched": true,

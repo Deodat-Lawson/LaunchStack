@@ -1,5 +1,46 @@
 {
   "programId": "accelerate-long-island-hot-spot",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
-  "pages": []
+  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "pages": [
+    {
+      "url": "https://accelerateli.org/about/",
+      "page": "details",
+      "anchor": "Learn More",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerateli.org/application/",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerateli.org/programs-initiatives/",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerateli.org/resource/empire-state-innovation-matching-grants-program-img/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerateli.org/supplier-finance-programs/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

@@ -1,6 +1,6 @@
 {
   "programId": "startupbootcamp",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://startupbootcamp.org/about/careers",
@@ -166,7 +166,7 @@
       "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
       "page": "application",
       "anchor": "FinTech & Cybersecurity Applications Open Netherlands An accelerator designed to empower fintech startups November 15, 2023 FinTech & Cybersecurity Netherlands June 2, 2022 Novembe",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -174,7 +174,7 @@
       "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
       "page": "application",
       "anchor": "FinTech Mexico City Applications Open Mexico An accelerator designed to empower fintech startups December 12, 2023 FinTech Mexico City Mexico December 12, 2023 September 17, 2023 2",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -182,7 +182,7 @@
       "url": "https://startupbootcamp.org/accelerator/food-agritech",
       "page": "application",
       "anchor": "Food & AgriTech Applications Open Hybrid | The Netherlands An accelerator designed to new technologies along the food value chain to meet the growing demand for food safety, digita",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -190,7 +190,7 @@
       "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
       "page": "application",
       "anchor": "Food & AgriTech II Applications Open Hybrid | The Netherlands An accelerator designed to new technologies along the food value chain to meet the growing demand for food safety, dig",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -199,14 +199,14 @@
       "page": "application",
       "anchor": "Food & AgriTech III Applications Open Hybrid | The Netherlands An accelerator designed to new technologies along the food value chain to meet the growing demand for food safety, di",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
       "page": "application",
       "anchor": "FoodTech Tasmania Applications Open Australia An accelerator designed to empower Food & AgriTech startups June 14, 2024 FoodTech Tasmania Australia June 14, 2024 April 2, 2024 2024",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

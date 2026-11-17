@@ -1,31 +1,15 @@
 {
   "programId": "health-wildcatters",
-  "checkedAt": "2026-11-14T20:04:58.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "http://healthwildcatters.com/",
     "https://www.healthwildcatters.com/accelerator",
+    "https://www.healthwildcatters.com/accelerator-folder",
     "https://www.healthwildcatters.com/news/recuro-health-announces-investments-by-deepwork-capital-and-gpg-ventures-proceeds-to-accelerate-marketing-and-expanded-capabilities-in-digital-health",
     "https://www.healthwildcatters.com/news/health-wildcatters-accelerator-unveils-its-newest-cohort-of-10-startups",
-    "https://www.healthwildcatters.com/news/lantern-pharma-expands-precision-oncology-collaboration-with-the-national-cancer-institute-accelerating-path-to-first-in-human-clinical-trials-for-drug-candidates-lp-184-amp-lp-284",
-    "https://www.healthwildcatters.com/news/lantern-pharma-rises-9-on-team-up-with-national-cancer-institute-for-drug-candidates",
-    "https://www.healthwildcatters.com/news/westchester-county-biosciences-accelerator-announces-second-cohort",
-    "https://www.healthwildcatters.com/accelerator-folder",
-    "https://www.healthwildcatters.com/events/health-wildcatters-2025-program-virtual-info-session",
-    "https://www.healthwildcatters.com/events/health-wildcatters-accelerator-info-session",
-    "https://www.healthwildcatters.com/events/health-wildcatters-program-info-session",
-    "https://www.healthwildcatters.com/news/axxess-announces-care-at-home-certification-program-launch",
-    "https://www.healthwildcatters.com/news/communities-foundation-of-texas-hopes-to-inspire-corporate-citizenship-with-new-recognition-program",
-    "https://www.healthwildcatters.com/news/lantern-pharma-announces-collaboration-with-world-leading-brain-cancer-program-at-johns-hopkins-to-further-develop-lp-184-as-therapy-for-glioblastoma",
-    "https://www.healthwildcatters.com/news/lantern-pharma-announces-launch-of-antibody-drug-conjugate-adc-program-to-target-solid-tumors-amp-blood-cancers-through-agreement-with-califia-pharma"
+    "https://www.healthwildcatters.com/news/lantern-pharma-expands-precision-oncology-collaboration-with-the-national-cancer-institute-accelerating-path-to-first-in-human-clinical-trials-for-drug-candidates-lp-184-amp-lp-284"
   ],
   "evidence": [
-    {
-      "id": "check-announced-713973b75b",
-      "url": "https://www.healthwildcatters.com/news/westchester-county-biosciences-accelerator-announces-second-cohort",
-      "title": "Health Wildcatters — batches page",
-      "excerpt": "Form Westchester County Biosciences Accelerator Announces Second Cohort Feb 18 Written by Health Wildcatters Health Wildcatters Previous",
-      "page": "batches"
-    },
     {
       "id": "check-announced-a1bbe03001",
       "url": "https://www.healthwildcatters.com/news/health-wildcatters-accelerator-unveils-its-newest-cohort-of-10-startups",
@@ -76,13 +60,6 @@
       "page": "details"
     },
     {
-      "id": "check-format-1b4d828359",
-      "url": "https://www.healthwildcatters.com/events/health-wildcatters-program-info-session",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Health Wildcatters Program Info Session VIRTUAL — Health Wildcatters 0 Skip to Content Pitch Day",
-      "page": "details"
-    },
-    {
       "id": "check-format-1e087dd569",
       "url": "https://www.healthwildcatters.com/accelerator-folder",
       "title": "Health Wildcatters — program page",
@@ -97,38 +74,10 @@
       "page": "application"
     },
     {
-      "id": "check-format-46881ff332",
-      "url": "https://www.healthwildcatters.com/events/health-wildcatters-2025-program-virtual-info-session",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Health Wildcatters 2025 Program Virtual Info Session — Health Wildcatters 0 Skip to Content Pitch",
-      "page": "details"
-    },
-    {
-      "id": "check-format-799c5a0cc3",
-      "url": "https://www.healthwildcatters.com/events/health-wildcatters-2025-program-virtual-info-session",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Form Back to All Events Health Wildcatters 2025 Program Virtual Info Session Wednesday, April 23, 2025 3:30 PM 4:30 PM",
-      "page": "details"
-    },
-    {
-      "id": "check-format-d7939203e5",
-      "url": "https://www.healthwildcatters.com/events/health-wildcatters-program-info-session",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Back to All Events Health Wildcatters Program Info Session VIRTUAL Thursday, April 11, 2024 1:30 PM 2:30 PM ZOOM (map) Google",
-      "page": "details"
-    },
-    {
       "id": "check-name-fcd6ccb5f4",
       "url": "http://healthwildcatters.com/",
       "title": "Health Wildcatters — homepage",
       "excerpt": "Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-0a3c7966f5",
-      "url": "https://www.healthwildcatters.com/events/health-wildcatters-accelerator-info-session",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Portfolio → https://www.healthwildcatters.com/portfolio",
       "page": "details"
     },
     {
@@ -153,20 +102,6 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-4959a4bee8",
-      "url": "https://www.healthwildcatters.com/news/axxess-announces-care-at-home-certification-program-launch",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Portfolio → https://www.healthwildcatters.com/portfolio",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-4abe97e001",
-      "url": "https://www.healthwildcatters.com/news/communities-foundation-of-texas-hopes-to-inspire-corporate-citizenship-with-new-recognition-program",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Portfolio → https://www.healthwildcatters.com/portfolio",
-      "page": "details"
-    },
-    {
       "id": "check-portfolio-8bc6dfd6b7",
       "url": "https://www.healthwildcatters.com/news/health-wildcatters-accelerator-unveils-its-newest-cohort-of-10-startups",
       "title": "Health Wildcatters — batches page",
@@ -181,13 +116,6 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-9b1a18efbc",
-      "url": "https://www.healthwildcatters.com/events/health-wildcatters-2025-program-virtual-info-session",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Portfolio → https://www.healthwildcatters.com/portfolio",
-      "page": "details"
-    },
-    {
       "id": "check-portfolio-c029621217",
       "url": "https://www.healthwildcatters.com/accelerator-folder",
       "title": "Health Wildcatters — program page",
@@ -195,58 +123,9 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-c3adf88f60",
-      "url": "https://www.healthwildcatters.com/news/lantern-pharma-announces-collaboration-with-world-leading-brain-cancer-program-at-johns-hopkins-to-further-develop-lp-184-as-therapy-for-glioblastoma",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Portfolio → https://www.healthwildcatters.com/portfolio",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-c8166559e1",
-      "url": "https://www.healthwildcatters.com/events/health-wildcatters-program-info-session",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Portfolio → https://www.healthwildcatters.com/portfolio",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-e8b07952a2",
-      "url": "https://www.healthwildcatters.com/news/lantern-pharma-announces-launch-of-antibody-drug-conjugate-adc-program-to-target-solid-tumors-amp-blood-cancers-through-agreement-with-califia-pharma",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Portfolio → https://www.healthwildcatters.com/portfolio",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-e8ce9732c4",
-      "url": "https://www.healthwildcatters.com/news/westchester-county-biosciences-accelerator-announces-second-cohort",
-      "title": "Health Wildcatters — batches page",
-      "excerpt": "Portfolio → https://www.healthwildcatters.com/portfolio",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-eed2d3d219",
-      "url": "https://www.healthwildcatters.com/news/lantern-pharma-rises-9-on-team-up-with-national-cancer-institute-for-drug-candidates",
-      "title": "Health Wildcatters — batches page",
-      "excerpt": "Portfolio → https://www.healthwildcatters.com/portfolio",
-      "page": "batches"
-    },
-    {
-      "id": "check-route-00821b30c9",
-      "url": "https://www.healthwildcatters.com/news/lantern-pharma-announces-collaboration-with-world-leading-brain-cancer-program-at-johns-hopkins-to-further-develop-lp-184-as-therapy-for-glioblastoma",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Overview / Apply → https://www.healthwildcatters.com/accelerator",
-      "page": "details"
-    },
-    {
       "id": "check-route-3723dc85c8",
       "url": "http://healthwildcatters.com/",
       "title": "Health Wildcatters — homepage",
-      "excerpt": "Overview / Apply → https://www.healthwildcatters.com/accelerator",
-      "page": "details"
-    },
-    {
-      "id": "check-route-918ca9adbf",
-      "url": "https://www.healthwildcatters.com/events/health-wildcatters-accelerator-info-session",
-      "title": "Health Wildcatters — program page",
       "excerpt": "Overview / Apply → https://www.healthwildcatters.com/accelerator",
       "page": "details"
     },
@@ -265,20 +144,6 @@
       "page": "details"
     },
     {
-      "id": "check-route-a652e21fbf",
-      "url": "https://www.healthwildcatters.com/news/lantern-pharma-rises-9-on-team-up-with-national-cancer-institute-for-drug-candidates",
-      "title": "Health Wildcatters — batches page",
-      "excerpt": "Overview / Apply → https://www.healthwildcatters.com/accelerator",
-      "page": "batches"
-    },
-    {
-      "id": "check-route-b06cc47f0c",
-      "url": "https://www.healthwildcatters.com/news/westchester-county-biosciences-accelerator-announces-second-cohort",
-      "title": "Health Wildcatters — batches page",
-      "excerpt": "Overview / Apply → https://www.healthwildcatters.com/accelerator",
-      "page": "batches"
-    },
-    {
       "id": "check-route-b22a6a72de",
       "url": "https://www.healthwildcatters.com/news/recuro-health-announces-investments-by-deepwork-capital-and-gpg-ventures-proceeds-to-accelerate-marketing-and-expanded-capabilities-in-digital-health",
       "title": "Health Wildcatters — terms page",
@@ -291,41 +156,6 @@
       "title": "Health Wildcatters — batches page",
       "excerpt": "Overview / Apply → https://www.healthwildcatters.com/accelerator",
       "page": "batches"
-    },
-    {
-      "id": "check-route-d1a2b9607b",
-      "url": "https://www.healthwildcatters.com/news/lantern-pharma-announces-launch-of-antibody-drug-conjugate-adc-program-to-target-solid-tumors-amp-blood-cancers-through-agreement-with-califia-pharma",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Overview / Apply → https://www.healthwildcatters.com/accelerator",
-      "page": "details"
-    },
-    {
-      "id": "check-route-eb057c7426",
-      "url": "https://www.healthwildcatters.com/news/axxess-announces-care-at-home-certification-program-launch",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Overview / Apply → https://www.healthwildcatters.com/accelerator",
-      "page": "details"
-    },
-    {
-      "id": "check-route-f4d0abae33",
-      "url": "https://www.healthwildcatters.com/news/communities-foundation-of-texas-hopes-to-inspire-corporate-citizenship-with-new-recognition-program",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Overview / Apply → https://www.healthwildcatters.com/accelerator",
-      "page": "details"
-    },
-    {
-      "id": "check-route-f9b9df68d0",
-      "url": "https://www.healthwildcatters.com/events/health-wildcatters-program-info-session",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Overview / Apply → https://www.healthwildcatters.com/accelerator",
-      "page": "details"
-    },
-    {
-      "id": "check-route-ff756a84f4",
-      "url": "https://www.healthwildcatters.com/events/health-wildcatters-2025-program-virtual-info-session",
-      "title": "Health Wildcatters — program page",
-      "excerpt": "Overview / Apply → https://www.healthwildcatters.com/accelerator",
-      "page": "details"
     },
     {
       "id": "check-status-12049a9ab8",
@@ -350,10 +180,178 @@
       "excerpt": "Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Folder: Accelerator Back Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Folder: Office Space Back Office Space Rental Featured Artists Folder: Get In Touch Back Outreach Form Speaker Request Form Future-Proofing Healthcare Health Wildcatters provides investment and key resources to support healthcare entrepreneurs. Health Wildcatters Accelerator Program Health Wildcatters was founded in 2013 to address the need for a health innovation hub in the burgeoning Dallas/Fort Worth Metroplex healthcare industry. Since its inception the Health Wildcatters portfolio has grown to 140 startups who have raised over $350 million. Health Wildcatters provides a seed investment, in-kind perks and a vast network of mentors comprised of well over 200 individuals spanning the healthcare industry, professional services and many other verticals. In a nutshell, 8 to 12 startups will join"
     },
     {
+      "id": "check-page-0c89ba4824",
+      "url": "http://healthwildcatters.com/",
+      "page": "details",
+      "excerpt": "In a nutshell, 8 to 12 startups will join our accelerator program annually and participate in our ten week program from September to November."
+    },
+    {
+      "id": "check-page-41d77d7e50",
+      "url": "http://healthwildcatters.com/",
+      "page": "details",
+      "excerpt": "Innovating Health Podcast Hosted by: Hubert Zajicek Our Sponsors Newsletter Block This newsletter signup form needs a storage option."
+    },
+    {
+      "id": "check-page-6998acfdbc",
+      "url": "http://healthwildcatters.com/",
+      "page": "details",
+      "excerpt": "Quick Links Events News Accelerator Latest Tweets Tweets by HWildCatters Health Wildcatters 3000 Pegasus Park Drive Suite 1330 Dallas, TX 75247"
+    },
+    {
       "id": "check-page-e9b5547d2a",
       "url": "https://www.healthwildcatters.com/accelerator",
       "page": "application",
       "excerpt": "Overview — Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Folder: Accelerator Back Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Folder: Office Space Back Office Space Rental Featured Artists Folder: Get In Touch Back Outreach Form Speaker Request Form Accelerator Accelerate your startup with a nationally-ranked program Health Wildcatters 2026 - Applications are closed The Health Wildcatters Accelerator Program continues to be ranked among the greatest in the nation according the Seed Accelerator Rankings Project, a study conducted by MIT, University of Richmond and Rice University. If you’re looking to take your startup to the next level, the Health Wildcatters Accelerator Program is your next step. The accelerator program is a fast and furious time period in which Health Wildcatters connects you to our vast network of mentors and investors and presents a diverse curriculum to accelerate the startups growth. In"
+    },
+    {
+      "id": "check-page-eaf6e96312",
+      "url": "https://www.healthwildcatters.com/accelerator",
+      "page": "application",
+      "excerpt": "In a nutshell, 8 to 12 startups will join our accelerator program annually and participate in our three month program."
+    },
+    {
+      "id": "check-page-bb72e3f921",
+      "url": "https://www.healthwildcatters.com/accelerator",
+      "page": "application",
+      "excerpt": "Garnering over 40 million media impressions per year, the Health Wildcatters program immediately offers the cohort an elevated media presence."
+    },
+    {
+      "id": "check-page-f5651a2a52",
+      "url": "https://www.healthwildcatters.com/accelerator",
+      "page": "application",
+      "excerpt": "As a member of our portfolio investors and healthcare executives know where to find quality startups, and after our due diligence and vetting process, they consider them to be legitimate investment opportunities."
+    },
+    {
+      "id": "check-page-5e47a164ed",
+      "url": "https://www.healthwildcatters.com/accelerator",
+      "page": "application",
+      "excerpt": "We offer a hybrid program, with the ability to participate in person or virtually Program Start- September 2026 Program Pitch Day - November 2026 Terms The terms for the Health Wildcatters program are in alignment with industry standards and what you’ll find at most accelerators."
+    },
+    {
+      "id": "check-page-8dd89ab482",
+      "url": "https://www.healthwildcatters.com/accelerator",
+      "page": "application",
+      "excerpt": "We offer $30,000 cash and a program valued above $200,000 per spot for eight percent equity and opportunities for follow on and convertible note investments to total a maximum potential cash investment of $380k in addition to the value of the program."
+    },
+    {
+      "id": "check-page-ae1c17af44",
+      "url": "https://www.healthwildcatters.com/accelerator",
+      "page": "application",
+      "excerpt": "Mentors The Health Wildcatters mentor network is vast and comprised of well over 200 individuals spanning the healthcare industry, professional services and many other verticals."
+    },
+    {
+      "id": "check-page-1af34f4733",
+      "url": "https://www.healthwildcatters.com/accelerator",
+      "page": "application",
+      "excerpt": "During the accelerator, startups are connected to this mentor network who in turn provide advice and counsel as well as open up their own personal networks to propel your business forward."
+    },
+    {
+      "id": "check-page-23f68ae5f9",
+      "url": "https://www.healthwildcatters.com/accelerator",
+      "page": "application",
+      "excerpt": "Testimonials \"Health Wildcatters were instrumental during Iluria's kick off stage, both in cementing the product market fit and positioning the company as viable for further investments."
+    },
+    {
+      "id": "check-page-0f1421abb4",
+      "url": "https://www.healthwildcatters.com/accelerator",
+      "page": "application",
+      "excerpt": "We consider this plan as one of the best decisions we made up to now.\" Hagay Levy, Iluria Health \"When I enrolled in Health Wildcatters, I was an experienced biotech CEO but starting an emerging biotech."
+    },
+    {
+      "id": "check-page-87f9b34025",
+      "url": "https://www.healthwildcatters.com/accelerator",
+      "page": "application",
+      "excerpt": "I found the special combination of the HW team’s passion, connection to mentors who gave of themselves, high net worth individuals who invested, and a parent VC to be a thrilling combination that gave my company a great start.\" Jon Northrup, Stingray Therapeutics \"Health Wildcatters provides access to a rich network of healthcare experts!"
+    },
+    {
+      "id": "check-page-b13f8e6ece",
+      "url": "https://www.healthwildcatters.com/accelerator",
+      "page": "application",
+      "excerpt": "The acceleration program genuinely helps startups in their quest of success using their resources, network and lovely team!"
+    },
+    {
+      "id": "check-page-5c7fcf7030",
+      "url": "https://www.healthwildcatters.com/accelerator",
+      "page": "application",
+      "excerpt": "Long live HW!\" Pavel Overtchouk, Alviss.ai \"The program's comprehensive approach to fostering innovation and collaboration within the healthcare industry is truly remarkable."
+    },
+    {
+      "id": "check-page-05f8c8b94b",
+      "url": "https://www.healthwildcatters.com/accelerator-folder",
+      "page": "details",
+      "excerpt": "Overview — Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Folder: Accelerator Back Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Folder: Office Space Back Office Space Rental Featured Artists Folder: Get In Touch Back Outreach Form Speaker Request Form Accelerator Accelerate your startup with a nationally-ranked program Health Wildcatters 2026 - Applications are closed The Health Wildcatters Accelerator Program continues to be ranked among the greatest in the nation according the Seed Accelerator Rankings Project, a study conducted by MIT, University of Richmond and Rice University. If you’re looking to take your startup to the next level, the Health Wildcatters Accelerator Program is your next step. The accelerator program is a fast and furious time period in which Health Wildcatters connects you to our vast network of mentors and investors and presents a diverse curriculum to accelerate the startups growth. In"
+    },
+    {
+      "id": "check-page-a6f09c1800",
+      "url": "https://www.healthwildcatters.com/accelerator-folder",
+      "page": "details",
+      "excerpt": "In a nutshell, 8 to 12 startups will join our accelerator program annually and participate in our three month program."
+    },
+    {
+      "id": "check-page-2414781a52",
+      "url": "https://www.healthwildcatters.com/accelerator-folder",
+      "page": "details",
+      "excerpt": "Garnering over 40 million media impressions per year, the Health Wildcatters program immediately offers the cohort an elevated media presence."
+    },
+    {
+      "id": "check-page-00cf870458",
+      "url": "https://www.healthwildcatters.com/accelerator-folder",
+      "page": "details",
+      "excerpt": "As a member of our portfolio investors and healthcare executives know where to find quality startups, and after our due diligence and vetting process, they consider them to be legitimate investment opportunities."
+    },
+    {
+      "id": "check-page-bbe5a17170",
+      "url": "https://www.healthwildcatters.com/accelerator-folder",
+      "page": "details",
+      "excerpt": "We offer a hybrid program, with the ability to participate in person or virtually Program Start- September 2026 Program Pitch Day - November 2026 Terms The terms for the Health Wildcatters program are in alignment with industry standards and what you’ll find at most accelerators."
+    },
+    {
+      "id": "check-page-15cd3a05c2",
+      "url": "https://www.healthwildcatters.com/accelerator-folder",
+      "page": "details",
+      "excerpt": "We offer $30,000 cash and a program valued above $200,000 per spot for eight percent equity and opportunities for follow on and convertible note investments to total a maximum potential cash investment of $380k in addition to the value of the program."
+    },
+    {
+      "id": "check-page-3339ca31fe",
+      "url": "https://www.healthwildcatters.com/accelerator-folder",
+      "page": "details",
+      "excerpt": "Mentors The Health Wildcatters mentor network is vast and comprised of well over 200 individuals spanning the healthcare industry, professional services and many other verticals."
+    },
+    {
+      "id": "check-page-74b151c949",
+      "url": "https://www.healthwildcatters.com/accelerator-folder",
+      "page": "details",
+      "excerpt": "During the accelerator, startups are connected to this mentor network who in turn provide advice and counsel as well as open up their own personal networks to propel your business forward."
+    },
+    {
+      "id": "check-page-8db78b2915",
+      "url": "https://www.healthwildcatters.com/accelerator-folder",
+      "page": "details",
+      "excerpt": "Testimonials \"Health Wildcatters were instrumental during Iluria's kick off stage, both in cementing the product market fit and positioning the company as viable for further investments."
+    },
+    {
+      "id": "check-page-1d19130892",
+      "url": "https://www.healthwildcatters.com/accelerator-folder",
+      "page": "details",
+      "excerpt": "We consider this plan as one of the best decisions we made up to now.\" Hagay Levy, Iluria Health \"When I enrolled in Health Wildcatters, I was an experienced biotech CEO but starting an emerging biotech."
+    },
+    {
+      "id": "check-page-4e992189cd",
+      "url": "https://www.healthwildcatters.com/accelerator-folder",
+      "page": "details",
+      "excerpt": "I found the special combination of the HW team’s passion, connection to mentors who gave of themselves, high net worth individuals who invested, and a parent VC to be a thrilling combination that gave my company a great start.\" Jon Northrup, Stingray Therapeutics \"Health Wildcatters provides access to a rich network of healthcare experts!"
+    },
+    {
+      "id": "check-page-5c745584b1",
+      "url": "https://www.healthwildcatters.com/accelerator-folder",
+      "page": "details",
+      "excerpt": "The acceleration program genuinely helps startups in their quest of success using their resources, network and lovely team!"
+    },
+    {
+      "id": "check-page-15cb2011c9",
+      "url": "https://www.healthwildcatters.com/accelerator-folder",
+      "page": "details",
+      "excerpt": "Long live HW!\" Pavel Overtchouk, Alviss.ai \"The program's comprehensive approach to fostering innovation and collaboration within the healthcare industry is truly remarkable."
     },
     {
       "id": "check-page-782c527a95",
@@ -372,66 +370,6 @@
       "url": "https://www.healthwildcatters.com/news/lantern-pharma-expands-precision-oncology-collaboration-with-the-national-cancer-institute-accelerating-path-to-first-in-human-clinical-trials-for-drug-candidates-lp-184-amp-lp-284",
       "page": "batches",
       "excerpt": "Lantern Pharma Expands Precision Oncology Collaboration with the National Cancer Institute - Accelerating Path to First in Human Clinical Trials for Drug Candidates LP-184 & LP-284 — Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Folder: Accelerator Back Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Folder: Office Space Back Office Space Rental Featured Artists Folder: Get In Touch Back Outreach Form Speaker Request Form Lantern Pharma Expands Precision Oncology Collaboration with the National Cancer Institute - Accelerating Path to First in Human Clinical Trials for Drug Candidates LP-184 & LP-284 Cision Jan 12 Written by Health Wildcatters Health Wildcatters Previous Previous Lantern Pharma rises 9% on team up with National Cancer Institute for drug candidates Next Next AGILE CITY ANNOUNCES WINNERS OF INNOVATION GRANTS Quick Links Events News Accelerator Latest Tweets Tweets by HWildCatters Health Wildcatters"
-    },
-    {
-      "id": "check-page-5332ccf327",
-      "url": "https://www.healthwildcatters.com/news/lantern-pharma-rises-9-on-team-up-with-national-cancer-institute-for-drug-candidates",
-      "page": "batches",
-      "excerpt": "Lantern Pharma rises 9% on team up with National Cancer Institute for drug candidates — Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Folder: Accelerator Back Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Folder: Office Space Back Office Space Rental Featured Artists Folder: Get In Touch Back Outreach Form Speaker Request Form Lantern Pharma rises 9% on team up with National Cancer Institute for drug candidates Seeking Alpha Jan 12 Written by Health Wildcatters Health Wildcatters Previous Previous Winston-Salem ecosystem builder Agile City awards a total of $450,000 to nine startups Next Next Lantern Pharma Expands Precision Oncology Collaboration with the National Cancer Institute - Accelerating Path to First in Human Clinical Trials for Drug Candidates LP-184 & LP-284 Quick Links Events News Accelerator Latest Tweets Tweets by HWildCatters Health Wildcatters 3000 Pegasus Park Drive Suite 1330 Dallas, TX 75247"
-    },
-    {
-      "id": "check-page-f623f1451f",
-      "url": "https://www.healthwildcatters.com/news/westchester-county-biosciences-accelerator-announces-second-cohort",
-      "page": "batches",
-      "excerpt": "Westchester County Biosciences Accelerator Announces Second Cohort — Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Folder: Accelerator Back Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Folder: Office Space Back Office Space Rental Featured Artists Folder: Get In Touch Back Outreach Form Speaker Request Form Westchester County Biosciences Accelerator Announces Second Cohort Feb 18 Written by Health Wildcatters Health Wildcatters Previous Previous University of Houston engineers recognized, TMCx company raises funds, and more local innovation news Next Next Telemedicine Shines In Northern Michigan Healthcare Quick Links Events News Accelerator Latest Tweets Tweets by HWildCatters Health Wildcatters 3000 Pegasus Park Drive Suite 1330 Dallas, TX 75247"
-    },
-    {
-      "id": "check-page-05f8c8b94b",
-      "url": "https://www.healthwildcatters.com/accelerator-folder",
-      "page": "details",
-      "excerpt": "Overview — Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Folder: Accelerator Back Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Folder: Office Space Back Office Space Rental Featured Artists Folder: Get In Touch Back Outreach Form Speaker Request Form Accelerator Accelerate your startup with a nationally-ranked program Health Wildcatters 2026 - Applications are closed The Health Wildcatters Accelerator Program continues to be ranked among the greatest in the nation according the Seed Accelerator Rankings Project, a study conducted by MIT, University of Richmond and Rice University. If you’re looking to take your startup to the next level, the Health Wildcatters Accelerator Program is your next step. The accelerator program is a fast and furious time period in which Health Wildcatters connects you to our vast network of mentors and investors and presents a diverse curriculum to accelerate the startups growth. In"
-    },
-    {
-      "id": "check-page-3f282ec1ac",
-      "url": "https://www.healthwildcatters.com/events/health-wildcatters-2025-program-virtual-info-session",
-      "page": "details",
-      "excerpt": "Health Wildcatters 2025 Program Virtual Info Session — Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Folder: Accelerator Back Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Folder: Office Space Back Office Space Rental Featured Artists Folder: Get In Touch Back Outreach Form Speaker Request Form Back to All Events Health Wildcatters 2025 Program Virtual Info Session Wednesday, April 23, 2025 3:30 PM 4:30 PM Zoom (map) Google Calendar ICS Learn more about the Health Wildcatters accelerator program starting September 2025. Click below to get your questions asked and answered. Register here Previous Previous April 16 Pegasus Park Speaker Series: Insights from the Frontlines of Health Policy Next Next April 24 The Pulse Luncheon: Texas Stock Exchange Quick Links Events News Accelerator Latest Tweets Tweets by HWildCatters Health Wildcatters 3000 Pegasus Park Drive Suite 1330 Dallas, TX 75247"
-    },
-    {
-      "id": "check-page-02ed12204f",
-      "url": "https://www.healthwildcatters.com/events/health-wildcatters-accelerator-info-session",
-      "page": "details",
-      "excerpt": "Health Wildcatters Accelerator Info Session — Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Folder: Accelerator Back Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Folder: Office Space Back Office Space Rental Featured Artists Folder: Get In Touch Back Outreach Form Speaker Request Form Back to All Events Health Wildcatters Accelerator Info Session Tuesday, March 5, 2024 2:00 PM 3:00 PM ZOOM (map) Google Calendar ICS Learn more about the Health Wildcatters Accelerator program. Register Here Previous Previous February 29 Ignite x Show Her The Money — Dallas Next Next March 8 2024 Women Driving Innovation Quick Links Events News Accelerator Latest Tweets Tweets by HWildCatters Health Wildcatters 3000 Pegasus Park Drive Suite 1330 Dallas, TX 75247"
-    },
-    {
-      "id": "check-page-1f32f9110c",
-      "url": "https://www.healthwildcatters.com/events/health-wildcatters-program-info-session",
-      "page": "details",
-      "excerpt": "Health Wildcatters Program Info Session VIRTUAL — Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Folder: Accelerator Back Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Folder: Office Space Back Office Space Rental Featured Artists Folder: Get In Touch Back Outreach Form Speaker Request Form Back to All Events Health Wildcatters Program Info Session VIRTUAL Thursday, April 11, 2024 1:30 PM 2:30 PM ZOOM (map) Google Calendar ICS Join us for the next Health Wildcatters Accelerator Program info session to learn more about the Fall program and see if it’s a fit for you and your startup! Register here Previous Previous March 21 Health Wildcatters Alumni Reunion and Community Happy Hour Next Next April 11 Health Wildcatters Happy Hour and Info Session Quick Links Events News Accelerator Latest Tweets Tweets by HWildCatters Health Wildcatters 3000 Pegasus Park Drive Suite 1330 Dallas, TX 75247"
-    },
-    {
-      "id": "check-page-856cd65515",
-      "url": "https://www.healthwildcatters.com/news/axxess-announces-care-at-home-certification-program-launch",
-      "page": "details",
-      "excerpt": "Axxess Announces Care at Home Certification Program Launch — Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Folder: Accelerator Back Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Folder: Office Space Back Office Space Rental Featured Artists Folder: Get In Touch Back Outreach Form Speaker Request Form Axxess Announces Care at Home Certification Program Launch Mar 8 Written by Health Wildcatters Health Wildcatters Previous Previous CareStarter: Dawning the New Era of Pediatric Special Care Next Next UNIVERSITY of WISCONSIN–MADISON: Startup Gregor Diagnostics advances novel diagnostic technology Quick Links Events News Accelerator Latest Tweets Tweets by HWildCatters Health Wildcatters 3000 Pegasus Park Drive Suite 1330 Dallas, TX 75247"
-    },
-    {
-      "id": "check-page-33acf06768",
-      "url": "https://www.healthwildcatters.com/news/communities-foundation-of-texas-hopes-to-inspire-corporate-citizenship-with-new-recognition-program",
-      "page": "details",
-      "excerpt": "Communities Foundation of Texas Hopes to Inspire Corporate Citizenship with New Recognition Program — Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Folder: Accelerator Back Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Folder: Office Space Back Office Space Rental Featured Artists Folder: Get In Touch Back Outreach Form Speaker Request Form Communities Foundation of Texas Hopes to Inspire Corporate Citizenship with New Recognition Program Nov 23 Written by Health Wildcatters Health Wildcatters Previous Previous The College of Health Care Professions opens Houston Med Center campus Next Next Dallas’ Lantern Pharma Hits Major Milestone on its AI Platform to Advance its Oncology Drug Research and Development Quick Links Events News Accelerator Latest Tweets Tweets by HWildCatters Health Wildcatters 3000 Pegasus Park Drive Suite 1330 Dallas, TX 75247"
-    },
-    {
-      "id": "check-page-c8030c7345",
-      "url": "https://www.healthwildcatters.com/news/lantern-pharma-announces-collaboration-with-world-leading-brain-cancer-program-at-johns-hopkins-to-further-develop-lp-184-as-therapy-for-glioblastoma",
-      "page": "details",
-      "excerpt": "Lantern Pharma Announces Collaboration with World Leading Brain Cancer Program at Johns Hopkins to Further Develop LP-184 as Therapy for Glioblastoma — Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Folder: Accelerator Back Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Folder: Office Space Back Office Space Rental Featured Artists Folder: Get In Touch Back Outreach Form Speaker Request Form Lantern Pharma Announces Collaboration with World Leading Brain Cancer Program at Johns Hopkins to Further Develop LP-184 as Therapy for Glioblastoma Dec 17 Written by Health Wildcatters Health Wildcatters Previous Previous Executive Holidays: Cynt Marshall, Chad Houser, Chris Kelly, Peter Brodsky, and More Next Next Health Wildcatters portfolio company LocuMatch relocates to McKinney Quick Links Events News Accelerator Latest Tweets Tweets by HWildCatters Health Wildcatters 3000 Pegasus Park Drive Suite 1330 Dallas, TX 75247"
-    },
-    {
-      "id": "check-page-b39583d75c",
-      "url": "https://www.healthwildcatters.com/news/lantern-pharma-announces-launch-of-antibody-drug-conjugate-adc-program-to-target-solid-tumors-amp-blood-cancers-through-agreement-with-califia-pharma",
-      "page": "details",
-      "excerpt": "Lantern Pharma Announces Launch of Antibody Drug Conjugate (ADC) Program to Target Solid Tumors & Blood Cancers through Agreement with Califia Pharma — Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Folder: Accelerator Back Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Folder: Office Space Back Office Space Rental Featured Artists Folder: Get In Touch Back Outreach Form Speaker Request Form Lantern Pharma Announces Launch of Antibody Drug Conjugate (ADC) Program to Target Solid Tumors & Blood Cancers through Agreement with Califia Pharma Jan 4 Written by Health Wildcatters Health Wildcatters Previous Previous Axxess Names Home Care Expert Patricia Drea to Senior Leadership Team Next Next Ahead of New Year's Eve, COVID-19 hospitalizations hit record level in Texas Quick Links Events News Accelerator Latest Tweets Tweets by HWildCatters Health Wildcatters 3000 Pegasus Park Drive Suite 1330 Dallas, TX 75247"
     }
   ],
   "findings": {
@@ -462,10 +400,6 @@
       {
         "value": "Sep",
         "evidenceId": "check-announced-a1bbe03001"
-      },
-      {
-        "value": "Feb",
-        "evidenceId": "check-announced-713973b75b"
       }
     ],
     "cohortStarts": [],
@@ -483,10 +417,6 @@
       {
         "value": "in-person",
         "evidenceId": "check-format-42ba171980"
-      },
-      {
-        "value": "remote",
-        "evidenceId": "check-format-46881ff332"
       }
     ],
     "location": [],

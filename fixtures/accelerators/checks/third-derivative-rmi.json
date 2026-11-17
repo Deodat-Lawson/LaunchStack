@@ -1,6 +1,6 @@
 {
   "programId": "third-derivative-rmi",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://rmi.org/third-derivative-2/",
     "https://rmi.org/resources/applying-hope-in-a-time-of-crisis/",
@@ -13,33 +13,17 @@
     "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook",
     "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations",
     "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=rmi-applications",
-    "https://rmi.org/about/careers/faqs/",
     "https://rmi.org/accelerating-clean-regional-economies-a-great-lakes-investment-strategy/",
     "https://rmi.org/faq-why-green-hydrogen/",
-    "https://rmi.org/homebuilderscan/faqs/"
+    "https://rmi.org/homebuilderscan/faqs/",
+    "https://rmi.org/minigrid-funding-investment-roundtable-london/",
+    "https://rmi.org/minigrid-funding-investment-roundtable/",
+    "https://rmi.org/our-solutions/driving-investment/",
+    "https://rmi.org/our-solutions/driving-investment/climate-finance/",
+    "https://rmi.org/our-solutions/driving-investment/market-creation/",
+    "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/"
   ],
   "evidence": [
-    {
-      "id": "check-duration-d0a50f70b9",
-      "url": "https://rmi.org/about/careers/faqs/",
-      "title": "RMI Third Derivative — terms page",
-      "excerpt": "to make an impact. The process will take 4–8 weeks, depending on the position. The roles you see",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-51989efb13",
-      "url": "https://rmi.org/about/careers/faqs/",
-      "title": "RMI Third Derivative — terms page",
-      "excerpt": "of visa sponsorship changes. Does RMI allow remote and/or hybrid work? Yes! We are a remote-ready company with team members",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-a130b5a927",
-      "url": "https://rmi.org/about/careers/faqs/",
-      "title": "RMI Third Derivative — terms page",
-      "excerpt": "if the status of visa sponsorship changes. Does RMI allow remote and/or hybrid work? Yes! We are a remote-ready company",
-      "page": "terms"
-    },
     {
       "id": "check-format-baf051a629",
       "url": "https://rmi.org/resources/from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations/",
@@ -48,32 +32,11 @@
       "page": "application"
     },
     {
-      "id": "check-format-c9b3772e57",
-      "url": "https://rmi.org/about/careers/faqs/",
-      "title": "RMI Third Derivative — terms page",
-      "excerpt": "experiences. You should expect to travel occasionally for in-person meetings (and, of course, we cover travel costs). Some",
-      "page": "terms"
-    },
-    {
       "id": "check-format-e4df5e181b",
       "url": "https://rmi.org/resources/from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations/",
       "title": "RMI Third Derivative — application page",
       "excerpt": "MWh battery together with a 15 MW diesel generator. The hybrid system enhances the resilience and reliability of",
       "page": "application"
-    },
-    {
-      "id": "check-format-f245cc60db",
-      "url": "https://rmi.org/about/careers/faqs/",
-      "title": "RMI Third Derivative — terms page",
-      "excerpt": "Does RMI allow remote and/or hybrid work? Yes! We are a remote-ready company with team members working around the globe.",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-f8723bf0e0",
-      "url": "https://rmi.org/about/careers/faqs/",
-      "title": "RMI Third Derivative — terms page",
-      "excerpt": "from home, we love having opportunities to see each other in person! We occasionally gather for shared time together like",
-      "page": "terms"
     },
     {
       "id": "check-route-057a923302",
@@ -104,6 +67,27 @@
       "page": "details"
     },
     {
+      "id": "check-route-27e52b335d",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable-london/",
+      "title": "RMI Third Derivative — terms page",
+      "excerpt": "Tools and Applications → https://rmi.org/rmi-applications/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-41d0d0346f",
+      "url": "https://rmi.org/our-solutions/driving-investment/",
+      "title": "RMI Third Derivative — terms page",
+      "excerpt": "Tools and Applications → https://rmi.org/rmi-applications/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-4683fc5c90",
+      "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
+      "title": "RMI Third Derivative — terms page",
+      "excerpt": "Tools and Applications → https://rmi.org/rmi-applications/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-50fd38ac60",
       "url": "https://rmi.org/resources/corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook/",
       "title": "RMI Third Derivative — application page",
@@ -118,15 +102,15 @@
       "page": "terms"
     },
     {
-      "id": "check-route-6c531ced48",
-      "url": "https://rmi.org/accelerating-clean-regional-economies-a-great-lakes-investment-strategy/",
+      "id": "check-route-625a67961d",
+      "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
       "title": "RMI Third Derivative — terms page",
       "excerpt": "Tools and Applications → https://rmi.org/rmi-applications/",
       "page": "terms"
     },
     {
-      "id": "check-route-9091b907e4",
-      "url": "https://rmi.org/about/careers/faqs/",
+      "id": "check-route-6c531ced48",
+      "url": "https://rmi.org/accelerating-clean-regional-economies-a-great-lakes-investment-strategy/",
       "title": "RMI Third Derivative — terms page",
       "excerpt": "Tools and Applications → https://rmi.org/rmi-applications/",
       "page": "terms"
@@ -137,6 +121,13 @@
       "title": "RMI Third Derivative — application page",
       "excerpt": "Tools and Applications → https://rmi.org/rmi-applications/",
       "page": "application"
+    },
+    {
+      "id": "check-route-a45c0f9a5b",
+      "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
+      "title": "RMI Third Derivative — terms page",
+      "excerpt": "Tools and Applications → https://rmi.org/rmi-applications/",
+      "page": "terms"
     },
     {
       "id": "check-route-a84cbe111b",
@@ -172,6 +163,13 @@
       "title": "RMI Third Derivative — application page",
       "excerpt": "Tools and Applications → https://rmi.org/rmi-applications/",
       "page": "application"
+    },
+    {
+      "id": "check-route-bfc152562e",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable/",
+      "title": "RMI Third Derivative — terms page",
+      "excerpt": "Tools and Applications → https://rmi.org/rmi-applications/",
+      "page": "terms"
     },
     {
       "id": "check-route-cbad1ba939",
@@ -217,10 +215,118 @@
       "excerpt": "Third Derivative - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market"
     },
     {
+      "id": "check-page-4ab104ca83",
+      "url": "https://rmi.org/third-derivative-2/",
+      "page": "details",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-8513750fcd",
+      "url": "https://rmi.org/third-derivative-2/",
+      "page": "details",
+      "excerpt": "Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Back to Main Menu Help build the clean energy future."
+    },
+    {
+      "id": "check-page-f208edb0a9",
+      "url": "https://rmi.org/third-derivative-2/",
+      "page": "details",
+      "excerpt": "RMI can pursue the highest-impact climate and energy solutions because we’re supported by people who believe change is possible."
+    },
+    {
+      "id": "check-page-b63f48475b",
+      "url": "https://rmi.org/third-derivative-2/",
+      "page": "details",
+      "excerpt": "Every gift helps advance the work needed to make clean energy the default choice worldwide."
+    },
+    {
+      "id": "check-page-d06b38eb61",
+      "url": "https://rmi.org/third-derivative-2/",
+      "page": "details",
+      "excerpt": "Our Mission To transform the global energy system to secure a clean, prosperous, zero-carbon future for all."
+    },
+    {
+      "id": "check-page-00625e0c1a",
+      "url": "https://rmi.org/third-derivative-2/",
+      "page": "details",
+      "excerpt": "Our Approach Our Solutions Get Involved Events Careers Contact Sign up for our newsletters Get regular updates on the global energy transition Subscribe Sign up for our newsletters ✕ Loading form... © 2026 RMI Privacy policy ✕ Notifications"
+    },
+    {
       "id": "check-page-66ce522e13",
       "url": "https://rmi.org/resources/applying-hope-in-a-time-of-crisis/",
       "page": "application",
       "excerpt": "Applying Hope in a Time of Crisis - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment"
+    },
+    {
+      "id": "check-page-db8d15cb08",
+      "url": "https://rmi.org/resources/applying-hope-in-a-time-of-crisis/",
+      "page": "application",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-acbebf39e8",
+      "url": "https://rmi.org/resources/applying-hope-in-a-time-of-crisis/",
+      "page": "application",
+      "excerpt": "Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Back to Main Menu Article April 23, 2020 Applying Hope in a Time of Crisis By Christian Roselund ✕ Why we share this work for free RMI is an independent nonprofit working to accelerate the clean energy transition."
+    },
+    {
+      "id": "check-page-9906bebee0",
+      "url": "https://rmi.org/resources/applying-hope-in-a-time-of-crisis/",
+      "page": "application",
+      "excerpt": "You’ll get new reports, event invitations, and practical insights to help us all accelerate the clean energy transition."
+    },
+    {
+      "id": "check-page-e8c7da3b48",
+      "url": "https://rmi.org/resources/applying-hope-in-a-time-of-crisis/",
+      "page": "application",
+      "excerpt": "Support this work Jump to Section Jump to Section The COVID-19 pandemic is many things: a health crisis, an economic crisis, and a crisis for specific sectors."
+    },
+    {
+      "id": "check-page-0e41b4a73d",
+      "url": "https://rmi.org/resources/applying-hope-in-a-time-of-crisis/",
+      "page": "application",
+      "excerpt": "The health concerns, illness or loss of loved ones, and economic stresses of this crisis are putting emotional pressure on millions across the world."
+    },
+    {
+      "id": "check-page-1ed269ac22",
+      "url": "https://rmi.org/resources/applying-hope-in-a-time-of-crisis/",
+      "page": "application",
+      "excerpt": "This crisis is only one of many that we will see as climate change accelerates globally, and how we act today can lessen the severity of these future crises."
+    },
+    {
+      "id": "check-page-2ee0cf326a",
+      "url": "https://rmi.org/resources/applying-hope-in-a-time-of-crisis/",
+      "page": "application",
+      "excerpt": "Stimulus The economic consequences of this pandemic are forcing governments around the world to take an active role in supporting the economy, and this is an opportunity to accelerate the clean energy economy of the future instead of propping up the dirty, inefficient industries of the past."
+    },
+    {
+      "id": "check-page-5aee8308e8",
+      "url": "https://rmi.org/resources/applying-hope-in-a-time-of-crisis/",
+      "page": "application",
+      "excerpt": "Working with other non-profits and advocacy organizations we are presenting frameworks and specific policy mechanisms that can help the United States and other nations to not only rebuild and put people back to work, but to build back better."
+    },
+    {
+      "id": "check-page-bd9bd6c954",
+      "url": "https://rmi.org/resources/applying-hope-in-a-time-of-crisis/",
+      "page": "application",
+      "excerpt": "Specifically, there is an opportunity to put people back to work in making our buildings more efficient and safer including through electrification of cooking and heat, in building nationwide electric vehicle charging networks, and in installing more resilient solar and battery storage systems to protect critical infrastructure and vulnerable communities."
+    },
+    {
+      "id": "check-page-b6f141e15c",
+      "url": "https://rmi.org/resources/applying-hope-in-a-time-of-crisis/",
+      "page": "application",
+      "excerpt": "The past decade has shown us that we cannot wait for federal leadership to address the climate crisis."
+    },
+    {
+      "id": "check-page-4082f8fd0f",
+      "url": "https://rmi.org/resources/applying-hope-in-a-time-of-crisis/",
+      "page": "application",
+      "excerpt": "Across all of our programs—from mobility to electricity access in the developing world to our work with trucking and heavy industry—RMI continues our work in a spirit of applied hope."
+    },
+    {
+      "id": "check-page-b9ea892779",
+      "url": "https://rmi.org/resources/applying-hope-in-a-time-of-crisis/",
+      "page": "application",
+      "excerpt": "RMI can pursue the highest-impact climate and energy solutions because we’re supported by people who believe change is possible."
     },
     {
       "id": "check-page-414e25eb9e",
@@ -229,10 +335,154 @@
       "excerpt": "Applying Hope in Today’s Tumultuous Times - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving"
     },
     {
+      "id": "check-page-c9e83b42f1",
+      "url": "https://rmi.org/resources/applying-hope-todays-tumultuous-times/",
+      "page": "application",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-33b02ee139",
+      "url": "https://rmi.org/resources/applying-hope-todays-tumultuous-times/",
+      "page": "application",
+      "excerpt": "Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Back to Main Menu Article February 9, 2017 Applying Hope in Today’s Tumultuous Times By Jules Kortenhorst ✕ Why we share this work for free RMI is an independent nonprofit working to accelerate the clean energy transition."
+    },
+    {
+      "id": "check-page-2e319b3015",
+      "url": "https://rmi.org/resources/applying-hope-todays-tumultuous-times/",
+      "page": "application",
+      "excerpt": "You’ll get new reports, event invitations, and practical insights to help us all accelerate the clean energy transition."
+    },
+    {
+      "id": "check-page-ec039878ee",
+      "url": "https://rmi.org/resources/applying-hope-todays-tumultuous-times/",
+      "page": "application",
+      "excerpt": "How do we apply hope to the urgent agenda of the energy transition, when the new administration is creating so much uncertainty about the path to a sustainable energy future, which we have been plotting for the 35 years RMI has been in existence?"
+    },
+    {
+      "id": "check-page-98bab17b33",
+      "url": "https://rmi.org/resources/applying-hope-todays-tumultuous-times/",
+      "page": "application",
+      "excerpt": "In recent years, the progress of renewable energy, electric vehicles, and other sustainable energy technologies has made a sustainable energy future both technically feasible and commercially viable."
+    },
+    {
+      "id": "check-page-ad8c10778e",
+      "url": "https://rmi.org/resources/applying-hope-todays-tumultuous-times/",
+      "page": "application",
+      "excerpt": "The transition toward low-carbon energy now has the support of business leaders from around the world, and solar and wind power enjoy broad public support from across the U.S. political spectrum."
+    },
+    {
+      "id": "check-page-4c99eda4a4",
+      "url": "https://rmi.org/resources/applying-hope-todays-tumultuous-times/",
+      "page": "application",
+      "excerpt": "Countries across the globe are starting to accelerate the decarbonization of their energy systems, with some of the boldest ambition coming from vulnerable and developing nations."
+    },
+    {
+      "id": "check-page-123ce1c34a",
+      "url": "https://rmi.org/resources/applying-hope-todays-tumultuous-times/",
+      "page": "application",
+      "excerpt": "As a result, it is hard to see how the U.S. would return to burning coal or wasting energy as the economic energy solution of the future."
+    },
+    {
+      "id": "check-page-952746db97",
+      "url": "https://rmi.org/resources/applying-hope-todays-tumultuous-times/",
+      "page": "application",
+      "excerpt": "Similarly, the agreement reached in Paris in late 2015 and ratified last fall is not buckling under the uncertainty raised by the new U.S. administration."
+    },
+    {
+      "id": "check-page-a853f84190",
+      "url": "https://rmi.org/resources/applying-hope-todays-tumultuous-times/",
+      "page": "application",
+      "excerpt": "In fact, countries around the world have underlined their commitment to the Paris agreement."
+    },
+    {
+      "id": "check-page-4fb92acad3",
+      "url": "https://rmi.org/resources/applying-hope-todays-tumultuous-times/",
+      "page": "application",
+      "excerpt": "At the 2017 World Economic Forum annual meeting in Davos, Switzerland, Chinese President Xi Jinping stated in his opening plenary address : “The Paris Agreement is a hard-won achievement which is in keeping with the underlying trend of global development."
+    },
+    {
+      "id": "check-page-7624e79042",
+      "url": "https://rmi.org/resources/applying-hope-todays-tumultuous-times/",
+      "page": "application",
+      "excerpt": "All signatories should stick to it instead of walking away from it as this is a responsibility we must assume for future generations.” And the consensus among nation states is undergirded by similar commitments and actions from cities and provinces, where so much of the regulations and implementation of the energy revolution actually take shape."
+    },
+    {
       "id": "check-page-c5f2160a94",
       "url": "https://rmi.org/resources/corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook/",
       "page": "application",
       "excerpt": "Corporate Green Power Procurement and Application: China’s Market Progress and Outlook - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings"
+    },
+    {
+      "id": "check-page-f43bac72ae",
+      "url": "https://rmi.org/resources/corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook/",
+      "page": "application",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-c60d90f6c2",
+      "url": "https://rmi.org/resources/corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook/",
+      "page": "application",
+      "excerpt": "Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Back to Main Menu Report 2025 Corporate Green Power Procurement and Application: China’s Market Progress and Outlook 2024 Annual Report By Shuo Gao , Yi Jiang , Yujing Liu , and Jun Xie Download ✕ Why we share this work for free RMI is an independent nonprofit working to accelerate the clean energy transition."
+    },
+    {
+      "id": "check-page-ea80c51ac2",
+      "url": "https://rmi.org/resources/corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook/",
+      "page": "application",
+      "excerpt": "You’ll get new reports, event invitations, and practical insights to help us all accelerate the clean energy transition."
+    },
+    {
+      "id": "check-page-0a71099cda",
+      "url": "https://rmi.org/resources/corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook/",
+      "page": "application",
+      "excerpt": "Support this work Jump to Section Jump to Section Ongoing power market reforms and improvements to green power procurement mechanisms have continued to boost China’s green power market."
+    },
+    {
+      "id": "check-page-448d81e4cb",
+      "url": "https://rmi.org/resources/corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook/",
+      "page": "application",
+      "excerpt": "The report evaluates five green power procurement options within the context of China’s power market reforms and provides analysis of domestic and international application scenarios for green power and GECs."
+    },
+    {
+      "id": "check-page-9ef5aadacc",
+      "url": "https://rmi.org/resources/corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook/",
+      "page": "application",
+      "excerpt": "Corporate green power procurement options: Green power trading: In 2024, trading volumes grew rapidly, accompanied by declines in energy prices and green premiums."
+    },
+    {
+      "id": "check-page-315a8b7ab2",
+      "url": "https://rmi.org/resources/corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook/",
+      "page": "application",
+      "excerpt": "On-site distributed renewable projects: Distributed solar PV has sustained rapid growth, exposing the limitations of distributed grid capacity and leading solar PV investors to adopt a more cautious approach."
+    },
+    {
+      "id": "check-page-356b17625d",
+      "url": "https://rmi.org/resources/corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook/",
+      "page": "application",
+      "excerpt": "Application scenarios: Domestic scenarios: The application scenarios for green power procurement have evolved from meeting renewable portfolio standards to addressing energy consumption dual control assessments."
+    },
+    {
+      "id": "check-page-f56d3d2826",
+      "url": "https://rmi.org/resources/corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook/",
+      "page": "application",
+      "excerpt": "As China transitions from energy dual control to carbon dual control, green power procurement is expected to further expand, shifting from energy use-focused applications to broader carbon emissions control scenarios."
+    },
+    {
+      "id": "check-page-078eba31ab",
+      "url": "https://rmi.org/resources/corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook/",
+      "page": "application",
+      "excerpt": "International scenarios: Voluntary application scenarios, represented by supply chain corporations, tend to embrace market-based approaches such as green power trading and GECs."
+    },
+    {
+      "id": "check-page-0fe8074ade",
+      "url": "https://rmi.org/resources/corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook/",
+      "page": "application",
+      "excerpt": "RMI can pursue the highest-impact climate and energy solutions because we’re supported by people who believe change is possible."
+    },
+    {
+      "id": "check-page-b95245fbfe",
+      "url": "https://rmi.org/resources/corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook/",
+      "page": "application",
+      "excerpt": "Every gift helps advance the work needed to make clean energy the default choice worldwide."
     },
     {
       "id": "check-page-17dc80a772",
@@ -241,10 +491,154 @@
       "excerpt": "From California to the Caribbean: Sharing Expertise on Developing Energy Storage for Grid Applications in Island Nations - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling"
     },
     {
+      "id": "check-page-7ebab274ae",
+      "url": "https://rmi.org/resources/from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations/",
+      "page": "application",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-1bd12d0cd0",
+      "url": "https://rmi.org/resources/from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations/",
+      "page": "application",
+      "excerpt": "Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Back to Main Menu Article December 3, 2019 From California to the Caribbean: Sharing Expertise on Developing Energy Storage for Grid Applications in Island Nations By Sidney Jules ✕ Why we share this work for free RMI is an independent nonprofit working to accelerate the clean energy transition."
+    },
+    {
+      "id": "check-page-19c499ec27",
+      "url": "https://rmi.org/resources/from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations/",
+      "page": "application",
+      "excerpt": "You’ll get new reports, event invitations, and practical insights to help us all accelerate the clean energy transition."
+    },
+    {
+      "id": "check-page-2f8497719c",
+      "url": "https://rmi.org/resources/from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations/",
+      "page": "application",
+      "excerpt": "Many small island developing states (SIDS) have already initiated a clean energy transition by tapping into solar, wind, geothermal, hydroelectric, and other renewable energy resources to supply their electricity needs cheaply and reliably."
+    },
+    {
+      "id": "check-page-e6524958da",
+      "url": "https://rmi.org/resources/from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations/",
+      "page": "application",
+      "excerpt": "However, energy storage is a vital component remaining to be incorporated into many island electricity grids, as it can support renewable energy integration, deliver frequency regulation services to the grid, and provide spinning reserve in lieu of expensive fossil fuel generators, among other things."
+    },
+    {
+      "id": "check-page-03a8158a26",
+      "url": "https://rmi.org/resources/from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations/",
+      "page": "application",
+      "excerpt": "The versatility of energy storage systems (ESS), in addition to the declining costs of storage technologies like batteries, creates a value proposition to increase its deployment in SIDS."
+    },
+    {
+      "id": "check-page-ff62b60b1e",
+      "url": "https://rmi.org/resources/from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations/",
+      "page": "application",
+      "excerpt": "The 2019 Energy Storage North America (ESNA) Conference, held November 5–7 in San Diego, provided an opportunity for utilities, regulators, developers, manufacturers, and other interested stakeholders to acquire insights on the current energy storage market, the vast range of technologies both in development and operation, and useful lessons from previous energy storage projects."
+    },
+    {
+      "id": "check-page-b9673ab8c0",
+      "url": "https://rmi.org/resources/from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations/",
+      "page": "application",
+      "excerpt": "Stakeholders interested in developing energy storage should consider four insights from the conference: Batteries, an increasingly popular form of grid energy storage, are relatively new and untested on many electricity grids; therefore, project proof points and tariff structure changes are required to initiate and stimulate deployment."
+    },
+    {
+      "id": "check-page-6e66f66c4a",
+      "url": "https://rmi.org/resources/from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations/",
+      "page": "application",
+      "excerpt": "Islands need energy storage to accelerate renewable energy integration and increase grid optimization—but the process to achieve this requires persistence and patience from stakeholders."
+    },
+    {
+      "id": "check-page-84525699e9",
+      "url": "https://rmi.org/resources/from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations/",
+      "page": "application",
+      "excerpt": "Energy storage deployment has advanced incredibly in places like California, where over 7,200 megawatts (MW) of energy storage projects are currently operational and bold legislation such as Assembly Bill 2514 mandates California’s three investor-owned utilities to install 1,325 MW of energy storage by 2020."
+    },
+    {
+      "id": "check-page-4ced4c4566",
+      "url": "https://rmi.org/resources/from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations/",
+      "page": "application",
+      "excerpt": "However, deployment has been challenged in other jurisdictions, partly due to the effort required to integrate energy storage (particularly battery energy storage systems [BESS]) into rigid electricity sectors."
+    },
+    {
+      "id": "check-page-01883bca89",
+      "url": "https://rmi.org/resources/from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations/",
+      "page": "application",
+      "excerpt": "Energy storage “pilot projects” can be used to counteract these challenges by identifying the true benefits of storage on island grids, testing which regulatory frameworks are most conducive to its development, and determining appropriate tariff structures to incorporate the value and cost of storage."
+    },
+    {
       "id": "check-page-31422a5754",
       "url": "https://rmi.org/rmi-applications/",
       "page": "application",
       "excerpt": "Tools and Applications - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance"
+    },
+    {
+      "id": "check-page-8c648b0da2",
+      "url": "https://rmi.org/rmi-applications/",
+      "page": "application",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-0f88283179",
+      "url": "https://rmi.org/rmi-applications/",
+      "page": "application",
+      "excerpt": "Transition Pathways Repository TOOL January 26, 2026 The Transition Pathways Repository provides users with standardized input and output parameters for the vast array of diverse energy transition pathways and scenarios."
+    },
+    {
+      "id": "check-page-e90b5f1720",
+      "url": "https://rmi.org/rmi-applications/",
+      "page": "application",
+      "excerpt": "Our pilot version currently covers the power sector of Southeast Asia with further expansion planned through 2026."
+    },
+    {
+      "id": "check-page-70f558fd35",
+      "url": "https://rmi.org/rmi-applications/",
+      "page": "application",
+      "excerpt": "OCI+ TOOL September 9, 2024 The OCI⁺ quantifies and compares greenhouse gas emissions intensities from global oil and gas assets."
+    },
+    {
+      "id": "check-page-8cbbe598c9",
+      "url": "https://rmi.org/rmi-applications/",
+      "page": "application",
+      "excerpt": "Use this web tool’s interactive features to see where methane and carbon dioxide are emitted and investigate ways to reduce energy waste and the life-cycle emissions intensities of production, refining and petrochemical processing, storage, transport, and end uses."
+    },
+    {
+      "id": "check-page-3ecb8c007d",
+      "url": "https://rmi.org/rmi-applications/",
+      "page": "application",
+      "excerpt": "PACTA RESOURCE April 5, 2026 The Paris Agreement Capital Transition Assessment (PACTA) is an open-source and free of charge software application that enables users to measure the alignment of financial portfolios with climate scenarios as well as analyze specific companies."
+    },
+    {
+      "id": "check-page-b7a9ad08c7",
+      "url": "https://rmi.org/rmi-applications/",
+      "page": "application",
+      "excerpt": "SAFc Registry RESOURCE September 9, 2024 The SAFc Registry connects corporate consumers, air transport providers, logistics providers, and clean fuel producers in a globally accessible platform that encourages the use of sustainable aviation fuel (SAF) through the purchase and use of SAF certificates."
+    },
+    {
+      "id": "check-page-32523012e9",
+      "url": "https://rmi.org/rmi-applications/",
+      "page": "application",
+      "excerpt": "It enables consistency, transparency and auditability of aviation-related emissions reduction claims to build trust, scale SAFc uptake, and signal strong demand for new SAF supply."
+    },
+    {
+      "id": "check-page-359abb95c3",
+      "url": "https://rmi.org/rmi-applications/",
+      "page": "application",
+      "excerpt": "Green Upgrade Calculator TOOL Buildings September 9, 2024 This sophisticated, user-friendly calculator enables energy professionals – contractors, advisors, and analysts – to assess the economic and environmental impacts of green home and transportation upgrades."
+    },
+    {
+      "id": "check-page-5f93e450a3",
+      "url": "https://rmi.org/rmi-applications/",
+      "page": "application",
+      "excerpt": "State Clean Energy Analysis with the Energy Policy Simulator RESOURCE March 29, 2021 The Energy Policy Simulator (EPS) is a free open-source model for estimating the environmental, economic, and human health impacts of hundreds of climate and energy policies."
+    },
+    {
+      "id": "check-page-3260098eed",
+      "url": "https://rmi.org/rmi-applications/",
+      "page": "application",
+      "excerpt": "Use the national model or 48 state models to test out energy policy scenarios."
+    },
+    {
+      "id": "check-page-60c50d1a9c",
+      "url": "https://rmi.org/rmi-applications/",
+      "page": "application",
+      "excerpt": "Clean Growth Tool RESOURCE July 25, 2024 Using this tool, every metro area in the US can find the clean energy industries most feasible for them to transition into based on their existing economic makeup and industrial capacities."
     },
     {
       "id": "check-page-53c7c8f23b",
@@ -253,10 +647,82 @@
       "excerpt": "Donate to RMI - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market"
     },
     {
+      "id": "check-page-67dc5bbed9",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=applying-hope-in-a-time-of-crisis",
+      "page": "application",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-9d73a95eef",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=applying-hope-in-a-time-of-crisis",
+      "page": "application",
+      "excerpt": "Your gift helps RMI turn promising ideas into practical solutions — testing new approaches, proving what works, and scaling solutions that make clean, efficient energy the default choice."
+    },
+    {
+      "id": "check-page-d844188029",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=applying-hope-in-a-time-of-crisis",
+      "page": "application",
+      "excerpt": "Your donation supports trusted, high-impact clean energy work."
+    },
+    {
+      "id": "check-page-bbe938b94a",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=applying-hope-in-a-time-of-crisis",
+      "page": "application",
+      "excerpt": "Stay updated with the latest clean energy stories, insights, and developments, delivered weekly to your inbox."
+    },
+    {
+      "id": "check-page-25569ecdba",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=applying-hope-in-a-time-of-crisis",
+      "page": "application",
+      "excerpt": "Learn More Our Mission To transform the global energy system to secure a clean, prosperous, zero-carbon future for all."
+    },
+    {
+      "id": "check-page-93910a41d8",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=applying-hope-in-a-time-of-crisis",
+      "page": "application",
+      "excerpt": "Our Approach Our Solutions Get Involved Events Careers Contact Sign up for our newsletters Get regular updates on the global energy transition Subscribe Sign up for our newsletters ✕ Loading form... © 2026 RMI Privacy policy Notifications"
+    },
+    {
       "id": "check-page-3b20cf2a34",
       "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=applying-hope-todays-tumultuous-times",
       "page": "application",
       "excerpt": "Donate to RMI - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market"
+    },
+    {
+      "id": "check-page-77c0c251e4",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=applying-hope-todays-tumultuous-times",
+      "page": "application",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-31b569929b",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=applying-hope-todays-tumultuous-times",
+      "page": "application",
+      "excerpt": "Your gift helps RMI turn promising ideas into practical solutions — testing new approaches, proving what works, and scaling solutions that make clean, efficient energy the default choice."
+    },
+    {
+      "id": "check-page-48f03d953b",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=applying-hope-todays-tumultuous-times",
+      "page": "application",
+      "excerpt": "Your donation supports trusted, high-impact clean energy work."
+    },
+    {
+      "id": "check-page-a91c9daed8",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=applying-hope-todays-tumultuous-times",
+      "page": "application",
+      "excerpt": "Stay updated with the latest clean energy stories, insights, and developments, delivered weekly to your inbox."
+    },
+    {
+      "id": "check-page-b64e3036c5",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=applying-hope-todays-tumultuous-times",
+      "page": "application",
+      "excerpt": "Learn More Our Mission To transform the global energy system to secure a clean, prosperous, zero-carbon future for all."
+    },
+    {
+      "id": "check-page-c19116bffc",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=applying-hope-todays-tumultuous-times",
+      "page": "application",
+      "excerpt": "Our Approach Our Solutions Get Involved Events Careers Contact Sign up for our newsletters Get regular updates on the global energy transition Subscribe Sign up for our newsletters ✕ Loading form... © 2026 RMI Privacy policy Notifications"
     },
     {
       "id": "check-page-b2db24a12f",
@@ -265,10 +731,82 @@
       "excerpt": "Donate to RMI - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market"
     },
     {
+      "id": "check-page-03ad7e0ba1",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook",
+      "page": "application",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-fd5416f779",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook",
+      "page": "application",
+      "excerpt": "Your gift helps RMI turn promising ideas into practical solutions — testing new approaches, proving what works, and scaling solutions that make clean, efficient energy the default choice."
+    },
+    {
+      "id": "check-page-f708c9dffd",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook",
+      "page": "application",
+      "excerpt": "Your donation supports trusted, high-impact clean energy work."
+    },
+    {
+      "id": "check-page-135f03e92d",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook",
+      "page": "application",
+      "excerpt": "Stay updated with the latest clean energy stories, insights, and developments, delivered weekly to your inbox."
+    },
+    {
+      "id": "check-page-0c446b5969",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook",
+      "page": "application",
+      "excerpt": "Learn More Our Mission To transform the global energy system to secure a clean, prosperous, zero-carbon future for all."
+    },
+    {
+      "id": "check-page-6cb4c9426a",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook",
+      "page": "application",
+      "excerpt": "Our Approach Our Solutions Get Involved Events Careers Contact Sign up for our newsletters Get regular updates on the global energy transition Subscribe Sign up for our newsletters ✕ Loading form... © 2026 RMI Privacy policy Notifications"
+    },
+    {
       "id": "check-page-aa1c997436",
       "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations",
       "page": "application",
       "excerpt": "Donate to RMI - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market"
+    },
+    {
+      "id": "check-page-1f79e82c5d",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations",
+      "page": "application",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-42a89fca91",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations",
+      "page": "application",
+      "excerpt": "Your gift helps RMI turn promising ideas into practical solutions — testing new approaches, proving what works, and scaling solutions that make clean, efficient energy the default choice."
+    },
+    {
+      "id": "check-page-b9938c68e1",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations",
+      "page": "application",
+      "excerpt": "Your donation supports trusted, high-impact clean energy work."
+    },
+    {
+      "id": "check-page-d68e7fc050",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations",
+      "page": "application",
+      "excerpt": "Stay updated with the latest clean energy stories, insights, and developments, delivered weekly to your inbox."
+    },
+    {
+      "id": "check-page-2e931d7451",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations",
+      "page": "application",
+      "excerpt": "Learn More Our Mission To transform the global energy system to secure a clean, prosperous, zero-carbon future for all."
+    },
+    {
+      "id": "check-page-83f3ac0eb3",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations",
+      "page": "application",
+      "excerpt": "Our Approach Our Solutions Get Involved Events Careers Contact Sign up for our newsletters Get regular updates on the global energy transition Subscribe Sign up for our newsletters ✕ Loading form... © 2026 RMI Privacy policy Notifications"
     },
     {
       "id": "check-page-9cb49b82fb",
@@ -277,10 +815,40 @@
       "excerpt": "Donate to RMI - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market"
     },
     {
-      "id": "check-page-5a4ac4c175",
-      "url": "https://rmi.org/about/careers/faqs/",
-      "page": "terms",
-      "excerpt": "FAQs - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US"
+      "id": "check-page-a6818be6d5",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=rmi-applications",
+      "page": "application",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-2773b39059",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=rmi-applications",
+      "page": "application",
+      "excerpt": "Your gift helps RMI turn promising ideas into practical solutions — testing new approaches, proving what works, and scaling solutions that make clean, efficient energy the default choice."
+    },
+    {
+      "id": "check-page-f78540d637",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=rmi-applications",
+      "page": "application",
+      "excerpt": "Your donation supports trusted, high-impact clean energy work."
+    },
+    {
+      "id": "check-page-9731caab88",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=rmi-applications",
+      "page": "application",
+      "excerpt": "Stay updated with the latest clean energy stories, insights, and developments, delivered weekly to your inbox."
+    },
+    {
+      "id": "check-page-82cc8fcbd7",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=rmi-applications",
+      "page": "application",
+      "excerpt": "Learn More Our Mission To transform the global energy system to secure a clean, prosperous, zero-carbon future for all."
+    },
+    {
+      "id": "check-page-973e2d2c44",
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=rmi-applications",
+      "page": "application",
+      "excerpt": "Our Approach Our Solutions Get Involved Events Careers Contact Sign up for our newsletters Get regular updates on the global energy transition Subscribe Sign up for our newsletters ✕ Loading form... © 2026 RMI Privacy policy Notifications"
     },
     {
       "id": "check-page-59e3b138a5",
@@ -289,16 +857,622 @@
       "excerpt": "Accelerating Clean Regional Economies: A Great Lakes Investment Strategy - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation"
     },
     {
+      "id": "check-page-324ca9740d",
+      "url": "https://rmi.org/accelerating-clean-regional-economies-a-great-lakes-investment-strategy/",
+      "page": "terms",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-b333dcd287",
+      "url": "https://rmi.org/accelerating-clean-regional-economies-a-great-lakes-investment-strategy/",
+      "page": "terms",
+      "excerpt": "ACRE’s focus has been on the Great Lakes region, a manufacturing powerhouse that is home to tens of millions and, as such, is pivotal to US politics."
+    },
+    {
+      "id": "check-page-483b6f2088",
+      "url": "https://rmi.org/accelerating-clean-regional-economies-a-great-lakes-investment-strategy/",
+      "page": "terms",
+      "excerpt": "The ACRE team has worked alongside local leaders to develop a range of resources designed to accelerate clean energy investments throughout the region."
+    },
+    {
+      "id": "check-page-1e757a01b2",
+      "url": "https://rmi.org/accelerating-clean-regional-economies-a-great-lakes-investment-strategy/",
+      "page": "terms",
+      "excerpt": "The following report is a summary of ACRE’s research into the dynamics of clean energy-based economic development across the Great Lakes region."
+    },
+    {
+      "id": "check-page-ed86e0c817",
+      "url": "https://rmi.org/accelerating-clean-regional-economies-a-great-lakes-investment-strategy/",
+      "page": "terms",
+      "excerpt": "The Brookings team has helped to develop a unique data tool for understanding the complexity, feasibility, and workforce dynamics of the energy transition."
+    },
+    {
+      "id": "check-page-51636a29b2",
+      "url": "https://rmi.org/accelerating-clean-regional-economies-a-great-lakes-investment-strategy/",
+      "page": "terms",
+      "excerpt": "Using this tool, every metro in the Great Lakes region can find the clean energy industries where it is most feasible for them to transition based on their existing economic makeup and industrial capacities."
+    },
+    {
+      "id": "check-page-97cb78f210",
+      "url": "https://rmi.org/accelerating-clean-regional-economies-a-great-lakes-investment-strategy/",
+      "page": "terms",
+      "excerpt": "Explore this research: Report Green Investment & Innovation Pipelines RESOURCE May 6, 2026 Help build the clean energy future."
+    },
+    {
+      "id": "check-page-3804e4d2ee",
+      "url": "https://rmi.org/accelerating-clean-regional-economies-a-great-lakes-investment-strategy/",
+      "page": "terms",
+      "excerpt": "RMI can pursue the highest-impact climate and energy solutions because we’re supported by people who believe change is possible."
+    },
+    {
+      "id": "check-page-e7c628b2c8",
+      "url": "https://rmi.org/accelerating-clean-regional-economies-a-great-lakes-investment-strategy/",
+      "page": "terms",
+      "excerpt": "Every gift helps advance the work needed to make clean energy the default choice worldwide."
+    },
+    {
+      "id": "check-page-2a7387db33",
+      "url": "https://rmi.org/accelerating-clean-regional-economies-a-great-lakes-investment-strategy/",
+      "page": "terms",
+      "excerpt": "Our Mission To transform the global energy system to secure a clean, prosperous, zero-carbon future for all."
+    },
+    {
+      "id": "check-page-a1ffb7a293",
+      "url": "https://rmi.org/accelerating-clean-regional-economies-a-great-lakes-investment-strategy/",
+      "page": "terms",
+      "excerpt": "Our Approach Our Solutions Get Involved Events Careers Contact Sign up for our newsletters Get regular updates on the global energy transition Subscribe Sign up for our newsletters ✕ Loading form... © 2026 RMI Privacy policy ✕ Notifications"
+    },
+    {
       "id": "check-page-65467d0bfa",
       "url": "https://rmi.org/faq-why-green-hydrogen/",
       "page": "terms",
       "excerpt": "FAQ: Why Green Hydrogen? - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance"
     },
     {
+      "id": "check-page-9d25da26b3",
+      "url": "https://rmi.org/faq-why-green-hydrogen/",
+      "page": "terms",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-d9c3286424",
+      "url": "https://rmi.org/faq-why-green-hydrogen/",
+      "page": "terms",
+      "excerpt": "Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Back to Main Menu FAQ: Why Green Hydrogen?"
+    },
+    {
+      "id": "check-page-c214a52a85",
+      "url": "https://rmi.org/faq-why-green-hydrogen/",
+      "page": "terms",
+      "excerpt": "Hydrogen is trending, and it is controversial."
+    },
+    {
+      "id": "check-page-18d085e954",
+      "url": "https://rmi.org/faq-why-green-hydrogen/",
+      "page": "terms",
+      "excerpt": "RMI has been analyzing hydrogen as a low-carbon energy solution since 2003 ."
+    },
+    {
+      "id": "check-page-db2012c0c3",
+      "url": "https://rmi.org/faq-why-green-hydrogen/",
+      "page": "terms",
+      "excerpt": "This Q&A explains where RMI thinks hydrogen will play a part in the energy transition and where it won’t, what kind of hydrogen we’re talking about in the hydrogen “rainbow,” and some important calls to action to industry and regulators to make sure this technology reaches its decarbonization potential."
+    },
+    {
+      "id": "check-page-493b35deaf",
+      "url": "https://rmi.org/faq-why-green-hydrogen/",
+      "page": "terms",
+      "excerpt": "How does RMI define “clean” hydrogen?"
+    },
+    {
+      "id": "check-page-623eeb6c63",
+      "url": "https://rmi.org/faq-why-green-hydrogen/",
+      "page": "terms",
+      "excerpt": "Hydrogen is “clean” only if carbon emissions from its production, storage, distribution, and use are low or zero."
+    },
+    {
+      "id": "check-page-28eb81f0b1",
+      "url": "https://rmi.org/faq-why-green-hydrogen/",
+      "page": "terms",
+      "excerpt": "It is insufficient to simply use the broad, color-coded definitions of hydrogen production and assume industry will adhere to strict performance standards."
+    },
+    {
+      "id": "check-page-055acd0446",
+      "url": "https://rmi.org/faq-why-green-hydrogen/",
+      "page": "terms",
+      "excerpt": "It is critical to include both Scope 2 and Scope 3 emissions to account for the emissions from energy production and supply chains associated with hydrogen production pathways."
+    },
+    {
+      "id": "check-page-f7aa6b2763",
+      "url": "https://rmi.org/faq-why-green-hydrogen/",
+      "page": "terms",
+      "excerpt": "In particular, a full accounting of hydrogen’s emissions must include the carbon intensity of the grid used to make “green” hydrogen , as well as upstream leakage of methane from the natural gas used to make “blue” hydrogen."
+    },
+    {
+      "id": "check-page-68bbfa3828",
+      "url": "https://rmi.org/faq-why-green-hydrogen/",
+      "page": "terms",
+      "excerpt": "RMI believes hydrogen must be regulated and certified to ensure true emissions savings are quantified and reflected in the market."
+    },
+    {
+      "id": "check-page-0de9e384f1",
+      "url": "https://rmi.org/faq-why-green-hydrogen/",
+      "page": "terms",
+      "excerpt": "The production of green hydrogen — which involves splitting water molecules with electricity — has no carbon inputs and no carbon outputs if that electricity comes from a dedicated renewables array or a renewables-powered grid."
+    },
+    {
       "id": "check-page-793750770b",
       "url": "https://rmi.org/homebuilderscan/faqs/",
       "page": "terms",
       "excerpt": "HomebuildersCAN - FAQs - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance"
+    },
+    {
+      "id": "check-page-60df3084c0",
+      "url": "https://rmi.org/homebuilderscan/faqs/",
+      "page": "terms",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-ea1e985c57",
+      "url": "https://rmi.org/homebuilderscan/faqs/",
+      "page": "terms",
+      "excerpt": "Membership is open to: homebuilders of all sizes with operations in North America all organizations that wish to support the program as consultant partners (energy raters, manufacturers, investors, green building rating programs, LCA practitioners, regulators, rand more)."
+    },
+    {
+      "id": "check-page-f56a60c87e",
+      "url": "https://rmi.org/homebuilderscan/faqs/",
+      "page": "terms",
+      "excerpt": "The basic requirements involve annual reporting of embodied carbon performance, developing a decarbonization plan, and choosing a performance pathway."
+    },
+    {
+      "id": "check-page-b84c6c371b",
+      "url": "https://rmi.org/homebuilderscan/faqs/",
+      "page": "terms",
+      "excerpt": "Embodied carbon represents the millions of tons of carbon emissions released during the lifecycle of building materials, including extraction, manufacturing, transport, construction, and disposal."
+    },
+    {
+      "id": "check-page-74844c6958",
+      "url": "https://rmi.org/homebuilderscan/faqs/",
+      "page": "terms",
+      "excerpt": "New home construction in the United States creates over 50 million tons of embodied carbon emissions annually, equivalent to the total emissions from entire countries, according to RMI research."
+    },
+    {
+      "id": "check-page-7b1d0b7320",
+      "url": "https://rmi.org/homebuilderscan/faqs/",
+      "page": "terms",
+      "excerpt": "The residential sector has a unique opportunity to reduce tens of millions of tons of emissions and become a leading contributor to reducing climate emissions, quickly and efficiently."
+    },
+    {
+      "id": "check-page-dcfdeb819c",
+      "url": "https://rmi.org/homebuilderscan/faqs/",
+      "page": "terms",
+      "excerpt": "HomebuildersCAN offers custom support, training, and extensive resources tailored to the residential sector while serving as a platform to elevate member successes toward improved climate performance."
+    },
+    {
+      "id": "check-page-2566d32672",
+      "url": "https://rmi.org/homebuilderscan/faqs/",
+      "page": "terms",
+      "excerpt": "In addition to offering trainings, providing useful templates, and assisting professionals in reaching their goals, HomebuildersCAN provides news of funding opportunities, advocates for recognition by regulators, and helps organizers of incentive programs and regulators to incorporate measures for high climate performance."
+    },
+    {
+      "id": "check-page-b1d1255f46",
+      "url": "https://rmi.org/homebuilderscan/faqs/",
+      "page": "terms",
+      "excerpt": "Subscribe & Join the Network For up-to-date information on news and events, subscribe to our email list: Connect with Us For questions, please contact us at homebuildersCAN@rmi.org Contact Us Help build the clean energy future."
+    },
+    {
+      "id": "check-page-e40771c9bc",
+      "url": "https://rmi.org/homebuilderscan/faqs/",
+      "page": "terms",
+      "excerpt": "RMI can pursue the highest-impact climate and energy solutions because we’re supported by people who believe change is possible."
+    },
+    {
+      "id": "check-page-8927bed245",
+      "url": "https://rmi.org/homebuilderscan/faqs/",
+      "page": "terms",
+      "excerpt": "Every gift helps advance the work needed to make clean energy the default choice worldwide."
+    },
+    {
+      "id": "check-page-78a42b5bc9",
+      "url": "https://rmi.org/homebuilderscan/faqs/",
+      "page": "terms",
+      "excerpt": "Our Mission To transform the global energy system to secure a clean, prosperous, zero-carbon future for all."
+    },
+    {
+      "id": "check-page-95b5c8b058",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable-london/",
+      "page": "terms",
+      "excerpt": "Minigrid Funding and Investment Roundtable London - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving"
+    },
+    {
+      "id": "check-page-2645b25869",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable-london/",
+      "page": "terms",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-38a6485541",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable-london/",
+      "page": "terms",
+      "excerpt": "Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Back to Main Menu Minigrid Funding and Investment Roundtable Help build the clean energy future."
+    },
+    {
+      "id": "check-page-d3864ebdc6",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable-london/",
+      "page": "terms",
+      "excerpt": "RMI can pursue the highest-impact climate and energy solutions because we’re supported by people who believe change is possible."
+    },
+    {
+      "id": "check-page-3a9007a945",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable-london/",
+      "page": "terms",
+      "excerpt": "Every gift helps advance the work needed to make clean energy the default choice worldwide."
+    },
+    {
+      "id": "check-page-7954e01d9e",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable-london/",
+      "page": "terms",
+      "excerpt": "Our Mission To transform the global energy system to secure a clean, prosperous, zero-carbon future for all."
+    },
+    {
+      "id": "check-page-5437542b93",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable-london/",
+      "page": "terms",
+      "excerpt": "Our Approach Our Solutions Get Involved Events Careers Contact Sign up for our newsletters Get regular updates on the global energy transition Subscribe Sign up for our newsletters ✕ Loading form... © 2026 RMI Privacy policy ✕ Notifications"
+    },
+    {
+      "id": "check-page-6977138e12",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable/",
+      "page": "terms",
+      "excerpt": "Minigrid Funding and Investment Roundtable - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving"
+    },
+    {
+      "id": "check-page-b6c6a76c66",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable/",
+      "page": "terms",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-95adb56c8a",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable/",
+      "page": "terms",
+      "excerpt": "Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Back to Main Menu Minigrid Funding and Investment Roundtable Help build the clean energy future."
+    },
+    {
+      "id": "check-page-6ad8014aba",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable/",
+      "page": "terms",
+      "excerpt": "RMI can pursue the highest-impact climate and energy solutions because we’re supported by people who believe change is possible."
+    },
+    {
+      "id": "check-page-afdf3256dc",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable/",
+      "page": "terms",
+      "excerpt": "Every gift helps advance the work needed to make clean energy the default choice worldwide."
+    },
+    {
+      "id": "check-page-3baa4f3a38",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable/",
+      "page": "terms",
+      "excerpt": "Our Mission To transform the global energy system to secure a clean, prosperous, zero-carbon future for all."
+    },
+    {
+      "id": "check-page-f990b7fb55",
+      "url": "https://rmi.org/minigrid-funding-investment-roundtable/",
+      "page": "terms",
+      "excerpt": "Our Approach Our Solutions Get Involved Events Careers Contact Sign up for our newsletters Get regular updates on the global energy transition Subscribe Sign up for our newsletters ✕ Loading form... © 2026 RMI Privacy policy ✕ Notifications"
+    },
+    {
+      "id": "check-page-956f8dd296",
+      "url": "https://rmi.org/our-solutions/driving-investment/",
+      "page": "terms",
+      "excerpt": "Driving Investment - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance"
+    },
+    {
+      "id": "check-page-1b0a5c2bf6",
+      "url": "https://rmi.org/our-solutions/driving-investment/",
+      "page": "terms",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-231084625f",
+      "url": "https://rmi.org/our-solutions/driving-investment/",
+      "page": "terms",
+      "excerpt": "Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Back to Main Menu Solutions Driving Investment Driving the investment needed to build a clean energy economy RMI is mobilizing capital, policy, and markets to scale clean energy and industrial solutions worldwide."
+    },
+    {
+      "id": "check-page-9683621d3c",
+      "url": "https://rmi.org/our-solutions/driving-investment/",
+      "page": "terms",
+      "excerpt": "Achieving a clean energy future requires trillions of dollars in new investment and the right market conditions to deploy it at scale."
+    },
+    {
+      "id": "check-page-96b94a1445",
+      "url": "https://rmi.org/our-solutions/driving-investment/",
+      "page": "terms",
+      "excerpt": "By aligning finance, policy, and industry around real-world deployment, we accelerate investment into clean energy, climate-aligned industries, and the workforce needed to deliver a prosperous and secure future."
+    },
+    {
+      "id": "check-page-6ca17f1621",
+      "url": "https://rmi.org/our-solutions/driving-investment/",
+      "page": "terms",
+      "excerpt": "Related Links Book and Claim for Cement and Concrete Leveraging Transition Pathways Clean energy investment needs to flow faster The global energy transition will require unprecedented levels of investment across power, industry, infrastructure, and new technologies."
+    },
+    {
+      "id": "check-page-102c2bca87",
+      "url": "https://rmi.org/our-solutions/driving-investment/",
+      "page": "terms",
+      "excerpt": "RMI is working to unlock the investment needed to accelerate decarbonization worldwide by strengthening financial systems, enabling supportive policy, and creating demand for low-carbon materials and technologies. $125 trillion Investment opportunity in clean energy globally."
+    },
+    {
+      "id": "check-page-52eb375c04",
+      "url": "https://rmi.org/our-solutions/driving-investment/",
+      "page": "terms",
+      "excerpt": "70% Share of energy transition investment expected to come from private capital."
+    },
+    {
+      "id": "check-page-fc390d7866",
+      "url": "https://rmi.org/our-solutions/driving-investment/",
+      "page": "terms",
+      "excerpt": "400 companies with concrete actions toward net zero."
+    },
+    {
+      "id": "check-page-919838ebcd",
+      "url": "https://rmi.org/our-solutions/driving-investment/",
+      "page": "terms",
+      "excerpt": "Whitney Mann Manager Learn more about financing community clean energy projects Whitney Mann Manager Help build the clean energy future."
+    },
+    {
+      "id": "check-page-9fa70773d1",
+      "url": "https://rmi.org/our-solutions/driving-investment/",
+      "page": "terms",
+      "excerpt": "RMI can pursue the highest-impact climate and energy solutions because we’re supported by people who believe change is possible."
+    },
+    {
+      "id": "check-page-e1fc9fc643",
+      "url": "https://rmi.org/our-solutions/driving-investment/",
+      "page": "terms",
+      "excerpt": "Every gift helps advance the work needed to make clean energy the default choice worldwide."
+    },
+    {
+      "id": "check-page-a3d1a6a120",
+      "url": "https://rmi.org/our-solutions/driving-investment/",
+      "page": "terms",
+      "excerpt": "Our Mission To transform the global energy system to secure a clean, prosperous, zero-carbon future for all."
+    },
+    {
+      "id": "check-page-b5b496b0f2",
+      "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
+      "page": "terms",
+      "excerpt": "Climate Finance - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market"
+    },
+    {
+      "id": "check-page-070a0e4393",
+      "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
+      "page": "terms",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-a6f116798b",
+      "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
+      "page": "terms",
+      "excerpt": "We do this by developing practical solutions to help banks and other financial institutions capture opportunities while evaluating and mitigating sources of climate-related risk."
+    },
+    {
+      "id": "check-page-34701c0351",
+      "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
+      "page": "terms",
+      "excerpt": "Related Links Transition Finance Resource Hub Equipping finance to lead in the energy transition Even as global annual investment in clean energy has surpassed fossil fuel related funding, capital providers face systemic obstacles to deliver funding to key regions, sectors, and technologies in need of climate-friendly investment."
+    },
+    {
+      "id": "check-page-7b1c20539a",
+      "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
+      "page": "terms",
+      "excerpt": "By focusing on one solution at a time, we reduce friction and unlock capital flows to scale decarbonization."
+    },
+    {
+      "id": "check-page-f8ccb9fd7e",
+      "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
+      "page": "terms",
+      "excerpt": "Enter the Deal Lab Insurance and Resilience RMI improves resilience investments that reduce physical climate risk, support decarbonization, and unlock action across insurers, banks, policymakers, and capital providers."
+    },
+    {
+      "id": "check-page-db7fd6c05b",
+      "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
+      "page": "terms",
+      "excerpt": "Learn More Deploying Private Capital for Clean Community Development RMI works with green banks, community lenders, financial intermediaries, commercial banks, and investors to close the persistent gaps that keep viable clean energy projects from attracting capital at scale."
+    },
+    {
+      "id": "check-page-8969a7dea0",
+      "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
+      "page": "terms",
+      "excerpt": "Learn More Transition Pathways Repository Understand how sectors evolve in a net-zero economy."
+    },
+    {
+      "id": "check-page-f0955cd10e",
+      "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
+      "page": "terms",
+      "excerpt": "January 5, 2026 ARTICLE Climate Finance Financing Community Clean Energy Projects in 2026 February 2, 2026 The energy transition will ultimately be shaped by where capital flows."
+    },
+    {
+      "id": "check-page-bf907df686",
+      "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
+      "page": "terms",
+      "excerpt": "What excites me about this work is helping financial institutions connect their climate commitments to the real-world investments that actually transform energy systems."
+    },
+    {
+      "id": "check-page-85c08f7d11",
+      "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
+      "page": "terms",
+      "excerpt": "Kaitlin Crouch-Hess Senior Principal Kaitlin Crouch-Hess Senior Principal Clean energy deployment ultimately comes down to deals."
+    },
+    {
+      "id": "check-page-c39777d926",
+      "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
+      "page": "terms",
+      "excerpt": "Nabil Bennouna Principal Nabil Bennouna Principal What I enjoy most about working with banks is translating climate goals into practical financing solutions."
+    },
+    {
+      "id": "check-page-32e1225eb2",
+      "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
+      "page": "terms",
+      "excerpt": "Evan Kornbluh Manager Evan Kornbluh Manager Help build the clean energy future."
+    },
+    {
+      "id": "check-page-fe6d49e6c4",
+      "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
+      "page": "terms",
+      "excerpt": "Market Creation - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market"
+    },
+    {
+      "id": "check-page-508bc2cea8",
+      "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
+      "page": "terms",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-611e60c975",
+      "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
+      "page": "terms",
+      "excerpt": "Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Back to Main Menu Driving Investment Market Creation Building markets for climate-differentiated commodities and credits to avoid, reduce, and remove emissions."
+    },
+    {
+      "id": "check-page-870c5dd47f",
+      "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
+      "page": "terms",
+      "excerpt": "Learn More Bringing Transparency and Integrity to Carbon Markets RMI’s Carbon Markets Initiative is building trust in carbon markets by advancing transparency, standardization, and coalitions to accelerate investments in high-integrity climate solutions."
+    },
+    {
+      "id": "check-page-58c17759e4",
+      "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
+      "page": "terms",
+      "excerpt": "Learn More Tracking Aviation Emissions Claims Working with, EDF, SABA and Energy Web, RMI launched the SAFc Registry, a rigorous SAF certificate system to aggregate demand for SAF and help eliminate barriers to adoption."
+    },
+    {
+      "id": "check-page-918c3f0ca7",
+      "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
+      "page": "terms",
+      "excerpt": "The system will expand SAF investment opportunities to all businesses, organizations, and even individuals interested in lowering the climate impacts of air transport."
+    },
+    {
+      "id": "check-page-5532748339",
+      "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
+      "page": "terms",
+      "excerpt": "Learn More Building Demand for Sustainable Concrete RMI and the Center for Green Market Activation (GMA) are working to connect corporate, government, and builder demand for low-emissions concrete with sustainable producers in the United States through the Sustainable Concrete Buyers Alliance (SCoBA)."
+    },
+    {
+      "id": "check-page-795224eaeb",
+      "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
+      "page": "terms",
+      "excerpt": "Learn More Leveraging Book and Claim for Maritime Decarbonization Katalist, launched with the Mærsk Mc-Kinney Møller Center for Zero Carbon Shipping, is a market-based mechanism that allows freight customers to claim emissions reductions from verified voyages using zero-emission fuels."
+    },
+    {
+      "id": "check-page-9ff2535856",
+      "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
+      "page": "terms",
+      "excerpt": "Thomas Koch Blank Managing Director Learn more about the Sustainable Steel Buyers Platform Thomas Koch Blank Managing Director The cement and concrete sector’s decarbonization challenge is also one of its greatest economic opportunities."
+    },
+    {
+      "id": "check-page-e375a98776",
+      "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
+      "page": "terms",
+      "excerpt": "Jon Creyts RMI CEO Read more about the Sustainable Concrete Buyers Alliance Jon Creyts RMI CEO Help build the clean energy future."
+    },
+    {
+      "id": "check-page-5bc3c1cb03",
+      "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
+      "page": "terms",
+      "excerpt": "RMI can pursue the highest-impact climate and energy solutions because we’re supported by people who believe change is possible."
+    },
+    {
+      "id": "check-page-b4d2d5c6ee",
+      "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
+      "page": "terms",
+      "excerpt": "Every gift helps advance the work needed to make clean energy the default choice worldwide."
+    },
+    {
+      "id": "check-page-8bb4f3432e",
+      "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
+      "page": "terms",
+      "excerpt": "Our Mission To transform the global energy system to secure a clean, prosperous, zero-carbon future for all."
+    },
+    {
+      "id": "check-page-cb42d4df0c",
+      "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
+      "page": "terms",
+      "excerpt": "Technology and Innovation - RMI Skip to content Build What Comes Next: Every $1 donated = $2 with our match! >> About Us About Us Our Impact Our History Our Experts Board of Trustees Financials & Annual Reports Diversity, Equity, and Inclusion Events and News Events and News Events Pressroom RMI at COP Careers Careers Open Positions How We Work Our Culture Benefits Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Clean Energy Basics Collections Tools and Applications Explore All Get Involved Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Donate Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate"
+    },
+    {
+      "id": "check-page-44d134f497",
+      "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
+      "page": "terms",
+      "excerpt": "Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution."
+    },
+    {
+      "id": "check-page-5f08e7a307",
+      "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
+      "page": "terms",
+      "excerpt": "Donate to RMI Leadership & Legacy Giving Other Ways to Give to RMI Corporate Engagement Back to Main Menu Driving Investment Technology and Innovation Accelerating breakthrough climate technologies from prototype to market deployment RMI and it's global climate tech accelerator, Third Derivative, are helping more promising early-stage innovation get to commercial operation."
+    },
+    {
+      "id": "check-page-b10c22b63e",
+      "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
+      "page": "terms",
+      "excerpt": "We are seeing very promising innovation in climate-friendly energy and industrial technology, but it takes too long for these innovations to achieve material market penetration."
+    },
+    {
+      "id": "check-page-27692f7ff0",
+      "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
+      "page": "terms",
+      "excerpt": "RMI and it’s global climate tech accelerator, Third Derivative, remove these barriers by combining rigorous techno-economic diligence, early corporate and investor engagement, and policy support."
+    },
+    {
+      "id": "check-page-4b28300546",
+      "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
+      "page": "terms",
+      "excerpt": "We help founders with mentorship, advice, connections, programming, and events."
+    },
+    {
+      "id": "check-page-b3b1365668",
+      "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
+      "page": "terms",
+      "excerpt": "We also provide research and insights to corporations, investors, and other organizations that enable them to invest in and partner with the energy transition’s most promising startups."
+    },
+    {
+      "id": "check-page-c850737f0f",
+      "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
+      "page": "terms",
+      "excerpt": "Learn More Connecting Corporate Innovators with Startups RMI connects leading corporations with emerging climate technologies to pilot solutions, validate performance, and create early market demand for breakthrough climate innovations."
+    },
+    {
+      "id": "check-page-7dc388f56b",
+      "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
+      "page": "terms",
+      "excerpt": "Learn More Catalyzing Investment in First Commercial Deployments RMI works with investors, development finance institutions, and corporate partners to unlock capital and reduce risk for first-of-a-kind commercial climate tech projects."
+    },
+    {
+      "id": "check-page-d0e85f4bd2",
+      "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
+      "page": "terms",
+      "excerpt": "Learn More Advancing Clean Industry Innovation RMI works with heavy industry leaders and innovators to accelerate the deployment of technologies critical to decarbonizing and increasing efficiency in the “hard-to-abate” sectors including cement, steel, chemicals, fertilizer, maritime shipping, and aviation."
+    },
+    {
+      "id": "check-page-5bbef673d3",
+      "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
+      "page": "terms",
+      "excerpt": "Learn More Cultivating Climate Innovation Globally RMI supports climate innovation ecosystems across emerging markets by connecting startups with investors, corporations, and technical expertise to accelerate commercialization and scale breakthrough climate technologies."
+    },
+    {
+      "id": "check-page-b945fb857d",
+      "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
+      "page": "terms",
+      "excerpt": "Learn More Featured Insight Piloting Next-Generation Cooling for Extreme Heat Passive daytime radiative cooling materials reflect sunlight, reducing buildings’ indoor temperatures without using energy."
+    },
+    {
+      "id": "check-page-b55b1e7f07",
+      "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
+      "page": "terms",
+      "excerpt": "Learn More Insights on Scaling Climate Technologies Explore RMI and Third Derivative research, tools, and analysis advancing climate technologies from early innovation to global market deployment."
     }
   ],
   "findings": {
@@ -342,12 +1516,7 @@
     "rolling": [],
     "announcedIntake": [],
     "cohortStarts": [],
-    "durationWeeks": [
-      {
-        "value": "8",
-        "evidenceId": "check-duration-d0a50f70b9"
-      }
-    ],
+    "durationWeeks": [],
     "format": [
       {
         "value": "hybrid",
@@ -356,10 +1525,6 @@
       {
         "value": "remote",
         "evidenceId": "check-format-baf051a629"
-      },
-      {
-        "value": "in-person",
-        "evidenceId": "check-format-f8723bf0e0"
       }
     ],
     "location": [],

@@ -1,6 +1,6 @@
 {
   "programId": "microsoft-for-startups",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://azure.microsoft.com/en-us/solutions/migration/web-applications/",
@@ -142,6 +142,46 @@
       "url": "https://www.microsoft.com/en-us/store/b/education",
       "page": "terms",
       "anchor": "Deals for students and parents",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/store/b/online-computer-shopping-appointments?icid=students_FAQ_personalshopping",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/store/b/price-protection-terms-and-conditions",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

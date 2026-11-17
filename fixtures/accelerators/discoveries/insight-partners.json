@@ -1,6 +1,6 @@
 {
   "programId": "insight-partners",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://jobs.insightpartners.com/jobs",
@@ -23,6 +23,38 @@
       "page": "details",
       "anchor": "Media",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/6-waves-receives-17-5-million-investment-from-insight-venture-partners/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/adaptive-shield-receives-30m-series-a-investment-from-insight-partners-to-help-businesses-gain-control-of-all-their-saas-investments/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -132,6 +164,14 @@
     },
     {
       "url": "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/tractable-is-applying-ai-to-accident-and-disaster-appraisal/",
       "page": "application",
       "anchor": "",
       "fetched": true,

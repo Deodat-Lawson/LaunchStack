@@ -1,44 +1,116 @@
 {
   "programId": "new-paltz-venture-hub-hot-spot",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
-      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
-      "page": "details",
-      "anchor": "HV Ecosystem Programs & Resources",
+      "url": "https://admissions.newpaltz.edu/portal/gr_app_landing_page",
+      "page": "other",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
-      "page": "details",
-      "anchor": "Accelerator",
-      "fetched": false,
+      "url": "https://admissions.newpaltz.edu/register/?id=e941e5b8-55fb-4be3-a783-efc363ea59c9",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/newsletter/article/september-2025/hvvh-entrepreneur-in-residence-program/",
+      "url": "https://catalog.newpaltz.edu/undergraduate/academic-programs-majors-minors/",
       "page": "details",
-      "anchor": "Learn More >",
-      "fetched": false,
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.newpaltz.edu/international",
+      "url": "https://international.newpaltz.edu/index.cfm?FuseAction=Programs.SimpleSearch",
       "page": "details",
-      "anchor": "International Programs",
-      "fetched": false,
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.newpaltz.edu/alumni",
-      "page": "portfolio",
-      "anchor": "Alumni Relations",
-      "fetched": false,
+      "url": "https://www.newpaltz.edu/about/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newpaltz.edu/about/attractions/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newpaltz.edu/about/directions.html",
+      "page": "details",
+      "anchor": "Maps, Directions & Parking",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newpaltz.edu/about/directions_text.html",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newpaltz.edu/about/glance.html",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newpaltz.edu/about/mission.html",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newpaltz.edu/about/visiting-new-paltz/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -51,10 +123,50 @@
       "origin": "official"
     },
     {
-      "url": "https://www.newpaltz.edu/about/directions.html",
-      "page": "details",
-      "anchor": "Maps, Directions & Parking",
+      "url": "https://www.newpaltz.edu/alumni",
+      "page": "portfolio",
+      "anchor": "Alumni Relations",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newpaltz.edu/esl/programs/apply/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newpaltz.edu/international",
+      "page": "details",
+      "anchor": "International Programs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "page": "details",
+      "anchor": "HV Ecosystem Programs & Resources",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/newsletter/article/september-2025/hvvh-entrepreneur-in-residence-program/",
+      "page": "details",
+      "anchor": "Learn More >",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "page": "details",
+      "anchor": "Accelerator",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

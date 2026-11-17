@@ -1,45 +1,29 @@
 {
   "programId": "cic",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://cic.com/",
-    "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
-    "https://cic.com/36for75",
-    "https://cic.com/blog/2023-5-9-cics-international-soft-landing-opens-cohort-application-window/",
-    "https://cic.com/blog/cic-massachusetts-social-impact-cohort-entries/",
-    "https://cic.com/blog/providing-a-runway-for-success-cic-st-louis-welcomes-third-social-impact-cohort/",
-    "https://cic.com/de/blog/cic-nimmt-jetzt-bewerbungen-fuer-die-neue-massachusetts-social-impact-cohort-entgegen/",
-    "https://cic.com/nl/blog/cic-accepteert-nu-inschrijvingen-voor-nieuw-sociaal-impactcohort-in-massachusetts/",
-    "https://cic.com/nl/blog/cic-zoekt-impactgerichte-ondernemers-voor-36for75-cohort/",
-    "https://cic.com/nl/blog/cics-internationale-zachte-landing-opent-inschrijvingsvenster-voor-cohort/",
-    "https://cic.com/nl/blog/een-startbaan-voor-succes-cic-st-louis-verwelkomt-derde-social-impact-cohort/",
     "https://cic.com/nl/cohort-sociale-impact-massachusetts/",
     "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
     "https://cic.com/nl/cohort-sociale-impact-st-louis/",
-    "https://cic.com/programs/social-impact-cohort/massachusetts/"
+    "https://cic.com/programs/social-impact-cohort/massachusetts/",
+    "https://cic.com/programs/social-impact-cohort/philadelphia/",
+    "https://cic.com/programs/social-impact-cohort/st-louis/",
+    "https://cic.com/about/",
+    "https://cic.com/catalyst/about/",
+    "https://cic.com/catalyst/programs/",
+    "https://cic.com/de/internationale-connect-programme/",
+    "https://cic.com/de/programme/",
+    "https://cic.com/de/programme/internationale-sanfte-landung/",
+    "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-miami/",
+    "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-rotterdam/",
+    "https://cic.com/de/programme/japan-schreibtisch/",
+    "https://cic.com/de/programme/japan-schreibtisch/anfrageformular-fuer-innovationstouren/",
+    "https://cic.com/international-connect-programs/",
+    "https://cic.com/nl/internationale-connect-programmas/",
+    "https://cic.com/nl/programmas/"
   ],
   "evidence": [
-    {
-      "id": "check-announced-5a777b1cd9",
-      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "not able to utilize the space to its fullest. We worked with the cohort to extend memberships until the end of July instead of April, as originally planned. A large part of our cohort",
-      "page": "batches"
-    },
-    {
-      "id": "check-announced-a5dc54b2b7",
-      "url": "https://cic.com/nl/blog/een-startbaan-voor-succes-cic-st-louis-verwelkomt-derde-social-impact-cohort/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "ter harte genomen bij het plannen van het derde Social Impact Cohort, dat net op 5 september van start is gegaan. Daarom hebben we de periode waarin de ruimte",
-      "page": "batches"
-    },
-    {
-      "id": "check-announced-e28aa4f133",
-      "url": "https://cic.com/blog/providing-a-runway-for-success-cic-st-louis-welcomes-third-social-impact-cohort/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "took that feedback to heart in planning for the third Social Impact Cohort, which just began on September 5. To that end, we have extended the runway time for which the space",
-      "page": "batches"
-    },
     {
       "id": "check-duration-0f022946b2",
       "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
@@ -69,73 +53,80 @@
       "page": "batches"
     },
     {
-      "id": "check-format-18870f4fa8",
-      "url": "https://cic.com/blog/2023-5-9-cics-international-soft-landing-opens-cohort-application-window/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": ". For more information visit CIC.com/softlanding or join virtual information sessions in May, RSVP here . About CIC CIC is",
-      "page": "batches"
+      "id": "check-email-0175b9a78a",
+      "url": "https://cic.com/international-connect-programs/",
+      "title": "Cambridge Innovation Center — program page",
+      "excerpt": "more about International Connect Programs? Contact us at connect@cic.com Cambridge Innovation Center Contact Company About Press",
+      "page": "details"
     },
     {
-      "id": "check-format-32a79d5521",
-      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "happens in person, so we had to quickly pivot to offer virtual engagement opportunities. Our events and relationship",
-      "page": "batches"
+      "id": "check-email-252681e8f0",
+      "url": "https://cic.com/international-connect-programs/",
+      "title": "Cambridge Innovation Center — program page",
+      "excerpt": "connect@cic.com",
+      "page": "details"
     },
     {
-      "id": "check-format-5952d687bb",
-      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "again program events for the cohort to meet and network in person, but we’ll also have consistent virtual opportunities that",
-      "page": "batches"
+      "id": "check-email-3962db539e",
+      "url": "https://cic.com/de/internationale-connect-programme/",
+      "title": "Cambridge Innovation Center — program page",
+      "excerpt": "Connect-Programme erfahren ? Kontaktieren Sie uns unter connect@cic.com Cambridge Innovation Center Kontakt Unternehmen",
+      "page": "details"
     },
     {
-      "id": "check-format-68f21dd0dd",
-      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "meet and network in person, but we’ll also have consistent virtual opportunities that fit into this “new normal” landscape.",
-      "page": "batches"
+      "id": "check-email-6e3dd53d53",
+      "url": "https://cic.com/nl/internationale-connect-programmas/",
+      "title": "Cambridge Innovation Center — program page",
+      "excerpt": "Connect Programs? Neem contact met ons op via connect@cic.com Cambridge Innovation Center Contact Bedrijf Bedrijf",
+      "page": "details"
     },
     {
-      "id": "check-format-748e6248d1",
-      "url": "https://cic.com/blog/2023-5-9-cics-international-soft-landing-opens-cohort-application-window/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "The Gateway program, which will be conducted as a virtual experience and offer two weeks of daily virtual sessions,",
-      "page": "batches"
+      "id": "check-email-75a5251bd8",
+      "url": "https://cic.com/nl/internationale-connect-programmas/",
+      "title": "Cambridge Innovation Center — program page",
+      "excerpt": "connect@cic.com",
+      "page": "details"
     },
     {
-      "id": "check-format-78073b8e42",
-      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "Most of our clients speak to the importance of connection in person. With COVID, it’s been hard to physically be in the same",
-      "page": "batches"
+      "id": "check-email-9d01e96bad",
+      "url": "https://cic.com/de/internationale-connect-programme/",
+      "title": "Cambridge Innovation Center — program page",
+      "excerpt": "connect@cic.com",
+      "page": "details"
     },
     {
-      "id": "check-format-85ea4d15b5",
-      "url": "https://cic.com/36for75",
-      "title": "Cambridge Innovation Center — application page",
+      "id": "check-format-4106d6d3d5",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "title": "Cambridge Innovation Center — batches page",
       "excerpt": "and a collaborative atmosphere. Best for: Solo founders, remote workers, and individual collaborators. From $400/month",
-      "page": "application"
-    },
-    {
-      "id": "check-format-8cbda7a5a5",
-      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "it is for children and adults to interact outside of a virtual setting. I’m most looking forward to being able to share a",
       "page": "batches"
     },
     {
-      "id": "check-format-9881b23b9b",
-      "url": "https://cic.com/36for75",
-      "title": "Cambridge Innovation Center — application page",
-      "excerpt": "access to the community. Best for: Solo entrepreneurs and remote employees From $600/desk/month Lease Dedicated Desk",
-      "page": "application"
+      "id": "check-format-50ae6762af",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "long-term liability. 1 Tour the Campus Come see the campus in person. A tour is the best way to see our buildings, check out",
+      "page": "batches"
     },
     {
-      "id": "check-format-bb8aaadb5d",
-      "url": "https://cic.com/blog/2023-5-9-cics-international-soft-landing-opens-cohort-application-window/",
+      "id": "check-format-674a5f10f3",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
       "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "and one-to-one meetings with potential partners, will be a hybrid program that combines online programming with two weeks on",
+      "excerpt": "access to the community. Best for: Solo entrepreneurs and remote employees From $600/desk/month Lease Dedicated Desk",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-b26ed19756",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "to the community. Best for: Individual entrepreneurs and remote workers who want a consistent home base From $400/month",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-bd389bf940",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "in the district. Best for: Solo founders, small teams, and remote workers From $300/month Explore Coworking Dedicated Desk A",
       "page": "batches"
     },
     {
@@ -146,32 +137,11 @@
       "page": "batches"
     },
     {
-      "id": "check-format-de65e209db",
-      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "being able to share a meal, moment, and idea with people in person into the new year. Our centers depend on people physically",
-      "page": "batches"
-    },
-    {
-      "id": "check-format-eee5ab1d2a",
-      "url": "https://cic.com/blog/2023-5-9-cics-international-soft-landing-opens-cohort-application-window/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "as a virtual experience and offer two weeks of daily virtual sessions, will accept 15 startups and begin May 30. The",
-      "page": "batches"
-    },
-    {
-      "id": "check-format-fb383ef090",
-      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "Minna: We had a short window of opportunity to have in-person programming for this year’s cohort before COVID hit, but",
-      "page": "batches"
-    },
-    {
-      "id": "check-format-fba5c19c81",
-      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "part of our cohort model is the collaboration that happens in person, so we had to quickly pivot to offer virtual engagement",
-      "page": "batches"
+      "id": "check-format-d9eb5f901e",
+      "url": "https://cic.com/about/",
+      "title": "Cambridge Innovation Center — program page",
+      "excerpt": "space, private offices, bookable conference rooms, and hybrid solutions for the modern world. Learn More Lab Space",
+      "page": "details"
     },
     {
       "id": "check-format-fd01cab256",
@@ -181,11 +151,11 @@
       "page": "batches"
     },
     {
-      "id": "check-location-8750d97ec1",
-      "url": "https://cic.com/blog/cic-massachusetts-social-impact-cohort-entries/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "seed – Series A) Have their business based in Massachusetts or the Greater Boston area Companies",
-      "page": "batches"
+      "id": "check-location-865ec46bf5",
+      "url": "https://cic.com/about/",
+      "title": "Cambridge Innovation Center — program page",
+      "excerpt": "is Head of Europe in CIC’s growth team based in Rotterdam. Previously he was Arval Director",
+      "page": "details"
     },
     {
       "id": "check-location-d27fd1785a",
@@ -202,11 +172,18 @@
       "page": "details"
     },
     {
-      "id": "check-phone-312a3875d6",
-      "url": "https://cic.com/36for75",
-      "title": "Cambridge Innovation Center — application page",
+      "id": "check-phone-5a2ad17f3b",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "title": "Cambridge Innovation Center — batches page",
       "excerpt": "\"telephone\": \"+1 (267) 233-6888\"",
-      "page": "application"
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-6301e1583c",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "\"telephone\": \"+1 (314) 332-2027\"",
+      "page": "batches"
     },
     {
       "id": "check-route-5a49e42d65",
@@ -214,20 +191,6 @@
       "title": "Cambridge Innovation Center — homepage",
       "excerpt": "https://cic.com/",
       "page": "details"
-    },
-    {
-      "id": "check-route-dec2e5a25e",
-      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "Learn more & Apply → https://cic.com/36for75",
-      "page": "batches"
-    },
-    {
-      "id": "check-status-02c84bd064",
-      "url": "https://cic.com/blog/2023-5-9-cics-international-soft-landing-opens-cohort-application-window/",
-      "title": "Cambridge Innovation Center — batches page",
-      "excerpt": "was first established in 2016, the program has supported five cohorts and a total of 68 entrepreneurs. Applications are open until May 22, 2023 . For more information visit CIC.com/softlanding or join virtual information sessions in",
-      "page": "batches"
     },
     {
       "id": "check-status-f3b9c65e72",
@@ -245,64 +208,76 @@
       "excerpt": "CIC | Innovation Campuses and Catalyst Services Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Design & Construction Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to learn more or ask"
     },
     {
-      "id": "check-page-b5f90aa0e1",
-      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
-      "page": "batches",
-      "excerpt": "CIC Seeks Impact-Driven Entrepreneurs for 36for75 Cohort | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Design & Construction Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to learn more"
+      "id": "check-page-d3510641ad",
+      "url": "https://cic.com/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka NOW OPEN Insights from our Blog What Is Flexible Office Space and What Are Its Benefits?"
     },
     {
-      "id": "check-page-7746cb7a2b",
-      "url": "https://cic.com/36for75",
-      "page": "application",
-      "excerpt": "Office, Coworking & Lab Space in Philadelphia | CIC Toggle menu Office Space North America Boston Cambridge Philadelphia Providence St. Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Now Open Insights from our Blog What Is Flexible Office Space and What Are Its Benefits? Learn More Lab Space Philadelphia St. Louis Event Space Attend an event Cambridge Philadelphia Providence St. Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Boston Cambridge Philadelphia Providence Rotterdam St. Louis Programs Venture Café Weekly events that build community and connect innovators to a global network International Connect Programs Bridging Ecosystems through Curated Programmatic Innovation Japan Desk Programming and services bridging Japan-Boston innovation ecosystems Social Impact Cohorts Supporting underserved entrepreneurs with resources, mentors, and more View all programs CIC offers diverse programs to support startups, growing companies & organizations Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Press Keep up with the latest news from CIC’s global locations Book a Tour Login EN Change language DE JA NL PL Office Space Toggle Office Space menu North America Boston"
+      "id": "check-page-62cd18dd7c",
+      "url": "https://cic.com/",
+      "page": "details",
+      "excerpt": "Learn More Lab Space Philadelphia St."
     },
     {
-      "id": "check-page-7e52c60c48",
-      "url": "https://cic.com/blog/2023-5-9-cics-international-soft-landing-opens-cohort-application-window/",
-      "page": "batches",
-      "excerpt": "CIC’s International Soft Landing Opens Cohort Application Window | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Design & Construction Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to"
+      "id": "check-page-274b3d4c38",
+      "url": "https://cic.com/",
+      "page": "details",
+      "excerpt": "Louis Event Space Attend an event Cambridge Philadelphia Providence St."
     },
     {
-      "id": "check-page-3d43d790dd",
-      "url": "https://cic.com/blog/cic-massachusetts-social-impact-cohort-entries/",
-      "page": "batches",
-      "excerpt": "CIC Now Accepting Entries for New Massachusetts Social Impact Cohort | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Design & Construction Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to"
+      "id": "check-page-6947a4c0b7",
+      "url": "https://cic.com/",
+      "page": "details",
+      "excerpt": "Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Boston Cambridge Philadelphia Providence Rotterdam NEW St."
     },
     {
-      "id": "check-page-a9079d3fda",
-      "url": "https://cic.com/blog/providing-a-runway-for-success-cic-st-louis-welcomes-third-social-impact-cohort/",
-      "page": "batches",
-      "excerpt": "Providing a Runway for Success: CIC St. Louis Welcomes Third Social Impact Cohort | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Design & Construction Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with"
+      "id": "check-page-4b441a03b6",
+      "url": "https://cic.com/",
+      "page": "details",
+      "excerpt": "Find a Workspace Find a Lab Event & Meeting Spaces Innovation Programs Innovation Ecosystem Development Give your team a flexible home in an Innovation Campus Find the right place to work at a CIC Innovation Campus, from flexible workspace to private offices and suites."
     },
     {
-      "id": "check-page-f3b6c766bf",
-      "url": "https://cic.com/de/blog/cic-nimmt-jetzt-bewerbungen-fuer-die-neue-massachusetts-social-impact-cohort-entgegen/",
-      "page": "batches",
-      "excerpt": "CIC nimmt jetzt Bewerbungen für die neue Massachusetts Social Impact Cohort entgegen | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to learn"
+      "id": "check-page-2ad83f8300",
+      "url": "https://cic.com/",
+      "page": "details",
+      "excerpt": "From flexible workspace and private offices to labs, meeting rooms, and event spaces, our campuses are built to make day-to-day work easier."
     },
     {
-      "id": "check-page-47cecafd0e",
-      "url": "https://cic.com/nl/blog/cic-accepteert-nu-inschrijvingen-voor-nieuw-sociaal-impactcohort-in-massachusetts/",
-      "page": "batches",
-      "excerpt": "CIC accepteert nu inschrijvingen voor nieuw sociaal impactcohort in Massachusetts | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to learn"
+      "id": "check-page-369855d55f",
+      "url": "https://cic.com/",
+      "page": "details",
+      "excerpt": "Today, CIC operates across North America, Europe, Middle East, and Asia, with spaces and services shaped by the people, industries, and opportunities in each market."
     },
     {
-      "id": "check-page-423705c80b",
-      "url": "https://cic.com/nl/blog/cic-zoekt-impactgerichte-ondernemers-voor-36for75-cohort/",
-      "page": "batches",
-      "excerpt": "CIC zoekt impactgerichte ondernemers voor 36for75 Cohort | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to learn more or ask questions Press"
+      "id": "check-page-7ae69868c5",
+      "url": "https://cic.com/",
+      "page": "details",
+      "excerpt": "14,000+ Entrepreneurs, startups, scale-ups, enterprises, institutions, and ecosystem partners have worked with CIC."
     },
     {
-      "id": "check-page-b01c17d63f",
-      "url": "https://cic.com/nl/blog/cics-internationale-zachte-landing-opent-inschrijvingsvenster-voor-cohort/",
-      "page": "batches",
-      "excerpt": "CIC's internationale zachte landing opent inschrijvingsvenster voor cohort | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to learn more or"
+      "id": "check-page-a51e152504",
+      "url": "https://cic.com/",
+      "page": "details",
+      "excerpt": "Find a CIC Location Near You Explore CIC campuses across North America, Europe, and Asia."
     },
     {
-      "id": "check-page-e996f971b6",
-      "url": "https://cic.com/nl/blog/een-startbaan-voor-succes-cic-st-louis-verwelkomt-derde-social-impact-cohort/",
-      "page": "batches",
-      "excerpt": "Een startbaan voor succes: CIC St. Louis verwelkomt derde Social Impact Cohort | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to learn more"
+      "id": "check-page-34e2134c0b",
+      "url": "https://cic.com/",
+      "page": "details",
+      "excerpt": "North America BOSTON CAMBRIDGE PROVIDENCE PHILADELPHIA ST."
+    },
+    {
+      "id": "check-page-1a397b8fb5",
+      "url": "https://cic.com/",
+      "page": "details",
+      "excerpt": "LOUIS Europe BERLIN ROTTERDAM WARSAW Middle East JEDDAH MUSCAT Asia FUKUOKA TOKYO OSAKA Put your ideas in the best position to make an impact."
+    },
+    {
+      "id": "check-page-1236100c61",
+      "url": "https://cic.com/",
+      "page": "details",
+      "excerpt": "Get in Touch Cambridge Innovation Center Contact Company About Press Careers Venture Café CIC Catalyst Captains of Innovation CIC Institute CIC Health Work With Us Landlords & Developers Enterprise Brokers Locations North America Boston Cambridge Philadelphia Providence St."
     },
     {
       "id": "check-page-ede4f1f0ee",
@@ -311,10 +286,154 @@
       "excerpt": "BIPOC en achtergestelde gemeenschappen Sociale impact | CIC Toggle menu Kantoorruimte Laboratoriumruimte Philadelphia St. Louis Vergaderruimtes Rotterdam Boston Cambridge Philadelphia Providence St. Louis Programma's Venture Café Wekelijkse evenementen die een community opbouwen en vernieuwers verbinden met een wereldwijd netwerk Internationale zachte landing Op maat gemaakte programmering waarmee startups kunnen uitbreiden naar nieuwe markten Japans bureau Programmering en diensten die de innovatie-ecosystemen tussen Japan en Boston overbruggen Cohorten voor sociale impact Ondersteuning van kansarme ondernemers met middelen, mentoren en meer Bekijk alle programma's CIC biedt diverse programma’s aan ter ondersteuning van startups, groeiende bedrijven en organisaties Evenementen Organiseer een evenement Verheven evenementen- en vergaderruimtes met diensten die u laten schitteren Bezoek een evenement Maak verbinding met het lokale innovatie-ecosysteem, netwerk en bouw een community op Bedrijf Over Ontdek de mensen en diensten die CIC tot de wereldleider op het gebied van innovatie maken Blog Krijg nieuwe inzichten en blijf op de hoogte van het laatste nieuws uit onze wereldwijde community. Carrières Sluit je aan bij ons wereldwijde team en help de toekomst van innovatie op schaal vorm te geven druk op Blijf op de hoogte van het laatste nieuws van CIC’s wereldwijde locaties Over"
     },
     {
+      "id": "check-page-cae52a50f6",
+      "url": "https://cic.com/nl/cohort-sociale-impact-massachusetts/",
+      "page": "batches",
+      "excerpt": "Carrières Sluit je aan bij ons wereldwijde team en help de toekomst van innovatie op schaal vorm te geven druk op Blijf op de hoogte van het laatste nieuws van CIC’s wereldwijde locaties Over Carrière Druk op Book a Tour Login NL Change language DE EN JA PL Kantoorruimte Laboratoriumruimte Toggle Laboratoriumruimte menu Philadelphia St."
+    },
+    {
+      "id": "check-page-4effa28e71",
+      "url": "https://cic.com/nl/cohort-sociale-impact-massachusetts/",
+      "page": "batches",
+      "excerpt": "Louis Vergaderruimtes Toggle Vergaderruimtes menu Rotterdam Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-5c12ba5a76",
+      "url": "https://cic.com/nl/cohort-sociale-impact-massachusetts/",
+      "page": "batches",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Nu geopend - CIC Berlin CIC and Jamestown Expand Partnership with Creation of CIC Innovation Campus in Berlin Learn more Laboratoriumruimte Philadelphia St."
+    },
+    {
+      "id": "check-page-1fbaee97f1",
+      "url": "https://cic.com/nl/cohort-sociale-impact-massachusetts/",
+      "page": "batches",
+      "excerpt": "Nu solliciteren Onze Social Impact Cohort Het Social Impact Cohort van CIC Massachusetts is een kleine groep bewust gekozen ondernemers uit Massachusetts."
+    },
+    {
+      "id": "check-page-ce097562ce",
+      "url": "https://cic.com/nl/cohort-sociale-impact-massachusetts/",
+      "page": "batches",
+      "excerpt": "Hoor van enkele van onze alumni wat het CIC Social Impact Program zo speciaal maakt."
+    },
+    {
+      "id": "check-page-a45d5fc775",
+      "url": "https://cic.com/nl/cohort-sociale-impact-massachusetts/",
+      "page": "batches",
+      "excerpt": "Ons early-stage cohort richt zich op kandidaten die nog bezig zijn met het opstarten van hun startups, inclusief degenen die hun MVP’s aan het bouwen zijn, op zoek zijn naar een medeoprichter, pre-commercial zijn en/of nog geen product op de markt hebben."
+    },
+    {
+      "id": "check-page-5e4cc8c735",
+      "url": "https://cic.com/nl/cohort-sociale-impact-massachusetts/",
+      "page": "batches",
+      "excerpt": "Ons cohort in de groeifase richt zich op kleine bedrijven in de groeifase (ongeveer seed – Series A) die actief fondsen werven en hun activiteiten opschalen."
+    },
+    {
+      "id": "check-page-6c1bee10a7",
+      "url": "https://cic.com/nl/cohort-sociale-impact-massachusetts/",
+      "page": "batches",
+      "excerpt": "We zijn vooral enthousiast over bedrijven op het gebied van AI, robotica, biowetenschappen, biotechnologie, geavanceerde productie, digitale gezondheid, farmaceutica, defensie, duurzaamheid, klimaattechnologie, voedseltechnologie en fintech, maar we moedigen elk bedrijf, ongeacht de sector, aan om een aanvraag in te dienen."
+    },
+    {
+      "id": "check-page-a69a80e3b9",
+      "url": "https://cic.com/nl/cohort-sociale-impact-massachusetts/",
+      "page": "batches",
+      "excerpt": "Deelnemers krijgen gratis toegang tot coworking voor de duur van het programma en voor 3 maanden na afronding van het programma."
+    },
+    {
+      "id": "check-page-ac0dcffe14",
+      "url": "https://cic.com/nl/cohort-sociale-impact-massachusetts/",
+      "page": "batches",
+      "excerpt": "Lees hier meer over onze alumni van het Social Impact Program ."
+    },
+    {
+      "id": "check-page-24be883c2f",
+      "url": "https://cic.com/nl/cohort-sociale-impact-massachusetts/",
+      "page": "batches",
+      "excerpt": "Maak kennis met het 2024-cohort van starters Dox Health, Inc Rajiv Shrestha, voorzitter Maya Gurung , hoofd OperatinG Office Meer informatie Vertel ons over uw organisatie ."
+    },
+    {
+      "id": "check-page-fcceaa9a22",
+      "url": "https://cic.com/nl/cohort-sociale-impact-massachusetts/",
+      "page": "batches",
+      "excerpt": "Dox Health, Inc. heeft een revolutionair digitaal gezondheidsplatform voor consumenten ontwikkeld, QPER Health, dat het probleem oplost van het volgen van een andere levensstijl als medicijn en dat zelfzorg democratiseert en transformeert."
+    },
+    {
       "id": "check-page-bad7b2cca4",
       "url": "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
       "page": "batches",
       "excerpt": "Cohort sociale impact - Philadelphia | CIC Toggle menu Kantoorruimte Laboratoriumruimte Philadelphia St. Louis Vergaderruimtes Rotterdam Boston Cambridge Philadelphia Providence St. Louis Programma's Venture Café Wekelijkse evenementen die een community opbouwen en vernieuwers verbinden met een wereldwijd netwerk Internationale zachte landing Op maat gemaakte programmering waarmee startups kunnen uitbreiden naar nieuwe markten Japans bureau Programmering en diensten die de innovatie-ecosystemen tussen Japan en Boston overbruggen Cohorten voor sociale impact Ondersteuning van kansarme ondernemers met middelen, mentoren en meer Bekijk alle programma's CIC biedt diverse programma’s aan ter ondersteuning van startups, groeiende bedrijven en organisaties Evenementen Organiseer een evenement Verheven evenementen- en vergaderruimtes met diensten die u laten schitteren Bezoek een evenement Maak verbinding met het lokale innovatie-ecosysteem, netwerk en bouw een community op Bedrijf Over Ontdek de mensen en diensten die CIC tot de wereldleider op het gebied van innovatie maken Blog Krijg nieuwe inzichten en blijf op de hoogte van het laatste nieuws uit onze wereldwijde community. Carrières Sluit je aan bij ons wereldwijde team en help de toekomst van innovatie op schaal vorm te geven druk op Blijf op de hoogte van het laatste nieuws van CIC’s wereldwijde locaties Over Carrière Druk op"
+    },
+    {
+      "id": "check-page-78a28a74ef",
+      "url": "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
+      "page": "batches",
+      "excerpt": "Carrières Sluit je aan bij ons wereldwijde team en help de toekomst van innovatie op schaal vorm te geven druk op Blijf op de hoogte van het laatste nieuws van CIC’s wereldwijde locaties Over Carrière Druk op Book a Tour Login NL Change language DE EN JA PL Kantoorruimte Laboratoriumruimte Toggle Laboratoriumruimte menu Philadelphia St."
+    },
+    {
+      "id": "check-page-baff6a9c44",
+      "url": "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
+      "page": "batches",
+      "excerpt": "Louis Vergaderruimtes Toggle Vergaderruimtes menu Rotterdam Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-61aae6545c",
+      "url": "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
+      "page": "batches",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Nu geopend - CIC Berlin CIC and Jamestown Expand Partnership with Creation of CIC Innovation Campus in Berlin Learn more Laboratoriumruimte Philadelphia St."
+    },
+    {
+      "id": "check-page-cd5732d31f",
+      "url": "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
+      "page": "batches",
+      "excerpt": "CIC is zowel een wereldwijd netwerk van duizenden ondernemers als een lokale gemeenschap in Philadelphia, waartoe je allebei toegang hebt."
+    },
+    {
+      "id": "check-page-c6502acb83",
+      "url": "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
+      "page": "batches",
+      "excerpt": "Nu solliciteren Oprichters van Open Access en leden van het Social Impact Cohort, Tiffany Stanard en Jeffrey Friedman."
+    },
+    {
+      "id": "check-page-0045d3b07b",
+      "url": "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
+      "page": "batches",
+      "excerpt": "Onze Social Impact Cohort De bedrijven in ons Social Impact Cohort werken in een omgeving die samenwerking, leermogelijkheden en interactie stimuleert."
+    },
+    {
+      "id": "check-page-444f8b2366",
+      "url": "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
+      "page": "batches",
+      "excerpt": "Wat CIC Philly’s Social Impact Cohort is een kleine groep bewust gekozen, sociaal gedreven ondernemers, bedrijfseigenaren en non-profits."
+    },
+    {
+      "id": "check-page-31a2b75696",
+      "url": "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
+      "page": "batches",
+      "excerpt": "Sinds de opening heeft CIC Philadelphia het volgende gedoneerd $500.000 aan werkruimte, evenementenruimte en diensten $300.000 aan donaties van de gemeenschap 200+ uur gedoneerde tijd Lokaal winkelen CIC streeft er altijd naar om lokaal te kopen en we moedigen onze klanten aan om dat ook te doen."
+    },
+    {
+      "id": "check-page-7f91d2d80f",
+      "url": "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
+      "page": "batches",
+      "excerpt": "Zie het University City District West Philadelphia Bedrijvengids voor lokale restaurants, winkels, recreatie en verfrissing."
+    },
+    {
+      "id": "check-page-0a7fe4108f",
+      "url": "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
+      "page": "batches",
+      "excerpt": "Bedankt voor je interesse in het CIC Philadelphia Social Impact Cohort We accepteren nu aanmeldingen voor het 2025 cohort."
+    },
+    {
+      "id": "check-page-fe97543572",
+      "url": "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
+      "page": "batches",
+      "excerpt": "Stuur een e-mail naar philly@cic.com Cambridge Innovation Center Contact Bedrijf Bedrijf Venture Café CIC Catalyst Captains of Innovation CIC Institute CIC Health Over Carrière Druk op Werk met ons Onderneming Locaties North America Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-3636a74e7e",
+      "url": "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
+      "page": "batches",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka LinkedIn Instagram YouTube Facebook Copyright ©️ 2026 CIC Innovation Services LLC."
     },
     {
       "id": "check-page-028afe9acc",
@@ -323,26 +442,1134 @@
       "excerpt": "Cohort sociale impact - St. Louis | CIC Toggle menu Kantoorruimte Laboratoriumruimte Philadelphia St. Louis Vergaderruimtes Rotterdam Boston Cambridge Philadelphia Providence St. Louis Programma's Venture Café Wekelijkse evenementen die een community opbouwen en vernieuwers verbinden met een wereldwijd netwerk Internationale zachte landing Op maat gemaakte programmering waarmee startups kunnen uitbreiden naar nieuwe markten Japans bureau Programmering en diensten die de innovatie-ecosystemen tussen Japan en Boston overbruggen Cohorten voor sociale impact Ondersteuning van kansarme ondernemers met middelen, mentoren en meer Bekijk alle programma's CIC biedt diverse programma’s aan ter ondersteuning van startups, groeiende bedrijven en organisaties Evenementen Organiseer een evenement Verheven evenementen- en vergaderruimtes met diensten die u laten schitteren Bezoek een evenement Maak verbinding met het lokale innovatie-ecosysteem, netwerk en bouw een community op Bedrijf Over Ontdek de mensen en diensten die CIC tot de wereldleider op het gebied van innovatie maken Blog Krijg nieuwe inzichten en blijf op de hoogte van het laatste nieuws uit onze wereldwijde community. Carrières Sluit je aan bij ons wereldwijde team en help de toekomst van innovatie op schaal vorm te geven druk op Blijf op de hoogte van het laatste nieuws van CIC’s wereldwijde locaties Over Carrière Druk op"
     },
     {
+      "id": "check-page-ac14888096",
+      "url": "https://cic.com/nl/cohort-sociale-impact-st-louis/",
+      "page": "batches",
+      "excerpt": "Carrières Sluit je aan bij ons wereldwijde team en help de toekomst van innovatie op schaal vorm te geven druk op Blijf op de hoogte van het laatste nieuws van CIC’s wereldwijde locaties Over Carrière Druk op Book a Tour Login NL Change language DE EN JA PL Kantoorruimte Laboratoriumruimte Toggle Laboratoriumruimte menu Philadelphia St."
+    },
+    {
+      "id": "check-page-2e8e4013cc",
+      "url": "https://cic.com/nl/cohort-sociale-impact-st-louis/",
+      "page": "batches",
+      "excerpt": "Louis Vergaderruimtes Toggle Vergaderruimtes menu Rotterdam Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-56261f4b38",
+      "url": "https://cic.com/nl/cohort-sociale-impact-st-louis/",
+      "page": "batches",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Nu geopend - CIC Berlin CIC and Jamestown Expand Partnership with Creation of CIC Innovation Campus in Berlin Learn more Laboratoriumruimte Philadelphia St."
+    },
+    {
+      "id": "check-page-b40ab07a10",
+      "url": "https://cic.com/nl/cohort-sociale-impact-st-louis/",
+      "page": "batches",
+      "excerpt": "Onze Social Impact Cohort De bedrijven in ons Social Impact Cohort werken in een omgeving die samenwerking, leermogelijkheden en interactie stimuleert."
+    },
+    {
+      "id": "check-page-b06630ce65",
+      "url": "https://cic.com/nl/cohort-sociale-impact-st-louis/",
+      "page": "batches",
+      "excerpt": "Louis Social Impact Cohort?"
+    },
+    {
+      "id": "check-page-04265db132",
+      "url": "https://cic.com/nl/cohort-sociale-impact-st-louis/",
+      "page": "batches",
+      "excerpt": "Louis Social Impact Cohort hoop ik een sterke band op te bouwen met mijn medecohortleden en de bredere CIC- en Cortex-gemeenschappen, en zo strategische partnerschappen op te bouwen om positieve impact te bewerkstelligen."
+    },
+    {
+      "id": "check-page-b06630ce65",
+      "url": "https://cic.com/nl/cohort-sociale-impact-st-louis/",
+      "page": "batches",
+      "excerpt": "Louis Social Impact Cohort?"
+    },
+    {
+      "id": "check-page-b06630ce65",
+      "url": "https://cic.com/nl/cohort-sociale-impact-st-louis/",
+      "page": "batches",
+      "excerpt": "Louis Social Impact Cohort?"
+    },
+    {
+      "id": "check-page-4eeaa66b17",
+      "url": "https://cic.com/nl/cohort-sociale-impact-st-louis/",
+      "page": "batches",
+      "excerpt": "Louis Social Impact Cohort hoop ik waardevolle inzichten en middelen op te doen om mijn werk op het gebied van preventie van middelengebruik en interventie bij overdoses vooruit te helpen."
+    },
+    {
+      "id": "check-page-b06630ce65",
+      "url": "https://cic.com/nl/cohort-sociale-impact-st-louis/",
+      "page": "batches",
+      "excerpt": "Louis Social Impact Cohort?"
+    },
+    {
+      "id": "check-page-b06630ce65",
+      "url": "https://cic.com/nl/cohort-sociale-impact-st-louis/",
+      "page": "batches",
+      "excerpt": "Louis Social Impact Cohort?"
+    },
+    {
+      "id": "check-page-b06630ce65",
+      "url": "https://cic.com/nl/cohort-sociale-impact-st-louis/",
+      "page": "batches",
+      "excerpt": "Louis Social Impact Cohort?"
+    },
+    {
       "id": "check-page-2b041015af",
       "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
       "page": "batches",
       "excerpt": "Social Impact Cohort for Underserved Founders in MA | CIC Toggle menu Office Space North America Boston Cambridge Philadelphia Providence St. Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Now Open Insights from our Blog What Is Flexible Office Space and What Are Its Benefits? Learn More Lab Space Philadelphia St. Louis Event Space Attend an event Cambridge Philadelphia Providence St. Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Boston Cambridge Philadelphia Providence Rotterdam St. Louis Programs Venture Café Weekly events that build community and connect innovators to a global network International Connect Programs Bridging Ecosystems through Curated Programmatic Innovation Japan Desk Programming and services bridging Japan-Boston innovation ecosystems Social Impact Cohorts Supporting underserved entrepreneurs with resources, mentors, and more View all programs CIC offers diverse programs to support startups, growing companies & organizations Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Press Keep up with the latest news from CIC’s global locations Book a Tour Login EN Change language DE JA NL PL Office Space Toggle Office Space menu North America"
+    },
+    {
+      "id": "check-page-19d73251ae",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "page": "batches",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Now Open Insights from our Blog Insights from our Blog Lab Space Toggle Lab Space menu Philadelphia St."
+    },
+    {
+      "id": "check-page-4fbafab93c",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "page": "batches",
+      "excerpt": "Louis Event Space Toggle Event Space menu Attend an event Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-fcc81a51bc",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "page": "batches",
+      "excerpt": "Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Toggle Meeting Rooms menu Boston Cambridge Philadelphia Providence Rotterdam St."
+    },
+    {
+      "id": "check-page-d523fe0c65",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "page": "batches",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka NOW OPEN Insights from our Blog What Is Flexible Office Space and What Are Its Benefits?"
+    },
+    {
+      "id": "check-page-4d288144c0",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "page": "batches",
+      "excerpt": "Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Boston Cambridge Philadelphia Providence Rotterdam NEW St."
+    },
+    {
+      "id": "check-page-c2c71b25b6",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "page": "batches",
+      "excerpt": "Join the list Our Social Impact Cohort CIC Massachusetts’ Social Impact Cohort is a small group of intentionally chosen entrepreneurs based in Massachusetts."
+    },
+    {
+      "id": "check-page-beb5ff44ce",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "page": "batches",
+      "excerpt": "CIC manages two distinct programs for different stages of entrepreneur growth: a 3-month, early stage cohort, and a 6-month, growth stage cohort."
+    },
+    {
+      "id": "check-page-ef57bfcbe7",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "page": "batches",
+      "excerpt": "When Our early-stage program runs annually from September to December, with applications opening in the late spring/early summer."
+    },
+    {
+      "id": "check-page-6112ed4090",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "page": "batches",
+      "excerpt": "Growth Stage Cohort Who Our ideal candidates are small growth-stage businesses, companies, or organizations who may meet one or more of the following criteria: Are in approximately pre-seed – Series A Are actively fundraising or about to pursue funding opportunities Are currently scaling their operations – including but not limited to expanding to new markets, preparing to hire, etc."
+    },
+    {
+      "id": "check-page-f6e9775959",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "page": "batches",
+      "excerpt": "When Our growth-stage program runs annually from January to June."
+    },
+    {
+      "id": "check-page-6e54692c45",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "page": "batches",
+      "excerpt": "Our early-stage cohort will cater to candidates who are still launching their startups, including those that are building their MVPs, seeking a cofounder, are pre-revenue, and/or do not yet have a product in market."
+    },
+    {
+      "id": "check-page-5cffe411e1",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "page": "batches",
+      "excerpt": "Our growth-stage cohort will cater to small businesses in their growth stages (approximately seed – Series A) who are actively fundraising and scaling their operations."
+    },
+    {
+      "id": "check-page-38037c6105",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "page": "batches",
+      "excerpt": "Office, Coworking & Lab Space in Philadelphia | CIC Toggle menu Office Space North America Boston Cambridge Philadelphia Providence St. Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Now Open Insights from our Blog What Is Flexible Office Space and What Are Its Benefits? Learn More Lab Space Philadelphia St. Louis Event Space Attend an event Cambridge Philadelphia Providence St. Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Boston Cambridge Philadelphia Providence Rotterdam St. Louis Programs Venture Café Weekly events that build community and connect innovators to a global network International Connect Programs Bridging Ecosystems through Curated Programmatic Innovation Japan Desk Programming and services bridging Japan-Boston innovation ecosystems Social Impact Cohorts Supporting underserved entrepreneurs with resources, mentors, and more View all programs CIC offers diverse programs to support startups, growing companies & organizations Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Press Keep up with the latest news from CIC’s global locations Book a Tour Login EN Change language DE JA NL PL Office Space Toggle Office Space menu North America Boston"
+    },
+    {
+      "id": "check-page-bd413cbc59",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "page": "batches",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Now Open Insights from our Blog Insights from our Blog Lab Space Toggle Lab Space menu Philadelphia St."
+    },
+    {
+      "id": "check-page-d4d3423032",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "page": "batches",
+      "excerpt": "Louis Event Space Toggle Event Space menu Attend an event Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-2bac3be94e",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "page": "batches",
+      "excerpt": "Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Toggle Meeting Rooms menu Boston Cambridge Philadelphia Providence Rotterdam St."
+    },
+    {
+      "id": "check-page-decab6bfc8",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "page": "batches",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka NOW OPEN Insights from our Blog What Is Flexible Office Space and What Are Its Benefits?"
+    },
+    {
+      "id": "check-page-288a4ba37c",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "page": "batches",
+      "excerpt": "Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Boston Cambridge Philadelphia Providence Rotterdam NEW St."
+    },
+    {
+      "id": "check-page-fdd4670676",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "page": "batches",
+      "excerpt": "The CIC Labs & Innovation Campus in Philadelphia provides move-in-ready office suites and specialized labs."
+    },
+    {
+      "id": "check-page-9ad5b2dd07",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "page": "batches",
+      "excerpt": "Discover Our Spaces Book a Tour Book a Tour Managed Office & Lab Space in uCity Square, Philadelphia Full-service workspace and laboratories in the heart of uCity Square."
+    },
+    {
+      "id": "check-page-fdd4670676",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "page": "batches",
+      "excerpt": "The CIC Labs & Innovation Campus in Philadelphia provides move-in-ready office suites and specialized labs."
+    },
+    {
+      "id": "check-page-baf9ec8a67",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "page": "batches",
+      "excerpt": "Discover Our Spaces Book a Tour Book a Tour Flexible Workspace and Lab Solutions Scale your operations with workspaces engineered for solo founders, enterprise teams, and growing labs."
+    },
+    {
+      "id": "check-page-59a737ab14",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "page": "batches",
+      "excerpt": "Best for: Companies and teams of 1–50+ From $850/month Find Your Workspace Coworking Flexible desk access in our shared lounge, providing a professional address and a collaborative atmosphere."
+    },
+    {
+      "id": "check-page-b1c53ddc68",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "page": "batches",
+      "excerpt": "From $400/month Explore Coworking Dedicated Desk A reserved, permanent desk within a shared workspace, providing a consistent home base with full access to the community."
+    },
+    {
+      "id": "check-page-5d7973f9da",
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "page": "batches",
+      "excerpt": "Best for: Solo entrepreneurs and remote employees From $600/desk/month Lease Dedicated Desk Private Labs Dedicated laboratory space and benches for teams requiring specialized, secure environments for their research."
+    },
+    {
+      "id": "check-page-9d9e4614fa",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "page": "batches",
+      "excerpt": "Offices, Coworking & Lab Space in St. Louis | CIC Toggle menu Office Space North America Boston Cambridge Philadelphia Providence St. Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Now Open Insights from our Blog What Is Flexible Office Space and What Are Its Benefits? Learn More Lab Space Philadelphia St. Louis Event Space Attend an event Cambridge Philadelphia Providence St. Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Boston Cambridge Philadelphia Providence Rotterdam St. Louis Programs Venture Café Weekly events that build community and connect innovators to a global network International Connect Programs Bridging Ecosystems through Curated Programmatic Innovation Japan Desk Programming and services bridging Japan-Boston innovation ecosystems Social Impact Cohorts Supporting underserved entrepreneurs with resources, mentors, and more View all programs CIC offers diverse programs to support startups, growing companies & organizations Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Press Keep up with the latest news from CIC’s global locations Book a Tour Login EN Change language DE JA NL PL Office Space Toggle Office Space menu North America Boston"
+    },
+    {
+      "id": "check-page-c6cc591ed8",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "page": "batches",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Now Open Insights from our Blog Insights from our Blog Lab Space Toggle Lab Space menu Philadelphia St."
+    },
+    {
+      "id": "check-page-cc83626906",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "page": "batches",
+      "excerpt": "Louis Event Space Toggle Event Space menu Attend an event Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-8636d3d363",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "page": "batches",
+      "excerpt": "Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Toggle Meeting Rooms menu Boston Cambridge Philadelphia Providence Rotterdam St."
+    },
+    {
+      "id": "check-page-9ffad591c1",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "page": "batches",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka NOW OPEN Insights from our Blog What Is Flexible Office Space and What Are Its Benefits?"
+    },
+    {
+      "id": "check-page-5e2aa1fc73",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "page": "batches",
+      "excerpt": "Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Boston Cambridge Philadelphia Providence Rotterdam NEW St."
+    },
+    {
+      "id": "check-page-18c2a04eb5",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "page": "batches",
+      "excerpt": "Louis’ Cortex Innovation District Private offices, laboratories, and coworking CIC offers move-in ready private offices and coworking along with specialized shared and private labs available for teams of all sizes."
+    },
+    {
+      "id": "check-page-52013ac32e",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "page": "batches",
+      "excerpt": "Discover Our Spaces Book a Tour Book a Tour Coworking, Office, & Lab Space in St."
+    },
+    {
+      "id": "check-page-18c2a04eb5",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "page": "batches",
+      "excerpt": "Louis’ Cortex Innovation District Private offices, laboratories, and coworking CIC offers move-in ready private offices and coworking along with specialized shared and private labs available for teams of all sizes."
+    },
+    {
+      "id": "check-page-d43d355b0d",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "page": "batches",
+      "excerpt": "Discover Our Spaces Book a Tour Book a Tour Flexible Workspace and Lab Solutions for Every Stage of Growth Choose the environment that fits your current needs."
+    },
+    {
+      "id": "check-page-59153875c0",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "page": "batches",
+      "excerpt": "Best for: Companies and teams of 1–50+ From $600/month Find Your Workspace Coworking Flexible, unassigned seating in our open workspace areas."
+    },
+    {
+      "id": "check-page-b3491f7cd8",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "page": "batches",
+      "excerpt": "Best for: Solo founders, small teams, and remote workers From $300/month Explore Coworking Dedicated Desk A reserved, permanent desk within a shared workspace, providing a consistent home base with full access to the community."
+    },
+    {
+      "id": "check-page-a770071381",
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
+      "page": "batches",
+      "excerpt": "Best for: Individual entrepreneurs and remote workers who want a consistent home base From $400/month Lease Dedicated Desk Private Labs Dedicated laboratory space and benches for teams requiring specialized, secure environments for their research."
+    },
+    {
+      "id": "check-page-eecf39eb12",
+      "url": "https://cic.com/about/",
+      "page": "details",
+      "excerpt": "About CIC | Our Mission to Support Innovation & Entrepreneurs Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Design & Construction Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to learn more"
+    },
+    {
+      "id": "check-page-92d8b7a798",
+      "url": "https://cic.com/about/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka NOW OPEN Insights from our Blog What Is Flexible Office Space and What Are Its Benefits?"
+    },
+    {
+      "id": "check-page-49f75d8336",
+      "url": "https://cic.com/about/",
+      "page": "details",
+      "excerpt": "Learn More Lab Space Philadelphia St."
+    },
+    {
+      "id": "check-page-fd0a20894b",
+      "url": "https://cic.com/about/",
+      "page": "details",
+      "excerpt": "Louis Event Space Attend an event Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-04407d361c",
+      "url": "https://cic.com/about/",
+      "page": "details",
+      "excerpt": "Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Boston Cambridge Philadelphia Providence Rotterdam NEW St."
+    },
+    {
+      "id": "check-page-9bca9cb039",
+      "url": "https://cic.com/about/",
+      "page": "details",
+      "excerpt": "We are the global leader in driving innovation at scale Founded in 1999, CIC has shaped more than 2M square feet of innovation space including workspace, laboratories, and event space across North America, Europe, and Asia."
+    },
+    {
+      "id": "check-page-5e341f3d35",
+      "url": "https://cic.com/about/",
+      "page": "details",
+      "excerpt": "Browse Campuses Boston Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-325afd66f9",
+      "url": "https://cic.com/about/",
+      "page": "details",
+      "excerpt": "Louis Berlin Rotterdam Warsaw Tokyo Let’s Go OUR ECOSYSTEM Creating a culture for innovating Workspace Coworking space, private offices, bookable conference rooms, and hybrid solutions for the modern world."
+    },
+    {
+      "id": "check-page-954c15645d",
+      "url": "https://cic.com/about/",
+      "page": "details",
+      "excerpt": "Learn More Lab Space Modern commercial wet labs that offer full equipment and as many benches your team needs."
+    },
+    {
+      "id": "check-page-94ec9c7534",
+      "url": "https://cic.com/about/",
+      "page": "details",
+      "excerpt": "Learn More Japan Desk Working to open pathways for business by connecting Japan and Boston’s innovation ecosystems."
+    },
+    {
+      "id": "check-page-4983b96471",
+      "url": "https://cic.com/about/",
+      "page": "details",
+      "excerpt": "He co-founded and chaired at launch LabCentral, MassRobotics and the Mass Mobility Hub, was founding president of the Kendall Square Association, and co-founded and chaired CIC Health, which delivered more than 10 million COVID-19 tests and 1 million vaccinations."
+    },
+    {
+      "id": "check-page-f568588f12",
+      "url": "https://cic.com/about/",
+      "page": "details",
+      "excerpt": "Earlier, he was a technology strategist at Mitsubishi Research Institute in Tokyo, a Principal at the Boston Consulting Group, a lecturer at MIT Sloan and a venture partner at DFJ New England and New Atlantic Ventures."
+    },
+    {
+      "id": "check-page-664965d2e7",
+      "url": "https://cic.com/about/",
+      "page": "details",
+      "excerpt": "His honors include EY Entrepreneur Of The Year (New England, 2015), the Boston Globe’s inaugural Tech Power Players 50 (2022) and Japan’s Foreign Minister’s Commendation (2024)."
+    },
+    {
+      "id": "check-page-4b55303660",
+      "url": "https://cic.com/catalyst/about/",
+      "page": "details",
+      "excerpt": "About Catalyst | Innovation Ecosystem Advisory | CIC Toggle menu Services Advisory Design & Construction Partnerships Programs About CIC Catalyst Talk to Us Login EN Change language DE JA NL PL Services Toggle Services menu Advisory Design & Construction Partnerships Programs About CIC Catalyst EN Toggle language menu DE JA NL PL Talk to Us Login Skip to main content Contact Book a Tour Bring CIC to You Log In Office Space North America Boston Cambridge Philadelphia Providence St. Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka NOW OPEN Insights from our Blog What Is Flexible Office Space and What Are Its Benefits? Learn More Lab Space Philadelphia St. Louis Event Space Attend an event Cambridge Philadelphia Providence St. Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Boston Cambridge Philadelphia Providence Rotterdam NEW St. Louis Catalyst About Advisory Partnerships Programs Programs Venture Café Weekly events that build community and connect innovators to a global network International Connect Programs Bridging Ecosystems through Curated Programmatic Innovation Japan Desk Programming and services bridging Japan-Boston innovation ecosystems Social Impact Cohorts Supporting underserved entrepreneurs with resources, mentors, and more View all programs CIC offers diverse programs to support startups, growing companies & organizations Company About Learn about the"
+    },
+    {
+      "id": "check-page-bb37fa505f",
+      "url": "https://cic.com/catalyst/about/",
+      "page": "details",
+      "excerpt": "With roots in CIC’s expansive campuses, spanning 1.5M square feet across North America, Europe, and Asia Catalyst leverages deep expertise in ecosystem development, bespoke programming, and district consulting."
+    },
+    {
+      "id": "check-page-331b2d1545",
+      "url": "https://cic.com/catalyst/about/",
+      "page": "details",
+      "excerpt": "OUR ECOSYSTEM How Catalyst Delivers Impact Accelerate Global Competitiveness We equip startups, scale-ups, and institutions to compete globally by strengthening commercialization, expanding market access, and turning innovation into measurable impact."
+    },
+    {
+      "id": "check-page-436ea38b92",
+      "url": "https://cic.com/catalyst/about/",
+      "page": "details",
+      "excerpt": "Accelerate Global Competitiveness We equip startups, scale-ups, corporates, and research institutions to compete globally by accelerating commercialization, expanding market access, and turning breakthrough innovation into measurable impact."
+    },
+    {
+      "id": "check-page-8b7317a40e",
+      "url": "https://cic.com/catalyst/about/",
+      "page": "details",
+      "excerpt": "Victor also contributes to public policy, serving as a Startup Fellow for the Tokyo Metropolitan Government."
+    },
+    {
+      "id": "check-page-666aa7483b",
+      "url": "https://cic.com/catalyst/about/",
+      "page": "details",
+      "excerpt": "A former research scientist at the China Institute of Technology, he brings a data-driven perspective to innovation and competitiveness."
+    },
+    {
+      "id": "check-page-e7f4c69de6",
+      "url": "https://cic.com/catalyst/about/",
+      "page": "details",
+      "excerpt": "She began her career by assisting in launching an international NGO’s branch in Japan, followed by developing ESG and emerging market business models at a Japanese think-tank firm."
+    },
+    {
+      "id": "check-page-3c1a73e90d",
+      "url": "https://cic.com/catalyst/about/",
+      "page": "details",
+      "excerpt": "She then founded Impact Hub Tokyo, where she supported emerging Japan’s startup ecosystem through cross-sector collaboration and community building."
+    },
+    {
+      "id": "check-page-b55db5ed6c",
+      "url": "https://cic.com/catalyst/about/",
+      "page": "details",
+      "excerpt": "Prior to her current role, she served as the Head of Google for Startups Japan."
+    },
+    {
+      "id": "check-page-b0e6ea951d",
+      "url": "https://cic.com/catalyst/about/",
+      "page": "details",
+      "excerpt": "At Catalyst, Shino leads large-scale innovation initiatives and ecosystem architecture, driving ecosystem growth and impact across Japan and beyond."
+    },
+    {
+      "id": "check-page-f052a2b26e",
+      "url": "https://cic.com/catalyst/about/",
+      "page": "details",
+      "excerpt": "Namika Maki Head of Japan Desk About Namika Namika leads Catalyst’s U.S.–Japan innovation initiatives, fostering collaboration among startups, corporates, universities, and government stakeholders."
+    },
+    {
+      "id": "check-page-2803e7d58e",
+      "url": "https://cic.com/catalyst/about/",
+      "page": "details",
+      "excerpt": "She brings more than a decade of experience at Harvard Kennedy School and Harvard Business School, where she supported global programs and executive education initiatives."
+    },
+    {
+      "id": "check-page-f661a9982a",
+      "url": "https://cic.com/catalyst/about/",
+      "page": "details",
+      "excerpt": "At Catalyst, she has led high-impact bilateral accelerator and exchange programs connecting Japanese and U.S. innovation ecosystems."
+    },
+    {
+      "id": "check-page-7e6d3d4abd",
+      "url": "https://cic.com/catalyst/programs/",
+      "page": "details",
+      "excerpt": "Programs for Innovation Ecosystems | CIC Catalyst Toggle menu Services Advisory Design & Construction Partnerships Programs About CIC Catalyst Talk to Us Login EN Change language DE JA NL PL Services Toggle Services menu Advisory Design & Construction Partnerships Programs About CIC Catalyst EN Toggle language menu DE JA NL PL Talk to Us Login Skip to main content Contact Book a Tour Bring CIC to You Log In Office Space North America Boston Cambridge Philadelphia Providence St. Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka NOW OPEN Insights from our Blog What Is Flexible Office Space and What Are Its Benefits? Learn More Lab Space Philadelphia St. Louis Event Space Attend an event Cambridge Philadelphia Providence St. Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Boston Cambridge Philadelphia Providence Rotterdam NEW St. Louis Catalyst About Advisory Partnerships Programs Programs Venture Café Weekly events that build community and connect innovators to a global network International Connect Programs Bridging Ecosystems through Curated Programmatic Innovation Japan Desk Programming and services bridging Japan-Boston innovation ecosystems Social Impact Cohorts Supporting underserved entrepreneurs with resources, mentors, and more View all programs CIC offers diverse programs to support startups, growing companies & organizations Company About Learn about the"
+    },
+    {
+      "id": "check-page-b14fbf88bf",
+      "url": "https://cic.com/catalyst/programs/",
+      "page": "details",
+      "excerpt": "Connect With Our Team Programming Designed for Ecosystem Activation Whether you’re launching an accelerator, addressing the commercialization gap, building a startup community, or entering a new market, we provide the structure, partnerships, and execution to make it successful."
+    },
+    {
+      "id": "check-page-7b76f5ccb5",
+      "url": "https://cic.com/catalyst/programs/",
+      "page": "details",
+      "excerpt": "We design and manage ecosystem programs that connect startups, corporations, university reserach, investors, and institutions through accelerators, partnerships, events, and community engagement."
+    },
+    {
+      "id": "check-page-8beadfdb9f",
+      "url": "https://cic.com/catalyst/programs/",
+      "page": "details",
+      "excerpt": "Impactful Programs That Connect Innovation Stakeholders We design programs that connect startups, corporates, researchers, investors, and public institutions through accelerators, innovation challenges, market-access initiatives, and cross-sector partnerships."
+    },
+    {
+      "id": "check-page-71090c1cfb",
+      "url": "https://cic.com/catalyst/programs/",
+      "page": "details",
+      "excerpt": "Industry Cluster Development We design and activate industry-focused innovation clusters that connect startups, corporates, investors, and research institutions around shared sector priorities."
+    },
+    {
+      "id": "check-page-51b3c6c723",
+      "url": "https://cic.com/catalyst/programs/",
+      "page": "details",
+      "excerpt": "Through accelerators, partnerships, reserach commercialization, and market-access programs, we help ecosystems grow around industries such as AI, mobility, climate, dual-use, and advanced technology."
+    },
+    {
+      "id": "check-page-fba25690c6",
+      "url": "https://cic.com/catalyst/programs/",
+      "page": "details",
+      "excerpt": "Combining tailored experiences, market insight, strategic partnerships, and hands-on support, we connect companies directly with partners, investors, and industry leaders by accelerating access, reducing friction, and driving successful expansion into markets like the United States or Japan."
+    },
+    {
+      "id": "check-page-6b3cecdb40",
+      "url": "https://cic.com/catalyst/programs/",
+      "page": "details",
+      "excerpt": "Investment Partners We partner with corporates and investment funds to design and run programs that source innovation, accelerate portfolio growth, and connect capital to high-potential opportunities."
+    },
+    {
+      "id": "check-page-016acd95e3",
+      "url": "https://cic.com/catalyst/programs/",
+      "page": "details",
+      "excerpt": "Schedule a Call With Our Team Trusted by Global Institutions, Developers, and Public Sector We work at the intersection of venture creation, startup acceleration, and ecosystem development—partnering with organizations to turn ideas into scalable, real-world outcomes."
+    },
+    {
+      "id": "check-page-900ade7cc7",
+      "url": "https://cic.com/catalyst/programs/",
+      "page": "details",
+      "excerpt": "They help to guarantee that your work in the United States will be fulfilling.” Moriyoshi Maeda Clinical Research “Through our collaboration with Catalyst Programming, we have enabled Colombian entrepreneurs to successfully enter international markets."
+    },
+    {
+      "id": "check-page-75e0de5a43",
+      "url": "https://cic.com/catalyst/programs/",
+      "page": "details",
+      "excerpt": "Cambridge Innovation Center Contact Company About Press Careers Venture Café CIC Catalyst Captains of Innovation CIC Institute CIC Health Work With Us Landlords & Developers Enterprise Brokers Locations North America Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-c3b7307a02",
+      "url": "https://cic.com/catalyst/programs/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka NOW OPEN LinkedIn Instagram YouTube Facebook Copyright ©️ 2026 CIC Innovation Services LLC."
+    },
+    {
+      "id": "check-page-ed1144db26",
+      "url": "https://cic.com/de/internationale-connect-programme/",
+      "page": "details",
+      "excerpt": "Internationale Connect-Programme | CIC Toggle menu Bürofläche Laborraum Philadelphia St. Louis Meeting Rooms Cambridge Philadelphia Providence Über Karriere Presse Programme Venture Café Wöchentliche Veranstaltungen, die die Gemeinschaft stärken und Innovatoren mit einem globalen Netzwerk verbinden Internationale sanfte Landung Maßgeschneiderte Programmierung, die Startups die Expansion in neue Märkte ermöglicht Japan Desk Programmierung und Dienste als Brücke zwischen den Innovationsökosystemen Japans und Bostons Kohorten mit sozialer Wirkung Unterstützung benachteiligter Unternehmer mit Ressourcen, Mentoren und mehr Alle Studiengänge anzeigen CIC bietet verschiedene Programme zur Unterstützung von Startups, wachsenden Unternehmen und Organisationen Veranstaltungen Veranstalten Sie ein Event Erhabene Veranstaltungs- und Tagungsräume mit Services, die Ihnen zu Glanz verhelfen An einer Veranstaltung teilnehmen Vernetzen Sie sich mit dem lokalen Innovationsökosystem, bauen Sie ein Netzwerk auf und bilden Sie eine Community Unternehmen Über Erfahren Sie mehr über die Menschen und Angebote, die CIC zum weltweiten Innovationsführer machen Der Blog Gewinnen Sie neue Einblicke und bleiben Sie auf dem Laufenden mit den neuesten Nachrichten aus unserer globalen Community. Karriere Werden Sie Teil unseres globalen Teams und helfen Sie mit, die Zukunft der Innovation im großen Maßstab zu"
+    },
+    {
+      "id": "check-page-0ae0c61874",
+      "url": "https://cic.com/de/internationale-connect-programme/",
+      "page": "details",
+      "excerpt": "Karriere Werden Sie Teil unseres globalen Teams und helfen Sie mit, die Zukunft der Innovation im großen Maßstab zu gestalten Presse Bleiben Sie über die neuesten Nachrichten von den weltweiten Standorten von CIC auf dem Laufenden Book a Tour Login DE Change language EN JA NL PL Bürofläche Laborraum Toggle Laborraum menu Philadelphia St."
+    },
+    {
+      "id": "check-page-03be163f52",
+      "url": "https://cic.com/de/internationale-connect-programme/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokio Fukuoka Jetzt offen - CIC Berlin CIC and Jamestown Expand Partnership with Creation of CIC Innovation Campus in Berlin Learn more Laborraum Philadelphia St."
+    },
+    {
+      "id": "check-page-199dd4dd8b",
+      "url": "https://cic.com/de/internationale-connect-programme/",
+      "page": "details",
+      "excerpt": "Unsere Initiativen in Boston, Philadelphia, Berlin, Rotterdam, Warschau und Tokio sind auf die Bedürfnisse der jeweiligen Gruppe zugeschnitten und fördern das Wachstum und die Zusammenarbeit in lokalen Ökosystemen."
+    },
+    {
+      "id": "check-page-d16b4032af",
+      "url": "https://cic.com/de/internationale-connect-programme/",
+      "page": "details",
+      "excerpt": "Diese Programme finden in Boston, Philadelphia, Berlin, Rotterdam, Warschau und Tokio statt und bieten den Unternehmern eine umfassende und globale Reichweite."
+    },
+    {
+      "id": "check-page-75909b6c46",
+      "url": "https://cic.com/de/internationale-connect-programme/",
+      "page": "details",
+      "excerpt": "Kontaktieren Sie uns unter connect@cic.com Cambridge Innovation Center Kontakt Unternehmen Unternehmen Venture Café CIC Catalyst Captains of Innovation CIC Institute CIC Health Über Karriere Presse Arbeite mit uns Unternehmen Standorte North America Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-175aa5ed63",
+      "url": "https://cic.com/de/internationale-connect-programme/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokio Fukuoka LinkedIn Instagram YouTube Facebook Copyright ©️ 2026 CIC Innovation Services LLC."
+    },
+    {
+      "id": "check-page-0c03d8e5c6",
+      "url": "https://cic.com/de/programme/",
+      "page": "details",
+      "excerpt": "Programme | CIC Toggle menu Bürofläche Laborraum Philadelphia St. Louis Meeting Rooms Cambridge Philadelphia Providence Über Karriere Presse Programme Venture Café Wöchentliche Veranstaltungen, die die Gemeinschaft stärken und Innovatoren mit einem globalen Netzwerk verbinden Internationale sanfte Landung Maßgeschneiderte Programmierung, die Startups die Expansion in neue Märkte ermöglicht Japan Desk Programmierung und Dienste als Brücke zwischen den Innovationsökosystemen Japans und Bostons Kohorten mit sozialer Wirkung Unterstützung benachteiligter Unternehmer mit Ressourcen, Mentoren und mehr Alle Studiengänge anzeigen CIC bietet verschiedene Programme zur Unterstützung von Startups, wachsenden Unternehmen und Organisationen Veranstaltungen Veranstalten Sie ein Event Erhabene Veranstaltungs- und Tagungsräume mit Services, die Ihnen zu Glanz verhelfen An einer Veranstaltung teilnehmen Vernetzen Sie sich mit dem lokalen Innovationsökosystem, bauen Sie ein Netzwerk auf und bilden Sie eine Community Unternehmen Über Erfahren Sie mehr über die Menschen und Angebote, die CIC zum weltweiten Innovationsführer machen Der Blog Gewinnen Sie neue Einblicke und bleiben Sie auf dem Laufenden mit den neuesten Nachrichten aus unserer globalen Community. Karriere Werden Sie Teil unseres globalen Teams und helfen Sie mit, die Zukunft der Innovation im großen Maßstab zu gestalten Presse"
+    },
+    {
+      "id": "check-page-cc1b936a45",
+      "url": "https://cic.com/de/programme/",
+      "page": "details",
+      "excerpt": "Karriere Werden Sie Teil unseres globalen Teams und helfen Sie mit, die Zukunft der Innovation im großen Maßstab zu gestalten Presse Bleiben Sie über die neuesten Nachrichten von den weltweiten Standorten von CIC auf dem Laufenden Book a Tour Login DE Change language EN JA NL PL Bürofläche Laborraum Toggle Laborraum menu Philadelphia St."
+    },
+    {
+      "id": "check-page-4123f4e8c1",
+      "url": "https://cic.com/de/programme/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokio Fukuoka Jetzt offen - CIC Berlin CIC and Jamestown Expand Partnership with Creation of CIC Innovation Campus in Berlin Learn more Laborraum Philadelphia St."
+    },
+    {
+      "id": "check-page-99f770f39d",
+      "url": "https://cic.com/de/programme/",
+      "page": "details",
+      "excerpt": "Erfahren Sie mehr über International Connect-Programme Erfahren Sie mehr über unser Programm in Rotterdam Schreibtisch Japan Verbindung der Innovationsökosysteme von Japan und Boston Wir arbeiten daran, durch praktische Programme und maßgeschneiderte Dienstleistungen Wege für Geschäfte zwischen Japan und den Vereinigten Staaten zu öffnen."
+    },
+    {
+      "id": "check-page-a009ccfd9b",
+      "url": "https://cic.com/de/programme/",
+      "page": "details",
+      "excerpt": "Japan Desk erleichtert die Verbindungen zwischen den Innovationsökosystemen Japans und des Großraums Boston und arbeitet mit in Japan ansässigen Organisationen zusammen, um gemeinsam intensive Bootcamps durchzuführen, die japanische Startups auf den Eintritt in den US-Markt vorbereiten."
+    },
+    {
+      "id": "check-page-6fbff739d0",
+      "url": "https://cic.com/de/programme/",
+      "page": "details",
+      "excerpt": "Erfahren Sie mehr über unsere Massachusetts-Kohorte Erfahren Sie mehr über unsere Philadelphia-Kohorte Erfahren Sie mehr über unsere St."
+    },
+    {
+      "id": "check-page-c24f96a525",
+      "url": "https://cic.com/de/programme/",
+      "page": "details",
+      "excerpt": "Lesen Sie die ganze Geschichte about Das japanische Ministerium für Wirtschaft, Handel und Industrie wählt CIC und MassChallenge aus, um ein Programm zur Entwicklung von Unternehmern für japanische Startups zu entwickeln und zu betreiben Melden Sie sich für unseren Newsletter an Erkunden Sie eine lokale CIC Boston Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-55cfc8324a",
+      "url": "https://cic.com/de/programme/",
+      "page": "details",
+      "excerpt": "Louis Berlin Rotterdam Warsaw Tokyo Let’s Go Versuchen Sie, die Innovation in Ihrem Unternehmen zu beschleunigen ?"
+    },
+    {
+      "id": "check-page-f4fe0c04a3",
+      "url": "https://cic.com/de/programme/",
+      "page": "details",
+      "excerpt": "Erfahren Sie mehr über Beratung Cambridge Innovation Center Kontakt Unternehmen Unternehmen Venture Café CIC Catalyst Captains of Innovation CIC Institute CIC Health Über Karriere Presse Arbeite mit uns Unternehmen Standorte North America Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-d4d4c66f1e",
+      "url": "https://cic.com/de/programme/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokio Fukuoka LinkedIn Instagram YouTube Facebook Copyright ©️ 2026 CIC Innovation Services LLC."
+    },
+    {
+      "id": "check-page-084ab3c257",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/",
+      "page": "details",
+      "excerpt": "Internationale sanfte Landung | CIC Toggle menu Bürofläche Laborraum Philadelphia St. Louis Meeting Rooms Cambridge Philadelphia Providence Über Karriere Presse Programme Venture Café Wöchentliche Veranstaltungen, die die Gemeinschaft stärken und Innovatoren mit einem globalen Netzwerk verbinden Internationale sanfte Landung Maßgeschneiderte Programmierung, die Startups die Expansion in neue Märkte ermöglicht Japan Desk Programmierung und Dienste als Brücke zwischen den Innovationsökosystemen Japans und Bostons Kohorten mit sozialer Wirkung Unterstützung benachteiligter Unternehmer mit Ressourcen, Mentoren und mehr Alle Studiengänge anzeigen CIC bietet verschiedene Programme zur Unterstützung von Startups, wachsenden Unternehmen und Organisationen Veranstaltungen Veranstalten Sie ein Event Erhabene Veranstaltungs- und Tagungsräume mit Services, die Ihnen zu Glanz verhelfen An einer Veranstaltung teilnehmen Vernetzen Sie sich mit dem lokalen Innovationsökosystem, bauen Sie ein Netzwerk auf und bilden Sie eine Community Unternehmen Über Erfahren Sie mehr über die Menschen und Angebote, die CIC zum weltweiten Innovationsführer machen Der Blog Gewinnen Sie neue Einblicke und bleiben Sie auf dem Laufenden mit den neuesten Nachrichten aus unserer globalen Community. Karriere Werden Sie Teil unseres globalen Teams und helfen Sie mit, die Zukunft der Innovation im großen Maßstab zu"
+    },
+    {
+      "id": "check-page-118cd17645",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/",
+      "page": "details",
+      "excerpt": "Karriere Werden Sie Teil unseres globalen Teams und helfen Sie mit, die Zukunft der Innovation im großen Maßstab zu gestalten Presse Bleiben Sie über die neuesten Nachrichten von den weltweiten Standorten von CIC auf dem Laufenden Book a Tour Login DE Change language EN JA NL PL Bürofläche Laborraum Toggle Laborraum menu Philadelphia St."
+    },
+    {
+      "id": "check-page-3d311dc0dc",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokio Fukuoka Jetzt offen - CIC Berlin CIC and Jamestown Expand Partnership with Creation of CIC Innovation Campus in Berlin Learn more Laborraum Philadelphia St."
+    },
+    {
+      "id": "check-page-c3e7a184d7",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/",
+      "page": "details",
+      "excerpt": "Louis Berlin Rotterdam Warsaw Tokyo Let’s Go Möchten Sie mehr über unsere anderen Innovationsprogramme erfahren ?"
+    },
+    {
+      "id": "check-page-760aed9fb1",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/",
+      "page": "details",
+      "excerpt": "Entdecken Sie mehr Programme Cambridge Innovation Center Kontakt Unternehmen Unternehmen Venture Café CIC Catalyst Captains of Innovation CIC Institute CIC Health Über Karriere Presse Arbeite mit uns Unternehmen Standorte North America Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-4103b0f5d4",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokio Fukuoka LinkedIn Instagram YouTube Facebook Copyright ©️ 2026 CIC Innovation Services LLC."
+    },
+    {
+      "id": "check-page-621adf2a88",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-miami/",
+      "page": "details",
+      "excerpt": "CIC unterstützt unterversorgte Gemeinden & LATAM Startups | CIC Toggle menu Bürofläche Laborraum Philadelphia St. Louis Meeting Rooms Cambridge Philadelphia Providence Über Karriere Presse Programme Venture Café Wöchentliche Veranstaltungen, die die Gemeinschaft stärken und Innovatoren mit einem globalen Netzwerk verbinden Internationale sanfte Landung Maßgeschneiderte Programmierung, die Startups die Expansion in neue Märkte ermöglicht Japan Desk Programmierung und Dienste als Brücke zwischen den Innovationsökosystemen Japans und Bostons Kohorten mit sozialer Wirkung Unterstützung benachteiligter Unternehmer mit Ressourcen, Mentoren und mehr Alle Studiengänge anzeigen CIC bietet verschiedene Programme zur Unterstützung von Startups, wachsenden Unternehmen und Organisationen Veranstaltungen Veranstalten Sie ein Event Erhabene Veranstaltungs- und Tagungsräume mit Services, die Ihnen zu Glanz verhelfen An einer Veranstaltung teilnehmen Vernetzen Sie sich mit dem lokalen Innovationsökosystem, bauen Sie ein Netzwerk auf und bilden Sie eine Community Unternehmen Über Erfahren Sie mehr über die Menschen und Angebote, die CIC zum weltweiten Innovationsführer machen Der Blog Gewinnen Sie neue Einblicke und bleiben Sie auf dem Laufenden mit den neuesten Nachrichten aus unserer globalen Community. Karriere Werden Sie Teil unseres globalen Teams und helfen Sie mit, die Zukunft der"
+    },
+    {
+      "id": "check-page-1df6dbac78",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-miami/",
+      "page": "details",
+      "excerpt": "Karriere Werden Sie Teil unseres globalen Teams und helfen Sie mit, die Zukunft der Innovation im großen Maßstab zu gestalten Presse Bleiben Sie über die neuesten Nachrichten von den weltweiten Standorten von CIC auf dem Laufenden Book a Tour Login DE Change language EN JA NL PL Bürofläche Laborraum Toggle Laborraum menu Philadelphia St."
+    },
+    {
+      "id": "check-page-cff0218f8a",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-miami/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokio Fukuoka Jetzt offen - CIC Berlin CIC and Jamestown Expand Partnership with Creation of CIC Innovation Campus in Berlin Learn more Laborraum Philadelphia St."
+    },
+    {
+      "id": "check-page-b874ae5404",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-miami/",
+      "page": "details",
+      "excerpt": "Sie wissen nicht, wie Sie auf dem US-Markt Fuß fassen können Firmenprofil Kommerzialisierbares Produkt oder Dienstleistung Skalierbares Geschäft Management Team vorhanden Sie möchten US-Kapital aufnehmen Alle Branchen willkommen Unsere Ausbilder Wer wir sind „Das Programm brachte mich mit den Partnern zusammen, die ich für einen erfolgreichen Markteintritt in den USA brauchte."
+    },
+    {
+      "id": "check-page-70b5df3790",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-miami/",
+      "page": "details",
+      "excerpt": "Nach dem Pitch-Training konnte ich mir meine erste Investitionsrunde sichern.“ — Oscar Herrera, CEO & Founder, Simplo Chile „Das Programm deckt alle kritischen Komponenten für eine erfolgreiche US-Expansion ab, was unseren Übergang wirklich beschleunigt hat."
+    },
+    {
+      "id": "check-page-f920ccadb6",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-miami/",
+      "page": "details",
+      "excerpt": "In der Masse der großen Unternehmen in den USA sticht mein Unternehmen jetzt heraus."
+    },
+    {
+      "id": "check-page-39c38f4b24",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-miami/",
+      "page": "details",
+      "excerpt": "Außerdem verließen wir das Programm mit einem starken Netzwerk, das uns eine schnelle und effiziente sanfte Landung in den USA ermöglichte."
+    },
+    {
+      "id": "check-page-11aa091bd9",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-miami/",
+      "page": "details",
+      "excerpt": "Mariano, arcomedlab Startups Alumni Verzeichnis –>“}“ data-block-type=“22″ id=“block-yui_3_17_2_1_1680791871397_1762375″> Unsere Partner Cambridge Innovation Center Kontakt Unternehmen Unternehmen Venture Café CIC Catalyst Captains of Innovation CIC Institute CIC Health Über Karriere Presse Arbeite mit uns Unternehmen Standorte North America Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-3aaa930919",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-miami/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokio Fukuoka LinkedIn Instagram YouTube Facebook Copyright ©️ 2026 CIC Innovation Services LLC."
+    },
+    {
+      "id": "check-page-bcdb51c7a2",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-rotterdam/",
+      "page": "details",
+      "excerpt": "Internationale sanfte Landung - Rotterdam | CIC Toggle menu Bürofläche Laborraum Philadelphia St. Louis Meeting Rooms Cambridge Philadelphia Providence Über Karriere Presse Programme Venture Café Wöchentliche Veranstaltungen, die die Gemeinschaft stärken und Innovatoren mit einem globalen Netzwerk verbinden Internationale sanfte Landung Maßgeschneiderte Programmierung, die Startups die Expansion in neue Märkte ermöglicht Japan Desk Programmierung und Dienste als Brücke zwischen den Innovationsökosystemen Japans und Bostons Kohorten mit sozialer Wirkung Unterstützung benachteiligter Unternehmer mit Ressourcen, Mentoren und mehr Alle Studiengänge anzeigen CIC bietet verschiedene Programme zur Unterstützung von Startups, wachsenden Unternehmen und Organisationen Veranstaltungen Veranstalten Sie ein Event Erhabene Veranstaltungs- und Tagungsräume mit Services, die Ihnen zu Glanz verhelfen An einer Veranstaltung teilnehmen Vernetzen Sie sich mit dem lokalen Innovationsökosystem, bauen Sie ein Netzwerk auf und bilden Sie eine Community Unternehmen Über Erfahren Sie mehr über die Menschen und Angebote, die CIC zum weltweiten Innovationsführer machen Der Blog Gewinnen Sie neue Einblicke und bleiben Sie auf dem Laufenden mit den neuesten Nachrichten aus unserer globalen Community. Karriere Werden Sie Teil unseres globalen Teams und helfen Sie mit, die Zukunft der Innovation im großen"
+    },
+    {
+      "id": "check-page-694bd250e4",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-rotterdam/",
+      "page": "details",
+      "excerpt": "Karriere Werden Sie Teil unseres globalen Teams und helfen Sie mit, die Zukunft der Innovation im großen Maßstab zu gestalten Presse Bleiben Sie über die neuesten Nachrichten von den weltweiten Standorten von CIC auf dem Laufenden Book a Tour Login DE Change language EN JA NL PL Bürofläche Laborraum Toggle Laborraum menu Philadelphia St."
+    },
+    {
+      "id": "check-page-7e5697e455",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-rotterdam/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokio Fukuoka Jetzt offen - CIC Berlin CIC and Jamestown Expand Partnership with Creation of CIC Innovation Campus in Berlin Learn more Laborraum Philadelphia St."
+    },
+    {
+      "id": "check-page-bf3b6eed58",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-rotterdam/",
+      "page": "details",
+      "excerpt": "Unser Programm befindet sich im Herzen des Rotterdamer Innovations-Ökosystems und bietet die Ressourcen und Unterstützung, die ausländische Startups und Scaleups benötigen, um in Europa durch die Niederlande zu gedeihen."
+    },
+    {
+      "id": "check-page-5586dc8007",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-rotterdam/",
+      "page": "details",
+      "excerpt": "Mit gezielter Unterstützung für Produkt-Markt-Fit, ESG-Ziele, Fundraising und Mentoring fördert dieses Programm Wachstum und Nachhaltigkeit in Europa durch die niederländische Geschäftswelt."
+    },
+    {
+      "id": "check-page-e3dcb797ad",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-rotterdam/",
+      "page": "details",
+      "excerpt": "Ganz gleich, ob Sie ein Branchenexperte sind, der nach Mentoring-Möglichkeiten sucht, ein Beschleuniger oder Investor, der bahnbrechende Ideen unterstützen möchte, oder eine Regierung, die Innovationen in Europa fördern möchte – wir würden uns gerne darüber unterhalten, wie wir zusammenarbeiten können, um die globale Innovationsgemeinschaft zu fördern."
+    },
+    {
+      "id": "check-page-b4156a56f4",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-rotterdam/",
+      "page": "details",
+      "excerpt": "Für die Mai-Kohorte müssen die Bewerber entweder ein Startup, ein Scaleup oder ein innovatives KMU sein."
+    },
+    {
+      "id": "check-page-cdb34659bf",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-rotterdam/",
+      "page": "details",
+      "excerpt": "Das 2016 ins Leben gerufene Programm International Soft Landing ist eine CIC-Plattform zur Unterstützung von Unternehmern mit mittelständischen Unternehmen, die in die USA expandieren möchten."
+    },
+    {
+      "id": "check-page-be119a2a3c",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-rotterdam/",
+      "page": "details",
+      "excerpt": "Lesen Sie die ganze Geschichte about Die wichtige Rolle von Einwanderern beim Aufbau innovativer, internationaler Gemeinschaften Erkunden Sie eine lokale CIC Boston Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-90601e91b2",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-rotterdam/",
+      "page": "details",
+      "excerpt": "Louis Berlin Rotterdam Warsaw Tokyo Let’s Go Möchten Sie mehr über unsere anderen Innovationsprogramme erfahren ?"
+    },
+    {
+      "id": "check-page-38481f6973",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-rotterdam/",
+      "page": "details",
+      "excerpt": "Entdecken Sie mehr Programme Cambridge Innovation Center Kontakt Unternehmen Unternehmen Venture Café CIC Catalyst Captains of Innovation CIC Institute CIC Health Über Karriere Presse Arbeite mit uns Unternehmen Standorte North America Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-edb2a09925",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-rotterdam/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokio Fukuoka LinkedIn Instagram YouTube Facebook Copyright ©️ 2026 CIC Innovation Services LLC."
+    },
+    {
+      "id": "check-page-9cb59c033c",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/",
+      "page": "details",
+      "excerpt": "Japan-Schreibtisch | CIC Toggle menu Bürofläche Laborraum Philadelphia St. Louis Meeting Rooms Cambridge Philadelphia Providence Über Karriere Presse Programme Venture Café Wöchentliche Veranstaltungen, die die Gemeinschaft stärken und Innovatoren mit einem globalen Netzwerk verbinden Internationale sanfte Landung Maßgeschneiderte Programmierung, die Startups die Expansion in neue Märkte ermöglicht Japan Desk Programmierung und Dienste als Brücke zwischen den Innovationsökosystemen Japans und Bostons Kohorten mit sozialer Wirkung Unterstützung benachteiligter Unternehmer mit Ressourcen, Mentoren und mehr Alle Studiengänge anzeigen CIC bietet verschiedene Programme zur Unterstützung von Startups, wachsenden Unternehmen und Organisationen Veranstaltungen Veranstalten Sie ein Event Erhabene Veranstaltungs- und Tagungsräume mit Services, die Ihnen zu Glanz verhelfen An einer Veranstaltung teilnehmen Vernetzen Sie sich mit dem lokalen Innovationsökosystem, bauen Sie ein Netzwerk auf und bilden Sie eine Community Unternehmen Über Erfahren Sie mehr über die Menschen und Angebote, die CIC zum weltweiten Innovationsführer machen Der Blog Gewinnen Sie neue Einblicke und bleiben Sie auf dem Laufenden mit den neuesten Nachrichten aus unserer globalen Community. Karriere Werden Sie Teil unseres globalen Teams und helfen Sie mit, die Zukunft der Innovation im großen Maßstab zu gestalten"
+    },
+    {
+      "id": "check-page-8a22d4ffc9",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/",
+      "page": "details",
+      "excerpt": "Karriere Werden Sie Teil unseres globalen Teams und helfen Sie mit, die Zukunft der Innovation im großen Maßstab zu gestalten Presse Bleiben Sie über die neuesten Nachrichten von den weltweiten Standorten von CIC auf dem Laufenden Book a Tour Login DE Change language EN JA NL PL Bürofläche Laborraum Toggle Laborraum menu Philadelphia St."
+    },
+    {
+      "id": "check-page-9bb553e7e5",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokio Fukuoka Jetzt offen - CIC Berlin CIC and Jamestown Expand Partnership with Creation of CIC Innovation Campus in Berlin Learn more Laborraum Philadelphia St."
+    },
+    {
+      "id": "check-page-1f6a00e067",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/",
+      "page": "details",
+      "excerpt": "In Zusammenarbeit mit japanischen Regierungsbehörden und Verbänden bringen wir Unternehmen in den Innovationsökosystemen von Japan und Boston zusammen."
+    },
+    {
+      "id": "check-page-8128df63b7",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/",
+      "page": "details",
+      "excerpt": "Kontaktieren Sie uns Wen wir betreuen Japanische Startups & Unternehmer Der CIC Japan Desk bietet Programme und Dienstleistungen zur Unterstützung internationaler Gründer aus Japan an, um ihnen den Zugang zum US-Markt zu ermöglichen und ihnen dabei zu helfen, ihr Geschäft mit Hilfe des erstklassigen Innovationsnetzwerks und der Gemeinschaft des CIC selbstbewusst nach Übersee zu expandieren."
+    },
+    {
+      "id": "check-page-794794d6e8",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/",
+      "page": "details",
+      "excerpt": "Kontaktieren Sie uns und erfahren Sie mehr Bildungsinstitutionen & Unternehmensdelegationen Das CIC Japan Desk bietet auf ein japanisches Publikum zugeschnittene Führungen durch das CIC an, um Besuchern das Innovationsnetzwerk von Weltrang, die Gemeinschaft und die auf Japan ausgerichteten Programme des CIC vorzustellen."
+    },
+    {
+      "id": "check-page-2d11b51582",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/",
+      "page": "details",
+      "excerpt": "Tour anfragen Regierungsbehörden und Industrievereinigungen Wir konzipieren und implementieren Programme und Veranstaltungen, um Unternehmer und Start-ups aus Japan beim Eintritt in den US-Markt über Boston und den Kendall Square in Cambridge zu unterstützen."
+    },
+    {
+      "id": "check-page-4701eb3436",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/",
+      "page": "details",
+      "excerpt": "Bitte kontaktieren Sie uns, wenn Sie daran interessiert sind, Japan Desk zu unterstützen!"
+    },
+    {
+      "id": "check-page-37eb3268da",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/",
+      "page": "details",
+      "excerpt": "Joel Berniac, MEng, PhD, MBA | President & Founder | BioFuturis, LLC Wir helfen Startups und Unternehmern aus Japan mit Hilfe von wichtigen Partnern in Japan und Boston dabei, den amerikanischen Markt zu erschließen."
+    },
+    {
+      "id": "check-page-5bc22354d2",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/",
+      "page": "details",
+      "excerpt": "Japan Desk hilft japanischen Unternehmen, große Fortschritte zu machen… Sie unterstützen unsere Kommunikations- und PR-Aktivitäten mit den Unternehmen vor Ort und kennen die japanischen Gepflogenheiten sehr gut, so dass es keine Reibereien aufgrund kultureller Unterschiede gibt."
+    },
+    {
+      "id": "check-page-6e5c713584",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/",
+      "page": "details",
+      "excerpt": "Tauchen Sie tiefer in die Auswirkungen von Japan Desk ein Mehr lesen Das Büro CIC Japan Desk Jahresrückblick – 2024-2025 Wir laden Sie ein, unseren CIC Japan Desk Jahresrückblick 2024-2025 zu lesen."
+    },
+    {
+      "id": "check-page-fdc025756d",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/",
+      "page": "details",
+      "excerpt": "Lesen Sie die ganze Geschichte about CIC Japan Desk Jahresrückblick – 2024-2025 Das Werk Innovatoren befähigen: TAKTOPIAs Mission, das Unternehmertum unter japanischen Studenten zu kultivieren Seit 2023 arbeitet TAKTOPIA eng mit dem CIC Japan Desk zusammen, um japanischen Studenten das Innovations-Ökosystem der Region Boston durch praktische Workshops im CIC Cambridge näherzubringen."
+    },
+    {
+      "id": "check-page-d9cc477c60",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/",
+      "page": "details",
+      "excerpt": "Lesen Sie die ganze Geschichte about Innovatoren befähigen: TAKTOPIAs Mission, das Unternehmertum unter japanischen Studenten zu kultivieren CIC Japan Desk Jahresrückblick – 2024-2025 Wir laden Sie ein, unseren CIC Japan Desk Jahresrückblick 2024-2025 zu lesen."
+    },
+    {
+      "id": "check-page-11af3bd767",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/anfrageformular-fuer-innovationstouren/",
+      "page": "details",
+      "excerpt": "Anfrageformular für Innovationstouren | CIC Toggle menu Bürofläche Laborraum Philadelphia St. Louis Meeting Rooms Cambridge Philadelphia Providence Über Karriere Presse Programme Venture Café Wöchentliche Veranstaltungen, die die Gemeinschaft stärken und Innovatoren mit einem globalen Netzwerk verbinden Internationale sanfte Landung Maßgeschneiderte Programmierung, die Startups die Expansion in neue Märkte ermöglicht Japan Desk Programmierung und Dienste als Brücke zwischen den Innovationsökosystemen Japans und Bostons Kohorten mit sozialer Wirkung Unterstützung benachteiligter Unternehmer mit Ressourcen, Mentoren und mehr Alle Studiengänge anzeigen CIC bietet verschiedene Programme zur Unterstützung von Startups, wachsenden Unternehmen und Organisationen Veranstaltungen Veranstalten Sie ein Event Erhabene Veranstaltungs- und Tagungsräume mit Services, die Ihnen zu Glanz verhelfen An einer Veranstaltung teilnehmen Vernetzen Sie sich mit dem lokalen Innovationsökosystem, bauen Sie ein Netzwerk auf und bilden Sie eine Community Unternehmen Über Erfahren Sie mehr über die Menschen und Angebote, die CIC zum weltweiten Innovationsführer machen Der Blog Gewinnen Sie neue Einblicke und bleiben Sie auf dem Laufenden mit den neuesten Nachrichten aus unserer globalen Community. Karriere Werden Sie Teil unseres globalen Teams und helfen Sie mit, die Zukunft der Innovation im großen"
+    },
+    {
+      "id": "check-page-ed7e8aa9a0",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/anfrageformular-fuer-innovationstouren/",
+      "page": "details",
+      "excerpt": "Karriere Werden Sie Teil unseres globalen Teams und helfen Sie mit, die Zukunft der Innovation im großen Maßstab zu gestalten Presse Bleiben Sie über die neuesten Nachrichten von den weltweiten Standorten von CIC auf dem Laufenden Book a Tour Login DE Change language EN JA NL PL Bürofläche Laborraum Toggle Laborraum menu Philadelphia St."
+    },
+    {
+      "id": "check-page-15bf478fc3",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/anfrageformular-fuer-innovationstouren/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokio Fukuoka Jetzt offen - CIC Berlin CIC and Jamestown Expand Partnership with Creation of CIC Innovation Campus in Berlin Learn more Laborraum Philadelphia St."
+    },
+    {
+      "id": "check-page-f69dbc6729",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/anfrageformular-fuer-innovationstouren/",
+      "page": "details",
+      "excerpt": "Um einen Besuch anzufordern, geben Sie bitte die folgenden Informationen an. ※Diese Anfrage bestätigt nicht Ihre Reservierung – Japan Desk wird sich mit Ihnen in Verbindung setzen, um spezifische Angebote und Preise im Detail zu besprechen."
+    },
+    {
+      "id": "check-page-5a656a9e4d",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/anfrageformular-fuer-innovationstouren/",
+      "page": "details",
+      "excerpt": "Cambridge Innovation Center Kontakt Unternehmen Unternehmen Venture Café CIC Catalyst Captains of Innovation CIC Institute CIC Health Über Karriere Presse Arbeite mit uns Unternehmen Standorte North America Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-d3d9ff0ebf",
+      "url": "https://cic.com/de/programme/japan-schreibtisch/anfrageformular-fuer-innovationstouren/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokio Fukuoka LinkedIn Instagram YouTube Facebook Copyright ©️ 2026 CIC Innovation Services LLC."
+    },
+    {
+      "id": "check-page-fda818e3b6",
+      "url": "https://cic.com/international-connect-programs/",
+      "page": "details",
+      "excerpt": "International Connect Programs | CIC Toggle menu Office Space North America Boston Cambridge Philadelphia Providence St. Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Now Open Insights from our Blog What Is Flexible Office Space and What Are Its Benefits? Learn More Lab Space Philadelphia St. Louis Event Space Attend an event Cambridge Philadelphia Providence St. Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Boston Cambridge Philadelphia Providence Rotterdam St. Louis Programs Venture Café Weekly events that build community and connect innovators to a global network International Connect Programs Bridging Ecosystems through Curated Programmatic Innovation Japan Desk Programming and services bridging Japan-Boston innovation ecosystems Social Impact Cohorts Supporting underserved entrepreneurs with resources, mentors, and more View all programs CIC offers diverse programs to support startups, growing companies & organizations Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Press Keep up with the latest news from CIC’s global locations Book a Tour Login EN Change language DE JA NL PL Office Space Toggle Office Space menu North America Boston Cambridge"
+    },
+    {
+      "id": "check-page-adf39c7be3",
+      "url": "https://cic.com/international-connect-programs/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Now Open Insights from our Blog Insights from our Blog Lab Space Toggle Lab Space menu Philadelphia St."
+    },
+    {
+      "id": "check-page-daf325cf4a",
+      "url": "https://cic.com/international-connect-programs/",
+      "page": "details",
+      "excerpt": "Louis Event Space Toggle Event Space menu Attend an event Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-dff8975533",
+      "url": "https://cic.com/international-connect-programs/",
+      "page": "details",
+      "excerpt": "Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Toggle Meeting Rooms menu Boston Cambridge Philadelphia Providence Rotterdam St."
+    },
+    {
+      "id": "check-page-7b4a364607",
+      "url": "https://cic.com/international-connect-programs/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka NOW OPEN Insights from our Blog What Is Flexible Office Space and What Are Its Benefits?"
+    },
+    {
+      "id": "check-page-c024c2db93",
+      "url": "https://cic.com/international-connect-programs/",
+      "page": "details",
+      "excerpt": "Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Boston Cambridge Philadelphia Providence Rotterdam NEW St."
+    },
+    {
+      "id": "check-page-bca51c3908",
+      "url": "https://cic.com/international-connect-programs/",
+      "page": "details",
+      "excerpt": "We partner with governments, venture capital firms, accelerators, corporates, and universities through customized international connect programs and strategic consulting to integrate them into global entrepreneurial networks."
+    },
+    {
+      "id": "check-page-5da7094686",
+      "url": "https://cic.com/international-connect-programs/",
+      "page": "details",
+      "excerpt": "Our work supports startups in accessing key international markets, attracts top talent to emerging innovation hubs, and accelerates corporate innovation by connecting companies with breakthrough startups and technologies."
+    },
+    {
+      "id": "check-page-2998cb53b5",
+      "url": "https://cic.com/international-connect-programs/",
+      "page": "details",
+      "excerpt": "By fostering meaningful connections with investors, mentors, and industry leaders, we help drive sustainable growth and cross-border innovation."
+    },
+    {
+      "id": "check-page-aef799945a",
+      "url": "https://cic.com/international-connect-programs/",
+      "page": "details",
+      "excerpt": "Contact us Who We Serve Government Agencies & Industry Associations We design programs and events to help governments support startups entering new markets or connecting to a global network."
+    },
+    {
+      "id": "check-page-17bda7ca6f",
+      "url": "https://cic.com/international-connect-programs/",
+      "page": "details",
+      "excerpt": "Our initiatives in Boston, Philadelphia, Berlin, Rotterdam, Warsaw, and Tokyo are tailored to each group’s needs, fostering growth and collaboration in local ecosystems."
+    },
+    {
+      "id": "check-page-ab7cebb76f",
+      "url": "https://cic.com/international-connect-programs/",
+      "page": "details",
+      "excerpt": "Contact us to learn more Education Institutions & Corporate Delegations We offer tailored programs and immersive experiences into CIC’s innovation network."
+    },
+    {
+      "id": "check-page-930c3942b2",
+      "url": "https://cic.com/international-connect-programs/",
+      "page": "details",
+      "excerpt": "These programs are hosted in Boston, Philadelphia, Berlin, Rotterdam, Warsaw, and Tokyo, providing a comprehensive and global reach to entrepreneurs."
+    },
+    {
+      "id": "check-page-d97794802d",
+      "url": "https://cic.com/nl/internationale-connect-programmas/",
+      "page": "details",
+      "excerpt": "Internationale Connect Programma's | CIC Toggle menu Kantoorruimte Laboratoriumruimte Philadelphia St. Louis Vergaderruimtes Rotterdam Boston Cambridge Philadelphia Providence St. Louis Programma's Venture Café Wekelijkse evenementen die een community opbouwen en vernieuwers verbinden met een wereldwijd netwerk Internationale zachte landing Op maat gemaakte programmering waarmee startups kunnen uitbreiden naar nieuwe markten Japans bureau Programmering en diensten die de innovatie-ecosystemen tussen Japan en Boston overbruggen Cohorten voor sociale impact Ondersteuning van kansarme ondernemers met middelen, mentoren en meer Bekijk alle programma's CIC biedt diverse programma’s aan ter ondersteuning van startups, groeiende bedrijven en organisaties Evenementen Organiseer een evenement Verheven evenementen- en vergaderruimtes met diensten die u laten schitteren Bezoek een evenement Maak verbinding met het lokale innovatie-ecosysteem, netwerk en bouw een community op Bedrijf Over Ontdek de mensen en diensten die CIC tot de wereldleider op het gebied van innovatie maken Blog Krijg nieuwe inzichten en blijf op de hoogte van het laatste nieuws uit onze wereldwijde community. Carrières Sluit je aan bij ons wereldwijde team en help de toekomst van innovatie op schaal vorm te geven druk op Blijf op de hoogte van het laatste nieuws van CIC’s wereldwijde locaties Over Carrière Druk op"
+    },
+    {
+      "id": "check-page-7a69a0ff7a",
+      "url": "https://cic.com/nl/internationale-connect-programmas/",
+      "page": "details",
+      "excerpt": "Carrières Sluit je aan bij ons wereldwijde team en help de toekomst van innovatie op schaal vorm te geven druk op Blijf op de hoogte van het laatste nieuws van CIC’s wereldwijde locaties Over Carrière Druk op Book a Tour Login NL Change language DE EN JA PL Kantoorruimte Laboratoriumruimte Toggle Laboratoriumruimte menu Philadelphia St."
+    },
+    {
+      "id": "check-page-c4350de751",
+      "url": "https://cic.com/nl/internationale-connect-programmas/",
+      "page": "details",
+      "excerpt": "Louis Vergaderruimtes Toggle Vergaderruimtes menu Rotterdam Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-85d0f6efae",
+      "url": "https://cic.com/nl/internationale-connect-programmas/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Nu geopend - CIC Berlin CIC and Jamestown Expand Partnership with Creation of CIC Innovation Campus in Berlin Learn more Laboratoriumruimte Philadelphia St."
+    },
+    {
+      "id": "check-page-58e226c7a9",
+      "url": "https://cic.com/nl/internationale-connect-programmas/",
+      "page": "details",
+      "excerpt": "We werken samen met overheden, venture capital-bedrijven, accelerators, bedrijven en universiteiten door middel van op maat gemaakte internationale connectieprogramma’s en strategisch advies om hen te integreren in wereldwijde ondernemersnetwerken."
+    },
+    {
+      "id": "check-page-b811414300",
+      "url": "https://cic.com/nl/internationale-connect-programmas/",
+      "page": "details",
+      "excerpt": "Onze initiatieven in Boston, Philadelphia, Berlijn, Rotterdam, Warschau en Tokio zijn afgestemd op de behoeften van elke groep en stimuleren groei en samenwerking in lokale ecosystemen."
+    },
+    {
+      "id": "check-page-fc8b6d337c",
+      "url": "https://cic.com/nl/internationale-connect-programmas/",
+      "page": "details",
+      "excerpt": "Deze programma’s worden gehost in Boston, Philadelphia, Berlijn, Rotterdam, Warschau en Tokio, waardoor ondernemers een uitgebreid en wereldwijd bereik hebben."
+    },
+    {
+      "id": "check-page-c783701961",
+      "url": "https://cic.com/nl/internationale-connect-programmas/",
+      "page": "details",
+      "excerpt": "Neem contact met ons op via connect@cic.com Cambridge Innovation Center Contact Bedrijf Bedrijf Venture Café CIC Catalyst Captains of Innovation CIC Institute CIC Health Over Carrière Druk op Werk met ons Onderneming Locaties North America Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-23ac4d6749",
+      "url": "https://cic.com/nl/internationale-connect-programmas/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka LinkedIn Instagram YouTube Facebook Copyright ©️ 2026 CIC Innovation Services LLC."
+    },
+    {
+      "id": "check-page-566ed7dbc3",
+      "url": "https://cic.com/nl/programmas/",
+      "page": "details",
+      "excerpt": "Programma's | CIC Toggle menu Kantoorruimte Laboratoriumruimte Philadelphia St. Louis Vergaderruimtes Rotterdam Boston Cambridge Philadelphia Providence St. Louis Programma's Venture Café Wekelijkse evenementen die een community opbouwen en vernieuwers verbinden met een wereldwijd netwerk Internationale zachte landing Op maat gemaakte programmering waarmee startups kunnen uitbreiden naar nieuwe markten Japans bureau Programmering en diensten die de innovatie-ecosystemen tussen Japan en Boston overbruggen Cohorten voor sociale impact Ondersteuning van kansarme ondernemers met middelen, mentoren en meer Bekijk alle programma's CIC biedt diverse programma’s aan ter ondersteuning van startups, groeiende bedrijven en organisaties Evenementen Organiseer een evenement Verheven evenementen- en vergaderruimtes met diensten die u laten schitteren Bezoek een evenement Maak verbinding met het lokale innovatie-ecosysteem, netwerk en bouw een community op Bedrijf Over Ontdek de mensen en diensten die CIC tot de wereldleider op het gebied van innovatie maken Blog Krijg nieuwe inzichten en blijf op de hoogte van het laatste nieuws uit onze wereldwijde community. Carrières Sluit je aan bij ons wereldwijde team en help de toekomst van innovatie op schaal vorm te geven druk op Blijf op de hoogte van het laatste nieuws van CIC’s wereldwijde locaties Over Carrière Druk op Book a Tour Login NL"
+    },
+    {
+      "id": "check-page-4adcfe30b7",
+      "url": "https://cic.com/nl/programmas/",
+      "page": "details",
+      "excerpt": "Carrières Sluit je aan bij ons wereldwijde team en help de toekomst van innovatie op schaal vorm te geven druk op Blijf op de hoogte van het laatste nieuws van CIC’s wereldwijde locaties Over Carrière Druk op Book a Tour Login NL Change language DE EN JA PL Kantoorruimte Laboratoriumruimte Toggle Laboratoriumruimte menu Philadelphia St."
+    },
+    {
+      "id": "check-page-78417c2329",
+      "url": "https://cic.com/nl/programmas/",
+      "page": "details",
+      "excerpt": "Louis Vergaderruimtes Toggle Vergaderruimtes menu Rotterdam Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-0d4557c04d",
+      "url": "https://cic.com/nl/programmas/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Nu geopend - CIC Berlin CIC and Jamestown Expand Partnership with Creation of CIC Innovation Campus in Berlin Learn more Laboratoriumruimte Philadelphia St."
+    },
+    {
+      "id": "check-page-2e9828bf7a",
+      "url": "https://cic.com/nl/programmas/",
+      "page": "details",
+      "excerpt": "Meer informatie over International Connect Programma’s Meer informatie over ons programma in Rotterdam Bureau Japan De innovatie-ecosystemen van Japan en Boston met elkaar verbinden Werken aan het openen van handelsroutes tussen Japan en de Verenigde Staten door middel van praktische programma’s en diensten op maat."
+    },
+    {
+      "id": "check-page-ae9d5038ef",
+      "url": "https://cic.com/nl/programmas/",
+      "page": "details",
+      "excerpt": "Japan Desk faciliteert verbindingen tussen de innovatie-ecosystemen van Japan en Groot Boston en werkt samen met in Japan gevestigde organisaties om gezamenlijk intensieve bootcamps te organiseren die Japanse startups voorbereiden op het betreden van de Amerikaanse markt."
+    },
+    {
+      "id": "check-page-bcbb2a5b52",
+      "url": "https://cic.com/nl/programmas/",
+      "page": "details",
+      "excerpt": "Meer informatie over ons cohort in Massachusetts Meer informatie over ons Philadelphia Cohort Meer informatie over ons St."
+    },
+    {
+      "id": "check-page-b1e09910aa",
+      "url": "https://cic.com/nl/programmas/",
+      "page": "details",
+      "excerpt": "Lees het volledige verhaal about Het Japanse ministerie van Economie, Handel en Industrie selecteert CIC en MassChallenge voor het opzetten en uitvoeren van een programma voor de ontwikkeling van ondernemers voor Japanse startups Meld je aan voor onze nieuwsbrief Ontdek een lokale CIC Boston Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-b7482cf272",
+      "url": "https://cic.com/nl/programmas/",
+      "page": "details",
+      "excerpt": "Louis Berlin Rotterdam Warsaw Tokyo Let’s Go Wilt u de innovatie in uw bedrijf versnellen ?"
+    },
+    {
+      "id": "check-page-a158b1a74b",
+      "url": "https://cic.com/nl/programmas/",
+      "page": "details",
+      "excerpt": "Meer informatie over consulting Cambridge Innovation Center Contact Bedrijf Bedrijf Venture Café CIC Catalyst Captains of Innovation CIC Institute CIC Health Over Carrière Druk op Werk met ons Onderneming Locaties North America Boston Cambridge Philadelphia Providence St."
+    },
+    {
+      "id": "check-page-ef420fced1",
+      "url": "https://cic.com/nl/programmas/",
+      "page": "details",
+      "excerpt": "Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka LinkedIn Instagram YouTube Facebook Copyright ©️ 2026 CIC Innovation Services LLC."
     }
   ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "connect@cic.com",
+        "evidenceId": "check-email-9d01e96bad"
+      }
+    ],
     "phones": [
       {
         "value": "+1 (267) 233-6888",
-        "evidenceId": "check-phone-312a3875d6"
-      }
-    ],
-    "routes": [
+        "evidenceId": "check-phone-5a2ad17f3b"
+      },
       {
-        "value": "https://cic.com/36for75",
-        "evidenceId": "check-route-dec2e5a25e"
+        "value": "+1 (314) 332-2027",
+        "evidenceId": "check-phone-6301e1583c"
       }
     ],
+    "routes": [],
     "applicationUrl": [
       {
         "value": "https://cic.com/",
@@ -352,26 +1579,13 @@
     "applicationsOpen": [
       {
         "value": true,
-        "evidenceId": "check-status-02c84bd064"
+        "evidenceId": "check-status-f3b9c65e72"
       }
     ],
     "operatingStatus": [],
     "deadlines": [],
     "rolling": [],
-    "announcedIntake": [
-      {
-        "value": "July",
-        "evidenceId": "check-announced-5a777b1cd9"
-      },
-      {
-        "value": "September",
-        "evidenceId": "check-announced-e28aa4f133"
-      },
-      {
-        "value": "september",
-        "evidenceId": "check-announced-a5dc54b2b7"
-      }
-    ],
+    "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [
       {
@@ -390,21 +1604,25 @@
     "format": [
       {
         "value": "in-person",
-        "evidenceId": "check-format-fba5c19c81"
+        "evidenceId": "check-format-c4b6fc7f6f"
       },
       {
         "value": "remote",
-        "evidenceId": "check-format-32a79d5521"
+        "evidenceId": "check-format-4106d6d3d5"
       },
       {
         "value": "hybrid",
-        "evidenceId": "check-format-bb8aaadb5d"
+        "evidenceId": "check-format-d9eb5f901e"
       }
     ],
     "location": [
       {
         "value": "Massachusetts",
-        "evidenceId": "check-location-8750d97ec1"
+        "evidenceId": "check-location-d27fd1785a"
+      },
+      {
+        "value": "Rotterdam",
+        "evidenceId": "check-location-865ec46bf5"
       }
     ],
     "selectivity": [],

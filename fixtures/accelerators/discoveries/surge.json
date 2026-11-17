@@ -1,6 +1,6 @@
 {
   "programId": "surge",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://surge.peakxv.com/apply",
@@ -92,6 +92,14 @@
     },
     {
       "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
       "page": "batches",
       "anchor": "",
       "fetched": true,
@@ -243,10 +251,34 @@
       "origin": "official"
     },
     {
+      "url": "https://surge.peakxv.com/resource/cursor-co-founder-aman-sanger-on-the-journey-from-0-100m-in-12-months-the-future-of-programming",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://surge.peakxv.com/resource/from-sun-microsystems-to-openai-vinod-khosla-on-bold-bets-building-enduring-companies",
       "page": "portfolio",
       "anchor": "CONNECTING THE DOTS Announcement Video Press Case study WATch From Sun Microsystems to OpenAI: Vinod Khosla on Bold Bets & Building Enduring Companies Vinod Khosla Founder, Khosla ",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/resource/gokul-rajaram-on-defensibility-scaling-companies-hiring-for-spikiness",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/resource/vercel-s-malte-ubl-on-agent-era-self-driving-infra-and-how-vercel-thinks-about-the-next-decade",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

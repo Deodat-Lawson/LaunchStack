@@ -1,24 +1,36 @@
 {
   "programId": "new-energy-nexus-usa",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.newenergynexus.com/programs/",
     "https://apply.workable.com/newenergynexus/",
     "https://apply.workable.com/newenergynexus/j/0B39CDEE8D/",
     "https://apply.workable.com/newenergynexus/j/23BA086C31/",
     "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
-    "https://www.newenergynexus.com/news/new-energy-nexus-response-to-white-houses-15-5-billion-ev-investment-announcement/",
-    "https://www.newenergynexus.com/news/six-women-led-agricultural-enterprises-secure-investment-to-tackle-climate-adaptation-in-the-mekong-delta/",
-    "https://www.newenergynexus.com/news/calseed-cohort-7-prototype-awards-announcement/",
-    "https://www.newenergynexus.com/news/supercharge-australia-innovation-challenge-announces-australias-first-cohort-of-11-battery-startups/",
     "https://www.newenergynexus.com/about/",
-    "https://www.newenergynexus.com/news/100-climate-solutions-selected-for-nex-cop28-climate-tech-startup-accelerator/",
-    "https://www.newenergynexus.com/news/2023-climate-fintech-accelerator-opens-to-startups-around-the-world/",
-    "https://www.newenergynexus.com/news/californias-pioneering-clean-energy-testing-program-lands-in-australia/",
-    "https://www.newenergynexus.com/news/climate-tech-startups-to-be-showcased-at-cop28-in-new-program-from-cop28-and-new-energy-nexus/",
-    "https://www.newenergynexus.com/news/ifc-and-new-energy-nexus-launch-accelerator-for-women-led-climate-startups-in-southeast-asia/"
+    "https://www.newenergynexus.com/program/building-energy-challenge/",
+    "https://www.newenergynexus.com/program/calcef-catalyst/",
+    "https://www.newenergynexus.com/program/calcef-ventures/",
+    "https://www.newenergynexus.com/program/calcharge/",
+    "https://www.newenergynexus.com/program/ee100-introduction-to-energy-entrepreneurship/",
+    "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+    "https://www.newenergynexus.com/program/energy-entrepreneurship-series-for-student-and-faculty-members-train-the-trainers-equipping-faculty-members/",
+    "https://www.newenergynexus.com/program/energy-storage/",
+    "https://www.newenergynexus.com/program/green-building-initiative/",
+    "https://www.newenergynexus.com/program/new-energy-academy/",
+    "https://www.newenergynexus.com/program/nexgen-program/",
+    "https://www.newenergynexus.com/program/ready-spark-charge/",
+    "https://www.newenergynexus.com/program/residency/",
+    "https://www.newenergynexus.com/program/solar-innovation-program-2/"
   ],
   "evidence": [
+    {
+      "id": "check-deal-9a415d1cac",
+      "url": "https://www.newenergynexus.com/program/ready-spark-charge/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "Php 1,000.00 per team will also be awarded Benefits AWS credits upto USD 10,000 Merchandise and other freebies Post hackathon support Mentorship &",
+      "page": "details"
+    },
     {
       "id": "check-duration-4de943a1a1",
       "url": "https://apply.workable.com/newenergynexus/",
@@ -32,6 +44,13 @@
       "title": "New Energy Nexus USA — application page",
       "excerpt": "United States California Full time Posted 2 months ago Market Engagement & Communications Lead",
       "page": "application"
+    },
+    {
+      "id": "check-duration-797b39f6af",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "energy efficiency and conservation. Through the 16-week incubation program, the individuals and RE",
+      "page": "details"
     },
     {
       "id": "check-duration-7fa4a3b723",
@@ -48,10 +67,17 @@
       "page": "application"
     },
     {
-      "id": "check-duration-dfe8888ee7",
-      "url": "https://www.newenergynexus.com/news/ifc-and-new-energy-nexus-launch-accelerator-for-women-led-climate-startups-in-southeast-asia/",
+      "id": "check-duration-a0bae5ae02",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
       "title": "New Energy Nexus USA — program page",
-      "excerpt": "in partnership with New Energy Nexus (NEX), is a 12-month program designed to propel 25 promising women",
+      "excerpt": "Efficiency and Conservation (EEC) Program, a 16-week hybrid business incubation program designed to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f0b0d869f7",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "suppliers in the evolving energy sector. This 5-week hybrid program combines in-person and online",
       "page": "details"
     },
     {
@@ -62,18 +88,18 @@
       "page": "application"
     },
     {
+      "id": "check-format-1c996007fe",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "sessions be sponsored or subsidized? Participation in the in-person sessions during the program will not be sponsored.",
+      "page": "details"
+    },
+    {
       "id": "check-format-2315bede9c",
       "url": "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
       "title": "New Energy Nexus USA — application page",
       "excerpt": "analysis and reporting. Ability to work independently in a remote environment. Experience supervising consultants. Ability",
       "page": "application"
-    },
-    {
-      "id": "check-format-369ab3d2ec",
-      "url": "https://www.newenergynexus.com/news/ifc-and-new-energy-nexus-launch-accelerator-for-women-led-climate-startups-in-southeast-asia/",
-      "title": "New Energy Nexus USA — program page",
-      "excerpt": "mentoring, expert sharing, and peer learning, as well as in-person workshops covering essential topics such as investor pitch",
-      "page": "details"
     },
     {
       "id": "check-format-38e117fe7d",
@@ -90,6 +116,27 @@
       "page": "application"
     },
     {
+      "id": "check-format-4d61ef0d90",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "Efficiency and Conservation (EEC) Program, a 16-week hybrid business incubation program designed to help renewable",
+      "page": "details"
+    },
+    {
+      "id": "check-format-580665ff58",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "energy sector. This 5-week hybrid program combines in-person and online sessions, providing targeted support to help",
+      "page": "details"
+    },
+    {
+      "id": "check-format-58a84b09cd",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "entire duration of the program? No, the program follows a hybrid format, with most sessions conducted online. The only",
+      "page": "details"
+    },
+    {
       "id": "check-format-64941cb1c2",
       "url": "https://apply.workable.com/newenergynexus/",
       "title": "New Energy Nexus USA — application page",
@@ -104,10 +151,17 @@
       "page": "application"
     },
     {
-      "id": "check-format-a1dd06cca2",
-      "url": "https://www.newenergynexus.com/news/ifc-and-new-energy-nexus-launch-accelerator-for-women-led-climate-startups-in-southeast-asia/",
+      "id": "check-format-9087852442",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
       "title": "New Energy Nexus USA — program page",
-      "excerpt": "key challenges faced by women-led climate startups. This hybrid-format program will provide in-depth virtual sessions",
+      "excerpt": "you qualify for an exemption. Will my participation in the in-person sessions be sponsored or subsidized? Participation in the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-93af33b3ee",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "fellow attendees and learning from session experts. The in-person sessions will also offer valuable networking",
       "page": "details"
     },
     {
@@ -146,18 +200,25 @@
       "page": "application"
     },
     {
+      "id": "check-format-dea96d34d4",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "suppliers in the evolving energy sector. This 5-week hybrid program combines in-person and online sessions, providing",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e128bf746d",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "and help shape the future of energy. What’s included: 2 in-person activities (kick-off & closing) 3 online learning sessions",
+      "page": "details"
+    },
+    {
       "id": "check-format-e270b2443d",
       "url": "https://apply.workable.com/newenergynexus/j/23BA086C31/",
       "title": "New Energy Nexus USA — application page",
       "excerpt": "that allow for personal and professional growth. This is a hybrid position based in the San Francisco Bay Area, with an",
       "page": "application"
-    },
-    {
-      "id": "check-format-e83236f2dd",
-      "url": "https://www.newenergynexus.com/news/ifc-and-new-energy-nexus-launch-accelerator-for-women-led-climate-startups-in-southeast-asia/",
-      "title": "New Energy Nexus USA — program page",
-      "excerpt": "startups. This hybrid-format program will provide in-depth virtual sessions including mentoring, expert sharing, and peer",
-      "page": "details"
     },
     {
       "id": "check-format-f587bd4404",
@@ -174,57 +235,8 @@
       "page": "details"
     },
     {
-      "id": "check-location-1050c92a04",
-      "url": "https://www.newenergynexus.com/news/climate-tech-startups-to-be-showcased-at-cop28-in-new-program-from-cop28-and-new-energy-nexus/",
-      "title": "New Energy Nexus USA — program page",
-      "excerpt": "tristan.tremschnig@newenergynexus.com (based in San Francisco, USA) About New Energy Nexus New",
-      "page": "details"
-    },
-    {
-      "id": "check-location-26f8549663",
-      "url": "https://www.newenergynexus.com/news/100-climate-solutions-selected-for-nex-cop28-climate-tech-startup-accelerator/",
-      "title": "New Energy Nexus USA — program page",
-      "excerpt": "tristan.tremschnig@newenergynexus.com (based in San Francisco, USA) About New Energy Nexus New",
-      "page": "details"
-    },
-    {
-      "id": "check-location-6f82f17892",
-      "url": "https://www.newenergynexus.com/news/2023-climate-fintech-accelerator-opens-to-startups-around-the-world/",
-      "title": "New Energy Nexus USA — program page",
-      "excerpt": "tristan.tremschnig@newenergynexus.com (based in San Francisco, USA) Jasper Shen Communications",
-      "page": "details"
-    },
-    {
-      "id": "check-location-dbaf47056b",
-      "url": "https://www.newenergynexus.com/news/new-energy-nexus-response-to-white-houses-15-5-billion-ev-investment-announcement/",
-      "title": "New Energy Nexus USA — terms page",
-      "excerpt": "tristan.tremschnig@newenergynexus.com (based in San Francisco, USA) About New Energy Nexus New",
-      "page": "terms"
-    },
-    {
-      "id": "check-location-df96cdb642",
-      "url": "https://www.newenergynexus.com/news/supercharge-australia-innovation-challenge-announces-australias-first-cohort-of-11-battery-startups/",
-      "title": "New Energy Nexus USA — batches page",
-      "excerpt": "services; Renewable Metals , based in Perth, which recycles lithium batteries",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-0b624cf503",
-      "url": "https://www.newenergynexus.com/news/ifc-and-new-energy-nexus-launch-accelerator-for-women-led-climate-startups-in-southeast-asia/",
-      "title": "New Energy Nexus USA — program page",
-      "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-1370134534",
-      "url": "https://www.newenergynexus.com/news/six-women-led-agricultural-enterprises-secure-investment-to-tackle-climate-adaptation-in-the-mekong-delta/",
-      "title": "New Energy Nexus USA — terms page",
-      "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-2d021f8b73",
-      "url": "https://www.newenergynexus.com/news/2023-climate-fintech-accelerator-opens-to-startups-around-the-world/",
+      "id": "check-portfolio-2dd7267946",
+      "url": "https://www.newenergynexus.com/program/green-building-initiative/",
       "title": "New Energy Nexus USA — program page",
       "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
       "page": "details"
@@ -237,11 +249,18 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-5959108c82",
-      "url": "https://www.newenergynexus.com/news/new-energy-nexus-response-to-white-houses-15-5-billion-ev-investment-announcement/",
-      "title": "New Energy Nexus USA — terms page",
+      "id": "check-portfolio-41ab8f849b",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "title": "New Energy Nexus USA — program page",
       "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
-      "page": "terms"
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5076c496b6",
+      "url": "https://www.newenergynexus.com/program/calcharge/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-6096902432",
@@ -251,22 +270,15 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-63ba3376ba",
-      "url": "https://www.newenergynexus.com/news/100-climate-solutions-selected-for-nex-cop28-climate-tech-startup-accelerator/",
+      "id": "check-portfolio-66631fd0a4",
+      "url": "https://www.newenergynexus.com/program/energy-entrepreneurship-series-for-student-and-faculty-members-train-the-trainers-equipping-faculty-members/",
       "title": "New Energy Nexus USA — program page",
       "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-7654b7f902",
-      "url": "https://www.newenergynexus.com/news/supercharge-australia-innovation-challenge-announces-australias-first-cohort-of-11-battery-startups/",
-      "title": "New Energy Nexus USA — batches page",
-      "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-81cbab8897",
-      "url": "https://www.newenergynexus.com/news/californias-pioneering-clean-energy-testing-program-lands-in-australia/",
+      "id": "check-portfolio-8562410a52",
+      "url": "https://www.newenergynexus.com/program/nexgen-program/",
       "title": "New Energy Nexus USA — program page",
       "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
       "page": "details"
@@ -279,18 +291,53 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-b43e0d218e",
-      "url": "https://www.newenergynexus.com/news/climate-tech-startups-to-be-showcased-at-cop28-in-new-program-from-cop28-and-new-energy-nexus/",
+      "id": "check-portfolio-af7010764d",
+      "url": "https://www.newenergynexus.com/program/energy-storage/",
       "title": "New Energy Nexus USA — program page",
       "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-d626d62373",
-      "url": "https://www.newenergynexus.com/news/calseed-cohort-7-prototype-awards-announcement/",
-      "title": "New Energy Nexus USA — batches page",
+      "id": "check-portfolio-c810457eb6",
+      "url": "https://www.newenergynexus.com/program/calcef-ventures/",
+      "title": "New Energy Nexus USA — program page",
       "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
-      "page": "batches"
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d2f39086ed",
+      "url": "https://www.newenergynexus.com/program/residency/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-dd112200ca",
+      "url": "https://www.newenergynexus.com/program/ready-spark-charge/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-de8072c4a2",
+      "url": "https://www.newenergynexus.com/program/building-energy-challenge/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ece2ace044",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f54b2f1410",
+      "url": "https://www.newenergynexus.com/program/calcef-catalyst/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
+      "page": "details"
     },
     {
       "id": "check-rolling-c008865cf8",
@@ -321,8 +368,15 @@
       "page": "application"
     },
     {
-      "id": "check-route-1dd7706926",
-      "url": "https://www.newenergynexus.com/news/ifc-and-new-energy-nexus-launch-accelerator-for-women-led-climate-startups-in-southeast-asia/",
+      "id": "check-route-1517802d76",
+      "url": "https://www.newenergynexus.com/program/green-building-initiative/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "Corporates & Building owners apply now → https://airtable.com/appmSUCdq9KgNIEm3/pagVxwYg4wh9sp5lX/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1cc7ccd57f",
+      "url": "https://www.newenergynexus.com/program/ready-spark-charge/",
       "title": "New Energy Nexus USA — program page",
       "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
       "page": "details"
@@ -335,11 +389,25 @@
       "page": "application"
     },
     {
+      "id": "check-route-3a90b75ac2",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
+      "page": "details"
+    },
+    {
       "id": "check-route-3c10e699ba",
       "url": "https://apply.workable.com/newenergynexus/j/23BA086C31/",
       "title": "New Energy Nexus USA — application page",
       "excerpt": "https://apply.workable.com/newenergynexus/",
       "page": "application"
+    },
+    {
+      "id": "check-route-41f657220b",
+      "url": "https://www.newenergynexus.com/program/nexgen-program/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
+      "page": "details"
     },
     {
       "id": "check-route-4b444817b4",
@@ -356,18 +424,18 @@
       "page": "application"
     },
     {
-      "id": "check-route-4fba233098",
-      "url": "https://www.newenergynexus.com/news/2023-climate-fintech-accelerator-opens-to-startups-around-the-world/",
+      "id": "check-route-67bfc50b0e",
+      "url": "https://www.newenergynexus.com/program/residency/",
       "title": "New Energy Nexus USA — program page",
       "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
       "page": "details"
     },
     {
-      "id": "check-route-549d14e09b",
-      "url": "https://www.newenergynexus.com/news/new-energy-nexus-response-to-white-houses-15-5-billion-ev-investment-announcement/",
-      "title": "New Energy Nexus USA — terms page",
+      "id": "check-route-6e13f8dbb7",
+      "url": "https://www.newenergynexus.com/program/calcef-catalyst/",
+      "title": "New Energy Nexus USA — program page",
       "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
-      "page": "terms"
+      "page": "details"
     },
     {
       "id": "check-route-6e91b5092e",
@@ -377,11 +445,11 @@
       "page": "application"
     },
     {
-      "id": "check-route-6edf0c626d",
-      "url": "https://www.newenergynexus.com/news/six-women-led-agricultural-enterprises-secure-investment-to-tackle-climate-adaptation-in-the-mekong-delta/",
-      "title": "New Energy Nexus USA — terms page",
+      "id": "check-route-7313e7bb33",
+      "url": "https://www.newenergynexus.com/program/calcef-ventures/",
+      "title": "New Energy Nexus USA — program page",
       "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
-      "page": "terms"
+      "page": "details"
     },
     {
       "id": "check-route-7bf4683d04",
@@ -398,11 +466,11 @@
       "page": "application"
     },
     {
-      "id": "check-route-8509ef18b4",
-      "url": "https://www.newenergynexus.com/news/supercharge-australia-innovation-challenge-announces-australias-first-cohort-of-11-battery-startups/",
-      "title": "New Energy Nexus USA — batches page",
+      "id": "check-route-809f2fc94e",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "title": "New Energy Nexus USA — program page",
       "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
-      "page": "batches"
+      "page": "details"
     },
     {
       "id": "check-route-8d67add0a4",
@@ -410,13 +478,6 @@
       "title": "New Energy Nexus USA — application page",
       "excerpt": "https://apply.workable.com/newenergynexus/j/23BA086C31/",
       "page": "application"
-    },
-    {
-      "id": "check-route-a532846c78",
-      "url": "https://www.newenergynexus.com/news/calseed-cohort-7-prototype-awards-announcement/",
-      "title": "New Energy Nexus USA — batches page",
-      "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
-      "page": "batches"
     },
     {
       "id": "check-route-a5a7bbb5bc",
@@ -433,8 +494,15 @@
       "page": "application"
     },
     {
-      "id": "check-route-b2d327d4c1",
-      "url": "https://www.newenergynexus.com/news/climate-tech-startups-to-be-showcased-at-cop28-in-new-program-from-cop28-and-new-energy-nexus/",
+      "id": "check-route-ab0389a716",
+      "url": "https://www.newenergynexus.com/program/green-building-initiative/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b0c5e8055d",
+      "url": "https://www.newenergynexus.com/program/energy-entrepreneurship-series-for-student-and-faculty-members-train-the-trainers-equipping-faculty-members/",
       "title": "New Energy Nexus USA — program page",
       "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
       "page": "details"
@@ -447,18 +515,18 @@
       "page": "application"
     },
     {
-      "id": "check-route-bc2a6f62b5",
-      "url": "https://www.newenergynexus.com/news/100-climate-solutions-selected-for-nex-cop28-climate-tech-startup-accelerator/",
-      "title": "New Energy Nexus USA — program page",
-      "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
-      "page": "details"
-    },
-    {
       "id": "check-route-c6d4dfc213",
       "url": "https://apply.workable.com/newenergynexus/j/23BA086C31/",
       "title": "New Energy Nexus USA — application page",
       "excerpt": "Application → https://apply.workable.com/newenergynexus/j/23BA086C31/apply/",
       "page": "application"
+    },
+    {
+      "id": "check-route-d62f9f56ec",
+      "url": "https://www.newenergynexus.com/program/building-energy-challenge/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
+      "page": "details"
     },
     {
       "id": "check-route-d79cbc98de",
@@ -475,6 +543,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-e2de892728",
+      "url": "https://www.newenergynexus.com/program/energy-storage/",
+      "title": "New Energy Nexus USA — program page",
+      "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
+      "page": "details"
+    },
+    {
       "id": "check-route-e55362f71f",
       "url": "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
       "title": "New Energy Nexus USA — application page",
@@ -482,17 +557,10 @@
       "page": "application"
     },
     {
-      "id": "check-route-f90ff87622",
-      "url": "https://www.newenergynexus.com/news/californias-pioneering-clean-energy-testing-program-lands-in-australia/",
+      "id": "check-route-e833e10c31",
+      "url": "https://www.newenergynexus.com/program/calcharge/",
       "title": "New Energy Nexus USA — program page",
       "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
-      "page": "details"
-    },
-    {
-      "id": "check-start-1e24340e04",
-      "url": "https://www.newenergynexus.com/news/ifc-and-new-energy-nexus-launch-accelerator-for-women-led-climate-startups-in-southeast-asia/",
-      "title": "New Energy Nexus USA — program page",
-      "excerpt": "Southeast Asia is open from May 5 – June 13, 2025. The program kicks off in August with a virtual event, setting clear objectives and",
       "page": "details"
     }
   ],
@@ -502,6 +570,24 @@
       "url": "https://www.newenergynexus.com/programs/",
       "page": "details",
       "excerpt": "Programs - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate Our programs Are you a startup or an aspiring clean energy entrepreneur? We have carefully designed programs to support every stage of your growth. Our programs Are you a startup or an aspiring clean energy entrepreneur? We have carefully designed programs to support every stage of your growth. 815,876 participants in our programs & events US$ 51.8 M + distributed (grants, loans, investments and vouchers) 880 portfolio startups supported 5362 entrepreneurs supported *The data above showcases metrics collected since 2016. LAUNCH These programs are designed to inspire new clean energy solutions and form startup teams. Bootcamps Hackathons Educational courses ACCELERATE Providing startups with the training, mentorship, and networks to grow locally and"
+    },
+    {
+      "id": "check-page-545a831598",
+      "url": "https://www.newenergynexus.com/programs/",
+      "page": "details",
+      "excerpt": "Bootcamps Hackathons Educational courses ACCELERATE Providing startups with the training, mentorship, and networks to grow locally and internationally."
+    },
+    {
+      "id": "check-page-2144b21f5e",
+      "url": "https://www.newenergynexus.com/programs/",
+      "page": "details",
+      "excerpt": "Accelerators Incubators Commercial partnerships FUND Providing capital resources to clean energy startups at various stages of growth Impact funds Grant programs Voucher programs Loan programs CONNECT Activities that connect entrepreneurs, corporations, education institutions, civil society, and financial organisations to accelerate startups and remove barriers for entrepreneurs."
+    },
+    {
+      "id": "check-page-aa629ce436",
+      "url": "https://www.newenergynexus.com/programs/",
+      "page": "details",
+      "excerpt": "We offer programs to grow clean energy entrepreneurs and build thriving, inclusive innovation ecosystems."
     },
     {
       "id": "check-page-182bd0c5cd",
@@ -516,10 +602,88 @@
       "excerpt": "Director of Commercialization & Corporate Partnerships - New Energy Nexus Director of Commercialization & Corporate Partnerships Hybrid California Full time Berkeley, California, United States Overview Application Share this job Description ABOUT NEW ENERGY NEXUS New Energy Nexus (NEX) is a not-for-profit organization that supports clean energy entrepreneurs with funds, services, and networks. Our vision is a 100% clean energy economy where innovation and communities thrive. As part of NEX’s global network, the New Energy Nexus California Chapter (NEX CA) is accelerating California’s clean energy transition by championing entrepreneurs, commercializing technologies, and co-designing strategies that scale innovation, build trust, and grow industries. With 20+ years of experience guiding entrepreneurs through the early stages of technology development into validation and scale-up, the NEX CA team focuses on the full lifecycle of entrepreneur support and technology commercialization. ABOUT THE ROLE & OPPORTUNITY NEX CA is seeking an experienced, market-driven leader to spearhead commercialization pathways across our long-standing portfolio of programs. These programs include CalSEED, which provides grant funding and wraparound services for the earliest-stage entrepreneurs; CalTestBed, which pairs startups with experts within universities and national labs to validate"
     },
     {
+      "id": "check-page-d6e3a9e669",
+      "url": "https://apply.workable.com/newenergynexus/j/0B39CDEE8D/",
+      "page": "application",
+      "excerpt": "These programs include CalSEED, which provides grant funding and wraparound services for the earliest-stage entrepreneurs; CalTestBed, which pairs startups with experts within universities and national labs to validate technologies; and PowerForward, which awards large grants to scale up battery manufacturing with partnerships for workforce development and community benefit."
+    },
+    {
+      "id": "check-page-9c9c0cb180",
+      "url": "https://apply.workable.com/newenergynexus/j/0B39CDEE8D/",
+      "page": "application",
+      "excerpt": "The Director will lead the strategic mapping of clean energy sectors, and most critically, build high-value relationships and secure tangible engagement with “next-level partners” – including utilities, corporate off-takers, manufacturers, developers, and procurement agencies."
+    },
+    {
+      "id": "check-page-9f1462fc8b",
+      "url": "https://apply.workable.com/newenergynexus/j/0B39CDEE8D/",
+      "page": "application",
+      "excerpt": "This is a pivotal point in the evolution of NEX CA programs as regulatory, market, and funding landscapes shift rapidly in the clean energy space."
+    },
+    {
+      "id": "check-page-213c266cf5",
+      "url": "https://apply.workable.com/newenergynexus/j/0B39CDEE8D/",
+      "page": "application",
+      "excerpt": "This role will help prepare clean energy entrepreneurs for the path ahead by connecting them with the customers and partners that will allow them to commercialize at scale."
+    },
+    {
+      "id": "check-page-4f9e385168",
+      "url": "https://apply.workable.com/newenergynexus/j/0B39CDEE8D/",
+      "page": "application",
+      "excerpt": "However, successful candidates should bring a strong combination of relevant experience across several of these areas, demonstrating comparable depth and breadth in climate tech commercialization, corporate innovation, and/or market development."
+    },
+    {
+      "id": "check-page-3b638badec",
+      "url": "https://apply.workable.com/newenergynexus/j/0B39CDEE8D/",
+      "page": "application",
+      "excerpt": "This is a hybrid position based in the San Francisco Bay Area, with an expectation to work out of our Berkeley office a minimum of two designated days per week (Tuesdays and Thursdays), with additional in-person requirements as needed to fulfill the responsibilities above (such as in-person meetings with next-level partners and traveling to external events)."
+    },
+    {
+      "id": "check-page-5b4348e1f6",
+      "url": "https://apply.workable.com/newenergynexus/j/0B39CDEE8D/",
+      "page": "application",
+      "excerpt": "New Energy Nexus hires and promotes individuals on the basis of their qualifications for the job to be filled."
+    },
+    {
       "id": "check-page-cf044bd279",
       "url": "https://apply.workable.com/newenergynexus/j/23BA086C31/",
       "page": "application",
       "excerpt": "Market Engagement & Communications Lead - New Energy Nexus Market Engagement & Communications Lead Hybrid California Full time Berkeley, California, United States Overview Application Share this job Description ABOUT NEW ENERGY NEXUS New Energy Nexus (NEX) is a not-for-profit organization that supports clean energy entrepreneurs with funds, services, and networks. Our vision is a 100% clean energy economy where innovation and communities thrive. As part of NEX’s global network, the New Energy Nexus California Chapter (NEX CA) is accelerating California’s clean energy transition by championing entrepreneurs, commercializing technologies, and co-designing strategies that scale innovation, build trust, and grow industries. With 20+ years of experience guiding entrepreneurs through the early stages of technology development into validation and scale-up, the NEX CA team focuses on the full lifecycle of entrepreneur support and technology commercialization. ABOUT THE ROLE & OPPORTUNITY NEX CA is seeking an experienced marketing leader and storyteller to help create new channels for startups across our long-standing portfolio of programs. These programs include CalSEED, which provides grant funding and wraparound services for the earliest-stage entrepreneurs; CalTestBed, which pairs startups with experts within universities and national labs to validate technologies; and"
+    },
+    {
+      "id": "check-page-a529d4e23b",
+      "url": "https://apply.workable.com/newenergynexus/j/23BA086C31/",
+      "page": "application",
+      "excerpt": "These programs include CalSEED, which provides grant funding and wraparound services for the earliest-stage entrepreneurs; CalTestBed, which pairs startups with experts within universities and national labs to validate technologies; and PowerForward, which awards large grants to scale up battery manufacturing with partnerships for workforce development and community benefit."
+    },
+    {
+      "id": "check-page-72ce27346c",
+      "url": "https://apply.workable.com/newenergynexus/j/23BA086C31/",
+      "page": "application",
+      "excerpt": "This is a pivotal point in the evolution of NEX CA programs as regulatory, market, and funding landscapes shift rapidly in the clean energy space."
+    },
+    {
+      "id": "check-page-41514ad329",
+      "url": "https://apply.workable.com/newenergynexus/j/23BA086C31/",
+      "page": "application",
+      "excerpt": "To respond to the needs of clean energy entrepreneurs today, we are developing new program offerings that will connect startups directly with the customers and partners that will allow them to commercialize at scale through corporate matchmaking, curated events, and commercial deployment support for our portfolio."
+    },
+    {
+      "id": "check-page-36ab71f0ae",
+      "url": "https://apply.workable.com/newenergynexus/j/23BA086C31/",
+      "page": "application",
+      "excerpt": "The Market Engagement & Communications Lead will design, launch, and execute campaign messaging across three distinct audiences: startups in our portfolio, corporate enterprise buyers, and external funding partners."
+    },
+    {
+      "id": "check-page-73e7c85469",
+      "url": "https://apply.workable.com/newenergynexus/j/23BA086C31/",
+      "page": "application",
+      "excerpt": "This is a hybrid position based in the San Francisco Bay Area, with an expectation to work out of our Berkeley office a minimum of two designated days per week (Tuesdays and Thursdays) ."
+    },
+    {
+      "id": "check-page-ec0425939c",
+      "url": "https://apply.workable.com/newenergynexus/j/23BA086C31/",
+      "page": "application",
+      "excerpt": "New Energy Nexus hires and promotes individuals on the basis of their qualifications for the job to be filled."
     },
     {
       "id": "check-page-87eb6e1488",
@@ -528,28 +692,76 @@
       "excerpt": "Global Director of Impact & Knowledge Management - New Energy Nexus Global Director of Impact & Knowledge Management Remote Full time United States Pakistan United Kingdom India Singapore Bangkok, Bangkok, Thailand Overview Application Share this job Description ABOUT NEW ENERGY NEXUS New Energy Nexus (NEX) is an international NGO that supports climate solutions and builds a more equitable clean energy economy. Our laser focus is on clean energy entrepreneurs: providing them with funds, accelerators, and networks to thrive. They are our main audience and our agent of change. We started in California in 2004 and now operate across China, India, Southeast Asia, East and West Africa, and Australia. We have leveraged US$5.4 billion in investment and supported more than 11,000 entrepreneurs. ABOUT THE ROLE & OPPORTUNITY The Global Impact Director & Knowledge Management is the champion of New Energy Nexus’ ambition to be a true learning organization. They will lead the Monitoring, Evaluation, and Learning function at New Energy Nexus (NEX) that tracks, highlights, and strengthens the impact of the NEX network. The role owns NEX Global Monitoring, Evaluation, and Learning (MEL) framework, collaborates with the leadership to refine and maintain global Theory of Change (TOC), is the organization’s leading subject matter expert on disciplined TOC development and evaluations and supports"
     },
     {
-      "id": "check-page-3b6b109275",
-      "url": "https://www.newenergynexus.com/news/new-energy-nexus-response-to-white-houses-15-5-billion-ev-investment-announcement/",
-      "page": "terms",
-      "excerpt": "New Energy Nexus response to White House’s $15.5 billion EV investment announcement - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate News Transportation tech New Energy Nexus response to White House’s $15.5 billion EV investment announcement August 31, 2023 Oakland, 31 August 2023 – The Biden-Harris Administration’s announcement today of US$15.5 billion for domestic EV production and workforce development is a welcome signal but questions remain around implementation. Danny Kennedy, CEO of New Energy Nexus, said: “This announcement shows the USA is finally getting real about onshoring a resilient and clean lithium and EV supply chain. This is a huge opportunity for innovators, with dozens of startups potentially receiving the backing they need to scale up production. “It’s time we unleash American ingenuity,"
+      "id": "check-page-a0395f90bf",
+      "url": "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
+      "page": "application",
+      "excerpt": "It supports the network to keep a common strategic direction and demonstrate its collective impact to funders, partners, and the wider clean energy entrepreneurship ecosystem."
     },
     {
-      "id": "check-page-7383a60890",
-      "url": "https://www.newenergynexus.com/news/six-women-led-agricultural-enterprises-secure-investment-to-tackle-climate-adaptation-in-the-mekong-delta/",
-      "page": "terms",
-      "excerpt": "Six women-led agricultural enterprises secure investment to tackle climate adaptation in the Mekong Delta - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate News Vietnam Energy for Agriculture Women Six women-led agricultural enterprises secure investment to tackle climate adaptation in the Mekong Delta December 3, 2024 Six women-led agricultural enterprises across the Mekong Delta in Vietnam have successfully secured up to AUD60,000 (VND1 billion) each to take their businesses to the next level, thanks to Delta ccelerate. Delta ccelerate is a women’s agribusiness climate adaptation accelerator funded by the Australian Government that provides customised training and tailored support for women-focused small and medium enterprises (SMEs) in Mekong Delta to build their capacity in sustainable business practices"
+      "id": "check-page-a64b8e7847",
+      "url": "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
+      "page": "application",
+      "excerpt": "Lead the organization-wide knowledge management structure, data systems, and AI strategy for the purposes of MEL, program design, and stakeholder management, ensuring information on program participants, partners, funders, investors etc can be connected and used across teams."
     },
     {
-      "id": "check-page-13306b9e2c",
-      "url": "https://www.newenergynexus.com/news/calseed-cohort-7-prototype-awards-announcement/",
-      "page": "batches",
-      "excerpt": "CalSEED Cohort 7 Prototype Awards announcement - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate News California Renewable energy tech CalSEED Cohort 7 Prototype Awards announcement April 17, 2026 Media contacts: About New Energy Nexus New Energy Nexus (NEX) is the world’s leading clean energy ecosystem builder, working toward a 100% clean energy economy for 100% of the population. It does this with a laser focus on diverse entrepreneurs, supporting them with accelerators, funds, skills, and building the local and global connections they need to thrive. NEX has accelerated 1,700+ startups and businesses, empowered over 11,500+ entrepreneurs, and mobilized more than US$5.4 billion in investment. Since its founding in California in 2004, NEX now operates programs or services in Australia, China, India, Japan,"
+      "id": "check-page-cfc396bf19",
+      "url": "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
+      "page": "application",
+      "excerpt": "Oversee the governance, security, and responsible use of organizational data, including in AI-enabled knowledge tools."
     },
     {
-      "id": "check-page-bb4ec46e1e",
-      "url": "https://www.newenergynexus.com/news/supercharge-australia-innovation-challenge-announces-australias-first-cohort-of-11-battery-startups/",
-      "page": "batches",
-      "excerpt": "Supercharge Australia Innovation Challenge announces Australia's first cohort of 11 battery startups - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate News Australia Supercharge Australia Innovation Challenge announces Australia’s first cohort of 11 battery startups February 2, 2023 Eleven Australian lithium battery start-ups and innovators will receive hyper-accelerated business support, helping build Australia’s role in the global US$400 billion lithium battery market. Sydney, 2 February 2023 – Australia’s lithium battery value chain – currently only representing 1% of global product value despite the nation producing 60% of the world’s lithium – is about to get a major boost through support to eleven startups that are participating in the inaugural Supercharge Australia Innovation Challenge . The Challenge"
+      "id": "check-page-7d5657ec36",
+      "url": "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
+      "page": "application",
+      "excerpt": "Leverage AI and integrate it into NEX's MEL systems to build efficiency and standardization in data collection, validation, analysis, and reporting, while protecting data privacy and quality."
+    },
+    {
+      "id": "check-page-037ff9d30f",
+      "url": "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
+      "page": "application",
+      "excerpt": "At least 3 years experience in working in organizations focused on climate change, clean energy and/or entrepreneurship."
+    },
+    {
+      "id": "check-page-4b7aeeef9b",
+      "url": "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
+      "page": "application",
+      "excerpt": "Proven ability to influence culture and collective behavior of a mission driven team to create enthusiasm for, collective ownership of and appreciation for a MEL as a core strategic competency Foundational knowledge of the climate, clean energy, and entrepreneurship support landscape, and willingness to engage in in-depth self-learning on any gaps."
+    },
+    {
+      "id": "check-page-a2312769aa",
+      "url": "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
+      "page": "application",
+      "excerpt": "Demonstrated ability to stay ahead of emerging trends, technologies, and best practices in MEL and knowledge management, including the use of AI and digital tools to improve data analysis, organizational learning, and impact measurement."
+    },
+    {
+      "id": "check-page-8557a321ee",
+      "url": "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
+      "page": "application",
+      "excerpt": "Experience leveraging AI and/or automation tools to build processes and systems for knowledge and data management."
+    },
+    {
+      "id": "check-page-3bbbf08a98",
+      "url": "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
+      "page": "application",
+      "excerpt": "Experience working with accelerators, incubators, or other entrepreneurship support programs, and tracking post-program outcomes for startups and small businesses Benefits BENEFITS AND COMPENSATION This is a full-time remote position."
+    },
+    {
+      "id": "check-page-dddbed0fa3",
+      "url": "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
+      "page": "application",
+      "excerpt": "Applicable benefits such as medical, dental, vision, paid time off, paid holidays and insurance will depend on the location of the selected candidate."
+    },
+    {
+      "id": "check-page-ee276a3643",
+      "url": "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
+      "page": "application",
+      "excerpt": "New Energy Nexus is an equal employment opportunity employer and does not discriminate against applicants or employees because of race, color, religion, national origin, sex, age, citizenship status, disability status, genetic information, sexual orientation, or gender identity or expression of an otherwise qualified individual, or membership in any other class protected by applicable law."
+    },
+    {
+      "id": "check-page-e6b5c3c2d8",
+      "url": "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
+      "page": "application",
+      "excerpt": "New Energy Nexus hires and promotes individuals on the basis of their qualifications for the job to be filled."
     },
     {
       "id": "check-page-7e07d982b4",
@@ -558,34 +770,310 @@
       "excerpt": "About - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate Join our solutions movement We are the world’s leading ecosystem of funds and accelerators supporting diverse clean energy entrepreneurs to thrive. Stay connected Who we are Our vision New Energy Nexus strives towards an abundant world with a 100% clean energy economy for 100% of the population in the shortest time possible. Our mission We support diverse entrepreneurs to drive innovation and build equity into the global clean energy economy. Our goal Our goal is to support 100,000 clean energy entrepreneurs to succeed by 2030. It’s the Big, Risky, Audacious, Visionary & Exponential (BRAVE) goal the planet needs to accelerate the energy transition. A global network of chapters and partners Global Australia China India Indonesia Japan Nigeria Pakistan"
     },
     {
-      "id": "check-page-2bc3acd555",
-      "url": "https://www.newenergynexus.com/news/100-climate-solutions-selected-for-nex-cop28-climate-tech-startup-accelerator/",
+      "id": "check-page-8ec0dc197f",
+      "url": "https://www.newenergynexus.com/about/",
       "page": "details",
-      "excerpt": "100 climate solutions selected for NEX COP28 Climate Tech Startup Accelerator - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate 100 climate solutions selected for NEX COP28 Climate Tech Startup Accelerator November 1, 2023 Oakland, 1 November 2023 – 100 climate tech startups have been selected for the NEX COP28 Climate Tech Startup Accelerator , with over 80% representing climate solutions from the Global South. New Energy Nexus and COP28 have partnered to deliver the first climate tech program of its kind leading up to COP28, the global climate summit this year hosted in Dubai. We’re thrilled to announce that these 100 diverse climate tech startups have been selected to be part of this one-of-a-kind-program. “From energy efficiency to mobility and AgTech, these 100 startups represent grassroots solutions from"
+      "excerpt": "Published paper on expanding energy access in US Tribal communities Created Residency Program (XIR & FIR) A grant program that provided the financial launchpad to develop clean energy businesses."
     },
     {
-      "id": "check-page-15e8aa2d77",
-      "url": "https://www.newenergynexus.com/news/2023-climate-fintech-accelerator-opens-to-startups-around-the-world/",
+      "id": "check-page-13e2ce2f76",
+      "url": "https://www.newenergynexus.com/about/",
       "page": "details",
-      "excerpt": "2023 Climate Fintech Accelerator opens to startups around the world - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate News Energy Finance 2023 Climate Fintech Accelerator opens to startups around the world February 22, 2023 Shanghai, China, 22 February 2023 – The 2023 Climate Fintech Accelerator hosted by New Energy Nexus (NEX) has officially started recruitment. It is an accelerator dedicated to the climate finance sector, aimed at accelerating fintech innovation by providing support services to startups such as commercial matchmaking, training, and networking. Climate change is one of the biggest challenges the world is facing today. Solving the problem of climate change requires collective action and innovative solutions in multiple areas. Carbon trading markets have been launched in several countries and"
+      "excerpt": "Launched CalSEED A program to help early stage California clean energy startups bring their concepts and prototypes to market."
     },
     {
-      "id": "check-page-2d13d0c3c3",
-      "url": "https://www.newenergynexus.com/news/californias-pioneering-clean-energy-testing-program-lands-in-australia/",
+      "id": "check-page-d0528b9a36",
+      "url": "https://www.newenergynexus.com/about/",
       "page": "details",
-      "excerpt": "California's pioneering clean energy testing program lands in Australia - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate News Australia Renewable energy tech California’s pioneering clean energy testing program lands in Australia March 8, 2026 Sydney, Australia, 9 March 2026 – A program that has helped California clean energy startups collectively raise over half a billion dollars in follow-on investment is coming to Australia. New Energy Nexus and EnergyLab today announced the launch of the AusTestBed pilot: a first-of-its-kind, non-matching grant that gives Australian clean energy entrepreneurs free access to university testing facilities to validate their technologies and move closer to commercial deployment. The launch has brought California Energy Commission (CEC) Chair David Hochschild to Climate Action"
+      "excerpt": "Launched New Energy Nexus This becomes the operating name for the organization’s expanding footprint in the USA and globally."
     },
     {
-      "id": "check-page-e6a3c2bfa1",
-      "url": "https://www.newenergynexus.com/news/climate-tech-startups-to-be-showcased-at-cop28-in-new-program-from-cop28-and-new-energy-nexus/",
+      "id": "check-page-297bd0a066",
+      "url": "https://www.newenergynexus.com/about/",
       "page": "details",
-      "excerpt": "Climate tech startups to be showcased at COP28, in new program from COP28 and New Energy Nexus - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate Climate tech startups to be showcased at COP28, in new program from COP28 and New Energy Nexus September 20, 2023 Oakland, 21 September 2023 – COP28 UAE is partnering with New Energy Nexus (NEX) to accelerate early stage climate tech startups from around the world, particularly in the Global South. The NEX COP28 Climate Tech Startup Accelerator will be the first time climate tech startups are put through an accelerator program and showcased at COP. “Climate entrepreneurs both big and small, South and North are going to be critical to solving some of the biggest challenges in the global clean energy transition. That’s why we’re thrilled to partner with the COP28"
+      "excerpt": "Partnership in India New Energy Nexus and Climate Collective partner to run India’s first Solar Hackathon in New Delhi."
     },
     {
-      "id": "check-page-f05b25d8b4",
-      "url": "https://www.newenergynexus.com/news/ifc-and-new-energy-nexus-launch-accelerator-for-women-led-climate-startups-in-southeast-asia/",
+      "id": "check-page-ab3b7ca60c",
+      "url": "https://www.newenergynexus.com/about/",
       "page": "details",
-      "excerpt": "IFC and New Energy Nexus launch accelerator for women-led climate startups in Southeast Asia - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate News Southeast Asia Women IFC and New Energy Nexus launch accelerator for women-led climate startups in Southeast Asia May 13, 2025 Update: Applications are still open until June 29 — apply now ! Ho Chi Minh – She Wins Climate is a global initiative by the International Finance Corporation (IFC) aimed at accelerating women-led climate startups and increasing their access to climate investment. The Southeast Asia acceleration program, supported by the Government of Canada and the Government of Australia, and delivered in partnership with New Energy Nexus (NEX), is a 12-month program designed to propel 25 promising women climate entrepreneurs in the region to lead the"
+      "excerpt": "Launched New Energy Nexus Southeast Asia With support from GIZ, the German development agency."
+    },
+    {
+      "id": "check-page-49b639886d",
+      "url": "https://www.newenergynexus.com/about/",
+      "page": "details",
+      "excerpt": "Co-founded Free Electrons A global energy startup accelerator that connects the world’s most promising energy startups with utility companies."
+    },
+    {
+      "id": "check-page-4ff5d8d9c9",
+      "url": "https://www.newenergynexus.com/about/",
+      "page": "details",
+      "excerpt": "Launched New Energy Nexus China Launch of New Energy Nexus in Thailand and Indonesia Launch of New Energy Nexus in Vietnam and the Philippines Expansion in Uganda New Energy Nexus and ENVenture merge to form New Energy Nexus Uganda, expanding our footprint into East Africa."
+    },
+    {
+      "id": "check-page-23c7df9ad6",
+      "url": "https://www.newenergynexus.com/about/",
+      "page": "details",
+      "excerpt": "New Energy Nexus launches The Clean Fight in New York A flagship accelerator helping growth-stage clean energy startups scale up in New York."
+    },
+    {
+      "id": "check-page-605a2b1084",
+      "url": "https://www.newenergynexus.com/about/",
+      "page": "details",
+      "excerpt": "Launched Third Derivative in partnership with RMI With the aim to accelerate deep tech climate solutions."
+    },
+    {
+      "id": "check-page-1326b02ad7",
+      "url": "https://www.newenergynexus.com/about/",
+      "page": "details",
+      "excerpt": "Expansion in Nigeria In partnership with the Clean Technology Hub, based in Abuja, Nigeria."
+    },
+    {
+      "id": "check-page-bea31a76a5",
+      "url": "https://www.newenergynexus.com/about/",
+      "page": "details",
+      "excerpt": "Launch of Supercharge Australia A partnership with EnergyLab to accelerate energy storage solutions in Australia – the world’s biggest producer of Lithium."
+    },
+    {
+      "id": "check-page-db9aa1e4ba",
+      "url": "https://www.newenergynexus.com/about/",
+      "page": "details",
+      "excerpt": "Climate of Change podcast launches New Energy Nexus CEO, Danny Kennedy, launches an Audible UK podcast series with actor Cate Blanchett, featuring a line-up of innovators, activists and thought leaders."
+    },
+    {
+      "id": "check-page-474ca7f197",
+      "url": "https://www.newenergynexus.com/program/building-energy-challenge/",
+      "page": "details",
+      "excerpt": "Building Energy Challenge 2020 Southeast Asia - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate Explore For Entrepreneurs Portfolio Impact News & Stories About Careers Stay Connected Subscribe Donate © 2024New Energy Nexus All Rights Reserved Privacy Policy © 2024New Energy Nexus All Rights Reserved Privacy Policy"
+    },
+    {
+      "id": "check-page-dd732f3247",
+      "url": "https://www.newenergynexus.com/program/calcef-catalyst/",
+      "page": "details",
+      "excerpt": "CalCEF Catalyst - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate Explore For Entrepreneurs Portfolio Impact News & Stories About Careers Stay Connected Subscribe Donate © 2024New Energy Nexus All Rights Reserved Privacy Policy © 2024New Energy Nexus All Rights Reserved Privacy Policy"
+    },
+    {
+      "id": "check-page-3c07c4bec8",
+      "url": "https://www.newenergynexus.com/program/calcef-ventures/",
+      "page": "details",
+      "excerpt": "CalCEF Ventures - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate Explore For Entrepreneurs Portfolio Impact News & Stories About Careers Stay Connected Subscribe Donate © 2024New Energy Nexus All Rights Reserved Privacy Policy © 2024New Energy Nexus All Rights Reserved Privacy Policy"
+    },
+    {
+      "id": "check-page-82f8d4c274",
+      "url": "https://www.newenergynexus.com/program/calcharge/",
+      "page": "details",
+      "excerpt": "CalCharge - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate Explore For Entrepreneurs Portfolio Impact News & Stories About Careers Stay Connected Subscribe Donate © 2024New Energy Nexus All Rights Reserved Privacy Policy © 2024New Energy Nexus All Rights Reserved Privacy Policy"
+    },
+    {
+      "id": "check-page-db522415f6",
+      "url": "https://www.newenergynexus.com/program/ee100-introduction-to-energy-entrepreneurship/",
+      "page": "details",
+      "excerpt": "EE100 - Introduction to Energy Entrepreneurship Skip to main content NEX Online Startup School Toggle menu Menu All Courses Sign In EE100 - Introduction to Energy Entrepreneurship This course is open to all students and professionals who are interested to learn about sustainable energy innovation and entrepreneurship. Enroll for free Course curriculum Module 0 - Course Intro Learner's Profile Form EE100 Syllabus Suggested Study Guide About the Pre-Assessment Survey Pre-Assessment: RE Knowledge and Interest in the Industry Module 1 - Context Setting About Module 1 Lesson 1 - Can 100% Renewable Energy power the world? (Optional) Lesson 2 - New Energy Nexus 100% for 100% Share your Story Module 2 - Fundamentals of Sustainable Energy About Module 2 Lesson 1 - Renewable Energy Sources in the Philippines Lesson 2 - Types of Renewable Energy in the Philippines Lesson 3 - Renewable Energy Capacity and Generation in the Philippines Lesson 4 - Benefits of Renewable Energy Think & Share: The Future of Energy Module 3 - Basics of Philippine Energy Sector About Module 3 Lesson 1 - Overview of the Energy Sector Lesson 2 - Overview of the Electricity Sector (Optional) Lesson 3 - Overview of the Philippine Electric Power Industry (Optional) Lesson 4 - EPIRA Law (Optional) Lesson 5 - Electricity Bill Explained Lesson 6 - Energy Challenges & Policies in Place Lesson 7 - Overview of Climate"
+    },
+    {
+      "id": "check-page-35b7335c84",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "page": "details",
+      "excerpt": "Energy Efficiency & Conservation (EEC) Program - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate PROGRAM (Program concluded) Energy Efficiency & Conservation (EEC) Program About A program under the grant project establishing an Energy Efficiency Incubation Hub in Northern Mindanao , under USAID Energy Secure Philippines The Energy Efficiency and Conservation Law (RA 11285) marks a significant milestone in the Department of Energy’s commitment to sustainable energy use in the Philippines. Although still in its early stages, RA 11285 is a groundbreaking effort in the country’s energy landscape. To support this initiative, the “Establishing an Energy Efficiency Incubation Hub in Northern Mindanao” project aims to build the entrepreneurial capacity of individuals and companies in Region X. This project includes"
+    },
+    {
+      "id": "check-page-504f69c5ca",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "page": "details",
+      "excerpt": "This project includes the Energy Efficiency and Conservation (EEC) Program, a 16-week hybrid business incubation program designed to help renewable energy startups and companies in Northern Mindanao launch and operate Energy Service Companies (ESCOs)."
+    },
+    {
+      "id": "check-page-5aff7fc9d9",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "page": "details",
+      "excerpt": "Program Objectives Growth Opportunities Identify and nurture high-potential EEC innovations in the region of Northern Mindanao In-depth market insights Foster collaboration and knowledge sharing within the EEC ecosystem in the region Empower EEC startups Support early-stage EEC startups; Aid in the promotion of EEC in Northern Mindanao."
+    },
+    {
+      "id": "check-page-3a6c4759fe",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "page": "details",
+      "excerpt": "Who can apply ​​Early-stage startups, individuals, teams, or enterprises offering solutions within the domain of innovations and technologies in energy efficiency and conservation."
+    },
+    {
+      "id": "check-page-79b3d4f645",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "page": "details",
+      "excerpt": "Small-scale renewable energy companies who are seeking to diversify their service portfolio to include offerings such as energy auditing services and other products and services related to energy efficiency and conservation."
+    },
+    {
+      "id": "check-page-bb6d97be9d",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "page": "details",
+      "excerpt": "Intended outcomes The program aims to increase the number of ESCOs in the region, which aligns with the DOE’s goals and initiatives in promoting energy efficiency and conservation."
+    },
+    {
+      "id": "check-page-eab5c7466f",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "page": "details",
+      "excerpt": "Through the 16-week incubation program, the individuals and RE companies participating will be equipped with the necessary skills in piloting and launching EEC products and services."
+    },
+    {
+      "id": "check-page-4e98b60c7e",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "page": "details",
+      "excerpt": "Early-stage companies are encouraged to apply."
+    },
+    {
+      "id": "check-page-7e1cb79927",
+      "url": "https://www.newenergynexus.com/program/energy-efficiency-and-conservation-program/",
+      "page": "details",
+      "excerpt": "Write to us Email: philippines@newenergynexus.com → Explore For Entrepreneurs Portfolio Impact News & Stories About Careers Stay Connected Subscribe Donate © 2024New Energy Nexus All Rights Reserved Privacy Policy © 2024New Energy Nexus All Rights Reserved Privacy Policy"
+    },
+    {
+      "id": "check-page-2d16435f93",
+      "url": "https://www.newenergynexus.com/program/energy-entrepreneurship-series-for-student-and-faculty-members-train-the-trainers-equipping-faculty-members/",
+      "page": "details",
+      "excerpt": "Energy Entrepreneurship Series for Student and Faculty Members - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate Explore For Entrepreneurs Portfolio Impact News & Stories About Careers Stay Connected Subscribe Donate © 2024New Energy Nexus All Rights Reserved Privacy Policy © 2024New Energy Nexus All Rights Reserved Privacy Policy"
+    },
+    {
+      "id": "check-page-9894e53717",
+      "url": "https://www.newenergynexus.com/program/energy-storage/",
+      "page": "details",
+      "excerpt": "Energy Storage & Mobility - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate Explore For Entrepreneurs Portfolio Impact News & Stories About Careers Stay Connected Subscribe Donate © 2024New Energy Nexus All Rights Reserved Privacy Policy © 2024New Energy Nexus All Rights Reserved Privacy Policy"
+    },
+    {
+      "id": "check-page-524d89b5c3",
+      "url": "https://www.newenergynexus.com/program/green-building-initiative/",
+      "page": "details",
+      "excerpt": "Green Building Initiative - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate Program GREEN BUILDING INITIATIVE Corporates & Building owners apply now Startups apply now FAQs What is the Green Building Initiative? The Green Building Initiative is a program designed to help corporates and building owners enhance their building efficiency, reduce energy consumption, and improve sustainability by implementing innovative technologies from startups. It is aligned with global and local climate commitments, supporting businesses in achieving their environmental, social, and governance (ESG) goals. How much cost savings can we expect by participating in the Green Building Initiative? Participants are expected to see reductions in energy bills and operational costs due to the implementation of energy-efficient"
+    },
+    {
+      "id": "check-page-509139c546",
+      "url": "https://www.newenergynexus.com/program/green-building-initiative/",
+      "page": "details",
+      "excerpt": "Participants are expected to see reductions in energy bills and operational costs due to the implementation of energy-efficient technologies and sustainable building practices."
+    },
+    {
+      "id": "check-page-12f199baa5",
+      "url": "https://www.newenergynexus.com/program/green-building-initiative/",
+      "page": "details",
+      "excerpt": "Explore For Entrepreneurs Portfolio Impact News & Stories About Careers Stay Connected Subscribe Donate © 2024New Energy Nexus All Rights Reserved Privacy Policy © 2024New Energy Nexus All Rights Reserved Privacy Policy"
+    },
+    {
+      "id": "check-page-dee95f9eba",
+      "url": "https://www.newenergynexus.com/program/new-energy-academy/",
+      "page": "details",
+      "excerpt": "NewEnergyAcademy – New Energy Academy - Philippines Skip to content Home Learning Pathways Shop My Courses News Partners Contact About Us Log in Home Learning Pathways Shop My Courses News Partners Contact About Us Search Log in Cart Item added to your cart Check out Continue shopping Accelerate your career in solar Find the right courses, and start learning, to reach your solar energy career goals. Shop all What is NewEnergyAcademy? We provide a customised learning pathway based on your career goals and skill levels to help you skill up in the renewable energy sector. Popular Products Energy Assessment Energy Assessment Regular price ₱1,299.00 PHP Regular price Sale price ₱1,299.00 PHP Unit price / per Matching Array and Inverter Matching Array and Inverter Regular price ₱1,299.00 PHP Regular price Sale price ₱1,299.00 PHP Unit price / per Site Assessment Site Assessment Regular price ₱1,299.00 PHP Regular price Sale price ₱1,299.00 PHP Unit price / per PV System Protection PV System Protection Regular price ₱1,299.00 PHP Regular price Sale price ₱1,299.00 PHP Unit price / per Generate a course list to match your current experience and career goals Get Started About us NewEnergyAcademy (NEA) was founded in collaboration with NewEnergyNexus, OpenSolar and GSES as a response to the rapidly growing solar industry. The current and projected growth in solar means that there will"
+    },
+    {
+      "id": "check-page-ef34675218",
+      "url": "https://www.newenergynexus.com/program/new-energy-academy/",
+      "page": "details",
+      "excerpt": "The current and projected growth in solar means that there will be high demand for engineers, electricians and businesses who have expertise in solar."
+    },
+    {
+      "id": "check-page-f557fdbc34",
+      "url": "https://www.newenergynexus.com/program/nexgen-program/",
+      "page": "details",
+      "excerpt": "NEXGen Program - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate Program NEXGen Program About The NEXGen program is committed to nurturing the next generation of high-performing leaders in the clean energy sector throughout Vietnam and Southeast Asia. Designed for youth aged 18-30, the program aims to produce 10 graduates in its first year and 15 in its second year, offering them continuous support, including local and international exposure, hands-on internship opportunities, and closely monitored training. Each participant benefits from a personalized development plan designed to equip them with the skills and experience necessary to drive innovation and sustainability in the energy industry. Program Benefits: Learning Modules Clean Energy literacy Business & Entrepreneurship Leadership training Mentorship"
+    },
+    {
+      "id": "check-page-fa24e70e55",
+      "url": "https://www.newenergynexus.com/program/ready-spark-charge/",
+      "page": "details",
+      "excerpt": "Ready Spark Charge - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate HACKATHON (Applications closed for 2024) Ready Spark Charge: Hacking the future of energy About The Philippine startup ecosystem has rapidly grown, supported by government initiatives and funding from both public and private sectors. Over 50 technology business incubators are spread across the country, funded primarily by Department of Science and Technology (DOST) agencies and private organizations. Despite this growth, energy and climate-focused startups remain underrepresented. To bridge this gap, the “ Ready, Spark, Charge: Hacking the Future of Energy ” initiative was launched with these key objectives: Promote Awareness: Spark interest among aspiring entrepreneurs in climate and energy solutions. Platform for Innovation: Showcase"
+    },
+    {
+      "id": "check-page-80ea470f1a",
+      "url": "https://www.newenergynexus.com/program/ready-spark-charge/",
+      "page": "details",
+      "excerpt": "Accelerate Growth: Equip startups with resources, expert mentorship, and tailored acceleration programs."
+    },
+    {
+      "id": "check-page-3dae02c0c9",
+      "url": "https://www.newenergynexus.com/program/ready-spark-charge/",
+      "page": "details",
+      "excerpt": "Diversify the Ecosystem: Expand the climate-tech landscape, strengthening the Philippines’ contributions to sustainable innovation."
+    },
+    {
+      "id": "check-page-6f09e5ca16",
+      "url": "https://www.newenergynexus.com/program/ready-spark-charge/",
+      "page": "details",
+      "excerpt": "Who can participate University and college students who are interested in creating technology-driven solutions to address the country’s energy challenges."
+    },
+    {
+      "id": "check-page-0a47d93239",
+      "url": "https://www.newenergynexus.com/program/ready-spark-charge/",
+      "page": "details",
+      "excerpt": "Young professionals and employees from both public and private sectors aiming to start ventures focused on solving energy issues."
+    },
+    {
+      "id": "check-page-350b2a43f7",
+      "url": "https://www.newenergynexus.com/program/ready-spark-charge/",
+      "page": "details",
+      "excerpt": "Startup founders, innovators and entrepreneurs looking to develop and scale energy-related solutions."
+    },
+    {
+      "id": "check-page-84aaf53fc5",
+      "url": "https://www.newenergynexus.com/program/ready-spark-charge/",
+      "page": "details",
+      "excerpt": "HACKATHON PARTNERS Write to us Email: philippines@newenergynexus.com Explore For Entrepreneurs Portfolio Impact News & Stories About Careers Stay Connected Subscribe Donate © 2024New Energy Nexus All Rights Reserved Privacy Policy © 2024New Energy Nexus All Rights Reserved Privacy Policy"
+    },
+    {
+      "id": "check-page-d191c952f4",
+      "url": "https://www.newenergynexus.com/program/residency/",
+      "page": "details",
+      "excerpt": "Residency - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate Explore For Entrepreneurs Portfolio Impact News & Stories About Careers Stay Connected Subscribe Donate © 2024New Energy Nexus All Rights Reserved Privacy Policy © 2024New Energy Nexus All Rights Reserved Privacy Policy"
+    },
+    {
+      "id": "check-page-ec72bfbd1b",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "page": "details",
+      "excerpt": "Solar Innovation Program - New Energy Nexus Search for: Discover programs & events in your region Discover programs & events in your region New Energy Nexus programs China Indonesia Japan Philippines Thailand Uganda USA - California USA - New York Vietnam NEX Ventures Programs we run with our partners Australia - Energy Lab Australia - AusTestBed Nigeria - Clean Technology Hub Pakistan - Renewables First Back to global website About Our story Our people Chapters & partners Australia California China India Indonesia New York Nigeria Pakistan Philippines Thailand UAE Uganda Vietnam Careers Contact us Impact Portfolio News For Entrepreneurs Donate PROGRAM Solar Innovation Program About The Solar Innovation Program (SIP) – Accelerating the future of rooftop solar installers and EPCs (engineering, procurement, construction) Launched by New Energy Nexus Philippines in 2021, the Solar Innovation Program (SIP) is designed to elevate the competitiveness of solar PV installers, EPCs, and solar equipment suppliers in the evolving energy sector. This 5-week hybrid program combines in-person and online sessions, providing targeted support to help participants scale and strengthen their solar businesses. Now in its third year, SIP continues to deliver impactful training and industry insights, fostering growth and innovation in the solar market. 174 No. of entrepreneurs supported 102 No. of"
+    },
+    {
+      "id": "check-page-b6de6e6aaf",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "page": "details",
+      "excerpt": "174 No. of entrepreneurs supported 102 No. of companies supported 13 % Women entrepreneurs *Program impact since 2021 174 No. of entrepreneurs supported 102 No. of companies supported 13 % Women entrepreneurs *Program impact since 2021 Program Objectives Empower small-scale solar installers with training, business support, and technical expertise to boost rooftop solar adoption."
+    },
+    {
+      "id": "check-page-27121d8a15",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "page": "details",
+      "excerpt": "Build a community of solar installers to share best practices, offer support, and strengthen industry connections."
+    },
+    {
+      "id": "check-page-90ca129f21",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "page": "details",
+      "excerpt": "Program Benefits Solar entrepreneur training The program features seminars, learning sessions, and workshops aimed at providing solar entrepreneurs with technical expertise."
+    },
+    {
+      "id": "check-page-58cd9a1987",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "page": "details",
+      "excerpt": "In-depth market insights & growth opportunities Gain a deep understanding of the Philippine solar landscape, market dynamics, and opportunities for innovation and growth in solar energy distribution."
+    },
+    {
+      "id": "check-page-a5ae9bd8f9",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "page": "details",
+      "excerpt": "Build your community Join a community of like-minded peers and gain exclusive access to the thriving energy sector in the Philippines."
+    },
+    {
+      "id": "check-page-8f5c6525a8",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "page": "details",
+      "excerpt": "Stay informed, collaborate, and help shape the future of energy."
+    },
+    {
+      "id": "check-page-308b7c5e9e",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "page": "details",
+      "excerpt": "Any solar PV business or enterprise (installation, EPC, supplier) that operates in the Philippines Has secured and installed a Solar PV system of at least one client Must be operational for at least six months Has installed no more than 100 kW in total Looking to grow their business Can commit at least two hours per week for five weeks Is it necessary to have commercial clients in order to join?"
+    },
+    {
+      "id": "check-page-5cd2455aae",
+      "url": "https://www.newenergynexus.com/program/solar-innovation-program-2/",
+      "page": "details",
+      "excerpt": "Write to us Email: philippines@newenergynexus.com → Explore For Entrepreneurs Portfolio Impact News & Stories About Careers Stay Connected Subscribe Donate © 2024New Energy Nexus All Rights Reserved Privacy Policy © 2024New Energy Nexus All Rights Reserved Privacy Policy"
     }
   ],
   "findings": {
@@ -633,20 +1121,19 @@
       }
     ],
     "announcedIntake": [],
-    "cohortStarts": [
-      {
-        "value": "August",
-        "evidenceId": "check-start-1e24340e04"
-      }
-    ],
+    "cohortStarts": [],
     "durationWeeks": [
       {
         "value": "2 months",
         "evidenceId": "check-duration-9d489cf12a"
       },
       {
-        "value": "12 months",
-        "evidenceId": "check-duration-dfe8888ee7"
+        "value": "16",
+        "evidenceId": "check-duration-a0bae5ae02"
+      },
+      {
+        "value": "5",
+        "evidenceId": "check-duration-f0b0d869f7"
       }
     ],
     "format": [
@@ -665,21 +1152,31 @@
     ],
     "location": [
       {
-        "value": "San Francisco",
-        "evidenceId": "check-location-dbaf47056b"
-      },
-      {
-        "value": "Perth",
-        "evidenceId": "check-location-df96cdb642"
-      },
-      {
         "value": "Abuja",
         "evidenceId": "check-location-035362a93f"
       }
     ],
     "selectivity": [],
-    "dealText": [],
-    "dealComponents": [],
+    "dealText": [
+      {
+        "value": "Php 1,000.00 per team will also be awarded Benefits AWS credits upto USD 10,000 Merchandise and other freebies Post hackathon support Mentorship &",
+        "evidenceId": "check-deal-9a415d1cac"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "10000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-9a415d1cac"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://www.newenergynexus.com/portfolio/",

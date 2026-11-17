@@ -1,6 +1,6 @@
 {
   "programId": "cubo",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://cubo.itau/corporates-apply",
@@ -14,7 +14,7 @@
       "url": "https://cubo.itau/corporates-portfolio",
       "page": "portfolio",
       "anchor": "Vitrine Corporates",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -126,7 +126,15 @@
       "url": "https://cubo.itau/events-sponsorship-apply",
       "page": "application",
       "anchor": "Seja um patrocinador",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cubo.itau/investors-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -139,10 +147,26 @@
       "origin": "official"
     },
     {
+      "url": "https://cubo.itau/partners-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://cubo.itau/partners-portfolio",
       "page": "portfolio",
       "anchor": "Vitrine Partners",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cubo.itau/startups-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

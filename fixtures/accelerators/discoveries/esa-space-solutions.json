@@ -1,6 +1,6 @@
 {
   "programId": "esa-space-solutions",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-1",
@@ -108,6 +108,46 @@
     },
     {
       "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/integrated-applications-using-ads-b",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/invitation-to-tender/esa-business-applications-ambassador-platform-business-developer-for-uk",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/invitation-to-tender/esa-business-applications-regional-ambassador-platform-for-uk",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/invitation-to-tender/integrated-applications-for-microgrids-developing-economies",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/open-competition/commercial-applications-space-weather-data",
       "page": "application",
       "anchor": "",
       "fetched": true,

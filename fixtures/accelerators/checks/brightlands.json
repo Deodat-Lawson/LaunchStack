@@ -1,6 +1,6 @@
 {
   "programId": "brightlands",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.brightlands.com/",
     "https://www.brightlands.com/campus-greenport-venlo/bedrijven-kennisinstellingen/bedrijven/bedrijf/dealingreen",
@@ -10,22 +10,20 @@
     "https://www.brightlands.com/maastricht-health-campus/de-ideale-werkplek-op-brightlands-maastricht-health-campus",
     "https://www.brightlands.com/maastricht-health-campus/evenement/discovery-deal-negotiation-essentials",
     "https://www.brightlands.com/wat-brightlands/inspirerende-verhalen/overzicht-bright-stories/de-ideale-studieplek-voor-megan",
-    "https://www.brightlands.com/en/campus-greenport-venlo/news/harvest-festival-regio-deal-noord-limburg-i",
     "https://www.brightlands.com/en/chemelot-campus/nieuws/eu1-million-seed-investment-fuels-resolved-technologies-mission-sustainable",
     "https://www.brightlands.com/en/chemelot-campus/nieuws/eu6m-investment-scaling-sustainable-solution-plastics-recycling",
-    "https://www.brightlands.com/en/maastricht-health-campus/event/discovery-deal-negotiation-essentials",
     "https://www.brightlands.com/en/maastricht-health-campus/facilities/office-space/ideal-workplace-brightlands-maastricht-health",
     "https://www.brightlands.com/en/wat-brightlands/bright-stories/overview-bright-stories/ideal-place-follow-bachelor",
-    "https://www.brightlands.com/brightlands-chemelot-campus/trainee-program"
+    "https://www.brightlands.com/brightlands-chemelot-campus/trainee-program",
+    "https://www.brightlands.com/campus-greenport-venlo/evenement/thesis-internship-program-um",
+    "https://www.brightlands.com/campus-greenport-venlo/nieuws/interview-met-max-vogel-over-talentprogramma-bright-society",
+    "https://www.brightlands.com/campus-greenport-venlo/nieuws/oud-deelnemers-over-startup-accelerator-blinc",
+    "https://www.brightlands.com/campus-greenport-venlo/samenwerken/blinc-startup-accelerator",
+    "https://www.brightlands.com/chemelot-campus/community/brightlands-chemelot-campus-onboarding-programma",
+    "https://www.brightlands.com/chemelot-campus/community/brightlands-chemelot-campus-vitality-program",
+    "https://www.brightlands.com/chemelot-campus/voor-wie/ondernemen/new-business-development-programmas"
   ],
   "evidence": [
-    {
-      "id": "check-format-fa9a82eea4",
-      "url": "https://www.brightlands.com/en/campus-greenport-venlo/news/harvest-festival-regio-deal-noord-limburg-i",
-      "title": "Brightlands — terms page",
-      "excerpt": "and Deputy Elianne Demollin-Schneiders could not attend in person, both shared personal video messages with the audience.",
-      "page": "terms"
-    },
     {
       "id": "check-name-432f7b4316",
       "url": "https://www.brightlands.com/",
@@ -34,11 +32,11 @@
       "page": "details"
     },
     {
-      "id": "check-phone-45ea3bda91",
-      "url": "https://www.brightlands.com/en/maastricht-health-campus/event/discovery-deal-negotiation-essentials",
-      "title": "Brightlands — terms page",
-      "excerpt": "(+31 (0)6 44 92 90 26)",
-      "page": "terms"
+      "id": "check-phone-4f9c4d74d5",
+      "url": "https://www.brightlands.com/chemelot-campus/community/brightlands-chemelot-campus-onboarding-programma",
+      "title": "Brightlands — program page",
+      "excerpt": "(+31 (0)6 51 61 93 48)",
+      "page": "details"
     },
     {
       "id": "check-phone-5ea545b5b7",
@@ -67,6 +65,13 @@
       "title": "Brightlands — terms page",
       "excerpt": "(+31 (0)43 388 58 88)",
       "page": "terms"
+    },
+    {
+      "id": "check-phone-d566555bad",
+      "url": "https://www.brightlands.com/chemelot-campus/community/brightlands-chemelot-campus-vitality-program",
+      "title": "Brightlands — program page",
+      "excerpt": "(+31683071292)",
+      "page": "details"
     },
     {
       "id": "check-phone-f8306ffdb1",
@@ -125,6 +130,13 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-954f55bfe4",
+      "url": "https://www.brightlands.com/chemelot-campus/community/brightlands-chemelot-campus-vitality-program",
+      "title": "Brightlands — program page",
+      "excerpt": "Startups → https://www.brightlands.com/brightlands-chemelot-campus/startup-support",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-a5c1facfb5",
       "url": "https://www.brightlands.com/en/wat-brightlands/bright-stories/overview-bright-stories/ideal-place-follow-bachelor",
       "title": "Brightlands — terms page",
@@ -139,11 +151,25 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-be5b7695e8",
+      "url": "https://www.brightlands.com/chemelot-campus/voor-wie/ondernemen/new-business-development-programmas",
+      "title": "Brightlands — program page",
+      "excerpt": "Startups → https://www.brightlands.com/brightlands-chemelot-campus/startup-support",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-bf613e3637",
       "url": "https://www.brightlands.com/en/chemelot-campus/nieuws/eu1-million-seed-investment-fuels-resolved-technologies-mission-sustainable",
       "title": "Brightlands — terms page",
       "excerpt": "Startup → https://www.brightlands.com/en/brightlands-and-you/startups",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ec802bb937",
+      "url": "https://www.brightlands.com/chemelot-campus/community/brightlands-chemelot-campus-onboarding-programma",
+      "title": "Brightlands — program page",
+      "excerpt": "Startups → https://www.brightlands.com/brightlands-chemelot-campus/startup-support",
+      "page": "details"
     },
     {
       "id": "check-route-f22c779bb4",
@@ -161,10 +187,28 @@
       "excerpt": "Brightlands | Waar Limburg vernieuwt zonder grenzen Overslaan en naar de inhoud gaan Samen innoveren Samen innoveren Defence Innovation Hub Samenwerken bij Brightlands Talentvolle regio New Dutch Inspirerende verhalen Voor wie Voor wie Studeren Ondernemen Onderzoeken Startups Over Brightlands Over Brightlands Education in Data Science Marc Cornelissen Brightlands Award Brightlands visie Brightlands Business Club Brightlands governance Evenementen Nieuws Pers Vacatures Contact Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Nederlands English Evenementen Nieuws Pers Vacatures Contact Samen innoveren Samen innoveren Defence Innovation Hub Samenwerken bij Brightlands Talentvolle regio New Dutch Inspirerende verhalen Voor wie Voor wie Studeren Ondernemen Onderzoeken Startups Over Brightlands Over Brightlands Education in Data Science Marc Cornelissen Brightlands Award Brightlands visie Brightlands Business Club Brightlands governance Limburg uitgeroepen tot Slimste Regio van 2026 Brightlands Limburg wint titel 'Intelligent Community of the Year 2026' van het Intelligent Community Forum Lees het volledige bericht Plastic van Planten Op Brightlands Chemelot Campus"
     },
     {
+      "id": "check-page-358db0a364",
+      "url": "https://www.brightlands.com/",
+      "page": "details",
+      "excerpt": "Ontdek deze innovatie Een complete stad hergebruiken MAECONOMY brengt met AI in kaart welke materialen in gebouwen en infrastructuur zijn verwerkt, en wanneer die beschikbaar komen."
+    },
+    {
+      "id": "check-page-350062d7c6",
+      "url": "https://www.brightlands.com/",
+      "page": "details",
+      "excerpt": "Hier bundelen we kennis en ondernemerschap en werken we samen om chemie circulair te maken, gezondheid persoonlijker, voeding gezonder en AI veiliger en menselijker."
+    },
+    {
       "id": "check-page-9560c96990",
       "url": "https://www.brightlands.com/campus-greenport-venlo/bedrijven-kennisinstellingen/bedrijven/bedrijf/dealingreen",
       "page": "terms",
       "excerpt": "Dealin.Green gevestigd op Brightlands Overslaan en naar de inhoud gaan Expertises Expertises Gezonde & duurzame voeding Future Farming Biocirculaire economie Voor wie Voor wie Community Startup & scale-up support Talent & ontwikkeling Vestigen Vestigen Huren Bouwen Faciliteiten Faciliteiten Onderzoeksfaciliteiten Vergaderfaciliteiten Evenementenlocatie Future Food Experience Over de campus Over de campus Bright Pioneers Nieuws Evenementen Bedrijven & Kennisinstellingen Vacatures Contact Contact Het team Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Campus Greenport Venlo Nederlands English Brightlands Campus Greenport Venlo Nieuws Evenementen Bedrijven & Kennisinstellingen Vacatures Contact Contact Het team Expertises Expertises Gezonde & duurzame voeding Future Farming Biocirculaire economie Voor wie Voor wie Community Startup & scale-up support Talent & ontwikkeling Vestigen Vestigen Huren Bouwen Faciliteiten Faciliteiten Onderzoeksfaciliteiten Vergaderfaciliteiten Evenementenlocatie Future Food Experience Over de campus Over de campus Bright Pioneers Dealin.Green Villa Flora Villafloraweg 1 5928 SZ Venlo, Nederland ( Google Maps ) Kruimelpad Brightlands"
+    },
+    {
+      "id": "check-page-2b109767ab",
+      "url": "https://www.brightlands.com/campus-greenport-venlo/bedrijven-kennisinstellingen/bedrijven/bedrijf/dealingreen",
+      "page": "terms",
+      "excerpt": "Overzicht Faciliteiten voor innovatie in agrifood Op Brightlands Campus Greenport Venlo Overzicht Future Farming Hightech landbouwinnovatie Overzicht Lees meer over..."
     },
     {
       "id": "check-page-18a688f5c7",
@@ -173,10 +217,22 @@
       "excerpt": "Oogstfeest Regio Deal Noord-Limburg I | Brightlands Overslaan en naar de inhoud gaan Expertises Expertises Gezonde & duurzame voeding Future Farming Biocirculaire economie Voor wie Voor wie Community Startup & scale-up support Talent & ontwikkeling Vestigen Vestigen Huren Bouwen Faciliteiten Faciliteiten Onderzoeksfaciliteiten Vergaderfaciliteiten Evenementenlocatie Future Food Experience Over de campus Over de campus Bright Pioneers Nieuws Evenementen Bedrijven & Kennisinstellingen Vacatures Contact Contact Het team Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Campus Greenport Venlo Nederlands English Brightlands Campus Greenport Venlo Nieuws Evenementen Bedrijven & Kennisinstellingen Vacatures Contact Contact Het team Expertises Expertises Gezonde & duurzame voeding Future Farming Biocirculaire economie Voor wie Voor wie Community Startup & scale-up support Talent & ontwikkeling Vestigen Vestigen Huren Bouwen Faciliteiten Faciliteiten Onderzoeksfaciliteiten Vergaderfaciliteiten Evenementenlocatie Future Food Experience Over de campus Over de campus Bright Pioneers Oogstfeest Regio Deal Noord-Limburg I 28 mei 2026 Kruimelpad Brightlands Campus Greenport"
     },
     {
+      "id": "check-page-8fe5f40793",
+      "url": "https://www.brightlands.com/campus-greenport-venlo/nieuws/oogstfeest-regio-deal-noord-limburg-i",
+      "page": "terms",
+      "excerpt": "Inspirerende keynote over brede welvaart Een van de inhoudelijke hoogtepunten van de middag was de keynote van Thomas Cleij, decaan van de Faculty of Science and Engineering van Maastricht University."
+    },
+    {
       "id": "check-page-5d056a9d30",
       "url": "https://www.brightlands.com/chemelot-campus/nieuws/eu1-million-seed-investment-fuels-resolved-technologies-mission-sustainable",
       "page": "terms",
       "excerpt": "€1 Million Seed Investment Fuels ReSolved Technologies' Mission for Sustainable Recycling Solutions | Brightlands Overslaan en naar de inhoud gaan Campus Campus Welkom op de Brightlands Chemelot Campus Chemelot Regio Bedrijven & Instituten Veiligheid Campus team Brightlands Merchandise Expertises Expertises Defensie Industrie Team Circulaire materialen Biomedische innovaties Duurzame processen Startups Financiering New Business Development Brightlands Circular Space Onderzoeksfaciliteiten Onderzoeksfaciliteiten Multi Purpose Pilot Plant Analysis Business Business Service Providers Vergader- en congresfaciliteiten Facilitaire diensten Talent Talent Studeren Onderzoeksinstituten Evenementen Community Vacatures Contact Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Chemelot Campus Nederlands English Brightlands Chemelot Campus Evenementen Community Vacatures Contact Campus Campus Welkom op de Brightlands Chemelot Campus Chemelot Regio Bedrijven & Instituten Veiligheid Campus team Brightlands Merchandise Expertises Expertises Defensie Industrie Team Circulaire materialen Biomedische innovaties Duurzame processen Startups Financiering New Business Development"
+    },
+    {
+      "id": "check-page-230436e68e",
+      "url": "https://www.brightlands.com/chemelot-campus/nieuws/eu1-million-seed-investment-fuels-resolved-technologies-mission-sustainable",
+      "page": "terms",
+      "excerpt": "With this funding, ReSolved Technologies will have the capability to manufacture recyclate that can be applied in various applications, e.g., in electronic equipment, automotive applications and in the building and construction industry."
     },
     {
       "id": "check-page-c8ab306a1b",
@@ -185,10 +241,46 @@
       "excerpt": "€6m investment: scaling a sustainable solution for plastics recycling | Brightlands Overslaan en naar de inhoud gaan Campus Campus Welkom op de Brightlands Chemelot Campus Chemelot Regio Bedrijven & Instituten Veiligheid Campus team Brightlands Merchandise Expertises Expertises Defensie Industrie Team Circulaire materialen Biomedische innovaties Duurzame processen Startups Financiering New Business Development Brightlands Circular Space Onderzoeksfaciliteiten Onderzoeksfaciliteiten Multi Purpose Pilot Plant Analysis Business Business Service Providers Vergader- en congresfaciliteiten Facilitaire diensten Talent Talent Studeren Onderzoeksinstituten Evenementen Community Vacatures Contact Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Chemelot Campus Nederlands English Brightlands Chemelot Campus Evenementen Community Vacatures Contact Campus Campus Welkom op de Brightlands Chemelot Campus Chemelot Regio Bedrijven & Instituten Veiligheid Campus team Brightlands Merchandise Expertises Expertises Defensie Industrie Team Circulaire materialen Biomedische innovaties Duurzame processen Startups Financiering New Business Development Brightlands Circular Space"
     },
     {
+      "id": "check-page-8279e96486",
+      "url": "https://www.brightlands.com/chemelot-campus/nieuws/eu6m-investment-scaling-sustainable-solution-plastics-recycling",
+      "page": "terms",
+      "excerpt": "The plant will be able to process 27,000 tonnes of residual plastic waste annually, equivalent to the total amount of plastic packaging waste generated by the population of Amsterdam municipality per year 1 ."
+    },
+    {
       "id": "check-page-340eb5d7b7",
       "url": "https://www.brightlands.com/maastricht-health-campus/de-ideale-werkplek-op-brightlands-maastricht-health-campus",
       "page": "terms",
       "excerpt": "De ideale werkplek op Maastricht Health Campus | Brightlands Overslaan en naar de inhoud gaan Expertises Expertises Octrooien & Licentiemogelijkheden Valorisatie ondersteuning Medische innovatie Financiering in gezondheidszorg Ondersteuning en services voor startups Community Community MKB MedTech Voor wie Voor wie Ondernemen Onderzoeken Studeren Investeren Faciliteiten Faciliteiten Onderzoeksfaciliteiten Congresfaciliteiten Vergaderruimtes Kantoorruimte Over de campus Over de campus Experts in gezondheidszorg Oplossingen in gezondheidszorg Nieuws Evenementen Bedrijven & instituten Vacatures Contact Contact Ons team Brightlands Merchandise Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Nederlands English Brightlands Maastricht Health Campus Oplossingen in gezondheidszorg Nieuws Evenementen Bedrijven & instituten Vacatures Contact Contact Ons team Brightlands Merchandise Expertises Expertises Octrooien & Licentiemogelijkheden Valorisatie ondersteuning Medische innovatie Financiering in gezondheidszorg Ondersteuning en services voor startups Community Community MKB MedTech Voor wie Voor wie Ondernemen Onderzoeken Studeren Investeren"
+    },
+    {
+      "id": "check-page-299299e8d4",
+      "url": "https://www.brightlands.com/maastricht-health-campus/de-ideale-werkplek-op-brightlands-maastricht-health-campus",
+      "page": "terms",
+      "excerpt": "Van een éénpersoons flex werkplek tot een paar verdiepingen met kantoorplekken én laboratoria… het kan allemaal bij Brightlands Incubators Maastricht."
+    },
+    {
+      "id": "check-page-34f5d20483",
+      "url": "https://www.brightlands.com/maastricht-health-campus/de-ideale-werkplek-op-brightlands-maastricht-health-campus",
+      "page": "terms",
+      "excerpt": "Wie op de campus werkruimte zoekt, komt terecht bij het team van Brightlands Incubators Maastricht, zelf ook gevestigd op Brightlands Maastricht Health Campus."
+    },
+    {
+      "id": "check-page-bc75fa1b04",
+      "url": "https://www.brightlands.com/maastricht-health-campus/de-ideale-werkplek-op-brightlands-maastricht-health-campus",
+      "page": "terms",
+      "excerpt": "Het team van Brightlands Incubators Maastricht weet hoe belangrijk een passende en prettige werkplek is."
+    },
+    {
+      "id": "check-page-5184eaf68a",
+      "url": "https://www.brightlands.com/maastricht-health-campus/de-ideale-werkplek-op-brightlands-maastricht-health-campus",
+      "page": "terms",
+      "excerpt": "En in hun kielzog gerenommeerde onderzoeksinstituten , vele medische startups en gerenommeerde bedrijven in de gezondheidszorg en life sciences."
+    },
+    {
+      "id": "check-page-c3b5385cf7",
+      "url": "https://www.brightlands.com/maastricht-health-campus/de-ideale-werkplek-op-brightlands-maastricht-health-campus",
+      "page": "terms",
+      "excerpt": "Neem contact op Horia Aquil CEO Brightlands Incubators Maastricht horia.aquil [at] brightlands.com Contactpersoon Stel je vraag Ook benieuwd naar andere artikelen in onze glossy?"
     },
     {
       "id": "check-page-e4f12f8bf3",
@@ -203,16 +295,16 @@
       "excerpt": "De ideale studieplek voor Megan | Brightlands Overslaan en naar de inhoud gaan Samen innoveren Samen innoveren Defence Innovation Hub Samenwerken bij Brightlands Talentvolle regio New Dutch Inspirerende verhalen Voor wie Voor wie Studeren Ondernemen Onderzoeken Startups Over Brightlands Over Brightlands Education in Data Science Marc Cornelissen Brightlands Award Brightlands visie Brightlands Business Club Brightlands governance Evenementen Nieuws Pers Vacatures Contact Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Nederlands English Evenementen Nieuws Pers Vacatures Contact Samen innoveren Samen innoveren Defence Innovation Hub Samenwerken bij Brightlands Talentvolle regio New Dutch Inspirerende verhalen Voor wie Voor wie Studeren Ondernemen Onderzoeken Startups Over Brightlands Over Brightlands Education in Data Science Marc Cornelissen Brightlands Award Brightlands visie Brightlands Business Club Brightlands governance De ideale studieplek voor Megan De studie én de regio zijn cool Kruimelpad Brightlands Wat is Brightlands? De ideale studieplek voor Megan Megan Entzinger kwam min of meer toevallig bij Universiteit Maastricht terecht. “Met mijn ouders heb"
     },
     {
-      "id": "check-page-1db4a5adcd",
-      "url": "https://www.brightlands.com/en/campus-greenport-venlo/news/harvest-festival-regio-deal-noord-limburg-i",
-      "page": "terms",
-      "excerpt": "Harvest Festival Regio Deal Noord-Limburg I | Brightlands Skip to main content Expertises Expertises Healthy and sustainable nutrition Future Farming Biocircular economy For whom For whom Community Startup & scale-up support Talent development and innovation Accomodation Accomodation Flexible office space Develop your own building Facilities Facilities Research facilities Meeting facilities Event location Future Food Experience About the campus About the campus Bright Pioneers News Events Companies & Institutes Jobs Contact Contact The team Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Campus Greenport Venlo Nederlands English Brightlands Campus Greenport Venlo News Events Companies & Institutes Jobs Contact Contact The team Expertises Expertises Healthy and sustainable nutrition Future Farming Biocircular economy For whom For whom Community Startup & scale-up support Talent development and innovation Accomodation Accomodation Flexible office space Develop your own building Facilities Facilities Research facilities Meeting facilities Event location Future Food Experience About the campus About the campus Bright Pioneers Harvest Festival Regio Deal"
-    },
-    {
       "id": "check-page-524dd8f826",
       "url": "https://www.brightlands.com/en/chemelot-campus/nieuws/eu1-million-seed-investment-fuels-resolved-technologies-mission-sustainable",
       "page": "terms",
       "excerpt": "€1 Million Seed Investment Fuels ReSolved Technologies' Mission for Sustainable Recycling Solutions | Brightlands Skip to main content Real Estate Real Estate Cleanrooms Pilot halls Labs Office space Campus Campus Welcome to Brightlands Chemelot Campus BCC - Chemelot Region Companies & Institutes Safety Campus team Brightlands Merchandise Expertise Expertise Meet our experts Circular materials Biomedical solutions Sustainable processes Startups Funding Innovation projects Brightlands Circular Space Research support Research support Multi Purpose Pilot Plant Analysis Business Business Service Providers Meeting and congress facilities Facility Services Talent Talent Education Knowledge & Research institutes Events Community Jobs Contact Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Chemelot Campus Nederlands English Brightlands Chemelot Campus Events Community Jobs Contact Real Estate Real Estate Cleanrooms Pilot halls Labs Office space Campus Campus Welcome to Brightlands Chemelot Campus BCC - Chemelot Region Companies & Institutes Safety Campus team Brightlands Merchandise Expertise Expertise Meet our experts Circular materials Biomedical solutions"
+    },
+    {
+      "id": "check-page-ff28cccdf4",
+      "url": "https://www.brightlands.com/en/chemelot-campus/nieuws/eu1-million-seed-investment-fuels-resolved-technologies-mission-sustainable",
+      "page": "terms",
+      "excerpt": "With this funding, ReSolved Technologies will have the capability to manufacture recyclate that can be applied in various applications, e.g., in electronic equipment, automotive applications and in the building and construction industry."
     },
     {
       "id": "check-page-2745b266a7",
@@ -221,10 +313,10 @@
       "excerpt": "€6m investment: scaling a sustainable solution for plastics recycling | Brightlands Skip to main content Real Estate Real Estate Cleanrooms Pilot halls Labs Office space Campus Campus Welcome to Brightlands Chemelot Campus BCC - Chemelot Region Companies & Institutes Safety Campus team Brightlands Merchandise Expertise Expertise Meet our experts Circular materials Biomedical solutions Sustainable processes Startups Funding Innovation projects Brightlands Circular Space Research support Research support Multi Purpose Pilot Plant Analysis Business Business Service Providers Meeting and congress facilities Facility Services Talent Talent Education Knowledge & Research institutes Events Community Jobs Contact Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Chemelot Campus Nederlands English Brightlands Chemelot Campus Events Community Jobs Contact Real Estate Real Estate Cleanrooms Pilot halls Labs Office space Campus Campus Welcome to Brightlands Chemelot Campus BCC - Chemelot Region Companies & Institutes Safety Campus team Brightlands Merchandise Expertise Expertise Meet our experts Circular materials Biomedical solutions Sustainable processes Startups Funding"
     },
     {
-      "id": "check-page-3084bdd6f4",
-      "url": "https://www.brightlands.com/en/maastricht-health-campus/event/discovery-deal-negotiation-essentials",
+      "id": "check-page-d87b683b1d",
+      "url": "https://www.brightlands.com/en/chemelot-campus/nieuws/eu6m-investment-scaling-sustainable-solution-plastics-recycling",
       "page": "terms",
-      "excerpt": "Events | From Discovery to Deal: Negotiation Essentials | Brightlands Skip to main content Expertises Expertises Licensing & collaboration opportunities Valorisation support Medical innovation Investment and funding in healthcare Support and services for startups Community Community SME MedTech For whom For whom Business Research Education Investment Facilities Facilities Research facilities Congress facilities Meeting rooms Office space About About Entrepreneurs in healthcare Solutions in healthcare News Events Companies & Institutes Jobs Contact Contact Our team Brightlands Merchandise Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Nederlands English Brightlands Maastricht Health Campus Solutions in healthcare News Events Companies & Institutes Jobs Contact Contact Our team Brightlands Merchandise Expertises Expertises Licensing & collaboration opportunities Valorisation support Medical innovation Investment and funding in healthcare Support and services for startups Community Community SME MedTech For whom For whom Business Research Education Investment Facilities Facilities Research facilities Congress facilities Meeting rooms"
+      "excerpt": "The plant will be able to process 27,000 tonnes of residual plastic waste annually, equivalent to the total amount of plastic packaging waste generated by the population of Amsterdam municipality per year 1 ."
     },
     {
       "id": "check-page-d4a774f296",
@@ -233,16 +325,250 @@
       "excerpt": "The ideal workplace at Brightlands Maastricht Health Campus | Brightlands Skip to main content Expertises Expertises Licensing & collaboration opportunities Valorisation support Medical innovation Investment and funding in healthcare Support and services for startups Community Community SME MedTech For whom For whom Business Research Education Investment Facilities Facilities Research facilities Congress facilities Meeting rooms Office space About About Entrepreneurs in healthcare Solutions in healthcare News Events Companies & Institutes Jobs Contact Contact Our team Brightlands Merchandise Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Nederlands English Brightlands Maastricht Health Campus Solutions in healthcare News Events Companies & Institutes Jobs Contact Contact Our team Brightlands Merchandise Expertises Expertises Licensing & collaboration opportunities Valorisation support Medical innovation Investment and funding in healthcare Support and services for startups Community Community SME MedTech For whom For whom Business Research Education Investment Facilities Facilities Research facilities Congress facilities Meeting"
     },
     {
+      "id": "check-page-82d3a619c3",
+      "url": "https://www.brightlands.com/en/maastricht-health-campus/facilities/office-space/ideal-workplace-brightlands-maastricht-health",
+      "page": "terms",
+      "excerpt": "With options from a single flex workplace to several floors of office space and laboratories available..."
+    },
+    {
+      "id": "check-page-509485063d",
+      "url": "https://www.brightlands.com/en/maastricht-health-campus/facilities/office-space/ideal-workplace-brightlands-maastricht-health",
+      "page": "terms",
+      "excerpt": "It's all possible at Brightlands Incubators Maastricht."
+    },
+    {
+      "id": "check-page-b484267118",
+      "url": "https://www.brightlands.com/en/maastricht-health-campus/facilities/office-space/ideal-workplace-brightlands-maastricht-health",
+      "page": "terms",
+      "excerpt": "Anyone looking for work space on the campus can contact the Brightlands Incubators Maastricht team, which is also based at Brightlands Maastricht Health Campus."
+    },
+    {
+      "id": "check-page-55a73cdbf7",
+      "url": "https://www.brightlands.com/en/maastricht-health-campus/facilities/office-space/ideal-workplace-brightlands-maastricht-health",
+      "page": "terms",
+      "excerpt": "Oxfordlaan 70 Office space Meeting rooms The current tenant base is very diverse."
+    },
+    {
+      "id": "check-page-367ed31564",
+      "url": "https://www.brightlands.com/en/maastricht-health-campus/facilities/office-space/ideal-workplace-brightlands-maastricht-health",
+      "page": "terms",
+      "excerpt": "The tenants range from those who rent a flexible workspace one day a week, to those who rent entire floors with office spaces and/or laboratories."
+    },
+    {
+      "id": "check-page-b0e931b1af",
+      "url": "https://www.brightlands.com/en/maastricht-health-campus/facilities/office-space/ideal-workplace-brightlands-maastricht-health",
+      "page": "terms",
+      "excerpt": "The Brightlands Incubators Maastricht team knows how important it is to have a suitable and pleasant workplace."
+    },
+    {
+      "id": "check-page-84f1ebf8c7",
+      "url": "https://www.brightlands.com/en/maastricht-health-campus/facilities/office-space/ideal-workplace-brightlands-maastricht-health",
+      "page": "terms",
+      "excerpt": "As a result, a number of renowned research institutes , many medical startups, and renowned companies in healthcare and life sciences are located in the vicinity."
+    },
+    {
+      "id": "check-page-3f422a1410",
+      "url": "https://www.brightlands.com/en/maastricht-health-campus/facilities/office-space/ideal-workplace-brightlands-maastricht-health",
+      "page": "terms",
+      "excerpt": "Get in touch Horia Aquil CEO Brightlands Incubators Maastricht horia.aquil [at] brightlands.com Contact person Ask a question Curious about our other Glossy articles?"
+    },
+    {
       "id": "check-page-4439d78e5a",
       "url": "https://www.brightlands.com/en/wat-brightlands/bright-stories/overview-bright-stories/ideal-place-follow-bachelor",
       "page": "terms",
       "excerpt": "The ideal place to follow a bachelor | Brightlands Skip to main content Powering innovation Powering innovation Samenwerken bij Brightlands Talented region Bright Stories Brightlands and you Brightlands and you Education Business Research Startups About Brightlands About Brightlands Education in Data Science Marc Cornelissen Brightlands Award Brightlands vision Brightlands Business Club Brightlands Governance Events News Pers Jobs Contact Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Nederlands English Events News Pers Jobs Contact Powering innovation Powering innovation Samenwerken bij Brightlands Talented region Bright Stories Brightlands and you Brightlands and you Education Business Research Startups About Brightlands About Brightlands Education in Data Science Marc Cornelissen Brightlands Award Brightlands vision Brightlands Business Club Brightlands Governance The ideal place to follow a bachelor The bachelor and the region are so cool! Breadcrumb Brightlands The ideal place to follow a bachelor Megan Entzinger actually ended up at Maastricht University more or less by chance. “Growing up, my parents and I lived in different parts of South Africa and"
     },
     {
+      "id": "check-page-103d597b33",
+      "url": "https://www.brightlands.com/en/wat-brightlands/bright-stories/overview-bright-stories/ideal-place-follow-bachelor",
+      "page": "terms",
+      "excerpt": "“Growing up, my parents and I lived in different parts of South Africa and Europe."
+    },
+    {
+      "id": "check-page-a939cc5d53",
+      "url": "https://www.brightlands.com/en/wat-brightlands/bright-stories/overview-bright-stories/ideal-place-follow-bachelor",
+      "page": "terms",
+      "excerpt": "I actually wanted to go to England after I graduated from high school in Switzerland, but I was put off by the high fees for foreign students and the really demanding admission requirements."
+    },
+    {
+      "id": "check-page-43d0c3a8da",
+      "url": "https://www.brightlands.com/en/wat-brightlands/bright-stories/overview-bright-stories/ideal-place-follow-bachelor",
+      "page": "terms",
+      "excerpt": "We have people here from all over the world; Russia, Asia, Africa, Europe, and the US."
+    },
+    {
+      "id": "check-page-aea5ac1961",
+      "url": "https://www.brightlands.com/en/wat-brightlands/bright-stories/overview-bright-stories/ideal-place-follow-bachelor",
+      "page": "terms",
+      "excerpt": "It is actually this mix that helps you learn to see certain issues from different sides.” UM is a great university to continue my education."
+    },
+    {
+      "id": "check-page-e610c6e2ae",
+      "url": "https://www.brightlands.com/en/wat-brightlands/bright-stories/overview-bright-stories/ideal-place-follow-bachelor",
+      "page": "terms",
+      "excerpt": "After all, there’s a reason I’m going to learn Dutch.” Megan Entzinger, bachelor student Maastricht Science Program, Maastricht University Megan found her education in Limburg Megan Entzinger is in the final phase of her bachelor’s degree in the Maastricht Science Programme."
+    },
+    {
+      "id": "check-page-ea30d948ae",
+      "url": "https://www.brightlands.com/en/wat-brightlands/bright-stories/overview-bright-stories/ideal-place-follow-bachelor",
+      "page": "terms",
+      "excerpt": "If we can create a bio-based adhesive that mimics the chemistry mussels use to cling to surfaces in the ocean, it can offer tremendous possibilities for medical applications.” Born in South Africa, this 21-year-old student will be completing her three-year bachelor’s degree this summer."
+    },
+    {
+      "id": "check-page-fa0c3eec3f",
+      "url": "https://www.brightlands.com/en/wat-brightlands/bright-stories/overview-bright-stories/ideal-place-follow-bachelor",
+      "page": "terms",
+      "excerpt": "“I really got lucky,” she says from a small lecture hall in the education building at the Brightlands Chemelot Campus in Geleen, where a total of 5000 students enroll in a bachelor or master’s program each year."
+    },
+    {
+      "id": "check-page-146ac45551",
+      "url": "https://www.brightlands.com/en/wat-brightlands/bright-stories/overview-bright-stories/ideal-place-follow-bachelor",
+      "page": "terms",
+      "excerpt": "I think I would like to stay in the Netherlands a little while longer.” Working on innovative solutions The South African did have a bit of a hard time with the course load."
+    },
+    {
+      "id": "check-page-311ee578ed",
+      "url": "https://www.brightlands.com/en/wat-brightlands/bright-stories/overview-bright-stories/ideal-place-follow-bachelor",
+      "page": "terms",
+      "excerpt": "UM is a great university to continue my education."
+    },
+    {
+      "id": "check-page-a47516debb",
+      "url": "https://www.brightlands.com/en/wat-brightlands/bright-stories/overview-bright-stories/ideal-place-follow-bachelor",
+      "page": "terms",
+      "excerpt": "Fundamental physics research Case Sunlight as fuel for sustainable chemical processes By Paul Buskens (TNO) on February 6, 2020 Case How to save energy in high value chemicals production?"
+    },
+    {
       "id": "check-page-f125a3ca0a",
       "url": "https://www.brightlands.com/brightlands-chemelot-campus/trainee-program",
       "page": "details",
       "excerpt": "Chemelot Management Trainee Programma | Brightlands Overslaan en naar de inhoud gaan Campus Campus Welkom op de Brightlands Chemelot Campus Chemelot Regio Bedrijven & Instituten Veiligheid Campus team Brightlands Merchandise Expertises Expertises Defensie Industrie Team Circulaire materialen Biomedische innovaties Duurzame processen Startups Financiering New Business Development Brightlands Circular Space Onderzoeksfaciliteiten Onderzoeksfaciliteiten Multi Purpose Pilot Plant Analysis Business Business Service Providers Vergader- en congresfaciliteiten Facilitaire diensten Talent Talent Studeren Onderzoeksinstituten Evenementen Community Vacatures Contact Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Chemelot Campus Nederlands English Brightlands Chemelot Campus Evenementen Community Vacatures Contact Campus Campus Welkom op de Brightlands Chemelot Campus Chemelot Regio Bedrijven & Instituten Veiligheid Campus team Brightlands Merchandise Expertises Expertises Defensie Industrie Team Circulaire materialen Biomedische innovaties Duurzame processen Startups Financiering New Business Development Brightlands Circular Space Onderzoeksfaciliteiten"
+    },
+    {
+      "id": "check-page-8e52b79270",
+      "url": "https://www.brightlands.com/campus-greenport-venlo/evenement/thesis-internship-program-um",
+      "page": "details",
+      "excerpt": "Evenementen | Thesis Internship Program (TIP) | UM Brightlands Talent Scholarship | Brightlands Overslaan en naar de inhoud gaan Expertises Expertises Gezonde & duurzame voeding Future Farming Biocirculaire economie Voor wie Voor wie Community Startup & scale-up support Talent & ontwikkeling Vestigen Vestigen Huren Bouwen Faciliteiten Faciliteiten Onderzoeksfaciliteiten Vergaderfaciliteiten Evenementenlocatie Future Food Experience Over de campus Over de campus Bright Pioneers Nieuws Evenementen Bedrijven & Kennisinstellingen Vacatures Contact Contact Het team Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Campus Greenport Venlo Nederlands English Brightlands Campus Greenport Venlo Nieuws Evenementen Bedrijven & Kennisinstellingen Vacatures Contact Contact Het team Expertises Expertises Gezonde & duurzame voeding Future Farming Biocirculaire economie Voor wie Voor wie Community Startup & scale-up support Talent & ontwikkeling Vestigen Vestigen Huren Bouwen Faciliteiten Faciliteiten Onderzoeksfaciliteiten Vergaderfaciliteiten Evenementenlocatie Future Food Experience Over de campus Over de campus Bright Pioneers Thesis Internship Program (TIP) | UM"
+    },
+    {
+      "id": "check-page-4f5208d21d",
+      "url": "https://www.brightlands.com/campus-greenport-venlo/evenement/thesis-internship-program-um",
+      "page": "details",
+      "excerpt": "Deze beurs is bedoeld voor topstudenten van buiten de EU/EER die zich inschrijven voor de masters Health Food Innovation Management of Global Supply Chain Management and Change aan de Universiteit Maastricht."
+    },
+    {
+      "id": "check-page-38d391110a",
+      "url": "https://www.brightlands.com/campus-greenport-venlo/evenement/thesis-internship-program-um",
+      "page": "details",
+      "excerpt": "Bekijk meer evenementen BLINC Masterclass Food & Nutrition 29 september t/m 1 december 2026 Event Innovatie op het menu - Afsluitevent BLINC Masterclass Food & Nutrition 1 december 2026 Event Masterclass AI voor Managers 12 november & 10 december 2026 Event Laad meer Lees meer over..."
+    },
+    {
+      "id": "check-page-aba53064ce",
+      "url": "https://www.brightlands.com/campus-greenport-venlo/nieuws/interview-met-max-vogel-over-talentprogramma-bright-society",
+      "page": "details",
+      "excerpt": "Interview met Max Vogel over 'Bright Society' | Brightlands Overslaan en naar de inhoud gaan Expertises Expertises Gezonde & duurzame voeding Future Farming Biocirculaire economie Voor wie Voor wie Community Startup & scale-up support Talent & ontwikkeling Vestigen Vestigen Huren Bouwen Faciliteiten Faciliteiten Onderzoeksfaciliteiten Vergaderfaciliteiten Evenementenlocatie Future Food Experience Over de campus Over de campus Bright Pioneers Nieuws Evenementen Bedrijven & Kennisinstellingen Vacatures Contact Contact Het team Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Campus Greenport Venlo Nederlands English Brightlands Campus Greenport Venlo Nieuws Evenementen Bedrijven & Kennisinstellingen Vacatures Contact Contact Het team Expertises Expertises Gezonde & duurzame voeding Future Farming Biocirculaire economie Voor wie Voor wie Community Startup & scale-up support Talent & ontwikkeling Vestigen Vestigen Huren Bouwen Faciliteiten Faciliteiten Onderzoeksfaciliteiten Vergaderfaciliteiten Evenementenlocatie Future Food Experience Over de campus Over de campus Bright Pioneers Interview met Max Vogel over talentprogramma 'Bright Society' 4 april 2024"
+    },
+    {
+      "id": "check-page-edd1bcee27",
+      "url": "https://www.brightlands.com/campus-greenport-venlo/nieuws/oud-deelnemers-over-startup-accelerator-blinc",
+      "page": "details",
+      "excerpt": "Oud-deelnemers over startup accelerator BLINC | Brightlands Overslaan en naar de inhoud gaan Expertises Expertises Gezonde & duurzame voeding Future Farming Biocirculaire economie Voor wie Voor wie Community Startup & scale-up support Talent & ontwikkeling Vestigen Vestigen Huren Bouwen Faciliteiten Faciliteiten Onderzoeksfaciliteiten Vergaderfaciliteiten Evenementenlocatie Future Food Experience Over de campus Over de campus Bright Pioneers Nieuws Evenementen Bedrijven & Kennisinstellingen Vacatures Contact Contact Het team Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Campus Greenport Venlo Nederlands English Brightlands Campus Greenport Venlo Nieuws Evenementen Bedrijven & Kennisinstellingen Vacatures Contact Contact Het team Expertises Expertises Gezonde & duurzame voeding Future Farming Biocirculaire economie Voor wie Voor wie Community Startup & scale-up support Talent & ontwikkeling Vestigen Vestigen Huren Bouwen Faciliteiten Faciliteiten Onderzoeksfaciliteiten Vergaderfaciliteiten Evenementenlocatie Future Food Experience Over de campus Over de campus Bright Pioneers Oud-deelnemers over startup accelerator BLINC 12 januari 2024 Kruimelpad"
+    },
+    {
+      "id": "check-page-b3ed5d4e4f",
+      "url": "https://www.brightlands.com/campus-greenport-venlo/nieuws/oud-deelnemers-over-startup-accelerator-blinc",
+      "page": "details",
+      "excerpt": "Niels Peeters van Innoveins Seed Solutions en Alex Schmeets van BioMosae deden in 2020 mee aan BLINC."
+    },
+    {
+      "id": "check-page-e5b29d78ef",
+      "url": "https://www.brightlands.com/campus-greenport-venlo/nieuws/oud-deelnemers-over-startup-accelerator-blinc",
+      "page": "details",
+      "excerpt": "Via de startup accelerator BLINC krijgen de deelnemers twaalf weken lang exclusieve kennis en contacten van partijen die in hun keten zitten en weten wat de uitdagingen in de markt zijn."
+    },
+    {
+      "id": "check-page-f1e27edeeb",
+      "url": "https://www.brightlands.com/campus-greenport-venlo/nieuws/oud-deelnemers-over-startup-accelerator-blinc",
+      "page": "details",
+      "excerpt": "We wilden ook graag aanhaken bij het ecosysteem van Brightlands Campus Greenport Venlo en door onze deelname aan BLINC konden we beiden doen.” Focus aanbrengen Niels Peeters zat met zijn bedrijf Innoveins Seed Solutions, een startup die bezighoudt met het coaten, primen en de karakterisering van zaden voor de land- en tuinbouw, toen in dezelfde groeifase als BioMosae."
+    },
+    {
+      "id": "check-page-7e8fa068a4",
+      "url": "https://www.brightlands.com/campus-greenport-venlo/nieuws/oud-deelnemers-over-startup-accelerator-blinc",
+      "page": "details",
+      "excerpt": "Het netwerk van de campus is heel handig om ons bedrijf nog verder door te ontwikkelen.” Innoveins Seed Solutions is de afgelopen jaren flink gegroeid."
+    },
+    {
+      "id": "check-page-8cf112abaf",
+      "url": "https://www.brightlands.com/campus-greenport-venlo/samenwerken/blinc-startup-accelerator",
+      "page": "details",
+      "excerpt": "BLINC voor agrifood startups | Brightlands Overslaan en naar de inhoud gaan Expertises Expertises Gezonde & duurzame voeding Future Farming Biocirculaire economie Voor wie Voor wie Community Startup & scale-up support Talent & ontwikkeling Vestigen Vestigen Huren Bouwen Faciliteiten Faciliteiten Onderzoeksfaciliteiten Vergaderfaciliteiten Evenementenlocatie Future Food Experience Over de campus Over de campus Bright Pioneers Nieuws Evenementen Bedrijven & Kennisinstellingen Vacatures Contact Contact Het team Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Campus Greenport Venlo Nederlands English Brightlands Campus Greenport Venlo Nieuws Evenementen Bedrijven & Kennisinstellingen Vacatures Contact Contact Het team Expertises Expertises Gezonde & duurzame voeding Future Farming Biocirculaire economie Voor wie Voor wie Community Startup & scale-up support Talent & ontwikkeling Vestigen Vestigen Huren Bouwen Faciliteiten Faciliteiten Onderzoeksfaciliteiten Vergaderfaciliteiten Evenementenlocatie Future Food Experience Over de campus Over de campus Bright Pioneers BLINC: Green Accelerator in Venlo Hoe kan BLINC jou als ondernemer helpen? Kruimelpad Brightlands"
+    },
+    {
+      "id": "check-page-1565dbb83b",
+      "url": "https://www.brightlands.com/campus-greenport-venlo/samenwerken/blinc-startup-accelerator",
+      "page": "details",
+      "excerpt": "Kruimelpad Brightlands Campus Greenport Venlo Voor wie BLINC: Green Accelerator in Venlo Jij wilt als startup jouw idee naar de markt brengen, je onderneming laten groeien en je impact vergroten."
+    },
+    {
+      "id": "check-page-4a2221c3c2",
+      "url": "https://www.brightlands.com/campus-greenport-venlo/samenwerken/blinc-startup-accelerator",
+      "page": "details",
+      "excerpt": "Bij BLINC, dé startup accelerator van Brightlands Campus Greenport Venlo, ondersteunen we gedreven en innovatieve ondernemers."
+    },
+    {
+      "id": "check-page-2e060f4c7e",
+      "url": "https://www.brightlands.com/chemelot-campus/community/brightlands-chemelot-campus-onboarding-programma",
+      "page": "details",
+      "excerpt": "Brightlands Chemelot Campus Onboarding Program | Brightlands Overslaan en naar de inhoud gaan Campus Campus Welkom op de Brightlands Chemelot Campus Chemelot Regio Bedrijven & Instituten Veiligheid Campus team Brightlands Merchandise Expertises Expertises Defensie Industrie Team Circulaire materialen Biomedische innovaties Duurzame processen Startups Financiering New Business Development Brightlands Circular Space Onderzoeksfaciliteiten Onderzoeksfaciliteiten Multi Purpose Pilot Plant Analysis Business Business Service Providers Vergader- en congresfaciliteiten Facilitaire diensten Talent Talent Studeren Onderzoeksinstituten Evenementen Community Vacatures Contact Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Chemelot Campus Nederlands English Brightlands Chemelot Campus Evenementen Community Vacatures Contact Campus Campus Welkom op de Brightlands Chemelot Campus Chemelot Regio Bedrijven & Instituten Veiligheid Campus team Brightlands Merchandise Expertises Expertises Defensie Industrie Team Circulaire materialen Biomedische innovaties Duurzame processen Startups Financiering New Business Development Brightlands Circular Space Onderzoeksfaciliteiten"
+    },
+    {
+      "id": "check-page-ed36e98f0f",
+      "url": "https://www.brightlands.com/chemelot-campus/community/brightlands-chemelot-campus-vitality-program",
+      "page": "details",
+      "excerpt": "Brightlands Chemelot Campus Vitality Program | Brightlands Overslaan en naar de inhoud gaan Campus Campus Welkom op de Brightlands Chemelot Campus Chemelot Regio Bedrijven & Instituten Veiligheid Campus team Brightlands Merchandise Expertises Expertises Defensie Industrie Team Circulaire materialen Biomedische innovaties Duurzame processen Startups Financiering New Business Development Brightlands Circular Space Onderzoeksfaciliteiten Onderzoeksfaciliteiten Multi Purpose Pilot Plant Analysis Business Business Service Providers Vergader- en congresfaciliteiten Facilitaire diensten Talent Talent Studeren Onderzoeksinstituten Evenementen Community Vacatures Contact Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Chemelot Campus Nederlands English Brightlands Chemelot Campus Evenementen Community Vacatures Contact Campus Campus Welkom op de Brightlands Chemelot Campus Chemelot Regio Bedrijven & Instituten Veiligheid Campus team Brightlands Merchandise Expertises Expertises Defensie Industrie Team Circulaire materialen Biomedische innovaties Duurzame processen Startups Financiering New Business Development Brightlands Circular Space Onderzoeksfaciliteiten"
+    },
+    {
+      "id": "check-page-d9f0d30f5b",
+      "url": "https://www.brightlands.com/chemelot-campus/community/brightlands-chemelot-campus-vitality-program",
+      "page": "details",
+      "excerpt": "Don’t miss out—join us to connect with others and work on your health goals at your own pace."
+    },
+    {
+      "id": "check-page-e44f676055",
+      "url": "https://www.brightlands.com/chemelot-campus/community/brightlands-chemelot-campus-vitality-program",
+      "page": "details",
+      "excerpt": "Over the years I am proud to say I,ve won multiple awards for my hard work within the fields of personal training and physical therapy."
+    },
+    {
+      "id": "check-page-006d1155b2",
+      "url": "https://www.brightlands.com/chemelot-campus/community/brightlands-chemelot-campus-vitality-program",
+      "page": "details",
+      "excerpt": "Let's make your sports and health dreams a reality."
+    },
+    {
+      "id": "check-page-bf57a6fa0e",
+      "url": "https://www.brightlands.com/chemelot-campus/community/brightlands-chemelot-campus-vitality-program",
+      "page": "details",
+      "excerpt": "This invaluable service is offered at no cost to individuals with Dutch supplementary health insurance coverage."
+    },
+    {
+      "id": "check-page-0ea8cf5940",
+      "url": "https://www.brightlands.com/chemelot-campus/community/brightlands-chemelot-campus-vitality-program",
+      "page": "details",
+      "excerpt": "To schedule an appointment or to inquire about the eligibility of your insurance coverage for this service, please do not hesitate to reach out to us at mark [at] markspt.nl ( mark @ mark spt.nl) ."
+    },
+    {
+      "id": "check-page-93d16c49bb",
+      "url": "https://www.brightlands.com/chemelot-campus/community/brightlands-chemelot-campus-vitality-program",
+      "page": "details",
+      "excerpt": "Your journey towards improved health and vitality starts here."
+    },
+    {
+      "id": "check-page-5b4a57f764",
+      "url": "https://www.brightlands.com/chemelot-campus/voor-wie/ondernemen/new-business-development-programmas",
+      "page": "details",
+      "excerpt": "New business development programs | Brightlands Chemelot Campus Overslaan en naar de inhoud gaan Campus Campus Welkom op de Brightlands Chemelot Campus Chemelot Regio Bedrijven & Instituten Veiligheid Campus team Brightlands Merchandise Expertises Expertises Defensie Industrie Team Circulaire materialen Biomedische innovaties Duurzame processen Startups Financiering New Business Development Brightlands Circular Space Onderzoeksfaciliteiten Onderzoeksfaciliteiten Multi Purpose Pilot Plant Analysis Business Business Service Providers Vergader- en congresfaciliteiten Facilitaire diensten Talent Talent Studeren Onderzoeksinstituten Evenementen Community Vacatures Contact Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Maastricht Health Campus Brightlands Campus Greenport Venlo Brightlands Chemelot Campus Brightlands Data & AI Campus Brightlands Chemelot Campus Nederlands English Brightlands Chemelot Campus Evenementen Community Vacatures Contact Campus Campus Welkom op de Brightlands Chemelot Campus Chemelot Regio Bedrijven & Instituten Veiligheid Campus team Brightlands Merchandise Expertises Expertises Defensie Industrie Team Circulaire materialen Biomedische innovaties Duurzame processen Startups Financiering New Business Development Brightlands Circular Space Onderzoeksfaciliteiten"
     }
   ],
   "findings": {
@@ -263,6 +589,14 @@
       {
         "value": "+31 46-7632110",
         "evidenceId": "check-phone-820058c89e"
+      },
+      {
+        "value": "+31 (0)6 51 61 93 48",
+        "evidenceId": "check-phone-4f9c4d74d5"
+      },
+      {
+        "value": "+31683071292",
+        "evidenceId": "check-phone-d566555bad"
       }
     ],
     "routes": [],
@@ -279,12 +613,7 @@
     "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [],
-    "format": [
-      {
-        "value": "in-person",
-        "evidenceId": "check-format-fa9a82eea4"
-      }
-    ],
+    "format": [],
     "location": [],
     "selectivity": [],
     "dealText": [],

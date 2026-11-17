@@ -1,22 +1,17 @@
 {
   "programId": "accel-atoms",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://atoms.accel.com/",
     "https://apply.accel-atoms.com/",
     "https://atoms.accel.com/apply",
     "https://atoms.accel.com/apply-early",
     "https://atoms.accel.com/faqs",
+    "https://atoms.accel.com/perks/nvidia-for-startups-program",
+    "https://atoms.accel.com/portfolio-old",
     "https://atoms.accel.com/news/ai-cohort-2026-with-google",
     "https://atoms.accel.com/news/announcing-our-accel-atoms-3-0-cohort-in-ai-and-industry-5-0",
-    "https://atoms.accel.com/news/announcing-the-14-startups-from-the-diwali-21-cohort-of-accel-atoms",
-    "https://atoms.accel.com/news/atoms-cohort-2-applications-are-now-open",
-    "https://atoms.accel.com/news/bytebeam-an-accel-atoms-cohort-company-raises-3-million-in-their-seed-round",
-    "https://atoms.accel.com/news/innovation-is-everywhere-what-we-learned-from-our-holi-cohorts-applications",
-    "https://atoms.accel.com/news/meet-the-startups-in-ai-cohort-2026",
-    "https://atoms.accel.com/news/rigi-an-accel-atoms-cohort-company-raises-10-million-in-series-a",
-    "https://atoms.accel.com/news/dhiwise-a-surat-boys-dream-to-build-a-programming-platform-for-the-global-developer-community",
-    "https://atoms.accel.com/news/how-we-designed-the-atoms-program-for-pre-seed-startups"
+    "https://atoms.accel.com/news/announcing-the-14-startups-from-the-diwali-21-cohort-of-accel-atoms"
   ],
   "evidence": [
     {
@@ -38,13 +33,6 @@
       "url": "https://atoms.accel.com/news/announcing-the-14-startups-from-the-diwali-21-cohort-of-accel-atoms",
       "title": "Accel Atoms — batches page",
       "excerpt": "them all of this. The first cohort of the Atoms program, the Diwali batch, launched in October last year. We evaluated more than 3000 applications to get to these",
-      "page": "batches"
-    },
-    {
-      "id": "check-deal-0480135c33",
-      "url": "https://atoms.accel.com/news/bytebeam-an-accel-atoms-cohort-company-raises-3-million-in-their-seed-round",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "Atoms in 2021 through which they also received an initial grant of $250K as a non-dilutive fund. Since then, the team has acquired users from",
       "page": "batches"
     },
     {
@@ -76,13 +64,6 @@
       "page": "terms"
     },
     {
-      "id": "check-deal-3e70b5e8e0",
-      "url": "https://atoms.accel.com/news/how-we-designed-the-atoms-program-for-pre-seed-startups",
-      "title": "Accel Atoms — program page",
-      "excerpt": "weeks, we came up with a program structure that looked like this: 1. $100-300k capital as a convertible note within few days of application",
-      "page": "details"
-    },
-    {
       "id": "check-deal-55833dc4ba",
       "url": "https://atoms.accel.com/faqs",
       "title": "Accel Atoms — terms page",
@@ -104,46 +85,11 @@
       "page": "batches"
     },
     {
-      "id": "check-duration-58e2aa2f26",
-      "url": "https://atoms.accel.com/news/rigi-an-accel-atoms-cohort-company-raises-10-million-in-series-a",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "achieve more than 50K app downloads. In the next 12 months, the company aims to magnify this number by more",
-      "page": "batches"
-    },
-    {
-      "id": "check-duration-6118426f5f",
-      "url": "https://atoms.accel.com/news/rigi-an-accel-atoms-cohort-company-raises-10-million-in-series-a",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "of their zeal and rigor, it took Rigi only 5 months to cross the 100,000-user benchmark and achieve",
-      "page": "batches"
-    },
-    {
-      "id": "check-duration-743e64aaf3",
-      "url": "https://atoms.accel.com/news/how-we-designed-the-atoms-program-for-pre-seed-startups",
-      "title": "Accel Atoms — program page",
-      "excerpt": "can make building in India easier. Over the next 8 weeks, we received a lot of inputs, and started",
-      "page": "details"
-    },
-    {
       "id": "check-duration-ae53a89560",
       "url": "https://atoms.accel.com/faqs",
       "title": "Accel Atoms — terms page",
       "excerpt": "of early-stage teams, typically running for 3 months. Its format, structure, and duration may vary",
       "page": "terms"
-    },
-    {
-      "id": "check-format-1b57bd6913",
-      "url": "https://atoms.accel.com/news/meet-the-startups-in-ai-cohort-2026",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "on Accel’s YouTube channel. The journey continues with a virtual Speaker Series (April–May 2026), featuring insights from",
-      "page": "batches"
-    },
-    {
-      "id": "check-format-67348993f6",
-      "url": "https://atoms.accel.com/news/atoms-cohort-2-applications-are-now-open",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "the Accel family. So this time, we will try to make these in-person sessions. If you are a very early stage startup, we are",
-      "page": "batches"
     },
     {
       "id": "check-location-d94663b037",
@@ -160,11 +106,25 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-0a6986275d",
-      "url": "https://atoms.accel.com/news/atoms-cohort-2-applications-are-now-open",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "Portfolio → https://atoms.accel.com/portfolio-old",
-      "page": "batches"
+      "id": "check-portfolio-15227891c7",
+      "url": "https://atoms.accel.com/portfolio-old",
+      "title": "Accel Atoms — portfolio page",
+      "excerpt": "See More ↓ → https://atoms.accel.com/portfolio?fd77e97b_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-1b8ab578b6",
+      "url": "https://atoms.accel.com/portfolio-old",
+      "title": "Accel Atoms — portfolio page",
+      "excerpt": "Francis Sebastian Anugrah Founder, BRIK → https://atoms.accel.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-214e6a5778",
+      "url": "https://atoms.accel.com/portfolio-old",
+      "title": "Accel Atoms — portfolio page",
+      "excerpt": "https://atoms.accel.com/portfolio",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-2465c85bc1",
@@ -174,13 +134,6 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-2adc45c657",
-      "url": "https://atoms.accel.com/news/innovation-is-everywhere-what-we-learned-from-our-holi-cohorts-applications",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "Portfolio → https://atoms.accel.com/portfolio-old",
-      "page": "batches"
-    },
-    {
       "id": "check-portfolio-45064fc97e",
       "url": "https://atoms.accel.com/apply-early",
       "title": "Accel Atoms — application page",
@@ -188,39 +141,18 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-4b9ea5e16b",
-      "url": "https://atoms.accel.com/news/rigi-an-accel-atoms-cohort-company-raises-10-million-in-series-a",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "Portfolio → https://atoms.accel.com/portfolio-old",
-      "page": "batches"
+      "id": "check-portfolio-4f1639d515",
+      "url": "https://atoms.accel.com/portfolio-old",
+      "title": "Accel Atoms — portfolio page",
+      "excerpt": "Heath-tech → https://atoms.accel.com/portfolio",
+      "page": "portfolio"
     },
     {
-      "id": "check-portfolio-4e29c47f8a",
-      "url": "https://atoms.accel.com/news/meet-the-startups-in-ai-cohort-2026",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "Portfolio → https://atoms.accel.com/portfolio-old",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-730258799a",
-      "url": "https://atoms.accel.com/news/dhiwise-a-surat-boys-dream-to-build-a-programming-platform-for-the-global-developer-community",
-      "title": "Accel Atoms — program page",
-      "excerpt": "Portfolio → https://atoms.accel.com/portfolio-old",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-9d70bc2a4e",
-      "url": "https://atoms.accel.com/news/bytebeam-an-accel-atoms-cohort-company-raises-3-million-in-their-seed-round",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "Portfolio → https://atoms.accel.com/portfolio-old",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-a571f4cc5e",
-      "url": "https://atoms.accel.com/news/how-we-designed-the-atoms-program-for-pre-seed-startups",
-      "title": "Accel Atoms — program page",
-      "excerpt": "Portfolio → https://atoms.accel.com/portfolio-old",
-      "page": "details"
+      "id": "check-portfolio-749363254b",
+      "url": "https://atoms.accel.com/portfolio-old",
+      "title": "Accel Atoms — portfolio page",
+      "excerpt": "Subscribe → https://atoms.accel.com/portfolio",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-a607fe809b",
@@ -251,6 +183,20 @@
       "page": "batches"
     },
     {
+      "id": "check-portfolio-c46d26aadd",
+      "url": "https://atoms.accel.com/portfolio-old",
+      "title": "Accel Atoms — portfolio page",
+      "excerpt": "Founder → https://atoms.accel.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-d156e5d748",
+      "url": "https://atoms.accel.com/portfolio-old",
+      "title": "Accel Atoms — portfolio page",
+      "excerpt": "All → https://atoms.accel.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-ff7a2072fe",
       "url": "https://atoms.accel.com/faqs",
       "title": "Accel Atoms — terms page",
@@ -263,27 +209,6 @@
       "title": "Accel Atoms — terms page",
       "excerpt": "can apply to the AI Cohort through the application form on our website. Since applications are accepted on a rolling basis, you can apply whenever you’re ready. Follow us on LinkedIn, X, and Instagram",
       "page": "terms"
-    },
-    {
-      "id": "check-route-01ce3d2f10",
-      "url": "https://atoms.accel.com/news/how-we-designed-the-atoms-program-for-pre-seed-startups",
-      "title": "Accel Atoms — program page",
-      "excerpt": "APPLY → https://atoms.accel.com/apply",
-      "page": "details"
-    },
-    {
-      "id": "check-route-0f758c7dfb",
-      "url": "https://atoms.accel.com/news/dhiwise-a-surat-boys-dream-to-build-a-programming-platform-for-the-global-developer-community",
-      "title": "Accel Atoms — program page",
-      "excerpt": "Apply Early → https://apply.accel-atoms.com/",
-      "page": "details"
-    },
-    {
-      "id": "check-route-17dea51188",
-      "url": "https://atoms.accel.com/news/rigi-an-accel-atoms-cohort-company-raises-10-million-in-series-a",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "APPLY → https://atoms.accel.com/apply",
-      "page": "batches"
     },
     {
       "id": "check-route-1c9ad655cb",
@@ -300,32 +225,11 @@
       "page": "batches"
     },
     {
-      "id": "check-route-251da13680",
-      "url": "https://atoms.accel.com/news/bytebeam-an-accel-atoms-cohort-company-raises-3-million-in-their-seed-round",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "Apply Early → https://apply.accel-atoms.com/",
-      "page": "batches"
-    },
-    {
       "id": "check-route-38b7de2085",
       "url": "https://atoms.accel.com/news/announcing-the-14-startups-from-the-diwali-21-cohort-of-accel-atoms",
       "title": "Accel Atoms — batches page",
       "excerpt": "Apply Early → https://apply.accel-atoms.com/",
       "page": "batches"
-    },
-    {
-      "id": "check-route-3e1b74d0df",
-      "url": "https://atoms.accel.com/news/how-we-designed-the-atoms-program-for-pre-seed-startups",
-      "title": "Accel Atoms — program page",
-      "excerpt": "Please fill this form to apply. → https://form.typeform.com/to/AGVVUIxr",
-      "page": "details"
-    },
-    {
-      "id": "check-route-47139b95a8",
-      "url": "https://atoms.accel.com/news/how-we-designed-the-atoms-program-for-pre-seed-startups",
-      "title": "Accel Atoms — program page",
-      "excerpt": "Apply Early → https://apply.accel-atoms.com/",
-      "page": "details"
     },
     {
       "id": "check-route-4d72e69fb9",
@@ -342,24 +246,17 @@
       "page": "application"
     },
     {
-      "id": "check-route-6629f2c7d4",
-      "url": "https://atoms.accel.com/news/innovation-is-everywhere-what-we-learned-from-our-holi-cohorts-applications",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "APPLY → https://atoms.accel.com/apply",
-      "page": "batches"
+      "id": "check-route-62959c5f7b",
+      "url": "https://atoms.accel.com/portfolio-old",
+      "title": "Accel Atoms — portfolio page",
+      "excerpt": "Apply Early → https://apply.accel-atoms.com/",
+      "page": "portfolio"
     },
     {
       "id": "check-route-72e92efaa2",
       "url": "https://atoms.accel.com/news/announcing-our-accel-atoms-3-0-cohort-in-ai-and-industry-5-0",
       "title": "Accel Atoms — batches page",
       "excerpt": "Apply Early → https://apply.accel-atoms.com/",
-      "page": "batches"
-    },
-    {
-      "id": "check-route-83782ac52f",
-      "url": "https://atoms.accel.com/news/atoms-cohort-2-applications-are-now-open",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "APPLY → https://atoms.accel.com/apply",
       "page": "batches"
     },
     {
@@ -377,34 +274,6 @@
       "page": "batches"
     },
     {
-      "id": "check-route-9d60e886a3",
-      "url": "https://atoms.accel.com/news/atoms-cohort-2-applications-are-now-open",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "Apply Early → https://apply.accel-atoms.com/",
-      "page": "batches"
-    },
-    {
-      "id": "check-route-9dd1b4e2da",
-      "url": "https://atoms.accel.com/news/meet-the-startups-in-ai-cohort-2026",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "Apply Early → https://apply.accel-atoms.com/",
-      "page": "batches"
-    },
-    {
-      "id": "check-route-9fb417db4e",
-      "url": "https://atoms.accel.com/news/dhiwise-a-surat-boys-dream-to-build-a-programming-platform-for-the-global-developer-community",
-      "title": "Accel Atoms — program page",
-      "excerpt": "APPLY → https://atoms.accel.com/apply",
-      "page": "details"
-    },
-    {
-      "id": "check-route-c24b7f752c",
-      "url": "https://atoms.accel.com/news/atoms-cohort-2-applications-are-now-open",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "you can apply here. → https://form.typeform.com/to/AGVVUIxr?typeform-source=atoms.accel.com",
-      "page": "batches"
-    },
-    {
       "id": "check-route-c79e18514a",
       "url": "https://atoms.accel.com/news/ai-cohort-2026-with-google",
       "title": "Accel Atoms — batches page",
@@ -412,11 +281,11 @@
       "page": "batches"
     },
     {
-      "id": "check-route-cc2f40fe45",
-      "url": "https://atoms.accel.com/news/innovation-is-everywhere-what-we-learned-from-our-holi-cohorts-applications",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "Apply Early → https://apply.accel-atoms.com/",
-      "page": "batches"
+      "id": "check-route-cfa1d1a9e7",
+      "url": "https://atoms.accel.com/portfolio-old",
+      "title": "Accel Atoms — portfolio page",
+      "excerpt": "APPLY → https://atoms.accel.com/apply",
+      "page": "portfolio"
     },
     {
       "id": "check-route-cff14dc24a",
@@ -424,13 +293,6 @@
       "title": "Accel Atoms — application page",
       "excerpt": "APPLY → https://atoms.accel.com/apply",
       "page": "application"
-    },
-    {
-      "id": "check-route-d0f876b856",
-      "url": "https://atoms.accel.com/news/meet-the-startups-in-ai-cohort-2026",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "APPLY → https://atoms.accel.com/apply",
-      "page": "batches"
     },
     {
       "id": "check-route-da35402365",
@@ -461,25 +323,11 @@
       "page": "batches"
     },
     {
-      "id": "check-route-f6163ffc1f",
-      "url": "https://atoms.accel.com/news/rigi-an-accel-atoms-cohort-company-raises-10-million-in-series-a",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "Apply Early → https://apply.accel-atoms.com/",
-      "page": "batches"
-    },
-    {
       "id": "check-route-fbdb60cd24",
       "url": "https://atoms.accel.com/",
       "title": "Accel Atoms — homepage",
       "excerpt": "APPLY → https://atoms.accel.com/apply",
       "page": "details"
-    },
-    {
-      "id": "check-route-fc471a501e",
-      "url": "https://atoms.accel.com/news/bytebeam-an-accel-atoms-cohort-company-raises-3-million-in-their-seed-round",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "APPLY → https://atoms.accel.com/apply",
-      "page": "batches"
     },
     {
       "id": "check-start-1b51f602e0",
@@ -501,20 +349,6 @@
       "title": "Accel Atoms — terms page",
       "excerpt": "stage. We also invest in ideas early— irrespective of an MVP. Is international participation allowed? Yes, we are accepting applications from founders based in India & Indian-origin founders based anywhere in the world. What is the selection",
       "page": "terms"
-    },
-    {
-      "id": "check-status-6f9b4d3fca",
-      "url": "https://atoms.accel.com/news/atoms-cohort-2-applications-are-now-open",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "Atoms cohort 2 applications are now open! | Accel Atoms X Philosophy Portfolio News FAQs Perks Apply Early APPLY Apply Early AI Cohort 2026: Meet the",
-      "page": "batches"
-    },
-    {
-      "id": "check-status-79e8b0c8ab",
-      "url": "https://atoms.accel.com/news/how-we-designed-the-atoms-program-for-pre-seed-startups",
-      "title": "Accel Atoms — program page",
-      "excerpt": "cohort are now open But it’s also time for the next big startups to enter the Atoms program. The Holi cohort applications are now open and we are continuously reviewing the applications. And please note that Atoms is open for both India and",
-      "page": "details"
     }
   ],
   "pageQuotes": [
@@ -549,6 +383,90 @@
       "excerpt": "FAQs X Philosophy Portfolio News FAQs Perks Apply Early APPLY Apply Early AI Cohort 2026: Meet the Startups Read the Blog Atoms X: Meet the startups Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog Frequently Asked Questions About AI X About About Programme Structure Eligibility Criteria Funding About What is Accel Atoms? Accel Atoms is Accel’s pre-seed and seed platform for early founders building for the next decade. Designed for ambitious founders, we offer capital, mentorship, and company-building support from Accel’s global network of investors and operators. Since launch, we’ve supported dozens of Indian & Indian diaspora founders, in categories spanning developer infrastructure to consumer, Industry 5.0 and AI. What are the different cohorts I can apply for? Accel Atoms is accepting applications for Atoms AI & Atoms X Cohorts. What is Accel Atoms AI? Accel Atoms AI is a pre-seed program for ambitious early-stage founders building across the AI stack. It is designed to support founders with capital, mentorship, and access to the broader Accel Atoms network as they accelerate their product and company-building journey. What is Atoms X? Accel Atoms X is a focused initiative that enables mission-centric"
     },
     {
+      "id": "check-page-ef0f2c4277",
+      "url": "https://atoms.accel.com/faqs",
+      "page": "terms",
+      "excerpt": "You can apply to the AI Cohort through the application form on our website."
+    },
+    {
+      "id": "check-page-c352572a5c",
+      "url": "https://atoms.accel.com/faqs",
+      "page": "terms",
+      "excerpt": "Program Structure How can I apply to the AI cohort?"
+    },
+    {
+      "id": "check-page-1d7de543a9",
+      "url": "https://atoms.accel.com/faqs",
+      "page": "terms",
+      "excerpt": "We keep cohorts small and focused to ensure personalized mentorship and meaningful support. ‍ Accel Atoms AI: 5-10 exceptional Indian and Indian-origin AI founders creating solutions across the AI stack, with the potential to go global."
+    },
+    {
+      "id": "check-page-93f780f637",
+      "url": "https://atoms.accel.com/faqs",
+      "page": "terms",
+      "excerpt": "We’ve partnered with the top AI foundational model companies to unlock credits."
+    },
+    {
+      "id": "check-page-9a88948ee9",
+      "url": "https://atoms.accel.com/faqs",
+      "page": "terms",
+      "excerpt": "Customer: Accel facilitates finding your initial customers across enterprise and end-customer."
+    },
+    {
+      "id": "check-page-e58a7b0e5b",
+      "url": "https://atoms.accel.com/faqs",
+      "page": "terms",
+      "excerpt": "1:1 Mentorship: Direct connects with top global AI leaders, along with monthly office hours with the Accel team."
+    },
+    {
+      "id": "check-page-59fee3ba4a",
+      "url": "https://atoms.accel.com/faqs",
+      "page": "terms",
+      "excerpt": "What stage of ideation should I be at in order to apply?"
+    },
+    {
+      "id": "check-page-6b35b38418",
+      "url": "https://atoms.accel.com/faqs",
+      "page": "terms",
+      "excerpt": "The Atoms program is most relevant for companies that are either at the pre-product or pre-revenue stage."
+    },
+    {
+      "id": "check-page-29de3f4aac",
+      "url": "https://atoms.accel.com/faqs",
+      "page": "terms",
+      "excerpt": "Yes, we are accepting applications from founders based in India & Indian-origin founders based anywhere in the world."
+    },
+    {
+      "id": "check-page-306b19acbb",
+      "url": "https://atoms.accel.com/faqs",
+      "page": "terms",
+      "excerpt": "We invest up to $1M- $2M in startups in the form of equity or a convertible note."
+    },
+    {
+      "id": "check-page-3b241f56e4",
+      "url": "https://atoms.accel.com/faqs",
+      "page": "terms",
+      "excerpt": "It’s important to note that the Accel Atoms program is run by the Accel AI investment team."
+    },
+    {
+      "id": "check-page-0b3126fd36",
+      "url": "https://atoms.accel.com/faqs",
+      "page": "terms",
+      "excerpt": "About Funding About the Program Eligibility Criteria Funding How much funding will be provided in the AI Cohort?"
+    },
+    {
+      "id": "check-page-796a41afb0",
+      "url": "https://atoms.accel.com/perks/nvidia-for-startups-program",
+      "page": "details",
+      "excerpt": "Accel Atoms 4.0 Developer Tools AI"
+    },
+    {
+      "id": "check-page-8ca537240e",
+      "url": "https://atoms.accel.com/portfolio-old",
+      "page": "portfolio",
+      "excerpt": "Portfolio X Philosophy Portfolio News FAQs Perks Apply Early APPLY Apply Early AI Cohort 2026: Meet the Startups Read the Blog Atoms X: Meet the startups Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog Portfolio All Cohorts All Select Cohort 2021 2022 2023 2024 2025 2026 All Sectors All All Sectors AI Bharat Consumer Fintech Industry 5.0 Marketplaces SaaS X Anko 2023 AI agent that automates root-cause analysis and reporting for operational metrics AI See Website ↗ AI agent that automates root-cause analysis and reporting for operational metrics Anko is an AI agent empowering business intelligence. Anko automates data crunching and root-cause analysis for operational metrics using the power of knowledge graphs, AI engine and language models. Meet the founders Pallavi Chakravorty Co-Founder & CEO Swapnil Basak Co-Founder & CPO Nipun Gupta Co-Founder & CTO Arivihan 2024 Arivihan is India's 1st AI-based 100% Automated Learning Platform Bharat See Website ↗ Arivihan is India's 1st AI-based 100% Automated Learning Platform Arivihan is India's 1st AI-based 100% Automated Learning Platform providing each unique school student with a personal tutor in their pocket at ₹300 per month, guiding them in planning for"
+    },
+    {
       "id": "check-page-48a61a0098",
       "url": "https://atoms.accel.com/news/ai-cohort-2026-with-google",
       "page": "batches",
@@ -565,48 +483,6 @@
       "url": "https://atoms.accel.com/news/announcing-the-14-startups-from-the-diwali-21-cohort-of-accel-atoms",
       "page": "batches",
       "excerpt": "Announcing the 14 startups from the Diwali '21 cohort of Accel Atoms | Accel Atoms X Philosophy Portfolio News FAQs Perks Apply Early APPLY Apply Early AI Cohort 2026: Meet the Startups Read the Blog Atoms X: Meet the startups Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog 15/2/2022 Announcing the 14 startups from the Diwali '21 cohort of Accel Atoms Prayank Swaroop Partner, Accel In October last year, Accel in India announced a new way to invest and help pre-seed startups. The premise was simple: Early stage startups need easier access to non-dilutive funding, they also need mentorship from founders and operators, and a community to empower and learn from. Accel Atoms would give them all of this. The first cohort of the Atoms program, the Diwali batch, launched in October last year. We evaluated more than 3000 applications to get to these 14 startups, and today, after 100 days of learning and conversations and growth and clarity, we are thrilled to introduce them to you. It’s a diverse set of companies, from SaaS to crypto to D2C to hardware, and the sheer range is testament to the imagination, creativity, and acumen of the entrepreneurs. As you’ll see when you read about these companies below, there’s a"
-    },
-    {
-      "id": "check-page-6e6b694521",
-      "url": "https://atoms.accel.com/news/atoms-cohort-2-applications-are-now-open",
-      "page": "batches",
-      "excerpt": "Atoms cohort 2 applications are now open! | Accel Atoms X Philosophy Portfolio News FAQs Perks Apply Early APPLY Apply Early AI Cohort 2026: Meet the Startups Read the Blog Atoms X: Meet the startups Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog 15/2/2022 Atoms cohort 2 applications are now open! Dinesh Katiyar Partner, Accel We’ve just announced the 14 startups of the first cohort of the Atoms program! The last 100 days have been an eventful, learning-filled time for the Atoms startups and there’s plenty to be excited about. Setting up the program and making sure it gets to the heart of what the founders need has been a learning process. Atoms was designed from the ground up for the best founders to get experimental capital without heavy dilution, armed with the best mentorship to increase their odds of success. It also aims to be accessible to entrepreneurs from everywhere and from all backgrounds. On the program side, we worked with some of India’s best founders and mentors to give the Atoms startups the guidance and actionable advice they needed, and gave it the structure that would help the founders learn and implement decisions quickly. The results were amazing! You can hear it from the founders"
-    },
-    {
-      "id": "check-page-1cae9271a7",
-      "url": "https://atoms.accel.com/news/bytebeam-an-accel-atoms-cohort-company-raises-3-million-in-their-seed-round",
-      "page": "batches",
-      "excerpt": "Bytebeam, an Accel Atoms cohort company, raises $3 million in their seed round! | Accel Atoms X Philosophy Portfolio News FAQs Perks Apply Early APPLY Apply Early AI Cohort 2026: Meet the Startups Read the Blog Atoms X: Meet the startups Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog 12/5/2022 Bytebeam, an Accel Atoms cohort company, raises $3 million in their seed round! Vikrant Mehra Content Marketing Manager, Accel We take great pleasure in congratulating the Bytebeam team for raising $3 million in their seed funding round. The funding was raised from Together fund, Accel and Strive VC. The round also saw participation from AdvantEdge VC backed by Motherson Group, Phanindra Sama, Founder of Redbus, Tanmai Gopal, Co-founder of Hasura, Vimal Kumar Founder of Juspay, Mekin Maheshwari, Ex CPO at Flipkart, Deepak Anchala Founder of Slintel, Aakrit Vaish Co-Founder of Haptik and many other marquee angel investors. What is Bytebeam? From their experience at Ather Energy, Gautam, Ravi & Bharadwaaj identified that building and scaling the backends for IoT products is way more complex, compared to that of mobile or web applications. So, aiming to build a one-stop backend solution for a company’s IoT products,"
-    },
-    {
-      "id": "check-page-e0f279126a",
-      "url": "https://atoms.accel.com/news/innovation-is-everywhere-what-we-learned-from-our-holi-cohorts-applications",
-      "page": "batches",
-      "excerpt": "Innovation is everywhere: What we learned from our Holi cohort’s applications | Accel Atoms X Philosophy Portfolio News FAQs Perks Apply Early APPLY Apply Early AI Cohort 2026: Meet the Startups Read the Blog Atoms X: Meet the startups Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog 21/4/2022 Innovation is everywhere: What we learned from our Holi cohort’s applications Vikrant Mehra Content Marketing Manager, Accel When we conceptualized Atoms, our goal was to design a program which would bring founders a valuable learning experience alongside accessible capital. And as the first cohort kicked off and gathered momentum, we did a whole lot of learning of our own. We learned what our founders wanted, what they didn’t, and how we could better structure the program to bring them even more value. With the second cohort, our learning journey started even earlier. Studying the applications alone had us challenging our assumptions and brought to light a host of insights. With the cohort now ready to begin, here are a few interesting data points. Founders are innovating everywhere We received applications for our second cohort from 35 cities in India, with a large number of applicants stating that their work was"
-    },
-    {
-      "id": "check-page-2f65204afe",
-      "url": "https://atoms.accel.com/news/meet-the-startups-in-ai-cohort-2026",
-      "page": "batches",
-      "excerpt": "The Next Chapter of Intelligence: Meet the Startups in AI Cohort 2026! | Accel Atoms X Philosophy Portfolio News FAQs Perks Apply Early APPLY Apply Early AI Cohort 2026: Meet the Startups Read the Blog Atoms X: Meet the startups Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog 16/3/2026 The Next Chapter of Intelligence: Meet the Startups in AI Cohort 2026! Prayank Swaroop Partner, Accel Shekhar Kirani Partner, Accel Jonathan Silber Co-Founder & Director of AI Futures Fund After an extensive search for startups building the next generation of AI, we are pleased to announce the AI Cohort 2026. From a global pool of thousands of applicants, five companies have been selected for this program—a strategic partnership between Accel Atoms and Google’s AI Futures Fund (AIFF). The Kickoff: Bengaluru’s Growing AI Ecosystem On March 11, 2026, the program officially began at Google Ananta in Bengaluru. While the cohort is global, with teams spanning from Singapore to Silicon Valley, launching in Bengaluru underscores the city’s vital role in the global AI ecosystem. The kickoff focused on deep technical and product development sessions with Google. The day included Founder Connect with AI Futures Fund, where we were"
-    },
-    {
-      "id": "check-page-d28f7b69ab",
-      "url": "https://atoms.accel.com/news/rigi-an-accel-atoms-cohort-company-raises-10-million-in-series-a",
-      "page": "batches",
-      "excerpt": "Rigi an Accel Atoms cohort company, raises $10 million in Series A | Accel Atoms X Philosophy Portfolio News FAQs Perks Apply Early APPLY Apply Early AI Cohort 2026: Meet the Startups Read the Blog Atoms X: Meet the startups Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog 20/4/2022 Rigi an Accel Atoms cohort company, raises $10 million in Series A Vikrant Mehra Content Marketing Manager, Accel Celebrating the journey of the Rigi App so far! We’re delighted to congratulate Rigi for successfully raising $10M in the Series A funding round. This round was co-led by Accel, Sequoia Capital India & Stellaris Venture Partners, and notable angel investors like Nitish Mittersain (CEO, Nazara), Apaksh Gupta (CEO, OneImpression), and Anupam Mittal (Founder, Shaadi.com), to name a few. The Dream Co-founders Swapnil Saurav and Ananya Singhal founded Rigi in October 2021 with a common vision - to enable established and aspiring creators to pursue their passion & make a substantial living out of it. They aim to execute this by becoming a go-to logistics partner for influencers, meaning that the app will do all the heavy lifting while allowing the creators the freedom and space to channel their creative energies & focus on"
-    },
-    {
-      "id": "check-page-b6019cd56c",
-      "url": "https://atoms.accel.com/news/dhiwise-a-surat-boys-dream-to-build-a-programming-platform-for-the-global-developer-community",
-      "page": "details",
-      "excerpt": "DhiWise: A Surat boy's dream to build a programming platform for the global developer community | Accel Atoms X Philosophy Portfolio News FAQs Perks Apply Early APPLY Apply Early AI Cohort 2026: Meet the Startups Read the Blog Atoms X: Meet the startups Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog 13/12/2022 DhiWise: A Surat boy's dream to build a programming platform for the global developer community Vikrant Mehra Content Marketing Manager, Accel Problems are given to you for a reason; they are disguised opportunities; thank God for them! Programming can often be repetitive and mundane, taking up valuable time that could be spent on more productive things. Vishal Virani and Rahul Shingala founded DhiWise in April 2021 to address this massive problem faced by programmers. DhiWise is an AI-powered devtool that is capable of thinking and generating source codes just like the human-written ones. It promises to change how coders work by enabling them to automate programming and fast-track application development by 10X. Anyone looking to save time and energy on repetitive tasks should look up to DhiWise! We will walk over DhiWise’s growth journey, its challenges, turning point, and how its founders"
-    },
-    {
-      "id": "check-page-3cd20c3f63",
-      "url": "https://atoms.accel.com/news/how-we-designed-the-atoms-program-for-pre-seed-startups",
-      "page": "details",
-      "excerpt": "How we designed the Atoms program for pre-seed startups | Accel Atoms X Philosophy Portfolio News FAQs Perks Apply Early APPLY Apply Early AI Cohort 2026: Meet the Startups Read the Blog Atoms X: Meet the startups Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog 14/12/2021 How we designed the Atoms program for pre-seed startups Prayank Swaroop Partner, Accel Accel has been investing in entrepreneurs globally for close to two decades now. And one thing we’ve always felt compared to our counterparts in the west is that the journey for most founders trying to get off the ground in India and SEA has been very hard. We’ve always wanted to change that. This is part of why we exist at all, and a question that we have tried to answer with whatever we have done. Over the past couple of years, Accel has been focusing deeply on building community-led initiatives for early stage entrepreneurs in the ecosystem. We launched FounderStack and Rebound as part of our Seed To Scale initiative, both of which received an overwhelming response from the ecosystem. FounderStack was a learning community for early stage founders, and Rebound is a closed community for repeat entrepreneurs, both of which are partner-driven. Community"
     }
   ],
   "findings": {
@@ -620,14 +496,6 @@
       {
         "value": "https://atoms.accel.com/apply",
         "evidenceId": "check-route-fbdb60cd24"
-      },
-      {
-        "value": "https://form.typeform.com/to/AGVVUIxr?typeform-source=atoms.accel.com",
-        "evidenceId": "check-route-c24b7f752c"
-      },
-      {
-        "value": "https://form.typeform.com/to/AGVVUIxr",
-        "evidenceId": "check-route-3e1b74d0df"
       }
     ],
     "applicationUrl": [
@@ -678,30 +546,9 @@
       {
         "value": "3 months",
         "evidenceId": "check-duration-ae53a89560"
-      },
-      {
-        "value": "5 months",
-        "evidenceId": "check-duration-6118426f5f"
-      },
-      {
-        "value": "12 months",
-        "evidenceId": "check-duration-58e2aa2f26"
-      },
-      {
-        "value": "8",
-        "evidenceId": "check-duration-743e64aaf3"
       }
     ],
-    "format": [
-      {
-        "value": "in-person",
-        "evidenceId": "check-format-67348993f6"
-      },
-      {
-        "value": "remote",
-        "evidenceId": "check-format-1b57bd6913"
-      }
-    ],
+    "format": [],
     "location": [
       {
         "value": "India",
@@ -783,36 +630,20 @@
           "condition": "up to"
         },
         "evidenceId": "check-deal-2155926ba6"
-      },
-      {
-        "value": {
-          "kind": "grant",
-          "amount": "250000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Grant",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-0480135c33"
-      },
-      {
-        "value": {
-          "kind": "convertible",
-          "amount": "100",
-          "currency": "USD",
-          "equity": null,
-          "label": "Convertible note",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-3e70b5e8e0"
       }
     ],
     "portfolioPages": [
       {
         "value": "https://atoms.accel.com/portfolio-old",
         "evidenceId": "check-portfolio-2465c85bc1"
+      },
+      {
+        "value": "https://atoms.accel.com/portfolio",
+        "evidenceId": "check-portfolio-d156e5d748"
+      },
+      {
+        "value": "https://atoms.accel.com/portfolio?fd77e97b_page=2",
+        "evidenceId": "check-portfolio-15227891c7"
       }
     ],
     "name": [

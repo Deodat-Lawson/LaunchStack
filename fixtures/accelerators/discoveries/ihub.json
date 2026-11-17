@@ -1,6 +1,6 @@
 {
   "programId": "ihub",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "http://wib.ihub.co.ke/apply/",
@@ -14,7 +14,7 @@
       "url": "https://ihub.co.ke/about-us/",
       "page": "details",
       "anchor": "About Us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -43,6 +43,14 @@
       "origin": "official"
     },
     {
+      "url": "https://ihub.co.ke/bridging-innovation-and-impact-introducing-the-supartech-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://ihub.co.ke/https-ihub-co-ke-announcement-cohort-2-ihub-kenya-2024-mastercard-foundation-edtech-fellowship/",
       "page": "batches",
       "anchor": "",
@@ -61,6 +69,14 @@
     {
       "url": "https://ihub.co.ke/https-ihub-co-ke-cchub-ihub-unveils-the-15-startups-in-women-in-business-cohort-2/",
       "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/https-ihub-co-ke-devcraft2019-program-is-out/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -107,6 +123,22 @@
       "origin": "official"
     },
     {
+      "url": "https://ihub.co.ke/ihub-announces-call-for-applications-for-third-cohort-of-mastercard-foundation-edtech-fellowship-in-kenya-following-success-of-second-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/ihub-kenya-kicks-off-cohort-3-of-the-mastercard-foundation-edtech-fellowship-with-75-per-cent-female-edtech-innovators/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://ihub.co.ke/investment-q1-2025-review-q2-outlook/",
       "page": "terms",
       "anchor": "",
@@ -139,8 +171,8 @@
       "origin": "official"
     },
     {
-      "url": "https://ihub.co.ke/wp-content/uploads/2025/06/Investment-Q1-2025-Review-Q2-Outlook-.pdf",
-      "page": "terms",
+      "url": "https://ihub.co.ke/the-spark-accelerator-program-unveils-the-second-cohort-to-drive-innovation-and-scale-in-africa/",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,

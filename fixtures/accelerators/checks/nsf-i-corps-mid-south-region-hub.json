@@ -1,53 +1,900 @@
 {
   "programId": "nsf-i-corps-mid-south-region-hub",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.midsouthhub.org/",
+    "https://www.midsouthhub.org/impact/from-lab-to-market-tsu-secures-first-faculty-research-licensing-deal",
+    "https://www.midsouthhub.org/impact/meharry-medicial-college-launches-cohort",
+    "https://www.midsouthhub.org/jefferson-st-cohort",
+    "https://www.midsouthhub.org/regional-cohorts",
     "https://www.midsouthhub.org/about",
-    "https://www.midsouthhub.org/regional-cohorts"
+    "https://www.midsouthhub.org/builder-program",
+    "https://www.midsouthhub.org/hub-summit-program",
+    "https://www.midsouthhub.org/impact/the-journey-of-invidy-through-the-nsf-i-corps-program",
+    "https://www.midsouthhub.org/new-folder",
+    "https://www.midsouthhub.org/programs",
+    "https://www.midsouthhub.org/regional-programs",
+    "https://www.midsouthhub.org/vanderbilt-programs",
+    "https://www.midsouthhub.org/impact/endoshunt-nsf-icorps-story",
+    "https://www.midsouthhub.org/events/george-mason-university-fall-2026-cohort",
+    "https://www.midsouthhub.org/events/george-mason-university-next-gen-digital-technology-cohort",
+    "https://www.midsouthhub.org/events/jackson-state-university-fall-2025-nsf-i-corps-cohort"
   ],
   "evidence": [
     {
-      "id": "check-deal-02468854da",
+      "id": "check-announced-13f4813eea",
+      "url": "https://www.midsouthhub.org/builder-program",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "Fall 2026 Cohort | Wednesdays 4pm-6pm CT August 26 - October 7 Applications close July 29 Apply Here FAQs Requirements To be eligible for the Builder",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-2ce5b05577",
       "url": "https://www.midsouthhub.org/regional-cohorts",
-      "title": "NSF I-Corps Mid-South Region Hub — batches page checked by scrape.py",
-      "excerpt": "pioneered by the NSF. The program will provide infrastructure, advice, resources, networking opportunities, training, and potentially funding (awards of up to $3,000 per team) to enable teams to transition their work towards the marketplace or into becoming National I-Corps Team applicants. Dates Mason I-Corps Fall 2026",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "I-Corps Fall 2026: Sept. 23 - Oct. 28 Program Dates: Registration Deadline: Wednesday, September 9 | 5:00 pm ET Kickoff: Wednesday, September 23 | 4:00 pm to 6:00 pm",
       "page": "batches"
+    },
+    {
+      "id": "check-announced-6140cac6c4",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "their technology. Registration Open Click here to learn more and apply by December 4th. Learn more George Mason University About The George Mason",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-619979ebca",
+      "url": "https://www.midsouthhub.org/impact/meharry-medicial-college-launches-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "Contact Us Meharry Medical College Launches Inaugural NSF I-Corps Cohort Oct 2 Written by Lauren Carnahan Meharry Medical College is up and",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-6cafa1619e",
+      "url": "https://www.midsouthhub.org/events/jackson-state-university-fall-2025-nsf-i-corps-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "welcomes all applicants, from all backgrounds. Click here to apply by Sept. 29. Previous Previous October 7 George Mason University - NSF",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-7e3ab15d69",
+      "url": "https://www.midsouthhub.org/impact/meharry-medicial-college-launches-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "Looking ahead, Meharry Medical College will offer a 10-week I-Corps cohort starting in January, providing teams with more flexibility in meeting",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-821d06e1b7",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "their technology. Registration Open Click here to learn more and apply by December 4th. Learn more George Mason University About The George Mason",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-ad4b8a36cb",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "I-Corps Fall 2026: Sept. 23 - Oct. 28 Program Dates: Registration Deadline: Wednesday, September 9 | 5:00 pm ET Kickoff: Wednesday, September 23 | 4:00 pm to 6:00 pm",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-4c23ffe7d4",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "opportunities, training, and potentially funding (awards of up to $3,000 per team) to enable teams to transition their work towards the",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-854d9e6c9e",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "opportunities, training, and potentially funding (awards of up to $3,000 per team) to enable teams to transition their work towards the",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-00a81131de",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "2026 Dates: September 16 – October 14 Join our 5-week NSF I-Corps cohort, held on Wednesdays virtually",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-08f322e4b2",
+      "url": "https://www.midsouthhub.org/impact/meharry-medicial-college-launches-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "ahead, Meharry Medical College will offer a 10-week I-Corps cohort starting in January, providing",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-265ebfff48",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "2026 Dates: September 16 – October 14 Join our 5-week NSF I-Corps cohort, held on Wednesdays virtually",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-bd4c1dd3a1",
+      "url": "https://www.midsouthhub.org/impact/meharry-medicial-college-launches-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "successfully had nine teams going through the 5-week program. Six of the teams opted to pitch their",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-0bcfaa6ce3",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "consideration, please apply by Monday, October 26, 2026. Virtual I-Corps 101 course times are: November 9, 2026 4pm -6pm CT",
+      "page": "details"
+    },
+    {
+      "id": "check-format-19252922d7",
+      "url": "https://www.midsouthhub.org/jefferson-st-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "for? The Jefferson Street Cohort is a free, 3-session virtual program beginning on September 7th and running through",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-39c7efe015",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "that make life and lives better. Through a six-week, virtual, and interactive training program, I-Corps accelerates",
+      "page": "details"
+    },
+    {
+      "id": "check-format-42858d0ee7",
+      "url": "https://www.midsouthhub.org/impact/meharry-medicial-college-launches-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "the energy and excitement were palpable, even across the virtual setting. Teams confidently presented what they had",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-584733bc4c",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "Fall 2026 Discovery: Dates: November 3 - December 8 This virtual cohort will encompass a broad overview of core I-CORPS",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-5b71611740",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "Fall 2026 Discovery: Dates: November 3 - December 8 This virtual cohort will encompass a broad overview of core I-CORPS",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6208691493",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "from discovery to real-world impact. Through a five-week virtual training experience, participants learn how to test ideas,",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-63e8d29782",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "that make life and lives better. Through a six-week, virtual, and interactive training program, I-Corps accelerates",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-64f91c166e",
+      "url": "https://www.midsouthhub.org/events/george-mason-university-fall-2026-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "13, 2026 9:00 AM Tuesday, November 10, 2026 11:30 AM Virtual (map) Google Calendar ICS Dates: October 13 - November 10",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-6de798fd0d",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "consideration, please apply by Monday, October 26, 2026. Virtual I-Corps 101 course times are: November 9, 2026 4pm -6pm CT",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-7f8c537b2d",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "from all backgrounds. Dates Jackson State University Virtual I-Corps Cohort Fall 2026: Dates: Nov. 9 - Nov. 30 The",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-813b86f38d",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "20 - December 1 The INNOVATOR Cohort is a free, 5-session virtual program based on pre-recorded content, assignments, live",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-818d131d53",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "new opportunities for their innovations. Additional in-person networking and presentation options may be added to",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-9fb9bd16c4",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "from discovery to real-world impact. Through a five-week virtual training experience, participants learn how to test ideas,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-a60d6e7b87",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "networking and presentation options may be added to virtual programs. Dates UVA Fall 2026 Discovery: Dates: November 3",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-acc6bc1d7c",
+      "url": "https://www.midsouthhub.org/events/jackson-state-university-fall-2025-nsf-i-corps-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "October 13, 2025 5:00 PM Monday, November 3, 2025 8:00 PM Virtual (map) Google Calendar ICS The I-Corps program is targeted",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-ad0e1ce03a",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "from all backgrounds. Dates Jackson State University Virtual I-Corps Cohort Fall 2026: Dates: Nov. 9 - Nov. 30 The",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ada6a503fe",
+      "url": "https://www.midsouthhub.org/events/jackson-state-university-fall-2025-nsf-i-corps-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "consideration, please apply by Monday, September 29, 2025. Virtual I-Corps 101 course times are: October 13, 2025 5pm -8pm CT",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-af581dfea0",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "networking and presentation options may be added to virtual programs. Dates UVA Fall 2026 Discovery: Dates: November 3",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b38bdafee7",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "Dates: August 26 - October 7 Build on your progress. The virtual Builder Program at Vanderbilt provides a step-by-step",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c5f213444b",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "20 - December 1 The INNOVATOR Cohort is a free, 5-session virtual program based on pre-recorded content, assignments, live",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c7a89009b4",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "Dates: August 26 - October 7 Build on your progress. The virtual Builder Program at Vanderbilt provides a step-by-step",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-df7e6b1da4",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "new opportunities for their innovations. Additional in-person networking and presentation options may be added to",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f9e3e59722",
+      "url": "https://www.midsouthhub.org/builder-program",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "Contact Us Builder Program Build on your progress. The virtual Builder Program provides a step-by-step guide for aspiring",
+      "page": "details"
+    },
+    {
+      "id": "check-location-20c38309dd",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "it does not have to be an idea based in STEM. This opportunity is also open to",
+      "page": "details"
+    },
+    {
+      "id": "check-location-a8796083f4",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "it does not have to be an idea based in STEM. This opportunity is also open to",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-d6572ee5fe",
+      "url": "https://www.midsouthhub.org/events/jackson-state-university-fall-2025-nsf-i-corps-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "it does not have to be an idea based in STEM. We are open to non-profits, social",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-00e62e7ec6",
+      "url": "https://www.midsouthhub.org/impact/meharry-medicial-college-launches-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-0554b12d1b",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "details"
     },
     {
       "id": "check-phone-20f3d18488",
       "url": "https://www.midsouthhub.org/regional-cohorts",
-      "title": "NSF I-Corps Mid-South Region Hub — batches page checked by scrape.py",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-245ae42907",
+      "url": "https://www.midsouthhub.org/regional-programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-27cd5faa78",
+      "url": "https://www.midsouthhub.org/jefferson-st-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-2e9fbb4ee3",
+      "url": "https://www.midsouthhub.org/impact/the-journey-of-invidy-through-the-nsf-i-corps-program",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-41d598ec1c",
+      "url": "https://www.midsouthhub.org/events/george-mason-university-next-gen-digital-technology-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
       "excerpt": "\"telephone\": \"6153431501\"",
       "page": "batches"
     },
     {
       "id": "check-phone-519c29c762",
       "url": "https://www.midsouthhub.org/",
-      "title": "NSF I-Corps Mid-South Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps Mid-South Region Hub — homepage",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-7d4f5dc831",
+      "url": "https://www.midsouthhub.org/hub-summit-program",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-860718f2e6",
+      "url": "https://www.midsouthhub.org/events/george-mason-university-fall-2026-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-86e2d426b5",
+      "url": "https://www.midsouthhub.org/events/jackson-state-university-fall-2025-nsf-i-corps-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-bf8b1c4f60",
+      "url": "https://www.midsouthhub.org/impact/from-lab-to-market-tsu-secures-first-faculty-research-licensing-deal",
+      "title": "NSF I-Corps Mid-South Region Hub — terms page",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-cd947d29e9",
+      "url": "https://www.midsouthhub.org/vanderbilt-programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-ee48e76235",
+      "url": "https://www.midsouthhub.org/builder-program",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-efd5205a6f",
+      "url": "https://www.midsouthhub.org/new-folder",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
       "excerpt": "\"telephone\": \"6153431501\"",
       "page": "details"
     },
     {
       "id": "check-phone-f0f69fc6e9",
       "url": "https://www.midsouthhub.org/about",
-      "title": "NSF I-Corps Mid-South Region Hub — details page checked by scrape.py",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
       "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-f5fc1b356d",
+      "url": "https://www.midsouthhub.org/impact/endoshunt-nsf-icorps-story",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6690b162a6",
+      "url": "https://www.midsouthhub.org/events/jackson-state-university-fall-2025-nsf-i-corps-cohort",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
+      "excerpt": "Click here to apply by Sept. 29. → https://airtable.com/appdlUbfSQI5PbNS6/shrFx4OUuTn0c02NG",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-8526bc55c5",
+      "url": "https://www.midsouthhub.org/builder-program",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "Apply Here → https://airtable.com/app8udmGAVy4XCtEC/shrvn813amY445OZF",
       "page": "details"
     },
     {
       "id": "check-route-bebd13437e",
       "url": "https://www.midsouthhub.org/",
-      "title": "NSF I-Corps Mid-South Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps Mid-South Region Hub — homepage",
       "excerpt": "https://www.midsouthhub.org/",
+      "page": "details"
+    },
+    {
+      "id": "check-status-4b30cb1b2e",
+      "url": "https://www.midsouthhub.org/programs",
+      "title": "NSF I-Corps Mid-South Region Hub — program page",
+      "excerpt": "available cohorts are listed below. Most regional cohorts are held virtually. University of Kentucky applications are open. Vanderbilt University About The Builder program provides a step-by-step guide for aspiring",
       "page": "details"
     },
     {
       "id": "check-status-62239046e2",
       "url": "https://www.midsouthhub.org/regional-cohorts",
-      "title": "NSF I-Corps Mid-South Region Hub — batches page checked by scrape.py",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page",
       "excerpt": "available cohorts are listed below. Most regional cohorts are held virtually. University of Kentucky applications are open. Vanderbilt University About The Builder program provides a step-by-step guide for aspiring",
       "page": "batches"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-ab812bb8ca",
+      "url": "https://www.midsouthhub.org/",
+      "page": "details",
+      "excerpt": "Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Innovation Optimized Led by Vanderbilt, this hub will accelerate the translation of groundbreaking university research outcomes into commercialized ventures that foster emergent, prosperous innovation ecosystems across the Mid-south. The NSF Mid-South I-Corps Hub is led by Vanderbilt University. The hub will accelerate the translation of groundbreaking university research outcomes into commercialized ventures that seed emergent, prosperous innovation ecosystems across the region. The hub spans five states"
+    },
+    {
+      "id": "check-page-25eb125d17",
+      "url": "https://www.midsouthhub.org/impact/from-lab-to-market-tsu-secures-first-faculty-research-licensing-deal",
+      "page": "terms",
+      "excerpt": "From Lab to Market, TSU Secures First Faculty Research Licensing Deal — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us From Lab to Market, TSU Secures First Faculty Research Licensing Deal Jul 10 Written by Lauren Carnahan Big news out of hub partner Tennessee State University (TSU): the university just landed its first faculty research licensing agreement. Dr. Ankit Patras, professor of food and biosystems engineering, co-founded FloUV Technologies to commercialize his UV-based system for disinfecting milk, juice, and other liquids without heat. A"
+    },
+    {
+      "id": "check-page-851d47f1fe",
+      "url": "https://www.midsouthhub.org/impact/from-lab-to-market-tsu-secures-first-faculty-research-licensing-deal",
+      "page": "terms",
+      "excerpt": "TSU's Alancia Wicks, director of technology transfer and innovation, has been championing this kind of work on campus, helping faculty navigate intellectual property and rebranding rigorous programs like NSF I-Corps into accessible innovation “boot camps” to show researchers that they belong in the commercial sphere."
+    },
+    {
+      "id": "check-page-80bfd9fc9f",
+      "url": "https://www.midsouthhub.org/impact/meharry-medicial-college-launches-cohort",
+      "page": "batches",
+      "excerpt": "Meharry Medical College Launches Inaugural NSF I-Corps Cohort — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Meharry Medical College Launches Inaugural NSF I-Corps Cohort Oct 2 Written by Lauren Carnahan Meharry Medical College is up and running their NSF I-Corps Cohorts! They successfully had nine teams going through the 5-week program. Six of the teams opted to pitch their ideas at the end of the cohort. This was significant for the program, since all of the teams knew that the optional pitch date was there to receive feedback. This means that"
+    },
+    {
+      "id": "check-page-f080d33a64",
+      "url": "https://www.midsouthhub.org/impact/meharry-medicial-college-launches-cohort",
+      "page": "batches",
+      "excerpt": "The mix of students were faculty and graduate students."
+    },
+    {
+      "id": "check-page-c2dec794a0",
+      "url": "https://www.midsouthhub.org/impact/meharry-medicial-college-launches-cohort",
+      "page": "batches",
+      "excerpt": "The cohort consisted of faculty and graduate students, all driven to make a difference in healthcare, underserved communities, and the broader scientific field."
+    },
+    {
+      "id": "check-page-49e019128d",
+      "url": "https://www.midsouthhub.org/impact/meharry-medicial-college-launches-cohort",
+      "page": "batches",
+      "excerpt": "A key element that was highlighted across all of the teams is the desire to help people in healthcare and within the scientific world."
+    },
+    {
+      "id": "check-page-4b11f8087d",
+      "url": "https://www.midsouthhub.org/impact/meharry-medicial-college-launches-cohort",
+      "page": "batches",
+      "excerpt": "On pitch day, the energy and excitement were palpable, even across the virtual setting."
+    },
+    {
+      "id": "check-page-87ee08094d",
+      "url": "https://www.midsouthhub.org/impact/meharry-medicial-college-launches-cohort",
+      "page": "batches",
+      "excerpt": "This first cohort is helping to build the culture of innovation within Meharry Medical College and enhancing Meharry’s mission of addressing health disparities and uplifting communities."
+    },
+    {
+      "id": "check-page-e6b7f2c555",
+      "url": "https://www.midsouthhub.org/jefferson-st-cohort",
+      "page": "batches",
+      "excerpt": "Jefferson St. Cohort — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Register now Join a Legacy. There is a rich and arduous , yet persistently triumphant history associated with the district along Jefferson Street in Nashville, Tennessee. Images from: The Tennessean Once existing as a pathway that joined a nearby plantation to the Cumberland River, to becoming an intellectual thoroughfare that was anchored by three historically-black academic centers of influence— Fisk University, Tennessee State University, and Meharry Medical College— the culture"
+    },
+    {
+      "id": "check-page-31d074b0d2",
+      "url": "https://www.midsouthhub.org/jefferson-st-cohort",
+      "page": "batches",
+      "excerpt": "Instructors and mentors will maintain a supportive atmosphere while simultaneously providing an environment which pushes, challenges, and questions each participant in the hope that they will quickly learn, adapt and thrive."
+    },
+    {
+      "id": "check-page-703e70f7d7",
+      "url": "https://www.midsouthhub.org/jefferson-st-cohort",
+      "page": "batches",
+      "excerpt": "Mentorship with seasoned entrepreneurs and business leaders Pitching and microgrant opportunities Networking and customer discovery, including the opportunity to attend the 3686 Festival (a $500 value) No cost to apply and attend Register now Our Work About HUB Initiatives Press Follow LinkedIn Instagram Location: the Wond’ry 2414 Highland Avenue, Nashville TN 37212"
+    },
+    {
+      "id": "check-page-5672a48623",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "page": "batches",
+      "excerpt": "Regional Cohorts — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Vanderbilt University - George Mason University - Jackson State University - University of Virginia - Tennessee State University - University of Tennessee, Knoxville - University of Kentucky - Meharry Medical College - University of Louisville - Vanderbilt University - George Mason University - Jackson State University - University of Virginia - Tennessee State University - University of Tennessee, Knoxville - University of Kentucky - Meharry Medical College - University of Louisville -"
+    },
+    {
+      "id": "check-page-54d1c2ee63",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "page": "batches",
+      "excerpt": "Vanderbilt University About The Builder program provides a step-by-step guide for aspiring university-affiliated entrepreneurs (students, faculty, staff, and alumni) with a viable early-stage idea to launch a new venture."
+    },
+    {
+      "id": "check-page-39741a9e4a",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "page": "batches",
+      "excerpt": "The goal of the program is to advance an innovation toward commercialization, including preparations for Small Business Innovation Research (SBIR) grants or National I-Corps applications, creation of a startup, or partnering with an established company to license the technology."
+    },
+    {
+      "id": "check-page-4b75da80e8",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "page": "batches",
+      "excerpt": "UAccel: Health Care is a specialized spring track within the UAccel program for innovators developing health care-related solutions."
+    },
+    {
+      "id": "check-page-72f1bf0677",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "page": "batches",
+      "excerpt": "Participants receive the core UAccel experience along with curriculum, coaching and mentorship tailored to health care innovation and its potential impact healthcare systems and communities."
+    },
+    {
+      "id": "check-page-f8b11dc559",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "page": "batches",
+      "excerpt": "Both program experiences are designed to help innovators move their solutions toward commercialization, including preparing for Small Business Innovation Research (SBIR) grants or National I-Corps applications, launching a startup, or pursuing opportunities to license their technology."
+    },
+    {
+      "id": "check-page-4afcb039e2",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "page": "batches",
+      "excerpt": "Learn more George Mason University About The George Mason University I-Corps Program will work on exploratory business ventures started by faculty, staff, students, and recent alumni, to accelerate business exploration and creation."
+    },
+    {
+      "id": "check-page-e80add529c",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "page": "batches",
+      "excerpt": "The program will provide infrastructure, advice, resources, networking opportunities, training, and potentially funding (awards of up to $3,000 per team) to enable teams to transition their work towards the marketplace or into becoming National I-Corps Team applicants."
+    },
+    {
+      "id": "check-page-adce74b564",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "page": "batches",
+      "excerpt": "Dates Mason I-Corps Fall 2026 Cohort Dates: October 13 - November 10 George Mason University's NSF I-Corps Regional Cohort supports faculty, researchers, students, and innovators from the Commonwealth of Virginia and beyond to explore the commercial viability of their technology-based ideas/innovations."
+    },
+    {
+      "id": "check-page-d4eb91234a",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "page": "batches",
+      "excerpt": "Dates Fall 2026 Innovator Entrepreneurship Bootcamp – Immersive Experience Dates: November 2 - November 6 Get ready for an exciting experience in Houston, Texas!"
+    },
+    {
+      "id": "check-page-4dca141c8a",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "page": "batches",
+      "excerpt": "The Innovator Entrepreneurship Bootcamp Immersive Experience gives participants the opportunity to learn, connect, and grow through the NSF I-Corps entrepreneurial ecosystem."
+    },
+    {
+      "id": "check-page-faeb740f3d",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "page": "batches",
+      "excerpt": "Focus Areas: Your idea must align with Cybersecurity , Biotechnology , Fashion Tech , or Engineering ."
+    },
+    {
+      "id": "check-page-a69cba44cc",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "page": "batches",
+      "excerpt": "Participants will learn customer discovery, validate the commercial potential of their innovation, and develop a pathway toward commercialization through hands-on training and mentorship."
+    },
+    {
+      "id": "check-page-8f65095bbf",
+      "url": "https://www.midsouthhub.org/about",
+      "page": "details",
+      "excerpt": "About — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us When we bring different kinds of people in, they see different problems. And they see different kinds of solutions. About the Mid-South Hub Overview The Mid-South Hub is an entrepreneurial institution that supports academic commercialization, economic growth, and shared prosperity across the entire Mid-South region. Funded by the US National Science Foundation, The Mid-South Hub is one of 13 Regional NSF Hubs across the country. Lead by Vanderbilt University, the Mid-South Hub spans five states and"
+    },
+    {
+      "id": "check-page-8f84f909f6",
+      "url": "https://www.midsouthhub.org/about",
+      "page": "details",
+      "excerpt": "The Hub’s mission is to accelerate the translation of groundbreaking university research outcomes into commercialized ventures that seed emergent, prosperous innovation ecosystems across the region."
+    },
+    {
+      "id": "check-page-2edb34429d",
+      "url": "https://www.midsouthhub.org/builder-program",
+      "page": "details",
+      "excerpt": "Builder — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Builder Program Build on your progress. The virtual Builder Program provides a step-by-step guide for aspiring university-affiliated entrepreneurs (students, faculty, staff, and alumni) with a viable early-stage idea to launch a new venture. Builder is the perfect next step for graduates of a Regional NSF I-Corps Program or entrepreneurs with a validated product, technology, or service that have already engaged in customer discovery efforts, found a problem-solution fit and would like to learn how"
+    },
+    {
+      "id": "check-page-3ceb2a3d0b",
+      "url": "https://www.midsouthhub.org/builder-program",
+      "page": "details",
+      "excerpt": "Program Support Support for the creation of this program was provided via a Faculty Grant from VentureWell ."
+    },
+    {
+      "id": "check-page-24dcd14fc7",
+      "url": "https://www.midsouthhub.org/hub-summit-program",
+      "page": "details",
+      "excerpt": "Hub Summit Program — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us WELCOME Go to the progam Our Work About HUB Initiatives Press Follow LinkedIn Instagram Location: the Wond’ry 2414 Highland Avenue, Nashville TN 37212"
+    },
+    {
+      "id": "check-page-34e4aebb3a",
+      "url": "https://www.midsouthhub.org/impact/the-journey-of-invidy-through-the-nsf-i-corps-program",
+      "page": "details",
+      "excerpt": "Innovation in Cancer Drug Development: The Journey of InViDy through the NSF I-CORPS Program — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Innovation in Cancer Drug Development: The Journey of InViDy through the NSF I-CORPS Program Oct 30 Written by Lauren Carnahan Medical innovation has seen significant progress thanks to the support of programs like the National Science Foundation’s (NSF) I-CORPS. Catherine Leasure, the second ASPIRE to Innovate fellow at Vanderbilt University, exemplifies the transformative impact of this program on burgeoning"
+    },
+    {
+      "id": "check-page-4369a4c49d",
+      "url": "https://www.midsouthhub.org/impact/the-journey-of-invidy-through-the-nsf-i-corps-program",
+      "page": "details",
+      "excerpt": "Catherine, Aspire to Innovate Fellow Catherine’s fellowship, a unique postdoctoral opportunity, operates like an entrepreneur-in-residence program, where fellows work towards commercializing university-developed IP."
+    },
+    {
+      "id": "check-page-793a3815ce",
+      "url": "https://www.midsouthhub.org/impact/the-journey-of-invidy-through-the-nsf-i-corps-program",
+      "page": "details",
+      "excerpt": "Catherine learned of the I-CORPS program through her fellowship, drawn by its promise to blend scientific acumen with business strategy."
+    },
+    {
+      "id": "check-page-9e024a4f81",
+      "url": "https://www.midsouthhub.org/impact/the-journey-of-invidy-through-the-nsf-i-corps-program",
+      "page": "details",
+      "excerpt": "The Value of Mentorship and Customer Discovery A core component of the I-CORPS program is mentorship."
+    },
+    {
+      "id": "check-page-cfe8b7e4ea",
+      "url": "https://www.midsouthhub.org/impact/the-journey-of-invidy-through-the-nsf-i-corps-program",
+      "page": "details",
+      "excerpt": "Catherine emphasizes the importance of guidance from experienced mentors in overcoming hurdles."
+    },
+    {
+      "id": "check-page-8991ff8da9",
+      "url": "https://www.midsouthhub.org/impact/the-journey-of-invidy-through-the-nsf-i-corps-program",
+      "page": "details",
+      "excerpt": "“Mentorship was crucial in reframing how I approached problems,” she notes."
+    },
+    {
+      "id": "check-page-5b76081d4f",
+      "url": "https://www.midsouthhub.org/impact/the-journey-of-invidy-through-the-nsf-i-corps-program",
+      "page": "details",
+      "excerpt": "Attending conferences in San Diego, Philadelphia, and Salt Lake City provided opportunities to engage with potential customers and gather crucial feedback."
+    },
+    {
+      "id": "check-page-7c36e749ac",
+      "url": "https://www.midsouthhub.org/impact/the-journey-of-invidy-through-the-nsf-i-corps-program",
+      "page": "details",
+      "excerpt": "The program’s collaborative environment, where industry mentors and academic researchers learn alongside each other, was a unique aspect she cherished."
+    },
+    {
+      "id": "check-page-c9f186d303",
+      "url": "https://www.midsouthhub.org/impact/the-journey-of-invidy-through-the-nsf-i-corps-program",
+      "page": "details",
+      "excerpt": "It’s intense, but the growth and insights you gain are invaluable.” She emphasizes the importance of having supportive mentors and being prepared for the program’s demands."
+    },
+    {
+      "id": "check-page-9e00c9573b",
+      "url": "https://www.midsouthhub.org/impact/the-journey-of-invidy-through-the-nsf-i-corps-program",
+      "page": "details",
+      "excerpt": "The future of InViDy, shaped by the rigorous training and mentorship of the I-Corps program, holds promise for innovative solutions in cancer therapy."
+    },
+    {
+      "id": "check-page-a317ff7d23",
+      "url": "https://www.midsouthhub.org/new-folder",
+      "page": "details",
+      "excerpt": "About — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us When we bring different kinds of people in, they see different problems. And they see different kinds of solutions. About the Mid-South Hub Overview The Mid-South Hub is an entrepreneurial institution that supports academic commercialization, economic growth, and shared prosperity across the entire Mid-South region. Funded by the US National Science Foundation, The Mid-South Hub is one of 13 Regional NSF Hubs across the country. Lead by Vanderbilt University, the Mid-South Hub spans five states and"
+    },
+    {
+      "id": "check-page-47bca4ecb6",
+      "url": "https://www.midsouthhub.org/new-folder",
+      "page": "details",
+      "excerpt": "The Hub’s mission is to accelerate the translation of groundbreaking university research outcomes into commercialized ventures that seed emergent, prosperous innovation ecosystems across the region."
+    },
+    {
+      "id": "check-page-605bad525f",
+      "url": "https://www.midsouthhub.org/programs",
+      "page": "details",
+      "excerpt": "Regional Cohorts — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Vanderbilt University - George Mason University - Jackson State University - University of Virginia - Tennessee State University - University of Tennessee, Knoxville - University of Kentucky - Meharry Medical College - University of Louisville - Vanderbilt University - George Mason University - Jackson State University - University of Virginia - Tennessee State University - University of Tennessee, Knoxville - University of Kentucky - Meharry Medical College - University of Louisville -"
+    },
+    {
+      "id": "check-page-0b0d4622d1",
+      "url": "https://www.midsouthhub.org/programs",
+      "page": "details",
+      "excerpt": "Vanderbilt University About The Builder program provides a step-by-step guide for aspiring university-affiliated entrepreneurs (students, faculty, staff, and alumni) with a viable early-stage idea to launch a new venture."
+    },
+    {
+      "id": "check-page-73cd129516",
+      "url": "https://www.midsouthhub.org/programs",
+      "page": "details",
+      "excerpt": "The goal of the program is to advance an innovation toward commercialization, including preparations for Small Business Innovation Research (SBIR) grants or National I-Corps applications, creation of a startup, or partnering with an established company to license the technology."
+    },
+    {
+      "id": "check-page-27acda8b81",
+      "url": "https://www.midsouthhub.org/programs",
+      "page": "details",
+      "excerpt": "UAccel: Health Care is a specialized spring track within the UAccel program for innovators developing health care-related solutions."
+    },
+    {
+      "id": "check-page-f53bf08d31",
+      "url": "https://www.midsouthhub.org/programs",
+      "page": "details",
+      "excerpt": "Participants receive the core UAccel experience along with curriculum, coaching and mentorship tailored to health care innovation and its potential impact healthcare systems and communities."
+    },
+    {
+      "id": "check-page-d21539efeb",
+      "url": "https://www.midsouthhub.org/programs",
+      "page": "details",
+      "excerpt": "Both program experiences are designed to help innovators move their solutions toward commercialization, including preparing for Small Business Innovation Research (SBIR) grants or National I-Corps applications, launching a startup, or pursuing opportunities to license their technology."
+    },
+    {
+      "id": "check-page-aed9cec5ac",
+      "url": "https://www.midsouthhub.org/programs",
+      "page": "details",
+      "excerpt": "Learn more George Mason University About The George Mason University I-Corps Program will work on exploratory business ventures started by faculty, staff, students, and recent alumni, to accelerate business exploration and creation."
+    },
+    {
+      "id": "check-page-f2da5f66c3",
+      "url": "https://www.midsouthhub.org/programs",
+      "page": "details",
+      "excerpt": "The program will provide infrastructure, advice, resources, networking opportunities, training, and potentially funding (awards of up to $3,000 per team) to enable teams to transition their work towards the marketplace or into becoming National I-Corps Team applicants."
+    },
+    {
+      "id": "check-page-fed734696b",
+      "url": "https://www.midsouthhub.org/programs",
+      "page": "details",
+      "excerpt": "Dates Mason I-Corps Fall 2026 Cohort Dates: October 13 - November 10 George Mason University's NSF I-Corps Regional Cohort supports faculty, researchers, students, and innovators from the Commonwealth of Virginia and beyond to explore the commercial viability of their technology-based ideas/innovations."
+    },
+    {
+      "id": "check-page-c46cd4e2a1",
+      "url": "https://www.midsouthhub.org/programs",
+      "page": "details",
+      "excerpt": "Dates Fall 2026 Innovator Entrepreneurship Bootcamp – Immersive Experience Dates: November 2 - November 6 Get ready for an exciting experience in Houston, Texas!"
+    },
+    {
+      "id": "check-page-088f58f8a5",
+      "url": "https://www.midsouthhub.org/programs",
+      "page": "details",
+      "excerpt": "The Innovator Entrepreneurship Bootcamp Immersive Experience gives participants the opportunity to learn, connect, and grow through the NSF I-Corps entrepreneurial ecosystem."
+    },
+    {
+      "id": "check-page-58d4a9e3c7",
+      "url": "https://www.midsouthhub.org/programs",
+      "page": "details",
+      "excerpt": "Focus Areas: Your idea must align with Cybersecurity , Biotechnology , Fashion Tech , or Engineering ."
+    },
+    {
+      "id": "check-page-f60ce4346c",
+      "url": "https://www.midsouthhub.org/programs",
+      "page": "details",
+      "excerpt": "Participants will learn customer discovery, validate the commercial potential of their innovation, and develop a pathway toward commercialization through hands-on training and mentorship."
+    },
+    {
+      "id": "check-page-478fa3d4e6",
+      "url": "https://www.midsouthhub.org/regional-programs",
+      "page": "details",
+      "excerpt": "Regional Programs — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Regional Programs Regional Entrepreneurial Training Programs are held at each partner institution and are open to students, faculty, and staff at partner institutions or other institutions of higher education in the region, as well as adults within the community at large. These programs are designed to help you test your start-up idea and find potential customers all while exploring valid models you could use to broaden the impact of your work. Regional Program Benefits Immersive short"
+    },
+    {
+      "id": "check-page-5a82dabdf7",
+      "url": "https://www.midsouthhub.org/regional-programs",
+      "page": "details",
+      "excerpt": "Moreover, this program enables you to receive NSF lineage and greatly improve your chances to receive future SBIR and STTR grant funding."
+    },
+    {
+      "id": "check-page-d13164497f",
+      "url": "https://www.midsouthhub.org/regional-programs",
+      "page": "details",
+      "excerpt": "Industry Mentor: An experienced entrepreneur or business leader who can provide mentorship."
+    },
+    {
+      "id": "check-page-649f7588c3",
+      "url": "https://www.midsouthhub.org/vanderbilt-programs",
+      "page": "details",
+      "excerpt": "About 4 — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Vanderbilt Innovation Pathways Powered by the Mid-South Hub | In collaboration with the Wond’ry Vanderbilt University is a proud founding member of the NSF Mid-South I-Corps Hub , advancing inclusive innovation across a growing regional network. Through a combination of tailored training programs and ecosystem partnerships, Vanderbilt supports idea-stage and early-stage innovators working to turn bold research and insight into real-world impact. Two primary programs support this mission at"
+    },
+    {
+      "id": "check-page-81133cd4ca",
+      "url": "https://www.midsouthhub.org/vanderbilt-programs",
+      "page": "details",
+      "excerpt": "Two primary programs support this mission at Vanderbilt: Sullivan Family Ideator Program (in collaboration with the Wond’ry) Builder Program (offered directly by the Mid-South Hub) These programs are open to faculty, students, staff, and recent alumni and serve as stepping stones on the path from idea validation to venture readiness."
+    },
+    {
+      "id": "check-page-806ace350b",
+      "url": "https://www.midsouthhub.org/vanderbilt-programs",
+      "page": "details",
+      "excerpt": "Sullivan Family Ideator Program In collaboration with the Wond’ry at Vanderbilt University Learn more → This entry-level program supports early-stage innovators who want to explore the viability of their ideas."
+    },
+    {
+      "id": "check-page-82400189ac",
+      "url": "https://www.midsouthhub.org/vanderbilt-programs",
+      "page": "details",
+      "excerpt": "Want to connect with mentors, funders, and peers? → Stay engaged through Mid-South Hub events, workshops, and demo days."
+    },
+    {
+      "id": "check-page-3b49bfbd4f",
+      "url": "https://www.midsouthhub.org/impact/endoshunt-nsf-icorps-story",
+      "page": "details",
+      "excerpt": "Trauma Surgery: The Journey of EndoShunt through the NSF I-Corps Program — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Trauma Surgery: The Journey of EndoShunt through the NSF I-Corps Program Oct 2 Written by Lauren Carnahan In the fast-evolving landscape of medical technology, EndoShunt stands out as a beacon of innovation. This startup, driven by the relentless pursuit of excellence and the need to address critical gaps in trauma surgery, made significant strides through its participation in the National I-Corps program. Michael Finn-Henry,"
+    },
+    {
+      "id": "check-page-21652d790a",
+      "url": "https://www.midsouthhub.org/impact/endoshunt-nsf-icorps-story",
+      "page": "details",
+      "excerpt": "The Role of Customer Discovery and Mentorship From its inception, EndoShunt embraced the ethos of customer discovery, continually refining its process."
+    },
+    {
+      "id": "check-page-ac57c8f1e6",
+      "url": "https://www.midsouthhub.org/impact/endoshunt-nsf-icorps-story",
+      "page": "details",
+      "excerpt": "Through the I-Corps program, the team learned to ask specific questions and gather actionable data, which honed their understanding of the needs of trauma surgeons, hospital administrators, and insurance companies."
+    },
+    {
+      "id": "check-page-7f4f7aed2b",
+      "url": "https://www.midsouthhub.org/impact/endoshunt-nsf-icorps-story",
+      "page": "details",
+      "excerpt": "Mentorship played a crucial role in EndoShunt's evolution."
+    },
+    {
+      "id": "check-page-4597cff834",
+      "url": "https://www.midsouthhub.org/impact/endoshunt-nsf-icorps-story",
+      "page": "details",
+      "excerpt": "\"Shawn Glinter and Stryker Warren were our main mentors, providing invaluable business insights and connections in the medical space,\" Michael notes."
+    },
+    {
+      "id": "check-page-25676a5e66",
+      "url": "https://www.midsouthhub.org/impact/endoshunt-nsf-icorps-story",
+      "page": "details",
+      "excerpt": "The mentorship from industry veterans helped the team navigate complex aspects of the medical ecosystem, from understanding hospital procurement processes to refining their business model."
+    },
+    {
+      "id": "check-page-4321beb706",
+      "url": "https://www.midsouthhub.org/impact/endoshunt-nsf-icorps-story",
+      "page": "details",
+      "excerpt": "EndoShunt’s experience in the program demonstrates how dedication and a customer-focused approach can drive meaningful advancements in medical technology."
+    },
+    {
+      "id": "check-page-52b602ecbf",
+      "url": "https://www.midsouthhub.org/events/george-mason-university-fall-2026-cohort",
+      "page": "batches",
+      "excerpt": "George Mason University: Fall 2026 Cohort — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Back to All Events George Mason University: Fall 2026 Cohort Tuesday, October 13, 2026 9:00 AM Tuesday, November 10, 2026 11:30 AM Virtual (map) Google Calendar ICS Dates: October 13 - November 10 Applications are currently closed. George Mason University's NSF I-Corps Regional Cohort supports faculty, researchers, students, and innovators from the Commonwealth of Virginia and beyond to explore the commercial viability of their technology-based ideas/innovations."
+    },
+    {
+      "id": "check-page-7e30dbaf2e",
+      "url": "https://www.midsouthhub.org/events/george-mason-university-next-gen-digital-technology-cohort",
+      "page": "batches",
+      "excerpt": "George Mason University Next-Gen Digital Technology Cohort — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Back to All Events George Mason University Next-Gen Digital Technology Cohort Thursday, August 28, 2025 12:00 AM Wednesday, September 17, 2025 11:59 PM Google Calendar ICS Click here to apply for this cohort. The George Mason University's NSF I-Corps Regional Program supports faculty, researchers, students, and innovators from the Commonwealth of Virginia to explore the commercial viability of their technology-based ideas/innovations. We offer a"
+    },
+    {
+      "id": "check-page-d8b755df29",
+      "url": "https://www.midsouthhub.org/events/jackson-state-university-fall-2025-nsf-i-corps-cohort",
+      "page": "batches",
+      "excerpt": "Jackson State University Fall 2025 NSF I-Corps Cohort — Mid-South Hub 0 Skip to Content Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home About About National I-CORPS Regional Programs Programs Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Open Menu Close Menu Home Folder: About Back About National I-CORPS Regional Programs Folder: Programs Back Regional Cohorts Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events Folder: News & Media Back Sign Up for Newsletter Media Archive Press Impact Stories Contact Us Back to All Events Jackson State University Fall 2025 NSF I-Corps Cohort Monday, October 13, 2025 5:00 PM Monday, November 3, 2025 8:00 PM Virtual (map) Google Calendar ICS The I-Corps program is targeted toward research with commercializing potential and is an evidence-based approach to bring ideas from lab to market (i.e. projects funded by a national lab or research organization). Although we call it tech transfer, it does not have to be an idea"
     }
   ],
   "findings": {
@@ -58,7 +905,16 @@
         "evidenceId": "check-phone-519c29c762"
       }
     ],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://airtable.com/app8udmGAVy4XCtEC/shrvn813amY445OZF",
+        "evidenceId": "check-route-8526bc55c5"
+      },
+      {
+        "value": "https://airtable.com/appdlUbfSQI5PbNS6/shrFx4OUuTn0c02NG",
+        "evidenceId": "check-route-6690b162a6"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.midsouthhub.org/",
@@ -73,11 +929,79 @@
     ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "Oct",
+        "evidenceId": "check-announced-619979ebca"
+      },
+      {
+        "value": "January",
+        "evidenceId": "check-announced-7e3ab15d69"
+      },
+      {
+        "value": "December",
+        "evidenceId": "check-announced-821d06e1b7"
+      },
+      {
+        "value": "September",
+        "evidenceId": "check-announced-2ce5b05577"
+      },
+      {
+        "value": "July",
+        "evidenceId": "check-announced-13f4813eea"
+      },
+      {
+        "value": "Sept",
+        "evidenceId": "check-announced-6cafa1619e"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "5",
+        "evidenceId": "check-duration-bd4c1dd3a1"
+      },
+      {
+        "value": "10",
+        "evidenceId": "check-duration-08f322e4b2"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-42858d0ee7"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-818d131d53"
+      }
+    ],
+    "location": [
+      {
+        "value": "STEM",
+        "evidenceId": "check-location-a8796083f4"
+      }
+    ],
     "selectivity": [],
     "dealText": [
       {
-        "value": "pioneered by the NSF. The program will provide infrastructure, advice, resources, networking opportunities, training, and potentially funding (awards of up to $3,000 per team) to enable teams to transition their work towards the marketplace or into becoming National I-Corps Team applicants. Dates Mason I-Corps Fall 2026",
-        "evidenceId": "check-deal-02468854da"
+        "value": "opportunities, training, and potentially funding (awards of up to $3,000 per team) to enable teams to transition their work towards the",
+        "evidenceId": "check-deal-854d9e6c9e"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "3000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-854d9e6c9e"
       }
     ],
     "portfolioPages": [],

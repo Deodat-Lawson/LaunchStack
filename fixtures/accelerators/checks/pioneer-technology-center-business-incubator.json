@@ -1,45 +1,437 @@
 {
   "programId": "pioneer-technology-center-business-incubator",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.pioneertech.edu/page/business-incubator",
-    "https://www.pioneertech.edu/page/about"
+    "https://www.pioneertech.edu/documents/about/655648",
+    "https://www.pioneertech.edu/documents/about/by-the-numbers/655653",
+    "https://www.pioneertech.edu/documents/about/foundation/655693",
+    "https://www.pioneertech.edu/documents/about/legal-and-consumer/655736",
+    "https://www.pioneertech.edu/documents/about/legal-and-consumer/title-ix-coordinator-training/655769",
+    "https://www.pioneertech.edu/documents/about/meeting-space/658920",
+    "https://www.pioneertech.edu/documents/adult/career-programs/656708",
+    "https://www.pioneertech.edu/documents/adult/career-programs/basic-peace-officer-certification/656709",
+    "https://www.pioneertech.edu/documents/high-school/career-programs/651500",
+    "https://www.pioneertech.edu/documents/high-school/career-programs/automotive-service-technology/651509",
+    "https://www.pioneertech.edu/documents/high-school/career-programs/biomedical-sciences-academy/651537",
+    "https://www.pioneertech.edu/documents/high-school/career-programs/construction-technology/651546",
+    "https://www.pioneertech.edu/documents/high-school/career-programs/cosmetology/651566",
+    "https://www.pioneertech.edu/documents/high-school/career-programs/criminal-justice/651577",
+    "https://www.pioneertech.edu/documents/high-school/career-programs/culinary-arts/651583",
+    "https://www.pioneertech.edu/documents/high-school/career-programs/firefighter/emt/651588",
+    "https://www.pioneertech.edu/documents/high-school/career-programs/health-careers-certification/651627",
+    "https://www.pioneertech.edu/documents/high-school/career-programs/information-technology/651637",
+    "https://www.pioneertech.edu/documents/high-school/career-programs/mechatronics/651657"
   ],
   "evidence": [
     {
-      "id": "check-email-9c2abc1e2d",
-      "url": "https://www.pioneertech.edu/page/about",
-      "title": "Pioneer Technology Center Business Incubator — details page checked by scrape.py",
+      "id": "check-email-03735c5bc8",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/information-technology/651637",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-03bcdd211b",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/biomedical-sciences-academy/651537",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2a7bc454ad",
+      "url": "https://www.pioneertech.edu/documents/about/legal-and-consumer/title-ix-coordinator-training/655769",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-432c596a72",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/construction-technology/651546",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-577ea3338c",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/automotive-service-technology/651509",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-66efc4f7dd",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/cosmetology/651566",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-6997a1c27c",
+      "url": "https://www.pioneertech.edu/documents/adult/career-programs/656708",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7fa4b03e5f",
+      "url": "https://www.pioneertech.edu/documents/about/by-the-numbers/655653",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-800cb816fd",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/culinary-arts/651583",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8e8967eb08",
+      "url": "https://www.pioneertech.edu/documents/about/meeting-space/658920",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-97e5502fff",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/criminal-justice/651577",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c8a9053518",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/mechatronics/651657",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-cd8218cf3c",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/firefighter/emt/651588",
+      "title": "Pioneer Technology Center Business Incubator — program page",
       "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
       "page": "details"
     },
     {
       "id": "check-email-d4a37fce93",
       "url": "https://www.pioneertech.edu/page/business-incubator",
-      "title": "Pioneer Technology Center Business Incubator — homepage checked by scrape.py",
+      "title": "Pioneer Technology Center Business Incubator — homepage",
       "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-de5227b32d",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/health-careers-certification/651627",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e47075d8a4",
+      "url": "https://www.pioneertech.edu/documents/about/655648",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ea96d3ec7e",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/651500",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-eb3d04a410",
+      "url": "https://www.pioneertech.edu/documents/adult/career-programs/basic-peace-officer-certification/656709",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f3ada9b526",
+      "url": "https://www.pioneertech.edu/documents/about/legal-and-consumer/655736",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-fc7963a48e",
+      "url": "https://www.pioneertech.edu/documents/about/foundation/655693",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-217f14b8ef",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/biomedical-sciences-academy/651537",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-22582e08b6",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/cosmetology/651566",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-2ba83f6931",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/information-technology/651637",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-3160530c0b",
+      "url": "https://www.pioneertech.edu/documents/adult/career-programs/basic-peace-officer-certification/656709",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-3f0683b849",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/firefighter/emt/651588",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
       "page": "details"
     },
     {
       "id": "check-phone-53fc6bd7b4",
       "url": "https://www.pioneertech.edu/page/business-incubator",
-      "title": "Pioneer Technology Center Business Incubator — homepage checked by scrape.py",
+      "title": "Pioneer Technology Center Business Incubator — homepage",
       "excerpt": "580.762.8336",
       "page": "details"
     },
     {
-      "id": "check-phone-f3baa53014",
-      "url": "https://www.pioneertech.edu/page/about",
-      "title": "Pioneer Technology Center Business Incubator — details page checked by scrape.py",
+      "id": "check-phone-6cda676a96",
+      "url": "https://www.pioneertech.edu/documents/adult/career-programs/656708",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-7102bd7464",
+      "url": "https://www.pioneertech.edu/documents/about/legal-and-consumer/title-ix-coordinator-training/655769",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-791a1f5718",
+      "url": "https://www.pioneertech.edu/documents/about/655648",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-7a8d9e080a",
+      "url": "https://www.pioneertech.edu/documents/about/legal-and-consumer/655736",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-7b209d11a7",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/mechatronics/651657",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-82238a9e5c",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/651500",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-8321e1f252",
+      "url": "https://www.pioneertech.edu/documents/about/by-the-numbers/655653",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-85dba90f93",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/health-careers-certification/651627",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-a84dd385da",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/culinary-arts/651583",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-be99ee51f3",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/construction-technology/651546",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-cc864f631d",
+      "url": "https://www.pioneertech.edu/documents/about/meeting-space/658920",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-dafe9c979b",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/automotive-service-technology/651509",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-f410b7baf3",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/criminal-justice/651577",
+      "title": "Pioneer Technology Center Business Incubator — program page",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-f5c2971a7f",
+      "url": "https://www.pioneertech.edu/documents/about/foundation/655693",
+      "title": "Pioneer Technology Center Business Incubator — program page",
       "excerpt": "580.762.8336",
       "page": "details"
     },
     {
       "id": "check-route-80ccbc9f13",
       "url": "https://www.pioneertech.edu/page/business-incubator",
-      "title": "Pioneer Technology Center Business Incubator — homepage checked by scrape.py",
+      "title": "Pioneer Technology Center Business Incubator — homepage",
       "excerpt": "Business Incubator → https://www.pioneertech.edu/page/business-incubator",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-b7a72a8152",
+      "url": "https://www.pioneertech.edu/page/business-incubator",
+      "page": "details",
+      "excerpt": "Business Incubator | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid"
+    },
+    {
+      "id": "check-page-7265331904",
+      "url": "https://www.pioneertech.edu/documents/about/655648",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-beb32276ed",
+      "url": "https://www.pioneertech.edu/documents/about/by-the-numbers/655653",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-6ea57e6206",
+      "url": "https://www.pioneertech.edu/documents/about/foundation/655693",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-04aa45d8c3",
+      "url": "https://www.pioneertech.edu/documents/about/legal-and-consumer/655736",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-0c8fb9d50c",
+      "url": "https://www.pioneertech.edu/documents/about/legal-and-consumer/title-ix-coordinator-training/655769",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-ad20989914",
+      "url": "https://www.pioneertech.edu/documents/about/meeting-space/658920",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-c6771cbf6f",
+      "url": "https://www.pioneertech.edu/documents/adult/career-programs/656708",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-8a177e0e2b",
+      "url": "https://www.pioneertech.edu/documents/adult/career-programs/basic-peace-officer-certification/656709",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-4692df30e1",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/651500",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-590074c9a8",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/automotive-service-technology/651509",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-32a75bf2d5",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/biomedical-sciences-academy/651537",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-dc151272d6",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/construction-technology/651546",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-0ec4ad968d",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/cosmetology/651566",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-2a4bc1daa0",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/criminal-justice/651577",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-274ff8411a",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/culinary-arts/651583",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-92cc2ea4df",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/firefighter/emt/651588",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-190d7ed5ec",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/health-careers-certification/651627",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-ed81b19f01",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/information-technology/651637",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
+    },
+    {
+      "id": "check-page-98e58ee687",
+      "url": "https://www.pioneertech.edu/documents/high-school/career-programs/mechatronics/651657",
+      "page": "details",
+      "excerpt": "Documents | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER TECHNOLOGY CENTER Rooms Support Search site Explore Explore Translate Sign in Explore Translate Sign in PIONEER TECHNOLOGY CENTER About Show submenu for About About Board of Education Cafeteria Menu Campus Art Tour Financial Aid Foundation History of PTC Legal and Consumer Show submenu for Legal and Consumer Consumer Information Meeting Space Mission. Vision. Values. Oklahoma CareerTech PTC Surplus Auction Work at PTC High School Show submenu for High School High School Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Guaranteed Graduate Handbooks Student Ambassadors Student/Parent Resources Testing Center Adult Show submenu for Adult Adult Adult Education and Family Literacy (Formerly ABE/GED) Career Programs 2026-2027 Career Programs Catalog College Credit Counselor/Student Services Financial Aid Handbooks Online ed2Go Courses Short Term Classes Schedule Short Term Courses Testing Center Services Show submenu for Services Services Academic Lab Adult Education and Family Literacy (Formerly ABE/HSE) Career Center Children's Lab Financial Aid New Beginning Salon SHARE Program Testing Center Transcript Request Forms Work Ready Oklahoma Business Show submenu for Business Business Ag Business Management Apprenticeships Bid Assistance BIS"
     }
   ],
   "findings": {
@@ -65,8 +457,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

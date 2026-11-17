@@ -1,6 +1,6 @@
 {
   "programId": "imec-istart",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.imec-int.com/en/istart",
     "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
@@ -16,9 +16,35 @@
     "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
     "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
     "https://www.imec-int.com/en/applications/security-and-resilience",
-    "https://www.imec-int.com/en/applications/semiconductor-technology"
+    "https://www.imec-int.com/en/applications/semiconductor-technology",
+    "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+    "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+    "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+    "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+    "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications"
   ],
   "evidence": [
+    {
+      "id": "check-format-18318a1d41",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "for indoor scenarios, expanding the Wi-Fi experience for virtual reality, multimedia streaming, gaming, wireless docking,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1915604862",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "directed laser audio, and eventually holography and virtual presence. Here are some examples of what we’re working on",
+      "page": "application"
+    },
+    {
+      "id": "check-format-36d7b1a17c",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "applications that are completely touch-sensitive, or virtual mid-air objects that can be touched. Finer gestures could",
+      "page": "application"
+    },
     {
       "id": "check-format-3897ed3357",
       "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
@@ -69,6 +95,13 @@
       "page": "application"
     },
     {
+      "id": "check-format-c78d2b29d0",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "higher video and audio resolutions, augmented reality and virtual reality, directed laser audio, and eventually holography",
+      "page": "application"
+    },
+    {
       "id": "check-format-cdb960c6fa",
       "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
       "title": "imec.istart — application page",
@@ -80,6 +113,20 @@
       "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
       "title": "imec.istart — application page",
       "excerpt": "How , David Fritz, Vice President of Hybrid-physical and Virtual Systems, Automotive and Mil-aero at Siemens Modular",
+      "page": "application"
+    },
+    {
+      "id": "check-format-dbeaaaaa92",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "Barriers In OLED Display Manufacturing ChoirBox enables remote and real-time choir performances Haptic feedback: the next",
+      "page": "application"
+    },
+    {
+      "id": "check-format-ee9ad9c619",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "title": "imec.istart — application page",
+      "excerpt": "Royal Meteorological Institute of Belgium in the field of remote sensing from space and joined imec in 2000. Published on :",
       "page": "application"
     },
     {
@@ -118,10 +165,24 @@
       "page": "application"
     },
     {
+      "id": "check-route-0148cb2463",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "AR/VR applications → https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/ar-glasses-have-the-potential-to-replace-the-smartphone-within-10-15-years-from-now",
+      "page": "application"
+    },
+    {
       "id": "check-route-04ecad4930",
       "url": "https://www.imec-int.com/en/applications",
       "title": "imec.istart — application page",
       "excerpt": "Contact us → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications&contactblock=147204#contact",
+      "page": "application"
+    },
+    {
+      "id": "check-route-06275c33e3",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
       "page": "application"
     },
     {
@@ -174,6 +235,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-0eef37a140",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
       "id": "check-route-0fa81b4504",
       "url": "https://www.imec-int.com/en/istart",
       "title": "imec.istart — homepage",
@@ -195,10 +263,24 @@
       "page": "application"
     },
     {
+      "id": "check-route-12e3e6a1d8",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
       "id": "check-route-16e5e25271",
       "url": "https://www.imec-int.com/en/applications/automotive-technologies",
       "title": "imec.istart — application page",
       "excerpt": "Baden-Württemberg attracts imec to lead development of chiplet-based technology for automotive applications → https://www.imec-int.com/en/press/baden-wurttemberg-attracts-imec-lead-development-chiplet-based-technology-automotive",
+      "page": "application"
+    },
+    {
+      "id": "check-route-17c150275f",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "EUV lithography → https://www.imec-int.com/en/articles/imec-pushes-the-limits-of-euv-lithography-single-exposure-for-logic-n5-metal-layers-and-dense-dram-applications",
       "page": "application"
     },
     {
@@ -216,6 +298,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-18ebbff34f",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "Swave, a new Imec and VUB, Spin-off, Raises €7M to Deliver Truly Realistic AR/VR Experiences to Applications Like the Metaverse → https://www.imec-int.com/en/press/swave-new-imec-and-vub-spin-raises-eu7m-deliver-truly-realistic-arvr-experiences-applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-19063b5141",
       "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
       "title": "imec.istart — application page",
@@ -227,6 +316,13 @@
       "url": "https://www.imec-int.com/en/applications",
       "title": "imec.istart — application page",
       "excerpt": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1f07d96532",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
       "page": "application"
     },
     {
@@ -258,6 +354,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-27f3e16cd6",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
+    },
+    {
       "id": "check-route-28e7e738a7",
       "url": "https://www.imec-int.com/en/applications/agrifood-technology",
       "title": "imec.istart — application page",
@@ -286,6 +389,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-2cc1f9ed34",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
       "id": "check-route-2d2b93057f",
       "url": "https://www.imec-int.com/en/istart",
       "title": "imec.istart — homepage",
@@ -300,8 +410,22 @@
       "page": "application"
     },
     {
+      "id": "check-route-2f4845f9a6",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact us → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications%2Fsustainable-energy-and-power-technologies&contactblock=147337#contact",
+      "page": "application"
+    },
+    {
       "id": "check-route-30ad35e918",
       "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3285063855",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
       "title": "imec.istart — application page",
       "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
       "page": "application"
@@ -335,10 +459,24 @@
       "page": "application"
     },
     {
+      "id": "check-route-397e021efc",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
       "id": "check-route-3a8fa7f783",
       "url": "https://www.imec-int.com/en/applications/automotive-technologies",
       "title": "imec.istart — application page",
       "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3adeeab430",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "progress in EUV lithography → https://www.imec-int.com/en/imec-magazine/imec-magazine-march-2018/imec-pushes-the-limits-of-euv-lithography-single-exposure-for-future-logic-and-memory-applications",
       "page": "application"
     },
     {
@@ -353,6 +491,13 @@
       "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
       "title": "imec.istart — application page",
       "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3dc26f4a69",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
       "page": "application"
     },
     {
@@ -398,6 +543,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-427f8a63cd",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
       "id": "check-route-4626a28927",
       "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
       "title": "imec.istart — application page",
@@ -416,6 +568,13 @@
       "url": "https://www.imec-int.com/en/applications/agrifood-technology",
       "title": "imec.istart — application page",
       "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4947281de3",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "https://www.imec-int.com/en/press/swave-new-imec-and-vub-spin-raises-eu7m-deliver-truly-realistic-arvr-experiences-applications",
       "page": "application"
     },
     {
@@ -468,10 +627,38 @@
       "page": "application"
     },
     {
+      "id": "check-route-508110edc1",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-51a7a24b26",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
       "id": "check-route-52e6e1a91f",
       "url": "https://www.imec-int.com/en/applications",
       "title": "imec.istart — application page",
       "excerpt": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-53ec41f92e",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-54157a8dd4",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
       "page": "application"
     },
     {
@@ -482,8 +669,22 @@
       "page": "application"
     },
     {
+      "id": "check-route-58d53f8beb",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
       "id": "check-route-5b7957163f",
       "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5c3006e2e8",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
       "title": "imec.istart — application page",
       "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
       "page": "application"
@@ -531,6 +732,34 @@
       "page": "application"
     },
     {
+      "id": "check-route-62e167a445",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Imec demonstrates GaN-on-Si MISHEMTs with excellent performance for 5G-advanced base station and mobile device applications → https://www.imec-int.com/en/press/imec-demonstrates-gan-si-mishemts-excellent-performance-5g-advanced-base-station-and-mobile",
+      "page": "application"
+    },
+    {
+      "id": "check-route-63bcaefa8f",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact us → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications%2Fsmarter-consumer-electronics&contactblock=147353#contact",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6585d3af69",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "title": "imec.istart — application page",
+      "excerpt": "MOMS pressure sensor → https://www.imec-int.com/en/articles/imec-reports-micro-optomechanical-pressure-sensor-advancing-pressure-monitoring-in-biomedical-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-663967dd46",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
       "id": "check-route-679141db2e",
       "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
       "title": "imec.istart — application page",
@@ -566,6 +795,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-6f69d5ecc7",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
       "id": "check-route-6f9166ce2c",
       "url": "https://www.imec-int.com/en/applications/home-automation",
       "title": "imec.istart — application page",
@@ -580,6 +816,13 @@
       "page": "details"
     },
     {
+      "id": "check-route-738d0c0151",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-746d038d32",
       "url": "https://www.imec-int.com/en/istart",
       "title": "imec.istart — homepage",
@@ -591,6 +834,13 @@
       "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
       "title": "imec.istart — application page",
       "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-77471b06e4",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
       "page": "application"
     },
     {
@@ -629,6 +879,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-816caec285",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
       "id": "check-route-8377c9906f",
       "url": "https://www.imec-int.com/en/applications/automotive-technologies",
       "title": "imec.istart — application page",
@@ -654,6 +911,13 @@
       "url": "https://www.imec-int.com/en/applications/home-automation",
       "title": "imec.istart — application page",
       "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-843e9f573c",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
       "page": "application"
     },
     {
@@ -685,6 +949,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-8a92ac84f3",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-8b160ef26c",
       "url": "https://www.imec-int.com/en/applications/agrifood-technology",
       "title": "imec.istart — application page",
@@ -697,6 +968,20 @@
       "title": "imec.istart — homepage",
       "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
       "page": "details"
+    },
+    {
+      "id": "check-route-8e707a34cf",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "wireless connectivity for IoT applications → https://www.imec-int.com/en/5G-and-wireless-iot-communication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8f16455b1c",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
     },
     {
       "id": "check-route-9127d778ed",
@@ -734,6 +1019,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-9edf06c7a4",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-a0cd29ed1e",
       "url": "https://www.imec-int.com/en/applications/home-automation",
       "title": "imec.istart — application page",
@@ -759,6 +1051,20 @@
       "url": "https://www.imec-int.com/en/applications/automotive-technologies",
       "title": "imec.istart — application page",
       "excerpt": "Automotive Chiplet Forum (ACF) → https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a329b01768",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a33c5556b6",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
       "page": "application"
     },
     {
@@ -804,6 +1110,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-a85a6cdf08",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact us → https://www.imec-int.com/en/about-us/imec-magazine/contact-form-imec-magazine?origin_url=%2Fen%2Fimec-magazine%2Fimec-magazine-february-2019%2Fsensor-searches-demanding-application&contactblock=null#contact",
+      "page": "application"
+    },
+    {
       "id": "check-route-a85fd4ef7d",
       "url": "https://www.imec-int.com/en/applications",
       "title": "imec.istart — application page",
@@ -846,10 +1159,38 @@
       "page": "application"
     },
     {
+      "id": "check-route-b045c4ee1c",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
       "id": "check-route-b121d33120",
       "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
       "title": "imec.istart — application page",
       "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b1c9a46103",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b3f87a62e4",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Breakthrough ADC for very-high-speed wireline → https://www.imec-int.com/en/press/imec-unveils-breakthrough-adc-architecture-very-high-speed-wireline-applications-excelling",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b45cdcb968",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "100-fold current density enhancement puts imec’s nanomesh electrodes in pole position for high-throughput electrochemical applications → https://www.imec-int.com/en/press/100-fold-current-density-enhancement-puts-imecs-nanomesh-electrodes-pole-position-high",
       "page": "application"
     },
     {
@@ -864,6 +1205,13 @@
       "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
       "title": "imec.istart — application page",
       "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b6ee145f01",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
       "page": "application"
     },
     {
@@ -909,8 +1257,29 @@
       "page": "application"
     },
     {
+      "id": "check-route-bf2068d5a9",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "artificial intelligence in consumer applications (tiny AI) → https://www.imec-int.com/en/artificial-intelligence/tiny-ai",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bfaacbe7a2",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
       "id": "check-route-c11dd69d5d",
       "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c32c7c8c79",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
       "title": "imec.istart — application page",
       "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
       "page": "application"
@@ -930,10 +1299,31 @@
       "page": "application"
     },
     {
+      "id": "check-route-c550a3bd1e",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c567290d25",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-c579312d2f",
       "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
       "title": "imec.istart — application page",
       "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c6df9e81e3",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact us → https://www.imec-int.com/en/about-us/imec-magazine/contact-form-imec-magazine?origin_url=%2Fen%2Fimec-magazine%2Fimec-magazine-january-2019%2Fin-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications&contactblock=null#contact",
       "page": "application"
     },
     {
@@ -979,10 +1369,31 @@
       "page": "application"
     },
     {
+      "id": "check-route-cb139f5a9c",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cc91c9c41d",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-cca808e3cb",
       "url": "https://www.imec-int.com/en/applications",
       "title": "imec.istart — application page",
       "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cce24cbc67",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
       "page": "application"
     },
     {
@@ -993,10 +1404,24 @@
       "page": "application"
     },
     {
+      "id": "check-route-d337c065bb",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-d37f6547d2",
       "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
       "title": "imec.istart — application page",
       "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d431f8b3ac",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
       "page": "application"
     },
     {
@@ -1025,6 +1450,13 @@
       "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
       "title": "imec.istart — application page",
       "excerpt": "Contact → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications%2Fautomotive-semiconductor-technologies%2Fwant-join-automotive-chiplet-alliance&contactblock=157574#contact",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d8d634d65a",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
       "page": "application"
     },
     {
@@ -1077,6 +1509,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-e6e175e7e2",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
+    },
+    {
       "id": "check-route-e7353dd4cb",
       "url": "https://www.imec-int.com/en/applications/security-and-resilience",
       "title": "imec.istart — application page",
@@ -1112,6 +1551,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-eb22457d83",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-ed3b02f64a",
       "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
       "title": "imec.istart — application page",
@@ -1140,10 +1586,38 @@
       "page": "application"
     },
     {
+      "id": "check-route-f5117c4e6f",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-f7ce170b9b",
       "url": "https://www.imec-int.com/en/applications/home-automation",
       "title": "imec.istart — application page",
       "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f7df95b4ce",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "title": "imec.istart — application page",
+      "excerpt": "Imec demonstrates flat-panel-display-compatible pMUT technology for emerging ultrasound applications → https://www.imec-int.com/en/press/imec-demonstrates-flat-panel-display-compatible-pmut-technology-emerging-ultrasound",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f9ab1eb8d3",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "https://www.imec-int.com/en/press/imec-unveils-breakthrough-adc-architecture-very-high-speed-wireline-applications-excelling",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fa9d744880",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
       "page": "application"
     },
     {
@@ -1168,6 +1642,20 @@
       "page": "application"
     },
     {
+      "id": "check-route-fe2de1bc6f",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact us → https://www.imec-int.com/en/about-us/imec-magazine/contact-form-imec-magazine?origin_url=%2Fen%2Fimec-magazine%2Fimec-magazine-april-2017%2F60ghz-technology-for-wigig-and-5g-applications&contactblock=null#contact",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fe8f113e2e",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-ffe28206a0",
       "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
       "title": "imec.istart — application page",
@@ -1183,10 +1671,94 @@
       "excerpt": "Imec.istart | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / What we offer / Venturing /"
     },
     {
+      "id": "check-page-0508376357",
+      "url": "https://www.imec-int.com/en/istart",
+      "page": "details",
+      "excerpt": "Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / What we offer / Venturing / Imec.istart Imec.istart Do you want to accelerate your startup?"
+    },
+    {
+      "id": "check-page-13448d757e",
+      "url": "https://www.imec-int.com/en/istart",
+      "page": "details",
+      "excerpt": "This it how we help them to grow: pre-seed funding to kick-start your startup journey industry-specific and personal coaching for 1 year access to imec expertise, guiding you to the appropriate imec technology and infrastructure an introduction to a wide network of business partners and investors Startups such as NGrave , Aloxy and Epihunter got off to a flying start thanks to imec.istart."
+    },
+    {
+      "id": "check-page-918fbc6c9f",
+      "url": "https://www.imec-int.com/en/istart",
+      "page": "details",
+      "excerpt": "Does your company want to get in touch with the startup community?"
+    },
+    {
+      "id": "check-page-bb3412361e",
+      "url": "https://www.imec-int.com/en/istart",
+      "page": "details",
+      "excerpt": "Artificial intelligence Life sciences Health technologies Discover more expertises..."
+    },
+    {
+      "id": "check-page-af642b2eff",
+      "url": "https://www.imec-int.com/en/istart",
+      "page": "details",
+      "excerpt": "What we offer Our R&D solutions and innovation services Research Manufacturing Venturing Applications Advanced semiconductor process technology Life sciences and health solutions Data and telecommunication Discover more applications..."
+    },
+    {
+      "id": "check-page-0653d9d343",
+      "url": "https://www.imec-int.com/en/istart",
+      "page": "details",
+      "excerpt": "Job opportunities Academic Excellence About imec Infrastructure Organization More imec Stories Press releases Event calendar Publications imec Germany imec the Netherlands imec USA imec UK ITF Connect with us partner site | disclaimer | privacy statement | cookie policy | terms and conditions of sale/purchase | accessibility"
+    },
+    {
       "id": "check-page-05432261e8",
       "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
       "page": "application",
       "excerpt": "79GHz radar for automotive applications - imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Expertise"
+    },
+    {
+      "id": "check-page-98c9db40d9",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "page": "application",
+      "excerpt": "Cookie settings Phase-modulated radar vs. frequency-modulated radar We compare the suitability of phase-modulated vs. frequency modulated-radar for automotive solutions."
+    },
+    {
+      "id": "check-page-cdc571fa69",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "page": "application",
+      "excerpt": "Frequency modulated radar is traditionally used in the automotive industry, a trend that Phase Modulated Continuous Wave (PMCW) radar disrupts."
+    },
+    {
+      "id": "check-page-7bc5bc8b5b",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "page": "application",
+      "excerpt": "Work with us Are you looking to accelerate the development of your automotive radar solution?"
+    },
+    {
+      "id": "check-page-0f7356f164",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "page": "application",
+      "excerpt": "Thanks to our thorough knowledge of the automotive sector, we function as your full-fledged strategic partner – right down to venturing support ."
+    },
+    {
+      "id": "check-page-536ea705f3",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "page": "application",
+      "excerpt": "With a proven track-record in mm-wave IC and antenna design in-house, we can help you develop your next-generation radar solution from design to prototyping and shorten your time-to market."
+    },
+    {
+      "id": "check-page-6933ad7e30",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "page": "application",
+      "excerpt": "Artificial intelligence Life sciences Health technologies Discover more expertises..."
+    },
+    {
+      "id": "check-page-c86d769982",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "page": "application",
+      "excerpt": "What we offer Our R&D solutions and innovation services Research Manufacturing Venturing Applications Advanced semiconductor process technology Life sciences and health solutions Data and telecommunication Discover more applications..."
+    },
+    {
+      "id": "check-page-4bb0d0eb56",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "page": "application",
+      "excerpt": "Job opportunities Academic Excellence About imec Infrastructure Organization More imec Stories Press releases Event calendar Publications imec Germany imec the Netherlands imec USA imec UK ITF Connect with us partner site | disclaimer | privacy statement | cookie policy | terms and conditions of sale/purchase | accessibility"
     },
     {
       "id": "check-page-f08034bae0",
@@ -1195,10 +1767,154 @@
       "excerpt": "Applications | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications Applications Get"
     },
     {
+      "id": "check-page-a4d954de1b",
+      "url": "https://www.imec-int.com/en/applications",
+      "page": "application",
+      "excerpt": "Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications Applications Get inspired by an overview of the ways in which imec’s technologies can transform your industry."
+    },
+    {
+      "id": "check-page-af725ac70d",
+      "url": "https://www.imec-int.com/en/applications",
+      "page": "application",
+      "excerpt": "The power of silicon technology to increase intelligence, add new functionalities, bring down costs, ... opens opportunities that reach far beyond the traditional tech market into application domains such as health, agrifood, automotive and many more."
+    },
+    {
+      "id": "check-page-ce7138c1f3",
+      "url": "https://www.imec-int.com/en/applications",
+      "page": "application",
+      "excerpt": "Semiconductor technology From exploration to implementation, imec is your partner to develop the next generations of semiconductor technology."
+    },
+    {
+      "id": "check-page-bbd9a6ca1f",
+      "url": "https://www.imec-int.com/en/applications",
+      "page": "application",
+      "excerpt": "Life sciences and health solutions Leverage our R&D and innovation services for your breakthroughs in advanced precision medicine and genomic solutions – enabling a revolution in prevention, Data and telecommunication Partner with imec to develop and fabricate your next generations of radios and communication technology."
+    },
+    {
+      "id": "check-page-da618f6e00",
+      "url": "https://www.imec-int.com/en/applications",
+      "page": "application",
+      "excerpt": "Automotive semiconductor technologies Smarter, safer, and more affordable mobility anytime, anywhere."
+    },
+    {
+      "id": "check-page-f45584bb45",
+      "url": "https://www.imec-int.com/en/applications",
+      "page": "application",
+      "excerpt": "Robotics Imec is ready to accelerate the journey to physical AI through breakthrough semiconductor innovation, system-level expertise and collaborative ecosystem partner Agrifood technology Imec explores new sensing, analytics, and decision support tools by combining innovative hardware and data science."
+    },
+    {
+      "id": "check-page-78ccb8ed17",
+      "url": "https://www.imec-int.com/en/applications",
+      "page": "application",
+      "excerpt": "Sustainable energy and power technologies Partner with imec to get a permanent front seat in the forthcoming energy revolution."
+    },
+    {
+      "id": "check-page-99f1a159f9",
+      "url": "https://www.imec-int.com/en/applications",
+      "page": "application",
+      "excerpt": "Security and resilience Semiconductors drive the future of aerospace and security innovation – with imec as the innovation engine for mission‑critical technologies."
+    },
+    {
+      "id": "check-page-7659f7748a",
+      "url": "https://www.imec-int.com/en/applications",
+      "page": "application",
+      "excerpt": "Smarter consumer electronics Make your consumer electronics more interactive, immersive, and interconnected."
+    },
+    {
+      "id": "check-page-330250489c",
+      "url": "https://www.imec-int.com/en/applications",
+      "page": "application",
+      "excerpt": "Artificial intelligence Life sciences Health technologies Discover more expertises..."
+    },
+    {
+      "id": "check-page-819f833397",
+      "url": "https://www.imec-int.com/en/applications",
+      "page": "application",
+      "excerpt": "What we offer Our R&D solutions and innovation services Research Manufacturing Venturing Applications Advanced semiconductor process technology Life sciences and health solutions Data and telecommunication Discover more applications..."
+    },
+    {
+      "id": "check-page-9ab4abb785",
+      "url": "https://www.imec-int.com/en/applications",
+      "page": "application",
+      "excerpt": "Job opportunities Academic Excellence About imec Infrastructure Organization More imec Stories Press releases Event calendar Publications imec Germany imec the Netherlands imec USA imec UK ITF Connect with us partner site | disclaimer | privacy statement | cookie policy | terms and conditions of sale/purchase | accessibility"
+    },
+    {
       "id": "check-page-49526fe389",
       "url": "https://www.imec-int.com/en/applications/agrifood-technology",
       "page": "application",
       "excerpt": "Agrifood technology: sensing, analytics, and decision support tools | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0"
+    },
+    {
+      "id": "check-page-fdc18ee432",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application",
+      "excerpt": "Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications / Agrifood technology Agrifood technology Imec explores new sensing, analytics, and decision support tools by combining innovative hardware and data science."
+    },
+    {
+      "id": "check-page-e0ed97be18",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application",
+      "excerpt": "Sensor technologies Hyperspectral imaging Work with us Sensor technologies Hyperspectral imaging Work with us If you’re in the agriculture and food industry, you’re probably aware of the grand challenges ahead."
+    },
+    {
+      "id": "check-page-b64d208c2a",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application",
+      "excerpt": "Major breakthroughs are expected through a combination of hardware, data science, and innovations with artificial intelligence."
+    },
+    {
+      "id": "check-page-45cec840e1",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application",
+      "excerpt": "In the OnePlanet Research Center , our engineers team up with Wageningen University & Research – one of the world’s premier universities in agriculture and food research – and Radboud University and Radboud University Medical Center with recognized leadership in Health and AI."
+    },
+    {
+      "id": "check-page-f9c19329c5",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application",
+      "excerpt": "Get in touch and see what we can do for you Sensor technologies for agrifood Within the OnePlanet Research initiative, we’re developing solutions at the interface of agrifood and chip and digital technology."
+    },
+    {
+      "id": "check-page-542d4f6e46",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application",
+      "excerpt": "Our team works on collecting and combining data on nitrogen emissions, precision agriculture, the greenhouse of the future, food processing and food quality ."
+    },
+    {
+      "id": "check-page-55e51ab5ae",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application",
+      "excerpt": "Learn more about our semiconductor-driven deep-tech support Hyperspectral imaging for precision agriculture Precision agriculture, satellite farming, or site-specific crop management (SSCM) are based on observing, measuring, and responding to the variability of crops in and between fields."
+    },
+    {
+      "id": "check-page-1ba313157c",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application",
+      "excerpt": "For efficient precision agriculture, the challenge is to enable monitoring that is sufficiently fine-grained and sensitive (parts per billion)."
+    },
+    {
+      "id": "check-page-47729746c0",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application",
+      "excerpt": "As one of its sensor solutions, imec has developed a line of hyperspectral imagers and super-lightweight cameras , for example for use in drones and satellites."
+    },
+    {
+      "id": "check-page-299aea0b86",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application",
+      "excerpt": "In combination with neuromorphic chips and artificial intelligence , these can extract a wealth of live actionable knowledge from the surveillance of fields and forests, for example identifying harmful weeds or drought spots."
+    },
+    {
+      "id": "check-page-6c38476f40",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application",
+      "excerpt": "Go from R&D to development and manufacturing with IC-Link Are you ready to accelerate your path from concept to production?"
+    },
+    {
+      "id": "check-page-ce68348221",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application",
+      "excerpt": "Learn about IC-Link Boost your agrifood products and applications pipeline by collaborating with imec Creating new data-driven models to boost agriculture, and building the sensors and sensor networks to profit from those models, is a huge undertaking."
     },
     {
       "id": "check-page-73f5b7b557",
@@ -1207,10 +1923,100 @@
       "excerpt": "3rd Automotive Chiplet Alliance Conference: confirm attendance | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More"
     },
     {
+      "id": "check-page-01e68c7a83",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "page": "application",
+      "excerpt": "Participants will again come from OEMs, Tier 1s and Tier 2s, IDMs and foundries, IP and tool vendors, software companies, outsourced semiconductor assembly and test (OSAT) suppliers and design houses."
+    },
+    {
+      "id": "check-page-555948de33",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "page": "application",
+      "excerpt": "The conference will be hosted at Siemens, Munich Neuperlach."
+    },
+    {
+      "id": "check-page-8baa52c515",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "page": "application",
+      "excerpt": "Artificial intelligence Life sciences Health technologies Discover more expertises..."
+    },
+    {
+      "id": "check-page-468949965b",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "page": "application",
+      "excerpt": "What we offer Our R&D solutions and innovation services Research Manufacturing Venturing Applications Advanced semiconductor process technology Life sciences and health solutions Data and telecommunication Discover more applications..."
+    },
+    {
+      "id": "check-page-cd3781d9ee",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "page": "application",
+      "excerpt": "Job opportunities Academic Excellence About imec Infrastructure Organization More imec Stories Press releases Event calendar Publications imec Germany imec the Netherlands imec USA imec UK ITF Connect with us partner site | disclaimer | privacy statement | cookie policy | terms and conditions of sale/purchase | accessibility"
+    },
+    {
       "id": "check-page-db1df6ea53",
       "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
       "page": "application",
       "excerpt": "Autonomous Edge Chiplet Forum | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications /"
+    },
+    {
+      "id": "check-page-20a0bbf973",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "page": "application",
+      "excerpt": "Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications / Automotive semiconductor technologies / Autonomous Edge Chiplet Forum Autonomous Edge Chiplet Forum Join the autonomous edge chiplet ecosystem and stay up to date on the latest chiplet innovations."
+    },
+    {
+      "id": "check-page-7c93db8f26",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "page": "application",
+      "excerpt": "Autonomous systems are becoming part of our everyday lives, from software-defined vehicles and robots to industrial automation and even aerospace applications."
+    },
+    {
+      "id": "check-page-7bf92fdabe",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "page": "application",
+      "excerpt": "As these systems take on increasingly complex tasks , so do the demands on the underlying compute hardware."
+    },
+    {
+      "id": "check-page-377c8acd07",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "page": "application",
+      "excerpt": "They also enable the industry to diversify its digital offering – by mixing and matching chiplets from niche semiconductor players – and bring innovations to market faster."
+    },
+    {
+      "id": "check-page-45d08f6572",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "page": "application",
+      "excerpt": "Building on the foundations laid by the Automotive Chiplet Program, AECP brings together partners from automotive, robotics, aerospace, security, high-performance edge computing, and the broader semiconductor ecosystem."
+    },
+    {
+      "id": "check-page-ca945d7444",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "page": "application",
+      "excerpt": "Participants include OEMs, Tier-1 and Tier-2 suppliers, semiconductor companies, foundries, OSATs, IP and software providers, EDA vendors, system integrators, research organizations, and universities."
+    },
+    {
+      "id": "check-page-1f56911e02",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "page": "application",
+      "excerpt": "Since the start of imec’s automotive chiplet initiative, the number of participants has been growing rapidly."
+    },
+    {
+      "id": "check-page-6dcc7e1bcc",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "page": "application",
+      "excerpt": "Artificial intelligence Life sciences Health technologies Discover more expertises..."
+    },
+    {
+      "id": "check-page-e1b44dcd86",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "page": "application",
+      "excerpt": "What we offer Our R&D solutions and innovation services Research Manufacturing Venturing Applications Advanced semiconductor process technology Life sciences and health solutions Data and telecommunication Discover more applications..."
+    },
+    {
+      "id": "check-page-8e9f159e38",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "page": "application",
+      "excerpt": "Job opportunities Academic Excellence About imec Infrastructure Organization More imec Stories Press releases Event calendar Publications imec Germany imec the Netherlands imec USA imec UK ITF Connect with us partner site | disclaimer | privacy statement | cookie policy | terms and conditions of sale/purchase | accessibility"
     },
     {
       "id": "check-page-4b5c8d5ed8",
@@ -1219,10 +2025,154 @@
       "excerpt": "Automotive semiconductor technologies | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications"
     },
     {
+      "id": "check-page-d151da4258",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application",
+      "excerpt": "Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications / Automotive semiconductor technologies Automotive semiconductor technologies Smarter, safer, and more affordable mobility anytime, anywhere."
+    },
+    {
+      "id": "check-page-1471d83251",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application",
+      "excerpt": "Get in touch Compute Sensing Future Compute Sensing Future The automotive industry is undergoing a fundamental transformation, shifting toward safe autonomous driving and enhanced in-cabin experiences."
+    },
+    {
+      "id": "check-page-7b9f1b320b",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application",
+      "excerpt": "This evolution places increasing demands on advanced automotive semiconductor technology."
+    },
+    {
+      "id": "check-page-33c53aa4c4",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application",
+      "excerpt": "And makes the automotive industry’s early engagement and alignment with the semiconductor roadmap essential for future mobility."
+    },
+    {
+      "id": "check-page-09424d76b8",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application",
+      "excerpt": "To support the automotive industry along this paradigm shift, imec develops advanced automotive chiplet integration, chiplet-based high-performance compute architectures, and next-generation automotive semiconductor technologies, enabling smarter, safer and more affordable mobility for everyone."
+    },
+    {
+      "id": "check-page-349e05ecdb",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application",
+      "excerpt": "Interested in shaping the future of mobility?"
+    },
+    {
+      "id": "check-page-52eb294078",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application",
+      "excerpt": "Chiplet-based compute for automotive applications As advanced driver-assistance systems (ADAS), autonomous capabilities, and immersive infotainment gain ground, the demand for computing power increases."
+    },
+    {
+      "id": "check-page-28c94929d5",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application",
+      "excerpt": "Through its autonomous edge chiplet program , formerly the automotive chiplet program, imec brings together a global, pre-competitive research consortium focused on defining, developing, and validating chiplet architectures for high-performance autonomous edge computing."
+    },
+    {
+      "id": "check-page-42596b4ecb",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application",
+      "excerpt": "Supporting cost-effective and reliable automotive platforms."
+    },
+    {
+      "id": "check-page-a3a59bc421",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application",
+      "excerpt": "Strengthening supply chain resilience across the semiconductor ecosystem."
+    },
+    {
+      "id": "check-page-61f86da2db",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application",
+      "excerpt": "As part of this effort, imec has also established the Advanced Chip Design Accelerator (ACDA) in Heilbronn, Germany, located at the Innovation Park Artificial Intelligence (IPAI)."
+    },
+    {
+      "id": "check-page-e3beb351fb",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application",
+      "excerpt": "Supported by the Ministry of Economic Affairs, Labor, and Tourism of Baden-Württemberg, ACDA expands imec’s chiplet research and validation capabilities through the development of automotive chiplet prototypes, multi-vendor integration and validation, and focused research on compute architectures tailored to automotive-grade requirements."
+    },
+    {
       "id": "check-page-01e9c4bb11",
       "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
       "page": "application",
       "excerpt": "Non-terrestrial network (NTN) semiconductor technologies | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More"
+    },
+    {
+      "id": "check-page-e558e853ed",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "page": "application",
+      "excerpt": "Imec offers a broad technology portfolio and support from research to manufacturing."
+    },
+    {
+      "id": "check-page-e6783066e7",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "page": "application",
+      "excerpt": "Non-terrestrial networks use satellites to extend mobile network coverage and enable connectivity between terrestrial users and networking infrastructure, including direct-to-cell (D2C) and direct-to-device (D2D) services."
+    },
+    {
+      "id": "check-page-a17e6c1c02",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "page": "application",
+      "excerpt": "Besides the massive infrastructural effort of putting large satellite constellations in orbit, NTN presents a number of challenges when it comes to payload electronics : Components must be extremely low-power and compact."
+    },
+    {
+      "id": "check-page-2a5a0874c3",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "page": "application",
+      "excerpt": "Even in low Earth orbit (LEO) or medium Earth orbit (MEO), radiation-tolerant or radiation-hardened electronics may be needed."
+    },
+    {
+      "id": "check-page-434a783570",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "page": "application",
+      "excerpt": "Imec has experience in space electronics and radiation-hardened IC design , with custom ASICs and sensors already operating in space."
+    },
+    {
+      "id": "check-page-98090c207c",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "page": "application",
+      "excerpt": "Combining advanced research, system-level validation, and a route to custom-chip manufacturing within one organization, we're well-positioned to support your NTN electronics development."
+    },
+    {
+      "id": "check-page-df42899d08",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "page": "application",
+      "excerpt": "Make sure to check out how we support semiconductor-driven ventures ."
+    },
+    {
+      "id": "check-page-b6c344f7d7",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "page": "application",
+      "excerpt": "System and circuit RF IP for demanding NTN applications Imec's advanced system and circuit IP enables you to tackle requirements that cannot be met by off-the-shelf semiconductor IP."
+    },
+    {
+      "id": "check-page-d5d5d1ddd7",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "page": "application",
+      "excerpt": "Advanced RF materials and semiconductor processes 5G and 6G NTN require moving to higher frequencies and output-power levels , where conventional silicon CMOS or BiCMOS may not meet all efficiency and performance requirements, particularly in power amplifiers."
+    },
+    {
+      "id": "check-page-c5edd26596",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "page": "application",
+      "excerpt": "Imec's advanced RF research program investigates the material and process innovations needed to integrate III-V semiconductors with silicon CMOS in a cost-effective and scalable way."
+    },
+    {
+      "id": "check-page-9c59a2c379",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "page": "application",
+      "excerpt": "RF interposer technology to enable the cost-effective integration of multiple semiconductor technologies (e.g., RF GaN or other III-V dies together with CMOS EIC dies) in a single package, with low loss even at high frequencies."
+    },
+    {
+      "id": "check-page-44c0f63168",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "page": "application",
+      "excerpt": "Optical connections are also playing a crucial role in high-performance compute and AI systems , for instance emerging concepts such as space-based computing and data-processing infrastructures."
     },
     {
       "id": "check-page-2cce4b4ffc",
@@ -1231,10 +2181,142 @@
       "excerpt": "Data and telecom | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications / Data- and"
     },
     {
+      "id": "check-page-ff60e97868",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application",
+      "excerpt": "Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications / Data- and telecommunication Data- and telecommunication Partner with imec to develop and fabricate your next generations of radios and communication technology."
+    },
+    {
+      "id": "check-page-e5ab46323b",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application",
+      "excerpt": "Whether you’re building telecom equipment, running state-of-the-art data centers, or designing IoT networks and applications, you’ll agree that the networking industry is going through a pivotal change ."
+    },
+    {
+      "id": "check-page-ac499aaa8f",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application",
+      "excerpt": "Moreover, as the emerging technologies involve new materials and components, we also offer capacity for integration, prototyping, small-to-medium volume production and – through our partners – even large volume manufacturing."
+    },
+    {
+      "id": "check-page-028b3db212",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application",
+      "excerpt": "Contact us today and see how we can contribute to your solutions Silicon photonics for high-speed transceivers for data centers and fronthaul The solution of choice for next-generation transceivers will involve silicon photonics, a technology that has become mature, can be integrated on chip , and allows multiplying data speeds without increasing energy use."
+    },
+    {
+      "id": "check-page-24a3c810f3",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application",
+      "excerpt": "Imec’s beyond 5G research program targets extreme-data-rate, low-cost and low-power radio solutions enabling next-generation device-to-device communication, high-quality augmented and virtual reality as well as >100 Gbps backhaul applications."
+    },
+    {
+      "id": "check-page-e080ed4356",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application",
+      "excerpt": "Learn more about our semiconductor-driven deep-tech support Deterministic end-to-end connectivity No matter how large the capacity of your network infrastructure is, a major concern is to assure deterministic Quality of Service (QoS) guarantees, especially between time-sensitive or critical end-to-end applications ."
+    },
+    {
+      "id": "check-page-c6f76f0441",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application",
+      "excerpt": "Imec has therefore extensively researched time-sensitive networking across multiple wired and wireless technologies such as Ethernet, PON, cellular 4G/5G/xG, Wi-Fi, BLE, IoT, ..."
+    },
+    {
+      "id": "check-page-e970e31f22",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application",
+      "excerpt": "For each of these, imec has unique, future-proof R&D tracks, mature IP, design capabilities, and access to prototyping and fabrication."
+    },
+    {
+      "id": "check-page-5d0e8b9d0f",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application",
+      "excerpt": "Use our silicon photonics platform (iSiPP) for prototyping silicon photonics ICs."
+    },
+    {
+      "id": "check-page-a92bd309af",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application",
+      "excerpt": "Artificial intelligence Life sciences Health technologies Discover more expertises..."
+    },
+    {
+      "id": "check-page-6add315f64",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application",
+      "excerpt": "What we offer Our R&D solutions and innovation services Research Manufacturing Venturing Applications Advanced semiconductor process technology Life sciences and health solutions Data and telecommunication Discover more applications..."
+    },
+    {
+      "id": "check-page-17aec623b8",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application",
+      "excerpt": "Job opportunities Academic Excellence About imec Infrastructure Organization More imec Stories Press releases Event calendar Publications imec Germany imec the Netherlands imec USA imec UK ITF Connect with us partner site | disclaimer | privacy statement | cookie policy | terms and conditions of sale/purchase | accessibility"
+    },
+    {
       "id": "check-page-efd81c7655",
       "url": "https://www.imec-int.com/en/applications/home-automation",
       "page": "application",
       "excerpt": "Smart buildings and intuitive spaces | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications"
+    },
+    {
+      "id": "check-page-b592a03085",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "page": "application",
+      "excerpt": "Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications / Home automation Home automation Explore the technology that enables the next wave of smart buildings – intuitive working and living spaces that adapt so people feel comfortable, safe, and healthy."
+    },
+    {
+      "id": "check-page-27e3c4cc97",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "page": "application",
+      "excerpt": "Intuitive spaces Work with us Intuitive spaces Work with us New sensor technology and advances in machine learning will support people to spend a safer, productive and more pleasant time at the office."
+    },
+    {
+      "id": "check-page-a47f364905",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "page": "application",
+      "excerpt": "The use of energy is minimized and access is monitored unobtrusively."
+    },
+    {
+      "id": "check-page-b7046f2ff2",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "page": "application",
+      "excerpt": "Cookie settings Go from R&D to development and manufacturing with IC-Link Are you ready to accelerate your path from concept to production?"
+    },
+    {
+      "id": "check-page-3d360f3e10",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "page": "application",
+      "excerpt": "Learn about IC-Link Develop your next-generation smart building solutions with imec Whether you’re involved in the design of future professional buildings, or are offering IoT sensors or solutions for intuitive spaces, you’ll find a great R&D partner in imec."
+    },
+    {
+      "id": "check-page-d61e16fbdd",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "page": "application",
+      "excerpt": "Moreover, collaborating with imec will give you access to proven technology, disruptive concepts, valuable IP, partnerships, prototyping and testing facilities, and the world’s largest ecosystem in electronics."
+    },
+    {
+      "id": "check-page-9217cf4f48",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "page": "application",
+      "excerpt": "Enlist our help for the development, prototyping and low-volume manufacturing of specific complex components."
+    },
+    {
+      "id": "check-page-381ea2fdea",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "page": "application",
+      "excerpt": "Artificial intelligence Life sciences Health technologies Discover more expertises..."
+    },
+    {
+      "id": "check-page-277099e82c",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "page": "application",
+      "excerpt": "What we offer Our R&D solutions and innovation services Research Manufacturing Venturing Applications Advanced semiconductor process technology Life sciences and health solutions Data and telecommunication Discover more applications..."
+    },
+    {
+      "id": "check-page-d11d9d155f",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "page": "application",
+      "excerpt": "Job opportunities Academic Excellence About imec Infrastructure Organization More imec Stories Press releases Event calendar Publications imec Germany imec the Netherlands imec USA imec UK ITF Connect with us partner site | disclaimer | privacy statement | cookie policy | terms and conditions of sale/purchase | accessibility"
     },
     {
       "id": "check-page-4c27df501d",
@@ -1243,10 +2325,154 @@
       "excerpt": "Advanced chip technology for healthcare | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Expertise"
     },
     {
+      "id": "check-page-091dd05daa",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application",
+      "excerpt": "Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Expertise / Accelerating healthcare innovation with advanced chip technology Accelerating healthcare innovation with advanced chip technology Imec believes in the power of silicon chip technologies to break new frontiers in health."
+    },
+    {
+      "id": "check-page-b76b00b140",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application",
+      "excerpt": "We develop next-generation chip technologies for our partners, to accelerate medical breakthroughs, reimagine clinical care, and ensure better health outcomes for everyone."
+    },
+    {
+      "id": "check-page-54ca105458",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application",
+      "excerpt": "Life science tools Neurotech Smart medtech Manufacturing Contact Life science tools Neurotech Smart medtech Manufacturing Contact Healthcare is undergoing a massive transformation, driven by the convergence of data, silicon, and life sciences."
+    },
+    {
+      "id": "check-page-3aaeb25cfc",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application",
+      "excerpt": "A new era awaits where prevention is the norm, care becomes continuous, and health will be truly human-centered."
+    },
+    {
+      "id": "check-page-77c37d524f",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application",
+      "excerpt": "Tech innovators and health professionals are shaping a future where breakthroughs are not just scientific, but societal."
+    },
+    {
+      "id": "check-page-1623ce7506",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application",
+      "excerpt": "Medtech, neurotechnology, and life science innovations are at the forefront of this shift enabling advanced imaging, smarter diagnostics, more responsive therapies, and deeper understanding of the human body and brain."
+    },
+    {
+      "id": "check-page-706afceeec",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application",
+      "excerpt": "Silicon platforms, the spark for healthcare innovation Imec partners with bold innovators to turn transformative ideas into real-world impact – accelerating the journey from concept to clinic."
+    },
+    {
+      "id": "check-page-bf79f33cd3",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application",
+      "excerpt": "By harnessing our deep expertise, world-class infrastructure , and pivotal role in the global tech ecosystem, we create semiconductor-enabled platforms that promise faster and more cost-effective research & development ."
+    },
+    {
+      "id": "check-page-6e2bf17d5b",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application",
+      "excerpt": "Even more, we guarantee a seamless transition towards low-, mid- or high-volume manufacturing , either in our 200mm and 300mm cleanrooms – imec Leuven, or imec Spain for non-standard materials – via IC-Link , or at partner foundries in our ecosystem."
+    },
+    {
+      "id": "check-page-f26e74a58f",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application",
+      "excerpt": "For example, in the world’s leading region for biotechnology, imec has set up the imec’s Massachusetts Center of Excellence to empower collaborations with leading research entities, thereby accelerating innovation at the intersection of biotechnology and semiconductor technology."
+    },
+    {
+      "id": "check-page-95858b3063",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application",
+      "excerpt": "In the Netherlands, imec, Wageningen University & Research (WUR), Radboud University (RU) and Radboudumc, with support from the Province of Gelderland, founded OnePlanet ."
+    },
+    {
+      "id": "check-page-6448be4da4",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application",
+      "excerpt": "It's an innovation center for nano- and digital technology for applications in agriculture, food, health and environment."
+    },
+    {
       "id": "check-page-3359cba0e2",
       "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
       "page": "application",
       "excerpt": "Robotics semiconductor technologies | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications /"
+    },
+    {
+      "id": "check-page-b556e16927",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application",
+      "excerpt": "Partner with us From digital intelligence to physical AI Artificial intelligence is entering a new era: bringing intelligence into the physical world with robots – changing every aspect of our lives."
+    },
+    {
+      "id": "check-page-ac0369c64d",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application",
+      "excerpt": "Robotics evolves in stages, with successive generations of robots entering the market: Industrial and logistics robots performing repetitive, well-defined tasks in structured environments such as factories, warehouses and distribution centers, including assembly, inspection, material handling, picking, packing and autonomous mobile transportation."
+    },
+    {
+      "id": "check-page-704092db60",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application",
+      "excerpt": "Service robots operating alongside people in semi-structured environments such as hospitals, retail stores, airports, hotels and public spaces, supporting activities including inventory management, cleaning, delivery, security, healthcare assistance and customer interaction."
+    },
+    {
+      "id": "check-page-fcbe861d01",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application",
+      "excerpt": "Advanced collaborative robots and autonomous assistants capable of understanding human intent, adapting to changing conditions and performing complex multi-step tasks in dynamic workplaces, construction sites, healthcare facilities and outdoor environments."
+    },
+    {
+      "id": "check-page-0a4751b97e",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application",
+      "excerpt": "The intelligence embodied in future robots will rely on innovations across the entire technology stack , from advanced semiconductor technologies and ultra-low-power computing platforms to sensing, communications and AI."
+    },
+    {
+      "id": "check-page-995c57aa86",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application",
+      "excerpt": "Beyond technology innovation, imec acts as a neutral catalyst for the robotics ecosystem ."
+    },
+    {
+      "id": "check-page-6b0f8a09f9",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application",
+      "excerpt": "As no single player can master the full robotics value chain, successful innovation requires close collaboration between hardware suppliers, AI developers, system integrators and application partners."
+    },
+    {
+      "id": "check-page-bbf0a2eb19",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application",
+      "excerpt": "Addressing the key challenges of autonomous robotics Deploying robots in the real world remains one of today's greatest technological challenges."
+    },
+    {
+      "id": "check-page-3214e85cee",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application",
+      "excerpt": "Full autonomy demands capabilities that must work flawlessly from day one: robust perception, real-time decision-making, safe operation, energy efficiency, reliability and data privacy."
+    },
+    {
+      "id": "check-page-089bcfec6a",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application",
+      "excerpt": "AI-powered robots rely on increasingly sophisticated models to understand their surroundings, make decisions and execute actions, all this while minimizing latency and energy consumption, and maximizing safety and performance."
+    },
+    {
+      "id": "check-page-0e0e562ab4",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application",
+      "excerpt": "This will require computing architectures that span multiple levels, from ultra-efficient, ultra-low power on-device processing and edge AI to cloud-based computing resources."
+    },
+    {
+      "id": "check-page-bb32f2292d",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application",
+      "excerpt": "Energy efficiency and endurance ."
     },
     {
       "id": "check-page-79220b3231",
@@ -1255,16 +2481,544 @@
       "excerpt": "Redefining robotic possibilities with SAFEBOT | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications /"
     },
     {
+      "id": "check-page-edebef3dcd",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "page": "application",
+      "excerpt": "We stand on the cusp of a transformative leap in manufacturing – a shift towards an era where humans and robots collaborate more closely than ever before."
+    },
+    {
+      "id": "check-page-463a259b1e",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "page": "application",
+      "excerpt": "Address the skilled labor shortage facing Europe."
+    },
+    {
+      "id": "check-page-2fd270cd81",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "page": "application",
+      "excerpt": "Their introduction promises enhanced working conditions , bridging human ingenuity with robotic precision, strength and intelligence – in a shared workspace."
+    },
+    {
+      "id": "check-page-ee1b845e8c",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "page": "application",
+      "excerpt": "Today’s cobot safety insurance: current solutions and non-existence of ‘collaboration’ There are broadly three ways in which cobot safety is addressed to date."
+    },
+    {
+      "id": "check-page-194575f59e",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "page": "application",
+      "excerpt": "To achieve this, we combine our in-house knowledge of sensor hardware and sensor fusion software ."
+    },
+    {
+      "id": "check-page-d9d860fce8",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "page": "application",
+      "excerpt": "This will prove valuable in an Industry 5.0 setting and spill over to other applications such as social robots, autonomous mobility, smart homes, and many other areas where an awareness of the environment and speed and productivity is required."
+    },
+    {
+      "id": "check-page-01cc83532d",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "page": "application",
+      "excerpt": "Artificial intelligence Life sciences Health technologies Discover more expertises..."
+    },
+    {
+      "id": "check-page-178101b378",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "page": "application",
+      "excerpt": "What we offer Our R&D solutions and innovation services Research Manufacturing Venturing Applications Advanced semiconductor process technology Life sciences and health solutions Data and telecommunication Discover more applications..."
+    },
+    {
+      "id": "check-page-a6dd40e631",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "page": "application",
+      "excerpt": "Job opportunities Academic Excellence About imec Infrastructure Organization More imec Stories Press releases Event calendar Publications imec Germany imec the Netherlands imec USA imec UK ITF Connect with us partner site | disclaimer | privacy statement | cookie policy | terms and conditions of sale/purchase | accessibility"
+    },
+    {
       "id": "check-page-c6f723bf5d",
       "url": "https://www.imec-int.com/en/applications/security-and-resilience",
       "page": "application",
       "excerpt": "Technology for security and resilience | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications /"
     },
     {
+      "id": "check-page-19f385ca56",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application",
+      "excerpt": "Autonomous systems Sensing and communication Cybersecurity Distributed sensing Work with us Autonomous systems Sensing and communication Cybersecurity Distributed sensing Work with us In an increasingly connected and unpredictable world, the need for secure, resilient systems has never been more urgent."
+    },
+    {
+      "id": "check-page-1e731690d1",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application",
+      "excerpt": "Imec offers a sovereign, high-tech breeding ground for developing trusted systems that are robust and intelligent, based on advances in: sensing & detection communication health monitoring cybersecurity energy generation & storage human-machine interface autonomous systems Imec’s R&D expertise can be applied to many domains."
+    },
+    {
+      "id": "check-page-3cdfded4f3",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application",
+      "excerpt": "Examples include: stable communication systems for emergency response smart sensor networks for monitoring the operational environment health and safety monitoring for critical personnel intelligent infrastructure that can detect and respond to threats Next to its world leading expertise in semiconductor and digital technologies, imec also offers manufacturing capabilities via IC-Link ."
+    },
+    {
+      "id": "check-page-c00e7d51df",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application",
+      "excerpt": "This includes end-to-end ASIC development services and silicon photonics IC prototyping and manufacturing."
+    },
+    {
+      "id": "check-page-6e30f8b14a",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application",
+      "excerpt": "This experience, proven in automotive ADAS and autonomous platforms, is directly relevant to the security and defense sector, where heterogeneous integration, robustness, modularity, and long-term scalability are equally critical."
+    },
+    {
+      "id": "check-page-a71983091f",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application",
+      "excerpt": "Let’s dive deeper into imec’s four key R&D focus areas: Reliable autonomy for drones and unmanned vehicles Autonomous systems must operate with absolute reliability – even when GNSS and external communications are severed."
+    },
+    {
+      "id": "check-page-6beb6f23c1",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application",
+      "excerpt": "Imec overcomes these limitations by delivering compact, energy-efficient solutions that empower platforms to navigate and decide independently."
+    },
+    {
+      "id": "check-page-d0270ba5dc",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application",
+      "excerpt": "Learn more about our semiconductor-driven deep-tech support Sensing and communication for resilient operations In contested electronic environments, RF signals can be jammed or intercepted, compromising both communication and situational awareness."
+    },
+    {
+      "id": "check-page-c1a745b590",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application",
+      "excerpt": "These dual-mode systems offer redundancy and resilience while meeting strict constraints on energy, size, weight, and cost."
+    },
+    {
+      "id": "check-page-02365091e2",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application",
+      "excerpt": "Cybersecurity, ensuring safe communication and data protection Modern transportation systems – from autonomous and connected land vehicles to aircraft communication networks – face increasing cybersecurity risks, ranging from intercepted communication channels to physical access by unauthorized parties."
+    },
+    {
+      "id": "check-page-8e34149b47",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application",
+      "excerpt": "Distributed sensing for early-threat detection Imec is advancing distributed sensing technologies to enhance threat detection accuracy, resilience, and response speed across autonomous systems and networks."
+    },
+    {
+      "id": "check-page-c743b1094a",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application",
+      "excerpt": "These sensing capabilities include: computational imaging extended-wavelength infrared imaging quantum and solid-state magnetic sensing advanced chemical spectroscopy AI sensor fusion chiplets Spectral camera and sensor for extended vision, revealing details and materials invisible to conventional cameras."
+    },
+    {
       "id": "check-page-c1808f8f1d",
       "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
       "page": "application",
       "excerpt": "Semiconductor technology: exploring the next generations | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More"
+    },
+    {
+      "id": "check-page-5eecbc055c",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application",
+      "excerpt": "Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications / Semiconductor technology Semiconductor technology From exploration to implementation, imec is your partner to develop the next generations of semiconductor technology."
+    },
+    {
+      "id": "check-page-d380b89637",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application",
+      "excerpt": "Explore our CMOS expertise Infrastructure and expertise Collaboration models Infrastructure and expertise Collaboration models More than any other industry, the semiconductor business is running a race against itself."
+    },
+    {
+      "id": "check-page-c49622ad0f",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application",
+      "excerpt": "For more than 60 years, semiconductor technology has maintained exponential performance growth , transforming society at a blistering pace."
+    },
+    {
+      "id": "check-page-964b08c353",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application",
+      "excerpt": "To accommodate for challenges such as the steeply growing amount of data, low-power edge computing for artificial intelligence and high-performance computing."
+    },
+    {
+      "id": "check-page-16abc59dc2",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application",
+      "excerpt": "But when it comes to semiconductor technology scaling, the low-hanging fruit has long been picked ."
+    },
+    {
+      "id": "check-page-1e6c297098",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application",
+      "excerpt": "Smaller, better, faster: dive into imec's chip scaling roadmap What’s more, the semiconductor industry needs to start taking its environmental impact into account."
+    },
+    {
+      "id": "check-page-b17b1a5073",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application",
+      "excerpt": "But it also consumes energy, needs raw – and sometimes rare – materials."
+    },
+    {
+      "id": "check-page-6b3d0fc197",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application",
+      "excerpt": "Read our white paper: the green transition of the IC industry Imec has been at the forefront of semiconductor technology since 1984."
+    },
+    {
+      "id": "check-page-a5c6da31da",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application",
+      "excerpt": "We offer all players in the industry an open innovation environment ."
+    },
+    {
+      "id": "check-page-4437b25b0d",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application",
+      "excerpt": "Work with us Do you want regular updates on imec’s semiconductor research?"
+    },
+    {
+      "id": "check-page-231077ec9c",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application",
+      "excerpt": "Click here Semiconductor research infrastructure and expertise The beating heart of imec’s innovation activities is its 300mm cleanroom, the largest and most advanced R&D cleanroom in the world."
+    },
+    {
+      "id": "check-page-4a8553c115",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application",
+      "excerpt": "Cookie settings Here, the world’s leading tool and material suppliers bring their instruments and technologies to create a unique, vendor-neutral lab where imec and its partners can explore new: patterning tools resist chemicals semiconductor materials analysis software semiconductor process technology tools process steps Take a look at imec’s complete infrastructure."
+    },
+    {
+      "id": "check-page-a56d18ec9a",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "page": "application",
+      "excerpt": "Smarter consumer electronics | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications /"
+    },
+    {
+      "id": "check-page-d3af28afbe",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "page": "application",
+      "excerpt": "Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications / Smarter consumer electronics Smarter consumer electronics Make your consumer electronics more interactive, immersive, and interconnected."
+    },
+    {
+      "id": "check-page-5d6d8e94be",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "page": "application",
+      "excerpt": "Fluent interaction Immersive experience Higher bandwidths Fluent interaction Immersive experience Higher bandwidths Key technology players in the consumer electronics market are on a constant lookout to make their products more interactive, immersive and connected."
+    },
+    {
+      "id": "check-page-6ff6e4fb25",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "page": "application",
+      "excerpt": "And our engineers strive to make emerging technologies mature, ready to be included in your cutting-edge consumer products."
+    },
+    {
+      "id": "check-page-a6b4bbc5e9",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "page": "application",
+      "excerpt": "Learn more about our semiconductor-driven deep-tech support Building an immersive experience Thanks to some amazing and disruptive technologies, audio and video applications have improved to a level that was long unimaginable."
+    },
+    {
+      "id": "check-page-d3a286f30f",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "page": "application",
+      "excerpt": "Still, more is to come: higher video and audio resolutions, augmented reality and virtual reality, directed laser audio, and eventually holography and virtual presence."
+    },
+    {
+      "id": "check-page-db9bd2bcca",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "page": "application",
+      "excerpt": "Learn about IC-Link Collaborate with imec to develop your next-generation consumer products Designing new products and enabling new consumer experiences doesn’t depend on one expertise or technology."
+    },
+    {
+      "id": "check-page-a85889b536",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "page": "application",
+      "excerpt": "They require innovation in display technology, intelligence, form factor, energy use, connectivity ... all at once."
+    },
+    {
+      "id": "check-page-09a09aa50e",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "page": "application",
+      "excerpt": "Enlist our help for the development, prototyping and low-volume manufacturing of specific complex components."
+    },
+    {
+      "id": "check-page-dd97c14405",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "page": "application",
+      "excerpt": "Artificial intelligence Life sciences Health technologies Discover more expertises..."
+    },
+    {
+      "id": "check-page-12088842f5",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "page": "application",
+      "excerpt": "What we offer Our R&D solutions and innovation services Research Manufacturing Venturing Applications Advanced semiconductor process technology Life sciences and health solutions Data and telecommunication Discover more applications..."
+    },
+    {
+      "id": "check-page-e18df38019",
+      "url": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "page": "application",
+      "excerpt": "Job opportunities Academic Excellence About imec Infrastructure Organization More imec Stories Press releases Event calendar Publications imec Germany imec the Netherlands imec USA imec UK ITF Connect with us partner site | disclaimer | privacy statement | cookie policy | terms and conditions of sale/purchase | accessibility"
+    },
+    {
+      "id": "check-page-d618b95870",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application",
+      "excerpt": "Sustainable energy technology | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications /"
+    },
+    {
+      "id": "check-page-228c701989",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application",
+      "excerpt": "Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications / Sustainable energy and power technologies Sustainable energy and power technologies Partner with imec to get a permanent front seat in the forthcoming energy revolution."
+    },
+    {
+      "id": "check-page-cea5d0de91",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application",
+      "excerpt": "Explore our energy expertise Power-to-Molecules Power electronics Solar energy Work with us Power-to-Molecules Power electronics Solar energy Work with us The world is in a race to reduce the emission of greenhouse gasses and become carbon neutral after the middle of this century."
+    },
+    {
+      "id": "check-page-a66ca94527",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application",
+      "excerpt": "You, as a company in the energy domain, are looking to be in the front lines."
+    },
+    {
+      "id": "check-page-1fa5734436",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application",
+      "excerpt": "Especially technologies that decarbonize the energy generation and use, and that store and convert green energy."
+    },
+    {
+      "id": "check-page-54c092f1fc",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application",
+      "excerpt": "Contact us today to see how we can help you Power-to-Molecules: converting green energy to fuels and valuable chemicals Imagine a world in which we have liquid fuels that are clean and sustainable, that we use as long-term storage of solar energy or to power vehicles and even airplanes."
+    },
+    {
+      "id": "check-page-3a933e3803",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application",
+      "excerpt": "One interesting liquid fuel is hydrogen ."
+    },
+    {
+      "id": "check-page-93accacafc",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application",
+      "excerpt": "But we’re also working towards photovoltaic systems that can generate hydrogen from ambient moisture."
+    },
+    {
+      "id": "check-page-e7d600be7e",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application",
+      "excerpt": "Imec’s concept is to use a combination of solar energy and nanotechnology to arrive at a low-cost process that produces valuable chemicals from CO 2 and water."
+    },
+    {
+      "id": "check-page-08a2e2a49e",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application",
+      "excerpt": "These chemicals can be fuels such as hydrogen, methanol or ethanol, but also compounds like ethylene or syngas that can be used as basic components for the chemical industry, to make polymers for instance."
+    },
+    {
+      "id": "check-page-aed961ac6f",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application",
+      "excerpt": "Together with VITO and industrial pioneers Bekaert, Colruyt Group, DEME and John Cockerill, imec has set up the Hyve consortium with the ambitious goal to sustainably and cost-efficiently produce hydrogen at gigawatt level."
+    },
+    {
+      "id": "check-page-488a5c8961",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application",
+      "excerpt": "Learn more about our semiconductor-driven deep-tech support Power electronics: efficient and compact conversion of electricity Gallium nitride (GaN) is today’s top material for fabricating power electronics devices and circuits."
+    },
+    {
+      "id": "check-page-0aae857b43",
+      "url": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application",
+      "excerpt": "Target applications include high-voltage power switching and power conversion, RF power amplifying and sensing, battery chargers for mobile phones and electric cars, and invertors for solar panel connections to the grid, to name but a few."
+    },
+    {
+      "id": "check-page-0a7acbb70c",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "page": "application",
+      "excerpt": "imec magazine April 2017 - 60GHz technology for WiGig® and 5G applications Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0"
+    },
+    {
+      "id": "check-page-b3aa162976",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "page": "application",
+      "excerpt": "On top of that, a whole range of new applications comes in sight, including video distribution in the home, fast exchange of GBytes of data between tablets and smartphones, immersive gaming and wireless docking of laptops."
+    },
+    {
+      "id": "check-page-3eb536061e",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "page": "application",
+      "excerpt": "WiGig® is a new standard for indoor scenarios, expanding the Wi-Fi experience for virtual reality, multimedia streaming, gaming, wireless docking, etc."
+    },
+    {
+      "id": "check-page-89a755e53b",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "page": "application",
+      "excerpt": "ATTO cell technology combines broadband antennas integrated in the floor with dedicated hardware to allow short-range high-speed wireless connectivity."
+    },
+    {
+      "id": "check-page-735ab7be06",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "page": "application",
+      "excerpt": "And to interconnect the different ATTO cells with the hardware, an RF-over-fiber network is envisaged which provides sufficient bandwidth to continue to increase ATTO’s data rates towards a dedicated 100Gb/s per user – which is ten times the speed of the upcoming 5G technology."
+    },
+    {
+      "id": "check-page-bc69d5b034",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "page": "application",
+      "excerpt": "To investigate and develop the disruptive wireless ATTO cell technology, Professor Demeester and his team (imec – Ghent University) received a European ERC advanced grant of 2.5 million euro [2017 - 2021]."
+    },
+    {
+      "id": "check-page-1de5f1d4d2",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "page": "application",
+      "excerpt": "This program uses an open innovation model and targets semiconductor vendors."
+    },
+    {
+      "id": "check-page-59a41e043c",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "page": "application",
+      "excerpt": "Artificial intelligence Life sciences Health technologies Discover more expertises..."
+    },
+    {
+      "id": "check-page-2a78d3c810",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "page": "application",
+      "excerpt": "What we offer Our R&D solutions and innovation services Research Manufacturing Venturing Applications Advanced semiconductor process technology Life sciences and health solutions Data and telecommunication Discover more applications..."
+    },
+    {
+      "id": "check-page-181f323d9b",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-april-2017/60ghz-technology-for-wigig-and-5g-applications",
+      "page": "application",
+      "excerpt": "Job opportunities Academic Excellence About imec Infrastructure Organization More imec Stories Press releases Event calendar Publications imec Germany imec the Netherlands imec USA imec UK ITF Connect with us partner site | disclaimer | privacy statement | cookie policy | terms and conditions of sale/purchase | accessibility"
+    },
+    {
+      "id": "check-page-a695fd1818",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "page": "application",
+      "excerpt": "imec magazine February 2019 - Sensor searches demanding application Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More"
+    },
+    {
+      "id": "check-page-4e156fa6c6",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "page": "application",
+      "excerpt": "Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications To Stories Sensor searches demanding application Micro opto-mechanical sensors (MOMS) are radiation-hard and combine a wide range with high sensitivity."
+    },
+    {
+      "id": "check-page-9209b95add",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "page": "application",
+      "excerpt": "Because of their miniaturization and performance, they are well established in areas such as the automotive and medical industry, height- and depth-measurements and flow sensing."
+    },
+    {
+      "id": "check-page-39b9c6082d",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "page": "application",
+      "excerpt": "And at least as important: it allows massive multiplexing: the parallel readout of an unprecedented number of sensors via an optical bus, not requiring integrated support electronics."
+    },
+    {
+      "id": "check-page-ba72ac4013",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "page": "application",
+      "excerpt": "Artificial intelligence Life sciences Health technologies Discover more expertises..."
+    },
+    {
+      "id": "check-page-ae8f39b499",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "page": "application",
+      "excerpt": "What we offer Our R&D solutions and innovation services Research Manufacturing Venturing Applications Advanced semiconductor process technology Life sciences and health solutions Data and telecommunication Discover more applications..."
+    },
+    {
+      "id": "check-page-e3ef18bff1",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-february-2019/sensor-searches-demanding-application",
+      "page": "application",
+      "excerpt": "Job opportunities Academic Excellence About imec Infrastructure Organization More imec Stories Press releases Event calendar Publications imec Germany imec the Netherlands imec USA imec UK ITF Connect with us partner site | disclaimer | privacy statement | cookie policy | terms and conditions of sale/purchase | accessibility"
+    },
+    {
+      "id": "check-page-e2c614a6c8",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "page": "application",
+      "excerpt": "imec magazine January 2019 - “In 2035, quantum processors with a few thousand qubits will run first small applications.” Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive"
+    },
+    {
+      "id": "check-page-b654bf6390",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "page": "application",
+      "excerpt": "Iuliana Radu, program director for beyond CMOS and quantum computing at imec, discusses how these high-performance computers might look like in 2035."
+    },
+    {
+      "id": "check-page-7d71704d5d",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "page": "application",
+      "excerpt": "Wearables and ingestibles will continuously monitor our health, and combine the data with our genetic imprint."
+    },
+    {
+      "id": "check-page-5ec4cf17ec",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "page": "application",
+      "excerpt": "Add to this the large amount of data generated by emerging IoT applications such as the autonomous cars, the smart buildings and the smart cities."
+    },
+    {
+      "id": "check-page-12c108ae24",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "page": "application",
+      "excerpt": "For both cloud computing and supercomputing, we will need solutions that bring computing to a higher level of performance, and this at the lowest possible energy consumption."
+    },
+    {
+      "id": "check-page-0ff617dd16",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "page": "application",
+      "excerpt": "This enables different applications ranging from ultralow-power in the IoT space, to mobile and to high-performance computing."
+    },
+    {
+      "id": "check-page-ecd4e3c206",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "page": "application",
+      "excerpt": "On the eve of quantum computing Some applications are too complex to be solved with classical computing paradigms."
+    },
+    {
+      "id": "check-page-480eba2b40",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "page": "application",
+      "excerpt": "Quantum computing can come to the rescue."
+    },
+    {
+      "id": "check-page-ee80e20e86",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "page": "application",
+      "excerpt": "In a quantum computer, information is manipulated in a fundamentally different way than in a classical computer."
+    },
+    {
+      "id": "check-page-aba1b1da87",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "page": "application",
+      "excerpt": "Quantum computers operate with qubits that can with a certain probability be zero and with a certain probability be one."
+    },
+    {
+      "id": "check-page-bdfb711f77",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "page": "application",
+      "excerpt": "Add to this entanglement, which means that qubits talk with each other and act concertedly, and the number of states in a quantum registry increases like a power law with the number of qubits."
+    },
+    {
+      "id": "check-page-e22bf6484e",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "page": "application",
+      "excerpt": "Quantum computing promises the ability to solve those big problems, too difficult to solve on a classical computer."
+    },
+    {
+      "id": "check-page-5393aa7ed8",
+      "url": "https://www.imec-int.com/en/imec-magazine/imec-magazine-january-2019/in-2035-quantum-processors-with-a-few-thousand-qubits-will-run-first-small-applications",
+      "page": "application",
+      "excerpt": "Quantum computing can go beyond the capabilities of classical computing, but it will not be the ‘holy grail’ for solving all issues."
     }
   ],
   "findings": {

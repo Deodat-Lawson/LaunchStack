@@ -1,6 +1,6 @@
 {
   "programId": "golden-gate-ventures",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.goldengate.vc/about",
@@ -30,111 +30,119 @@
       "url": "https://www.goldengate.vc/portfolio",
       "page": "portfolio",
       "anchor": "Portfolio",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.goldengate.vc/portfolio/99-co",
       "page": "portfolio",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.goldengate.vc/portfolio/alodokter",
       "page": "portfolio",
       "anchor": "Alodokter",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.goldengate.vc/portfolio/angellist",
       "page": "portfolio",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.goldengate.vc/portfolio/appota",
       "page": "portfolio",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.goldengate.vc/portfolio/aptoide",
       "page": "portfolio",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.goldengate.vc/portfolio/arkadiah",
       "page": "portfolio",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.goldengate.vc/portfolio/ayannah",
       "page": "portfolio",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.goldengate.vc/portfolio/baokim",
       "page": "portfolio",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.goldengate.vc/portfolio/biosapien",
       "page": "portfolio",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.goldengate.vc/portfolio/bootloader",
       "page": "portfolio",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.goldengate.vc/portfolio/bucketplace",
       "page": "portfolio",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.goldengate.vc/portfolio/bukuwarung",
       "page": "portfolio",
       "anchor": "BukuWarung",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/byanat",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.goldengate.vc/portfolio/carousell",
       "page": "portfolio",
       "anchor": "Carousell",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -142,7 +150,7 @@
       "url": "https://www.goldengate.vc/portfolio/carro",
       "page": "portfolio",
       "anchor": "Carro",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -150,7 +158,7 @@
       "url": "https://www.goldengate.vc/portfolio/chilibeli",
       "page": "portfolio",
       "anchor": "Chilibeli",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

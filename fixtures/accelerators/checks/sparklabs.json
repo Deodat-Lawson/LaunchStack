@@ -1,6 +1,6 @@
 {
   "programId": "sparklabs",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://sparklabs.co.kr/kr/",
     "https://sparklabs.co.kr/kr/program_faq",
@@ -16,7 +16,12 @@
     "https://sparklabs.co.kr/en/partnership_program",
     "https://sparklabs.co.kr/en/program",
     "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fpartnership_program",
-    "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fprogram"
+    "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fprogram",
+    "https://sparklabs.co.kr/kr/portfolio",
+    "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fportfolio",
+    "https://sparklabs.co.kr/kr/portfolio/allganize/",
+    "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fportfolio%2Fallganize%2F",
+    "https://sparklabs.co.kr/kr/portfolio/bemyfriends-co-ltd/"
   ],
   "evidence": [
     {
@@ -111,6 +116,13 @@
       "page": "batches"
     },
     {
+      "id": "check-email-06c281034f",
+      "url": "https://sparklabs.co.kr/kr/portfolio",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "info@sparklabs.co.kr",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-076a99eac9",
       "url": "https://sparklabs.co.kr/kr/faq",
       "title": "SparkLabs — terms page",
@@ -195,6 +207,27 @@
       "page": "terms"
     },
     {
+      "id": "check-email-3225ba3640",
+      "url": "https://sparklabs.co.kr/kr/portfolio/bemyfriends-co-ltd/",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-347c7c8a68",
+      "url": "https://sparklabs.co.kr/kr/portfolio/allganize/",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-36fd375565",
+      "url": "https://sparklabs.co.kr/kr/portfolio/allganize/",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-3acd84e28d",
       "url": "https://sparklabs.co.kr/kr/partnership_program",
       "title": "SparkLabs — program page",
@@ -221,6 +254,34 @@
       "title": "SparkLabs — program page",
       "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group",
       "page": "details"
+    },
+    {
+      "id": "check-email-4faac200bc",
+      "url": "https://sparklabs.co.kr/kr/portfolio/allganize/",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "info@sparklabs.co.kr",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-57a6d629cd",
+      "url": "https://sparklabs.co.kr/kr/portfolio/bemyfriends-co-ltd/",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "info@sparklabs.co.kr",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-583faf8211",
+      "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fportfolio",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "info@sparklabs.co.kr",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-58879d6c8a",
+      "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fportfolio%2Fallganize%2F",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "info@sparklabs.co.kr",
+      "page": "portfolio"
     },
     {
       "id": "check-email-59d778bb7f",
@@ -314,6 +375,13 @@
       "page": "terms"
     },
     {
+      "id": "check-email-81d1f9c239",
+      "url": "https://sparklabs.co.kr/kr/portfolio",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-8303d04d64",
       "url": "https://sparklabs.co.kr/en/partnership_program",
       "title": "SparkLabs — program page",
@@ -340,6 +408,13 @@
       "title": "SparkLabs — terms page",
       "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group",
       "page": "terms"
+    },
+    {
+      "id": "check-email-927b7090e7",
+      "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fportfolio%2Fallganize%2F",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr",
+      "page": "portfolio"
     },
     {
       "id": "check-email-9402ded177",
@@ -384,11 +459,25 @@
       "page": "terms"
     },
     {
+      "id": "check-email-aa23278646",
+      "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fportfolio%2Fallganize%2F",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-aa72642053",
       "url": "https://sparklabs.co.kr/en/visit_program",
       "title": "SparkLabs — program page",
       "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group",
       "page": "details"
+    },
+    {
+      "id": "check-email-b216b612cc",
+      "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fportfolio",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group",
+      "page": "portfolio"
     },
     {
       "id": "check-email-b931277340",
@@ -426,11 +515,32 @@
       "page": "terms"
     },
     {
+      "id": "check-email-dcc520680c",
+      "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fportfolio",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-de72be7b09",
+      "url": "https://sparklabs.co.kr/kr/portfolio",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-e3c69e1cfb",
       "url": "https://sparklabs.co.kr/kr/batch_team/christina-min/",
       "title": "SparkLabs — batches page",
       "excerpt": "info@sparklabs.co.kr",
       "page": "batches"
+    },
+    {
+      "id": "check-email-e79582bd0b",
+      "url": "https://sparklabs.co.kr/kr/portfolio/bemyfriends-co-ltd/",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr",
+      "page": "portfolio"
     },
     {
       "id": "check-email-f1393a86ee",
@@ -489,6 +599,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-11d7974c1f",
+      "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fportfolio%2Fallganize%2F",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "Our Companies → https://sparklabs.co.kr/kr/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-23f15e7c4b",
       "url": "https://sparklabs.co.kr/kr/application_faq",
       "title": "SparkLabs — terms page",
@@ -501,6 +618,20 @@
       "title": "SparkLabs — terms page",
       "excerpt": "Our Companies → https://sparklabs.co.kr/en/portfolio",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-3b058b3e33",
+      "url": "https://sparklabs.co.kr/kr/portfolio",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "https://sparklabs.co.kr/kr/portfolio?page=8",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-419a8f2e3a",
+      "url": "https://sparklabs.co.kr/kr/portfolio",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "3 → https://sparklabs.co.kr/kr/portfolio?page=3",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-4411b76983",
@@ -517,6 +648,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-4da2db8cc6",
+      "url": "https://sparklabs.co.kr/kr/portfolio/allganize/",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "Our Companies → https://sparklabs.co.kr/kr/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-584d9595e6",
       "url": "https://sparklabs.co.kr/en/program",
       "title": "SparkLabs — program page",
@@ -531,6 +669,20 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-60d84f9034",
+      "url": "https://sparklabs.co.kr/kr/portfolio",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "7 → https://sparklabs.co.kr/kr/portfolio?page=7",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-682308a3be",
+      "url": "https://sparklabs.co.kr/kr/portfolio",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "5 → https://sparklabs.co.kr/kr/portfolio?page=5",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-6907bab7c1",
       "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fprogram",
       "title": "SparkLabs — program page",
@@ -538,11 +690,25 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-7fb944247e",
+      "url": "https://sparklabs.co.kr/kr/portfolio",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "4 → https://sparklabs.co.kr/kr/portfolio?page=4",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-85d9b71b26",
       "url": "https://sparklabs.co.kr/kr/batch_team/christina-min/",
       "title": "SparkLabs — batches page",
       "excerpt": "Our Companies → https://sparklabs.co.kr/kr/portfolio",
       "page": "batches"
+    },
+    {
+      "id": "check-portfolio-87596104b0",
+      "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fportfolio",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "Our Companies → https://sparklabs.co.kr/kr/portfolio",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-8a743f3b53",
@@ -566,6 +732,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-c5713da308",
+      "url": "https://sparklabs.co.kr/kr/portfolio",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "2 → https://sparklabs.co.kr/kr/portfolio?page=2",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-cf3109b701",
       "url": "https://sparklabs.co.kr/en/bbs/login.php?url=%2Fen%2Fvisit_program",
       "title": "SparkLabs — program page",
@@ -580,11 +753,32 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-e681ef519b",
+      "url": "https://sparklabs.co.kr/kr/portfolio",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "6 → https://sparklabs.co.kr/kr/portfolio?page=6",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-f16d8a0abe",
+      "url": "https://sparklabs.co.kr/kr/portfolio/bemyfriends-co-ltd/",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "Our Companies → https://sparklabs.co.kr/kr/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-f20d74aefa",
       "url": "https://sparklabs.co.kr/kr/faq",
       "title": "SparkLabs — terms page",
       "excerpt": "Our Companies → https://sparklabs.co.kr/kr/portfolio",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f516739110",
+      "url": "https://sparklabs.co.kr/kr/portfolio",
+      "title": "SparkLabs — portfolio page",
+      "excerpt": "https://sparklabs.co.kr/kr/portfolio?page=19",
+      "page": "portfolio"
     },
     {
       "id": "check-route-3ad605b8d8",
@@ -609,16 +803,76 @@
       "excerpt": "스파크랩 | SparkLabs 팝업레이어 알림 Batch 모집 소식 받기 Our Program Spark Claw Batch Program Partnership Program Our Companies Our Team Stories Insights News Batch 모집 소식 받기 entrepreneurs growing entrepreneurs entrepreneurs growing entrepreneurs Accelerate Growth. Nothing More. 다음 분기까지의 생존이 아닌, 앞으로 10년간의 성장을 위한 사업 기반을 다집니다. 스파크랩은 사업 성패 여부의 핵심인 PMF(Product-Market-Fit)에 집중하는 스타트업 액셀러레이터입니다. 스파크랩의 프로그램에 참여하는 동안 초기 창업자인 당신은 풀어야 할 진짜 문제가 무엇인지, 누구를 위해, 어떻게 풀 것인지 그 어느 때보다도 치열하게 고민하고 해답에 가까워질 것입니다. 비즈니스의 정수만이 남을 때까지 모두 쳐내는 과정을 거치며 단단해진 당신의 팀은 한 가지 목표를 향해 함께 달려가게 될 것이며, 어떤 투자자를 만나도 막히지 않고 사업을 설명할 수 있게 될 것입니다. Accelerate Growth. Nothing More. 다음 분기까지의 생존이 아닌, 앞으로 10년간의 성장을 위한 사업 기반을 다집니다. 스파크랩은 사업 성패 여부의 핵심인 PMF(Product-Market-Fit)에 집중하는 스타트업 액셀러레이터입니다. 스파크랩의 프로그램에 참여하는 동안 초기 창업자인 당신은 풀어야 할 진짜 문제가 무엇인지, 누구를 위해, 어떻게 풀 것인지 그 어느 때보다도 치열하게 고민하고 해답에 가까워질 것입니다. 비즈니스의 정수만이 남을 때까지 모두 쳐내는 과정을 거치며 단단해진 당신의 팀은 한 가지 목표를 향해 함께 달려가게 될 것이며, 어떤 투자자를 만나도 막히지 않고 사업을 설명할 수 있게 될 것입니다. 스파크랩 배치 프로그램 모집 일정 지금 빠르게 이메일로 알림 신청 받아보세요. 신청 소식 받기 스파크랩 배치 프로그램 모집 일정 지금 빠르게 이메일로 알림 신청 받아보세요. 신청 소식 받기 Portfolio Highlights What We'll Do Together 15주 동안 사업의 성패를 좌우할 PMF 찾기에 전념합니다. 집요하게 사업의 본질과 고객에 파고들다 어느 순간 맞이하게 되는 아하 모먼트의 희열을 느껴보세요. What We'll Do Together 15주 동안 사업의 성패를 좌우할 PMF 찾기에 전념합니다. 집요하게 사업의 본질과 고객에 파고들다 어느 순간 맞이하게 되는 아하 모먼트의 희열을 느껴보세요. Phase 1. Bootcamp 현황 분석 및 성장 방해 요소 제거 Phase 2. Spark Your Business KPI 설정 및 다음 단계로의 도약에 집중"
     },
     {
+      "id": "check-page-4985ec4952",
+      "url": "https://sparklabs.co.kr/kr/",
+      "page": "details",
+      "excerpt": "Q1. 최소 지원 자격이 뭔가요? 법인 설립 3년 이내의 초기 단계 스타트업 (1인 스타트업 지원 불가) Q2. 어떤 분야에 투자하나요? 커머스, B2B SaaS, 헬스케어, 게임, 딥테크, 푸드테크, AI, 프롭테크, 하드웨어 등 분야 제한 없이 유망한 스타트업에 투자합니다."
+    },
+    {
+      "id": "check-page-4985ec4952",
+      "url": "https://sparklabs.co.kr/kr/",
+      "page": "details",
+      "excerpt": "Q1. 최소 지원 자격이 뭔가요? 법인 설립 3년 이내의 초기 단계 스타트업 (1인 스타트업 지원 불가) Q2. 어떤 분야에 투자하나요? 커머스, B2B SaaS, 헬스케어, 게임, 딥테크, 푸드테크, AI, 프롭테크, 하드웨어 등 분야 제한 없이 유망한 스타트업에 투자합니다."
+    },
+    {
+      "id": "check-page-18eac3957a",
+      "url": "https://sparklabs.co.kr/kr/",
+      "page": "details",
+      "excerpt": "FAQ 전체보기 © 2023 SparkLabs ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login SparkLabs Inc."
+    },
+    {
+      "id": "check-page-a57ad62465",
+      "url": "https://sparklabs.co.kr/kr/",
+      "page": "details",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login © 2023 SparkLabs SparkLabs Inc."
+    },
+    {
+      "id": "check-page-0dcb3588ae",
+      "url": "https://sparklabs.co.kr/kr/",
+      "page": "details",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr"
+    },
+    {
       "id": "check-page-b2f392dec7",
       "url": "https://sparklabs.co.kr/kr/program_faq",
       "page": "terms",
       "excerpt": "Program FAQ | 스파크랩 | SparkLabs Batch 모집 소식 받기 Our Program Spark Claw Batch Program Partnership Program Our Companies Our Team Stories Insights News Batch 모집 소식 받기 FAQ 스파크랩에 대해 궁금하신 모든 것, 팩트로 확인하세요. 검색어 검색하기 FAQ로 해결되지 않은 문의 사항은 아래 이메일로 보내주세요. 12시간 내로 회신 드리겠습니다. hey@sparklabs.co.kr Program FAQ | Application FAQ Q1. 스파크랩 액셀러레이터 프로그램의 지원 방식이 궁금합니다. 프로그램의 서류 접수는 온라인 플랫폼인 Accelerator App를 통해 진행됩니다. \"APPLY NOW(지원하기)\"를 클릭하여 Accelerator App 웹사이트 회원가입을 후, 지원서에 나와 있는 질문에 답변하는 방식으로 서류를 접수해주시면 됩니다. Accelerator App은 국문 / 영문 모두 지원하오니, 서류 작성 시 편한 언어로 자유롭게 지원 바랍니다. Q2. 주로 어떤 분야의 스타트업을 선정하나요? 스파크랩은 인터넷, 온라인 게임, 모바일, e-commerce, 디지털 미디어, 의료 서비스, IoT (사물 인터넷) 및 하드웨어 분야에 속한 스타트업을 비롯하여, 다양한 분야를 대상으로 유연하게 스타트업을 선정하고 있습니다. 또한, 시장에서 유의미한 데이터를 수집하고, 활용하는 회사들에도 큰 가치를 둡니다. 통상적으로, 스파크랩은 신생 단계(seed)와 초기 단계(early-stage)의 스타트업에 투자하고 있습니다. 하지만, 저희는 항상 혁신적인 비전과 잠재력이 있는 회사의 도전을 기다리고 있습니다. Q3. SparkLabs에 선정된 회사는 투자를 얼마나 받나요? 스파크랩은 배치 프로그램에 선정된 모든 기업에 1억 ~ 3억원을 투자하며, 최소 6%의 지분을 취합니다. 또한 최대 7억원의 자금을 확보할 수 있는 팁스(TIPS) 프로그램 추천을 지원합니다. 그 외에도 배치 프로그램 참여 기간 동안 입주 공간을 지원하며, 스파크랩 파트너사를 통한 다양한 혜택을 제공합니다. Q4. SparkLabs의 선정기준이 뭔가요? 첫째 , 글로벌 진출 가능성이 높은 스타트업을 찾습니다. 둘째 , 세상을 바꿀 수 있는 혁신적인 아이디어를 가진 스타트업을 찾습니다. 셋째 , 파괴적인 혁신을 통해 세상을 변화시킬 아이디어를 가진 스타트업을 찾습니다. *저희의 내부 정책에 따라, 1인 스타트업은 선정하지 않습니다. Q5. 한 기수에 보통 몇개의 스타트업을 선정하나요? 한 기수에 보통 8-12개의 스타트업을 선정합니다. Q6. 기존의 SparkLabs 포트폴리오 스타트업들과 네트워킹할 기회가 있나요? 물론입니다. 스파크랩에서는 배치에 선정된 팀의 대표님들과 기존"
     },
     {
+      "id": "check-page-6702684911",
+      "url": "https://sparklabs.co.kr/kr/program_faq",
+      "page": "terms",
+      "excerpt": "Q14. 스파크랩에서 팁스를 받으려면 어떻게 해야 하나요? 스파크랩은 액셀러레이터 프로그램 참가 기업 혹은 스파크랩에서 투자한 다른 포트폴리오 중에서, 내부 심사를 거쳐 팁스 프로그램에 추천할 기업을 선별하고 있습니다. 다만, 오로지 팁스 추천만을 위한 별도의 투자 검토는 하고 있지 않습니다."
+    },
+    {
+      "id": "check-page-a1413a4a60",
+      "url": "https://sparklabs.co.kr/kr/program_faq",
+      "page": "terms",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login © 2023 SparkLabs SparkLabs Inc."
+    },
+    {
+      "id": "check-page-6808784185",
+      "url": "https://sparklabs.co.kr/kr/program_faq",
+      "page": "terms",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr"
+    },
+    {
       "id": "check-page-81a733a3cf",
       "url": "https://sparklabs.co.kr/kr/application_faq",
       "page": "terms",
       "excerpt": "Application FAQ | 스파크랩 | SparkLabs Batch 모집 소식 받기 Our Program Spark Claw Batch Program Partnership Program Our Companies Our Team Stories Insights News Batch 모집 소식 받기 FAQ 스파크랩에 대해 궁금하신 모든 것, 팩트로 확인하세요. 검색어 검색하기 FAQ로 해결되지 않은 문의 사항은 아래 이메일로 보내주세요. 12시간 내로 회신 드리겠습니다. hey@sparklabs.co.kr Program FAQ | Application FAQ Q1. 스파크랩 액셀러레이터 프로그램의 지원 방식이 궁금합니다. 프로그램의 서류 접수는 온라인 플랫폼인 Accelerator App를 통해 진행됩니다. \"APPLY NOW(지원하기)\"를 클릭하여 Accelerator App 웹사이트 회원가입을 후, 지원서에 나와 있는 질문에 답변하는 방식으로 서류를 접수해주시면 됩니다. Accelerator App은 국문 / 영문 모두 지원하오니, 서류 작성 시 편한 언어로 자유롭게 지원 바랍니다. Q2. 서류 접수를 빨리하는 기업에 별도의 혜택이 있나요? 서류 접수 기간 동안에도 대면 면접이 이루어지기 때문에, 서류 접수를 빨리 하실 경우 보다 여유롭게 저희 심사역 및 파트너들과의 대면 면접을 하실 수 있다는 장점이 있습니다. Q3. 서류 접수 마감일 이후 대면 면접 일정이 궁금합니다. 서류 심사 결과는 서류 접수 마감일로부터 3주 이내에 이메일을 통해 일괄 공지드리고 있습니다. 서류 심사에 통과한 기업의 경우, 개별적인 연락을 통해 면접 일정을 조율합니다. 인터뷰는 1, 2, 3차 총 3단계로 이뤄져 있으며, 매 단계 마다 합격자와 탈락자가 정해지고, 최종 3차에 합격하시면 스파크랩의 배치 프로그램에 합류하시게 됩니다. Q4. 저희는 이미 상당 기간 스타트업을 운영해왔고, 투자도 유치했는데 스파크랩 프로그램에 지원하는게 도움이 될수 있을까요? 그렇지 않습니다. 어느 정도의 매출이 있고 이미 투자자금을 받은 스타트업들도 SparkLabs 프로그램에서 얻을 수 있는 베네핏이 많을 뿐만 아니라, 실제 지난 기수들에는 스파크랩 프로그램 참가 전 투자를 유치한 상태에서 참가한 기업들도 다수 존재합니다. © 2023 SparkLabs ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login SparkLabs Inc. 180, Yeoksam-ro, Gangnam-gu, Seoul,"
+    },
+    {
+      "id": "check-page-d700134765",
+      "url": "https://sparklabs.co.kr/kr/application_faq",
+      "page": "terms",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login © 2023 SparkLabs SparkLabs Inc."
+    },
+    {
+      "id": "check-page-6cc2837b25",
+      "url": "https://sparklabs.co.kr/kr/application_faq",
+      "page": "terms",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr"
     },
     {
       "id": "check-page-b6b711ebe2",
@@ -639,6 +893,24 @@
       "excerpt": "Visit Program 1 페이지 | SparkLabs Batch Get Application Updates Our Program Spark Claw Batch Program Partnership Program Visit Program Our Companies Our Team Batch Get Application Updates SparkLabs Visit Program Explore the Korean startup ecosystem firsthand Why SparkLabs Visit Program SparkLabs offers a visit program for universities and educational institutions from around the world to experience Korea's startup ecosystem and venture investment landscape firsthand. This program is designed for undergraduate and graduate students, MBA programs, and faculty members visiting Seoul who are interested in gaining a deeper understanding of Korea's entrepreneurship environment and venture capital ecosystem. What You'll Experience Introduction to Korea's entrepreneurial landscape Understanding Korea's venture investment structure and the role of accelerators Growth stories from SparkLabs portfolio companies Open Q&A on the startup ecosystem How the Program Works Based on our standard program timeline. All sessions are conducted in English and can be customized to fit your cohort. 0:00 Welcome & Office Tour Walk through SparkLabs' co-working floors and offices to see firsthand how a venture firm operates. 0:30 SparkLabs CEO Session Led directly by the SparkLabs CEO. - About SparkLabs - Startup Landscape in Korea 1:30 Extended Q&A Open floor to ask any questions after the session. 2:00"
     },
     {
+      "id": "check-page-3197ba271e",
+      "url": "https://sparklabs.co.kr/en/visit_program",
+      "page": "details",
+      "excerpt": "Submit Inquiry © 2023 SparkLabs ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login SparkLabs Inc."
+    },
+    {
+      "id": "check-page-66932a95c4",
+      "url": "https://sparklabs.co.kr/en/visit_program",
+      "page": "details",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login © 2023 SparkLabs SparkLabs Inc."
+    },
+    {
+      "id": "check-page-125a6c123d",
+      "url": "https://sparklabs.co.kr/en/visit_program",
+      "page": "details",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr"
+    },
+    {
       "id": "check-page-763e78f095",
       "url": "https://sparklabs.co.kr/en/program_faq",
       "page": "terms",
@@ -651,10 +923,58 @@
       "excerpt": "Partnership Program | 스파크랩 | SparkLabs Batch 모집 소식 받기 Our Program Spark Claw Batch Program Partnership Program Our Companies Our Team Stories Insights News Batch 모집 소식 받기 SparkLabs Partnership Programs Customized Global Acceleration with Companies and Institutions The Launchpad for the World's Next Global Leaders 스파크랩은 기술과 아이디어로 세상을 바꾸는 창업자들이 가장 빠르게 글로벌 시장으로 도약할 수 있는 Launchpad가 되는 것을 목표로 합니다. 국경을 넘는 연결과 실행력으로 창업자 중심의 혁신 생태계를 만들어갑니다. CORE VALUE 시장을 혁신하는 스타트업 발굴 선구안 성과로 증명된 창업자 육성 역량 글로벌 확장을 가능하게 하는 네트워크와 파트너십 스파크랩은 창업자의 여정 전반에 깊이 연결되어, 잠재력이 글로벌 무대에서 실질적 성과와 영향력으로 확장되도록 끝까지 함께 달리는 전략적 파트너입니다. 아이디어의 시작부터 스케일업의 순간까지, 창업자가 더 멀리·더 빠르게 성장하도록 함께 하겠습니다. What We Do 스파크랩은 지난 13년간 응축된 초기 스타트업 발굴 및 육성 노하우를 바탕으로 기관 및 기업의 목표 달성에 최적화된 스타트업 지원, 오픈이노베이션 프로그램을 설계, 운영합니다. 프로그램 참여 스타트업들은 스파크랩이 전 세계 창업 거점에 보유하고 있는 현지 지사 및 파트너사와의 강력한 네트워크를 바탕으로 국내는 물론 해외 시장 진출에 특화된 지원을 제공받을 수 있습니다. GLOBAL 현지 파트너십과 글로벌 네트워크로 혁신의 무대를 세계로 확장합니다. OPEN INNOVATION 스타트업의 아이디어와 자원을 연결해 PoC 실증과 신사업 기회를 현실로 만듭니다. LOCAL 산업·지자체와 손잡고 지속 가능한 로컬 혁신 생태계를 구축합니다. SCALE UP 아이디어 검증부터 사업화·성장 전략 수립까지 창업팀 단계에 맞춰 성장을 지원합니다. Featured Success Stories 스파크랩은 다양한 국내외 파트너들과의 협력을 통해 우수한 스타트업을 발굴하고 성장시켜왔으며, 이를 통해 창업 생태계의 흐름을 바꾸는 역할을 수행해왔습니다. 축적된 실행력과 네트워크는 더 많은 창업자가 글로벌로 나아가도록 이끄는 스파크랩의 핵심 자산입니다. 》 《 2025 중동진출지원 프로그램 중동 진출을 희망하는 국내 스타트업 대상 글로벌 네트워크 및 현지 파트너 매칭 》 《 2025 Saudi tech founders 인바운드 프로그램 사우디 스타트업 대상 한국 현지 스타트업 생태계 체험 및 협력 기회 제공 구글 스타트업"
     },
     {
+      "id": "check-page-3889909090",
+      "url": "https://sparklabs.co.kr/kr/partnership_program",
+      "page": "details",
+      "excerpt": "\" 광운대학교 예비창업패키지 SIM's 프로그램 참여 스타트업 스파크랩은 단순한 투자자가 아니라 창업가의 진정한 러닝메이트입니다. 초기에 받은 실전적인 IR 멘토링은 지금도 우리 비즈니스의 핵심 자산으로 남아 있습니다. 창업팀 성장을 진심으로 지원하는 최고의 액셀러레이터입니다."
+    },
+    {
+      "id": "check-page-287d211de7",
+      "url": "https://sparklabs.co.kr/kr/partnership_program",
+      "page": "details",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login © 2023 SparkLabs SparkLabs Inc."
+    },
+    {
+      "id": "check-page-3acd84e28d",
+      "url": "https://sparklabs.co.kr/kr/partnership_program",
+      "page": "details",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr"
+    },
+    {
       "id": "check-page-bd450eee09",
       "url": "https://sparklabs.co.kr/kr/program",
       "page": "details",
       "excerpt": "Program | 스파크랩 | SparkLabs Batch 모집 소식 받기 Our Program Spark Claw Batch Program Partnership Program Our Companies Our Team Stories Insights News Batch 모집 소식 받기 SparkLabs Batch Program SparkLabs Batch Program은 단순히 스타트업 성공비법 을 전달하는 교육 프로그램이 아닙니다. 스타트업의 성장을 위한 맞춤형 엑셀러레이팅 프로그램 입니다. 스파크랩은 모든 참가 기업이 PMF(Product-Market-Fit)를 빠르게 찾고, 후속 투자 유치 확률을 극대화할 수 있도록 최적화된 시스템을 제공합니다. 성장을 위한 핵심 지원 ✔ 전담팀 & 대표 파트너, 멘토 – 창업자와 함께 고민하고 실행하는 국내 유일한 밀착 지원 ✔ 검증된 스파크랩의 노하우 – 단기간 내 폭발적인 성장을 위한 맞춤형 프로그램 ✔ 강력한 창업자 네트워크 – 비즈니스 성장뿐 아니라 평생 함께할 동료들과의 연결 스타트업이 생존을 넘어 성장으로 도약할 수 있도록, 13여 년간 300여 개 이상의 포트폴리오 코칭 노하우가 담겨있는 스파크랩 배치 프로그램을 경험해 보세요! Batch 모집 소식 받기 프로그램 주요 혜택 01. 투자 최대 3억 원 투자 TIPS Program 추천 최대 7억 원 지원 후속 투자 유치 적극 지원 (인베스터데이, 데모데이) 02. 액셀러레이션 기업별 1:1 밀착 PMF 코칭 역대 알럼나이 세션 제공 기업별 IR Mentoring 제공 파트너들과의 Office Hour 제공 Tech & UX · UI 세션 제공 외부 전문인력 연결 Pitching 개별 코칭 03. 서포트 정부지원사업 기업별 맞춤 추천 보도자료 배포지원,기획기사·인터뷰 연결 스파크랩 내부 재무팀 지원 => 기업별 사후관리 · 주주총회 준비 지원 해외 진출 및 글로벌 네트워크 연결 포트폴리오사 베네핏 혜택 이런 사람들과 함께합니다. 22주 동안 김유진, 김호민, 이한주, 버나드 문 공동대표를 비롯한 스파크랩 핵심 임직원 과 함께 PMF(Product-Market-Fit) 탐색 -압도적인 성장 기반 구축- 효과적인 후속 투자 유치 준비합니다. 김유진 대표 ㆍ텐센트 코리아 해외 사업 개발, 해외 세일즈 총괄 ㆍ포도트리 사업 개발부 및 마케팅부 이사 ㆍ버티고우게임즈 해외 사업부 본부장 ㆍNHN USA 품질 보증 및 현지화 본부장 ㆍSK 콘텐츠 컴퍼니 사업 개발 부서 김호민 대표 ㆍ소프트웨어 N3N 공동창업자 및 CEO ㆍInnotive CEO ㆍNexonova CEO ㆍNexon Portal Web Services 본부장 이한주 대표 ㆍ뉴베리글로벌 수장 ㆍ베스핀글로벌 대표이사 ㆍ호스트웨이 공동창업자 (EXIT) 버나드문 대표 ㆍVidquick 공동창업자 및 CEO"
+    },
+    {
+      "id": "check-page-3ba7165d34",
+      "url": "https://sparklabs.co.kr/kr/program",
+      "page": "details",
+      "excerpt": "Bootcamp 현황 분석 및 성장 방해 요소 제거 Phase 2."
+    },
+    {
+      "id": "check-page-2731b0f33f",
+      "url": "https://sparklabs.co.kr/kr/program",
+      "page": "details",
+      "excerpt": "Demoday 비공개 데모데이를 통한 VC 미팅 및 IR 진행 프로그램 주요 일정 서류 접수 1.5개월 홈페이지를 통한 지원서 제출 매년 상ㆍ하반기 오픈 심사 3주 서류 심사 및 인터뷰 최종 선발 1주 합격 기업 개별 연락 부트캠프 2주 프로그램 참가 준비를 위한 사전 부트캠프 본 프로그램 22주 기업별 맞춤형 세션, 알럼나이 세션, 오피스 아워, IR 멘토링, 그로스, IR Pitch 코칭 등 데모데이 준비 및 발표 8주 국내외 유수 VC와의 비공개 데모데이 참여 잠깐! ▼ 지원 전 반드시 확인해주세요. 서류 접수 및 프로그램 관련 상세 정보는 FAQ 전체보기에서 확인하실 수 있습니다."
+    },
+    {
+      "id": "check-page-1fe8bc8201",
+      "url": "https://sparklabs.co.kr/kr/program",
+      "page": "details",
+      "excerpt": "FAQ 전체보기 © 2023 SparkLabs ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login SparkLabs Inc."
+    },
+    {
+      "id": "check-page-85430c38b7",
+      "url": "https://sparklabs.co.kr/kr/program",
+      "page": "details",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login © 2023 SparkLabs SparkLabs Inc."
+    },
+    {
+      "id": "check-page-0a34e21cca",
+      "url": "https://sparklabs.co.kr/kr/program",
+      "page": "details",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr"
     },
     {
       "id": "check-page-420750f9f1",
@@ -675,10 +995,154 @@
       "excerpt": "Partnership Program 1 페이지 | SparkLabs Batch Get Application Updates Our Program Spark Claw Batch Program Partnership Program Visit Program Our Companies Our Team Batch Get Application Updates SparkLabs Partnership Programs Customized Global Acceleration with Companies and Institutions The Launchpad for the World's Next Global Leaders SparkLabs aims to be the launchpad where founders who change the world with technology and ideas can leap into the global market most rapidly. We create a founder-centric innovation ecosystem through cross-border connections and execution. CORE VALUE Pioneering vision to discover market-disrupting startups Proven founder development capabilities backed by results Networks and partnerships enabling global expansion SparkLabs is deeply connected throughout the founder's journey, a strategic partner that runs alongside until the end to ensure potential expands into tangible results and impact on the global stage. From the beginning of an idea to the moment of scale-up, we will be with founders to help them grow farther and faster. What We Do Based on 13 years of condensed expertise in discovering and nurturing early-stage startups, SparkLabs designs and operates startup support and open innovation programs optimized for institutional and corporate objectives. Program participants receive specialized support for both domestic and international market"
     },
     {
+      "id": "check-page-ab0ee1a2d8",
+      "url": "https://sparklabs.co.kr/en/partnership_program",
+      "page": "details",
+      "excerpt": "OPEN INNOVATION Connecting startup ideas with resources to turn PoC validation and new business opportunities into reality."
+    },
+    {
+      "id": "check-page-50bcfb6054",
+      "url": "https://sparklabs.co.kr/en/partnership_program",
+      "page": "details",
+      "excerpt": "\" Content Startup Business Support Startupcon Demo Day Participant SparkLabs provided full support throughout all processes including mentoring, IR deck improvement, and pitching rehearsals."
+    },
+    {
+      "id": "check-page-ff853f3570",
+      "url": "https://sparklabs.co.kr/en/partnership_program",
+      "page": "details",
+      "excerpt": "As a result, we achieved 1st place at the Demo Day we prepared together and received the prize money."
+    },
+    {
+      "id": "check-page-f7a40a4dcb",
+      "url": "https://sparklabs.co.kr/en/partnership_program",
+      "page": "details",
+      "excerpt": "\" Yonsei University Global Capacity Building Bootcamp Participant From the startup preparation stage through program participation and follow-up support, SparkLabs has been a warm partner supporting us in various ways based on their extensive network."
+    },
+    {
+      "id": "check-page-bcfe5f9aa4",
+      "url": "https://sparklabs.co.kr/en/partnership_program",
+      "page": "details",
+      "excerpt": "\" Gangnam-gu Global Startup IR Activation Support Project Participant They carefully supported us not only in IR material preparation and Demo Day preparation, but also in investment attraction and network expansion."
+    },
+    {
+      "id": "check-page-a309bc76ee",
+      "url": "https://sparklabs.co.kr/en/partnership_program",
+      "page": "details",
+      "excerpt": "\" SME Middle East Market Entry Support Program Participant Thanks to their systematic and meticulous preparation of meetings with various partners during the program period, we were able to effectively gain in-depth insights into the local market."
+    },
+    {
+      "id": "check-page-6917f701cc",
+      "url": "https://sparklabs.co.kr/en/partnership_program",
+      "page": "details",
+      "excerpt": "The practical IR mentoring we received in the early stage still remains as a core asset of our business."
+    },
+    {
+      "id": "check-page-b7a2adc10b",
+      "url": "https://sparklabs.co.kr/en/partnership_program",
+      "page": "details",
+      "excerpt": "They are the best accelerator that truly supports the growth of startup teams."
+    },
+    {
+      "id": "check-page-c83656d2bf",
+      "url": "https://sparklabs.co.kr/en/partnership_program",
+      "page": "details",
+      "excerpt": "Our Partners Collaborate With Us Experience SparkLabs' optimized partnership programs based on our unique founder pool, powerful domestic and international partner networks, and collaboration experience with government agencies and global enterprises."
+    },
+    {
+      "id": "check-page-63f5b0c50f",
+      "url": "https://sparklabs.co.kr/en/partnership_program",
+      "page": "details",
+      "excerpt": "Name * Company * Title Email * Type * Please select Startup Institution / Organization VC (Venture Capital) Enterprise / Corporation Other Inquiry Type * Please select Global Program Open Innovation (OI) Scale-Up Local Program Other Message * Security Verification (Enter numbers) * 자동등록방지 숫자음성듣기 새로고침 자동등록방지 숫자를 순서대로 입력하세요."
+    },
+    {
+      "id": "check-page-be373083ed",
+      "url": "https://sparklabs.co.kr/en/partnership_program",
+      "page": "details",
+      "excerpt": "Submit © 2023 SparkLabs ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login SparkLabs Inc."
+    },
+    {
+      "id": "check-page-832d261f85",
+      "url": "https://sparklabs.co.kr/en/partnership_program",
+      "page": "details",
+      "excerpt": "180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login © 2023 SparkLabs SparkLabs Inc."
+    },
+    {
       "id": "check-page-1f09004de8",
       "url": "https://sparklabs.co.kr/en/program",
       "page": "details",
       "excerpt": "Program 1 페이지 | SparkLabs Batch Get Application Updates Our Program Spark Claw Batch Program Partnership Program Visit Program Our Companies Our Team Batch Get Application Updates SparkLabs Batch Program SparkLabs Batch Program is not simply an educational program that teaches startup success strategies . It is a customized acceleration program for startup growth. SparkLabs provides an optimized system to help all participating companies quickly find PMF (Product-Market-Fit) and maximize their chances of securing follow-on funding. Core Support for Growth ✔ Dedicated Team & Managing Partners, Mentors – Korea's only hands-on support that thinks and executes with founders ✔ Proven SparkLabs Know-how – Customized program for explosive growth in a short period ✔ Strong Founder Network – Connections with lifelong colleagues beyond business growth Experience the SparkLabs Batch Program, which contains over 13 years of coaching know-how from more than 300 portfolio companies, so startups can leap from survival to growth! Batch Get Application Updates Program Key Benefits 01. Investment Up to 300 million KRW investment TIPS Program recommendation for up to 700 million KRW support Active support for follow-on funding (Investor Day, Demo Day) 02. Acceleration 1:1 intensive PMF coaching per company Alumni sessions from past batches IR Mentoring per company Office Hours with partners Tech"
+    },
+    {
+      "id": "check-page-5826ebc73c",
+      "url": "https://sparklabs.co.kr/en/program",
+      "page": "details",
+      "excerpt": "Acceleration 1:1 intensive PMF coaching per company Alumni sessions from past batches IR Mentoring per company Office Hours with partners Tech & UX·UI sessions Connection with external experts Individual pitching coaching 03."
+    },
+    {
+      "id": "check-page-cdd1ef9021",
+      "url": "https://sparklabs.co.kr/en/program",
+      "page": "details",
+      "excerpt": "Support Customized government program recommendations per company Press release distribution support, article planning & interview connections SparkLabs internal finance team support => Post-investment management & AGM preparation support per company Global expansion & network connections Portfolio company benefit perks We work together with these people."
+    },
+    {
+      "id": "check-page-169500c59e",
+      "url": "https://sparklabs.co.kr/en/program",
+      "page": "details",
+      "excerpt": "We will be with all founders who go through SparkLabs until they become unicorns beyond the initial growth stage, providing practical support and being a reliable partner throughout the long and challenging journey."
+    },
+    {
+      "id": "check-page-1d638536f6",
+      "url": "https://sparklabs.co.kr/en/program",
+      "page": "details",
+      "excerpt": "An Accelerator with 13 Years of History and Experience Over the past 13 years, we have been with numerous early-stage startups through their growth, challenges, successes, and failures."
+    },
+    {
+      "id": "check-page-ee5adcfe8a",
+      "url": "https://sparklabs.co.kr/en/program",
+      "page": "details",
+      "excerpt": "Experience the SparkLabs Batch Program, a hands-on, customized acceleration program."
+    },
+    {
+      "id": "check-page-fa5b4df4bc",
+      "url": "https://sparklabs.co.kr/en/program",
+      "page": "details",
+      "excerpt": "Showcase of Explosive Growth, SparkLabs Demo Day This is a stage to showcase the achievements at Demo Day, where only major domestic and international investors and stakeholders can attend."
+    },
+    {
+      "id": "check-page-079134d1ba",
+      "url": "https://sparklabs.co.kr/en/program",
+      "page": "details",
+      "excerpt": "We complete impactful storytelling with SparkLabs' powerful formula so that the achievements during the batch program can lead to follow-on funding, and provide professional coaching to offer opportunities for successful follow-on funding through Demo Day."
+    },
+    {
+      "id": "check-page-efbe9cf746",
+      "url": "https://sparklabs.co.kr/en/program",
+      "page": "details",
+      "excerpt": "SparkLabs invests in startups like these."
+    },
+    {
+      "id": "check-page-800cd0153c",
+      "url": "https://sparklabs.co.kr/en/program",
+      "page": "details",
+      "excerpt": "We invest on the most favorable terms for founders."
+    },
+    {
+      "id": "check-page-89cfd46613",
+      "url": "https://sparklabs.co.kr/en/program",
+      "page": "details",
+      "excerpt": "Program Elements Based on accumulated experience and data from investing in over 320 startups over 13 years, SparkLabs provides a systematic program for explosive growth of early-stage startups."
+    },
+    {
+      "id": "check-page-01a31c3017",
+      "url": "https://sparklabs.co.kr/en/program",
+      "page": "details",
+      "excerpt": "Bootcamp Current Status Analysis & Removing Growth Barriers Phase 2."
+    },
+    {
+      "id": "check-page-b74be11bc1",
+      "url": "https://sparklabs.co.kr/en/program",
+      "page": "details",
+      "excerpt": "Demo Day Preparation & Presentation 8 weeks Participation in private Demo Day with top domestic and international VCs Wait! ▼ Please check before applying."
     },
     {
       "id": "check-page-76f8f2956f",
@@ -691,6 +1155,36 @@
       "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fprogram",
       "page": "details",
       "excerpt": "로그인 | 스파크랩 | SparkLabs Batch 모집 소식 받기 Our Program Spark Claw Batch Program Partnership Program Our Companies Our Team Stories Insights News Batch 모집 소식 받기 관리자 글등록 자동로그인 아이디 필수 비밀번호 필수 로그인 © 2023 SparkLabs ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login SparkLabs Inc. 180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login © 2023 SparkLabs SparkLabs Inc. 180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr"
+    },
+    {
+      "id": "check-page-606d61bfde",
+      "url": "https://sparklabs.co.kr/kr/portfolio",
+      "page": "portfolio",
+      "excerpt": "All Portfolio | 스파크랩 | SparkLabs Batch 모집 소식 받기 Our Program Spark Claw Batch Program Partnership Program Our Companies Our Team Stories Insights News Batch 모집 소식 받기 FEATURED (주)쿼드메디슨 의료 마이크로니들 선도기업 비트바이트 반응형 키보드 꾸미기 앱 H2O Hospitality 12만개 객실 운영, 호스피탈리티 DX의 리더 FEATURED (주)쿼드메디슨 의료 마이크로니들 선도기업 비트바이트 반응형 키보드 꾸미기 앱 H2O Hospitality 12만개 객실 운영, 호스피탈리티 DX의 리더 All Category Others AI AD Tech Advertisement Advertising Agriculture AR Beauty B2B Software Bio Pharmaceuticals Blockchain Commerce Community Copywriting Cosmetic Cybersecurity Data Analytics Digital Health Distribution Edutech Education E-commerce E-Sports Entertainment ESG Fashion Fintech Food Foodtech F&B Gaming Hardware Healthcare HR tech Human Resource IoT IP business Life Style Logistics Marketing Media Medifood Mobility Pet Pharmacy Wholesale Platform Proptech SaaS Services Smart Farm Software Development Sports Sustainability Supply Chain Travel VR Status Active Exit Location 대한민국 미국 프랑스 홍콩 이탈리아 싱가포르 베트남 글로벌 Company Name 원티드랩 HRtech 원티드랩은 '우리 모두가 나답게 일하고 즐겁게 성장할 수 있도록 돕기'를 미션으로, AI 매칭 등 차별화된 기술과 데이터를 통해 개인화된 커리어 성장 기회를 제공하는 HR테크 업계 선도 기업이다.2015년 설립 이후… 쿼드메디슨 Bio 쿼드메디슨은 경피로 전달이 가능한 백신의약품과 합성의약품, 진단의료기기까지 폭넓은 활용이 가능한 의료용 마이크로니들 플랫폼 기술을 보유한 기업이다. 기존의 피하주사제 또는 경구복용 의약품을 마이크로니들 플랫폼 기술을… 페스카로 Cybersecurity 페스카로(Fescaro)는 자율주행자동차, 커넥티드카 등 자동차에 실제 양산 적용될 수 있는 보안 기술을 개발하고 있는 자동차 보안 전문 스타트업이다. 자동차 전자식 제어기(ECU) 개발사 출신의 연구원들과 화이트해…"
+    },
+    {
+      "id": "check-page-bd96610cb9",
+      "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fportfolio",
+      "page": "portfolio",
+      "excerpt": "로그인 | 스파크랩 | SparkLabs Batch 모집 소식 받기 Our Program Spark Claw Batch Program Partnership Program Our Companies Our Team Stories Insights News Batch 모집 소식 받기 관리자 글등록 자동로그인 아이디 필수 비밀번호 필수 로그인 © 2023 SparkLabs ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login SparkLabs Inc. 180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login © 2023 SparkLabs SparkLabs Inc. 180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr"
+    },
+    {
+      "id": "check-page-3185caef92",
+      "url": "https://sparklabs.co.kr/kr/portfolio/allganize/",
+      "page": "portfolio",
+      "excerpt": "Allganize > All Portfolio | 스파크랩 | SparkLabs Batch 모집 소식 받기 Our Program Spark Claw Batch Program Partnership Program Our Companies Our Team Stories Insights News Batch 모집 소식 받기 본문 올거나이즈 Others 엔터프라이즈 AI 솔루션 기업 올거나이즈는 기업의 실제 업무 데이터를 기반으로 AI를 바로 실행 가능한 형태로 자동화하는 엔터프라이즈 AI 솔루션 'Alli'를 제공하는 기업입니다. Category Others Status Exit Founded 2017 Location USA CEO 이창수 Latest Highlights 2025.11 | 올거나이즈, ‘대한민국 인터넷대상’ 부총리 겸 과기정통부 장관상 수상 2025.07 | '기업 AI 에이전트 구축' 올거나이즈, 일본 AI 앱개발 시장 1위 2023.11 | 인공지능·LLM 올인원 솔루션 기업 '올거나이즈'... 시리즈 B로 270억원 투자 유치 관련자료 © 2023 SparkLabs ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login SparkLabs Inc. 180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login © 2023 SparkLabs SparkLabs Inc. 180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr"
+    },
+    {
+      "id": "check-page-7a5094bd5f",
+      "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fportfolio%2Fallganize%2F",
+      "page": "portfolio",
+      "excerpt": "로그인 | 스파크랩 | SparkLabs Batch 모집 소식 받기 Our Program Spark Claw Batch Program Partnership Program Our Companies Our Team Stories Insights News Batch 모집 소식 받기 관리자 글등록 자동로그인 아이디 필수 비밀번호 필수 로그인 © 2023 SparkLabs ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login SparkLabs Inc. 180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login © 2023 SparkLabs SparkLabs Inc. 180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr"
+    },
+    {
+      "id": "check-page-01461f2c58",
+      "url": "https://sparklabs.co.kr/kr/portfolio/bemyfriends-co-ltd/",
+      "page": "portfolio",
+      "excerpt": "bemyfriends Co., Ltd. > All Portfolio | 스파크랩 | SparkLabs Batch 모집 소식 받기 Our Program Spark Claw Batch Program Partnership Program Our Companies Our Team Stories Insights News Batch 모집 소식 받기 본문 비마이프렌즈 - 비스테이지(b.stage) Commerce IP business Logistics SaaS IT 기술 기반, 아티스트/브랜드 콘텐츠 IP 사업을 위한 글로벌 팬덤 비즈니스 토탈 솔루션 IT기술의 전문성을 기반으로, 아티스트 및 브랜드에게 IP 사업을 용이하게 하고, 커머스 운영 및 판매/마케팅 등 비즈니스 서비스 토탈 솔루션 '비스테이지(b.stage)'를 제공하는 기업, '비마이프렌즈'. 비마이프렌즈의 솔루션인 '비스테이지(b.stage)'는 화이트레이블이 가능한 SaaS 솔루션으로, 자체 브랜딩을 활용하여, 단독 플랫폼 구축과 해당 플랫폼 내에서 발생하는 팬덤 데이터 분석을 통해, 팬덤의 니즈를 파악하고, IP 가치를 극대화할 수 있는 지속가능한 비즈니스를 도와주는 서비스입니다. Category Commerce, IP business, Logistics, SaaS Status Active Founded 2021 Location Korea CEO 서우석 Related Video Latest Highlights 2024 MAY | 비스테이지, MAU 100만 돌파…“전 세계에 팬덤 비즈니스 확장” 2024 JAN | 일본에 '팬덤 비즈니스' 전수한다…비마이프렌즈, 日 법인 설립 2022 MAY | 비마이프렌즈, CJ에서 224억 투자 유치 관련자료 © 2023 SparkLabs ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login SparkLabs Inc. 180, Yeoksam-ro, Gangnam-gu, Seoul, Republic of Korea | info@sparklabs.co.kr ABOUT Who We Are FAQ Contact Press NETWORK SparkLabs Group SparkLabs Global Ventures SparkLabs Partners SparkLabs Taiwan SparkLabs Cultiv8 SparkBioLabs GRACE Medical Institute LOGIN Founders Login © 2023 SparkLabs SparkLabs Inc. 180,"
     }
   ],
   "findings": {
@@ -762,6 +1256,22 @@
       {
         "value": "https://sparklabs.co.kr/en/portfolio",
         "evidenceId": "check-portfolio-b70dc913bc"
+      },
+      {
+        "value": "https://sparklabs.co.kr/kr/portfolio?page=2",
+        "evidenceId": "check-portfolio-c5713da308"
+      },
+      {
+        "value": "https://sparklabs.co.kr/kr/portfolio?page=3",
+        "evidenceId": "check-portfolio-419a8f2e3a"
+      },
+      {
+        "value": "https://sparklabs.co.kr/kr/portfolio?page=4",
+        "evidenceId": "check-portfolio-7fb944247e"
+      },
+      {
+        "value": "https://sparklabs.co.kr/kr/portfolio?page=5",
+        "evidenceId": "check-portfolio-682308a3be"
       }
     ],
     "name": [

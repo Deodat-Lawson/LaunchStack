@@ -1,6 +1,6 @@
 {
   "programId": "social-alpha",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.socialalpha.org/about-us-draft/",
@@ -91,7 +91,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.socialalpha.org/category/investment-stories/",
+      "url": "https://www.socialalpha.org/faq_terms-temp/",
       "page": "terms",
       "anchor": "",
       "fetched": true,
@@ -99,8 +99,8 @@
       "origin": "official"
     },
     {
-      "url": "https://www.socialalpha.org/faq_terms-temp/",
-      "page": "terms",
+      "url": "https://www.socialalpha.org/fedex-accelerator/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -115,10 +115,26 @@
       "origin": "official"
     },
     {
+      "url": "https://www.socialalpha.org/medprimes-digital-microscopes-set-to-bring-about-sweeping-changes-in-pathology-services/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/mufg-accelerator/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.socialalpha.org/nidhi-sss/",
       "page": "details",
       "anchor": "DST Seed Support Program",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -135,6 +151,22 @@
       "page": "portfolio",
       "anchor": "Portfolio",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/pfizer-iit-delhi-innovation-and-intellectual-property-ip-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/press-releasae/accelerator-launched-for-startups-that-make-tech-for-disabled/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

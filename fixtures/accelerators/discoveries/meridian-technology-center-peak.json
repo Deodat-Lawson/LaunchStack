@@ -1,11 +1,139 @@
 {
   "programId": "meridian-technology-center-peak",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
-      "url": "https://www.meridiantech.edu/full-time-programs",
+      "url": "http://meridiantech.edu/full-time-programs/air-conditioning-and-refrigeration",
       "page": "details",
-      "anchor": "Full-Time Programs",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://meridiantech.edu/full-time-programs/automotive-technology",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://meridiantech.edu/full-time-programs/biomedical-sciences-stem-academy",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://meridiantech.edu/full-time-programs/business-technology",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://meridiantech.edu/full-time-programs/carpentry",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://meridiantech.edu/full-time-programs/cnc-machining",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://meridiantech.edu/full-time-programs/collision-repair-technology",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://meridiantech.edu/full-time-programs/computer-aided-drafting",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://meridiantech.edu/full-time-programs/cosmetology-evening",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.meridiantech.edu/about-meridian",
+      "page": "details",
+      "anchor": "About Meridian",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.meridiantech.edu/about-meridian/board-of-education",
+      "page": "details",
+      "anchor": "Board of Education",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.meridiantech.edu/about-meridian/contact-us",
+      "page": "details",
+      "anchor": "Contact Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.meridiantech.edu/about-meridian/leadership",
+      "page": "details",
+      "anchor": "MTC Leadership",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "page": "details",
+      "anchor": "Staff Directory",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.meridiantech.edu/about-meridian/the-meridian-district",
+      "page": "details",
+      "anchor": "Meridian District",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.meridiantech.edu/about-meridian/work-at-meridian",
+      "page": "details",
+      "anchor": "Work at Meridian",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -14,63 +142,15 @@
       "url": "https://www.meridiantech.edu/bes/classes",
       "page": "details",
       "anchor": "Programs and Classes",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.meridiantech.edu/about-meridian",
+      "url": "https://www.meridiantech.edu/full-time-programs",
       "page": "details",
-      "anchor": "About Meridian",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.meridiantech.edu/about-meridian/contact-us",
-      "page": "details",
-      "anchor": "Contact Us",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
-      "page": "details",
-      "anchor": "Staff Directory",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.meridiantech.edu/about-meridian/the-meridian-district",
-      "page": "details",
-      "anchor": "Meridian District",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.meridiantech.edu/about-meridian/leadership",
-      "page": "details",
-      "anchor": "MTC Leadership",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.meridiantech.edu/about-meridian/board-of-education",
-      "page": "details",
-      "anchor": "Board of Education",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.meridiantech.edu/about-meridian/work-at-meridian",
-      "page": "details",
-      "anchor": "Work at Meridian",
-      "fetched": false,
+      "anchor": "Full-Time Programs",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

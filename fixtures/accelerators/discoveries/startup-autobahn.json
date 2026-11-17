@@ -1,7 +1,23 @@
 {
   "programId": "startup-autobahn",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "http://www.startup-autobahn.com/en/news/startup-autobahn-march-focus-week-program-2-started/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "http://www.startup-autobahn.com/en/news/startup-selected-program2/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
     {
       "url": "https://startup-autobahn.com/about/",
       "page": "details",
@@ -51,6 +67,14 @@
       "origin": "official"
     },
     {
+      "url": "https://startup-autobahn.com/allgemein/guardknox-startup-autobahn-is-about-real-life-pilots-together-with-the-largest-automotive-companies/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://startup-autobahn.com/allgemein/jetlite-about-startup-autobahn-the-program-is-very-well-organised-and-stuffed-with-premium-partners/",
       "page": "details",
       "anchor": "",
@@ -91,6 +115,14 @@
       "origin": "official"
     },
     {
+      "url": "https://startup-autobahn.com/news/community-initiatives-against-covid-19-startup-autobahn-program-alumni-what-is-our-ecosystem-doing-in-response-to-covid-19/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://startup-autobahn.com/news/press-release/motherson-additional-press-information-about-pilot-projects/",
       "page": "details",
       "anchor": "",
@@ -118,7 +150,7 @@
       "url": "https://startup-autobahn.com/partner",
       "page": "details",
       "anchor": "More about us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

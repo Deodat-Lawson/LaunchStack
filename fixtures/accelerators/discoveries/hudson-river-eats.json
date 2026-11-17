@@ -1,11 +1,11 @@
 {
   "programId": "hudson-river-eats",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
-      "url": "https://www.hudsonriverhousing.org/s/HowtoApplyFINAL72326.docx",
+      "url": "https://www.hudsonriverhousing.org/apply",
       "page": "application",
-      "anchor": "How to Apply",
+      "anchor": "Folder: APPLY FOR HOUSING",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -14,15 +14,71 @@
       "url": "https://www.hudsonriverhousing.org/apply-online",
       "page": "application",
       "anchor": "Apply Online",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.hudsonriverhousing.org/apply",
-      "page": "application",
-      "anchor": "Folder: APPLY FOR HOUSING",
+      "url": "https://www.hudsonriverhousing.org/blog/ahc-flood-assistance-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hudsonriverhousing.org/blog/groundbreaking-celebrates-new-investment-in-first-time-homeownership-on-poughkeepsies-northside",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hudsonriverhousing.org/https://www.hudsonriverhousing.org/https://fallkill-commons-on-rose-lihtc-rentcafewebsite.securecafe.com/onlineleasing/fallkill-commons-on-rose-lihtc/guestlogin.aspx",
+      "page": "other",
+      "anchor": "",
       "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hudsonriverhousing.org/plus-one-adu-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hudsonriverhousing.org/s/AHC-Flood-Relief-Program-Application-10-2023.pdf",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hudsonriverhousing.org/s/HRH-Universal-Rental-Application-6-12-2025-English.pdf",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hudsonriverhousing.org/s/HRH-Universal-Rental-Application-6-12-2025-Spanish.pdf",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hudsonriverhousing.org/s/HowtoApplyFINAL72326.docx",
+      "page": "application",
+      "anchor": "How to Apply",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

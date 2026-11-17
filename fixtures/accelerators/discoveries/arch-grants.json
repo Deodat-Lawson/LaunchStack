@@ -1,6 +1,6 @@
 {
   "programId": "arch-grants",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "http://archgrants.org/about-us/",
@@ -28,14 +28,6 @@
     },
     {
       "url": "http://archgrants.org/about-us/sustained-impact/",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "http://archgrants.org/about-us/team/",
       "page": "details",
       "anchor": "",
       "fetched": true,
@@ -75,8 +67,24 @@
       "origin": "official"
     },
     {
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "http://archgrants.org/mission-driven-tech-startup-selected-to-join-latest-cohort-of-fintechs-in-mastercard-start-path-program/",
       "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://archgrants.org/programs/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -93,6 +101,38 @@
     {
       "url": "http://archgrants.org/programs/faqs/",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://archgrants.org/programs/founder-lending-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,

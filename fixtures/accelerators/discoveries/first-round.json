@@ -1,6 +1,6 @@
 {
   "programId": "first-round",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
@@ -43,22 +43,6 @@
       "origin": "official"
     },
     {
-      "url": "https://firstround.com/companies/fal",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://firstround.com/companies/k2space",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://firstround.com/review/founder-exposed-opening-up-about-startup-failures-and-vulnerability/?ref=review.firstround.com",
       "page": "details",
       "anchor": "",
@@ -69,6 +53,14 @@
     {
       "url": "https://firstround.com/terms",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://review.firstround.com/23-tactical-company-building-lessons-learned-from-scaling-stripe-and-notion/",
+      "page": "other",
       "anchor": "",
       "fetched": true,
       "blocked": null,

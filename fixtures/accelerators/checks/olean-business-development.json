@@ -1,59 +1,239 @@
 {
   "programId": "olean-business-development",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://oleanbd.com/",
-    "https://www.oleanbd.com/about-us"
+    "https://www.oleanbd.com/rlf-pre-application",
+    "https://www.oleanbd.com/about-us",
+    "https://www.oleanbd.com/our-programs-and-services",
+    "https://www.oleanbd.com/post/8-businesses-selected-to-participate-in-2025-laine-business-accelerator-cohort",
+    "https://www.oleanbd.com/post/9-businesses-selected-for-2026-laine-business-accelerator-cohort",
+    "https://www.oleanbd.com/post/laine-business-accelerator-celebrates-2022-cohort"
   ],
   "evidence": [
     {
+      "id": "check-announced-d7b60b9dc0",
+      "url": "https://www.oleanbd.com/post/9-businesses-selected-for-2026-laine-business-accelerator-cohort",
+      "title": "Olean Business Development — batches page",
+      "excerpt": "Search 8 Businesses Selected for 2026 Laine Business Accelerator Cohort Wixspace Digital Aug 17 2 min read Updated: Oct 7 By JOHN BARTIMOLE | Special to Olean",
+      "page": "batches"
+    },
+    {
+      "id": "check-deal-7918edac17",
+      "url": "https://www.oleanbd.com/post/9-businesses-selected-for-2026-laine-business-accelerator-cohort",
+      "title": "Olean Business Development — batches page",
+      "excerpt": "from across the region. Each participating business will receive $5,000 in seed funding and take part in a multi-week program of education,",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-16e0a9579f",
+      "url": "https://www.oleanbd.com/post/laine-business-accelerator-celebrates-2022-cohort",
+      "title": "Olean Business Development — batches page",
+      "excerpt": "info@oleanbd.com",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-33e6091003",
+      "url": "https://www.oleanbd.com/our-programs-and-services",
+      "title": "Olean Business Development — program page",
+      "excerpt": "OBDC's partnership in the Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401",
+      "page": "details"
+    },
+    {
+      "id": "check-email-461a02149d",
+      "url": "https://www.oleanbd.com/our-programs-and-services",
+      "title": "Olean Business Development — program page",
+      "excerpt": "info@oleanbd.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7b9869a48b",
+      "url": "https://www.oleanbd.com/post/9-businesses-selected-for-2026-laine-business-accelerator-cohort",
+      "title": "Olean Business Development — batches page",
+      "excerpt": "a PDF version, please click t Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401",
+      "page": "batches"
+    },
+    {
       "id": "check-email-a5a6fd9533",
       "url": "https://www.oleanbd.com/about-us",
-      "title": "Olean Business Development — details page checked by scrape.py",
+      "title": "Olean Business Development — program page",
       "excerpt": "14760 4th Floor | Suite 401 Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401",
       "page": "details"
     },
     {
+      "id": "check-email-a8dfc77373",
+      "url": "https://www.oleanbd.com/rlf-pre-application",
+      "title": "Olean Business Development — application page",
+      "excerpt": "if Loan is Approved * Submit Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401",
+      "page": "application"
+    },
+    {
       "id": "check-email-b4836840c2",
       "url": "https://oleanbd.com/",
-      "title": "Olean Business Development — homepage checked by scrape.py",
+      "title": "Olean Business Development — homepage",
       "excerpt": "info@oleanbd.com",
       "page": "details"
+    },
+    {
+      "id": "check-email-b49883a553",
+      "url": "https://www.oleanbd.com/rlf-pre-application",
+      "title": "Olean Business Development — application page",
+      "excerpt": "info@oleanbd.com",
+      "page": "application"
     },
     {
       "id": "check-email-bd6c5a742e",
       "url": "https://oleanbd.com/",
-      "title": "Olean Business Development — homepage checked by scrape.py",
+      "title": "Olean Business Development — homepage",
       "excerpt": "Amy R., LBA Cohort Alumnus Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401",
       "page": "details"
     },
     {
+      "id": "check-email-d53b7f8089",
+      "url": "https://www.oleanbd.com/post/laine-business-accelerator-celebrates-2022-cohort",
+      "title": "Olean Business Development — batches page",
+      "excerpt": "of Olean Business Development Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401",
+      "page": "batches"
+    },
+    {
       "id": "check-email-d760f1373e",
       "url": "https://www.oleanbd.com/about-us",
-      "title": "Olean Business Development — details page checked by scrape.py",
+      "title": "Olean Business Development — program page",
       "excerpt": "info@oleanbd.com",
       "page": "details"
     },
     {
+      "id": "check-email-e1b3210b92",
+      "url": "https://www.oleanbd.com/post/8-businesses-selected-to-participate-in-2025-laine-business-accelerator-cohort",
+      "title": "Olean Business Development — batches page",
+      "excerpt": "info@oleanbd.com",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-ed986acaf1",
+      "url": "https://www.oleanbd.com/post/8-businesses-selected-to-participate-in-2025-laine-business-accelerator-cohort",
+      "title": "Olean Business Development — batches page",
+      "excerpt": "of Olean Business Development Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-f7ba838ae9",
+      "url": "https://www.oleanbd.com/post/9-businesses-selected-for-2026-laine-business-accelerator-cohort",
+      "title": "Olean Business Development — batches page",
+      "excerpt": "info@oleanbd.com",
+      "page": "batches"
+    },
+    {
       "id": "check-name-5705a9ab70",
       "url": "https://oleanbd.com/",
-      "title": "Olean Business Development — homepage checked by scrape.py",
+      "title": "Olean Business Development — homepage",
       "excerpt": "Olean Business Development Corporation | Supporting business | 301 N. Union Street",
       "page": "details"
     },
     {
+      "id": "check-phone-43e6e9a72e",
+      "url": "https://www.oleanbd.com/rlf-pre-application",
+      "title": "Olean Business Development — application page",
+      "excerpt": "716-701-4009",
+      "page": "application"
+    },
+    {
       "id": "check-phone-5f8a5321e7",
       "url": "https://oleanbd.com/",
-      "title": "Olean Business Development — homepage checked by scrape.py",
+      "title": "Olean Business Development — homepage",
       "excerpt": "716-701-4009",
       "page": "details"
     },
     {
+      "id": "check-phone-671f9f8060",
+      "url": "https://www.oleanbd.com/post/laine-business-accelerator-celebrates-2022-cohort",
+      "title": "Olean Business Development — batches page",
+      "excerpt": "716-701-4009",
+      "page": "batches"
+    },
+    {
       "id": "check-phone-8aaed1bf2a",
       "url": "https://www.oleanbd.com/about-us",
-      "title": "Olean Business Development — details page checked by scrape.py",
+      "title": "Olean Business Development — program page",
       "excerpt": "716-701-4009",
       "page": "details"
+    },
+    {
+      "id": "check-phone-b95fcb9270",
+      "url": "https://www.oleanbd.com/post/8-businesses-selected-to-participate-in-2025-laine-business-accelerator-cohort",
+      "title": "Olean Business Development — batches page",
+      "excerpt": "716-701-4009",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-cb5cbfa66f",
+      "url": "https://www.oleanbd.com/our-programs-and-services",
+      "title": "Olean Business Development — program page",
+      "excerpt": "716-701-4009",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-d986211949",
+      "url": "https://www.oleanbd.com/post/9-businesses-selected-for-2026-laine-business-accelerator-cohort",
+      "title": "Olean Business Development — batches page",
+      "excerpt": "716-701-4009",
+      "page": "batches"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-324cc751ad",
+      "url": "https://oleanbd.com/",
+      "page": "details",
+      "excerpt": "Olean Business Development Corporation | Supporting business | 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401 top of page Home About Us Laine Place Our Programs and Services Blog Contact Donate Olean Business Development Corporation Propelling Business and Community Development in the Greater Olean Area Contact Us 400+ Companies Served 10+ Years of Experience 100+ Programs Deployed Who We Are Olean Business Development Corporation (OBDC) is a 501(c)(3) not-for-profit dedicated to the continued development of the Entrepreneurial Ecosystem in the greater Olean area. OBDC strives to help entrepreneurs and small business owners throughout their business journey, from startup to transition, by deploying programming, establishing connections to other support organizations that OBDC partners with, and continuous contact with these business owners. Our Impact Our small town is full of big ideas, driven by amazing entrepreneurs and small business owners. Our programs and services have led to over 100 jobs being created in the Olean region, with increased revenue for these business owners, maintaining this impactful small business footprint in our region, and keeping these much-needed services in our communities. Our Collaborative Institutions Consistent with the concepts of the book Startup Communities, by Brad Feld, that OBDC continues to nurture, collaboration with higher"
+    },
+    {
+      "id": "check-page-39f4276427",
+      "url": "https://oleanbd.com/",
+      "page": "details",
+      "excerpt": "Our Collaborative Institutions Consistent with the concepts of the book Startup Communities, by Brad Feld, that OBDC continues to nurture, collaboration with higher education institutions is critical to a successful entrepreneurial ecosystem and community."
+    },
+    {
+      "id": "check-page-c01ea711e8",
+      "url": "https://oleanbd.com/",
+      "page": "details",
+      "excerpt": "OBDC and the Laine Business Accelerator were pivotal in transforming my small-town flower shop dreams into a vibrant reality."
+    },
+    {
+      "id": "check-page-0b342015c6",
+      "url": "https://www.oleanbd.com/rlf-pre-application",
+      "page": "application",
+      "excerpt": "RLF Pre-Application | Olean Business Development Corporation top of page Home About Us Laine Place Our Programs and Services Blog Contact Donate Revolving Loan Fund Pre-Application Application Information Business Name * DBA (If Applicable) * Business Location (Street, City, Zip Code) * Business Tax ID Number * Applicant Name Applicant Phone Number Applicant Email * Please provide a brief description of your business Loan Amount Anticipated to be Requested * Anticipated Use for Funds if Loan is Approved * Submit Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401 DONATE bottom of page"
+    },
+    {
+      "id": "check-page-c8b1e325bb",
+      "url": "https://www.oleanbd.com/about-us",
+      "page": "details",
+      "excerpt": "About Us | Olean Business Development Corporation top of page Home About Us Laine Place Our Programs and Services Blog Contact Donate About Us OBDC was formed in 2013 and solidified in 2015 with the purchase of the former Olean Business Institute building, an 1895 built landmark in downtown Olean, now called Laine Place . Meet the Team Our Staff Bob Forness President and Executive Director Bobi Cornelius Business Manager Sean Campbell Business Development & Operations Associate Board of Directors Steve McClain Chairman Digital Marketing Manager Cutco Corporation James E. Stitt Immediate Past Chairman Executive Chairman Cutco Corporation Dr. Matrecia James Dean of the School of Business St. Bonaventure University Brent Driscoll Retired CFO Cutco Corporation Mike Smith Vice Chair Vice President of Lending High Point Federal Credit Union Daniel DeMarte Secretary President Jamestown Community College Corey Wiktor Executive Director Cattaraugus County Industrial Development Agency Kirk Windus Executive Director Cattaraugus Region Community Foundation Want to learn more? For news releases, Annual Reports, and other critical information regarding our programs & services, check out our Blog page! Visit Us at Laine Place 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401 Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401"
+    },
+    {
+      "id": "check-page-c8a8f19e80",
+      "url": "https://www.oleanbd.com/our-programs-and-services",
+      "page": "details",
+      "excerpt": "Our Programs and Services | Olean Business Development Corporation top of page Home About Us Laine Place Our Programs and Services Blog Contact Donate Our Programs and Services OBDC supports entrepreneurship in the greater Olean area through spaces like The Hub co-working space and programs like the Laine Business Accelerator, the Revolving Loan Fund, and more.” Take a look at our Co-working and Event spaces Learn more about OBDC's Signature Program, the Laine Business Accelerator Find out more about OBDC's Revolving Loan Fund Check out OBDC's Workforce/Job Demand Video Series See what OBDC is doing to support local small businesses looking to transition Entrepreneurship Through Acquisition (ETA) Meet and learn more about OBDC's partnership in the Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401 DONATE bottom of page"
+    },
+    {
+      "id": "check-page-e862739651",
+      "url": "https://www.oleanbd.com/post/8-businesses-selected-to-participate-in-2025-laine-business-accelerator-cohort",
+      "page": "batches",
+      "excerpt": "8 Businesses selected to participate in 2025 Laine Business Accelerator Cohort top of page Home About Us Laine Place Our Programs and Services Blog Contact Donate All Posts News Laine Business Accelerator Our Additional Programs Annual Reports Search 8 Businesses selected to participate in 2025 Laine Business Accelerator Cohort Wixspace Digital Aug 22, 2025 1 min read Updated: Sep 24, 2025 OBDC is excited to announce this year's cohort for the Laine Business Accelerator (LBA), consisting of 8 area businesses that are looking to grow and expand their services. This year also marks a significant milestone for the LBA - our fifth cohort of businesses. The business selected for this year's cohort are: 1907 Wax LLC, Adored Boards, Fuller's Fabrication, MDA Consulting Engineers PLLC, Olean Carpet Cleaning, Pine Hill Cattle Company, Preston's Personal Training, and Turbo Machining. Read More Here! News Laine Business Accelerator Recent Posts See All 8 Businesses Selected for 2026 Laine Business Accelerator Cohort Come Home, Stay Home: Olean Business Development features new video series highlighting young workers, entrepreneurs State & Union: Stitt passing torch as chair of Olean Business Development Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401 DONATE bottom of page"
+    },
+    {
+      "id": "check-page-707e1a17d1",
+      "url": "https://www.oleanbd.com/post/9-businesses-selected-for-2026-laine-business-accelerator-cohort",
+      "page": "batches",
+      "excerpt": "8 Businesses Selected for 2026 Laine Business Accelerator Cohort top of page Home About Us Laine Place Our Programs and Services Blog Contact Donate All Posts News Laine Business Accelerator Our Additional Programs Annual Reports Search 8 Businesses Selected for 2026 Laine Business Accelerator Cohort Wixspace Digital Aug 17 2 min read Updated: Oct 7 By JOHN BARTIMOLE | Special to Olean Times Herald August 15, 2026 OLEAN — Olean Business Development Corporation announced the selection of eight businesses for the sixth cohort of its signature program, the Laine Business Accelerator , continuing the entrepreneurial legacy of Erick Laine, former CEO of Cutco Corporation. The 2026 cohort brings together businesses representing a diverse range of industries from across the region. Each participating business will receive $5,000 in seed funding and take part in a multi-week program of education, mentorship, peer collaboration, and strategic business development. “We continue to be excited by the growth of the entrepreneurial community and ecosystem in the greater Olean region,” said Bob Forness, president and executive director of OBDC. “This year’s cohort represents another strong group of business owners, and we look forward to working with them as they identify opportunities to strengthen and grow their businesses.” The businesses selected for the 2026 Laine Business Accelerator"
+    },
+    {
+      "id": "check-page-878b71ad70",
+      "url": "https://www.oleanbd.com/post/laine-business-accelerator-celebrates-2022-cohort",
+      "page": "batches",
+      "excerpt": "Laine Business Accelerator celebrates 2022 Cohort top of page Home About Us Laine Place Our Programs and Services Blog Contact Donate All Posts News Laine Business Accelerator Our Additional Programs Annual Reports Search Laine Business Accelerator celebrates 2022 Cohort Wixspace Digital Dec 6, 2022 1 min read Updated: Sep 25, 2024 The 2022 Laine Business Accelerator Cohort, comprised of 9 area businesses, were celebrated at the Community Showcase in early December at JCC's Cutco Theater. Read More! News Laine Business Accelerator Recent Posts See All 8 Businesses Selected for 2026 Laine Business Accelerator Cohort Come Home, Stay Home: Olean Business Development features new video series highlighting young workers, entrepreneurs State & Union: Stitt passing torch as chair of Olean Business Development Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401 DONATE bottom of page"
     }
   ],
   "findings": {
@@ -74,8 +254,38 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "Aug",
+        "evidenceId": "check-announced-d7b60b9dc0"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "from across the region. Each participating business will receive $5,000 in seed funding and take part in a multi-week program of education,",
+        "evidenceId": "check-deal-7918edac17"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "5000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-7918edac17"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

@@ -1,9 +1,8 @@
 {
   "programId": "aws-activate",
-  "checkedAt": "2026-11-14T20:59:02.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://aws.amazon.com/startups/",
-    "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
     "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
     "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
     "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
@@ -16,7 +15,13 @@
     "https://aws.amazon.com/marketplace/solutions/business-applications",
     "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
     "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
-    "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management"
+    "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+    "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
+    "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+    "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+    "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+    "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+    "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform"
   ],
   "evidence": [
     {
@@ -48,10 +53,52 @@
       "page": "application"
     },
     {
+      "id": "check-format-07ee4502f0",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "CCaaS systems provide the flexibility to support remote and distributed teams, enabling agents to work from",
+      "page": "application"
+    },
+    {
+      "id": "check-format-0a1e59ee5c",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "AI-powered customer service platforms to sophisticated virtual assistants, these tools cater to organizations of all",
+      "page": "application"
+    },
+    {
+      "id": "check-format-16b33c733d",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "or providing basic information. Virtual Assistants: Virtual assistants are advanced chatbots designed to simulate",
+      "page": "application"
+    },
+    {
       "id": "check-format-182c00449f",
       "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
       "title": "AWS Activate — application page",
       "excerpt": "compliance Contextual retrieval with vector databases and hybrid search To avoid struggling with poor retrieval quality or",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1bb2bc4768",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "Work Adaptability: The flexibility of CCaaS supports remote operations, catering to rapid changes in call volumes and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1eb7287f40",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "leading to enhanced efficiency and responsiveness. Remote Collaboration: Collaboration software facilitates remote",
+      "page": "application"
+    },
+    {
+      "id": "check-format-20d87d6ce3",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "to traditional systems. Empowering Remote Work: Supporting remote work capabilities, our CCaaS provides flexibility for both",
       "page": "application"
     },
     {
@@ -62,10 +109,45 @@
       "page": "application"
     },
     {
+      "id": "check-format-25f1ff296a",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "is utilized in educational institutions to facilitate remote learning, enable collaboration among students and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-26d14afa71",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "continuity in any situation. Anywhere System Access: The remote accessibility of our CCaaS ensures uninterrupted customer",
+      "page": "application"
+    },
+    {
+      "id": "check-format-2df0a21ecb",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "and enhance collaboration on projects and initiatives. Remote and distributed teams: Collaboration software is",
+      "page": "application"
+    },
+    {
       "id": "check-format-32b3e2f824",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
       "title": "AWS Activate — application page",
       "excerpt": "setup, it provided monitoring capabilities for Amazon Virtual Private Cloud (VPC ), allowing me to track network traffic",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3ef4a801d7",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "frequently asked questions or providing basic information. Virtual Assistants: Virtual assistants are advanced chatbots",
+      "page": "application"
+    },
+    {
+      "id": "check-format-454ff47d65",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "connect and collaborate virtually, reducing the need for in-person meetings and enabling organizations to leverage talent",
       "page": "application"
     },
     {
@@ -76,10 +158,59 @@
       "page": "details"
     },
     {
-      "id": "check-format-bfaf8407d9",
-      "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
+      "id": "check-format-749b8cf6d2",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
       "title": "AWS Activate — application page",
-      "excerpt": "Media Services Migration & Modernization Multicloud & Hybrid Networking & Content Delivery Operations Security &",
+      "excerpt": "Remote Collaboration: Collaboration software facilitates remote work and enables teams to collaborate effectively,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8952ab42f6",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "need for travel expenses by enabling virtual meetings and remote collaboration. It also minimizes communication costs by",
+      "page": "application"
+    },
+    {
+      "id": "check-format-9a78dd71fd",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "CCaaS platforms often incorporate AI chatbots and virtual assistants to automate routine interactions, freeing up",
+      "page": "application"
+    },
+    {
+      "id": "check-format-ad143d9632",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "to efficiently adjust to demand and business shifts. Remote Work Adaptability: The flexibility of CCaaS supports",
+      "page": "application"
+    },
+    {
+      "id": "check-format-b2841b0a8c",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "teams: Collaboration software is especially valuable for remote or distributed teams. It allows team members working in",
+      "page": "application"
+    },
+    {
+      "id": "check-format-bd0282629a",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "and method of communication, such as email, phone, or in-person meetings. This information helps sales representatives and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-bd67953ea7",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "often include self-service options such as chatbots and virtual assistants, which can handle routine inquiries and tasks,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c24d73d742",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "tools. AI Assistance: Integration of AI chatbots and virtual assistants automates routine interactions and supports",
       "page": "application"
     },
     {
@@ -87,6 +218,41 @@
       "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
       "title": "AWS Activate — application page",
       "excerpt": "LLM responses. Add zero-trust access, API input scanning, remote team access, and LLM-specific security posture. Explore",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e080b43de7",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "appointments, making reservations, or placing orders. Virtual assistants combine AI technologies with integrations to",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e2583bbdbd",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "deploy, and manage chatbots. Chatbots are AI-powered virtual assistants designed to interact with users in natural",
+      "page": "application"
+    },
+    {
+      "id": "check-format-eeb50af903",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "significantly compared to traditional systems. Empowering Remote Work: Supporting remote work capabilities, our CCaaS",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f56baa9a9d",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "It reduces the need for travel expenses by enabling virtual meetings and remote collaboration. It also minimizes",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f676d28276",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "conferencing capabilities. It enables teams to conduct virtual meetings, webinars, or conference calls with participants",
       "page": "application"
     },
     {
@@ -111,24 +277,17 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-0e85577d02",
-      "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
-      "title": "AWS Activate — application page",
-      "excerpt": "Startup → https://aws.amazon.com/startups/",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-f9762ab845",
-      "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
-      "title": "AWS Activate — application page",
-      "excerpt": "Home → https://aws.amazon.com/startups/",
-      "page": "application"
-    },
-    {
       "id": "check-route-01b363a7b9",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
       "title": "AWS Activate — application page",
       "excerpt": "Business applications → https://aws.amazon.com/marketplace/solutions/business-applications/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0233540589",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "title": "AWS Activate — application page",
+      "excerpt": "Enterprise Resource Software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/enterprise-resource-management",
       "page": "application"
     },
     {
@@ -146,10 +305,24 @@
       "page": "application"
     },
     {
+      "id": "check-route-03cd199296",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "Collaboration and productivity software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "page": "application"
+    },
+    {
       "id": "check-route-04153b3571",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
       "title": "AWS Activate — application page",
       "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
+      "id": "check-route-04879ac743",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
       "page": "application"
     },
     {
@@ -167,6 +340,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-06fbdb83c3",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business applications → https://aws.amazon.com/marketplace/solutions/business-applications/",
+      "page": "application"
+    },
+    {
       "id": "check-route-0aad153160",
       "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
       "title": "AWS Activate — application page",
@@ -181,8 +361,29 @@
       "page": "application"
     },
     {
+      "id": "check-route-0b344decb5",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Robotic Process Automation Robotic Process Automation → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/robotic-process-automation-rpa",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0ee1127d64",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business applications → https://aws.amazon.com/marketplace/solutions/business-applications/",
+      "page": "application"
+    },
+    {
       "id": "check-route-0f1f00cb92",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-153b0438e7",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
       "title": "AWS Activate — application page",
       "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
       "page": "application"
@@ -202,6 +403,20 @@
       "page": "application"
     },
     {
+      "id": "check-route-19f39dd3a9",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1a4ffeaf89",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
       "id": "check-route-1b565a35d9",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
       "title": "AWS Activate — application page",
@@ -209,10 +424,45 @@
       "page": "application"
     },
     {
+      "id": "check-route-1c1d688df7",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "Project Management Software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/project-management-software",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1ea976cacb",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "title": "AWS Activate — application page",
+      "excerpt": "Resource management software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/resource-management-software",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1fe83e5d92",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
+    },
+    {
       "id": "check-route-2487f3ba9b",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
       "title": "AWS Activate — application page",
       "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-27a5ccc6b3",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
+    },
+    {
+      "id": "check-route-27c77b8e65",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
       "page": "application"
     },
     {
@@ -234,6 +484,13 @@
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
       "title": "AWS Activate — application page",
       "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
+    },
+    {
+      "id": "check-route-313578c969",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
       "page": "application"
     },
     {
@@ -262,6 +519,41 @@
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
       "title": "AWS Activate — application page",
       "excerpt": "https://aws.amazon.com/marketplace/pp/prodview-xxxbvpk2cmhcq?sr=0-2&ref_=beagle&applicationId=AWSMPContessa&trk=5ad469a6-4fed-484b-8f20-053172717fde&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-36cac162a2",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "Enterprise Resource Software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/enterprise-resource-management",
+      "page": "application"
+    },
+    {
+      "id": "check-route-37953e629e",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Collaboration and productivity software Learn more about different types of business application software, their benefits, key features, implementation strategies and browse solutions available in AWS Marketplace. Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "page": "application"
+    },
+    {
+      "id": "check-route-39678a8ff6",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3ad0c97988",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3b8f4e977f",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
       "page": "application"
     },
     {
@@ -300,10 +592,38 @@
       "page": "details"
     },
     {
+      "id": "check-route-3f239eebe2",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "Customer Data Platform Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3fa1c4bb18",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
+      "id": "check-route-416b6bc7c7",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
       "id": "check-route-440882e7e6",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
       "title": "AWS Activate — application page",
       "excerpt": "Application performance, monitoring, and observability → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-450b439ce5",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Contact Center as a Service Contact Center as a Service → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
       "page": "application"
     },
     {
@@ -314,18 +634,18 @@
       "page": "application"
     },
     {
+      "id": "check-route-461dc4f7ce",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
       "id": "check-route-468885e27d",
       "url": "https://aws.amazon.com/startups/",
       "title": "AWS Activate — homepage",
       "excerpt": "Startups Fuel your startup’s growth with up to $200,000 in AWS Activate Credits Apply today → https://aws.amazon.com/startups/join?destination=/credits/apply",
       "page": "details"
-    },
-    {
-      "id": "check-route-46e67f266b",
-      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
-      "title": "AWS Activate — application page",
-      "excerpt": "Business Applications → https://aws.amazon.com/mp/business-applications-store",
-      "page": "application"
     },
     {
       "id": "check-route-48aec54551",
@@ -349,10 +669,17 @@
       "page": "application"
     },
     {
-      "id": "check-route-51779a5e36",
-      "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
+      "id": "check-route-4ce638cbbc",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
       "title": "AWS Activate — application page",
-      "excerpt": "Amazon Bedrock The end-to-end platform for building generative AI applications and agents → https://aws.amazon.com/bedrock/?nc2=h_prod_fs_br",
+      "excerpt": "Resource management software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/resource-management-software",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4f47fbdd71",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
       "page": "application"
     },
     {
@@ -360,6 +687,13 @@
       "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
       "title": "AWS Activate — application page",
       "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
+      "id": "check-route-52811f98c7",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "Robotic Process Automation Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/robotic-process-automation-rpa",
       "page": "application"
     },
     {
@@ -391,10 +725,17 @@
       "page": "application"
     },
     {
-      "id": "check-route-55cdb63781",
-      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "id": "check-route-55b0ddf704",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
       "title": "AWS Activate — application page",
-      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5784829f08",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "AI chatbots Learn more about different types of business application software, their benefits, key features, implementation strategies and browse solutions available in AWS Marketplace. Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
       "page": "application"
     },
     {
@@ -402,6 +743,13 @@
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
       "title": "AWS Activate — application page",
       "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-59416d0d25",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Resource management software Resource management software → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/resource-management-software",
       "page": "application"
     },
     {
@@ -440,6 +788,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-60b33ef867",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Contact Center as a Service Learn more about different types of business application software, their benefits, key features, implementation strategies and browse solutions available in AWS Marketplace. Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application"
+    },
+    {
       "id": "check-route-61083ed3ca",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
       "title": "AWS Activate — application page",
@@ -461,6 +816,27 @@
       "page": "application"
     },
     {
+      "id": "check-route-655894ffb4",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "title": "AWS Activate — application page",
+      "excerpt": "Project management software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/project-management-software",
+      "page": "application"
+    },
+    {
+      "id": "check-route-66effecc15",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6726076cf9",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Project management software Learn more about different types of business application software, their benefits, key features, implementation strategies and browse solutions available in AWS Marketplace. Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/project-management-software",
+      "page": "application"
+    },
+    {
       "id": "check-route-678c95f9fc",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
       "title": "AWS Activate — application page",
@@ -468,10 +844,17 @@
       "page": "application"
     },
     {
-      "id": "check-route-684e7152d7",
-      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "id": "check-route-69f764fffd",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
       "title": "AWS Activate — application page",
-      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications?ref_=mp_nav_solutions_bza",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6bb12a2c32",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
       "page": "application"
     },
     {
@@ -489,10 +872,38 @@
       "page": "application"
     },
     {
+      "id": "check-route-6e00936a23",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
       "id": "check-route-6f109477fe",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
       "title": "AWS Activate — application page",
       "excerpt": "CRM Software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software?trk=5a5e1287-c028-4184-8719-3a5a862834a2&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-711dba83bc",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
+      "id": "check-route-719d25c1f5",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-71b6a1c154",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "CRM software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
       "page": "application"
     },
     {
@@ -531,6 +942,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-7760aae6e4",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
+    },
+    {
       "id": "check-route-78962d0a15",
       "url": "https://aws.amazon.com/startups/",
       "title": "AWS Activate — homepage",
@@ -552,6 +970,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-7c40b79d51",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-7d926ae2ac",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
       "title": "AWS Activate — application page",
@@ -566,6 +991,20 @@
       "page": "application"
     },
     {
+      "id": "check-route-804d6f65fa",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "title": "AWS Activate — application page",
+      "excerpt": "Contact Center as a Service Learn more about different types of business application software, their benefits, key features, implementation strategies and browse solutions available in AWS Marketplace. Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application"
+    },
+    {
+      "id": "check-route-81a9ae8c35",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-83d98026b3",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
       "title": "AWS Activate — application page",
@@ -577,6 +1016,13 @@
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
       "title": "AWS Activate — application page",
       "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
+      "id": "check-route-85a8ce5aca",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
+      "title": "AWS Activate — application page",
+      "excerpt": "What Is Enterprise Resource Management software? → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/enterprise-resource-management?trk=5a5e1287-c028-4184-8719-3a5a862834a2&sc_channel=el",
       "page": "application"
     },
     {
@@ -596,6 +1042,20 @@
     {
       "id": "check-route-8bb28fd17e",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8f592a0fae",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "https://aws.amazon.com/marketplace/pp/prodview-xxxbvpk2cmhcq?sr=0-2&ref_=beagle&applicationId=AWSMPContessa&trk=5ad469a6-4fed-484b-8f20-053172717fde&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8fb4f25e28",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
       "title": "AWS Activate — application page",
       "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
       "page": "application"
@@ -643,6 +1103,20 @@
       "page": "application"
     },
     {
+      "id": "check-route-95c6864ded",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-96531fc26a",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-967167ec76",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
       "title": "AWS Activate — application page",
@@ -654,6 +1128,20 @@
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
       "title": "AWS Activate — application page",
       "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
+    },
+    {
+      "id": "check-route-972cf5e327",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "title": "AWS Activate — application page",
+      "excerpt": "Robotic Process Automation Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/robotic-process-automation-rpa",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9a49567a87",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "Contact Center as a Service Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
       "page": "application"
     },
     {
@@ -720,6 +1208,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-a70609ffd3",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Dropbox Sign - API The Dropbox Sign API provides intuitive eSignature capabilities via a clean and simple API, embedded signatures for your website or application, and advanced features. Learn more → https://aws.amazon.com/marketplace/pp/prodview-amlbvduqw6hla?trk=5ad469a6-4fed-484b-8f20-053172717fde&sc_channel=el",
+      "page": "application"
+    },
+    {
       "id": "check-route-a743088f40",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
       "title": "AWS Activate — application page",
@@ -762,6 +1257,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-ac400287c0",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business applications → https://aws.amazon.com/marketplace/solutions/business-applications/",
+      "page": "application"
+    },
+    {
       "id": "check-route-ad3bbce3bc",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
       "title": "AWS Activate — application page",
@@ -783,6 +1285,27 @@
       "page": "application"
     },
     {
+      "id": "check-route-af88e282ba",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "title": "AWS Activate — application page",
+      "excerpt": "CRM software Learn more about different types of business application software, their benefits, key features, implementation strategies and browse solutions available in AWS Marketplace. Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b06ae3ed4d",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "Robotic Process Automation Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/robotic-process-automation-rpa",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b15c506ebb",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-b2a00f00fc",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
       "title": "AWS Activate — application page",
@@ -790,17 +1313,17 @@
       "page": "application"
     },
     {
+      "id": "check-route-b331640383",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "Enterprise Resource Software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/enterprise-resource-management",
+      "page": "application"
+    },
+    {
       "id": "check-route-b5b2af7874",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
       "title": "AWS Activate — application page",
       "excerpt": "Robotic Process Automation Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/robotic-process-automation-rpa?trk=5a5e1287-c028-4184-8719-3a5a862834a2&sc_channel=el",
-      "page": "application"
-    },
-    {
-      "id": "check-route-b5eda9b093",
-      "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
-      "title": "AWS Activate — application page",
-      "excerpt": "Credits Stretch your runway with credits, expert guidance, and go-to-market support Apply for AWS Activate → https://aws.amazon.com/startups/credits/",
       "page": "application"
     },
     {
@@ -825,10 +1348,24 @@
       "page": "application"
     },
     {
+      "id": "check-route-b9eaaad270",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "Customer Data Platform Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application"
+    },
+    {
       "id": "check-route-ba3debe71e",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
       "title": "AWS Activate — application page",
       "excerpt": "Search business applications product catalog → https://aws.amazon.com/marketplace/b/2649275011",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bbd9399d85",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
       "page": "application"
     },
     {
@@ -853,6 +1390,27 @@
       "page": "application"
     },
     {
+      "id": "check-route-be66ad5e09",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "title": "AWS Activate — application page",
+      "excerpt": "AI chatbots Learn more about different types of business application software, their benefits, key features, implementation strategies and browse solutions available in AWS Marketplace. Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bf5c9c9bae",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "CRM software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c0cc554f63",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
       "id": "check-route-c109e2273c",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
       "title": "AWS Activate — application page",
@@ -874,6 +1432,20 @@
       "page": "application"
     },
     {
+      "id": "check-route-c4ded12961",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Enterprise Resource Software Enterprise Resource Software → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/enterprise-resource-management",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c9efcdbfce",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
       "id": "check-route-ca0b0876e4",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
       "title": "AWS Activate — application page",
@@ -885,6 +1457,27 @@
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
       "title": "AWS Activate — application page",
       "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ccd59a0673",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications?ref_=mp_nav_solutions_bza",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ce8b0a250b",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Customer Data Platform Learn more about different types of business application software, their benefits, key features, implementation strategies and browse solutions available in AWS Marketplace. Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cebc8b8a0c",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/mp/business-applications-store",
       "page": "application"
     },
     {
@@ -902,6 +1495,27 @@
       "page": "application"
     },
     {
+      "id": "check-route-d12dfb41ae",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d26c1bde99",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d3175e693b",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Resource management software Learn more about different types of business application software, their benefits, key features, implementation strategies and browse solutions available in AWS Marketplace. Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/resource-management-software",
+      "page": "application"
+    },
+    {
       "id": "check-route-d33a26a4b0",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
       "title": "AWS Activate — application page",
@@ -909,10 +1523,38 @@
       "page": "application"
     },
     {
+      "id": "check-route-d376d96e5c",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "Contact Center → https://aws.amazon.com/marketplace/pp/prodview-xxxbvpk2cmhcq?sr=0-2&ref_=beagle&applicationId=AWSMPContessa&trk=5ad469a6-4fed-484b-8f20-053172717fde&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d4a1d3845a",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "AI chatbots AI chatbots → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d674f6fda9",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-d6b599a691",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
       "title": "AWS Activate — application page",
       "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d752b273fb",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
       "page": "application"
     },
     {
@@ -930,10 +1572,24 @@
       "page": "application"
     },
     {
-      "id": "check-route-db31443f97",
-      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "id": "check-route-daeda5c18f",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
       "title": "AWS Activate — application page",
-      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "excerpt": "Cyara Automated CX Assurance Platform → https://aws.amazon.com/marketplace/pp/prodview-xxxbvpk2cmhcq?sr=0-2&ref_=beagle&applicationId=AWSMPContessa&trk=5ad469a6-4fed-484b-8f20-053172717fde&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-daf50837a1",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-db61e41591",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
       "page": "application"
     },
     {
@@ -944,6 +1600,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-dbdd64f996",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "CRM software CRM software → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application"
+    },
+    {
       "id": "check-route-dc9e8107c0",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
       "title": "AWS Activate — application page",
@@ -951,10 +1614,10 @@
       "page": "application"
     },
     {
-      "id": "check-route-dcb1f85a96",
-      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "id": "check-route-ddc3a77c75",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
       "title": "AWS Activate — application page",
-      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register?ref_=footer_nav_partner_application",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
       "page": "application"
     },
     {
@@ -965,10 +1628,52 @@
       "page": "application"
     },
     {
+      "id": "check-route-dedecd4c2b",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
+      "id": "check-route-def2fd40a1",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e1f280b8b1",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business applications → https://aws.amazon.com/marketplace/solutions/business-applications/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e23634782a",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
       "id": "check-route-e2e04dbdbe",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
       "title": "AWS Activate — application page",
       "excerpt": "Resources Learn more about AWS observability Learn more → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability?trk=6708729b-a546-4b61-a118-a40761eeb558&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e37add096b",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e7b7b48ba2",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
       "page": "application"
     },
     {
@@ -979,10 +1684,24 @@
       "page": "application"
     },
     {
+      "id": "check-route-e9453e8842",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Robotic Process Automation Learn more about different types of business application software, their benefits, key features, implementation strategies and browse solutions available in AWS Marketplace. Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/robotic-process-automation-rpa",
+      "page": "application"
+    },
+    {
       "id": "check-route-e9ca6a94be",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
       "title": "AWS Activate — application page",
       "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ea4bcd9ecb",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
       "page": "application"
     },
     {
@@ -1042,6 +1761,41 @@
       "page": "application"
     },
     {
+      "id": "check-route-f2830a5e7f",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "Resource management software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/resource-management-software/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f2c13b2711",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Project management software Project management software → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/project-management-software",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f3ec4e09b4",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "title": "AWS Activate — application page",
+      "excerpt": "Project management software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/project-management-software",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f76eae74cf",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Customer Data Platform Customer Data Platform → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f7eac85f2a",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Enterprise Resource Software Learn more about different types of business application software, their benefits, key features, implementation strategies and browse solutions available in AWS Marketplace. Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/enterprise-resource-management",
+      "page": "application"
+    },
+    {
       "id": "check-route-f888c92d21",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
       "title": "AWS Activate — application page",
@@ -1063,6 +1817,34 @@
       "page": "application"
     },
     {
+      "id": "check-route-fb7c903cec",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "title": "AWS Activate — application page",
+      "excerpt": "Collaboration and productivity software Learn more about different types of business application software, their benefits, key features, implementation strategies and browse solutions available in AWS Marketplace. Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fbd335d34b",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "AI chatbots Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fd1b5440e4",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business applications → https://aws.amazon.com/marketplace/solutions/business-applications/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fdf1345747",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "title": "AWS Activate — application page",
+      "excerpt": "Collaboration and productivity software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "page": "application"
+    },
+    {
       "id": "check-route-fdf1c1e642",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
       "title": "AWS Activate — application page",
@@ -1078,10 +1860,76 @@
       "excerpt": "AWS for Startups - Amazon Web Services (AWS) Skip to main content Filter: All English Contact us AWS Marketplace Support My account re:Invent Discover AWS Products Solutions Pricing Resources Search Filter: All Sign in to console Access Activate Explore topics AWS re:Invent Livestream Go beyond watching with guided labs and live Q&A Build & Deploy AI Agents 88% of agent pilots stall. Learn what the rest do differently Get started Sign up free, connect your coding agent, and start building Data for agentic AI The 7 essential data capabilities to scale agentic AI Analyst Report AWS named a Leader in the 2026 Gartner Magic Quadrant for SCPS AI for Small Businesses Solutions designed for your business. Delivered by AWS Partners News & announcements AWS blog About AWS AWS is the world's most comprehensive cloud, enabling organizations to accelerate innovation, reduce costs, and scale more efficiently Why AWS Getting Started Security Compliance Trust Center Sustainability Our Impact Global Infrastructure Careers Featured Products Analytics Application Integration Artificial Intelligence Business Applications Compute Customer Experience Databases Developer Tools End User Computing Game Tech Management Tools Media Services Migration & Modernization Multicloud & Hybrid Networking & Content Delivery Operations Security & Identity Storage Supply Chain Browse all products Transformation"
     },
     {
-      "id": "check-page-894544783b",
-      "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
-      "page": "application",
-      "excerpt": "What’s new in AWS Startup Advisor? Skip to main content Filter: All English Contact us AWS Marketplace Support My account re:Invent Discover AWS Products Solutions Pricing Resources Search Filter: All Sign in to console Access Activate Explore topics re:Invent 2026 The session catalog is live. Explore what's waiting for you Build & Deploy AI Agents 88% of agent pilots stall. Learn what the rest do differently Get started Sign up free, connect your coding agent, and start building Data for agentic AI The 7 essential data capabilities to scale agentic AI Analyst Report AWS named a Leader in the 2026 Gartner Magic Quadrant for SCPS AI for Small Businesses Solutions designed for your business. Delivered by AWS Partners News & announcements AWS blog About AWS AWS is the world's most comprehensive cloud, enabling organizations to accelerate innovation, reduce costs, and scale more efficiently Why AWS Getting Started Security Compliance Trust Center Sustainability Global Infrastructure Careers Featured Products Analytics Application Integration Artificial Intelligence Business Applications Compute Customer Experience Databases Developer Tools End User Computing Game Tech Management Tools Media Services Migration & Modernization Multicloud & Hybrid Networking & Content Delivery Operations Security & Identity Storage Supply Chain Browse all products Transformation Hubs Migrate to"
+      "id": "check-page-5e98c5d4dd",
+      "url": "https://aws.amazon.com/startups/",
+      "page": "details",
+      "excerpt": "Everything for Startups at re:Invent 2026 Sessions, robotics, live customer demos, 1:1s with AWS experts, and more in the Startup Plaza at Caesars Forum from Nov."
+    },
+    {
+      "id": "check-page-1242aa9a52",
+      "url": "https://aws.amazon.com/startups/",
+      "page": "details",
+      "excerpt": "Read the announcement AI Gets Physical: The Global Startups Readiness Index One in seven startups is already building AI that works in the real world."
+    },
+    {
+      "id": "check-page-c9d202f23b",
+      "url": "https://aws.amazon.com/startups/",
+      "page": "details",
+      "excerpt": "Expertise from our startup network AWS for Startups comprises former founders and CTOs, venture capitalists, angel investors, and mentors who help today's founders navigate challenges and opportunities."
+    },
+    {
+      "id": "check-page-aa431a4a35",
+      "url": "https://aws.amazon.com/startups/",
+      "page": "details",
+      "excerpt": "Programs and resources to empower success From your first line of code to your millionth customer, AWS for Startups provides the technical guidance, business mentorship, and go-to-market resources to help you reach your next milestone."
+    },
+    {
+      "id": "check-page-86beeafda0",
+      "url": "https://aws.amazon.com/startups/",
+      "page": "details",
+      "excerpt": "Credits to help you test and build Apply to receive up to $200,000 in AWS Activate Credits to offset costs on infrastructure, data services, and AI/ML models."
+    },
+    {
+      "id": "check-page-f36f89235f",
+      "url": "https://aws.amazon.com/startups/",
+      "page": "details",
+      "excerpt": "AI startups ready to grow may be eligible for additional credits beyond Activate."
+    },
+    {
+      "id": "check-page-370b44b1f8",
+      "url": "https://aws.amazon.com/startups/",
+      "page": "details",
+      "excerpt": "The AWS Partner Network has more than 140,000 partners from over 200 countries, with 70% headquartered outside of the United States."
+    },
+    {
+      "id": "check-page-8a13901f4f",
+      "url": "https://aws.amazon.com/startups/",
+      "page": "details",
+      "excerpt": "The technology behind the fastest-growing startups With AWS, founders leverage the latest cloud and AI technologies to experiment and innovate faster."
+    },
+    {
+      "id": "check-page-fe7fba17df",
+      "url": "https://aws.amazon.com/startups/",
+      "page": "details",
+      "excerpt": "AWS Startups: Made in Boston, powered by AWS What draws founders to Boston?"
+    },
+    {
+      "id": "check-page-ad5c271b8a",
+      "url": "https://aws.amazon.com/startups/",
+      "page": "details",
+      "excerpt": "What draws founders to Boston?"
+    },
+    {
+      "id": "check-page-8a86a14e29",
+      "url": "https://aws.amazon.com/startups/",
+      "page": "details",
+      "excerpt": "Explore articles, videos, and resources built for early-stage founders."
+    },
+    {
+      "id": "check-page-b108c1ed76",
+      "url": "https://aws.amazon.com/startups/",
+      "page": "details",
+      "excerpt": "Get up to $200,000 in AWS Activate Credits, with additional credits available for AI startups ready to scale."
     },
     {
       "id": "check-page-0d84d1774d",
@@ -1090,10 +1938,106 @@
       "excerpt": "Observability and Application Performance Monitoring (APM) for AWS | AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case Technical resources Popular tools AWS Marketplace Developer tools & tutorials Observability and Application Performance Monitoring (APM) for AWS Popular tools and technical guidance for cloud-native monitoring Explore technical guidance Try popular tools Monitor and analyze AWS workloads with precision As an indispensable foundation to Site Reliability Engineering (SRE) and with broad use cases from infrastructure to applications, alerting to root cause analysis, monitoring and observability is a critical capability to get right. We're here to provide technical guidance for your use case and to help you find the right tool for the job. Explore the following learning resources and try out industry-leading observability tools for AWS that you can use right now with your AWS account. Many are free to try, with streamlined AWS integrations, and you can easily pay-as-you-go using AWS billing once you find what you're looking for. Tools to expand your observability capabilities Improve your ability to monitor performance and issues in your AWS environment with"
     },
     {
+      "id": "check-page-7a23798570",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
+      "page": "application",
+      "excerpt": "Loading Loading Loading Loading Loading Why AWS Marketplace for on-demand cloud tools Free to try."
+    },
+    {
+      "id": "check-page-7b85b02f79",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
+      "page": "application",
+      "excerpt": "Most tools include free trials or developer-tier pricing to support fast prototyping."
+    },
+    {
+      "id": "check-page-a1639bdc8c",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
+      "page": "application",
+      "excerpt": "Curated tools built for cloud engineers A broad selection of tools across observability, security, AI, data, and more can enhance how you build with AWS."
+    },
+    {
+      "id": "check-page-9f1dca9a9a",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
+      "page": "application",
+      "excerpt": "Why AWS Marketplace?"
+    },
+    {
       "id": "check-page-8d7b334722",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
       "page": "application",
       "excerpt": "Building Observable Amazon EKS Clusters with Amazon CDK and Grafana Cloud | AWS Marketplace AWS Marketplace Home Sign in Sign in or Create a new account Agent Mode Search Field Categories Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case AWS Marketplace › Developer tools & tutorials › Application performance, monitoring, and observability Technical article Building observable Amazon EKS clusters with Amazon CDK and Grafana Cloud Learn how to leverage AWS CDK to automate deploying Kubernetes clusters with built-in observability Try Grafana Cloud free Start, run, and scale Kubernetes applications Auto-deploy EKS clusters with CDK and Grafana Monitoring Initial setup Let’s build our observable Amazon EKS cluster with Grafana Cloud’s built-in self-service offering Next steps Auto-deploy EKS clusters with CDK and Grafana Monitoring As more organizations rely on Kubernetes to orchestrate their containerized applications and rely on internal developer platforms to accelerate and empower development teams in provisioning and operating their own infrastructure, offering a Kubernetes solution that is fully automated and observable becomes a key concern. In this implementation walkthrough, you will learn how the AWS Cloud Development Kit (AWS CDK) can be used to build a self-service Amazon Elastic"
+    },
+    {
+      "id": "check-page-f52465bc59",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "page": "application",
+      "excerpt": "Before getting started You must have an Amazon Web Services (AWS) account with enough permissions to deploy all required resources, including AWS CloudFormation templates, AWS Identity and Access Management (IAM) roles, Amazon EKS clusters, and AWS Marketplace offerings."
+    },
+    {
+      "id": "check-page-bc9d40c8f8",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "page": "application",
+      "excerpt": "Subscribe to Grafana Cloud in AWS Marketplace Start by subscribing to Grafana Cloud using your AWS Credentials from AWS Marketplace."
+    },
+    {
+      "id": "check-page-d62ae183e7",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "page": "application",
+      "excerpt": "Additionally, you need to make sure that the Grafana Cloud Kubernetes Monitoring offering in AWS Marketplace is subscribed to and available in your AWS account."
+    },
+    {
+      "id": "check-page-a95f02cbf8",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "page": "application",
+      "excerpt": "Grafana Cloud Kubernetes Monitoring subscription in AWS Marketplace Now let’s look at the AWS side of things."
+    },
+    {
+      "id": "check-page-7a0e04556f",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "page": "application",
+      "excerpt": "In AWS you will need to ensure an active subscription exists for the Grafana Cloud Kubernetes Monitoring product in AWS Marketplace."
+    },
+    {
+      "id": "check-page-6e758a3337",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "page": "application",
+      "excerpt": "In AWS Marketplace, look for Grafana Labs, and locate the Grafana Cloud Kubernetes Monitoring offering."
+    },
+    {
+      "id": "check-page-d5f65d9d30",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "page": "application",
+      "excerpt": "In our example you can see that we’re identifying this solution as owned by the “marketplace” team."
+    },
+    {
+      "id": "check-page-ee93f56200",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "page": "application",
+      "excerpt": "To get started, try Grafana Cloud in AWS Marketplace using your AWS account, and the Grafana Cloud Kubernetes Monitoring Add-on to start building following the steps in this guide."
+    },
+    {
+      "id": "check-page-3a7f6f6f4a",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "page": "application",
+      "excerpt": "Get hands on FREE TRIAL Grafana Cloud Try for free Resources Learn more about AWS observability Learn more Resources Developer tools & tutorials Explore technical guidance Why AWS Marketplace for on-demand cloud tools Free to try."
+    },
+    {
+      "id": "check-page-e0a560f2d1",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "page": "application",
+      "excerpt": "Most tools include free trials or developer-tier pricing to support fast prototyping."
+    },
+    {
+      "id": "check-page-5c0abadf50",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "page": "application",
+      "excerpt": "Curated tools built for cloud engineers A broad selection of tools across observability, security, AI, data, and more can enhance how you build with AWS."
+    },
+    {
+      "id": "check-page-9877cc00b5",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "page": "application",
+      "excerpt": "Why AWS Marketplace?"
     },
     {
       "id": "check-page-89039bbc41",
@@ -1102,16 +2046,148 @@
       "excerpt": "Accelerate Amazon ECS Performance: Deep-dive Troubleshooting with End-to-end Observability | AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case Technical resources Popular tools AWS Marketplace › Developer tools & tutorials › Application performance, monitoring, and observability TUTORIAL Accelerate Amazon ECS performance: Deep-dive troubleshooting with end-to-end observability Three-dimensional monitoring with IBM Instana—combining distributed tracing, infrastructure visibility, and code-level profiling for Python applications on AWS Fargate Try IBM Instana Observability for free Python container performance: Find and fix bottlenecks Gap: Lack of performance mindset So what’s the right solution? Choosing IBM Instana for AWS ECS Observability Strategies you can use to improve performance Conclusion and key takeaways Python container performance: Find and fix bottlenecks Writing efficient code is a skill that developers must polish through experience, at the core of which lies a need to provide them with the right tools to understand how the code they’ve written performs in the various environments where it will ultimately run. As tech stacks, application packaging and"
     },
     {
+      "id": "check-page-4a62fa14b7",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "page": "application",
+      "excerpt": "Where most performance related technical debt comes from In an enterprise organization, the application or feature development typically starts with the proof of concept (POC)."
+    },
+    {
+      "id": "check-page-de37d888cb",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "page": "application",
+      "excerpt": "As an Amazon Web Services (AWS) user, finding a pay-as-you-go product in AWS Marketplace with a free trial helps me establish my proof of concept without upfront costs."
+    },
+    {
+      "id": "check-page-0e21d770af",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "page": "application",
+      "excerpt": "If you haven’t started yet, give IBM Instana Observability a try for free in AWS Marketplace using your AWS account."
+    },
+    {
+      "id": "check-page-2c60224778",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "page": "application",
+      "excerpt": "More resources for building on AWS FREE TRIAL IBM Instana Observability Try for free Resources Learn more about AWS observability Learn more Resources Explore other use cases Explore technical guidance Why AWS Marketplace for on-demand cloud tools Free to try."
+    },
+    {
+      "id": "check-page-531995f201",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "page": "application",
+      "excerpt": "Most tools include free trials or developer-tier pricing to support fast prototyping."
+    },
+    {
+      "id": "check-page-f0d112d29b",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "page": "application",
+      "excerpt": "Curated tools built for cloud engineers A broad selection of tools across observability, security, AI, data, and more can enhance how you build with AWS."
+    },
+    {
+      "id": "check-page-b7390cc4e2",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "page": "application",
+      "excerpt": "Why AWS Marketplace?"
+    },
+    {
       "id": "check-page-1f6866872d",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
       "page": "application",
       "excerpt": "Achieving observability for AWS serverless applications | AWS Marketplace AWS Marketplace Home Sign in Sign in or Create a new account Agent Mode Search Field Categories Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case Technical resources Popular tools AWS Marketplace Developer tools & tutorials Application performance, monitoring, and observability Achieving observability for AWS serverless applications using in-depth instrumentation How to perform end-to-end monitoring of AWS Lambda applications with Datadog Try Datadog Pro free Troubleshooting Serverless Applications Understanding the rise of serverless computing Monitoring challenges with serverless apps What telemetry must I collect? Selecting the right observability tool Key takeaways Troubleshooting Serverless Applications Gone are the days when organizations used to simply lift and shift their applications to the cloud. Now, organizations are looking at the migration strategy from a holistic angle and are rebuilding their applications using serverless design patterns to get the biggest bang for the buck. However, serverless environments present unique challenges in monitoring and troubleshooting due to their distributed nature. DevOps teams understand that without end-to-end visibility into function execution and the ability to"
     },
     {
+      "id": "check-page-9b53aba902",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "page": "application",
+      "excerpt": "What’s notable about Datadog Pro is that it provides both security and observability in a single unified SaaS-based platform that can monitor cloud-based applications while providing real-time threat detection."
+    },
+    {
+      "id": "check-page-178c57ede1",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "page": "application",
+      "excerpt": "Datadog Pro for serverless applications I subscribed to Datadog Pro in the AWS Marketplace and started exploring during the 14-day free trial."
+    },
+    {
+      "id": "check-page-5a73c5733f",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "page": "application",
+      "excerpt": "To get started, sign up for Datadog Pro (Pay-As-You-Go with 14-day Free Trial) in AWS Marketplace using your AWS account."
+    },
+    {
+      "id": "check-page-05bce66df0",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "page": "application",
+      "excerpt": "More resources for building on AWS FREE TRIAL Try Datadog Pro (Pay-As-You-Go with 14-day Free Trial) free Try for free Resources Learn more about AWS observability Learn more Resources Explore other use cases Discover more Why AWS Marketplace for on-demand cloud tools Free to try."
+    },
+    {
+      "id": "check-page-031915cb8f",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "page": "application",
+      "excerpt": "Most tools include free trials or developer-tier pricing to support fast prototyping."
+    },
+    {
+      "id": "check-page-d0d9b05b36",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "page": "application",
+      "excerpt": "Curated tools built for cloud engineers A broad selection of tools across observability, security, AI, data, and more can enhance how you build with AWS."
+    },
+    {
+      "id": "check-page-51c8c14b2c",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "page": "application",
+      "excerpt": "Why AWS Marketplace?"
+    },
+    {
       "id": "check-page-37df6f8f4b",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
       "page": "application",
-      "excerpt": "Cloud Computing Services - Amazon Web Services (AWS) Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case AWS Marketplace › Developer tools and tutorials › Application performance, monitoring, and observability TECHNICAL ARTICLE Optimizing cloud costs with observability: A practical guide to performance monitoring How to identify cost drivers, predict performance spikes, and prevent outages using telemetry data and monitoring tools Try New Relic for free Cloud Cost Optimization Through Observability Choosing the right tool for the job Key takeaways Cloud Cost Optimization Through Observability Cloud adoption is at an all-time high; the number of organizations leveraging the cloud for innovation and agility keeps a solid growth pace that has not slowed down for the past decade. And with that adoption, we’ve also seen a variety of stages of how technology has evolved, from traditional lift and shift operations that attempt to bring legacy applications into the cloud with minimal change to their architecture, to new services being built following cloud-native principles and with observability built-in from the start. Nevertheless, many teams and organizations are struggling to realize the true"
+      "excerpt": "Cloud Computing Services - Amazon Web Services (AWS) AWS Marketplace Home Sign in Sign in or Create a new account Agent Mode Search Field Categories Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case AWS Marketplace › Developer tools and tutorials › Application performance, monitoring, and observability TECHNICAL ARTICLE Optimizing cloud costs with observability: A practical guide to performance monitoring How to identify cost drivers, predict performance spikes, and prevent outages using telemetry data and monitoring tools Try New Relic for free Cloud Cost Optimization Through Observability Choosing the right tool for the job Key takeaways Cloud Cost Optimization Through Observability Cloud adoption is at an all-time high; the number of organizations leveraging the cloud for innovation and agility keeps a solid growth pace that has not slowed down for the past decade. And with that adoption, we’ve also seen a variety of stages of how technology has evolved, from traditional lift and shift operations that attempt to bring legacy applications into the cloud with minimal change to their architecture, to new services being built following cloud-native principles and with observability built-in from the start. Nevertheless, many teams and organizations are struggling to realize the true"
+    },
+    {
+      "id": "check-page-c43c144e99",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "page": "application",
+      "excerpt": "For containerized applications, you need to track container health and status."
+    },
+    {
+      "id": "check-page-2688471eb2",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "page": "application",
+      "excerpt": "To get started, I signed up for New Relic in AWS Marketplace with my AWS account."
+    },
+    {
+      "id": "check-page-04f76793c1",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "page": "application",
+      "excerpt": "It is also very interesting how New Relic is integrating AI algorithms into their platform, which allows a whole new range of ways to leverage their solution, including predictive analytics and gaining insights conversationally."
+    },
+    {
+      "id": "check-page-713ff9a95c",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "page": "application",
+      "excerpt": "Sign up to try New Relic free in AWS Marketplace using your AWS account ."
+    },
+    {
+      "id": "check-page-6ce9fce6f8",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "page": "application",
+      "excerpt": "More resources for building on AWS FREE TRIAL New Relic Try for free Resources Learn more about AWS observability Resources Resources Explore other use cases Explore technical guidance Why AWS Marketplace for on-demand cloud tools Free to try."
+    },
+    {
+      "id": "check-page-8315ccfd1e",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "page": "application",
+      "excerpt": "Most tools include free trials or developer-tier pricing to support fast prototyping."
+    },
+    {
+      "id": "check-page-c4be7825af",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "page": "application",
+      "excerpt": "Curated tools built for cloud engineers A broad selection of tools across observability, security, AI, data, and more can enhance how you build with AWS."
+    },
+    {
+      "id": "check-page-241a3cca17",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "page": "application",
+      "excerpt": "Why AWS Marketplace?"
     },
     {
       "id": "check-page-eb5ce84e96",
@@ -1120,10 +2196,124 @@
       "excerpt": "Optimizing Kubernetes monitoring on Amazon EKS for unified observability | AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case Technical resources Popular tools AWS Marketplace › Developer tools & tutorials › Application performance, monitoring, and observability Optimizing Kubernetes monitoring on Amazon EKS for unified observability Learn how to enhance operational efficiency and reduce MTTR by implementing comprehensive observability across your AWS container infrastructure Try Logz.io for free Complexity in modern containerized software systems Challenges in implementing unified observability Solution: Overcoming modern observability challenges with Logz.io Collecting telemetry data Create an alert for Amazon EKS monitoring Key takeaways Complexity in modern containerized software systems Modern cloud-native applications running on AWS generate massive volumes of telemetry data across logs, metrics, traces and events. As organizations scale their containerized workloads on Amazon Elastic Kubernetes Service (Amazon EKS), achieving comprehensive visibility into application performance and system health becomes increasingly challenging. The challenge is often exacerbated by"
     },
     {
+      "id": "check-page-9b7ce36d13",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "page": "application",
+      "excerpt": "This article explores how to implement unified observability that enables Site Reliability Engineers (SREs) and DevOps teams to proactively monitor system health and rapidly resolve issues."
+    },
+    {
+      "id": "check-page-4c6ddee550",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "page": "application",
+      "excerpt": "With data often siloed across multiple tools and dashboards, it becomes difficult for me to gain a unified view of application health and performance."
+    },
+    {
+      "id": "check-page-7c21cc3de3",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "page": "application",
+      "excerpt": "I need a way to monitor the health of my systems and catch issues BEFORE my customers notice."
+    },
+    {
+      "id": "check-page-9a824bc340",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "page": "application",
+      "excerpt": "And when issues do arise, the AI-powered troubleshooting features will automatically detect anomalies, identify root causes, and even generate recommended resolution steps."
+    },
+    {
+      "id": "check-page-3e12b33b2f",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "page": "application",
+      "excerpt": "The Logz.io Open 360 Observability Platform in AWS Marketplace will seamlessly integrate with our existing AWS infrastructure, making it a natural choice to help us bridge the visibility gaps between our applications and teams."
+    },
+    {
+      "id": "check-page-f0a3964fbf",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "page": "application",
+      "excerpt": "Create an alert for Amazon EKS monitoring Now, I will demonstrate how to connect Logz.io to an EKS cluster and create an alert to monitor the health and stability of your production workloads."
+    },
+    {
+      "id": "check-page-b5d779452b",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "page": "application",
+      "excerpt": "With this configured as a high-severity alert, I can be notified to quickly respond to potential service degradations, particularly those caused by repeated pod failures, health check issues, or crash-loop scenarios in our production systems."
+    },
+    {
+      "id": "check-page-27c7205585",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "page": "application",
+      "excerpt": "You can get started by trying Logz.io Open 360 Observability Platform in the AWS Marketplace with a free trial then pay-as-you-go billing through your AWS account."
+    },
+    {
+      "id": "check-page-d87a7f87b2",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "page": "application",
+      "excerpt": "Get hands on FREE TRIAL Logz.io Open 360 Observability Platform Try for free Resources Learn more about AWS observability Learn more Resources Explore other use cases Learn more Why AWS Marketplace for on-demand cloud tools Free to try."
+    },
+    {
+      "id": "check-page-0ed7bf6fb9",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "page": "application",
+      "excerpt": "Most tools include free trials or developer-tier pricing to support fast prototyping."
+    },
+    {
+      "id": "check-page-a6acb4ed7e",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "page": "application",
+      "excerpt": "Curated tools built for cloud engineers A broad selection of tools across observability, security, AI, data, and more can enhance how you build with AWS."
+    },
+    {
+      "id": "check-page-b2a407aa13",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "page": "application",
+      "excerpt": "Why AWS Marketplace?"
+    },
+    {
       "id": "check-page-a2869f45e6",
       "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
       "page": "application",
       "excerpt": "Self-Service Observable Amazon EKS Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case AWS Marketplace › Developer tools & tutorials › Application performance, monitoring, and observability Technical article Self-Service Observable Amazon EKS How to deliver observable Kubernetes as part of your Internal Developer Platform Try Grafana Cloud EKS and Grafana: Automating IDPs A wide-spreading transformation Clusters and more clusters Enter platform engineering Self-service cluster observability with Grafana Cloud In a nutshell EKS and Grafana: Automating IDPs In this article we will talk about the causes, outcomes and requirements of platform engineering and internal developer platforms (IDPs). We’ll also discuss how Kubernetes (K8s) and observability are key components in the service catalog that most development teams require as well as how you can fully automate the process of spinning up Amazon Elastic Kubernetes Service (Amazon EKS) clusters with Grafana Cloud observability built-in, as part of your IDP offerings. Let's dig in! A wide-spreading transformation DevOps has transformed how most organizations build software, and as Melvin Conway wisely highlighted back in the late ’60s, the"
+    },
+    {
+      "id": "check-page-537c0a1c33",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "page": "application",
+      "excerpt": "This scenario, which is the baseline for most organizations, means SREs, infrastructure engineers, and operations folks now had 15 different clusters to support and observe, because as we highlighted prior “you build it, you own it” has not really resulted in the elimination of horizontal teams of SMEs that provide support in keeping the lights on."
+    },
+    {
+      "id": "check-page-f287daa262",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "page": "application",
+      "excerpt": "As it turns out, Grafana Cloud offers an Amazon EKS add-on, available in AWS Marketplace, that handles all the necessary tasks of integration and configuration in your Amazon EKS cluster, automatically enabling full cluster observability."
+    },
+    {
+      "id": "check-page-73e7ef2cc6",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "page": "application",
+      "excerpt": "The Grafana Amazon EKS add-on is an offering available in AWS Marketplace and does require a Grafana Cloud account, which you can also configure automatically as part of your IDP templated offering."
+    },
+    {
+      "id": "check-page-1eff45d8ca",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "page": "application",
+      "excerpt": "Get hands on Product Grafana Cloud Try Grafana Cloud Resources Learn more about AWS observability Browse more resources Resources Explore other use cases Explore technical guidance Why AWS Marketplace for on-demand cloud tools Free to try."
+    },
+    {
+      "id": "check-page-fbfaf29a97",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "page": "application",
+      "excerpt": "Most tools include free trials or developer-tier pricing to support fast prototyping."
+    },
+    {
+      "id": "check-page-891f6fec4a",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "page": "application",
+      "excerpt": "Curated tools built for cloud engineers A broad selection of tools across observability, security, AI, data, and more can enhance how you build with AWS."
+    },
+    {
+      "id": "check-page-53d023985d",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "page": "application",
+      "excerpt": "Why AWS Marketplace?"
     },
     {
       "id": "check-page-b373cd2f88",
@@ -1132,10 +2322,154 @@
       "excerpt": "Build smarter RAG applications in AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case Technical resources Popular tools AWS Marketplace Developer tools & tutorials Build smarter RAG AI applications How to add advanced capabilities to help you get to market faster with better gen AI performance and control Build agentic systems with AWS Tools and technical guides to accelerate development Retrieval-Augmented Generation (RAG) is a powerful approach for building AI applications that deliver accurate, contextual responses using an organization's data. AWS Marketplace provides a suite of tools that integrate with AWS-native services, enhancing RAG implementations through advanced context augmentation, real-time data pipelines, and LLM observability while ensuring robust security and privacy. These specialized tools transcend basic vector embeddings by incorporating sophisticated knowledge graphs and agentic architectures. With free trials and consumption-based pricing, you can rapidly develop and scale AI applications from proof-of-concept to production, managing costs effectively through AWS billing. You'll find comprehensive technical guides that walk you through applying these"
     },
     {
+      "id": "check-page-7652837e78",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "page": "application",
+      "excerpt": "Loading Loading Loading Loading Loading Learn more with technical guides Simplify your RAG implementation using foundational models Streamline RAG AI workflows with AWS-native foundational models for fast deployment."
+    },
+    {
+      "id": "check-page-5ae201cf81",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "page": "application",
+      "excerpt": "Learn more Architecting RAG gen AI application for multi-region low latency Design RAG AI applications for global scale with low-latency, multi-region AWS architectures."
+    },
+    {
+      "id": "check-page-8f7836c448",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "page": "application",
+      "excerpt": "Loading Loading Loading Loading Loading Learn more with technical guides Building real-time pipelines with Confluent Enable real-time RAG AI data pipelines with Confluent and AWS for fresh context."
+    },
+    {
+      "id": "check-page-2ecc440a07",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "page": "application",
+      "excerpt": "Learn more Orchestrate data, MLOps, and infrastructure pipelines at scale on AWS Automate RAG AI data and MLOps workflows at scale using AWS orchestration tools."
+    },
+    {
+      "id": "check-page-8b3c9e587c",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "page": "application",
+      "excerpt": "Learn more Streamline multi-partner data integration with Boomi iPaaS and AWS Integrate diverse data sources for RAG AI via Boomi iPaaS and AWS services."
+    },
+    {
+      "id": "check-page-23fe64dd93",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "page": "application",
+      "excerpt": "Learn more Observability & monitoring for RAG LLM workloads Measure latency, token usage, API error rates, and trace service interactions across your AI stack while gaining in-depth understanding of how your LLM of choice is using data."
+    },
+    {
+      "id": "check-page-ba5472a45c",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "page": "application",
+      "excerpt": "Learn more Deep-dive troubleshooting with end-to-end observability Troubleshoot RAG AI applications with full-stack, end-to-end observability."
+    },
+    {
+      "id": "check-page-67eff554c4",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "page": "application",
+      "excerpt": "Learn more Security, access control, and compliance Secure the AI boundary — inputs, retrieval, and LLM responses."
+    },
+    {
+      "id": "check-page-66a00fafec",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "page": "application",
+      "excerpt": "Add zero-trust access, API input scanning, remote team access, and LLM-specific security posture."
+    },
+    {
+      "id": "check-page-f64e9b774f",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "page": "application",
+      "excerpt": "Learn more Why AWS Marketplace for on-demand cloud tools Free to try."
+    },
+    {
+      "id": "check-page-4a0c605c94",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "page": "application",
+      "excerpt": "Most tools include free trials or developer-tier pricing to support fast prototyping."
+    },
+    {
+      "id": "check-page-db87a3102f",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "page": "application",
+      "excerpt": "Curated tools built for cloud engineers A broad selection of tools across observability, security, AI, data, and more can enhance how you build with AWS."
+    },
+    {
       "id": "check-page-2c324d0cfb",
       "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
       "page": "application",
       "excerpt": "How to improve LLM RAG responses using search data | AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case AWS Marketplace › Developer tools & tutorials › Data, analytics, & machine learning Technical article Architecting your RAG gen AI application for multi-region low latency How to use a multi-region vector database to scale your app globally Try DataStax Astra DB free Global Gen AI: Building for Low Latency Scaling across regions: Need for an architectural solution Gen AI essential concepts Application architecture Scaling application architecture across regions Challenges scaling your current vector database How DataStax Astra DB supports your multi-region use case Key takeaways Global Gen AI: Building for Low Latency Generative AI (gen AI) has been the talk of the town for quite some time, and many organizations have moved beyond simply doing POCs to building applications with gen AI at their core. With a new generation of tools like Amazon Bedrock , the barrier of entry to building gen AI applications has dramatically dropped. However, as these applications become exposed to the dynamic and demanding requirements of real-world use, making them work across the globe"
+    },
+    {
+      "id": "check-page-33c9f46ace",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "page": "application",
+      "excerpt": "The main challenge isn't just getting AI to work - it’s to ensure that users get quick responses no matter where they are."
+    },
+    {
+      "id": "check-page-6ff2f908a3",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "page": "application",
+      "excerpt": "Imagine you are a data architect who recently joined a unicorn startup that uses gen AI to help leaders and visionaries optimize how they use their time."
+    },
+    {
+      "id": "check-page-61b55b520c",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "page": "application",
+      "excerpt": "Because of the unexpected and overwhelming global demand, your management has decided to expand the application to Europe and the Asia Pacific (APAC) regions."
+    },
+    {
+      "id": "check-page-4acf3fe05c",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "page": "application",
+      "excerpt": "The key requirement driving the change is that you need to scale your gen AI application globally while maintaining ultra-low response times, regardless of your users' location."
+    },
+    {
+      "id": "check-page-fc8748cb8f",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "page": "application",
+      "excerpt": "Bottlenecks during peak load - If your Asian and European customers use the current, US-based application, there will be bottlenecks and scalability issues."
+    },
+    {
+      "id": "check-page-10a114b94a",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "page": "application",
+      "excerpt": "However, before you look at the application architecture, take a moment to brush up on your gen AI application concepts."
+    },
+    {
+      "id": "check-page-f9d4550f01",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "page": "application",
+      "excerpt": "Gen AI essential concepts 1."
+    },
+    {
+      "id": "check-page-6d0cc6250d",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "page": "application",
+      "excerpt": "Large Language Model (LLM) An LLM is an AI model that has been trained on massive amounts of data."
+    },
+    {
+      "id": "check-page-b688a0c20a",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "page": "application",
+      "excerpt": "Due to the way LLMs are built and the huge data sets they require for training, they have the ability to “understand” and generate human-like text."
+    },
+    {
+      "id": "check-page-2a058a2eef",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "page": "application",
+      "excerpt": "Vector embeddings are generated using AI models mostly for similarity searches."
+    },
+    {
+      "id": "check-page-a4e4649b25",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "page": "application",
+      "excerpt": "Retrieval Augmented Generation (RAG) RAG is a popular design pattern used by gen AI applications that combines search results from a vector database and the intelligence of LLMs to provide context-aware responses to the user."
+    },
+    {
+      "id": "check-page-b14603a156",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "page": "application",
+      "excerpt": "Here is how it works: First, you generate and store vector embeddings for all the data that is relevant to have available for context to the LLM."
     },
     {
       "id": "check-page-37d28e25d4",
@@ -1144,22 +2478,574 @@
       "excerpt": "Business Applications | AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Business Applications Understanding Business Applications AWS Marketplace Solutions Business applications Business Application software in AWS Marketplace Enhance business agility, improve employee collaboration, and transform the customer experience (CX) with Business solutions in AWS Marketplace Explore popular solutions Explore resources Improve the customer journey with Business Application software Customer expectations are accelerating the march to the cloud leading organizations to look for business application tools that transform CX, improve business agility, and lower costs. Find the business applications software you need in AWS Marketplace to help you discover, procure, provision, and govern third-party software, allowing you to offload infrastructure management and focus on what matters most. GROW with SAP on AWS Why organizations use AWS Marketplace for Business Application solutions Improve selection, speed, and agility Quickly procure and deploy business application software that address your need to enhance business agility, lower costs, and transform the customer experience. Advance control and"
     },
     {
+      "id": "check-page-40f1c3a81a",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application",
+      "excerpt": "Popular business application solutions in AWS Marketplace Browse the most popular business application cloud software to discover the right solution for your needs."
+    },
+    {
+      "id": "check-page-bc6b8926c4",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application",
+      "excerpt": "Learn more ActionIQ Demo ActionIQ, the leading composable CX Hub, allows enterprise organizations to turn fragmented customer data into extraordinary experiences."
+    },
+    {
+      "id": "check-page-954ac8851a",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application",
+      "excerpt": "Read the report Webinar Unify data for a strong AI foundation with AWS and Salesforce Learn how real-time data access fuels AI and ML predictions that streamline workflows, overcome staffing challenges, and deliver exceptional customer experiences."
+    },
+    {
+      "id": "check-page-ad399d293d",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application",
+      "excerpt": "Watch the webinar Report Forrester report: How to transform CX with advanced analytics Learn how advanced AI-driven analytics can shift organizations from reactive to proactive—predicting churn before it happens, identifying revenue opportunities before they're missed, and automatically delivering personalized experiences in real time."
+    },
+    {
+      "id": "check-page-2b96df5bca",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application",
+      "excerpt": "Read the report Webinar Unlock next-level experience management and content workflows Explore how content workflows and customer experience (CX) platforms powered by artificial intelligence AI can shape high-impact customer journeys."
+    },
+    {
+      "id": "check-page-a0c861f418",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application",
+      "excerpt": "Watch the webinar Webinar Leveraging AI in healthcare patient journeys Learn how Amazon Web Services (AWS) and Genesys use AI and cloud technology to transform patient engagement and healthcare operations."
+    },
+    {
+      "id": "check-page-c341e7c2f3",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application",
+      "excerpt": "Watch the webinar Webinar Bring your AI productivity to life with AWS and Zoom See how Amazon Web Services (AWS) and Zoom enable secure, scalable enterprise AI assistants powered by your business workflows and data."
+    },
+    {
+      "id": "check-page-777e35bbc8",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application",
+      "excerpt": "By June, we had switched to purchasing from AWS Marketplace."
+    },
+    {
+      "id": "check-page-8d21ec22df",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application",
+      "excerpt": "We closed the purchase and delivery process within hours instead of days and also consolidated our billing process.” Mohammad-Reza Gashtil Head of Cloud Competence Center, adesso See what other companies say about AWS Marketplace Code42 benefits from a year’s worth of accounting time worth $100,000."
+    },
+    {
+      "id": "check-page-e200ed9a3c",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application",
+      "excerpt": "Why AWS Marketplace?"
+    },
+    {
       "id": "check-page-7709fbbeab",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
       "page": "application",
       "excerpt": "Amazon Connect AWS Partner Solutions | AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Business Applications Understanding Business Applications AWS Marketplace Solutions Business applications Amazon connect AWS partner solutions Amazon Connect & AWS Partner Solutions available in AWS Marketplace In today's hyper-competitive market, customers have more choices than ever. Each interaction is an opportunity to win loyalty or lose a customer. With overwhelmed consumers juggling countless demands and endless choices, delivering anything less than exceptional experiences is a lost opportunity. The companies that thrive tomorrow will be those that invest in remarkable customer experiences today. Thus, it’s vital for companies to prioritize their customer interactions, and take the necessary steps and investments to ensure that every customer has the best possible experience. Unlock Seamless Customer Engagement Amazon Connect, the AI-powered contact center from AWS, has revolutionized customer service, and businesses can further accelerate and customize Amazon Connect using AWS Partner solutions. Whether you need seamless Microsoft Teams integration through P3Fusion, lightning-fast deployment with"
     },
     {
+      "id": "check-page-2520ccd4e1",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "page": "application",
+      "excerpt": "This guide introduces the power and potential of Amazon Connect and recommends partner solutions available in AWS Marketplace."
+    },
+    {
+      "id": "check-page-b926f68a34",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "page": "application",
+      "excerpt": "With built-in AI- and ML-powered features, new agents are productive from day one, and experienced agents become superhuman in their ability to solve complex customer problems quickly."
+    },
+    {
+      "id": "check-page-32fb71a524",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "page": "application",
+      "excerpt": "Key Features of Amazon Connect AI-Powered Contact Center Solutions Omnichannel customer experience Amazon Connect helps you delight customers by resolving their issues quickly with personalized and proactive experiences across the channels they prefer."
+    },
+    {
+      "id": "check-page-6edca89ace",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "page": "application",
+      "excerpt": "Agent productivity Amazon Connect empowers contact center agents to deliver great customer experiences from day one, with a comprehensive set of AI-powered capabilities that automatically determine a customer's issue, provide contextual customer information, and recommend personalized and accurate responses and next best actions for faster resolution."
+    },
+    {
+      "id": "check-page-ff85c2275e",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "page": "application",
+      "excerpt": "Agents leverage a unified workspace that enables everything agents need to be at their fingertips to provide personalized service to their customers."
+    },
+    {
+      "id": "check-page-77c643c701",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "page": "application",
+      "excerpt": "Using AI/ML-powered analytics and optimization capabilities, businesses can proactively detect and address issues with customer experience, agent performance and contact center operations."
+    },
+    {
+      "id": "check-page-cc2c29cba8",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "page": "application",
+      "excerpt": "Customers can consolidate their technology stacks and see efficiencies from AI across multiple personas and touchpoints."
+    },
+    {
+      "id": "check-page-127b606a77",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "page": "application",
+      "excerpt": "Learn more AWS CX Design & Implementation Professional Services We specialise in AWS CX that spans Amazon Connect and Gen AI Agents."
+    },
+    {
+      "id": "check-page-0fa145b064",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "page": "application",
+      "excerpt": "Broad selection of products products across 70+ categories 25,000+ sellers 6,000+ Explore AWS Marketplace Why AWS Marketplace?"
+    },
+    {
+      "id": "check-page-abe91f9e32",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "page": "application",
+      "excerpt": "Why AWS Marketplace?"
+    },
+    {
       "id": "check-page-0312efbcc1",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
       "page": "application",
-      "excerpt": "Cloud Cost Management | AWS Marketplace AWS Marketplace Home Sign in Sign in or Create a new account Agent Mode Search Field Categories Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Business Applications Understanding Business Applications AWS Marketplace Solutions Business applications Cloud Cost Management Cloud cost management Enterprises need visibility and control to avoid surprises in their cloud spend. Adoption of cloud management solutions in AWS Marketplace enables cloud bill monitoring and optimization in one convenient location. Cloud cost optimization solutions in AWS Marketplace Displaying 1-8 (9) Displaying 1-8 (9) Anaplan Video | Datasheet Anaplan helps businesses gain cloud cost historical spend insights, driver-based forecasting, cost allocations, and high ROI optimized cost scenarios. Learn more Cloud financial management for small and medium businesses AI-powered financials, planning and analytics available in AWS Marketplace - ideal for SaaS businesses looking to upgrade from QuickBooks. Learn more Operational excellence and cost optimization CloudZero Cloud Cost Intelligence Video | Datasheet CloudZero provides the visibility to make cloud spend a strategic business metric and common language between engineering and finance. Learn more Dropbox Business Video | Datasheet Dropbox helps you"
+      "excerpt": "Cloud Cost Management | AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Business Applications Understanding Business Applications AWS Marketplace Solutions Business applications Cloud Cost Management Cloud cost management Enterprises need visibility and control to avoid surprises in their cloud spend. Adoption of cloud management solutions in AWS Marketplace enables cloud bill monitoring and optimization in one convenient location. Cloud cost optimization solutions in AWS Marketplace Displaying 1-8 (9) Displaying 1-8 (9) Anaplan Video | Datasheet Anaplan helps businesses gain cloud cost historical spend insights, driver-based forecasting, cost allocations, and high ROI optimized cost scenarios. Learn more Cloud financial management for small and medium businesses AI-powered financials, planning and analytics available in AWS Marketplace - ideal for SaaS businesses looking to upgrade from QuickBooks. Learn more Operational excellence and cost optimization CloudZero Cloud Cost Intelligence Video | Datasheet CloudZero provides the visibility to make cloud spend a strategic business metric and common language between engineering and finance. Learn more Dropbox Business Video | Datasheet Dropbox"
+    },
+    {
+      "id": "check-page-cff5c4db97",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "page": "application",
+      "excerpt": "Jan Sulaiman IoT Product Manager, 1NCE Want to learn more?"
+    },
+    {
+      "id": "check-page-d68cd66da9",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "page": "application",
+      "excerpt": "Get in touch with AWS experts Get connected with a solutions architect that can share best practices and help solve unique challenges. contact us Ask and answer questions Access AWS Marketplace forum to share ideas, answer questions, and learn about new services and best practices."
+    },
+    {
+      "id": "check-page-43f75fcb44",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "page": "application",
+      "excerpt": "Join Forum Expand your cloud knowledge Explore AWS Marketplace library of resources with AWS technical content authored by industry leaders on key-topics."
+    },
+    {
+      "id": "check-page-926761fd63",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "page": "application",
+      "excerpt": "Explore resources Explore AWS Marketplace Why AWS Marketplace?"
+    },
+    {
+      "id": "check-page-8c0a1885d1",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "page": "application",
+      "excerpt": "Why AWS Marketplace?"
     },
     {
       "id": "check-page-bf26ff0309",
       "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
       "page": "application",
       "excerpt": "Contact management software in AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Business Applications Understanding Business Applications AWS Marketplace Solutions Business applications Contact management Contact management Artificial intelligence (AI) and analytics-powered engagement solutions help contact centers create superior customer and agent experiences across all channels. Contact Management Software for Businesses Use contact management systems in AWS Marketplace to improve contact center effectiveness, reduce supply chain costs, maximize ROI on web self-service, and deliver consistently excellent customer experience. Business Application solutions in AWS Marketplace overview | (1:40 min) Play Contact Management solutions in AWS Marketplace Calabrio One Demo Calabrio ONE enables companies to uncover insights that empower human interactions with an easy, personalized and smart Workforce Engagement suite. Learn more Contact Center Cyara Automated CX Assurance Platform Video | Datasheet The Cyara Accelerator for Amazon Connect enables automation that accelerates migrations, reduces risk, and assures high-quality customer experiences. Learn more Contact Center Talkdesk Datasheet | Demo"
+    },
+    {
+      "id": "check-page-4b1940e00f",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "page": "application",
+      "excerpt": "Head of Customer Technology and Innovation Leading UK Telco As a result of using Gyst, we were able to reduce costs, provide better customer service, and discover new ways to improve our existing call flows."
+    },
+    {
+      "id": "check-page-8f5cb04c1d",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "page": "application",
+      "excerpt": "Head of Customer Experience Innovation, Leading Turkish Telecom Provider Delivering the government's National Coronavirus Helpline on time meant we needed to work quickly and bring on agile partners that could provide assurance that we could scale up safely and with confidence."
+    },
+    {
+      "id": "check-page-895aa2b75f",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "page": "application",
+      "excerpt": "Grant Sayer Chief Technology Officer, Healthdirect Australia [Technology] latency issues don’t exist with the SingleComm solution."
+    },
+    {
+      "id": "check-page-ded3f1cf58",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "page": "application",
+      "excerpt": "Get in touch with AWS experts Join Forum Access AWS Marketplace forum to share ideas, answer questions, and learn about new services and best practices."
+    },
+    {
+      "id": "check-page-23395e3f25",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "page": "application",
+      "excerpt": "Ask and answer questions Explore resources Explore AWS Marketplace library of resources with AWS technical content authored by industry leaders on key-topics."
+    },
+    {
+      "id": "check-page-1183182bde",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "page": "application",
+      "excerpt": "Expand your cloud knowledge Explore AWS Marketplace Why AWS Marketplace?"
+    },
+    {
+      "id": "check-page-c597fe1e9d",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "page": "application",
+      "excerpt": "Why AWS Marketplace?"
+    },
+    {
+      "id": "check-page-c86e48dbab",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
+      "page": "application",
+      "excerpt": "Enterprise Resource Planning Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Business Applications Understanding Business Applications AWS Marketplace Solutions Business applications ERP Enterprise resource planning (ERP) Retire lengthy reporting processes and manual data analysis, and streamline Streamline Your Business Operations Streamline your business operations with powerful enterprise resource planning (ERP) solutions available in AWS Marketplace. Discover cloud-based ERP software that integrates seamlessly with AWS services, offering scalable, secure, and cost-effective management of core business processes including finance, HR, supply chain, and customer relationships. Benefit from flexible pricing, automatic updates, and customizable features tailored to your industry needs. Explore top ERP vendors and transform your business efficiency with AWS Marketplace's enterprise resource planning solutions. What Is Enterprise Resource Management software? Enterprise resource planning (ERP) solutions in AWS Marketplace Displaying 1-8 (9) Displaying 1-8 (9) Bluescape Industry-leading content sharing, image search, and security take you beyond basic whiteboarding. Learn more Dropbox Business Video |"
+    },
+    {
+      "id": "check-page-29e3cd5e63",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
+      "page": "application",
+      "excerpt": "Learn more Collaboration and Productivity VIN OMS Order Management System (IN) Providing real-time inventory visibility across the supply chain and efficiently orchestrating fulfillment from various sources, including own warehouses, marketplaces, 3PLs, own stores, franchisees, and distributors."
+    },
+    {
+      "id": "check-page-12cf5ebaa4",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
+      "page": "application",
+      "excerpt": "Learn more Open Mobile provides mobile telecommunications services throughout Puerto Rico."
+    },
+    {
+      "id": "check-page-62f4a26a2e",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
+      "page": "application",
+      "excerpt": "Federico Grosso CFO, Open Mobile Explore AWS Marketplace Why AWS Marketplace?"
+    },
+    {
+      "id": "check-page-53d8ee9b66",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/erp",
+      "page": "application",
+      "excerpt": "Why AWS Marketplace?"
+    },
+    {
+      "id": "check-page-c96c4b8fbb",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "page": "application",
+      "excerpt": "Chatbot Software in AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Business Applications Understanding Business Applications AWS Marketplace › Solutions › Business applications Chatbot Software What is chatbot software? The benefits of chatbot software Features of chatbot software How to implement chatbot software Chatbot solutions and software What is chatbot software? Chatbot software refers to a specialized platform or tool that enables businesses to build, deploy, and manage chatbots. Chatbots are AI-powered virtual assistants designed to interact with users in natural language, simulating human-like conversations. They can be integrated into various communication channels such as websites, messaging apps, social media platforms, and voice assistants. What Types of Chatbot Software Exist? There are different types of chatbot software available, each with its own capabilities and use cases. Here are some common types: AI-Powered Chatbots: AI-powered chatbots utilize machine learning and natural language processing techniques to understand and respond to user inputs. These chatbots can handle more complex interactions and adapt to user behavior over time. They use algorithms to analyze"
+    },
+    {
+      "id": "check-page-8fbc5ae6d9",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "page": "application",
+      "excerpt": "AI-powered chatbots offer greater flexibility and are suitable for a wide range of use cases, including customer support, lead generation, and personalized recommendations."
+    },
+    {
+      "id": "check-page-de78dce28f",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "page": "application",
+      "excerpt": "Virtual assistants combine AI technologies with integrations to backend systems, allowing them to offer extensive functionality and automate complex processes."
+    },
+    {
+      "id": "check-page-b2570cfd88",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "page": "application",
+      "excerpt": "Here are some examples of who can benefit from chatbot software: E-commerce: Online retailers can leverage chatbot software to provide personalized product recommendations, answer customer queries, assist with order tracking, and facilitate seamless purchasing experiences."
+    },
+    {
+      "id": "check-page-ff44a1069e",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "page": "application",
+      "excerpt": "Chatbot solutions and software AWS Marketplace offers a comprehensive selection of chatbot solutions and software designed to transform your business communications."
+    },
+    {
+      "id": "check-page-414074b50f",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "page": "application",
+      "excerpt": "From AI-powered customer service platforms to sophisticated virtual assistants, these tools cater to organizations of all sizes and industries."
+    },
+    {
+      "id": "check-page-0d65deef61",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "page": "application",
+      "excerpt": "Whether you're looking to automate customer support, enhance user engagement, or streamline internal operations, AWS Marketplace provides vetted, enterprise-ready chatbot solutions that integrate seamlessly with your existing AWS infrastructure."
+    },
+    {
+      "id": "check-page-40b2be7d69",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots",
+      "page": "application",
+      "excerpt": "Why AWS Marketplace?"
+    },
+    {
+      "id": "check-page-8e52f6e9e2",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "page": "application",
+      "excerpt": "Collaboration Software | AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Cloud Solutions Business Applications Understanding Business Applications AWS Marketplace Solutions Business applications Collaboration Software Collaboration and Productivity Software and Tools What is collaboration software? Why Use Collaboration Software? Who Uses Collaboration Software? What are the benefits of collaboration software? What are the features of collaboration software? How to implement collaboration software Collaboration software solutions in AWS Marketplace What is collaboration software? Collaboration software refers to a category of applications and tools designed to facilitate teamwork, communication, and coordination among individuals and groups within an organization. It provides a centralized platform for team members to connect, share information, collaborate on projects, and achieve common goals. Collaboration software enables real-time communication, file sharing, task management, and project collaboration, regardless of the physical location of team members. Why Use Collaboration Software? Collaboration software offers numerous benefits that enhance productivity, efficiency, and"
+    },
+    {
+      "id": "check-page-cfacab53b8",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "page": "application",
+      "excerpt": "Improved Collaboration and Teamwork: Collaboration software fosters better teamwork by providing a shared workspace where team members can collaborate on projects, share ideas, and contribute their expertise."
+    },
+    {
+      "id": "check-page-4a00c05b74",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "page": "application",
+      "excerpt": "Better Teamwork Collaboration software promotes better teamwork by creating a shared workspace where team members can collaborate, contribute their expertise, and work towards common goals."
+    },
+    {
+      "id": "check-page-0ab1c8d600",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "page": "application",
+      "excerpt": "Collaboration software solutions in AWS Marketplace AWS Marketplace offers a wide range of collaboration software solutions designed to enhance teamwork, communication, and productivity within organizations."
+    },
+    {
+      "id": "check-page-d8597227fa",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "page": "application",
+      "excerpt": "Speak with a collaboration software expert who can help you find the right solutions Contact us AWS Marketplace collaboration software solutions Displaying 1-8 (9) Displaying 1-8 (9) Dropbox Business Video | Datasheet Dropbox helps you securely store, access, share, and collaborate on projects, from any device or location, so you can bring your best ideas to life."
+    },
+    {
+      "id": "check-page-3c72621f2a",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "page": "application",
+      "excerpt": "Learn more Customer Relationship Management (CRM) Work management Demo monday.com Work OS is a low-code/no-code work management platform that empowers organizations to connect teams and business units, enhances organizational agility, creates a unifying workspace across departments, and increases operational efficiency and productivity."
+    },
+    {
+      "id": "check-page-8263f415bd",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "page": "application",
+      "excerpt": "Learn more Show 1 more Zoom Government (Federal, State, Local) and Education (Higher Ed, K-12) Video | Datasheet Designed to meet the specialized requirements and needs of U.S. government agencies, Zoom provides these employees with the same seamless, secure, and reliable Zoom experience."
+    },
+    {
+      "id": "check-page-e8bed4f4d4",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software",
+      "page": "application",
+      "excerpt": "Why AWS Marketplace?"
+    },
+    {
+      "id": "check-page-b1deb30a1c",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application",
+      "excerpt": "Contact Center as a Service (CCaaS) | AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Business Applications Understanding Business Applications AWS Marketplace Solutions Business applications Contact Center as a Service Contact Center as a Service (CCaaS) What is a Contact Center as a Service (CCaaS)? Features of modern CCaaS solutions Key components of a CCaaS system Call centers vs CCaaS Implementing CCaaS in your organization Potential challenges and considerations for CCaaS adoption Benefits of adopting Amazon CCaaS Contact Center as a Service solutions in AWS Marketplace What is a Contact Center as a Service (CCaaS)? Contact Center as a Service (CCaaS) is a cloud-based solution that provides organizations with a comprehensive set of tools and services for managing customer interactions through various communication channels. CCaaS platforms are designed to enhance the customer service and support capabilities of businesses by centralizing and streamlining their contact center operations. Implementing a Contact Center as a Service (CCaaS) solution can offer several key business benefits: Cost Savings: CCaaS eliminates the need for substantial upfront investments in on-premises hardware"
+    },
+    {
+      "id": "check-page-5717530f1d",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application",
+      "excerpt": "Implementing a Contact Center as a Service (CCaaS) solution can offer several key business benefits: Cost Savings: CCaaS eliminates the need for substantial upfront investments in on-premises hardware and infrastructure."
+    },
+    {
+      "id": "check-page-c94418ceb1",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application",
+      "excerpt": "Business Continuity: Cloud-based CCaaS solutions typically include disaster recovery and redundancy features, ensuring uninterrupted service even in the event of hardware failures or natural disasters."
+    },
+    {
+      "id": "check-page-816b690a4a",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application",
+      "excerpt": "Support for AI and Automation: CCaaS platforms often incorporate AI chatbots and virtual assistants to automate routine interactions, freeing up live agents to focus on more complex customer issues and enhancing efficiency."
+    },
+    {
+      "id": "check-page-fb0df67083",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application",
+      "excerpt": "Disaster Recovery and Redundancy: Cloud-based CCaaS solutions offer built-in disaster recovery and redundancy features to ensure uninterrupted service in case of hardware failures or natural disasters."
+    },
+    {
+      "id": "check-page-460aeaf993",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application",
+      "excerpt": "AI Assistance: Integration of AI chatbots and virtual assistants automates routine interactions and supports agents in providing accurate customer responses."
+    },
+    {
+      "id": "check-page-e4c577b741",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application",
+      "excerpt": "Physical Infrastructure Location-Based Operations: Traditional call centers operate from specific physical locations, relying heavily on on-site hardware and telephony systems."
+    },
+    {
+      "id": "check-page-8b8f141c70",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application",
+      "excerpt": "Hardware Investments: They require significant investments in infrastructure like PBX systems and ACDs, leading to higher capital expenses."
+    },
+    {
+      "id": "check-page-b74024419f",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application",
+      "excerpt": "Ongoing Hardware Maintenance Resource-Intensive Maintenance: Organizations are tasked with the ongoing maintenance and upgrades of their call center hardware."
+    },
+    {
+      "id": "check-page-eede406230",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application",
+      "excerpt": "Cloud-Forward Infrastructure Cloud-Based Operations: CCaaS is entirely cloud-deployed, freeing organizations from the need for on-premises hardware."
+    },
+    {
+      "id": "check-page-2aa70531d9",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application",
+      "excerpt": "Seamless System Integration: Integration with CRM systems, third-party apps, and AI-driven chatbots enhances customer engagement and service efficiency."
+    },
+    {
+      "id": "check-page-f4207b1ec1",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application",
+      "excerpt": "Existing Infrastructure Review: Analyze your current contact center setup, including hardware, software, and communication methods, to identify areas ripe for CCaaS enhancement."
+    },
+    {
+      "id": "check-page-17745bc20b",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas",
+      "page": "application",
+      "excerpt": "Training and Empowerment Agent Education: Provide in-depth training on the CCaaS platform, covering call handling, omnichannel communication, and feature utilization."
+    },
+    {
+      "id": "check-page-72bb92001c",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application",
+      "excerpt": "CRM Software in AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Business Applications Understanding Business Applications AWS Marketplace Solutions Business applications CRM Software Customer Relationship Software (CRM) Browse CRM software and solutions What is customer relationship software (CRM)? What types of CRM software are there? What are the benefits of CRM software? Exploring the Future of Customer Relationship Management: Unveiling the Role of AI in Revolutionizin Features of CRM software Use cases for CRM software Implementing CRM software Challenges and considerations for CRM software CRM software and solutions What is customer relationship software (CRM)? Customer Relationship Software, commonly referred to as CRM, is a dynamic tool designed to help businesses forge and nurture robust relationships with their customers. At its core, CRM software serves as a centralized hub that consolidates valuable customer data, automates essential processes, and empowers organizations with actionable insights to elevate customer satisfaction, drive sales growth, and optimize overall business performance. Key features of CRM software typically include: Contact Management: CRM systems allow"
+    },
+    {
+      "id": "check-page-b3e8bef837",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application",
+      "excerpt": "With CRM software available on AWS Marketplace, businesses can transform the way they engage with customers, driving satisfaction, loyalty, and growth."
+    },
+    {
+      "id": "check-page-3ea50d82c6",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application",
+      "excerpt": "Exploring the Future of Customer Relationship Management: Unveiling the Role of AI in Revolutionizin This is new text, because it is way better than what was here previously."
+    },
+    {
+      "id": "check-page-06c59c0651",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application",
+      "excerpt": "Advanced Analytics: Some CRM software solutions offer advanced analytics capabilities, such as predictive modeling and machine learning."
+    },
+    {
+      "id": "check-page-e9be802e8a",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application",
+      "excerpt": "This allows businesses to connect CRM with external services like payment gateways, e-commerce platforms, social media networks, data enrichment services, or any other system that complements their CRM processes."
+    },
+    {
+      "id": "check-page-d474707a7f",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application",
+      "excerpt": "CRM software and solutions When it comes to CRM software, AWS Marketplace is a trusted destination for businesses seeking robust and scalable solutions."
+    },
+    {
+      "id": "check-page-fa903a0642",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application",
+      "excerpt": "With AWS Marketplace CRM Software, businesses can leverage the power of the cloud to enhance their customer relationship management capabilities."
+    },
+    {
+      "id": "check-page-ff0168d5e1",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application",
+      "excerpt": "AWS Marketplace offers a diverse selection of CRM software solutions that seamlessly integrate with the AWS infrastructure."
+    },
+    {
+      "id": "check-page-6d56bc96f0",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application",
+      "excerpt": "CRM software and solutions in AWS Marketplace Customer Relationship Management (CRM) Freshsales Freshsales is a modern and easy-to-use CRM that combines the power of sales force automation, chat, and telephony in one smart and comprehensive solution."
+    },
+    {
+      "id": "check-page-d5718029f6",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application",
+      "excerpt": "Learn more Learning and training resources Video Elevate customer experiences, modernize your contact center Watch the webinar Infographic Modern contact center solutions, the key to better customer experiences Download infographic SOFTWARE Salesforce is now available in AWS Marketplace Learn more Have questions?"
+    },
+    {
+      "id": "check-page-b658d550eb",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application",
+      "excerpt": "Speak with a CRM software expert who can help you find the right solutions Contact us Understanding Business Applications AI chatbots Learn more about different types of business application software, their benefits, key features, implementation strategies and browse solutions available in AWS Marketplace."
+    },
+    {
+      "id": "check-page-329cdf3b6d",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application",
+      "excerpt": "Learn more Collaboration and productivity software Learn more about different types of business application software, their benefits, key features, implementation strategies and browse solutions available in AWS Marketplace."
+    },
+    {
+      "id": "check-page-17f7504a33",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software",
+      "page": "application",
+      "excerpt": "Learn more Contact Center as a Service Learn more about different types of business application software, their benefits, key features, implementation strategies and browse solutions available in AWS Marketplace."
+    },
+    {
+      "id": "check-page-dd93da9348",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application",
+      "excerpt": "Customer Data Platforms in AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Business Applications Understanding Business Applications AWS Marketplace Solutions Business applications Customer data platforms Customer Data Platform (CDP) What is a Customer Data Platform (CDP)? CDP vs Other Data Systems Key Features of Modern CDPs Benefits of Implementing a CDP Steps to Implementing a CDP in Your Organization Cost Considerations of Customer Data Platforms (CDPs) Potential Challenges and Solutions Emerging Trends in the CDP Landscape Customer Data Platform software available in AWS Marketplace What is a Customer Data Platform (CDP)? A Customer Data Platform (CDP) is a centralized software system that enables organizations to collect, unify, and manage customer data from various sources, creating a comprehensive and unified customer profile, enhancing understanding and personalization. CDPs are designed to provide a 360-degree view of each customer, allowing businesses to better understand their customers, personalize marketing and engagement efforts, and improve overall customer experiences. CDP vs Other Data Systems CDP vs CRM CDP: Specializes in aggregating and unifying diverse customer data for"
+    },
+    {
+      "id": "check-page-9c0bbbec82",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application",
+      "excerpt": "Integration Capabilities merging with other tools and platforms Third-party Integrations: CDPs are designed to work seamlessly with various external systems, enhancing their functionality much like how a marketplace integrates with diverse vendors."
+    },
+    {
+      "id": "check-page-4467c8658d",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application",
+      "excerpt": "APIs and Connectors: They offer APIs and connectors for easy data exchange, reminiscent of how different services within a large e-commerce platform interact."
+    },
+    {
+      "id": "check-page-e40e1f010d",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application",
+      "excerpt": "Machine Learning and AI Predictive Analytics: Utilizing machine learning, some CDPs predict customer behavior, akin to forecasting market trends."
+    },
+    {
+      "id": "check-page-837170b891",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application",
+      "excerpt": "Modern CDPs are to customer data what a sophisticated e-commerce platform is to online retail – a multifaceted tool that harnesses data to enhance customer understanding, engagement, and experience."
+    },
+    {
+      "id": "check-page-a52e09c6ff",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application",
+      "excerpt": "Enhanced Personalization CDPs provide a comprehensive view of each customer, similar to how an online retail platform personalizes shopping experiences."
+    },
+    {
+      "id": "check-page-e0df797e97",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application",
+      "excerpt": "With CDPs, organizations can offer real-time, relevant interactions, mirroring the way ecommerce platforms update recommendations as customers browse."
+    },
+    {
+      "id": "check-page-c0063283e0",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application",
+      "excerpt": "They also assist with adhering to data protection laws, similar to how e-commerce giants manage customer data with security and compliance as a priority."
+    },
+    {
+      "id": "check-page-de08667959",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application",
+      "excerpt": "Assess Data Sources: Identify and evaluate all sources of customer data, akin to how a large e-commerce platform analyzes data from various channels."
+    },
+    {
+      "id": "check-page-64bb4601f9",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application",
+      "excerpt": "Staff Training Training Plan: Develop a comprehensive training program, ensuring teams are proficient in using the CDP, much like training staff on new internal tools."
+    },
+    {
+      "id": "check-page-2511993ad8",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application",
+      "excerpt": "Here's a glimpse into the evolving trends in the CDP landscape: Embracing AI and Machine Learning Trend: The incorporation of AI and machine learning in CDPs is becoming a standard, significantly enhancing data analysis, personalization, and predictive modeling."
+    },
+    {
+      "id": "check-page-cedbc0e34e",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application",
+      "excerpt": "Impact: Elevated Personalization: Our AI-enabled CDPs dissect customer behavior and preferences in real-time, empowering businesses to offer highly personalized experiences."
+    },
+    {
+      "id": "check-page-f1d6693dda",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform",
+      "page": "application",
+      "excerpt": "Insightful Predictive Analytics: With machine learning, CDPs are now equipped to anticipate customer behaviors and trends, offering businesses a head start in their marketing and sales strategies."
     }
   ],
   "findings": {
@@ -1175,20 +3061,20 @@
         "evidenceId": "check-route-78962d0a15"
       },
       {
-        "value": "https://aws.amazon.com/bedrock/?nc2=h_prod_fs_br",
-        "evidenceId": "check-route-51779a5e36"
-      },
-      {
-        "value": "https://aws.amazon.com/startups/credits/",
-        "evidenceId": "check-route-b5eda9b093"
-      },
-      {
         "value": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability?aws-marketplace-cards.sort-by=item.additionalFields.sortOrder&aws-marketplace-cards.sort-order=asc#container-3416bf3b31",
         "evidenceId": "check-route-9a6a0f447a"
       },
       {
         "value": "https://aws.amazon.com/marketplace/solutions/business-applications",
         "evidenceId": "check-route-9b18ec1eaf"
+      },
+      {
+        "value": "https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+        "evidenceId": "check-route-30a233acc5"
+      },
+      {
+        "value": "https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+        "evidenceId": "check-route-2487f3ba9b"
       }
     ],
     "applicationUrl": [
@@ -1217,6 +3103,10 @@
       {
         "value": "remote",
         "evidenceId": "check-format-32b3e2f824"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-454ff47d65"
       }
     ],
     "location": [
@@ -1254,12 +3144,7 @@
         "evidenceId": "check-deal-6751b4e12e"
       }
     ],
-    "portfolioPages": [
-      {
-        "value": "https://aws.amazon.com/startups/",
-        "evidenceId": "check-portfolio-f9762ab845"
-      }
-    ],
+    "portfolioPages": [],
     "name": [
       {
         "value": "AWS Activate",

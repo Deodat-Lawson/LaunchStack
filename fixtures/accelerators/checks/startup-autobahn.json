@@ -1,6 +1,6 @@
 {
   "programId": "startup-autobahn",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://startup-autobahn.com/",
     "https://startup-autobahn.com/about/",
@@ -14,9 +14,12 @@
     "https://startup-autobahn.com/allgemein/startups-selected-for-startup-autobahn-program-1/",
     "https://startup-autobahn.com/allgemein/we-are-hiring-startup-autobahn-is-looking-for-an-accelerator-director/",
     "https://startup-autobahn.com/allgemein/where-others-see-craziness-we-do-see-our-purpose-a-week-about-shared-mobility-services-performance-driving-at-startup-autobahn/",
+    "https://startup-autobahn.com/our-program/",
+    "https://startup-autobahn.com/partner",
+    "https://startup-autobahn.com/allgemein/guardknox-startup-autobahn-is-about-real-life-pilots-together-with-the-largest-automotive-companies/",
     "https://startup-autobahn.com/news/press-release/motherson-additional-press-information-about-pilot-projects/",
     "https://startup-autobahn.com/news/press-release/porsche-additional-press-information-about-pilot-projects/",
-    "https://startup-autobahn.com/our-program/"
+    "https://startup-autobahn.com/news/community-initiatives-against-covid-19-startup-autobahn-program-alumni-what-is-our-ecosystem-doing-in-response-to-covid-19/"
   ],
   "evidence": [
     {
@@ -27,11 +30,39 @@
       "page": "details"
     },
     {
+      "id": "check-duration-2de76b0652",
+      "url": "https://startup-autobahn.com/news/community-initiatives-against-covid-19-startup-autobahn-program-alumni-what-is-our-ecosystem-doing-in-response-to-covid-19/",
+      "title": "STARTUP AUTOBAHN — portfolio page",
+      "excerpt": "their Automated Video Interview tool free for 1 month, 1 position. Market Dojo 🇬🇧 UK Program 7 With",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-4543b4c35a",
+      "url": "https://startup-autobahn.com/allgemein/guardknox-startup-autobahn-is-about-real-life-pilots-together-with-the-largest-automotive-companies/",
+      "title": "STARTUP AUTOBAHN — portfolio page",
+      "excerpt": "We like that the program is in a constrained in 3 month time frame after which you must deliver results.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-6a2819454e",
+      "url": "https://startup-autobahn.com/news/community-initiatives-against-covid-19-startup-autobahn-program-alumni-what-is-our-ecosystem-doing-in-response-to-covid-19/",
+      "title": "STARTUP AUTOBAHN — portfolio page",
+      "excerpt": "access to their Conflict Resolution Module for 6-weeks during these challenging times. Indivizo 🇭🇺",
+      "page": "portfolio"
+    },
+    {
       "id": "check-duration-77d0f99aff",
       "url": "https://startup-autobahn.com/our-program/",
       "title": "STARTUP AUTOBAHN — program page",
       "excerpt": "of maintenance by detecting machine failures 4 months in advance. View Website Legal documents contain",
       "page": "details"
+    },
+    {
+      "id": "check-duration-eaa965af99",
+      "url": "https://startup-autobahn.com/allgemein/guardknox-startup-autobahn-is-about-real-life-pilots-together-with-the-largest-automotive-companies/",
+      "title": "STARTUP AUTOBAHN — portfolio page",
+      "excerpt": "journey at Startup Autobahn Program #2. Today – 6 weeks prior to the great Expo Day on 25th July – we",
+      "page": "portfolio"
     },
     {
       "id": "check-duration-ec8d51ea6a",
@@ -87,6 +118,13 @@
       "url": "https://startup-autobahn.com/our-program/",
       "title": "STARTUP AUTOBAHN — program page",
       "excerpt": "hosted with Schaeffler Join us for our upcoming virtual Meetup hosted along with Schaeffler. Meet founders and",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1ad2af17be",
+      "url": "https://startup-autobahn.com/partner",
+      "title": "STARTUP AUTOBAHN — program page",
+      "excerpt": "range from advanced diesel, natural gas, electric and hybrid powertrains and powertrain-related components including",
       "page": "details"
     },
     {
@@ -363,6 +401,13 @@
       "page": "details"
     },
     {
+      "id": "check-format-6463677d3e",
+      "url": "https://startup-autobahn.com/news/community-initiatives-against-covid-19-startup-autobahn-program-alumni-what-is-our-ecosystem-doing-in-response-to-covid-19/",
+      "title": "STARTUP AUTOBAHN — portfolio page",
+      "excerpt": "now offering a free trial of Augmented Reality Support & Remote Assist with ten free licenses. They are also offering the",
+      "page": "portfolio"
+    },
+    {
       "id": "check-format-65c13a7dd2",
       "url": "https://startup-autobahn.com/our-program/",
       "title": "STARTUP AUTOBAHN — program page",
@@ -531,6 +576,13 @@
       "page": "details"
     },
     {
+      "id": "check-format-b030b5fcf9",
+      "url": "https://startup-autobahn.com/news/community-initiatives-against-covid-19-startup-autobahn-program-alumni-what-is-our-ecosystem-doing-in-response-to-covid-19/",
+      "title": "STARTUP AUTOBAHN — portfolio page",
+      "excerpt": "🇸🇪 Sweden Program 7 The company is now offering free remote guidance for companies affected by COVID-19 for 60 days to",
+      "page": "portfolio"
+    },
+    {
       "id": "check-format-b30efb7793",
       "url": "https://startup-autobahn.com/our-program/",
       "title": "STARTUP AUTOBAHN — program page",
@@ -585,6 +637,13 @@
       "title": "STARTUP AUTOBAHN — program page",
       "excerpt": "human-machine interface involving displays, XR/MR/AR/VR, remote monitoring & control, and metaverse. View Website Do it,",
       "page": "details"
+    },
+    {
+      "id": "check-format-d11f0537ff",
+      "url": "https://startup-autobahn.com/news/community-initiatives-against-covid-19-startup-autobahn-program-alumni-what-is-our-ecosystem-doing-in-response-to-covid-19/",
+      "title": "STARTUP AUTOBAHN — portfolio page",
+      "excerpt": "of the cleancode movement. evoach ug 🇩🇪 Germany Read “Why remote arguing is crucial for your team-performance!” and gain",
+      "page": "portfolio"
     },
     {
       "id": "check-format-d433913134",
@@ -692,6 +751,13 @@
       "page": "details"
     },
     {
+      "id": "check-location-772831e1e2",
+      "url": "https://startup-autobahn.com/partner",
+      "title": "STARTUP AUTOBAHN — program page",
+      "excerpt": "and suppliers. The family business, headquartered in Esslingen am Neckar, stands for innovative",
+      "page": "details"
+    },
+    {
       "id": "check-location-8237f3ebd6",
       "url": "https://startup-autobahn.com/",
       "title": "STARTUP AUTOBAHN — homepage",
@@ -742,16 +808,232 @@
       "excerpt": "STARTUP AUTOBAHN powered by Plug and Play – Speed up Innovation! Jobs Press News Pictures Contact Menu Home Partners Our Program Events About Apply Now Home Partners Our Program Events About Apply Now Active Partners 29 Startups Accelerated 289 Pilot Projects Realized 380 Virtual Events Hosted 223 Hey Tech Enthusiasts! Make innovation real with STARTUP AUTOBAHN. We are the open innovation platform that connects startups with industry-leading corporate partners to pilot their technology and drive the ultimate goal: a successful production-ready implementation. STARTUP AUTOBAHN’s flagship event returns to Stuttgart on July 2, 2026. Find out more and apply for a spot now! Get Started! 3 reasons why you'll love Startup Autobahn Connect On our platform, startups gain access to industry-leading corporates and are connected directly to the relevant contacts and key decision makers. There is no being redirected or lost between hierarchies and failed leads. STARTUP AUTOBAHN is the interface that enables young companies to collaborate with the key industry players with the aim of bringing innovation to life. Realize We have moved beyond acceleration. STARTUP AUTOBAHN is all about evaluating and driving technology in a real-world environment. Together with our established partners, we have set a clear goal – developing successful production-ready implementations or long-term investments"
     },
     {
+      "id": "check-page-96947692b1",
+      "url": "https://startup-autobahn.com/",
+      "page": "details",
+      "excerpt": "To add a level of exposure, project teams have the chance to showcase their work at one of Europe’s largest demo days: EXPO."
+    },
+    {
+      "id": "check-page-aeae7cb8f7",
+      "url": "https://startup-autobahn.com/",
+      "page": "details",
+      "excerpt": "In addition to traditional measurements of air pressure, precipitation and wind, the Boston- and Tel Aviv-based startup collects weather data from new sources of information, such as Wi-Fi signals, connected cars or smartphones."
+    },
+    {
+      "id": "check-page-aeae7cb8f7",
+      "url": "https://startup-autobahn.com/",
+      "page": "details",
+      "excerpt": "In addition to traditional measurements of air pressure, precipitation and wind, the Boston- and Tel Aviv-based startup collects weather data from new sources of information, such as Wi-Fi signals, connected cars or smartphones."
+    },
+    {
+      "id": "check-page-98e9dfe37e",
+      "url": "https://startup-autobahn.com/",
+      "page": "details",
+      "excerpt": "Nexmachina is a pure IoT startup, specializing in wireless technologies."
+    },
+    {
+      "id": "check-page-52562bf0e7",
+      "url": "https://startup-autobahn.com/",
+      "page": "details",
+      "excerpt": "With this project, they wanted to prove that IoT technology and LORA WAN in particular, provide an efficient and economical solution to digitize fluid meters and other assets in the plants."
+    },
+    {
+      "id": "check-page-98e9dfe37e",
+      "url": "https://startup-autobahn.com/",
+      "page": "details",
+      "excerpt": "Nexmachina is a pure IoT startup, specializing in wireless technologies."
+    },
+    {
+      "id": "check-page-54c0dfb8eb",
+      "url": "https://startup-autobahn.com/",
+      "page": "details",
+      "excerpt": "On Expo Day 7 Natural Fiber Welding, in cooperation with the Indian automotive supplier Motherson, presented a pilot project together with Porsche: a trim for a Taycan door — with a vegan leather substitute."
+    },
+    {
+      "id": "check-page-1689f829a6",
+      "url": "https://startup-autobahn.com/",
+      "page": "details",
+      "excerpt": "They took CO2, converted into the feedstocks for poly carbonate and produced with Daimlers existing supply chain a part that would be compatible with the Mercedes A-Class."
+    },
+    {
+      "id": "check-page-37d74a3ff6",
+      "url": "https://startup-autobahn.com/",
+      "page": "details",
+      "excerpt": "Mercedes-Benz Procurement is already involved in a pilot project with Circulor, to create transparency about CO2 emissions in the cobalt supply chain."
+    },
+    {
+      "id": "check-page-7f9fe6d91e",
+      "url": "https://startup-autobahn.com/",
+      "page": "details",
+      "excerpt": "The startup uses blockchain technology to track the emission of gases harmful to the climate and the proportion of secondary material along the complex supply chains of battery cell manufacturers."
+    },
+    {
+      "id": "check-page-37d74a3ff6",
+      "url": "https://startup-autobahn.com/",
+      "page": "details",
+      "excerpt": "Mercedes-Benz Procurement is already involved in a pilot project with Circulor, to create transparency about CO2 emissions in the cobalt supply chain."
+    },
+    {
+      "id": "check-page-26a2745a2c",
+      "url": "https://startup-autobahn.com/",
+      "page": "details",
+      "excerpt": "It improves services like remote valet parking, driverless end-of-line logistics, and driverless taxis."
+    },
+    {
       "id": "check-page-3d65d1db2a",
       "url": "https://startup-autobahn.com/about/",
       "page": "details",
       "excerpt": "Meet the Team! – STARTUP AUTOBAHN powered by Plug and Play Jobs Press News Pictures Contact Menu Home Partners Our Program Events About Apply Now Home Partners Our Program Events About Apply Now Ready to join us? It’s about the people. We know that behind every new technology is a team passionate about what they are working on. By building strong connections between our partners and with our program startups and alumni, we have a flourishing community of innovators, entrepreneurs, experts, scientists, engineers, executives, professionals, and more. Meet the Team! The team behind Startup Autobahn Show All AGC Amber Enterprises Arena 2036 Bosch Bridgestone Mobility Solutions Cummins DXC Technology Eberspächer Forvia GF Casting Solutions Huf Group Mercedes Benz AG Motherson Novelis NXP Semiconductors OPmobility Plug and Play Porsche AG Schaeffler Seikisui STMicroelectronics TOGG University Stuttgart Webasto ZF Friedrichshafen AG Soufiane El Abdouni Innovation Advisor at AGC Philipp Minkwitz Innovation Manager at Webasto Group Sebastian Tietz Director Startup Collaboration at Bosch Gioele Varvarito Business Innovation Consulting and Startup Relations at DXC Technology Marie Mathis Business Development Manager at Eberspächer Aurelien Moressee Innovation Manager at Plastic Omnium Theodora Preda Ventures Director at Plug & Play Germany GmbH Alexander Brem Endowed Chaired Professor &"
     },
     {
+      "id": "check-page-a47330be5b",
+      "url": "https://startup-autobahn.com/about/",
+      "page": "details",
+      "excerpt": "Become a partner Show All Founding Partners Anchor Partners Ecosystem Partners Strategic Partners As a founding partner of the innovation platform STARTUP AUTOBAHN, we want to mediate between startups and large corporations bringing together specific tech know-how with comprehensive automotive competence."
+    },
+    {
+      "id": "check-page-7578c1cfe1",
+      "url": "https://startup-autobahn.com/about/",
+      "page": "details",
+      "excerpt": "We are convinced that we will benefit from the open innovation approach."
+    },
+    {
+      "id": "check-page-82ab030d2b",
+      "url": "https://startup-autobahn.com/about/",
+      "page": "details",
+      "excerpt": "Therefore, we are constantly looking for innovative startups to combine the best of both worlds to shape the future of mobility and production."
+    },
+    {
+      "id": "check-page-60b4eb5892",
+      "url": "https://startup-autobahn.com/about/",
+      "page": "details",
+      "excerpt": "Headquartered in Silicon Valley, we have built accelerator programs, corporate innovation services, and an inhouse VC to make technological advancement progress faster than ever before."
+    },
+    {
+      "id": "check-page-cb9593a500",
+      "url": "https://startup-autobahn.com/about/",
+      "page": "details",
+      "excerpt": "To give startups the necessary resources to succeed in Silicon Valley and beyond, we are now active in 28 locations globally, including U.S., China, France, Germany, The Netherlands, Singapore, Indonesia, and Mexico."
+    },
+    {
+      "id": "check-page-40e0c8f238",
+      "url": "https://startup-autobahn.com/about/",
+      "page": "details",
+      "excerpt": "One of Plug and Play’s most successful projects is STARTUP AUTOBAHN: An innovation platform for global startups that brings Silicon Valley tech expertise to the birthplace of automotive."
+    },
+    {
+      "id": "check-page-141a927156",
+      "url": "https://startup-autobahn.com/about/",
+      "page": "details",
+      "excerpt": "We accelerate software and hardware startups – from early stage to growth stage – which develop innovative solutions in the fields of Future Mobility and Smart Production."
+    },
+    {
+      "id": "check-page-0989d7d97d",
+      "url": "https://startup-autobahn.com/about/",
+      "page": "details",
+      "excerpt": "Within such a creative and synergistic environment, the startups of STARTUP AUTOBAHN receive coworking space as well as state of the art hardware to implement their ideas."
+    },
+    {
+      "id": "check-page-af1453103a",
+      "url": "https://startup-autobahn.com/about/",
+      "page": "details",
+      "excerpt": "This setup grants many possibilities for startups to exchange with the ARENA2036 partners, to employ their know-how as well as to profit from their experience."
+    },
+    {
+      "id": "check-page-dcda0a61d9",
+      "url": "https://startup-autobahn.com/about/",
+      "page": "details",
+      "excerpt": "Partnership networks also play a vital role in DXC’s effort of supporting customers in their digital transformation, generating new engaging customer experiences, developing differentiating business models and helping to automate and optimize corporate processes in administration, in production, and along the supply chain."
+    },
+    {
+      "id": "check-page-0d65e5f4cb",
+      "url": "https://startup-autobahn.com/about/",
+      "page": "details",
+      "excerpt": "View Website Accelerators are playing an increasing role for companies like ZF to enter into dynamic and innovative startup communities worldwide."
+    },
+    {
+      "id": "check-page-154d7803da",
+      "url": "https://startup-autobahn.com/about/",
+      "page": "details",
+      "excerpt": "Our experience is a process of intense, rapid, and immersive education between all parties aimed for acceleration."
+    },
+    {
       "id": "check-page-8a3d52b75f",
       "url": "https://startup-autobahn.com/allgemein/130-joint-projects-between-startups-and-corporations-initiated-but-still-hungry-startup-autobahn-launches-program-4/",
       "page": "details",
       "excerpt": "130 joint projects between startups and corporations initiated but still hungry: STARTUP AUTOBAHN launches Program 4 – STARTUP AUTOBAHN powered by Plug and Play Jobs Press News Pictures Contact Menu Home Partners Our Program Events About Apply Now Home Partners Our Program Events About Apply Now News Press 130 joint projects between startups and corporations initiated but still hungry: STARTUP AUTOBAHN launches Program 4 Back Mar 23 2018 130 joint projects between startups and corporations initiated but still hungry: STARTUP AUTOBAHN launches Program 4 Europe’s largest innovation platform starts its fourth round with 31 young tech companies from 4 continents and 13 countries STARTUP AUTOBAHN facilitates joint projects between startups and corporations and offers access to VC’s, mentors, hardware lab, expertise, tools and office space Wide range of projects around vehicle tech (CASE), vehicle services (fintech / insurtech), enterprise processes (HR / retail), energy, future of production and supply chain Stuttgart, Germany. Europe’s largest innovation platform – STARTUP AUTOBAHN – kicks-off its fourth round. After screening hundreds of young tech companies 31 startups were accepted into Program 4 starting on 22 March. STARTUP AUTOBAHN is about facilitating joint projects between young tech companies and established corporations In the current batch, 31 young tech companies –"
+    },
+    {
+      "id": "check-page-39798443cf",
+      "url": "https://startup-autobahn.com/allgemein/130-joint-projects-between-startups-and-corporations-initiated-but-still-hungry-startup-autobahn-launches-program-4/",
+      "page": "details",
+      "excerpt": "STARTUP AUTOBAHN is about facilitating joint projects between young tech companies and established corporations In the current batch, 31 young tech companies – with the combined strength of now 16 corporate partners – will work on joint projects."
+    },
+    {
+      "id": "check-page-2fc9662920",
+      "url": "https://startup-autobahn.com/allgemein/130-joint-projects-between-startups-and-corporations-initiated-but-still-hungry-startup-autobahn-launches-program-4/",
+      "page": "details",
+      "excerpt": "Plug and Play – as the moderator of the program started the sourcing for these startups in October 2017 and organized hundreds of meetings between startups and the corporate partners of STARTUP AUTOBAHN."
+    },
+    {
+      "id": "check-page-9c01691165",
+      "url": "https://startup-autobahn.com/allgemein/130-joint-projects-between-startups-and-corporations-initiated-but-still-hungry-startup-autobahn-launches-program-4/",
+      "page": "details",
+      "excerpt": "On Expo Day taking place in July 2018 the partners and network of STARTUP AUTOBAHN will hear about many more joint projects happened thanks to the open innovation platform."
+    },
+    {
+      "id": "check-page-65156e3f52",
+      "url": "https://startup-autobahn.com/allgemein/130-joint-projects-between-startups-and-corporations-initiated-but-still-hungry-startup-autobahn-launches-program-4/",
+      "page": "details",
+      "excerpt": "In Program 4 only one third of the participating startups are based in Germany and one third comes even from outside of Europe: USA (5x), Israel (3x), Canada (1x), Japan (1x) and Australia (1x)."
+    },
+    {
+      "id": "check-page-f042b93622",
+      "url": "https://startup-autobahn.com/allgemein/130-joint-projects-between-startups-and-corporations-initiated-but-still-hungry-startup-autobahn-launches-program-4/",
+      "page": "details",
+      "excerpt": "The European startups were sourced in countries such as: Switzerland, Belgium, Austria, France, Netherlands, Portugal and the UK."
+    },
+    {
+      "id": "check-page-056d3d00ad",
+      "url": "https://startup-autobahn.com/allgemein/130-joint-projects-between-startups-and-corporations-initiated-but-still-hungry-startup-autobahn-launches-program-4/",
+      "page": "details",
+      "excerpt": "The focus of joint projects includes e-mobility, human-machine interface, supply chain logistics as well related themes in field of vehicle tech (CASE), vehicle services (fintech/insurtech), enterprise processes (HR/Retail), energy, future of production and industry 4.0."
+    },
+    {
+      "id": "check-page-90fea3711f",
+      "url": "https://startup-autobahn.com/allgemein/130-joint-projects-between-startups-and-corporations-initiated-but-still-hungry-startup-autobahn-launches-program-4/",
+      "page": "details",
+      "excerpt": "Neutral innovation platform – the best way for startups to get in business with our corporate partners STARTUP AUTOBAHN was founded by Daimler, Plug and Play, University of Stuttgart, and ARENA2036."
+    },
+    {
+      "id": "check-page-bb72e0c379",
+      "url": "https://startup-autobahn.com/allgemein/130-joint-projects-between-startups-and-corporations-initiated-but-still-hungry-startup-autobahn-launches-program-4/",
+      "page": "details",
+      "excerpt": "New founding anchor partners are Hewlett Packard Enterprise, DXC Technology, BASF, Porsche, ZF Friedrichshafen, Webasto and Deutsche Post DHL Group."
+    },
+    {
+      "id": "check-page-07f1caca0d",
+      "url": "https://startup-autobahn.com/allgemein/130-joint-projects-between-startups-and-corporations-initiated-but-still-hungry-startup-autobahn-launches-program-4/",
+      "page": "details",
+      "excerpt": "Murata, HELLA, BENTELER, Linde Group, Jardine Matheson Limited, Wieland Ventures, PostNL and AGC Glass Europe contribute as ecosystem partners."
+    },
+    {
+      "id": "check-page-66ec2f5cac",
+      "url": "https://startup-autobahn.com/allgemein/130-joint-projects-between-startups-and-corporations-initiated-but-still-hungry-startup-autobahn-launches-program-4/",
+      "page": "details",
+      "excerpt": "STARTUP AUTOBAHN is open for further corporate partners as well believing in open doors, disruptive thinking, and the sharing of ideas, technology, and connections to help startups and corporates thrive faster."
+    },
+    {
+      "id": "check-page-fec2443063",
+      "url": "https://startup-autobahn.com/allgemein/130-joint-projects-between-startups-and-corporations-initiated-but-still-hungry-startup-autobahn-launches-program-4/",
+      "page": "details",
+      "excerpt": "In the space of the ARENA2036 technology laboratory on the University of Stuttgart campus startups are able to use co – working space and have moderated access to high- tech hardware worth millions of euros."
+    },
+    {
+      "id": "check-page-0cc50ba50b",
+      "url": "https://startup-autobahn.com/allgemein/130-joint-projects-between-startups-and-corporations-initiated-but-still-hungry-startup-autobahn-launches-program-4/",
+      "page": "details",
+      "excerpt": "About STARTUP AUTOBAHN STARTUP AUTOBAHN is the ultimate innovation platform that unites global young tech companies with the unrivalled tech expertise of Silicon Valley and the best of German engineering ."
     },
     {
       "id": "check-page-ffc6179f93",
@@ -772,10 +1054,106 @@
       "excerpt": "Europe’s largest innovation platform STARTUP AUTOBAHN launches its third 100-day program in Stuttgart – STARTUP AUTOBAHN powered by Plug and Play Jobs Press News Pictures Contact Menu Home Partners Our Program Events About Apply Now Home Partners Our Program Events About Apply Now News Press Europe’s largest innovation platform STARTUP AUTOBAHN launches its third 100-day program in Stuttgart Back Sep 19 2017 Europe’s largest innovation platform STARTUP AUTOBAHN launches its third 100-day program in Stuttgart Record number of 33 startups selected for the third round of Europe’s largest innovation platform STARTUP AUTOBAHN facilitates joint projects between startups and corporations and offers access to VC’s, mentors, tools, expertise and office space Wide range of projects around vehicle tech (CASE), vehicle services (fintech/insurtech), enterprise processes (HR /retail), future of production and supply chain. Stuttgart. Europe’s largest innovation platform – STARTUP AUTOBAHN – is about to kick-off its third round. 500+ startups were screened for the program and 33 startups were accepted into Program 3 starting on 25 th September. STARTUP AUTOBAHN is about facilitating joint projects between young tech companies and established corporations In the upcoming batch, young tech companies – with the combined strength of now 10 corporate partners – will work on joint projects at"
     },
     {
+      "id": "check-page-83ee759219",
+      "url": "https://startup-autobahn.com/allgemein/europes-largest-innovation-platform-startup-autobahn-launches-its-third-100-day-program-in-stuttgart/",
+      "page": "details",
+      "excerpt": "STARTUP AUTOBAHN is about facilitating joint projects between young tech companies and established corporations In the upcoming batch, young tech companies – with the combined strength of now 10 corporate partners – will work on joint projects at ARENA2036 technology laboratory and showcase their results on Expo Day taking place on February 2018."
+    },
+    {
+      "id": "check-page-c21bcf1535",
+      "url": "https://startup-autobahn.com/allgemein/europes-largest-innovation-platform-startup-autobahn-launches-its-third-100-day-program-in-stuttgart/",
+      "page": "details",
+      "excerpt": "The focus of joint projects includes e-mobility, human-machine interface, supply chain logistics as well related themes in field of vehicle tech (CASE), vehicle services (fintech/insurtech), enterprise processes (HR/Retail), future of production and industry 4.0."
+    },
+    {
+      "id": "check-page-dd97ad011f",
+      "url": "https://startup-autobahn.com/allgemein/europes-largest-innovation-platform-startup-autobahn-launches-its-third-100-day-program-in-stuttgart/",
+      "page": "details",
+      "excerpt": "Neutral innovation platform – the best way for startups to get in business with our corporate partners STARTUP AUTOBAHN was founded by Daimler, Plug & Play, University of Stuttgart, and ARENA2036."
+    },
+    {
+      "id": "check-page-5cc6db8b73",
+      "url": "https://startup-autobahn.com/allgemein/europes-largest-innovation-platform-startup-autobahn-launches-its-third-100-day-program-in-stuttgart/",
+      "page": "details",
+      "excerpt": "New founding anchor partners are Hewlett Packard Enterprise, DXC Technology, BASF, Porsche, ZF Friedrichshafen and Deutsche Post DHL Group."
+    },
+    {
+      "id": "check-page-8eb3086140",
+      "url": "https://startup-autobahn.com/allgemein/europes-largest-innovation-platform-startup-autobahn-launches-its-third-100-day-program-in-stuttgart/",
+      "page": "details",
+      "excerpt": "STARTUP AUTOBAHN is open for further corporate partners as well believing in open doors, disruptive thinking, and the sharing of ideas, technology, and connections to help startups and corporates thrive faster."
+    },
+    {
+      "id": "check-page-71a840b4c2",
+      "url": "https://startup-autobahn.com/allgemein/europes-largest-innovation-platform-startup-autobahn-launches-its-third-100-day-program-in-stuttgart/",
+      "page": "details",
+      "excerpt": "In the space of the ARENA2036 technology laboratory on the University of Stuttgart campus startups are able to use co – working space and have moderated access to high- tech hardware worth millions of euros."
+    },
+    {
+      "id": "check-page-2ea875ac20",
+      "url": "https://startup-autobahn.com/allgemein/europes-largest-innovation-platform-startup-autobahn-launches-its-third-100-day-program-in-stuttgart/",
+      "page": "details",
+      "excerpt": "About STARTUP AUTOBAHN STARTUP AUTOBAHN is the ultimate innovation platform that unites global young tech companies with the unrivalled tech expertise of Silicon Valley and the best of German engineering ."
+    },
+    {
+      "id": "check-page-c2670efb6c",
+      "url": "https://startup-autobahn.com/allgemein/europes-largest-innovation-platform-startup-autobahn-launches-its-third-100-day-program-in-stuttgart/",
+      "page": "details",
+      "excerpt": "Our network of investment firms and mentors further helps the growth of tech companies."
+    },
+    {
+      "id": "check-page-d0958797b6",
+      "url": "https://startup-autobahn.com/allgemein/europes-largest-innovation-platform-startup-autobahn-launches-its-third-100-day-program-in-stuttgart/",
+      "page": "details",
+      "excerpt": "During our first Focus Week we had a lot going on: Startup Welcome and Move-in Day with a tour through ARENA2036 , Kick-off Meetup with more than 40 corporates, 33 startups from 10 countries & 23 startup pitches, Pilot Partner Meetings and Deal Flow Sessions, Founder-Business Unit Roundtable with KREATIZE and DXC Technology ."
+    },
+    {
       "id": "check-page-831243ba98",
       "url": "https://startup-autobahn.com/allgemein/fibres-startup-autobahn-is-about-direct-sales-opportunities/",
       "page": "details",
       "excerpt": "FIBRES: Startup Autobahn is about direct sales opportunities – STARTUP AUTOBAHN powered by Plug and Play Jobs Press News Pictures Contact Menu Home Partners Our Program Events About Apply Now Home Partners Our Program Events About Apply Now News Press FIBRES: Startup Autobahn is about direct sales opportunities Back Apr 14 2017 FIBRES: Startup Autobahn is about direct sales opportunities This time we go behind the scenes of Fibres’s innovation journey at Startup Autobahn Program #2. Panu Kause, the founder and CEO gave us an insight into their groundbreaking AI development which will be showcased at our EXPO Day on July 25th. One month ago we started our Acceleration Program #2 at Startup Autobahn. 300 startups applied for the program and the best 28 startups were accepted to shape the future of mobility with Daimler, HPE, Porsche, BASF, ZF and Murata. FIBRES – one of our startups selected for Startup Autobahn Program#2- is a user-friendly business application for collaborative trend management and strategy execution. TheFinnishstartup aims to become the world’s favorite platform for hybrid foresight and smart strategies. FIBRES is now set to combine crowd collaboration with world-leading artificial intelligence for identification of emerging trends and new opportunities. Why did you join Startup Autobahn (SA) and what are your expectations from the program? We applied after"
+    },
+    {
+      "id": "check-page-6a03d14e3c",
+      "url": "https://startup-autobahn.com/allgemein/fibres-startup-autobahn-is-about-direct-sales-opportunities/",
+      "page": "details",
+      "excerpt": "We applied after already being in discussions with one of the corporate partners, who suggested we’d apply to join in Program 2."
+    },
+    {
+      "id": "check-page-e80ac07475",
+      "url": "https://startup-autobahn.com/allgemein/fibres-startup-autobahn-is-about-direct-sales-opportunities/",
+      "page": "details",
+      "excerpt": "We feel they saw the potential of FIBRES not only for themselves but for the other corporate partners as well, since our software is industry-independent and helps in tracking market trends and identifying new opportunities at any corporation."
+    },
+    {
+      "id": "check-page-bfb6759b11",
+      "url": "https://startup-autobahn.com/allgemein/fibres-startup-autobahn-is-about-direct-sales-opportunities/",
+      "page": "details",
+      "excerpt": "From our point of, the possibility to meet and discuss with top executives of such great companies – the corporate partners and beyond – is the program’s key value for us."
+    },
+    {
+      "id": "check-page-5c244329b9",
+      "url": "https://startup-autobahn.com/allgemein/fibres-startup-autobahn-is-about-direct-sales-opportunities/",
+      "page": "details",
+      "excerpt": "Also I must add, we’ve already had the great pleasure of meeting really cool people from the other startups and mentors alike: seems to me some of these may be friends for life, and some will most likely result in partnering in some development areas for mutual benefit."
+    },
+    {
+      "id": "check-page-537cb557c7",
+      "url": "https://startup-autobahn.com/allgemein/fibres-startup-autobahn-is-about-direct-sales-opportunities/",
+      "page": "details",
+      "excerpt": "In your opinion what makes Startup Autobahn different from other accelerator programs?"
+    },
+    {
+      "id": "check-page-b0a8be4e73",
+      "url": "https://startup-autobahn.com/allgemein/fibres-startup-autobahn-is-about-direct-sales-opportunities/",
+      "page": "details",
+      "excerpt": "We will be showcasing a whole new release of our FIBRES software, developed with the support from at least one of the corporate partners."
+    },
+    {
+      "id": "check-page-fb6bcaabc3",
+      "url": "https://startup-autobahn.com/allgemein/fibres-startup-autobahn-is-about-direct-sales-opportunities/",
+      "page": "details",
+      "excerpt": "FIBRES is then the first strategic management software enabling ‘hybrid foresight’: combining human insight and AI capabilities for the purposes of better understanding of on-going and emerging trends and their expected impacts onto one’s own business."
     },
     {
       "id": "check-page-2e88788c0b",
@@ -784,16 +1162,100 @@
       "excerpt": "Jetlite about Startup Autobahn: the program is very well organised and stuffed with premium partners – STARTUP AUTOBAHN powered by Plug and Play Jobs Press News Pictures Contact Menu Home Partners Our Program Events About Apply Now Home Partners Our Program Events About Apply Now News Press Jetlite about Startup Autobahn: the program is very well organised and stuffed with premium partners Back Apr 11 2017 Jetlite about Startup Autobahn: the program is very well organised and stuffed with premium partners Less than a month ago we started our Acceleration Program #2 at Startup Autobahn. 300 startups applied for the program and the best 28 startups were accepted to shape the future of mobility with Daimler, HPE, Porsche, BASF, ZF and Murata. Today we interviewed Achim Leder , the co-founder of Jetlite to give us a sneak peek into their activities at Startup Autobahn. Jetlite® – one of our startups selected for Startup Autobahn Program#2 – offers a holistic, algorithm-based approach to increase the comfort of passengers by reducing jetlag on long-distance flights while reducing fuel consumption and the workload for the crew on board. Why did you join Startup Autobahn (SA) and what are your expectations from the program? We joined Startup Autobahn as the program offers a direct link to the Automotive-Industry, a new but very interesting branch for us. What do you like the most"
     },
     {
+      "id": "check-page-349dbaa0e1",
+      "url": "https://startup-autobahn.com/allgemein/jetlite-about-startup-autobahn-the-program-is-very-well-organised-and-stuffed-with-premium-partners/",
+      "page": "details",
+      "excerpt": "In your opinion what makes Startup Autobahn different from other accelerator programs?"
+    },
+    {
+      "id": "check-page-bf9a0a9237",
+      "url": "https://startup-autobahn.com/allgemein/jetlite-about-startup-autobahn-the-program-is-very-well-organised-and-stuffed-with-premium-partners/",
+      "page": "details",
+      "excerpt": "For us as part of the Airbus Accelerator BizLab it was interesting to see how an accelerator with more than one backer is handled; it seems that it works very well."
+    },
+    {
       "id": "check-page-2075b187a4",
       "url": "https://startup-autobahn.com/allgemein/startup-autobahn-march-focus-week-program-2-has-started/",
       "page": "details",
       "excerpt": "STARTUP AUTOBAHN March Focus Week – Program #2 has started! – STARTUP AUTOBAHN powered by Plug and Play Jobs Press News Pictures Contact Menu Home Partners Our Program Events About Apply Now Home Partners Our Program Events About Apply Now News Press STARTUP AUTOBAHN March Focus Week – Program #2 has started! Back Mar 20 2017 STARTUP AUTOBAHN March Focus Week – Program #2 has started! Last week was very exciting for STARTUP AUTOBAHN. After months of preparing, scouting the best startups all over the world, and selecting the TOP 28 out of over 300 startups, Program 2 finally started on March 13th. Plug and Play team organized various activities for the startups, corporate partners and the whole STARTUP AUTOBAHN community in order to provide platform for networking, pilot projects and mentoring. On March 13th Welcoming Day selected startups from all around the world: Finland, Norway, Israel, United Kingdom, France, Germany and Silicon Valley moved into our co-working space in the brand new ARENA2036 building. On Monday we started the onboarding week with delicious breakfast and in the afternoon ARENA2036 CEO Peter Froeschle gave a tour through the building. Tueasday´s Corporate Day was all about networking and pilot projects. After PNP team presented an overview about program #2 to the audience the startups and corporate partners discussed potential collaborations in one-hour"
     },
     {
+      "id": "check-page-34822e28bc",
+      "url": "https://startup-autobahn.com/allgemein/startup-autobahn-march-focus-week-program-2-has-started/",
+      "page": "details",
+      "excerpt": "After PNP team presented an overview about program #2 to the audience the startups and corporate partners discussed potential collaborations in one-hour private meetings in the ARENA2036."
+    },
+    {
+      "id": "check-page-e8febfc3dc",
+      "url": "https://startup-autobahn.com/allgemein/startup-autobahn-march-focus-week-program-2-has-started/",
+      "page": "details",
+      "excerpt": "Thursday morning was dedicated to Mentoring Sessions ."
+    },
+    {
+      "id": "check-page-d15fe76eed",
+      "url": "https://startup-autobahn.com/allgemein/startup-autobahn-march-focus-week-program-2-has-started/",
+      "page": "details",
+      "excerpt": "After that Willem Bulthuis and Ivan Labra joined our co-working space and startups swang by at the mentors’ desks for ad-hoc one-on-one talks about business development, business modelling and investment strategies."
+    },
+    {
+      "id": "check-page-35db2fdee3",
+      "url": "https://startup-autobahn.com/allgemein/startup-autobahn-march-focus-week-program-2-has-started/",
+      "page": "details",
+      "excerpt": "More than 100 people – corporations, industry partners, startups, mentors, universities and government representatives – gathered to see our STARTUP AUTOBAHN startups."
+    },
+    {
       "id": "check-page-a3a57d14ec",
       "url": "https://startup-autobahn.com/allgemein/startups-selected-for-startup-autobahn-program-1/",
       "page": "details",
       "excerpt": "Startups selected for STARTUP AUTOBAHN Program 1! – STARTUP AUTOBAHN powered by Plug and Play Jobs Press News Pictures Contact Menu Home Partners Our Program Events About Apply Now Home Partners Our Program Events About Apply Now News Press Startups selected for STARTUP AUTOBAHN Program 1! Back Jun 15 2016 Startups selected for STARTUP AUTOBAHN Program 1! Congratulations to the 13 selected startups for STARTUP AUTOBAHN Program 1! 4tiitoo 4tiitoo creates a software platform to control everyday devices and applications in a consistent, natural and more efficient way based on inputs like gaze, gestures and speech. Based on the overall context it predicts users‘ intentions to enable devices to act automatically and intelligently. Argus Argus is the world’s largest, independent automotive cyber security company, whose customers are the world’s major OEMs, Tier 1s, aftermarket connectivity providers and fleet managers. Led by a team of seasoned cyber-security experts and automotive veterans, Argus offers its customers the most comprehensive, multi-layered and end-to-end protection in the industry. Proven to be technologically superior by independent third parties and with 20 pending patents, Argus is well positioned to help its customers overcome the dynamic cyber security challenges posed by the connected car revolution: Argus is headquartered in Tel Aviv, Israel and has a global"
+    },
+    {
+      "id": "check-page-e924cba348",
+      "url": "https://startup-autobahn.com/allgemein/startups-selected-for-startup-autobahn-program-1/",
+      "page": "details",
+      "excerpt": "Canatu’s CNB™ Films have unrivalled flexibility and 3D formability coupled with zero haze and reflectance, making them the material of choice for the next generation automotive interior decoration surfaces with free-form touch and high contrast for good readability."
+    },
+    {
+      "id": "check-page-4f36927042",
+      "url": "https://startup-autobahn.com/allgemein/startups-selected-for-startup-autobahn-program-1/",
+      "page": "details",
+      "excerpt": "The app is available for iOS, Android and Windows. evopark evopark is the market leader in digital off-street parking in Germany."
+    },
+    {
+      "id": "check-page-c24c9e9598",
+      "url": "https://startup-autobahn.com/allgemein/startups-selected-for-startup-autobahn-program-1/",
+      "page": "details",
+      "excerpt": "At exclusive retail partners, you receive a discount on your parking fees."
+    },
+    {
+      "id": "check-page-0186a556d9",
+      "url": "https://startup-autobahn.com/allgemein/startups-selected-for-startup-autobahn-program-1/",
+      "page": "details",
+      "excerpt": "Gauzy develops, manufactures and markets Liquid Crystal materials (PDLC, PDSLC, NLC and more), controllers, applications and solutions for a variety of markets including construction, automotive and consumer electronics, anything from elevators to refrigerators and more."
+    },
+    {
+      "id": "check-page-b9ed657382",
+      "url": "https://startup-autobahn.com/allgemein/startups-selected-for-startup-autobahn-program-1/",
+      "page": "details",
+      "excerpt": "Or to keep it simple, get in and out from a bus/ tram/ train with your smartphone and HopOn would take care for the rest. n-Join n-Join is Internet of Things for the manufacturing industry."
+    },
+    {
+      "id": "check-page-3529fbcaeb",
+      "url": "https://startup-autobahn.com/allgemein/startups-selected-for-startup-autobahn-program-1/",
+      "page": "details",
+      "excerpt": "A true Plug&Play solution for transforming any factory into a smarter factory. n-Join’s revolutionary Industrial IoT technology painlessly optimizes factories‘ efficiency, quality and profitability, and reduces environmental impact in the process."
+    },
+    {
+      "id": "check-page-7d16313597",
+      "url": "https://startup-autobahn.com/allgemein/startups-selected-for-startup-autobahn-program-1/",
+      "page": "details",
+      "excerpt": "TruckPad TruckPad is an online mobile marketplace where truckers come to get their next truckload using their smartphones."
+    },
+    {
+      "id": "check-page-d65feefc54",
+      "url": "https://startup-autobahn.com/allgemein/startups-selected-for-startup-autobahn-program-1/",
+      "page": "details",
+      "excerpt": "Vayyar sensors enable an extensive breadth of applications ranging from breast cancer screening, enhanced robot vision, automotive, smart home, IoT, food safety monitoring and much more."
     },
     {
       "id": "check-page-e39391950a",
@@ -808,6 +1270,240 @@
       "excerpt": "Where others see craziness we do see our purpose – a week about Shared Mobility Services & Performance Driving at STARTUP AUTOBAHN – STARTUP AUTOBAHN powered by Plug and Play Jobs Press News Pictures Contact Menu Home Partners Our Program Events About Apply Now Home Partners Our Program Events About Apply Now News Press Where others see craziness we do see our purpose – a week about Shared Mobility Services & Performance Driving at STARTUP AUTOBAHN Back Nov 27 2017 Where others see craziness we do see our purpose – a week about Shared Mobility Services & Performance Driving at STARTUP AUTOBAHN Last week, STARTUP AUTOBAHN achieved a new milestone in its history. Our biggest meetup ever with more than 380 guests in the Mercedes-Benz Arena in Stuttgart attracted more than 21 startups from all around the world (US, Canada, UK, North Ireland, Finland, Belgium, France, Germany, Italy, Israel and even South Korea) to present their groundbreaking technology, products and services in the field of Shared Mobility Services and the Future of Performance Driving in front of Daimler, Porsche, HPE, DXC Technology, DPDHL, ZF, BASF, Webasto, Murata, Continental, Shell, Deutsche Bank, IBM, John Deere, AGC Glass, Jardines and other corporations. During the morning and afternoon deep dive sessions startups set up demonstrations of their prototypes and sat together with business unit experts to"
     },
     {
+      "id": "check-page-39f513cd03",
+      "url": "https://startup-autobahn.com/allgemein/where-others-see-craziness-we-do-see-our-purpose-a-week-about-shared-mobility-services-performance-driving-at-startup-autobahn/",
+      "page": "details",
+      "excerpt": "Amongst the adrenaline racing startup entrepreneurs to attend were Bryn Balcombe of UK’s Roborace , UK’s Darren Cox of IDEAS + CARS LTD and France’s David Nadal of Eden Games – the last two being part of Canada’s Millennial Esports Corp."
+    },
+    {
+      "id": "check-page-059830ed56",
+      "url": "https://startup-autobahn.com/allgemein/where-others-see-craziness-we-do-see-our-purpose-a-week-about-shared-mobility-services-performance-driving-at-startup-autobahn/",
+      "page": "details",
+      "excerpt": "Cliff Singleton managed to attract further startup entrepreneurs all the way from Canada such as Simon Ashby of Audiokinetic and Robert Eisses of Orbitless Drives Inc."
+    },
+    {
+      "id": "check-page-eaf3ebde21",
+      "url": "https://startup-autobahn.com/allgemein/where-others-see-craziness-we-do-see-our-purpose-a-week-about-shared-mobility-services-performance-driving-at-startup-autobahn/",
+      "page": "details",
+      "excerpt": "For the STARTUP AUTOBAHN event at the Mercedes-Benz Arena Brian Yoo and Kevin Yi of TEGway flew in all the way from South Korea while Tin Hang Liu of OSVehicle arrived from Silicon Valley."
+    },
+    {
+      "id": "check-page-3a0d6a9c48",
+      "url": "https://startup-autobahn.com/allgemein/where-others-see-craziness-we-do-see-our-purpose-a-week-about-shared-mobility-services-performance-driving-at-startup-autobahn/",
+      "page": "details",
+      "excerpt": "Cnaan Aviv of Make My Day, Ido Levy of Safemode and Ziv Hermon of Silentium Ltd. hopped over from Israel."
+    },
+    {
+      "id": "check-page-a29176ea26",
+      "url": "https://startup-autobahn.com/allgemein/where-others-see-craziness-we-do-see-our-purpose-a-week-about-shared-mobility-services-performance-driving-at-startup-autobahn/",
+      "page": "details",
+      "excerpt": "Fleetonomy Israel End to end platform for planning, operating and optimizing fleets of autonomous vehicles."
+    },
+    {
+      "id": "check-page-96fc1e6188",
+      "url": "https://startup-autobahn.com/allgemein/where-others-see-craziness-we-do-see-our-purpose-a-week-about-shared-mobility-services-performance-driving-at-startup-autobahn/",
+      "page": "details",
+      "excerpt": "Belgium based startup that does a particular good job of contextualising and interpreting data to create behavioural profiles in real time to optimise consumer experience e.g. for ride sharing, fleet management, multimodal mobility management and connected car personal assistant."
+    },
+    {
+      "id": "check-page-b703e3103d",
+      "url": "https://startup-autobahn.com/allgemein/where-others-see-craziness-we-do-see-our-purpose-a-week-about-shared-mobility-services-performance-driving-at-startup-autobahn/",
+      "page": "details",
+      "excerpt": "Silentium Israel Active noise cancellation software."
+    },
+    {
+      "id": "check-page-77d1722d53",
+      "url": "https://startup-autobahn.com/allgemein/where-others-see-craziness-we-do-see-our-purpose-a-week-about-shared-mobility-services-performance-driving-at-startup-autobahn/",
+      "page": "details",
+      "excerpt": "MakeMyDay Israel Make My Day is a car personal assistant."
+    },
+    {
+      "id": "check-page-05ff272dad",
+      "url": "https://startup-autobahn.com/allgemein/where-others-see-craziness-we-do-see-our-purpose-a-week-about-shared-mobility-services-performance-driving-at-startup-autobahn/",
+      "page": "details",
+      "excerpt": "Their Natural Language Understanding Engine is built specifically for automotive use cases – which allows it to understand drivers better than competitors."
+    },
+    {
+      "id": "check-page-dbc5fb9b8b",
+      "url": "https://startup-autobahn.com/allgemein/where-others-see-craziness-we-do-see-our-purpose-a-week-about-shared-mobility-services-performance-driving-at-startup-autobahn/",
+      "page": "details",
+      "excerpt": "Audiokinetic Montreal, Canada Leading global provider of cross-platform audio solutions for the interactive media and gaming industries."
+    },
+    {
+      "id": "check-page-be01509038",
+      "url": "https://startup-autobahn.com/allgemein/where-others-see-craziness-we-do-see-our-purpose-a-week-about-shared-mobility-services-performance-driving-at-startup-autobahn/",
+      "page": "details",
+      "excerpt": "Toroidion Finland The Toroidion all-new electric powertrain has been designed to be scalable in power for different applications while remaining safe to use and service.The high-performance battery of the powertrain is as easily replaced in the pit-lane as it is in the home garage."
+    },
+    {
+      "id": "check-page-3b4815955c",
+      "url": "https://startup-autobahn.com/allgemein/where-others-see-craziness-we-do-see-our-purpose-a-week-about-shared-mobility-services-performance-driving-at-startup-autobahn/",
+      "page": "details",
+      "excerpt": "Eden Games Lyon, France Almost unrivalled reputation as an independent racing game developer with the huge critical and commercial success of both Test Drive Unlimited and V-Rally."
+    },
+    {
+      "id": "check-page-6622fc39ff",
+      "url": "https://startup-autobahn.com/our-program/",
+      "page": "details",
+      "excerpt": "Our Program – STARTUP AUTOBAHN powered by Plug and Play Jobs Press News Pictures Contact Menu Home Partners Our Program Events About Apply Now Home Partners Our Program Events About Apply Now Join our Platform! Become a part of our growing community. You are working on game-changing technology and we have the connections to take your business to new heights. Our program enables you to work together with our partners on the future of mobility, production, enterprise and beyond. Our Program How Startup Autobahn works Our program is divided into three phases. First is the scouting phase including the Selection Day at the end, the second one is the 100 day pilot phase with our Expo Day as the closing event and last but not least the Go real! Phase. Connecting with Startups We are always on the search for startups working on the future of mobility, production, enterprise, and beyond. The most interesting and relevant of the bunch will be invited to tech-themed 1:1 meetings, our so-called “Deep Dives” hosted by our corporate partners. Based on these meetings, our partners will consider voting startups into the next program. Getting Projects up and running Once a startup is voted into the program, they will work on joint projects, proofs of concepts and prototypes with the partner. During this phase, the STARTUP AUTOBAHN powered by Plug and Play team is there to guide and support"
+    },
+    {
+      "id": "check-page-caaf565755",
+      "url": "https://startup-autobahn.com/our-program/",
+      "page": "details",
+      "excerpt": "It has grown into a highly acclaimed event with a stacked program of speakers, experts, and the teams behind the technologies – creating a stage for industry-players, companies, startups and VCs to come together and celebrate the work of open innovation."
+    },
+    {
+      "id": "check-page-71b5f72db6",
+      "url": "https://startup-autobahn.com/our-program/",
+      "page": "details",
+      "excerpt": "Are you a startup working on hard- or software solutions for mobility, production, or enterprise?"
+    },
+    {
+      "id": "check-page-db7f18d78b",
+      "url": "https://startup-autobahn.com/our-program/",
+      "page": "details",
+      "excerpt": "Apply now Tell us about your startup Upload your pitch deck Get invited to pitch in Stuttgart, Germany Past Smart Workplace & Mobile Work, ..."
+    },
+    {
+      "id": "check-page-504c37b45e",
+      "url": "https://startup-autobahn.com/our-program/",
+      "page": "details",
+      "excerpt": "Webasto Thermo & Comfort SE Headquarter 29.11.2018 Show more Past The Automated Logistics Facility – ..."
+    },
+    {
+      "id": "check-page-1d35cab7cc",
+      "url": "https://startup-autobahn.com/our-program/",
+      "page": "details",
+      "excerpt": "DHL Innovation Center, Bonn 17.01.2019 Show more Past Selection Day – Program 6 Arena2036 24.01.2019 Show more Past EXPO Day – Program 5 Wagenhallen, Stuttgart 21.02.2019 Show more Past Kick Off Program 6 Arena2036 21.03.2019 Show more Past Sustainable Vehicle & Materials – ..."
+    },
+    {
+      "id": "check-page-294596218f",
+      "url": "https://startup-autobahn.com/our-program/",
+      "page": "details",
+      "excerpt": "Dornier Museum, Friedrichshafen 09.05.2019 Show more Past Mobility & The Sustainable Smart ..."
+    },
+    {
+      "id": "check-page-ca275506ce",
+      "url": "https://startup-autobahn.com/our-program/",
+      "page": "details",
+      "excerpt": "AMS-Institute, Amsterdam 22.05.2019 Show more Past Production 4.0 & Digital Business ..."
+    },
+    {
+      "id": "check-page-e39ab34731",
+      "url": "https://startup-autobahn.com/our-program/",
+      "page": "details",
+      "excerpt": "T-Systems, Bonn 19.11.2019 Show more Past Intuitive HMI and Intelligent Manufacturing ..."
+    },
+    {
+      "id": "check-page-fe4768d7ef",
+      "url": "https://startup-autobahn.com/our-program/",
+      "page": "details",
+      "excerpt": "Stuttgart, Germany 05.12.2019 Show more Past Sustainable Luxury and Circular Economy ..."
+    },
+    {
+      "id": "check-page-1b97b97319",
+      "url": "https://startup-autobahn.com/our-program/",
+      "page": "details",
+      "excerpt": "Plug and Play's Virtual Venue 04.11.2020 Show more Past Unleashing the power of AI ..."
+    },
+    {
+      "id": "check-page-05c0cc6077",
+      "url": "https://startup-autobahn.com/our-program/",
+      "page": "details",
+      "excerpt": "Plug and Play's Virtual Venue 03.12.2020 Show more Past Automation of Operations in Logistics ..."
+    },
+    {
+      "id": "check-page-ec15e7d031",
+      "url": "https://startup-autobahn.com/our-program/",
+      "page": "details",
+      "excerpt": "Plug and Play's Virtual Venue 18.11.2021 Show more Past Event: \"Future of Mobility\" hosted ..."
+    },
+    {
+      "id": "check-page-2e84e19d92",
+      "url": "https://startup-autobahn.com/partner",
+      "page": "details",
+      "excerpt": "Meet our Partners! – STARTUP AUTOBAHN powered by Plug and Play Jobs Press News Pictures Contact Menu Home Partners Our Program Events About Apply Now Home Partners Our Program Events About Apply Now Let’s work together! Become a part of Europe’s largest open innovation platform. Is your company eager to make an impact with innovation? Collaborate with major industry players to attract the best international startups and solve the challenges of the future, today. Meet our Partners! 3 Key benefits of being a partner Scouting Discover applicable technologies to innovate, extend or improve your business model efficiently and effectively. Utilize the strong global network and reputation of Startup Autobahn to scout startups that could be the perfect match for your idea or challenge, and meet them face-to-face in curated deep dives and deal-flows. Collaboration Our strong network allows us to attract the best startups worldwide, and in addition, our platform promotes cross-collaboration between partners, supporting joint projects with other partners, right from the start. Mindset Shift Innovation requires an open mindset. We will support you in activating or furthering a culture of innovation within your organization. This can be achieved through exposing your organization to a broad range of activities and tech-topic-focused monthly events, and a continued dialogue with key"
+    },
+    {
+      "id": "check-page-efec9f3aa7",
+      "url": "https://startup-autobahn.com/partner",
+      "page": "details",
+      "excerpt": "Show All Founding Partners Anchor Partners Ecosystem Partners Strategic Partners As a founding partner of the innovation platform STARTUP AUTOBAHN, we want to mediate between startups and large corporations bringing together specific tech know-how with comprehensive automotive competence."
+    },
+    {
+      "id": "check-page-cc914c83ab",
+      "url": "https://startup-autobahn.com/partner",
+      "page": "details",
+      "excerpt": "We are convinced that we will benefit from the open innovation approach."
+    },
+    {
+      "id": "check-page-041eb9744d",
+      "url": "https://startup-autobahn.com/partner",
+      "page": "details",
+      "excerpt": "Therefore, we are constantly looking for innovative startups to combine the best of both worlds to shape the future of mobility and production."
+    },
+    {
+      "id": "check-page-907509900e",
+      "url": "https://startup-autobahn.com/partner",
+      "page": "details",
+      "excerpt": "Headquartered in Silicon Valley, we have built accelerator programs, corporate innovation services, and an inhouse VC to make technological advancement progress faster than ever before."
+    },
+    {
+      "id": "check-page-a6efcff3e9",
+      "url": "https://startup-autobahn.com/partner",
+      "page": "details",
+      "excerpt": "To give startups the necessary resources to succeed in Silicon Valley and beyond, we are now active in 28 locations globally, including U.S., China, France, Germany, The Netherlands, Singapore, Indonesia, and Mexico."
+    },
+    {
+      "id": "check-page-dee3b167eb",
+      "url": "https://startup-autobahn.com/partner",
+      "page": "details",
+      "excerpt": "One of Plug and Play’s most successful projects is STARTUP AUTOBAHN: An innovation platform for global startups that brings Silicon Valley tech expertise to the birthplace of automotive."
+    },
+    {
+      "id": "check-page-f40f328eab",
+      "url": "https://startup-autobahn.com/partner",
+      "page": "details",
+      "excerpt": "We accelerate software and hardware startups – from early stage to growth stage – which develop innovative solutions in the fields of Future Mobility and Smart Production."
+    },
+    {
+      "id": "check-page-d6b6974e1a",
+      "url": "https://startup-autobahn.com/partner",
+      "page": "details",
+      "excerpt": "Within such a creative and synergistic environment, the startups of STARTUP AUTOBAHN receive coworking space as well as state of the art hardware to implement their ideas."
+    },
+    {
+      "id": "check-page-42b01cbc4b",
+      "url": "https://startup-autobahn.com/partner",
+      "page": "details",
+      "excerpt": "This setup grants many possibilities for startups to exchange with the ARENA2036 partners, to employ their know-how as well as to profit from their experience."
+    },
+    {
+      "id": "check-page-4680b87d7f",
+      "url": "https://startup-autobahn.com/partner",
+      "page": "details",
+      "excerpt": "Partnership networks also play a vital role in DXC’s effort of supporting customers in their digital transformation, generating new engaging customer experiences, developing differentiating business models and helping to automate and optimize corporate processes in administration, in production, and along the supply chain."
+    },
+    {
+      "id": "check-page-5ca36c54cf",
+      "url": "https://startup-autobahn.com/partner",
+      "page": "details",
+      "excerpt": "View Website Accelerators are playing an increasing role for companies like ZF to enter into dynamic and innovative startup communities worldwide."
+    },
+    {
+      "id": "check-page-ab7704de4e",
+      "url": "https://startup-autobahn.com/partner",
+      "page": "details",
+      "excerpt": "Our experience is a process of intense, rapid, and immersive education between all parties aimed for acceleration."
+    },
+    {
+      "id": "check-page-dad5615b64",
+      "url": "https://startup-autobahn.com/allgemein/guardknox-startup-autobahn-is-about-real-life-pilots-together-with-the-largest-automotive-companies/",
+      "page": "portfolio",
+      "excerpt": "GuardKnox: Startup Autobahn is about real-life pilots together with the largest automotive companies – STARTUP AUTOBAHN powered by Plug and Play Jobs Press News Pictures Contact Menu Home Partners Our Program Events About Apply Now Home Partners Our Program Events About Apply Now News Press GuardKnox: Startup Autobahn is about real-life pilots together with the largest automotive companies Back Jun 16 2017 GuardKnox: Startup Autobahn is about real-life pilots together with the largest automotive companies As we are finishing with pilot Program #2, Dionis Teshler(CTO of GuardKnox ) gave us a look behind the scenes of their innovation journey at Startup Autobahn Program #2. Today – 6 weeks prior to the great Expo Day on 25th July – we introduce GuardKnox to our readers. Out of 300 startups that applied for the program the best 28 startups were accepted to shape the future of mobility with Daimler, HPE, Porsche, BASF, ZF and Murata. GuardKnox – one of Startup Autobahn Program #2 startups – offers cyber security hardware solutions for automotive. Why did you join Startup Autobahn (SA) and what are your expectations from the program? We joined Startup Autobahn for a multitude of reasons, the most important being the opportunities that it has afforded us. As an Israeli startup we have been looking towards the German automotive landscape as the leaders in innovation. We think Startup"
+    },
+    {
       "id": "check-page-a8aa827432",
       "url": "https://startup-autobahn.com/news/press-release/motherson-additional-press-information-about-pilot-projects/",
       "page": "details",
@@ -820,10 +1516,10 @@
       "excerpt": "[Porsche] Additional press information about pilot projects – STARTUP AUTOBAHN powered by Plug and Play Jobs Press News Pictures Contact Menu Home Partners Our Program Events About Apply Now Home Partners Our Program Events About Apply Now News Press [Porsche] Additional press information about pilot projects Back Feb 05 2020 [Porsche] Additional press information about pilot projects – deutsche Version am Ende des Artikels zu finden/german version at the bottom – Main press release for STARTUP AUTOBAHN EXPO Day Program 7: https://startup-autobahn.com/news/press-release/europes-largest-open-innovation-platform-startup-autobahn-presents-40-new-pilot-projects-at-expo-day/ Way Ahead with Startup Autobahn The automotive industry is currently changing more than ever before. After 70 successful years of building sports cars, Porsche is turning into a provider of exclusive and sporty mobility. We believe that the future belongs to those, who take action: visionaries and entrepreneurs. If founders bring new business models in the context of the customer experience, connected mobility and sustainable performance or use cases for future technologies like AI, blockchain or augmented reality: we continue to team up with outstanding entrepreneurs to solve the toughest challenges in the mobility space. Porsche’s collaboration with Way Ahead Technologies is especially remarkable for us, as"
     },
     {
-      "id": "check-page-6622fc39ff",
-      "url": "https://startup-autobahn.com/our-program/",
-      "page": "details",
-      "excerpt": "Our Program – STARTUP AUTOBAHN powered by Plug and Play Jobs Press News Pictures Contact Menu Home Partners Our Program Events About Apply Now Home Partners Our Program Events About Apply Now Join our Platform! Become a part of our growing community. You are working on game-changing technology and we have the connections to take your business to new heights. Our program enables you to work together with our partners on the future of mobility, production, enterprise and beyond. Our Program How Startup Autobahn works Our program is divided into three phases. First is the scouting phase including the Selection Day at the end, the second one is the 100 day pilot phase with our Expo Day as the closing event and last but not least the Go real! Phase. Connecting with Startups We are always on the search for startups working on the future of mobility, production, enterprise, and beyond. The most interesting and relevant of the bunch will be invited to tech-themed 1:1 meetings, our so-called “Deep Dives” hosted by our corporate partners. Based on these meetings, our partners will consider voting startups into the next program. Getting Projects up and running Once a startup is voted into the program, they will work on joint projects, proofs of concepts and prototypes with the partner. During this phase, the STARTUP AUTOBAHN powered by Plug and Play team is there to guide and support"
+      "id": "check-page-322e04c6da",
+      "url": "https://startup-autobahn.com/news/community-initiatives-against-covid-19-startup-autobahn-program-alumni-what-is-our-ecosystem-doing-in-response-to-covid-19/",
+      "page": "portfolio",
+      "excerpt": "Community Initiatives Against COVID-19: STARTUP AUTOBAHN Program Alumni – What is our ecosystem doing in response to COVID-19? – STARTUP AUTOBAHN powered by Plug and Play Jobs Press News Pictures Contact Menu Home Partners Our Program Events About Apply Now Home Partners Our Program Events About Apply Now News Press Community Initiatives Against COVID-19: STARTUP AUTOBAHN Program Alumni – What is our ecosystem doing in response to COVID-19? Back Apr 29 2020 Community Initiatives Against COVID-19: STARTUP AUTOBAHN Program Alumni – What is our ecosystem doing in response to COVID-19? Let’s talk about the word community. A word that is used often and broadly, like many other words, holds so much meaning yet is hard to fully grasp or define. When you talk to people about what it means to them, they have completely different associations or understandings. For some it incites a sense of comfort, suggests connection with others around them. For others, community crosses borders, or exists within digital spaces. And for some people, it may represent something entirely different, maybe an absence – more challenging or exclusive, even. But when times are tough, no matter how we understand it as individuals – and we are certainly seeing this amidst the COVID-19 global pandemic – the role of community in many of its forms, takes on a new level of significance. We are being asked as a"
     }
   ],
   "findings": {
@@ -850,6 +1546,18 @@
       {
         "value": "4 months",
         "evidenceId": "check-duration-77d0f99aff"
+      },
+      {
+        "value": "6",
+        "evidenceId": "check-duration-eaa965af99"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-4543b4c35a"
+      },
+      {
+        "value": "1 month",
+        "evidenceId": "check-duration-2de76b0652"
       }
     ],
     "format": [

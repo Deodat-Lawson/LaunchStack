@@ -1,5 +1,54 @@
 {
   "programId": "nsf-i-corps-southwest-region-hub",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
-  "pages": []
+  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "pages": [
+    {
+      "url": "https://swicorps.org/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://swicorps.org/apply/",
+      "page": "terms",
+      "anchor": "Apply for IdeaLaunch",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://swicorps.org/faqs/",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://swicorps.org/idealaunch/",
+      "page": "terms",
+      "anchor": "IdeaLaunch",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://swicorps.org/nationalteams/",
+      "page": "details",
+      "anchor": "NSF National Teams Program",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://swicorps.org/wp-content/uploads/2026/03/NSF-National-Programs-Video.mp4",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

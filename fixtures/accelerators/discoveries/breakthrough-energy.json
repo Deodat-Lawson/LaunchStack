@@ -1,6 +1,6 @@
 {
   "programId": "breakthrough-energy",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.breakthroughenergy.org/portfolio",
@@ -20,30 +20,6 @@
     },
     {
       "url": "https://www.breakthroughenergy.org/portfolio/buildings",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.breakthroughenergy.org/portfolio/electricity",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.breakthroughenergy.org/portfolio/manufacturing",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.breakthroughenergy.org/portfolio/transportation",
       "page": "portfolio",
       "anchor": "",
       "fetched": true,

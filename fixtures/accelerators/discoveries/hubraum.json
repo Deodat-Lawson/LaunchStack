@@ -1,6 +1,6 @@
 {
   "programId": "hubraum",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.hubraum.com/initiatives/digital-innovation-program/",
@@ -92,6 +92,46 @@
     },
     {
       "url": "https://www.hubraum.com/initiatives/past-programs/ios-augmented-reality-innovation-program-2021/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/iot-program-with-microsoft/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/iot-space-challenge/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/low-latency-prototyping/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/lte-m-prototyping/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/mixed-reality-program/",
       "page": "details",
       "anchor": "",
       "fetched": true,

@@ -1,6 +1,6 @@
 {
   "programId": "startup-braga",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.startupbraga.com/",
     "https://www.startupbraga.com/termsandconditions",
@@ -16,13 +16,23 @@
     "https://accelerationprogram.startupbraga.com/",
     "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FAceleracao",
     "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FIncubation",
-    "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration"
+    "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+    "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FAceleracao",
+    "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FIncubation",
+    "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration"
   ],
   "evidence": [
     {
       "id": "check-email-03bb7aea2a",
       "url": "https://www.startupbraga.com/",
       "title": "Startup Braga — homepage",
+      "excerpt": "(+351) 253 142 200 [call to the national fixed network] info@startupbraga.com Ver Mapa Obter Direções Programas Verticais Sobre Nós A",
+      "page": "details"
+    },
+    {
+      "id": "check-email-05a3f72d8b",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FIncubation",
+      "title": "Startup Braga — program page",
       "excerpt": "(+351) 253 142 200 [call to the national fixed network] info@startupbraga.com Ver Mapa Obter Direções Programas Verticais Sobre Nós A",
       "page": "details"
     },
@@ -43,6 +53,13 @@
     {
       "id": "check-email-215f8923db",
       "url": "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FAceleracao",
+      "title": "Startup Braga — program page",
+      "excerpt": "info@startupbraga.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2a00f802b5",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FIncubation",
       "title": "Startup Braga — program page",
       "excerpt": "info@startupbraga.com",
       "page": "details"
@@ -83,6 +100,13 @@
       "page": "terms"
     },
     {
+      "id": "check-email-5c2c069752",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "title": "Startup Braga — program page",
+      "excerpt": "info@startupbraga.com",
+      "page": "details"
+    },
+    {
       "id": "check-email-5ef1b2f418",
       "url": "https://www.startupbraga.com/Detail/Index/74c9f40b-dc5c-11f1-bcf5-000d3ad7a4dc",
       "title": "Startup Braga — program page",
@@ -106,6 +130,13 @@
     {
       "id": "check-email-6e05062fdf",
       "url": "https://www.startupbraga.com/Detail/Index/86805bed-0cf5-11f1-b67e-000d3ad7a4dc",
+      "title": "Startup Braga — program page",
+      "excerpt": "(+351) 253 142 200 [call to the national fixed network] info@startupbraga.com Ver Mapa Obter Direções Programas Verticais Sobre Nós A",
+      "page": "details"
+    },
+    {
+      "id": "check-email-77383beb0d",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
       "title": "Startup Braga — program page",
       "excerpt": "(+351) 253 142 200 [call to the national fixed network] info@startupbraga.com Ver Mapa Obter Direções Programas Verticais Sobre Nós A",
       "page": "details"
@@ -153,6 +184,13 @@
       "page": "details"
     },
     {
+      "id": "check-email-b679e1f05b",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FAceleracao",
+      "title": "Startup Braga — program page",
+      "excerpt": "(+351) 253 142 200 [call to the national fixed network] info@startupbraga.com Ver Mapa Obter Direções Programas Verticais Sobre Nós A",
+      "page": "details"
+    },
+    {
       "id": "check-email-bbb583b54e",
       "url": "https://www.startupbraga.com/Detail/Index/d22ec7c4-dc5b-11f1-bcf5-000d3ad7a4dc",
       "title": "Startup Braga — program page",
@@ -193,6 +231,13 @@
       "title": "Startup Braga — terms page",
       "excerpt": "(+351) 253 142 200 [call to the national fixed network] info@startupbraga.com Ver Mapa Obter Direções Programas Verticais Sobre Nós A",
       "page": "terms"
+    },
+    {
+      "id": "check-email-df550f5b7f",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FAceleracao",
+      "title": "Startup Braga — program page",
+      "excerpt": "info@startupbraga.com",
+      "page": "details"
     },
     {
       "id": "check-email-e2279c92c8",
@@ -244,10 +289,24 @@
       "page": "terms"
     },
     {
+      "id": "check-format-12ce3a3e70",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FIncubation",
+      "title": "Startup Braga — program page",
+      "excerpt": "nanotecnologia e sustentabilidade. Quer em regime virtual ou presencial, disponibilizamos-te acesso a uma rede de",
+      "page": "details"
+    },
+    {
       "id": "check-format-13da095534",
       "url": "https://www.startupbraga.com/Programs/Incubation",
       "title": "Startup Braga — program page",
       "excerpt": "nanotecnologia e sustentabilidade. Quer em regime virtual ou presencial, disponibilizamos-te acesso a uma rede de",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1cf8757da5",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FIncubation",
+      "title": "Startup Braga — program page",
+      "excerpt": "Primecog Economia Digital Prodsmart Economia Digital Remote Partner Economia Digital Reviewpad Economia Digital Scanio",
       "page": "details"
     },
     {
@@ -290,6 +349,13 @@
       "url": "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FIncubation",
       "title": "Startup Braga — program page",
       "excerpt": "nanotecnologia e sustentabilidade. Quer em regime virtual ou presencial, disponibilizamos-te acesso a uma rede de",
+      "page": "details"
+    },
+    {
+      "id": "check-format-fecc3f07cc",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FAceleracao",
+      "title": "Startup Braga — program page",
+      "excerpt": "PrimeVee Economia Digital Prodsmart Economia Digital Remote Partner Economia Digital Reputation Transfer Economia",
       "page": "details"
     },
     {
@@ -363,8 +429,22 @@
       "page": "details"
     },
     {
+      "id": "check-phone-a50d7c5987",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "title": "Startup Braga — program page",
+      "excerpt": "(+351) 253 142 200",
+      "page": "details"
+    },
+    {
       "id": "check-phone-aa8950be22",
       "url": "https://www.startupbraga.com/Detail/Index/86805bed-0cf5-11f1-b67e-000d3ad7a4dc",
+      "title": "Startup Braga — program page",
+      "excerpt": "(+351) 253 142 200",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-ab3b865fde",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FAceleracao",
       "title": "Startup Braga — program page",
       "excerpt": "(+351) 253 142 200",
       "page": "details"
@@ -398,6 +478,13 @@
       "page": "details"
     },
     {
+      "id": "check-phone-cd77a64d37",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FIncubation",
+      "title": "Startup Braga — program page",
+      "excerpt": "(+351) 253 142 200",
+      "page": "details"
+    },
+    {
       "id": "check-route-d647bed04e",
       "url": "https://www.startupbraga.com/",
       "title": "Startup Braga — homepage",
@@ -413,10 +500,40 @@
       "excerpt": "Startup Braga Loading… PT Português English Programas Verticais Sobre Nós Comunidade Rede Notícias + Eventos STARTUP BRAGA FROM BRAGA TO THE WORLD Startup Point Programa intensivo de formação que visa estimular ideias de negócio de base tecnológica que surjam em contexto académico. Saber Mais Aceleração Em 2026, a Startup Braga dinamizará dois programas de aceleração: a 10.ª edição do seu programa de aceleração e a 2.ª edição do Global Health Accelerator. Precisas de orientação para validar e definir o teu modelo de negócio? Saber Mais Incubação Programa orientado para startups em fase de arranque que necessitem de espaços de trabalho que incluem o acesso a um conjunto de recursos e serviços de valor acrescentado. Saber Mais Verticais Apoiamos projetos tecnológicos altamente escaláveis BIOTECNOLOGIA CONHEÇA AS EMPRESAS ECONOMIA DIGITAL CONHEÇA AS EMPRESAS TECNOLOGIAS DIGITAIS PARA A SAÚDE CONHEÇA AS EMPRESAS NANOTECNOLOGIA CONHEÇA AS EMPRESAS SUSTENTABILIDADE CONHEÇA AS EMPRESAS Sobre Nós STARTUP BRAGA Na Startup Braga sabemos que o sucesso só é possível com trabalho e com as ferramentas certas, pelo que a nossa missão é munir os empreendedores dos apoios e conhecimentos para que possam atingir os seus objetivos. Criada como hub de inovação da InvestBraga, a Startup Braga dedica-se a apoiar projetos de elevado potencial empreendedor com ambições globais. Atuamos na promoção e"
     },
     {
+      "id": "check-page-6f88647a4a",
+      "url": "https://www.startupbraga.com/",
+      "page": "details",
+      "excerpt": "Atuamos na promoção e desenvolvimento de um ecossistema empreendedor e na criação, aceleração e incubação de startups."
+    },
+    {
+      "id": "check-page-3b46c4bee0",
+      "url": "https://www.startupbraga.com/",
+      "page": "details",
+      "excerpt": "Notícias Estamos a recrutar | Gestor(a) de Programas Júnior 09 novembro 2026 Ler Mais Estamos a recrutar | Gestor(a) de Programas Sénior 09 novembro 2026 Ler Mais Ver Mais Eventos Candidaturas ao 10.º Programa de Aceleração prolongadas até 31 de março 10 março 2026 |31 março 2026 Ler Mais A 10.ª Edição do Programa de Aceleração está à tua espera!"
+    },
+    {
       "id": "check-page-def22fe57d",
       "url": "https://www.startupbraga.com/termsandconditions",
       "page": "terms",
       "excerpt": "Startup Braga | Termos e Condições Loading… PT Português English Programas Verticais Sobre Nós Comunidade Rede Notícias + Eventos Termos e Condições Agradecemos a sua visita ao nosso website. Assegure-se que lê cuidadosamente os Termos e Condições apresentados neste website, na medida em que qualquer utilização do mesmo significa que aceita os Termos e Condições ora apresentados. A utilização dos termos “nós”, “InvestBraga”, “nosso” e “Grupo InvestBraga” referem-se à IB – Agência para a Dinamização Económica, E.M. e a quaisquer das Unidades de Negócio (Startup Braga, Centro de Juventude de Braga e Altice Forum Braga), e serão usados da forma mais apropriada segundo o contexto. POLÍTICA DE PRIVACIDADE DO WEBSITE Qualquer conteúdo ou dados pessoais que sejam enviados para os websites do Grupo InvestBraga estão sujeitos à Política de Privacidade e Proteção de Dados Pessoais disponíveis para consulta aqui: Política de Privacidade da InvestBraga Política de Privacidade do Altice Forum Braga Política de Privacidade da Startup Braga Política de Privacidade do Centro da Juventude de Braga EXATIDÃO, INTEGRIDADE E A TEMPORALIDADE DA INFORMAÇÃO Ainda que sejam usados todos os meios ao nosso dispor para assegurar a exatidão e a integridade da informação existente nesta página web, não assumimos, em caso algum, qualquer responsabilidade se a informação disponibilizada não é exata ou"
+    },
+    {
+      "id": "check-page-93b0e929cc",
+      "url": "https://www.startupbraga.com/termsandconditions",
+      "page": "terms",
+      "excerpt": "Francisco Pires Gonçalves, Braga (São José de São Lázaro e São João do Souto), 4715-558 BRAGA Ou para o email: dpo@investbraga.com JURISDIÇÃO E LEGISLAÇÃO APLICÁVEL O conteúdo e a informação do Grupo InvestBraga contida nesta página web são disponibilizados unicamente para os usuários de Portugal."
+    },
+    {
+      "id": "check-page-59bb6a2f9b",
+      "url": "https://www.startupbraga.com/termsandconditions",
+      "page": "terms",
+      "excerpt": "Não assumimos, nem garantimos que esse conteúdo e informação sejam apropriados ou disponíveis em países distintos de Portugal."
+    },
+    {
+      "id": "check-page-2783e8f426",
+      "url": "https://www.startupbraga.com/termsandconditions",
+      "page": "terms",
+      "excerpt": "O usuário desta página e o Grupo InvestBraga aceitam, sem reservas, que qualquer diferendo ou litígio resultante do uso desta página web será regido pela lei portuguesa, convencionando-se como competente, com expressa renúncia a qualquer outro, o foro da comarca de Braga, Portugal."
     },
     {
       "id": "check-page-b49af8f828",
@@ -425,10 +542,46 @@
       "excerpt": "Startup Braga | Termos e Condições Loading… PT Português English Programas Verticais Sobre Nós Comunidade Rede Notícias + Eventos Termos e Condições Agradecemos a sua visita ao nosso website. Assegure-se que lê cuidadosamente os Termos e Condições apresentados neste website, na medida em que qualquer utilização do mesmo significa que aceita os Termos e Condições ora apresentados. A utilização dos termos “nós”, “InvestBraga”, “nosso” e “Grupo InvestBraga” referem-se à IB – Agência para a Dinamização Económica, E.M. e a quaisquer das Unidades de Negócio (Startup Braga, Centro de Juventude de Braga e Altice Forum Braga), e serão usados da forma mais apropriada segundo o contexto. POLÍTICA DE PRIVACIDADE DO WEBSITE Qualquer conteúdo ou dados pessoais que sejam enviados para os websites do Grupo InvestBraga estão sujeitos à Política de Privacidade e Proteção de Dados Pessoais disponíveis para consulta aqui: Política de Privacidade da InvestBraga Política de Privacidade do Altice Forum Braga Política de Privacidade da Startup Braga Política de Privacidade do Centro da Juventude de Braga EXATIDÃO, INTEGRIDADE E A TEMPORALIDADE DA INFORMAÇÃO Ainda que sejam usados todos os meios ao nosso dispor para assegurar a exatidão e a integridade da informação existente nesta página web, não assumimos, em caso algum, qualquer responsabilidade se a informação disponibilizada não é exata ou"
     },
     {
+      "id": "check-page-b43b268777",
+      "url": "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2Ftermsandconditions",
+      "page": "terms",
+      "excerpt": "Francisco Pires Gonçalves, Braga (São José de São Lázaro e São João do Souto), 4715-558 BRAGA Ou para o email: dpo@investbraga.com JURISDIÇÃO E LEGISLAÇÃO APLICÁVEL O conteúdo e a informação do Grupo InvestBraga contida nesta página web são disponibilizados unicamente para os usuários de Portugal."
+    },
+    {
+      "id": "check-page-37ccadce84",
+      "url": "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2Ftermsandconditions",
+      "page": "terms",
+      "excerpt": "Não assumimos, nem garantimos que esse conteúdo e informação sejam apropriados ou disponíveis em países distintos de Portugal."
+    },
+    {
+      "id": "check-page-5aea9c9a62",
+      "url": "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2Ftermsandconditions",
+      "page": "terms",
+      "excerpt": "O usuário desta página e o Grupo InvestBraga aceitam, sem reservas, que qualquer diferendo ou litígio resultante do uso desta página web será regido pela lei portuguesa, convencionando-se como competente, com expressa renúncia a qualquer outro, o foro da comarca de Braga, Portugal."
+    },
+    {
       "id": "check-page-a3c3a291ee",
       "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2Ftermsandconditions",
       "page": "terms",
       "excerpt": "Startup Braga | Termos e Condições Loading… PT Português English Programas Verticais Sobre Nós Comunidade Rede Notícias + Eventos Termos e Condições Agradecemos a sua visita ao nosso website. Assegure-se que lê cuidadosamente os Termos e Condições apresentados neste website, na medida em que qualquer utilização do mesmo significa que aceita os Termos e Condições ora apresentados. A utilização dos termos “nós”, “InvestBraga”, “nosso” e “Grupo InvestBraga” referem-se à IB – Agência para a Dinamização Económica, E.M. e a quaisquer das Unidades de Negócio (Startup Braga, Centro de Juventude de Braga e Altice Forum Braga), e serão usados da forma mais apropriada segundo o contexto. POLÍTICA DE PRIVACIDADE DO WEBSITE Qualquer conteúdo ou dados pessoais que sejam enviados para os websites do Grupo InvestBraga estão sujeitos à Política de Privacidade e Proteção de Dados Pessoais disponíveis para consulta aqui: Política de Privacidade da InvestBraga Política de Privacidade do Altice Forum Braga Política de Privacidade da Startup Braga Política de Privacidade do Centro da Juventude de Braga EXATIDÃO, INTEGRIDADE E A TEMPORALIDADE DA INFORMAÇÃO Ainda que sejam usados todos os meios ao nosso dispor para assegurar a exatidão e a integridade da informação existente nesta página web, não assumimos, em caso algum, qualquer responsabilidade se a informação disponibilizada não é exata ou"
+    },
+    {
+      "id": "check-page-c90403d91a",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2Ftermsandconditions",
+      "page": "terms",
+      "excerpt": "Francisco Pires Gonçalves, Braga (São José de São Lázaro e São João do Souto), 4715-558 BRAGA Ou para o email: dpo@investbraga.com JURISDIÇÃO E LEGISLAÇÃO APLICÁVEL O conteúdo e a informação do Grupo InvestBraga contida nesta página web são disponibilizados unicamente para os usuários de Portugal."
+    },
+    {
+      "id": "check-page-4d85f60853",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2Ftermsandconditions",
+      "page": "terms",
+      "excerpt": "Não assumimos, nem garantimos que esse conteúdo e informação sejam apropriados ou disponíveis em países distintos de Portugal."
+    },
+    {
+      "id": "check-page-fcb45743fd",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2Ftermsandconditions",
+      "page": "terms",
+      "excerpt": "O usuário desta página e o Grupo InvestBraga aceitam, sem reservas, que qualquer diferendo ou litígio resultante do uso desta página web será regido pela lei portuguesa, convencionando-se como competente, com expressa renúncia a qualquer outro, o foro da comarca de Braga, Portugal."
     },
     {
       "id": "check-page-7a1a055c00",
@@ -461,10 +614,22 @@
       "excerpt": "Startup Braga | Aceleração Loading… PT Português English Programas Verticais Sobre Nós Comunidade Rede Notícias + Eventos Aceleração Em 2026, a Startup Braga dinamizará dois programas de aceleração: a 10.ª edição do seu programa de aceleração e a 2.ª edição do Global Health Accelerator. Precisas de orientação para validar e definir o teu modelo de negócio? Então, estás no sítio certo! As candidaturas para a 10.ª edição do Programa de Aceleração da Startup Braga estão abertas até dia 31 de março. Fica a saber tudo sobre a iniciativa: Criado em 2014, este programa apoia as startups, ajudando-as a validar e a definir o seu modelo de negócio, a construir um produto mais forte e a alcançar novos mercados e consumidores, com o apoio de uma vasta rede de parceiros e mentores. Em 2026, o programa de inovação irá centrar-se em projetos tecnológicos na fase de Produto Mínimo Viável (MVP) que abordem desafios urbanos e sociais numa das seguintes três áreas: Sustentabilidade e Cidades Inteligentes, Economia Digital e Serviços Inteligentes, e Indústria e Construção do Futuro. A quem se destina? Empreendedores que procuram orientação para projetos alinhados com as verticais do 10.º Programa de Aceleração da Startup Braga; Empreendedores que necessitam de orientação para validar e definir o seu modelo de negócios; Empreendedores prontos para despertar o seu potencial e moldar o futuro. Quero"
     },
     {
+      "id": "check-page-accd8da56a",
+      "url": "https://www.startupbraga.com/Programs/Aceleracao",
+      "page": "details",
+      "excerpt": "Quero candidatar-me ao 10 Programa de Aceleração!"
+    },
+    {
       "id": "check-page-bf310ddf17",
       "url": "https://www.startupbraga.com/Programs/Incubation",
       "page": "details",
       "excerpt": "Startup Braga | Incubação Loading… PT Português English Programas Verticais Sobre Nós Comunidade Rede Notícias + Eventos Incubação Programa orientado para startups em fase de arranque que necessitem de espaços de trabalho que incluem o acesso a um conjunto de recursos e serviços de valor acrescentado. Startup Braga Incubation Program O programa de incubação oferece apoio a jovens empresas de base tecnológica com ambição internacional, que atuam nos setores da economia digital, tecnologias para a saúde, biotecnologia, nanotecnologia e sustentabilidade. Quer em regime virtual ou presencial, disponibilizamos-te acesso a uma rede de parceiros, mentores e especialistas nacionais e internacionais. Temos também espaços de trabalho em gabinetes, espaços de cowork ou hot seating. Este programa é uma oportunidade única para obteres apoio de toda a comunidade Startup Braga no desenvolvimento do teu negócio. Graças ao programa de incubação podes ter acesso a: Ligação a uma rede de empreendedores, startups e scaleups, mentores, especialistas de diversas indústrias; Acesso 24/7 a escritórios para investigação e desenvolvimento de produto; Acesso a serviços e produtos fornecidos por parceiros; Formação contínua com parceiros e mentores da Startup Braga; Ganho de acesso a oportunidades de financiamento e investimento; Acesso a redes e mercados internacionais; Alcance de posicionamento e"
+    },
+    {
+      "id": "check-page-8acf46f2b6",
+      "url": "https://www.startupbraga.com/Programs/Incubation",
+      "page": "details",
+      "excerpt": "Tens interesse garantir o nosso apoio através do programa de incubação da Startup Braga?"
     },
     {
       "id": "check-page-123ec31e25",
@@ -473,10 +638,70 @@
       "excerpt": "Startup Braga | Pré-Aceleração Loading… PT Português English Programas Verticais Sobre Nós Comunidade Rede Notícias + Eventos Startup Point Programa intensivo de formação que visa estimular ideias de negócio de base tecnológica que surjam em contexto académico. Tens o que é preciso para te tornares no 8.º Unicórnio Português? Se tens uma ideia de negócio tecnológica inovadora e ambicionas transformá-la numa empresa de sucesso, o Startup Point’25 é para ti! Estamos à procura de soluções ligadas aos seguintes verticais: Economia Digital Tecnologias para a saúde Biotecnologia Nanotecnologia Sustentabilidade ★ ★ PODES FICAR A CONHECER TODOS OS PORMENORES DESTE PROGRAMA AQUI ! ★★ O que é o Startup Point? Programa desenhado pela Startup Braga, em parceria com o Liftoff - Hub de Empreendedorismo e a START POINT da Associação Académica da Universidade do Minho (AAUMinho), para te ajudar a: compreender melhor o problema que estás a resolver, validar e definir o modelo de negócio, através de um conjunto de bootcamps imersivos e concentrados num curto período de tempo. No final, deverás ter uma clara definição de quem é o teu potencial cliente e das características básicas que o teu produto deve ter. A quem se destina? Procuramos empreendedores com ideias de produto por definir e sem clientes. O programa está aberto a todas as equipas que tenham projetos com caráter inovador e"
     },
     {
+      "id": "check-page-2359c3105f",
+      "url": "https://www.startupbraga.com/Programs/PreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 1 - Design Thinking | 24 de setembro 3."
+    },
+    {
+      "id": "check-page-76b57fb95d",
+      "url": "https://www.startupbraga.com/Programs/PreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 2 - Business Model Canvas | 30 de setembro 4."
+    },
+    {
+      "id": "check-page-c63a755057",
+      "url": "https://www.startupbraga.com/Programs/PreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 3 - Product, Market & Competitive Analysis | 7 de outubro 5."
+    },
+    {
+      "id": "check-page-427f32d440",
+      "url": "https://www.startupbraga.com/Programs/PreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 4 - Marketing, Branding & Intellectual Property | 8 de outubro 6."
+    },
+    {
+      "id": "check-page-f493e0c912",
+      "url": "https://www.startupbraga.com/Programs/PreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 5 - Capital Boost | 13 de outubro 7."
+    },
+    {
+      "id": "check-page-f3f916d295",
+      "url": "https://www.startupbraga.com/Programs/PreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 6 - Pitching & Feedback | 14 de outubro 8."
+    },
+    {
+      "id": "check-page-b0e109666a",
+      "url": "https://www.startupbraga.com/Programs/PreAcceleration",
+      "page": "details",
+      "excerpt": "Demo Day | 22 de outubro Como participar?"
+    },
+    {
       "id": "check-page-c886bc54c3",
       "url": "https://accelerationprogram.startupbraga.com/",
       "page": "details",
       "excerpt": "10th Acceleration Program PT EN O Programa Mentores Promotores Parceiros FAQs Testemunhos Candidatura Contacta-nos TARGET | Para quem é este programa? Este programa de inovação é para ti que tens um projeto inovador e tecnológico em fase MVP que aborda desafios urbanos e sociais, numa das seguintes três áreas: Sustentabilidade e Cidades Inteligentes Economia Digital e Serviços Inteligentes Indústria e Construção do Futuro O Programa | O que podes esperar? FORMATO DO PROGRAMA A 10.ª Edição do Programa de Aceleração da Startup Braga terá um formato híbrido , combinando sessões presenciais e online. As sessões presenciais terão lugar na Startup ou no Forum Braga. O programa decorrerá entre 22 de abril e 30 de junho , será conduzido inteiramente em inglês e consistirá em 6 bootcamps imersivos, sessões de mentoria com especialistas em diferentes áreas e acompanhamento da incubadora ao longo de todo o programa. Todos os bootcamps, contarão com Founder's Meetings , onde os participantes poderão partilhar experiências, resolver problemas e aprender uns com os outros. Adicionalmente, serão realizadas regularmente Follow-up Sessions para recolha de feedback e avaliação do progresso, garantindo o contínuo crescimento do programa. BOOTCAMPS Kick-Off & Bootcamp #1 @Forum Braga 22 e 23 de Abril Bootcamp #2 @Forum Braga 6 e 7 de Maio Bootcamp #3 @Startup Braga 20 e 21 de Maio Bootcamp #4"
+    },
+    {
+      "id": "check-page-36a358673b",
+      "url": "https://accelerationprogram.startupbraga.com/",
+      "page": "details",
+      "excerpt": "O que é o Programa de Aceleração da Startup Braga?"
+    },
+    {
+      "id": "check-page-a8744a2092",
+      "url": "https://accelerationprogram.startupbraga.com/",
+      "page": "details",
+      "excerpt": "SOBRE A STARTUP BRAGA A Startup Braga, o hub de inovação da InvestBraga, apoia a criação de projetos com elevado potencial empreendedor nos mercados internacionais, atuando no desenvolvimento e na promoção do empreendedorismo e na criação, incubação e aceleração de startups, fundamentalmente nas áreas da economia digital, tecnologias para a saúde, biotecnologia, nanotecnologia e sustentabilidade."
+    },
+    {
+      "id": "check-page-80051c4c31",
+      "url": "https://accelerationprogram.startupbraga.com/",
+      "page": "details",
+      "excerpt": "A Startup Braga conta já com mais de 350 startups apoiadas e cerca de 150 aceleradas. + info: www.startupbraga.com O Programa Mentores Promotores Parceiros FAQs Testemunhos Candidatura Contacta-nos © 2023 Programa de Aceleração | Todos os direitos reservados."
     },
     {
       "id": "check-page-a9d680d23a",
@@ -491,10 +716,130 @@
       "excerpt": "Startup Braga | Incubação Loading… PT Português English Programas Verticais Sobre Nós Comunidade Rede Notícias + Eventos Incubação Programa orientado para startups em fase de arranque que necessitem de espaços de trabalho que incluem o acesso a um conjunto de recursos e serviços de valor acrescentado. Startup Braga Incubation Program O programa de incubação oferece apoio a jovens empresas de base tecnológica com ambição internacional, que atuam nos setores da economia digital, tecnologias para a saúde, biotecnologia, nanotecnologia e sustentabilidade. Quer em regime virtual ou presencial, disponibilizamos-te acesso a uma rede de parceiros, mentores e especialistas nacionais e internacionais. Temos também espaços de trabalho em gabinetes, espaços de cowork ou hot seating. Este programa é uma oportunidade única para obteres apoio de toda a comunidade Startup Braga no desenvolvimento do teu negócio. Graças ao programa de incubação podes ter acesso a: Ligação a uma rede de empreendedores, startups e scaleups, mentores, especialistas de diversas indústrias; Acesso 24/7 a escritórios para investigação e desenvolvimento de produto; Acesso a serviços e produtos fornecidos por parceiros; Formação contínua com parceiros e mentores da Startup Braga; Ganho de acesso a oportunidades de financiamento e investimento; Acesso a redes e mercados internacionais; Alcance de posicionamento e"
     },
     {
+      "id": "check-page-747b728ab4",
+      "url": "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FIncubation",
+      "page": "details",
+      "excerpt": "Tens interesse garantir o nosso apoio através do programa de incubação da Startup Braga?"
+    },
+    {
       "id": "check-page-ca1fc2b6be",
       "url": "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
       "page": "details",
       "excerpt": "Startup Braga | Pré-Aceleração Loading… PT Português English Programas Verticais Sobre Nós Comunidade Rede Notícias + Eventos Startup Point Programa intensivo de formação que visa estimular ideias de negócio de base tecnológica que surjam em contexto académico. Tens o que é preciso para te tornares no 8.º Unicórnio Português? Se tens uma ideia de negócio tecnológica inovadora e ambicionas transformá-la numa empresa de sucesso, o Startup Point’25 é para ti! Estamos à procura de soluções ligadas aos seguintes verticais: Economia Digital Tecnologias para a saúde Biotecnologia Nanotecnologia Sustentabilidade ★ ★ PODES FICAR A CONHECER TODOS OS PORMENORES DESTE PROGRAMA AQUI ! ★★ O que é o Startup Point? Programa desenhado pela Startup Braga, em parceria com o Liftoff - Hub de Empreendedorismo e a START POINT da Associação Académica da Universidade do Minho (AAUMinho), para te ajudar a: compreender melhor o problema que estás a resolver, validar e definir o modelo de negócio, através de um conjunto de bootcamps imersivos e concentrados num curto período de tempo. No final, deverás ter uma clara definição de quem é o teu potencial cliente e das características básicas que o teu produto deve ter. A quem se destina? Procuramos empreendedores com ideias de produto por definir e sem clientes. O programa está aberto a todas as equipas que tenham projetos com caráter inovador e"
+    },
+    {
+      "id": "check-page-ae20d59e20",
+      "url": "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 1 - Design Thinking | 24 de setembro 3."
+    },
+    {
+      "id": "check-page-bd1db3a7bf",
+      "url": "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 2 - Business Model Canvas | 30 de setembro 4."
+    },
+    {
+      "id": "check-page-99601bc305",
+      "url": "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 3 - Product, Market & Competitive Analysis | 7 de outubro 5."
+    },
+    {
+      "id": "check-page-e2ff4603b9",
+      "url": "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 4 - Marketing, Branding & Intellectual Property | 8 de outubro 6."
+    },
+    {
+      "id": "check-page-10647465cd",
+      "url": "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 5 - Capital Boost | 13 de outubro 7."
+    },
+    {
+      "id": "check-page-4f0dff6382",
+      "url": "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 6 - Pitching & Feedback | 14 de outubro 8."
+    },
+    {
+      "id": "check-page-6137c257b1",
+      "url": "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
+      "excerpt": "Demo Day | 22 de outubro Como participar?"
+    },
+    {
+      "id": "check-page-f8b1c5678e",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FAceleracao",
+      "page": "details",
+      "excerpt": "Startup Braga | Aceleração Loading… PT Português English Programas Verticais Sobre Nós Comunidade Rede Notícias + Eventos Aceleração Em 2026, a Startup Braga dinamizará dois programas de aceleração: a 10.ª edição do seu programa de aceleração e a 2.ª edição do Global Health Accelerator. Precisas de orientação para validar e definir o teu modelo de negócio? Então, estás no sítio certo! As candidaturas para a 10.ª edição do Programa de Aceleração da Startup Braga estão abertas até dia 31 de março. Fica a saber tudo sobre a iniciativa: Criado em 2014, este programa apoia as startups, ajudando-as a validar e a definir o seu modelo de negócio, a construir um produto mais forte e a alcançar novos mercados e consumidores, com o apoio de uma vasta rede de parceiros e mentores. Em 2026, o programa de inovação irá centrar-se em projetos tecnológicos na fase de Produto Mínimo Viável (MVP) que abordem desafios urbanos e sociais numa das seguintes três áreas: Sustentabilidade e Cidades Inteligentes, Economia Digital e Serviços Inteligentes, e Indústria e Construção do Futuro. A quem se destina? Empreendedores que procuram orientação para projetos alinhados com as verticais do 10.º Programa de Aceleração da Startup Braga; Empreendedores que necessitam de orientação para validar e definir o seu modelo de negócios; Empreendedores prontos para despertar o seu potencial e moldar o futuro. Quero"
+    },
+    {
+      "id": "check-page-80c0d235e9",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FAceleracao",
+      "page": "details",
+      "excerpt": "Quero candidatar-me ao 10 Programa de Aceleração!"
+    },
+    {
+      "id": "check-page-271df70325",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FIncubation",
+      "page": "details",
+      "excerpt": "Startup Braga | Incubação Loading… PT Português English Programas Verticais Sobre Nós Comunidade Rede Notícias + Eventos Incubação Programa orientado para startups em fase de arranque que necessitem de espaços de trabalho que incluem o acesso a um conjunto de recursos e serviços de valor acrescentado. Startup Braga Incubation Program O programa de incubação oferece apoio a jovens empresas de base tecnológica com ambição internacional, que atuam nos setores da economia digital, tecnologias para a saúde, biotecnologia, nanotecnologia e sustentabilidade. Quer em regime virtual ou presencial, disponibilizamos-te acesso a uma rede de parceiros, mentores e especialistas nacionais e internacionais. Temos também espaços de trabalho em gabinetes, espaços de cowork ou hot seating. Este programa é uma oportunidade única para obteres apoio de toda a comunidade Startup Braga no desenvolvimento do teu negócio. Graças ao programa de incubação podes ter acesso a: Ligação a uma rede de empreendedores, startups e scaleups, mentores, especialistas de diversas indústrias; Acesso 24/7 a escritórios para investigação e desenvolvimento de produto; Acesso a serviços e produtos fornecidos por parceiros; Formação contínua com parceiros e mentores da Startup Braga; Ganho de acesso a oportunidades de financiamento e investimento; Acesso a redes e mercados internacionais; Alcance de posicionamento e"
+    },
+    {
+      "id": "check-page-4489175352",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FIncubation",
+      "page": "details",
+      "excerpt": "Tens interesse garantir o nosso apoio através do programa de incubação da Startup Braga?"
+    },
+    {
+      "id": "check-page-264a46d6ef",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
+      "excerpt": "Startup Braga | Pré-Aceleração Loading… PT Português English Programas Verticais Sobre Nós Comunidade Rede Notícias + Eventos Startup Point Programa intensivo de formação que visa estimular ideias de negócio de base tecnológica que surjam em contexto académico. Tens o que é preciso para te tornares no 8.º Unicórnio Português? Se tens uma ideia de negócio tecnológica inovadora e ambicionas transformá-la numa empresa de sucesso, o Startup Point’25 é para ti! Estamos à procura de soluções ligadas aos seguintes verticais: Economia Digital Tecnologias para a saúde Biotecnologia Nanotecnologia Sustentabilidade ★ ★ PODES FICAR A CONHECER TODOS OS PORMENORES DESTE PROGRAMA AQUI ! ★★ O que é o Startup Point? Programa desenhado pela Startup Braga, em parceria com o Liftoff - Hub de Empreendedorismo e a START POINT da Associação Académica da Universidade do Minho (AAUMinho), para te ajudar a: compreender melhor o problema que estás a resolver, validar e definir o modelo de negócio, através de um conjunto de bootcamps imersivos e concentrados num curto período de tempo. No final, deverás ter uma clara definição de quem é o teu potencial cliente e das características básicas que o teu produto deve ter. A quem se destina? Procuramos empreendedores com ideias de produto por definir e sem clientes. O programa está aberto a todas as equipas que tenham projetos com caráter inovador e"
+    },
+    {
+      "id": "check-page-f8697fa588",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 1 - Design Thinking | 24 de setembro 3."
+    },
+    {
+      "id": "check-page-5544be4fa3",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 2 - Business Model Canvas | 30 de setembro 4."
+    },
+    {
+      "id": "check-page-2ba75c51e6",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 3 - Product, Market & Competitive Analysis | 7 de outubro 5."
+    },
+    {
+      "id": "check-page-f217c01e44",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 4 - Marketing, Branding & Intellectual Property | 8 de outubro 6."
+    },
+    {
+      "id": "check-page-8d9808748a",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 5 - Capital Boost | 13 de outubro 7."
+    },
+    {
+      "id": "check-page-8cb451de11",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
+      "excerpt": "Bootcamp 6 - Pitching & Feedback | 14 de outubro 8."
+    },
+    {
+      "id": "check-page-efd70a39ee",
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
+      "excerpt": "Demo Day | 22 de outubro Como participar?"
     }
   ],
   "findings": {

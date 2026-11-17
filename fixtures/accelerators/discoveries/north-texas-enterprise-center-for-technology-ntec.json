@@ -1,7 +1,15 @@
 {
   "programId": "north-texas-enterprise-center-for-technology-ntec",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://www.ntec-inc.org/about-ntec/business-accelerator-team/",
+      "page": "details",
+      "anchor": "Team",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.ntec-inc.org/about-ntec/frisco-accelerator-mission/",
       "page": "details",
@@ -14,15 +22,7 @@
       "url": "https://www.ntec-inc.org/about-ntec/frisco-business-center/",
       "page": "details",
       "anchor": "Facility",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.ntec-inc.org/about-ntec/business-accelerator-team/",
-      "page": "details",
-      "anchor": "Team",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -30,15 +30,23 @@
       "url": "https://www.ntec-inc.org/about-ntec/startup-accelerator-board-of-directors/",
       "page": "details",
       "anchor": "Board of Directors",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.ntec-inc.org/startup-accelerator/program-information/",
+      "url": "https://www.ntec-inc.org/category/startup-accelerator/",
       "page": "details",
-      "anchor": "Program",
-      "fetched": false,
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ntec-inc.org/startup-accelerator/business-partners/",
+      "page": "details",
+      "anchor": "Partners",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -46,7 +54,7 @@
       "url": "https://www.ntec-inc.org/startup-accelerator/program-companies/",
       "page": "portfolio",
       "anchor": "Member",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -54,7 +62,23 @@
       "url": "https://www.ntec-inc.org/startup-accelerator/program-cost/",
       "page": "details",
       "anchor": "Cost",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ntec-inc.org/startup-accelerator/program-information/",
+      "page": "details",
+      "anchor": "Program",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ntec-inc.org/startup-accelerator/startup-advisors/",
+      "page": "details",
+      "anchor": "Advisors",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

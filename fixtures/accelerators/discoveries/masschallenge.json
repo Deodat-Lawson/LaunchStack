@@ -1,6 +1,6 @@
 {
   "programId": "masschallenge",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://accelerate.masschallenge.org/accounts/login/?next=/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav&_gl=1*100wh1d*_ga*MTM2NDEwNjc0NS4xNzU3NjQzMzg4*_ga_THNYBZVCTM*czE3NTc2NDMzODckbzEkZzEkdDE3NTc2NDM5MjUkajU2JGwwJGgw",
@@ -35,6 +35,22 @@
       "origin": "official"
     },
     {
+      "url": "https://apply.masschallenge.org/autodesk-challenge?utm_campaign=Autodesk&utm_source=hootsuite&utm_medium=social&utm_content=partnership%20announcement",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2026",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2026?hsLang=es-mx",
       "page": "application",
       "anchor": "",
@@ -51,6 +67,38 @@
       "origin": "official"
     },
     {
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-solutions-challenge-2023",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.masschallenge.org/home-cleanovation-challenge-2023",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.masschallenge.org/humanpotential23",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.masschallenge.org/maternal-health",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2026?hsLang=en-us",
       "page": "application",
       "anchor": "",
@@ -62,6 +110,14 @@
       "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2027",
       "page": "application",
       "anchor": "NOW ACCEPTING APPLICATIONS",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.masschallenge.org/mitre-mentorship",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -110,15 +166,7 @@
       "url": "https://masschallenge.org/news/masschallenge-ranked-number-2-us-accelerator-time-statista/",
       "page": "details",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://masschallenge.org/news/yes-boston-inaugural-cohort-announcement/",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },

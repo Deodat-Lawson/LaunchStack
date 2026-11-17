@@ -1,30 +1,70 @@
 {
   "programId": "startup-wise-guys",
-  "checkedAt": "2026-11-14T20:59:02.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://startupwiseguys.com/",
     "https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
-    "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
-    "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
     "https://startupwiseguys.com/investment-deal/",
-    "https://startupwiseguys.com/news/ai-deep-tech-in-early-stage-investment-evolution-challenges/",
-    "https://startupwiseguys.com/news/category/investment/",
-    "https://startupwiseguys.com/news/copernic-space-secures-seed-investment-to-democratize-space-economy/",
-    "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
-    "https://startupwiseguys.com/news/fueling-innovation-through-strategic-investment-in-lumian-energy/",
-    "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
-    "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
-    "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
-    "https://startupwiseguys.com/news/young-entrepreneurs-summer-school-from-an-idea-to-an-investment-proposal/",
-    "https://startupwiseguys.com/news/10-teams-to-watch-from-the-second-saas-bilbao-batch/"
+    "https://startupwiseguys.com/about/",
+    "https://startupwiseguys.com/all-programs/",
+    "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+    "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+    "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+    "https://startupwiseguys.com/all-programs/the-founders-club/",
+    "https://startupwiseguys.com/building/",
+    "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+    "https://startupwiseguys.com/building/pre-accelerator-program/",
+    "https://startupwiseguys.com/building/sustainability-pre-revenue-program/",
+    "https://startupwiseguys.com/building/xr-pre-revenue-program/",
+    "https://startupwiseguys.com/growing/",
+    "https://startupwiseguys.com/growing/flagship-accelerator/",
+    "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+    "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+    "https://startupwiseguys.com/scaling/",
+    "https://startupwiseguys.com/scaling/growth-program-ukraine/"
   ],
   "evidence": [
     {
-      "id": "check-announced-3495adbe7d",
-      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
-      "excerpt": "Balkan Accelerator Program are now officially open. The final deadline is May 18 , and applications will be reviewed on a rolling basis , which",
-      "page": "application"
+      "id": "check-announced-46b1e59935",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "program Application Process Applications for the 22nd Founders Club cohort are now open until February 19th. Applications are reviewed on a rolling basis. Selected",
+      "page": "details"
+    },
+    {
+      "id": "check-deadline-c60e27caaa",
+      "url": "https://startupwiseguys.com/all-programs/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "your product-market fit. Read more Read more Application deadline: February 19th, 2027 The Founders Club Find co-founders, refine ideas, develop",
+      "page": "details"
+    },
+    {
+      "id": "check-deadline-d15c4e29db",
+      "url": "https://startupwiseguys.com/building/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "your entrepreneurial journey off the ground. Application deadline: February 19th, 2027 The Founders Club Find co-founders, refine ideas, develop",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-25b8af676f",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "up to €150K convertible investment (120K cash + 30K program) with a €300K follow-on possibility. Learn from the best You'll have the chance to",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-29a23f61c1",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "an investment in around 10 promising startups. Get funding Get up to €120K convertible investment (85K cash + 35K program) with a €250K",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-3454906d4d",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "CET. How much does Founders Club cost? The participation fee is: €1,000 + VAT for an individual €1,500 + VAT for a team €500 + VAT for a CTO",
+      "page": "details"
     },
     {
       "id": "check-deal-37e261dcd5",
@@ -32,6 +72,13 @@
       "title": "Startup Wise Guys — application page",
       "excerpt": "up to our newsletter Program costs:* The program inscription fee is € 1000+VAT per individual or €1500+VAT per team (to be paid upon",
       "page": "application"
+    },
+    {
+      "id": "check-deal-5f6701452d",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "the tools and resources you need to succeed. Get funding Get up to €150K convertible investment (120K cash + 30K program) with a €300K",
+      "page": "details"
     },
     {
       "id": "check-deal-624937a82c",
@@ -48,6 +95,13 @@
       "page": "application"
     },
     {
+      "id": "check-deal-6f84a35a62",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "toward a more sustainable future. Get funding Get up to $100,000 convertible investment and access to a follow-on opportunity. Learn",
+      "page": "details"
+    },
+    {
       "id": "check-deal-937dda02b2",
       "url": "https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
       "title": "Startup Wise Guys — application page",
@@ -55,39 +109,193 @@
       "page": "application"
     },
     {
-      "id": "check-deal-f9ba516a8e",
-      "url": "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
-      "excerpt": "where non incorporated idea stage startups can compete for up to 25K eur financial support per startup, along with 8 weeks online",
-      "page": "application"
+      "id": "check-deal-b19eec0c93",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Club cost? The participation fee is: €1,000 + VAT for an individual €1,500 + VAT for a team €500 + VAT for a CTO / Developer The fee is paid",
+      "page": "details"
     },
     {
-      "id": "check-duration-363e30eae6",
-      "url": "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
-      "excerpt": "eur financial support per startup, along with 8 weeks online pre-accelerator program. The main",
-      "page": "application"
+      "id": "check-deal-cc45f7a355",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "are the investment conditions? Startup will receive an investment of $100,000 per startup in exchange for equity and a free 4-month hybrid Proptech",
+      "page": "details"
     },
     {
-      "id": "check-duration-48cdf8febf",
-      "url": "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "startup’s impressive performance over the past 12 months. We’re confident in an even brighter future",
-      "page": "terms"
+      "id": "check-deal-d78028afd3",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "people who see the world just like you do! Get funding Get up to €150K convertible investment (120K cash + 30K program) with a €250K",
+      "page": "details"
     },
     {
-      "id": "check-duration-5881d051e9",
-      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "all of them have just finished deals in the past 2 weeks (disclaimer: all of those terms sheets were",
-      "page": "terms"
+      "id": "check-deal-ee9e654ab3",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "up to €150K convertible investment (120K cash + 30K program) with a €250K follow-on possibility. Learn from the best Learn top sales and",
+      "page": "details"
     },
     {
-      "id": "check-duration-6252f855fa",
-      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "companies – what’s your survival plan for next 9 months without the money, and then – how getting a",
-      "page": "terms"
+      "id": "check-deal-ef0af86e54",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "fee is: €1,000 + VAT for an individual €1,500 + VAT for a team €500 + VAT for a CTO / Developer The fee is paid upon confirmation of",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-ff511c6060",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "up to €120K convertible investment (85K cash + 35K program) with a €250K follow-on possibility. Learn from the best Learn top sales and",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-07eb2c5c9b",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Club, and who is it for? Founders Club is a 3-month online program for experienced professionals and",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0d6a7f6ecc",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "and requires active participation throughout the 3 months. Participants are expected to attend the live",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0e46a920f8",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "for acceleration we invite the startup for the 8-week long pre-acceleration program, where we provide",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0f45be53ae",
+      "url": "https://startupwiseguys.com/building/xr-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Apply Now Designed for early-stage startups, our 8-week program offers a no-strings-attached,",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-10b517da3c",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "and have a clear roadmap for the following 3-6 months. Also, Startup Wise Guys' General Partners will",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-19d00cec93",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "are at. Acceleration part I is an equity-free 8-week long Pre-acceleration program. This is an",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-1bb68d7fd7",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "program. The acceleration program is a 5-month program and comes with an investment. The main",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-1fc21937aa",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Each team can expect to spend between 2-3 weeks in total onsite. What is the expected",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-211c928c0f",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "program. The acceleration program is a 5-month program and comes with an investment. The main",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-264889e4cf",
+      "url": "https://startupwiseguys.com/building/pre-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "for early-stage startup founders in mind. Our 8-week program will empower your startup and ensure",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-28cb1783d4",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "part II – we invite the startup for the 8-week online acceleration part I program, where we",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2a99120ffc",
+      "url": "https://startupwiseguys.com/building/sustainability-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "for early-stage sustainability startups, our 8-week program offers a no-strings-attached,",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2e2541d444",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "per startup in exchange for equity and a free 4-month hybrid Proptech focused program focused.",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3073fce852",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "application for eligibility. It can take up to 2 weeks for us to get back to you after we have received",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3ad0f3ec4d",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "pace. Your experience, over the course of 4 months, will include intensive training and personal",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3d3e5e432c",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "application for eligibility. It can take up to 2 weeks for us to get back to you after we have received",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3d743ca158",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "pace. Your experience, over the course 5 months, will include intensive training and personal",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-44b655fe6e",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "the hard work startups have put in over the past 5 months and recognize how much they’ve grown. Congrats.",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-455b6f968a",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "application for eligibility. It can take up to 2 weeks for us to get back to you after we have received",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-5ddca72941",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "for acceleration we invite the startup for the 8-week long pre-acceleration program, where we provide",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-70f8561cbd",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "would require your presence in Marbella for 6 to 8 weeks throughout the whole program. What is the",
+      "page": "details"
     },
     {
       "id": "check-duration-71fff0ca0c",
@@ -95,6 +303,13 @@
       "title": "Startup Wise Guys — application page",
       "excerpt": "period of the Founders Club Program, including 6 months after the end. All personal data, except full",
       "page": "application"
+    },
+    {
+      "id": "check-duration-72082fcd29",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "application for eligibility. It can take up to 2 weeks for us to get back to you after we have received",
+      "page": "details"
     },
     {
       "id": "check-duration-78cc756899",
@@ -111,6 +326,41 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-8b327233ef",
+      "url": "https://startupwiseguys.com/all-programs/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "customers, and ensure your first funding in a 3-month online program designed to create a scalable B2B",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-92aa6da567",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "your presence in a specific location for 6 to 8 weeks throughout the whole program. The location will",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-93c51118a4",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "pace. Your experience, over the course of 4 months, will include intensive training and personal",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9d03c7a8b3",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "program. The acceleration program is a 5-month program and comes with an investment. The main",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-a36ce20c3c",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "application for eligibility. It can take up to 2 weeks for us to get back to you after we have received",
+      "page": "details"
+    },
+    {
       "id": "check-duration-aedcf58c61",
       "url": "https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
       "title": "Startup Wise Guys — application page",
@@ -118,25 +368,88 @@
       "page": "application"
     },
     {
-      "id": "check-duration-d7dcb313c0",
-      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "C, etc) and how they are going to look in 18-24 months. In the previous crisis valuations went down by",
-      "page": "terms"
+      "id": "check-duration-b31901e12c",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "for acceleration we invite the startup for the 8-week long pre-acceleration program, where we provide",
+      "page": "details"
     },
     {
-      "id": "check-duration-feaf16e6f2",
-      "url": "https://startupwiseguys.com/news/10-teams-to-watch-from-the-second-saas-bilbao-batch/",
-      "title": "Startup Wise Guys — batches page",
-      "excerpt": "Selected teams will go through an intense 3-month-long acceleration program and get access to up",
-      "page": "batches"
+      "id": "check-duration-bd23b9d10e",
+      "url": "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "for early-stage startup founders in mind. Our 8-week program will empower your startup and ensure",
+      "page": "details"
     },
     {
-      "id": "check-email-051755cddd",
-      "url": "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
-      "excerpt": "hello@startupwiseguys.com",
-      "page": "application"
+      "id": "check-duration-d0777a62b8",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "MVP, and developing a clear path to market, in a 3-month, fully online, paid program. Apply Now Who is",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d17f021908",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "investor strategy to help you achieve success 3-6 months post-program. Show less Show more After the",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d9901e26ab",
+      "url": "https://startupwiseguys.com/building/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "customers, and ensure your first funding in a 3-month online program designed to create a scalable B2B",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d99b4b5a7b",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Each team can expect to spend between 2–3 weeks in total onsite. What is the expected",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d9ce3eb3bc",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "the scouting process. Acceleration part II is a 5-month program and comes with an investment. The main",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ddce9a37cb",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "program. The acceleration program is a 5-month program and comes with an investment. The main",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e8063ecd1f",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "for acceleration we invite the startup for the 8-week long pre-acceleration program, where we provide",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ec66bf14e4",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "pace. Your experience, over the course of 4 months, will include intensive training and personal",
+      "page": "details"
+    },
+    {
+      "id": "check-email-022eb560e6",
+      "url": "https://startupwiseguys.com/about/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "details"
+    },
+    {
+      "id": "check-email-0445656c3c",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "details"
     },
     {
       "id": "check-email-082bd3c2fe",
@@ -146,39 +459,88 @@
       "page": "terms"
     },
     {
-      "id": "check-email-08b6d1550c",
-      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
-      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
-      "page": "application"
+      "id": "check-email-0938483bef",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "questions? Feel free to get in touch with our team at hello@startupwiseguys.com . Sign up for our newsletter Only the most interesting",
+      "page": "details"
     },
     {
-      "id": "check-email-10b682e299",
-      "url": "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-email-0af184003f",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-email-11d9387191",
-      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
+      "id": "check-email-0d651581b2",
+      "url": "https://startupwiseguys.com/building/pre-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "details"
+    },
+    {
+      "id": "check-email-0f9120ffa0",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "hello@startupwiseguys.com",
-      "page": "application"
+      "page": "details"
     },
     {
-      "id": "check-email-1dfe65bcf8",
-      "url": "https://startupwiseguys.com/news/fueling-innovation-through-strategic-investment-in-lumian-energy/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
-      "page": "terms"
-    },
-    {
-      "id": "check-email-2608b84579",
-      "url": "https://startupwiseguys.com/news/copernic-space-secures-seed-investment-to-democratize-space-economy/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-email-11184c63d6",
+      "url": "https://startupwiseguys.com/building/sustainability-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "hello@startupwiseguys.com",
-      "page": "terms"
+      "page": "details"
+    },
+    {
+      "id": "check-email-1907cebe84",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "details"
+    },
+    {
+      "id": "check-email-1daba8b119",
+      "url": "https://startupwiseguys.com/all-programs/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-1fa8c10d73",
+      "url": "https://startupwiseguys.com/building/xr-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "details"
+    },
+    {
+      "id": "check-email-22e6ae763f",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "find what you were looking for get in touch with us at hello@startupwiseguys.com . Sign up for our newsletter Only the most interesting",
+      "page": "details"
+    },
+    {
+      "id": "check-email-23eb386cde",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-289a906a84",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2b4604ca59",
+      "url": "https://startupwiseguys.com/building/xr-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "details"
     },
     {
       "id": "check-email-2f7ec54c39",
@@ -188,25 +550,18 @@
       "page": "terms"
     },
     {
-      "id": "check-email-30f6c562b1",
-      "url": "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-email-3c25033bda",
+      "url": "https://startupwiseguys.com/scaling/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "hello@startupwiseguys.com",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-email-375d46481d",
-      "url": "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
-      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
-      "page": "application"
-    },
-    {
-      "id": "check-email-46f80039b4",
-      "url": "https://startupwiseguys.com/news/10-teams-to-watch-from-the-second-saas-bilbao-batch/",
-      "title": "Startup Wise Guys — batches page",
-      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
-      "page": "batches"
+      "id": "check-email-3f7fd28581",
+      "url": "https://startupwiseguys.com/growing/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "details"
     },
     {
       "id": "check-email-53eb50304c",
@@ -216,58 +571,93 @@
       "page": "application"
     },
     {
-      "id": "check-email-54bdb6ef44",
-      "url": "https://startupwiseguys.com/news/category/investment/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
-      "page": "terms"
-    },
-    {
-      "id": "check-email-5814d45828",
-      "url": "https://startupwiseguys.com/news/category/investment/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-email-5d6f881b12",
+      "url": "https://startupwiseguys.com/building/pre-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "hello@startupwiseguys.com",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-email-6d04877244",
-      "url": "https://startupwiseguys.com/news/copernic-space-secures-seed-investment-to-democratize-space-economy/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-email-62ad1c9d7e",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "find what you were looking for get in touch with us at hello@startupwiseguys.com . Sign up for our newsletter Only the most interesting",
+      "page": "details"
+    },
+    {
+      "id": "check-email-699f72a0c6",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "find what you were looking for get in touch with us at hello@startupwiseguys.com . Sign up for our newsletter Only the most interesting",
+      "page": "details"
+    },
+    {
+      "id": "check-email-705b19279f",
+      "url": "https://startupwiseguys.com/scaling/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-email-74c6e07006",
-      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-email-7be0968ff5",
+      "url": "https://startupwiseguys.com/about/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "hello@startupwiseguys.com",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-email-7b38947bf7",
-      "url": "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-email-7c17983e03",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-email-7ff0ea2ebd",
-      "url": "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
-      "page": "terms"
-    },
-    {
-      "id": "check-email-839f4463e6",
-      "url": "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-email-83f2969ed3",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "hello@startupwiseguys.com",
-      "page": "terms"
+      "page": "details"
     },
     {
       "id": "check-email-855bbd6006",
       "url": "https://startupwiseguys.com/",
       "title": "Startup Wise Guys — homepage",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "details"
+    },
+    {
+      "id": "check-email-883aeb073b",
+      "url": "https://startupwiseguys.com/growing/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "details"
+    },
+    {
+      "id": "check-email-89e7603392",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "find what you were looking for get in touch with us at hello@startupwiseguys.com . Sign up for our newsletter Only the most interesting",
+      "page": "details"
+    },
+    {
+      "id": "check-email-911a593f8f",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-97a22a55cf",
+      "url": "https://startupwiseguys.com/building/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a0b20ccd72",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
       "page": "details"
     },
@@ -279,25 +669,39 @@
       "page": "application"
     },
     {
-      "id": "check-email-b365f8e3b4",
-      "url": "https://startupwiseguys.com/news/young-entrepreneurs-summer-school-from-an-idea-to-an-investment-proposal/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-email-ae4cdecefb",
+      "url": "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-email-c7282ba6fb",
-      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
-      "page": "terms"
+      "id": "check-email-aec5368184",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "find what you were looking for get in touch with us at hello@startupwiseguys.com . Sign up for our newsletter Only the most interesting",
+      "page": "details"
     },
     {
-      "id": "check-email-d34afe06a7",
-      "url": "https://startupwiseguys.com/news/10-teams-to-watch-from-the-second-saas-bilbao-batch/",
-      "title": "Startup Wise Guys — batches page",
+      "id": "check-email-aff7cecc11",
+      "url": "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "hello@startupwiseguys.com",
-      "page": "batches"
+      "page": "details"
+    },
+    {
+      "id": "check-email-b67c56fee8",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-bc6476aabb",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "find what you were looking for get in touch with us at hello@startupwiseguys.com . Sign up for our newsletter Only the most interesting",
+      "page": "details"
     },
     {
       "id": "check-email-d500f5871f",
@@ -307,95 +711,193 @@
       "page": "details"
     },
     {
-      "id": "check-email-e20900edc1",
-      "url": "https://startupwiseguys.com/news/young-entrepreneurs-summer-school-from-an-idea-to-an-investment-proposal/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "hello@startupwiseguys.com",
-      "page": "terms"
-    },
-    {
-      "id": "check-email-e5358ed934",
-      "url": "https://startupwiseguys.com/news/ai-deep-tech-in-early-stage-investment-evolution-challenges/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-email-d566314d7e",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-email-ed2cbb7389",
-      "url": "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-email-d860e409ea",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "find what you were looking for get in touch with us at hello@startupwiseguys.com . Sign up for our newsletter Only the most interesting",
+      "page": "details"
+    },
+    {
+      "id": "check-email-dfea79a3ee",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e8164c88a1",
+      "url": "https://startupwiseguys.com/building/sustainability-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e958fd7999",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "details"
+    },
+    {
+      "id": "check-email-eea9a7f8ae",
+      "url": "https://startupwiseguys.com/all-programs/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f3c04c9867",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "hello@startupwiseguys.com",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-email-f2e48d8e6c",
-      "url": "https://startupwiseguys.com/news/fueling-innovation-through-strategic-investment-in-lumian-energy/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-email-f645c7bbaa",
+      "url": "https://startupwiseguys.com/building/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "hello@startupwiseguys.com",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-email-f7dd1e01de",
-      "url": "https://startupwiseguys.com/news/ai-deep-tech-in-early-stage-investment-evolution-challenges/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-email-f8b3a3db87",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "hello@startupwiseguys.com",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-format-036927bce5",
-      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "processes that before required workshops, committees and in-person meetings. The same applies to the processes for how VCs",
-      "page": "terms"
+      "id": "check-format-1a64dafdd8",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Infrastructure Infrastructure Resilience / ShelterTech Virtual Reality (VR) / Augmented Reality (AR) Shared Economy /",
+      "page": "details"
     },
     {
-      "id": "check-format-4bd5ff097a",
-      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
-      "excerpt": "is what this accelerator is meant to address. Through a hybrid format combining online sessions with in-person bootcamps",
-      "page": "application"
+      "id": "check-format-1a8594bf96",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "to be fully online – and we expect founders to attend in person at least 2/3 of the modules. I have applied for the",
+      "page": "details"
     },
     {
-      "id": "check-format-4e90b0c3a0",
-      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
-      "excerpt": "Through a hybrid format combining online sessions with in-person bootcamps in Prishtina and Skopje , the program will",
-      "page": "application"
+      "id": "check-format-1d49fa9a12",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "per startup in exchange for equity and a free 4-month hybrid Proptech focused program focused. Additionally, startups",
+      "page": "details"
     },
     {
-      "id": "check-format-76b9b8d165",
-      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "Execution – can the processes and product be adapted to remote situations Credit risk – what the impact of it might be on",
-      "page": "terms"
+      "id": "check-format-23632eca85",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Tech / Safety / Training / Digital Construction Virtual Reality / Augmented Reality Materials Science Robotics /",
+      "page": "details"
     },
     {
-      "id": "check-format-847929657b",
-      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "is an obvious push on some technologies like VR or AR, remote collaboration tools, and industries like MedTech or",
-      "page": "terms"
+      "id": "check-format-2d11f8afb0",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "so you might have to adapt to this schedule. Also, it’s a hybrid program with online and onsite modules, therefore some",
+      "page": "details"
     },
     {
-      "id": "check-format-a56e031ea2",
-      "url": "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "12 markets, solidifying DriveX’s position as the leading remote inspection provider in the Baltic States. Strategic",
-      "page": "terms"
+      "id": "check-format-301ee68ab2",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Where is the program taking place? We are running a hybrid program, meaning that some modules of the program are",
+      "page": "details"
     },
     {
-      "id": "check-format-f011e5ca32",
-      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "Success stories Success stories: GoRamp Startup advice Virtual impact News Startup Wise Guys becomes official partner for",
-      "page": "terms"
+      "id": "check-format-393c5ff092",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "the program. Where is the program taking place? This is a hybrid accelerator program, where 80% of the program content will",
+      "page": "details"
     },
     {
-      "id": "check-location-a169ef2f88",
-      "url": "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "of loyalty programs. About Loyi: Loyi, based in Berlin, revolutionizes customer loyalty with",
-      "page": "terms"
+      "id": "check-format-4036c28706",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Where is the program taking place? Our program follows a hybrid format , combining both online and onsite modules . You",
+      "page": "details"
+    },
+    {
+      "id": "check-format-434044750c",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "so you might have to adapt to this schedule. Also, it’s a hybrid program with online and onsite modules, therefore, some",
+      "page": "details"
+    },
+    {
+      "id": "check-format-43eb53dddb",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Where is the program taking place? We are running a hybrid program, meaning that some modules of the program are",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5b1c964bf0",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "to ensure your startup has a strong foundation. For our hybrid program, this also includes an onsite portion, where",
+      "page": "details"
+    },
+    {
+      "id": "check-format-7d7c3a7a8b",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "so you might have to adapt to this schedule. Also, it’s a hybrid program with online and onsite modules, therefore, if",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b52d35d591",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "so you might have to adapt to this schedule. Also, it’s a hybrid program with online and onsite modules, therefore, if",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ba7bef7dbd",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "content will take place online, and 20% will be conducted in person in Tallinn, Estonia and another European hub to be",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e0aed428b8",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "so you might have to adapt to this schedule. Also, it’s a hybrid program with online and onsite modules, therefore some",
+      "page": "details"
+    },
+    {
+      "id": "check-format-fc58395e6c",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "take place online, and 20% of the program will take place in person in Bilbao, Spain. The program consists of four modules,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-fd1ae491b8",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "the program. Where is the program taking place? This is a hybrid accelerator program, where 80% of the program content will",
+      "page": "details"
+    },
+    {
+      "id": "check-location-219acef1ae",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Built Assets Accelerator Program, based in Riyadh, Saudi Arabia, gives you access to an",
+      "page": "details"
     },
     {
       "id": "check-name-3f0aa27aa6",
@@ -405,38 +907,59 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-069e961bb8",
-      "url": "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-portfolio-03acdbafc2",
+      "url": "https://startupwiseguys.com/building/sustainability-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0e2ae0ef7e",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-portfolio-12f2f19cbe",
-      "url": "https://startupwiseguys.com/news/young-entrepreneurs-summer-school-from-an-idea-to-an-investment-proposal/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-portfolio-1754f16115",
+      "url": "https://startupwiseguys.com/growing/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1e582649db",
+      "url": "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-portfolio-14da315b92",
-      "url": "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "DriveX Technologies → https://startupwiseguys.com/portfolio/#drivex-technologies",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-1e9a065cde",
-      "url": "https://startupwiseguys.com/news/ai-deep-tech-in-early-stage-investment-evolution-challenges/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
-      "page": "terms"
+      "id": "check-portfolio-21cc60dfaf",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-29a415d901",
       "url": "https://startupwiseguys.com/",
       "title": "Startup Wise Guys — homepage",
       "excerpt": "StepShot → https://startupwiseguys.com/portfolio/#stepshot",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2ef016bdc6",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-323a138e1d",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
       "page": "details"
     },
     {
@@ -447,13 +970,6 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-3b63190134",
-      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
-      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
-      "page": "application"
-    },
-    {
       "id": "check-portfolio-4286b920e8",
       "url": "https://startupwiseguys.com/",
       "title": "Startup Wise Guys — homepage",
@@ -461,53 +977,39 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-4312930275",
-      "url": "https://startupwiseguys.com/news/young-entrepreneurs-summer-school-from-an-idea-to-an-investment-proposal/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-portfolio-42f9f6571c",
+      "url": "https://startupwiseguys.com/growing/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4c79bb563e",
+      "url": "https://startupwiseguys.com/building/sustainability-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-portfolio-5045f92301",
-      "url": "https://startupwiseguys.com/news/10-teams-to-watch-from-the-second-saas-bilbao-batch/",
-      "title": "Startup Wise Guys — batches page",
-      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-5bc489b438",
-      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
-      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-5d5945ac02",
-      "url": "https://startupwiseguys.com/news/category/investment/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-portfolio-601d74e9a1",
+      "url": "https://startupwiseguys.com/building/pre-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-portfolio-688720e597",
-      "url": "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "Restworld → https://startupwiseguys.com/portfolio/#restworld",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-6b5073ce31",
-      "url": "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-portfolio-614cf2e6c0",
+      "url": "https://startupwiseguys.com/building/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-portfolio-6c5864d97b",
-      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
-      "page": "terms"
+      "id": "check-portfolio-6abddc27e4",
+      "url": "https://startupwiseguys.com/building/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-769572cbb1",
@@ -517,11 +1019,11 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-792a5d18bc",
-      "url": "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
-      "page": "terms"
+      "id": "check-portfolio-7aac9fcbf5",
+      "url": "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-7b2337002d",
@@ -531,39 +1033,18 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-8ccf697a89",
-      "url": "https://startupwiseguys.com/news/category/investment/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-91fa376969",
-      "url": "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "Loyi → https://startupwiseguys.com/portfolio/#loyi",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-9874a452db",
-      "url": "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-9f9b82bb8b",
-      "url": "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-portfolio-7b6406f08b",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-portfolio-a0a0a41631",
-      "url": "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
-      "page": "terms"
+      "id": "check-portfolio-a00e8880a8",
+      "url": "https://startupwiseguys.com/building/xr-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-a4dbe7c27e",
@@ -573,13 +1054,6 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-a73716a46a",
-      "url": "https://startupwiseguys.com/news/ai-deep-tech-in-early-stage-investment-evolution-challenges/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
-      "page": "terms"
-    },
-    {
       "id": "check-portfolio-a8a90092ca",
       "url": "https://startupwiseguys.com/",
       "title": "Startup Wise Guys — homepage",
@@ -587,18 +1061,18 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-a94e039b9c",
-      "url": "https://startupwiseguys.com/news/10-teams-to-watch-from-the-second-saas-bilbao-batch/",
-      "title": "Startup Wise Guys — batches page",
+      "id": "check-portfolio-ae77e3f39f",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
-      "page": "batches"
+      "page": "details"
     },
     {
-      "id": "check-portfolio-a9b66abe85",
-      "url": "https://startupwiseguys.com/news/copernic-space-secures-seed-investment-to-democratize-space-economy/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
-      "page": "terms"
+      "id": "check-portfolio-b1ed4d2142",
+      "url": "https://startupwiseguys.com/all-programs/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-becbf21f5b",
@@ -608,18 +1082,11 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-c152695300",
-      "url": "https://startupwiseguys.com/news/fueling-innovation-through-strategic-investment-in-lumian-energy/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-c716169dc6",
-      "url": "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
+      "id": "check-portfolio-c94a322fad",
+      "url": "https://startupwiseguys.com/scaling/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
-      "page": "application"
+      "page": "details"
     },
     {
       "id": "check-portfolio-c9af285771",
@@ -629,25 +1096,39 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-ca0576be56",
-      "url": "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
+      "id": "check-portfolio-ca952b72b9",
+      "url": "https://startupwiseguys.com/building/xr-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
-      "page": "application"
+      "page": "details"
     },
     {
-      "id": "check-portfolio-d450b7565b",
-      "url": "https://startupwiseguys.com/news/copernic-space-secures-seed-investment-to-democratize-space-economy/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-portfolio-d45e37fe37",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-portfolio-d843a9cc37",
-      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
-      "title": "Startup Wise Guys — terms page",
+      "id": "check-portfolio-e1acc56a82",
+      "url": "https://startupwiseguys.com/scaling/",
+      "title": "Startup Wise Guys — program page",
       "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
-      "page": "terms"
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e69d18fec6",
+      "url": "https://startupwiseguys.com/about/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ea1ef43b0f",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-f12420a919",
@@ -655,13 +1136,6 @@
       "title": "Startup Wise Guys — application page",
       "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
       "page": "application"
-    },
-    {
-      "id": "check-portfolio-f6ee9f853e",
-      "url": "https://startupwiseguys.com/news/fueling-innovation-through-strategic-investment-in-lumian-energy/",
-      "title": "Startup Wise Guys — terms page",
-      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
-      "page": "terms"
     },
     {
       "id": "check-portfolio-fb6f78470f",
@@ -678,11 +1152,25 @@
       "page": "details"
     },
     {
-      "id": "check-rolling-a2bffe5059",
-      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
-      "excerpt": "open. The final deadline is May 18 , and applications will be reviewed on a rolling basis , which means early applications are strongly encouraged. If you are building",
-      "page": "application"
+      "id": "check-portfolio-fdba4e2ab8",
+      "url": "https://startupwiseguys.com/building/pre-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-rolling-c8bd1d890e",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Club cohort are now open until February 19th. Applications are reviewed on a rolling basis. Selected candidates will be invited to a short interview with the Founders",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3ae6ae4eb9",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Apply Now → https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
+      "page": "details"
     },
     {
       "id": "check-route-3cb7c6ef0c",
@@ -692,18 +1180,88 @@
       "page": "details"
     },
     {
-      "id": "check-route-45816255f6",
-      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
-      "excerpt": "Apply here → https://airtable.com/app21MYqwW64bMEYJ/pagSnYigPrCWXvgT8/form",
-      "page": "application"
+      "id": "check-route-b79ed0810c",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Apply now → https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
+      "page": "details"
     },
     {
-      "id": "check-status-9696934fc7",
-      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
-      "title": "Startup Wise Guys — application page",
-      "excerpt": "Applications Are Now Open for the Western Balkans Accelerator Program - Startup Wise Guys Menu Close For Founders Startup Stages",
-      "page": "application"
+      "id": "check-route-ca8a20f4b2",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Apply now → https://startupwiseguys.com/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ffb6b6e420",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "Join the waitlist now → https://startupwiseguys.com/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-status-01a14e99d4",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "online and onsite at the graduation event held in Vilnius, Lithuania. About the program Application Process Applications are now open for the Growth Ukraine Program. There will be 2 cohorts of 6 startups. The deadlines: - The first cohort -",
+      "page": "details"
+    },
+    {
+      "id": "check-status-3452e54342",
+      "url": "https://startupwiseguys.com/building/xr-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "so it’s up to you how much time and effort you can or want to invest. About the program Application Process Applications are open . Our team will carefully review all applications and once we identify potential candidates that fit our",
+      "page": "details"
+    },
+    {
+      "id": "check-status-762d157902",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "800+ fellow visionary founders growing in the same industry as you. About the program Application Process Applications are now open . Our team will carefully review all applications and once we identify potential candidates that fit our",
+      "page": "details"
+    },
+    {
+      "id": "check-status-78ff387148",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "600+ fellow visionary founders growing in the same industry as you. About the program Application Process Applications are now open . Our team will carefully review all applications and once we identify potential candidates that fit our",
+      "page": "details"
+    },
+    {
+      "id": "check-status-a1f6c9da9e",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "partners . Are there geographical restrictions? No. Founders Club is an online international program and applications are open to participants from different countries. What types of startups are a good fit? We primarily work with",
+      "page": "details"
+    },
+    {
+      "id": "check-status-a886049b80",
+      "url": "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "be the opportunity to take the stage and deliver your winning pitch. About the program Application Process Applications are open . Our team will carefully review all applications and once we identify potential candidates that fit our",
+      "page": "details"
+    },
+    {
+      "id": "check-status-b812979912",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "800+ fellow visionary founders growing in the same industry as you. About the program Application Process Applications are now open for the Sustainability program . Our team will carefully review all applications and once we identify",
+      "page": "details"
+    },
+    {
+      "id": "check-status-c181b3ba14",
+      "url": "https://startupwiseguys.com/building/sustainability-pre-revenue-program/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "so it’s up to you how much time and effort you put into it. About the program Application Process Applications are open. Our team will carefully review all applications and once we identify potential candidates that fit our",
+      "page": "details"
+    },
+    {
+      "id": "check-status-f3736f0575",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "title": "Startup Wise Guys — program page",
+      "excerpt": "600+ fellow visionary founders growing in the same industry as you. About the program Application Process Applications are now open for the program . Our team will carefully review all applications and once we identify potential candidates",
+      "page": "details"
     }
   ],
   "pageQuotes": [
@@ -714,22 +1272,34 @@
       "excerpt": "Startup Wise Guys | Investing In The Bold Ones Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Investing in the bold ones Global VC funds and accelerators for passionate B2B startup founders See all programs We help you to solve key challenges at every stage Dare to dream global. We’re a startup accelerator like no other, our optimized approach puts early-stage startups on the map and catapults them into worldwide success. Startup Wise Guys’ origins began in Europe’s tech-savvy startup capital, Estonia. Since 2012, we have used our carefully curated expertise, skills and funding to skyrocket hundreds of emerging early-stage startups into upwards growth. This is not our first rodeo… we are the most experienced accelerator fund in the region with over 45+ programs, an international community of founders from over 60 countries and an established market in CEE and CIS countries. Do you think you have what it takes? Ready to take the world by storm? The proof is in the pudding"
     },
     {
+      "id": "check-page-39b8d68805",
+      "url": "https://startupwiseguys.com/",
+      "page": "details",
+      "excerpt": "“Being challenged by my mentors was invaluable."
+    },
+    {
+      "id": "check-page-bd9fe32af3",
+      "url": "https://startupwiseguys.com/",
+      "page": "details",
+      "excerpt": "Mentors are incredibly knowledgeable with great experience in the industry."
+    },
+    {
+      "id": "check-page-0053326f62",
+      "url": "https://startupwiseguys.com/",
+      "page": "details",
+      "excerpt": "Thriving community We nurture an active and collaborative peer community on 5 continents, as well as large mentor and investor network."
+    },
+    {
+      "id": "check-page-7aa64c401c",
+      "url": "https://startupwiseguys.com/",
+      "page": "details",
+      "excerpt": "In 2016 we saw our first major exit when VitalFields was acquired by the Climate Corporation."
+    },
+    {
       "id": "check-page-54fd793765",
       "url": "https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
       "page": "application",
       "excerpt": "Founders Club application - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home All programs The Founders Club Founders Club application Founders Club application Join Startup Wise Guys Founders Club! Our plan is to help you find co-founders that complement your skills (or reinforce your team in case you have one already), help you zero-in a great B2B business idea and provide you with your 1st founding (up to €100k!). The program is 3 months long with weekly workshops (each 2 hours long) + some homework. Your name* Surname* Your email* Linkedin page* Upload your CV (optional) I am applying as:* an individual a team (up to 3 people) LinkedIn profile of your team member Nr. 1: LinkedIn profile of your team member Nr. 2: LinkedIn profile of your team member Nr. 3: Do you have a B2B business/startup idea?* No Yes Please explain it in 1 - 3 sentences: Vertical: FinTech Sustainability XR SaaS Cyber HealthTech EdTech Other Does not matter Which vertical interests"
-    },
-    {
-      "id": "check-page-e13a4cb700",
-      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
-      "page": "application",
-      "excerpt": "Applications Are Now Open for the Western Balkans Accelerator Program - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs 2026 News Startups Applications Are Now Open for the Western Balkans Accelerator Program Back to News A few months ago, in Prishtina, we brought together founders, ecosystem builders, institutions, and international partners to discuss a fundamental question: What does it really take to build a sustainable startup ecosystem in an emerging market? One of the clearest conclusions from the Kosovo Startup Ecosystem Forum was that ambition is not the problem. Talent is not the problem either. What early-stage ecosystems often need most is structure: the right support, at the right time, for the right founders. That is exactly the context in which the Western Balkan Accelerator Program was built. A next step, not a standalone initiative If the Forum was a moment of alignment, this program is a step into execution. The Western Balkan Accelerator"
-    },
-    {
-      "id": "check-page-cbb8562373",
-      "url": "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
-      "page": "application",
-      "excerpt": "Idea stage startups from Baltics and Ukraine can apply for 25K eur financial support and pre-accelerator program - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs News Idea stage startups from Baltics and Ukraine can apply for 25K eur financial support and pre-accelerator program Back to News Second year in a row EIT Digital and Startup Wise Guys are running a Venture Program, where non incorporated idea stage startups can compete for up to 25K eur financial support per startup, along with 8 weeks online pre-accelerator program. The main criteria for startup eligibility is at least 2 team members that are legal residents of Baltic countries or Ukraine, not incorporated yet and working on innovative ideas. While Startup Wise Guys is the local partner in particular 4 countries, in total EIT Digital Venture Program is run in 20 European countries with 4 other local partners. Idea stage teams from Estonia, Latvia, Lithuania, and Ukraine can apply here till April"
     },
     {
       "id": "check-page-38e27b7c72",
@@ -738,64 +1308,1000 @@
       "excerpt": "Investment deal - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home Investment deal Investment Deal Introduction At Startup Wise Guys (SWG), our mission is to empower founders with the resources, mentorship, and funding they need to scale their startups into successful, high-impact businesses. We offer a comprehensive investment package that includes capital, hands-on mentorship, and access to a vast network, all within an intensive 14-week acceleration program designed to fast-track your growth. About the deal We recognize that every startup is unique, and we tailor our investment structure to meet your specific needs. Typically, for startups joining the Accelerator Programs, we initially invest up to €100,000 in exchange for a negotiated equity in your company. The exact terms are determined by factors such as your company’s maturity, revenue, market potential, and team strength. Our investment is delivered through industry-standard instruments, such as"
     },
     {
-      "id": "check-page-b5e10fba33",
-      "url": "https://startupwiseguys.com/news/ai-deep-tech-in-early-stage-investment-evolution-challenges/",
+      "id": "check-page-5d1907caca",
+      "url": "https://startupwiseguys.com/investment-deal/",
       "page": "terms",
-      "excerpt": "AI Deep Tech in Early-Stage Investment: Evolution & Challenges - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs AI News Startups AI Deep Tech in Early-Stage Investment: Evolution & Challenges Back to News Share article The Intersection of AI Deep Tech and Early-Stage VC In today’s fast-evolving tech landscape, AI Deep Tech has become a focal point for early-stage VC investments. Recently, I was invited to speak at Expand North Star in Dubai on “The Impact of AI in Deep Tech VC Investment.” This opportunity led me to immerse myself in the latest resources, including insights from Sequoia’s Generative AI Report, helping me see AI not as a standalone concept but as a technology that’s becoming embedded in every modern tech stack. Going forward, it won’t be about if companies use AI, but rather how they leverage it for productivity and differentiation. “AI is no longer a standalone concept; it’s embedded in every modern tech stack. The question now isn’t if"
+      "excerpt": "Our investment is delivered through industry-standard instruments, such as equity agreements, convertible notes, or SAFE notes , chosen based on what best suits your startup’s current situation and future plans."
     },
     {
-      "id": "check-page-3340947d46",
-      "url": "https://startupwiseguys.com/news/category/investment/",
+      "id": "check-page-9467a41e89",
+      "url": "https://startupwiseguys.com/investment-deal/",
       "page": "terms",
-      "excerpt": "Investment Archives - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Category: Investment Back to News 2026 Investment Startups The First Startup Win Is Not Always Revenue: How Three Founders Met in Founders Club 19 2026 Investment Startups SOMAREALITY Raises Over €3 Million to Build the Future of Cognitive Insights 2025 Investment News Startups CryptoSwift Raises €510K to Solve One of Crypto’s Biggest Compliance Headaches 2025 Cyber Investment News Startups Copernic Space Secures Seed Investment to Democratize Access to the Space Economy 2025 Cyber Investment News Startups Zerow is Reinventing Luxury Fashion with Circular Innovation 2025 Cyber Investment News Startups BotsCrew Acquired by CourtAvenue: Marking a New Exit and New Chapter in Conversational AI Innovation 2025 Cyber Investment News Startups Cloudtainer Lands $228K to Advance Smart Cargo Locks 2025 Investment News SaaS Startups DriveX Secures €1.2M Investment to Revolutionize Auto Repair and"
+      "excerpt": "In addition to the financial investment, your startup will participate in our acceleration program , offering tailored mentorship, targeted workshops, and strategic networking opportunities to help you refine your business model, scale operations, and prepare for future funding rounds."
     },
     {
-      "id": "check-page-9d068068f7",
-      "url": "https://startupwiseguys.com/news/copernic-space-secures-seed-investment-to-democratize-space-economy/",
+      "id": "check-page-b3f62dcc97",
+      "url": "https://startupwiseguys.com/investment-deal/",
       "page": "terms",
-      "excerpt": "Copernic Space Secures Seed Investment to Democratize Access to the Space Economy - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs 2025 Cyber Investment News Startups Copernic Space Secures Seed Investment to Democratize Access to the Space Economy Back to News Copernic Space has secured a significant seed investment from Dark Horse Venture Partners , marking a major step toward building the financial and marketplace infrastructure that will power the next era of the commercial space economy. The company’s platform enables real-world space assets —from lunar missions to in-orbit services—to be tokenized, owned, and traded , opening the space industry to a much wider range of investors and commercial participants. This strategic investment will accelerate Copernic Space’s mission roadmap along will secured space asset sales and product launches, reinforcing its role as a pioneer in tokenized space finance and the commercialization. Turning Space Into a Liquid"
+      "excerpt": "Here’s how it works: Acceptance into the Program Upon acceptance, you receive an official invitation to join the SWG acceleration program."
     },
     {
-      "id": "check-page-e6afccb7db",
-      "url": "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
+      "id": "check-page-8492e0be6f",
+      "url": "https://startupwiseguys.com/investment-deal/",
       "page": "terms",
-      "excerpt": "DriveX Secures €1.2M Investment to Revolutionize Auto Repair and Automotive Technology - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs 2025 Investment News SaaS Startups DriveX Secures €1.2M Investment to Revolutionize Auto Repair and Automotive Technology Back to News DriveX Technologies , a standout from our SaaS Tallinn 2022 Batch , has successfully secured € 1.2 million in funding! This significant investment marks a new milestone in automotive technology and the insurance industry , signaling an exciting step forward in DriveX’s mission to eliminate dishonesty and waste in the car repair industry. Innovating Auto Repair with AI-Powered Inspections Founded in 2019 at Porsche’s Open Innovation Hackathon , DriveX was born out of a vision to streamline vehicle pre-inspections and transform the auto insurance market. By utilizing AI-powered vehicle inspection software , DriveX is tackling one of the most common issues in auto repair: glass damage , which"
+      "excerpt": "Program Kickoff With the investment secured, you embark on our acceleration program , receiving mentorship, attending workshops, and leveraging our network to accelerate your startup’s growth."
     },
     {
-      "id": "check-page-98a32dc5f3",
-      "url": "https://startupwiseguys.com/news/fueling-innovation-through-strategic-investment-in-lumian-energy/",
+      "id": "check-page-fa922e3239",
+      "url": "https://startupwiseguys.com/investment-deal/",
       "page": "terms",
-      "excerpt": "Fueling Innovation Through Strategic Investment in Lumian Energy - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Investment News Startups Fueling Innovation Through Strategic Investment in Lumian Energy Back to News Share article About Lumian Energy Founded in 2023 by Batu Balkır, Emre Birol, and Levent Şahiner, Lumian Inc. is a rising force in B2B energy management solutions. The company’s SaaS platform offers businesses a streamlined, hardware-free way to manage energy from the initial supply process. Lumian’s software provides real-time energy consumption monitoring, bill analysis, invoice validation, predictive alerts, and regulatory notifications—all deployable in under five minutes. The platform’s IoT capabilities also enable in-depth device monitoring for clients seeking advanced energy insights. Operating across Turkey, the EU, EMEA, the Caspian, and Turkic Republics, Lumian serves over 60 clients and manages energy for 1,250 facilities,"
+      "excerpt": "Convertible Notes A loan that converts into equity during a future financing event (often at a discount or with a valuation cap) or after a set period of time, usually between 18-24 months from signing."
     },
     {
-      "id": "check-page-b5944a01d0",
-      "url": "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
+      "id": "check-page-711618d67e",
+      "url": "https://startupwiseguys.com/investment-deal/",
       "page": "terms",
-      "excerpt": "How a €1M Investment is Propelling Restworld Toward Global Hospitality Leadership - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Investment Italy News Startups How a €1M Investment is Propelling Restworld Toward Global Hospitality Leadership Back to News Restworld , portfolio company from our SaaS Milan 2022 batch, has raised €1 million in seed funding to revolutionize hiring in the hospitality and restaurant sector (Ho.Re.Ca). The Turin-based startup bridges the gap between businesses and job seekers, emphasizing transparency, accessibility, and ethical recruitment practices. The funding will support the creation of Restworld’s 2.0 platform, tailored to serve businesses of all sizes, from independent eateries to global chains. This milestone comes at a time of rapid change in the hospitality sector, underpinned by updates to Italy’s national labor agreement (CCNL). Expanding to Global Horizons With €1 million in revenue in 2024, partnerships with Lavazza,"
+      "excerpt": "Incorporation Requirements We invest in companies incorporated in the EU, USA, UK, and other jurisdictions approved under our fund rules ."
     },
     {
-      "id": "check-page-dee70125a7",
-      "url": "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
+      "id": "check-page-584689de91",
+      "url": "https://startupwiseguys.com/investment-deal/",
       "page": "terms",
-      "excerpt": "Startup Loyi Secures €425,000 Investment to Revolutionize Banking Loyalty Programs with Web3 and Gamification - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Startups Success stories Web3 Startup Loyi Secures €425,000 Investment to Revolutionize Banking Loyalty Programs with Web3 and Gamification Back to News Loyi , a pioneering brand under Enefty Technologies and a standout portfolio company of Startup Wise Guys from our second Web3 acceleration program , has secured a significant €425,000 investment from DG Nexolution. This funding is set to revolutionize customer loyalty programs using Web3 technology and gamification, bringing innovative blockchain-based solutions to Volksbanken and Raiffeisenbanken . Loyi is poised to transform customer engagement in the banking sector. Curious about the future of loyalty programs and blockchain technology? Read on to discover more about the company’s mission and their groundbreaking approach. Pioneering Loyalty with"
+      "excerpt": "Program Service Fee The €35,000 service fee covers all aspects of our acceleration program , including: Personalized Mentorship: Access to a wide network of experienced mentors."
     },
     {
-      "id": "check-page-09cb2a8d62",
-      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
+      "id": "check-page-69cd138ba2",
+      "url": "https://startupwiseguys.com/investment-deal/",
       "page": "terms",
-      "excerpt": "VC Investment in Times of Crisis - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs News VC Investment in Times of Crisis Back to News Not much of an intro is needed, The World is different today. You might have thought that fundraising is something easily approachable, and now there are many open questions – to fundraise or not to fundraise, what to do with a round in progress, how to close funding deals, are VCs even considering new investments or are they on lockdown too? While a list of Active investors in spite of Corona circles around and VCs say that they are open for business – what does it really mean? To find some answers and to help our portfolio startups get through this crisis as smoothly as possible, we gathered a panel of 5 amazing people and great professionals representing some of the best VCs in Europe, sitting in Tallinn, Riga, Warsaw, Vienna, and Berlin to talk about VC investments in times of crisis. Here are some of the highlights from"
+      "excerpt": "Office Space and Resources: Access to co-working spaces during on-site program components."
     },
     {
-      "id": "check-page-aec0c3d0ed",
-      "url": "https://startupwiseguys.com/news/young-entrepreneurs-summer-school-from-an-idea-to-an-investment-proposal/",
+      "id": "check-page-dbf954643b",
+      "url": "https://startupwiseguys.com/investment-deal/",
       "page": "terms",
-      "excerpt": "Young Entrepreneurs Summer School - from an idea to an investment proposal - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Foundation Impact News Young Entrepreneurs Summer School – from an idea to an investment proposal Back to News It’s not even a secret – the world needs ever more young talents. We at Startup Wise Guys realized that we can educate and build the entrepreneurial spirit in students’ minds, hence why for the second time we organized the Young Entrepreneurs Summer School in collaboration with Estonian Business School, recently held in Tallinn. The young Entrepreneurs program is an intensive 7-day program for high school and university students eager to learn more about entrepreneurship and what it takes to build a startup. 🚀 This year 15 students joined the program to learn about business strategies, problem-solving skills, sales, and digital marketing from 23 amazing mentors. During the week students went through 10 lectures and 8 workshops,"
+      "excerpt": "We invest in companies incorporated in the EU, USA, UK, and other jurisdictions approved under our fund rules ."
     },
     {
-      "id": "check-page-ee7df77f82",
-      "url": "https://startupwiseguys.com/news/10-teams-to-watch-from-the-second-saas-bilbao-batch/",
-      "page": "batches",
-      "excerpt": "10 teams to watch from the second SaaS Bilbao batch - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Growing SaaS Spain Startups 10 teams to watch from the second SaaS Bilbao batch Back to News We are excited to welcome 10 startups to our acceleration program that kicked off this Spring in Bilbao, Spain. Over the next three months, we’ll work closely with each team to help them refine their strategies, develop their products, and scale their businesses. Founders will have access to our network of over 750+ like-minded founders and 550+ mentors, investors, and industry experts. Selected teams will go through an intense 3-month-long acceleration program and get access to up to €100K convertible investment (€70K cash + €30K towards the program) with a potential €100K follow-on after the program. Joining us from around the world, these teams share a common goal: to revolutionize the way we work and live. From a real estate development platform to an asynchronous"
+      "id": "check-page-ff1097357d",
+      "url": "https://startupwiseguys.com/investment-deal/",
+      "page": "terms",
+      "excerpt": "We don’t have a fixed upfront equity % in exchange for our investment and participation in the acceleration program."
+    },
+    {
+      "id": "check-page-6c79af2200",
+      "url": "https://startupwiseguys.com/investment-deal/",
+      "page": "terms",
+      "excerpt": "Our equity is generally taken as preferred shares , which include certain rights and protections that are standard in venture capital investments."
+    },
+    {
+      "id": "check-page-0bb49c3ebe",
+      "url": "https://startupwiseguys.com/investment-deal/",
+      "page": "terms",
+      "excerpt": "The €35,000 service fee covers all the resources, support, and services provided during the acceleration program , including: Expert Mentorship: Tailored guidance from industry leaders."
+    },
+    {
+      "id": "check-page-ab07810685",
+      "url": "https://startupwiseguys.com/about/",
+      "page": "details",
+      "excerpt": "About - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home About Where funding meets passion We are a diverse team of tech lovers, mentors, experts, and founders ourselves bound together by our passion to support founders on their entrepreneurial journey. What makes us special you might ask? Startup Wise Guys has been at the birth of the European startup accelerator scene, we’ve been investing in startups and accelerating them for more than a decade now. In other words – well, we know our s**t, and we aren’t afraid to do the hard work, which is finding high potential startup founders probably even before they themselves know what they are capable of ! The startups that keep listening to their customers are the ones that succeed. We aim to practice the same – constantly evolving, innovating our programs to fit the fast-paced founder journey and embracing the feedback. Over time we have changed our focus from B2C to B2B, and now to various specialized"
+    },
+    {
+      "id": "check-page-4dc8154774",
+      "url": "https://startupwiseguys.com/about/",
+      "page": "details",
+      "excerpt": "Over time we have changed our focus from B2C to B2B, and now to various specialized verticals (more to come)."
+    },
+    {
+      "id": "check-page-c57fb2902c",
+      "url": "https://startupwiseguys.com/about/",
+      "page": "details",
+      "excerpt": "However, we keep the human touch in high value too – be it from on-site sessions during accelerator program to our local gatherings with startups, mentors and investors across various continents."
+    },
+    {
+      "id": "check-page-e52a00f9ce",
+      "url": "https://startupwiseguys.com/about/",
+      "page": "details",
+      "excerpt": "Guess our founders calling us “the accelerator with a heart” has a reason."
+    },
+    {
+      "id": "check-page-8c9842a644",
+      "url": "https://startupwiseguys.com/about/",
+      "page": "details",
+      "excerpt": "800+ Founders 48% Follow-on rate 25+ Exits 71 nationalities Our story Once upon a time (2012), in a land far far away (Tallinn, Estonia) a bunch of successful tech- savvy entrepreneurs decided to get together, show other startups how it was done and empower the next generation of tech founders."
+    },
+    {
+      "id": "check-page-a6fd7d0b81",
+      "url": "https://startupwiseguys.com/about/",
+      "page": "details",
+      "excerpt": "A lot may have changed since 2012, our team has grown from 3 to +60 and we have expanded across Europe and Africa, but we haven’t lost our true north."
+    },
+    {
+      "id": "check-page-667fdf500a",
+      "url": "https://startupwiseguys.com/about/",
+      "page": "details",
+      "excerpt": "We are now a truly global team and a community of committed investors and mentors who really know their stuff ."
+    },
+    {
+      "id": "check-page-1f90fb5a1e",
+      "url": "https://startupwiseguys.com/about/",
+      "page": "details",
+      "excerpt": "We genuinely want everyone to succeed even if it requires additional effort, mental energy and magic."
+    },
+    {
+      "id": "check-page-fe4c24ab81",
+      "url": "https://startupwiseguys.com/all-programs/",
+      "page": "details",
+      "excerpt": "All programs - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home All programs Something for Everyone Programs for any stage of your journey. Filter Apply Close Stage Building 1 Growing 2 Vertical Generic 2 Proptech 1 Flagship Accelerator Level up your startup with our signature Flagship Acceleration and start an intense journey. Get investment, mentorship from industry experts, and refine your product-market fit. Read more Read more Application deadline: February 19th, 2027 The Founders Club Find co-founders, refine ideas, develop an MVP, engage your first customers, and ensure your first funding in a 3-month online program designed to create a scalable B2B startup. Read more Read more Future Built Assets Accelerator Program Take your PropTech startup to new heights with our Proptech B2B Acceleration Program. Get investment, mentorship, and industry connections to help you disrupt the real estate industry. Read more Read more Sign up for our newsletter Only"
+    },
+    {
+      "id": "check-page-79969cc420",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Fintech Accelerator Program - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home All programs Fintech Accelerator Program Fintech Accelerator Program : Global Elevate your Fintech startup to the next level, transform your business and discover your potential. Apply Now Startup Wise Guys Fintech acceleration program will provide an optimized approach that delivers tailored guidance and support from world class mentors and experts. Our accelerator program will help you navigate the bumps in the company building road, revolutionize your go-to-market strategy and encourage you to bring your A game. We know you’re passionate about what you do and this program will provide you access to an constantly expanding network of like minded founders, practitioners and investors and encourage value driven partnerships with people who see the world just like you do! Get funding Get up to €150K convertible investment (120K cash + 30K program) with a €250K follow-on"
+    },
+    {
+      "id": "check-page-65eed41024",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Learn from the best Learn top sales and product development tricks from leading Fintech mentors and experts."
+    },
+    {
+      "id": "check-page-d02a3a7f39",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Meet the people Access a community +350 mentors, +200 investors and collaborate with 600+ fellow visionary founders growing in the same industry as you."
+    },
+    {
+      "id": "check-page-26ceb60b5a",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Show less Show more A typical week in the Startup Wise Guys Fintech accelerator program might look like… Well truth be told there’s no such thing as a typical week in our Fintech accelerator program."
+    },
+    {
+      "id": "check-page-2766b21a7e",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Networking sessions with our mentors and investors."
+    },
+    {
+      "id": "check-page-f41336ac95",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Intensive pitch practice, in preparation for Demo Day and fundraising."
+    },
+    {
+      "id": "check-page-c1529eec74",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Our mentors tailor the content to your businesses’ individual needs so you can develop specifically with your vertical in mind."
+    },
+    {
+      "id": "check-page-2df6e085b1",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Once you have completed the program we don’t stop working together… You will still benefit from the support and program aftercare of the Startup Wise Guys community channels, expert mentors and continue to achieve fundraising support for your future investment rounds."
+    },
+    {
+      "id": "check-page-9d30083e24",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "page": "details",
+      "excerpt": "This Fintech accelerator program is designed for teams who meet one or more of the requirements listed below."
+    },
+    {
+      "id": "check-page-f2c42912cd",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "page": "details",
+      "excerpt": "You are an early-stage B2B Fintech startup working in Fintech Insurtech Regtech You have a working MVP Your startup has at least 2 co-founders or team members You are building initial customer traction, MRR or revenues."
+    },
+    {
+      "id": "check-page-4c786433f8",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "page": "details",
+      "excerpt": "25+ Exits 370+ portfolio companies 700+ founders network 80% Survival rate Marvelous mentors Meet the great minds behind it all."
+    },
+    {
+      "id": "check-page-d083609f2b",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "page": "details",
+      "excerpt": "We have a network of over 200+ experienced mentors, industry experts and first rate founders who you will have the chance to learn and grow from."
+    },
+    {
+      "id": "check-page-10098f1b33",
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Our programs are meant for B2B startups."
+    },
+    {
+      "id": "check-page-3526a1582c",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Future Built Assets Accelerator Program - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home All programs Future Built Assets Accelerator Program Future Built Assets Accelerator Program Empowering Sustainable Innovation in Real Estate. Apply now As a real estate tech founder, we know you’re passionate about transforming the industry. That’s why our Future Built Assets Accelerator Program, based in Riyadh, Saudi Arabia, gives you access to an ever-growing network of founders, industry experts, and investors who share your vision. By joining our program, you’ll have the chance to build value-driven partnerships with people who understand how technology can address the major challenges facing real estate today, including Energy Transition, Labor Shortages, Productivity, Affordable Housing, and other friction points in the industry. We recognize that Proptech, can be complex. That’s why we offer personalized guidance to help you overcome the unique challenges of"
+    },
+    {
+      "id": "check-page-64b80dc007",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Our mentors and industry experts will support you in developing go-to-market strategies, navigating regulatory landscapes, and scaling your team."
+    },
+    {
+      "id": "check-page-0fdac7e94c",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "page": "details",
+      "excerpt": "As a participant in our Future Built Assets Accelerator Program, you’ll join a community of founders committed to reshaping the industry through innovative tech solutions."
+    },
+    {
+      "id": "check-page-cfceb966e8",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "page": "details",
+      "excerpt": "We’ll help you connect with the right partners and provide the tools and resources needed to take your real estate tech startup to the next level."
+    },
+    {
+      "id": "check-page-926ece3baf",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "page": "details",
+      "excerpt": "With Saudi Arabia’s real estate market rapidly expanding, there’s never been a better time for startups focused on efficiency, sustainability, and scalability."
+    },
+    {
+      "id": "check-page-24461cef1d",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Learn from the best You'll have the chance to learn top sales and product development tricks from industry experts, leaders and focused coaches in the Proptech."
+    },
+    {
+      "id": "check-page-90c0608018",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Meet the people Access a community +350 mentors, +200 investors and collaborate with 800+ fellow visionary founders growing in the same industry as you."
+    },
+    {
+      "id": "check-page-de9f97e91e",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Show less Show more A typical week in the Startup Wise Guys Future Built Assets accelerator program might look like… Well truth be told there’s no such thing as a typical week in our Future Built Assets accelerator program."
+    },
+    {
+      "id": "check-page-8f11d0d9dc",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Networking sessions with our mentors and investors."
+    },
+    {
+      "id": "check-page-348e4f55dd",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Intensive pitch practice, in preparation for Demo Day and fundraising."
+    },
+    {
+      "id": "check-page-c0dd6585f0",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Our mentors tailor the content to your businesses’ individual needs so you can develop specifically with your vertical in mind."
+    },
+    {
+      "id": "check-page-97cd5491ba",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "page": "details",
+      "excerpt": "It would be a great match if you are… The startup must meet the criteria below: Proptech SaaS (B2B or B2B2C, no B2C) startups with at least a working MVP ."
+    },
+    {
+      "id": "check-page-88f3646e92",
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "page": "details",
+      "excerpt": "Hardware will only be accepted if there is SaaS or Licensed material Science (consumables) bundled with it."
+    },
+    {
+      "id": "check-page-e1d26c4a0f",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "page": "details",
+      "excerpt": "SaaS Accelerator Program: Africa - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home All programs SaaS Accelerator Program: Africa SaaS Accelerator Program: Africa Level up your SaaS startup with our SaaS Acceleration Program in Africa and start an intense journey. Apply Now Startup Wise Guys SaaS acceleration Africa program will provide an optimized approach that delivers tailored guidance and support from world class mentors and experts. Our accelerator program will help you navigate the bumps in the company building road, revolutionize your go-to-market strategy and encourage you to bring your A game. We know you’re passionate about what you do and this program will provide you access to an constantly expanding network of like minded founders, practitioners and investors and encourage value driven partnerships with people who see the world just like you do! Key benefits Get funding Up to €100K investment for equity (70K cash + 30K program) with a"
+    },
+    {
+      "id": "check-page-40e4371371",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "page": "details",
+      "excerpt": "Make connections Get access to top notch industry experts joining a network of +600 founders, +350 mentors and +200 investors."
+    },
+    {
+      "id": "check-page-61761428b5",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "page": "details",
+      "excerpt": "Show less Show more Week 1-5 / Module 1 Setting KPI’s, Company Building, Get together, and Market Engineering Sprint Acceleration Program Starts: October 9th , 2023 The first module begins with an introduction to the program, including a first meeting with your lead coaches who will work alongside you and track your progress through the program."
+    },
+    {
+      "id": "check-page-3e24d68a84",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "page": "details",
+      "excerpt": "Like the Market Engineering Sprint, the Product Sprint is another highly rated part of the accelerator program."
+    },
+    {
+      "id": "check-page-bf9eae4b49",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "page": "details",
+      "excerpt": "Show less Show more Week 12-15 / Module 3 Sales, Marketing,Growth and Progress Day In addition to interactive and informative workshops focused on sales, modules 3 and 4 focus more on one-on-one mentorship by selected experts to address your individual needs."
+    },
+    {
+      "id": "check-page-e38bccc00e",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "page": "details",
+      "excerpt": "Each module startups have an opportunity to check in with their lead mentors to ensure they are progressing as planned."
+    },
+    {
+      "id": "check-page-986d7d103f",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "page": "details",
+      "excerpt": "Show less Show more Week 17-20 / Module 4 Fundraising, Investor Readiness and Graduation Day This includes VC presentations, investor panels, investor negotiations, and more one-on-one support."
+    },
+    {
+      "id": "check-page-e7953422f3",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "page": "details",
+      "excerpt": "Mentors Adia Sowho CMO MTN Nigeria, Tech Venture Builder and Operator LinkedIn Chika Nwobi CEO of Decagon and L5Lab LinkedIn Norah Koigi Deal Flow Facility FSD Uganda LinkedIn Seun Ojo Product and technical leader INSEAD MBA LinkedIn Zion Thompson Partner Startup Launchcode LinkedIn Team Running an accelerator is a bit like running a sports camp!"
+    },
+    {
+      "id": "check-page-c4ff136203",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "page": "details",
+      "excerpt": "Based in 🇪🇸 Cristobal Alonso General Partner LinkedIn Based in 🇦🇹 Franziska Kolk General Partner Africa LinkedIn Based in 🇦🇹 Petra Wolkenstein General Partner Africa LinkedIn Program partners & supporters Frequently Asked Questions (FAQ) What are the requirements the startup must comply with to participate in the program?"
+    },
+    {
+      "id": "check-page-9496fc7c26",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "page": "details",
+      "excerpt": "Our programs are meant for B2B startups."
+    },
+    {
+      "id": "check-page-b129f33f22",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "page": "details",
+      "excerpt": "We do sometimes work with B2B2C companies, but we do not work with B2C startups."
+    },
+    {
+      "id": "check-page-05dff2c546",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "page": "details",
+      "excerpt": "To be eligible for the full-time acceleration program you need to have: at least a working MVP; at least 2 co-founders/team members; initial customer traction, MRR or revenues; scaling potential across the African continent."
+    },
+    {
+      "id": "check-page-27905fdd36",
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "page": "details",
+      "excerpt": "TOP 10-12 teams are selected to participate in the acceleration program."
+    },
+    {
+      "id": "check-page-c3de3c10fe",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "page": "details",
+      "excerpt": "The Founders Club - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home All programs The Founders Club The Founders Club Turn your experience, idea, or early venture into a scalable B2B startup by strengthening your founding team, validating the right problem, building and testing your MVP, and developing a clear path to market, in a 3-month, fully online, paid program. Apply Now Who is Founders Club for? Founders Club is designed for experienced professionals and early-stage B2B founders who may be starting from different points: You want to become a founder You have strong professional experience and entrepreneurial ambition, but you are still exploring the right problem, idea or people to build with. You have an idea, but you are building alone You have identified an opportunity and want to validate it, strengthen the concept and find complementary people who could join the journey. → “I was seeking a program that fits founders at an early stage – I was"
+    },
+    {
+      "id": "check-page-51814a6f50",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "page": "details",
+      "excerpt": "You have an idea, but you are building alone You have identified an opportunity and want to validate it, strengthen the concept and find complementary people who could join the journey. → “I was seeking a program that fits founders at an early stage – I was still looking for a cofounder and we had only started building our solution."
+    },
+    {
+      "id": "check-page-48d54ad9a9",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "page": "details",
+      "excerpt": "Show less Show more It would be a great match if you are Founders Club is designed for experienced professionals and early-stage founders who want to build a scalable B2B tech company."
+    },
+    {
+      "id": "check-page-563974d23f",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "page": "details",
+      "excerpt": "We primarily work with scalable B2B technology ventures , particularly at pre-revenue or early-revenue stage."
+    },
+    {
+      "id": "check-page-48451a1de6",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "page": "details",
+      "excerpt": "Let’s crunch some numbers Startup Wise Guys (SWG) is one of the leading investors in the broader CEE and CIS regions, as well as Nordics."
+    },
+    {
+      "id": "check-page-d5a78ff111",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "page": "details",
+      "excerpt": "With 470+ startups in our portfolio and a strong team of top-notch mentors and serial entrepreneurs, we have the experience and knowledge to help you grow your startup — sustainably, wisely, and globally."
+    },
+    {
+      "id": "check-page-89b0c23fe0",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "page": "details",
+      "excerpt": "Founders Club is a 3-month online program for experienced professionals and early-stage B2B founders who want to build and validate a scalable technology startup."
+    },
+    {
+      "id": "check-page-c027569ed1",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "page": "details",
+      "excerpt": "Participants remain connected through the Founders Club alumni community , future cohort opportunities, and continued introductions to relevant Startup Wise Guys portfolio founders, mentors, experts, and ecosystem partners ."
+    },
+    {
+      "id": "check-page-7de461997b",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "page": "details",
+      "excerpt": "We primarily work with founders who want to build scalable B2B technology companies ."
+    },
+    {
+      "id": "check-page-c7533971b3",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "page": "details",
+      "excerpt": "You can be pre-revenue or at an early stage of commercial development."
+    },
+    {
+      "id": "check-page-89f13391e6",
+      "url": "https://startupwiseguys.com/building/",
+      "page": "details",
+      "excerpt": "Building - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home Building Building You might be more ready than you think you are… See all open programs Do you think you have the next big idea? Have you begun your startup journey but not sure what step to take next ? Are you missing a piece to your puzzle of business success? Well you are in the right place. Roll your sleeves up, we have work to do! Here at Startup Wise Guys we know just how exciting it is to be on the edge of something great. Our programs are here to help you find your team, offer you support and put you on the upwards track to a successful startup. Enroll in one of our pre-revenue programs, meet like minded people, or connect with other startups that will take your early stage ideas and make them MVP ready. Let’s raise the bar. What we can do to help your early stage startup. Find your people Looking for the missing piece of your puzzle? Meet potential co-founders and other like minded"
+    },
+    {
+      "id": "check-page-177a406c04",
+      "url": "https://startupwiseguys.com/building/",
+      "page": "details",
+      "excerpt": "Get you MVP ready Identify a viable business model and revenue streams with expertise from our mentors."
+    },
+    {
+      "id": "check-page-c77a732c83",
+      "url": "https://startupwiseguys.com/building/",
+      "page": "details",
+      "excerpt": "Grow your Network Tap into our diverse community of world class founders, experienced mentors and dependable backers."
+    },
+    {
+      "id": "check-page-e829681693",
+      "url": "https://startupwiseguys.com/building/",
+      "page": "details",
+      "excerpt": "Application deadline: February 19th, 2027 The Founders Club Find co-founders, refine ideas, develop an MVP, engage your first customers, and ensure your first funding in a 3-month online program designed to create a scalable B2B startup."
+    },
+    {
+      "id": "check-page-60d90ecaef",
+      "url": "https://startupwiseguys.com/building/",
+      "page": "details",
+      "excerpt": "Startup Wise Guys provides a platform that guides early-stage founders with the right market penetration."
+    },
+    {
+      "id": "check-page-f4d1871fa5",
+      "url": "https://startupwiseguys.com/building/",
+      "page": "details",
+      "excerpt": "Scaling For scaleups growing with necessity to expand their market."
+    },
+    {
+      "id": "check-page-b4563041c4",
+      "url": "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Fintech Pre-Revenue Program - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home Building Fintech Pre-Revenue Program Fintech Pre-Revenue Program The perfect training ground for early-stage startup founders that want to focus on Fintech. Apply Now This equity-free no strings attached program has been designed specifically for early-stage startup founders in mind. Our 8-week program will empower your startup and ensure that you have all the key components of your business in order. Getting a foot in the door can be hard, we know that better than anyone. Our mission is to nurture your talent and bring your company up to speed so that you can successfully apply for full-time accelerator programs or first-round investment. Key benefits Validate your idea Confirm your business idea, find the big why and improve your pitch deck prep. We have prepared pre-recorded content, templates and a live session for you to work your way through it with our help. Mentoring"
+    },
+    {
+      "id": "check-page-0bea603865",
+      "url": "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Mentoring Learn what it takes to build a successful business from leading industry experts who will mentor you have the chance to meet twice per program."
+    },
+    {
+      "id": "check-page-9ac16d6701",
+      "url": "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Meet the people Access a community +350 mentors, +200 investors and collaborate with 600+ fellow visionary founders from about 15-20 different countries growing in the same or similar industry as you."
+    },
+    {
+      "id": "check-page-0c7a07fcd1",
+      "url": "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Get onsite exposure As a well-deserved reward, you'll receive an exclusive invitation to spend 3 exciting days in Dublin."
+    },
+    {
+      "id": "check-page-fc6a291e17",
+      "url": "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Once you have completed the program we don’t stop working together… You will still benefit from the support and program aftercare of the Startup Wise Guys community channels, expert mentors and maybe you will be ready to take the next step and join one of our accelerator programs."
+    },
+    {
+      "id": "check-page-bde48beac8",
+      "url": "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "This pre accelerator program is designed for teams who meet one or more of the requirements listed below You have a working draft of your MVP Your startup has at least 2 co-founders or team members You are building your market research knowledge Marvelous mentors Meet the great minds behind it all."
+    },
+    {
+      "id": "check-page-29db25b81a",
+      "url": "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "We have a network of over 200+ experienced mentors, industry experts and first rate founders who you will have the chance to learn and grow from."
+    },
+    {
+      "id": "check-page-605783a987",
+      "url": "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Startup Wise Guys provides a platform that guides early-stage founders with the right market penetration."
+    },
+    {
+      "id": "check-page-c55dc87937",
+      "url": "https://startupwiseguys.com/building/pre-accelerator-program/",
+      "page": "details",
+      "excerpt": "Pre-accelerator Program - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home Building Pre-accelerator Program Pre-accelerator program This program is finished, but you can still make it to our Founders Club program. Go to Founders Club This equity-free no strings attached program has been designed specifically for early-stage startup founders in mind. Our 8-week program will empower your startup and ensure that you have all the key components of your business in order. Getting a foot in the door can be hard, we know that better than anyone. Our mission is to nurture your talent and bring your company up to speed so that you can successfully apply for full-time accelerator programs or first-round investment. Key benefits Validate your idea Confirm your business idea, find the big why and improve your pitch deck prep. We have prepared pre-recorded content, templates and a live session for you to work your way through it with our help. Mentoring Learn what it"
+    },
+    {
+      "id": "check-page-fd0dce7fb7",
+      "url": "https://startupwiseguys.com/building/pre-accelerator-program/",
+      "page": "details",
+      "excerpt": "Mentoring Learn what it takes to build a successful business from leading industry experts who will mentor you have the chance to meet twice per program."
+    },
+    {
+      "id": "check-page-6eb5b7ce18",
+      "url": "https://startupwiseguys.com/building/pre-accelerator-program/",
+      "page": "details",
+      "excerpt": "Meet the people Access a community +350 mentors, +200 investors and collaborate with 800+ fellow visionary founders from about 15-20 different countries growing in the same or similar industry as you."
+    },
+    {
+      "id": "check-page-5bee483ab2",
+      "url": "https://startupwiseguys.com/building/pre-accelerator-program/",
+      "page": "details",
+      "excerpt": "Once you have completed the program we don’t stop working together… You will still benefit from the support and program aftercare of the Startup Wise Guys community channels, expert mentors and maybe you will be ready to take the next step and join one of our accelerator programs."
+    },
+    {
+      "id": "check-page-8c031695e3",
+      "url": "https://startupwiseguys.com/building/pre-accelerator-program/",
+      "page": "details",
+      "excerpt": "This pre accelerator program is designed for teams who meet one or more of the requirements listed below You have a working draft of your MVP Your startup has at least 2 co-founders or team members You are building your market research knowledge Marvelous mentors Meet the great minds behind it all."
+    },
+    {
+      "id": "check-page-c565c2d286",
+      "url": "https://startupwiseguys.com/building/pre-accelerator-program/",
+      "page": "details",
+      "excerpt": "We have a network of over 200+ experienced mentors, industry experts and first rate founders who you will have the chance to learn and grow from."
+    },
+    {
+      "id": "check-page-b4467ef9fb",
+      "url": "https://startupwiseguys.com/building/pre-accelerator-program/",
+      "page": "details",
+      "excerpt": "Startup Wise Guys provides a platform that guides early-stage founders with the right market penetration."
+    },
+    {
+      "id": "check-page-44edc7c408",
+      "url": "https://startupwiseguys.com/building/sustainability-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Sustainability Pre-Revenue Program - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home Building Sustainability Pre-Revenue Program Sustainability Pre-Revenue Program Perfect Launching Ground for Sustainability Startups Innovating for a Greener Future Apply Now Crafted for early-stage sustainability startups, our 8-week program offers a no-strings-attached, equity-free approach to nurturing your green vision. It focuses on empowering your team, ensuring all critical elements of your sustainable business are thoroughly validated, in place, and geared up for success. We recognize the challenges in making a significant impact and gaining recognition in the sustainability sector. Our mission is to equip you with the essential skills and content necessary to grow your business, so you’re ready to join full-time accelerator programs or get your first round of funding. Key benefits Validate your idea Confirm your business idea, find the big why and improve your"
+    },
+    {
+      "id": "check-page-752e5aee85",
+      "url": "https://startupwiseguys.com/building/sustainability-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Get clear understanding where to get first traction and how to negotiate with your clients What development practices to implement to build resilient stable and scalable technical solution Mentoring Learn what it takes to build a successful business from leading industry experts who will mentor you and have the chance to meet twice per program."
+    },
+    {
+      "id": "check-page-e90dc3e326",
+      "url": "https://startupwiseguys.com/building/sustainability-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Meet the people Access a community of +350 mentors, +200 investors and collaborate with 600+ fellow visionary founders from about 15-20 different countries growing in the same or similar industry as you."
+    },
+    {
+      "id": "check-page-e3278bf99e",
+      "url": "https://startupwiseguys.com/building/sustainability-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Once you have completed the program we don’t stop working together… You will still benefit from the support and program aftercare of the Startup Wise Guys community channels, expert mentors and maybe you will be ready to take the next step and join one of our accelerator programs."
+    },
+    {
+      "id": "check-page-362658c82c",
+      "url": "https://startupwiseguys.com/building/sustainability-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Our extensive network includes more than 200 skilled mentors, seasoned industry professionals, and top-tier founders, offering you invaluable opportunities for learning and development."
+    },
+    {
+      "id": "check-page-8261a86214",
+      "url": "https://startupwiseguys.com/building/sustainability-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Startup Wise Guys provides a platform that guides early-stage founders with the right market penetration."
+    },
+    {
+      "id": "check-page-5d205ddf3f",
+      "url": "https://startupwiseguys.com/building/xr-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Extended Reality Pre-Revenue Program - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home Building Extended Reality Pre-Revenue Program Extended Reality Pre-Revenue Program Ultimate launchpad for early-stage startups eager to innovate in the realm of Extended Reality Apply Now Designed for early-stage startups, our 8-week program offers a no-strings-attached, equity-free approach to reaching your goals. It aims to empower your startup team, ensuring all key aspects of your business are properly validated, set up and ready to go. We understand how challenging it can be to make your impact and be recognized in the XR industry. Our aim is to equip you with the essential skills and content necessary to grow your next business, so you’re ready to join full-time accelerator programs or get your first round of funding. Key benefits Validate your idea Confirm your best business ideas, find your answers to the big “why?” and improve your pitch deck. We have prepared"
+    },
+    {
+      "id": "check-page-1b09cd505b",
+      "url": "https://startupwiseguys.com/building/xr-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Mentoring Learn what it takes to build a successful business from leading industry experts who will mentor you and have the chance to meet twice per program."
+    },
+    {
+      "id": "check-page-980b26eb8f",
+      "url": "https://startupwiseguys.com/building/xr-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Meet the people Access a community of +350 mentors, +200 investors and collaborate with 600+ fellow visionary founders from nearly 20 countries growing their businesses in XR industry."
+    },
+    {
+      "id": "check-page-5e07f9e684",
+      "url": "https://startupwiseguys.com/building/xr-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Once you have completed the program we don’t stop working together… You will still benefit from the support and program aftercare of the Startup Wise Guys community channels, expert mentors and maybe you will be ready to take the next step and join one of our accelerator programs."
+    },
+    {
+      "id": "check-page-cb2b21b4c0",
+      "url": "https://startupwiseguys.com/building/xr-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "This pre accelerator program is designed for teams who meet one or more of the requirements listed below You have a working draft of your MVP Your startup has at least 2 co-founders or team members You are building your market research knowledge Marvelous mentors Meet the great minds behind it all."
+    },
+    {
+      "id": "check-page-9bf5758496",
+      "url": "https://startupwiseguys.com/building/xr-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "We have a network of over 200+ experienced mentors, industry experts and first rate founders who you will have the chance to learn and grow from."
+    },
+    {
+      "id": "check-page-a5b1086a47",
+      "url": "https://startupwiseguys.com/building/xr-pre-revenue-program/",
+      "page": "details",
+      "excerpt": "Startup Wise Guys provides a platform that guides early-stage founders with the right market penetration."
+    },
+    {
+      "id": "check-page-682a1fc8f1",
+      "url": "https://startupwiseguys.com/growing/",
+      "page": "details",
+      "excerpt": "Growing - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home Growing Growing Acceleration programs for early stage startups with limited traction. Check programs See all open programs Ready to revolutionize your game? Elevate your startup and join one of our acceleration programs today. Is your team MVP ready and looking for the next step ? Is it sales facilitation that you are in need of? Or maybe you are seeking pre-seed investment for your startup? Well look no further and make it happen today. Enroll in one of our acceleration programs. Meet your cohort of 10-15 likeminded startups and find out how our vertical specific accelerators will turn your dreams into a reality. Take your startup and run with it … Fundraising Secure significant investments that convert your big ideas into big profit. With follow-on possibility as a founder. In addition, benefit from our purpose built fundraising solutions. Go to market Get off the ground with our data-driven"
+    },
+    {
+      "id": "check-page-7b9034b02c",
+      "url": "https://startupwiseguys.com/growing/",
+      "page": "details",
+      "excerpt": "Grow your network Tap into our diverse community of world class founders, experienced mentors and dependable backers."
+    },
+    {
+      "id": "check-page-254d1c42f6",
+      "url": "https://startupwiseguys.com/growing/",
+      "page": "details",
+      "excerpt": "Product market fit Power your engine with our one-on-one mentorship schemes that address your building company’s market and its unique needs."
+    },
+    {
+      "id": "check-page-1dc3b025c5",
+      "url": "https://startupwiseguys.com/growing/",
+      "page": "details",
+      "excerpt": "Get the ball rolling with our acceleration programs Flagship Accelerator Level up your startup with our signature Flagship Acceleration and start an intense journey."
+    },
+    {
+      "id": "check-page-9a768f0d2b",
+      "url": "https://startupwiseguys.com/growing/",
+      "page": "details",
+      "excerpt": "Get investment, mentorship from industry experts, and refine your product-market fit."
+    },
+    {
+      "id": "check-page-c42a9a3b81",
+      "url": "https://startupwiseguys.com/growing/",
+      "page": "details",
+      "excerpt": "It matters with the content, Startup Wise Guys has boosted our company like the NITRO in a super fast car.\" Octopus Cybersecurity \"Startup Wise Guys accelerator is a real opportunity to expand startups in Europe."
+    },
+    {
+      "id": "check-page-8d02b4b724",
+      "url": "https://startupwiseguys.com/growing/",
+      "page": "details",
+      "excerpt": "I will continue to recommend Startup Wise Guys as the best startup accelerator in Europe for all founders that I will meet.\" VOLEE \"If anything, I would never tag a price on the connections and network I gained from Startup Wise Guys."
+    },
+    {
+      "id": "check-page-2a24a17b79",
+      "url": "https://startupwiseguys.com/growing/",
+      "page": "details",
+      "excerpt": "Scaling For scaleups growing with necessity to expand their market."
+    },
+    {
+      "id": "check-page-2155e4e686",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "page": "details",
+      "excerpt": "Flagship Accelerator - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home Growing Flagship Accelerator Flagship Accelerator Program Elevate your startup to the next level, transform your business and discover your potential. Apply now Startup Wise Guys acceleration program will provide an optimized approach that delivers tailored guidance and support from world class mentors and experts. Our accelerator program will help you navigate the bumps in the company building road, revolutionize your go-to-market strategy and encourage you to bring your A game. We know you’re passionate about what you do and this program will provide you access to an constantly expanding network of like minded founders, practitioners and investors and encourage value driven partnerships with people who see the world just like you do! Get funding Receive a convertible investment up to €100,000 (with a program cost of €35,000) and an additional €250,000 as a follow-on opportunity."
+    },
+    {
+      "id": "check-page-1dd6524381",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "page": "details",
+      "excerpt": "Learn from the best Learn top sales and product development tricks from leading mentors and experts."
+    },
+    {
+      "id": "check-page-d7a38075e2",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "page": "details",
+      "excerpt": "Meet the people Access a community +350 mentors, +200 investors and collaborate with 600+ fellow visionary founders growing in the same industry as you."
+    },
+    {
+      "id": "check-page-8537810bd4",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "page": "details",
+      "excerpt": "Show less Show more A typical week in the Startup Wise Guys accelerator program might look like… Well truth be told there’s no such thing as a typical week in our accelerator program."
+    },
+    {
+      "id": "check-page-7b1f234a20",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "page": "details",
+      "excerpt": "Networking events Meet with mentors, investors, and other founders to broaden your support network and access fresh insights."
+    },
+    {
+      "id": "check-page-0db73828af",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "page": "details",
+      "excerpt": "Intensive pitch practice In preparation for Demo Day and fundraising, designed to help you communicate your vision effectively to investors during Demo Day and all future opportunities."
+    },
+    {
+      "id": "check-page-e76f11dc23",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "page": "details",
+      "excerpt": "Top mentoring Every batch and experience is different."
+    },
+    {
+      "id": "check-page-b12b6ae526",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "page": "details",
+      "excerpt": "Our mentors tailor the content to your businesses’ individual needs so you can develop specifically with your vertical in mind."
+    },
+    {
+      "id": "check-page-4f08b581a2",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "page": "details",
+      "excerpt": "Continue to tap into the support, mentorship, and community resources of Startup Wise Guys as you pursue your next rounds of funding and further development."
+    },
+    {
+      "id": "check-page-9d77568567",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "page": "details",
+      "excerpt": "This accelerator program is designed for teams who meet one or more of the requirements listed below."
+    },
+    {
+      "id": "check-page-7aa2ed18d5",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "page": "details",
+      "excerpt": "This booming region in northern Spain is the perfect place to grow your business."
+    },
+    {
+      "id": "check-page-cca958ef02",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "page": "details",
+      "excerpt": "There is the potential to secure governmental non-refundable grants of up to 125K€ in the first year of your operation and when your business takes off (we know it will), there is possibility of receiving additional sums of up to 160K directed at startups in the later stages of R&D projects and opening up of international markets."
+    },
+    {
+      "id": "check-page-804a13dcca",
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "page": "details",
+      "excerpt": "Our programs are meant for B2B startups."
+    },
+    {
+      "id": "check-page-170852d6cc",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "page": "details",
+      "excerpt": "Proptech Accelerator Program: Waitlist - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home Growing Proptech Accelerator Program: Waitlist Proptech Accelerator Program: Waitlist Transform and elevate your Proptech startup and discover its true potential. Join the waitlist now As a proptech founder, we know you’re passionate about revolutionizing the real estate industry. That’s why our Proptech Accelerator Program provides access to a constantly expanding network of like-minded founders, practitioners, and investors who share your vision. By joining our program, you’ll have the opportunity to form value-driven partnerships with people who understand the importance of leveraging technology to address the main challenges of the real estate industry like: Energy Transition, Labor Shortage & Productivity, Affordable Housing, and any friction in the Real Estate Industry. We understand that proptech is a complex industry, which is why we offer personalized support"
+    },
+    {
+      "id": "check-page-139257013c",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "page": "details",
+      "excerpt": "We understand that proptech is a complex industry, which is why we offer personalized support to help you navigate the unique challenges of your business."
+    },
+    {
+      "id": "check-page-1aec2d342a",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "page": "details",
+      "excerpt": "We’ll help you connect with the right people to drive your proptech startup forward, and provide you with the tools and resources you need to succeed."
+    },
+    {
+      "id": "check-page-f6cae97c05",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "page": "details",
+      "excerpt": "Learn from the best You'll have the chance to learn top sales and product development tricks from industry experts, leaders and focused coaches in the Proptech, Construction Tech, Infrastructure Tech, Real Estate Tech."
+    },
+    {
+      "id": "check-page-bc9d56652e",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "page": "details",
+      "excerpt": "Meet the people Access a community +350 mentors, +200 investors and collaborate with 600+ fellow visionary founders growing in the same industry as you."
+    },
+    {
+      "id": "check-page-d022286578",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "page": "details",
+      "excerpt": "Show less Show more A typical week in the Startup Wise Guys Proptech accelerator program might look like… Well truth be told there’s no such thing as a typical week in our Proptech accelerator program."
+    },
+    {
+      "id": "check-page-8fae9f2c40",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "page": "details",
+      "excerpt": "Networking sessions with our mentors and investors."
+    },
+    {
+      "id": "check-page-5991bcd4b5",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "page": "details",
+      "excerpt": "Intensive pitch practice, in preparation for Demo Day and fundraising."
+    },
+    {
+      "id": "check-page-a2890dd6a8",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "page": "details",
+      "excerpt": "Our mentors tailor the content to your businesses’ individual needs so you can develop specifically with your vertical in mind."
+    },
+    {
+      "id": "check-page-e8645f347d",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "page": "details",
+      "excerpt": "Once you have completed the program we don’t stop working together… You will still benefit from the support and program aftercare of the Startup Wise Guys community channels, expert mentors and continue to achieve fundraising support for your future investment rounds."
+    },
+    {
+      "id": "check-page-15a61d3591",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "page": "details",
+      "excerpt": "This program is designed for early-stage Proptech startups that meet one or more of the following criteria: A proptech founder with big ambitions and a long-term vision for your business."
+    },
+    {
+      "id": "check-page-04a8c6f131",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "page": "details",
+      "excerpt": "13 Exits 370+ portfolio companies 700+ founders network 80% Survival rate Marvelous mentors Meet the great minds behind it all."
+    },
+    {
+      "id": "check-page-467824e458",
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "page": "details",
+      "excerpt": "We have a network of over 200+ experienced mentors, industry experts and first rate founders who you will have the chance to learn and grow from."
+    },
+    {
+      "id": "check-page-a814bad54c",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "page": "details",
+      "excerpt": "Sustainability Accelerator Program - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home Growing Sustainability Accelerator Program Sustainability Accelerator Program Empower a Green Future: Elevate Your Startup with Our Sustainability Acceleration Program. Join the waitlist now Are you someone who’s got a passion for tackling climate change and building a greener future? We totally get your drive to make a real impact. Welcome to our Climate Change Warriors Program – custom-made for creative minds determined to reshape the planet’s future. Dive headfirst into an exciting community of eco-conscious trailblazers, experienced experts, and forward-thinking investors, all teaming up to supercharge the essential changes we need to fight climate change. Our program opens the door to a dynamic crew of sustainability enthusiasts, wise mentors, and change-driven investors, all on a mission to speed up the crucial shifts required to take on climate change. As a member,"
+    },
+    {
+      "id": "check-page-5dba96efc6",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "page": "details",
+      "excerpt": "As a member, you’ll tap into a vast network of folks who are all about making a difference in key sustainability areas and taking on climate change head-on."
+    },
+    {
+      "id": "check-page-ddaea78493",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "page": "details",
+      "excerpt": "Our focus is primarily on startups from the Nordics and Eastern Europe offering B2B software or services that capture, store, or reduce CO2 emissions."
+    },
+    {
+      "id": "check-page-5f3f75829e",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "page": "details",
+      "excerpt": "Learn from the best Learn top sales and product development tricks from leading Sustainability mentors and experts."
+    },
+    {
+      "id": "check-page-eb88a33057",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "page": "details",
+      "excerpt": "Meet the people Access a community +350 mentors, +200 investors and collaborate with 800+ fellow visionary founders growing in the same industry as you."
+    },
+    {
+      "id": "check-page-adfaa5b28c",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "page": "details",
+      "excerpt": "Show less Show more A typical week in the Startup Wise Guys Sustainability acceleration program might look like… Well truth be told there’s no such thing as a typical week in our Sustainability accelerator program."
+    },
+    {
+      "id": "check-page-a2a3d1dc90",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "page": "details",
+      "excerpt": "Networking sessions with our mentors and investors."
+    },
+    {
+      "id": "check-page-a23ea9c277",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "page": "details",
+      "excerpt": "Intensive pitch practice, in preparation for Demo Day and fundraising."
+    },
+    {
+      "id": "check-page-c4a4d4513e",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "page": "details",
+      "excerpt": "Our mentors tailor the content to your businesses’ individual needs so you can develop specifically with your vertical in mind."
+    },
+    {
+      "id": "check-page-368fb20694",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "page": "details",
+      "excerpt": "Once you have completed the program we don’t stop working together… You will still benefit from the support and program aftercare of the Startup Wise Guys community channels, expert mentors and continue to achieve fundraising support for your future investment rounds."
+    },
+    {
+      "id": "check-page-18c4a8293c",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "page": "details",
+      "excerpt": "This Sustainability accelerator program is designed for teams who meet one or more of the requirements listed below."
+    },
+    {
+      "id": "check-page-3462636828",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "page": "details",
+      "excerpt": "You are an early-stage B2B Sustainability startup working in Climate-smart agriculture Regenerative agriculture Circular economy Circular waste management Sustainable land management You have a working MVP Your startup has at least 2 co-founders or team members You are building initial customer traction, MRR or revenues."
+    },
+    {
+      "id": "check-page-28aa2bf8e0",
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "page": "details",
+      "excerpt": "25+ Exits 440+ portfolio companies 800+ founders network 70% Survival rate Marvelous mentors Meet the great minds behind it all."
+    },
+    {
+      "id": "check-page-206d14b3f9",
+      "url": "https://startupwiseguys.com/scaling/",
+      "page": "details",
+      "excerpt": "Scaling - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home Scaling Scaling Step on the gas and gain momentum with our scaling programs. Raise your next round and transform your startup into an internationally scalable business. See all open programs Our tailor made programs will push you to realize your visions and execute your long-term strategic plan. Gain access to the expertise that will generate new investments and markets to bring the best out of your business. Unlock your business’s potential and see where our scale up programs can take you… Fly to the moon Fundraising Secure significant investments that convert your big ideas into big profit and begin your sustainable development. Tailored support Get off the ground with our data-driven vertical strategies. We understand the specific needs of startups scaling up. Exposure Transform your business and enjoy the spotlight with our international engagements in growth-driven businesses. Grow your"
+    },
+    {
+      "id": "check-page-b796bad9b2",
+      "url": "https://startupwiseguys.com/scaling/",
+      "page": "details",
+      "excerpt": "Grow your network Tap into our diverse community of world class founders, experienced mentors and dependable backers."
+    },
+    {
+      "id": "check-page-b213357fcd",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "page": "details",
+      "excerpt": "Growth Program: Ukraine - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home Scaling Growth Program: Ukraine Growth Program: Ukraine Unlock the exponential growth of your scale-up Apply Now Startup Wise Guys Growth Ukraine is a four-month acceleration initiative exclusively tailored for 12 ambitious Ukrainian scale-ups, offering unparalleled mentorship, tailored guidance, and fundraising support to amplify their business footprints in Europe and globally. The program, runs in cooperation with EBRD and is supported by Taiwan Business-EBRD Technical Cooperation Fund as a donor. We recognize the fiery passion of Ukrainian entrepreneurs, who are eager to put their nation on the global business map. That’s the driving force behind our program – to connect you with a continuously growing community of visionaries, market leaders, and investors who resonate with your ambition. Our growth program empowers startups with intensive 1:1 support, tailored scaling"
+    },
+    {
+      "id": "check-page-13ce185758",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "page": "details",
+      "excerpt": "Our growth program empowers startups with intensive 1:1 support, tailored scaling strategies, and European exposure."
+    },
+    {
+      "id": "check-page-36def500e1",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "page": "details",
+      "excerpt": "Tune-up your sales and fundraising strategy Through work with the program's Managing Director and the fund's General Partners, you will learn hands-on ways to scale your sales strategy, prepare for expansion in European markets, and develop your fundraising strategy."
+    },
+    {
+      "id": "check-page-36d3e6b0d4",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "page": "details",
+      "excerpt": "Expand your network The program will have various matchmaking and networking opportunities with investors and corporates, both online and onsite at the graduation event held in Vilnius, Lithuania."
+    },
+    {
+      "id": "check-page-cf77497abe",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "page": "details",
+      "excerpt": "In terms of startup support, a lot of focus was aimed at military tech, many founders joined the country’s defense forces or dived deep into voluntary work supporting others."
+    },
+    {
+      "id": "check-page-c7a4f38fc2",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "page": "details",
+      "excerpt": "We see an opportunity to help them break that glass ceiling by running a targeted accelerator program aimed at reducing these obstacles."
+    },
+    {
+      "id": "check-page-52d9f093c1",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "page": "details",
+      "excerpt": "It would be a great match if you are… Ukrainian-rooted, forward-thinking, and ready to tap into European markets."
+    },
+    {
+      "id": "check-page-c17872dd7e",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "page": "details",
+      "excerpt": "This accelerator program is tailored for startups that align with one or more of the specifications below: At least one of startup founders has a Ukrainian passport."
+    },
+    {
+      "id": "check-page-60117c8641",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "page": "details",
+      "excerpt": "You’re a B2B SaaS startup in various verticals scaling up."
+    },
+    {
+      "id": "check-page-85aad4fb58",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "page": "details",
+      "excerpt": "Secured at least pre-seed level funding."
+    },
+    {
+      "id": "check-page-5ce7c5d331",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "page": "details",
+      "excerpt": "14 Exits 370+ portfolio companies 700+ founders network 80% Survival rate Marvelous mentors Learn from the best practitioners out there in intensive 1:1 tailored sessions."
+    },
+    {
+      "id": "check-page-5cb7da2b70",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "page": "details",
+      "excerpt": "Our mentors will help you fill the gaps and boost your expertise to ensure the company's growth."
+    },
+    {
+      "id": "check-page-edf447ad7a",
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "page": "details",
+      "excerpt": "Asta Vasiliauskaite Coach CityBee LinkedIn Douglas Wong Mentor & Investor Augmented Robotics LinkedIn Johan Lorenzen Former CEO Holvi (exited to BBVA) LinkedIn Mike Evans Pitch Coach Captivate Coaching LinkedIn Simoneta Vargová Founder & Leadership Development & Team Coach Parallel Connections LinkedIn Program partners Frequently Asked Questions (FAQ) What should I expect from the program?"
     }
   ],
   "findings": {
@@ -808,8 +2314,12 @@
     "phones": [],
     "routes": [
       {
-        "value": "https://airtable.com/app21MYqwW64bMEYJ/pagSnYigPrCWXvgT8/form",
-        "evidenceId": "check-route-45816255f6"
+        "value": "https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
+        "evidenceId": "check-route-3ae6ae4eb9"
+      },
+      {
+        "value": "https://startupwiseguys.com/apply/",
+        "evidenceId": "check-route-ffb6b6e420"
       }
     ],
     "applicationUrl": [
@@ -821,21 +2331,26 @@
     "applicationsOpen": [
       {
         "value": true,
-        "evidenceId": "check-status-9696934fc7"
+        "evidenceId": "check-status-78ff387148"
       }
     ],
     "operatingStatus": [],
-    "deadlines": [],
+    "deadlines": [
+      {
+        "value": "2027-02-19",
+        "evidenceId": "check-deadline-c60e27caaa"
+      }
+    ],
     "rolling": [
       {
         "value": true,
-        "evidenceId": "check-rolling-a2bffe5059"
+        "evidenceId": "check-rolling-c8bd1d890e"
       }
     ],
     "announcedIntake": [
       {
-        "value": "May",
-        "evidenceId": "check-announced-3495adbe7d"
+        "value": "February",
+        "evidenceId": "check-announced-46b1e59935"
       }
     ],
     "cohortStarts": [],
@@ -849,10 +2364,6 @@
         "evidenceId": "check-duration-71fff0ca0c"
       },
       {
-        "value": "8",
-        "evidenceId": "check-duration-363e30eae6"
-      },
-      {
         "value": "14",
         "evidenceId": "check-duration-78cc756899"
       },
@@ -861,28 +2372,32 @@
         "evidenceId": "check-duration-83d04b7917"
       },
       {
-        "value": "12 months",
-        "evidenceId": "check-duration-48cdf8febf"
+        "value": "4 months",
+        "evidenceId": "check-duration-3ad0f3ec4d"
+      },
+      {
+        "value": "2",
+        "evidenceId": "check-duration-3073fce852"
       }
     ],
     "format": [
       {
         "value": "hybrid",
-        "evidenceId": "check-format-4bd5ff097a"
-      },
-      {
-        "value": "in-person",
-        "evidenceId": "check-format-4e90b0c3a0"
+        "evidenceId": "check-format-301ee68ab2"
       },
       {
         "value": "remote",
-        "evidenceId": "check-format-a56e031ea2"
+        "evidenceId": "check-format-1a64dafdd8"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-1a8594bf96"
       }
     ],
     "location": [
       {
-        "value": "Berlin",
-        "evidenceId": "check-location-a169ef2f88"
+        "value": "Riyadh",
+        "evidenceId": "check-location-219acef1ae"
       }
     ],
     "selectivity": [],
@@ -900,12 +2415,16 @@
         "evidenceId": "check-deal-937dda02b2"
       },
       {
-        "value": "where non incorporated idea stage startups can compete for up to 25K eur financial support per startup, along with 8 weeks online",
-        "evidenceId": "check-deal-f9ba516a8e"
-      },
-      {
         "value": "startups joining the Accelerator Programs, we initially invest up to €100,000 in exchange for a negotiated equity in your company. The exact terms",
         "evidenceId": "check-deal-624937a82c"
+      },
+      {
+        "value": "people who see the world just like you do! Get funding Get up to €150K convertible investment (120K cash + 30K program) with a €250K",
+        "evidenceId": "check-deal-d78028afd3"
+      },
+      {
+        "value": "up to €150K convertible investment (120K cash + 30K program) with a €250K follow-on possibility. Learn from the best Learn top sales and",
+        "evidenceId": "check-deal-ee9e654ab3"
       }
     ],
     "dealComponents": [
@@ -947,18 +2466,6 @@
       },
       {
         "value": {
-          "kind": "cash",
-          "amount": "25000",
-          "currency": "EUR",
-          "equity": null,
-          "label": "Cash",
-          "contingent": true,
-          "condition": "up to"
-        },
-        "evidenceId": "check-deal-f9ba516a8e"
-      },
-      {
-        "value": {
           "kind": "equity",
           "amount": "100000",
           "currency": "EUR",
@@ -968,6 +2475,30 @@
           "condition": "up to"
         },
         "evidenceId": "check-deal-624937a82c"
+      },
+      {
+        "value": {
+          "kind": "convertible",
+          "amount": "150000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Convertible note",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-d78028afd3"
+      },
+      {
+        "value": {
+          "kind": "convertible",
+          "amount": "250000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Convertible note",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-ee9e654ab3"
       }
     ],
     "portfolioPages": [

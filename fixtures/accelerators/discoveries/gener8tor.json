@@ -1,12 +1,12 @@
 {
   "programId": "gener8tor",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.gener8tor.com/about-us",
       "page": "details",
       "anchor": "ABOUT US",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -14,7 +14,7 @@
       "url": "https://www.gener8tor.com/accelerators",
       "page": "details",
       "anchor": "Folder: Accelerators",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -27,10 +27,18 @@
       "origin": "official"
     },
     {
+      "url": "https://www.gener8tor.com/bronze-valley-accelerator",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.gener8tor.com/corporate-innovation",
       "page": "details",
       "anchor": "Corporate innovation Corporations Innovation Support: Engaging with startups while developing corporate venture capital or corporate innovation practices. Explore programs →",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -38,7 +46,7 @@
       "url": "https://www.gener8tor.com/creatives",
       "page": "details",
       "anchor": "Creative Accelerators",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -54,13 +62,29 @@
       "url": "https://www.gener8tor.com/free-accelerators",
       "page": "details",
       "anchor": "Free Accelerators",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/gbeta/acie-healthtech-accelerator",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://www.gener8tor.com/gener8tor-accelerators-application-thank-you",
       "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/invesment-accelerators/us-venture-accelerator",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -78,60 +102,124 @@
       "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
       "page": "terms",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.gener8tor.com/investment-accelerators/cincinnati/thank-you",
       "page": "terms",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.gener8tor.com/investment-accelerators/curql",
       "page": "terms",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
       "page": "terms",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
       "page": "terms",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.gener8tor.com/investment-accelerators/las-vegas/thank-you",
       "page": "terms",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
       "page": "terms",
       "anchor": "",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://www.gener8tor.com/investment-accelerators/m-spire",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/north-dakota",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/northwestern-mutual-accelerator",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/oklahoma-city",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/pinnacle-atlanta-innovation",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/prosper-healthtech",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/reno-tahoe",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/reno-tahoe/thank-you",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/thank-you",
       "page": "terms",
       "anchor": "",
       "fetched": true,
@@ -139,8 +227,24 @@
       "origin": "official"
     },
     {
-      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
-      "page": "application",
+      "url": "https://www.gener8tor.com/investment-accelerators/uw-green-bay",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/wisconsin",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/northern-michigan-bluetech-accelerator",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -189,6 +293,22 @@
     {
       "url": "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
       "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/startups",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/statistics",
+      "page": "other",
       "anchor": "",
       "fetched": true,
       "blocked": null,

@@ -1,17 +1,350 @@
 {
   "programId": "north-texas-enterprise-center-for-technology-ntec",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.ntec-inc.org",
-    "https://www.ntec-inc.org/about-ntec/frisco-accelerator-mission/"
+    "https://www.ntec-inc.org/about-ntec/business-accelerator-team/",
+    "https://www.ntec-inc.org/about-ntec/frisco-accelerator-mission/",
+    "https://www.ntec-inc.org/about-ntec/frisco-business-center/",
+    "https://www.ntec-inc.org/about-ntec/startup-accelerator-board-of-directors/",
+    "https://www.ntec-inc.org/startup-accelerator/business-partners/",
+    "https://www.ntec-inc.org/startup-accelerator/program-cost/",
+    "https://www.ntec-inc.org/startup-accelerator/program-information/",
+    "https://www.ntec-inc.org/startup-accelerator/startup-advisors/",
+    "https://www.ntec-inc.org/startup-accelerator/program-companies/",
+    "https://www.ntec-inc.org/category/startup-accelerator/"
   ],
   "evidence": [
     {
+      "id": "check-duration-a7c1571146",
+      "url": "https://www.ntec-inc.org/startup-accelerator/program-companies/",
+      "title": "North Texas Enterprise Center for Technology (NTEC) — portfolio page",
+      "excerpt": "several levels of education spanning from its 12-week fully immersive code bootcamps that are highly",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-1d19c85e6d",
+      "url": "https://www.ntec-inc.org/startup-accelerator/program-cost/",
+      "title": "North Texas Enterprise Center for Technology (NTEC) — program page",
+      "excerpt": "at the Center, as well as limited meeting room privileges. Virtual membership rate is $250 per month. *medical and technology",
+      "page": "details"
+    },
+    {
+      "id": "check-format-9beb012ea6",
+      "url": "https://www.ntec-inc.org/startup-accelerator/program-cost/",
+      "title": "North Texas Enterprise Center for Technology (NTEC) — program page",
+      "excerpt": "24/7 Video surveillance Ample parking Janitorial service Virtual Memberships For those who don’t require the breadth of the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-bd124a0b64",
+      "url": "https://www.ntec-inc.org/startup-accelerator/program-cost/",
+      "title": "North Texas Enterprise Center for Technology (NTEC) — program page",
+      "excerpt": "the Accelerator Membership, we offer select organizations virtual memberships, which includes a business mailing address and",
+      "page": "details"
+    },
+    {
       "id": "check-route-8c95e6a55d",
       "url": "https://www.ntec-inc.org",
-      "title": "North Texas Enterprise Center for Technology (NTEC) — homepage checked by scrape.py",
+      "title": "North Texas Enterprise Center for Technology (NTEC) — homepage",
       "excerpt": "NTEC | North Texas Enterprise Center → https://www.ntec-inc.org",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-7b7d5824c6",
+      "url": "https://www.ntec-inc.org",
+      "page": "details",
+      "excerpt": "Farther. Faster. Closer. - NTEC | North Texas Enterprise Center Effective March 1, 2017 Launch Pad City will assume management of Frisco's entrepreneurship center. Read More NTEC | North Texas Enterprise Center About Mission Facility Team Board of Directors Pharmacy Happy Family Store Pharmacy Mall Accelerator Program Member Advisors Partners Cost News/Press In the Loop NTEC in the News Contact Us Sitemap Farther. Faster. Closer. The North Texas Enterprise Center (NTEC) provides promising startups from Frisco, Plano, McKinney, Allen and surrounding communities with the resources they need to succeed – minus the commute. learn how The Center Explore NTEC's premium amenities, enterprise-grade infrastructure and collaboration-friendly environment. explore the space The Companies Learn about the diverse community of member companies that are innovating and collaborating at NTEC. meet the companies The Latest There's always something going on at NTEC - get the latest news about NTEC and our member companies at IN THE LOOP. get the scoop Latest News How Not to Lose Your Business During Crisis Unfortunately, the year 2020 did not pass without leaving a trace for small businesses. Yes, the state tried to support […] Read more NTEC Startup Advisors Providing vital guidance and support share with Our distinguished startup advisors work with NTEC leadership and member companies to assess"
+    },
+    {
+      "id": "check-page-5c35764dbf",
+      "url": "https://www.ntec-inc.org",
+      "page": "details",
+      "excerpt": "As one of the largest business accelerators in Texas, NTEC offers promising ventures access to expert guidance, enterprise-class infrastructure and a vast professional network. member, nbia NTEC is a member of the National Business Incubation Association (NBIA) - the world’s leading organization advancing business incubation and entrepreneurship. location NTEC, Inc."
+    },
+    {
+      "id": "check-page-d839cfbab7",
+      "url": "https://www.ntec-inc.org/about-ntec/business-accelerator-team/",
+      "page": "details",
+      "excerpt": "The NTEC Team - NTEC | North Texas Enterprise Center Effective March 1, 2017 Launch Pad City will assume management of Frisco's entrepreneurship center. Read More NTEC | North Texas Enterprise Center About Mission Facility Team Board of Directors Pharmacy Happy Family Store Pharmacy Mall Accelerator Program Member Advisors Partners Cost News/Press In the Loop NTEC in the News Contact Us Sitemap The NTEC Team Supporting, advising and promoting NTEC’s entrepreneurs share with NTEC’s talented team of full-time management and support staff works together and with the Board of Directors , advisors and partners to plan, coordinate and execute structured programs and events as well as providing ad-hoc support to our entrepreneurs and managing The Center ‘s day-to-day operations. Jonathan Lewis Executive Director Jonathan Lewis As Executive Director, Jonathan Lewis leads NTEC’s full-time staff and works with the Board of Directors, city leaders and others to achieve The Center’s mission of expanding and diversifying Frisco’s economic base by helping high-potential startups grow into significant contributors to the city’s business community. In the past twenty years, Lewis has led three companies from inception/early-stage; each achieving $100M to well over $1B in revenues. His industry operating experience is broad-based and includes technology, renewable energy, global manufacturing"
+    },
+    {
+      "id": "check-page-d82544d7c3",
+      "url": "https://www.ntec-inc.org/about-ntec/business-accelerator-team/",
+      "page": "details",
+      "excerpt": "His industry operating experience is broad-based and includes technology, renewable energy, global manufacturing and related services, and facilities management."
+    },
+    {
+      "id": "check-page-b9424e9320",
+      "url": "https://www.ntec-inc.org/about-ntec/business-accelerator-team/",
+      "page": "details",
+      "excerpt": "Jonathan has structured and led financing transactions in the public markets, venture capital, and private equity for companies at nearly all stages of development."
+    },
+    {
+      "id": "check-page-54eafdf401",
+      "url": "https://www.ntec-inc.org/about-ntec/business-accelerator-team/",
+      "page": "details",
+      "excerpt": "He served as CEO of YLG Holdings, Inc., a national leader in the landscape industry; Managing Director of WTCG, a wind energy technology development company; and was the executive leader for the LeBlanc Group, a billion dollar diversified technology telecommunications/broadcast equipment company."
+    },
+    {
+      "id": "check-page-608948074b",
+      "url": "https://www.ntec-inc.org/about-ntec/business-accelerator-team/",
+      "page": "details",
+      "excerpt": "He has also served as presidential campaign Regional Finance Director, Chairman of the Government Affairs Committee, and on the Board of the European/International Energy Trade Association."
+    },
+    {
+      "id": "check-page-858a015ed4",
+      "url": "https://www.ntec-inc.org/about-ntec/business-accelerator-team/",
+      "page": "details",
+      "excerpt": "Lewis received his graduate education in economics at the University of Delaware, Newark and pursued his undergraduate studies at the University of Nebraska, Lincoln."
+    },
+    {
+      "id": "check-page-e1dd326492",
+      "url": "https://www.ntec-inc.org/about-ntec/business-accelerator-team/",
+      "page": "details",
+      "excerpt": "He then became Vice President of Technology for a rapidly growing commercial services business that became one of the nation’s largest companies in its sector, and he later broadened his focus to include facilities management for a property management and investment firm."
+    },
+    {
+      "id": "check-page-06a20431bd",
+      "url": "https://www.ntec-inc.org/about-ntec/business-accelerator-team/",
+      "page": "details",
+      "excerpt": "Categories Accelerator Events at NTEC General In the Loop NTEC Blog Recent Posts How Not to Lose Your Business During Crisis NTEC Startup Advisors Accelerator Program Pricing NTEC Member Companies iOS Code Bootcamp Featured Company Since 2013, PVP Live has been setting the standard for high quality content and events in the world of North American esports."
+    },
+    {
+      "id": "check-page-c0e70e926d",
+      "url": "https://www.ntec-inc.org/about-ntec/business-accelerator-team/",
+      "page": "details",
+      "excerpt": "As one of the largest business accelerators in Texas, NTEC offers promising ventures access to expert guidance, enterprise-class infrastructure and a vast professional network. member, nbia NTEC is a member of the National Business Incubation Association (NBIA) - the world’s leading organization advancing business incubation and entrepreneurship. location NTEC, Inc."
+    },
+    {
+      "id": "check-page-61dfe76b21",
+      "url": "https://www.ntec-inc.org/about-ntec/frisco-accelerator-mission/",
+      "page": "details",
+      "excerpt": "Our Mission: Grow Frisco From Within - NTEC | North Texas Enterprise Center Effective March 1, 2017 Launch Pad City will assume management of Frisco's entrepreneurship center. Read More NTEC | North Texas Enterprise Center About Mission Facility Team Board of Directors Pharmacy Happy Family Store Pharmacy Mall Accelerator Program Member Advisors Partners Cost News/Press In the Loop NTEC in the News Contact Us Sitemap Our Mission: Grow Frisco From Within NTEC helps high-potential startups get farther, faster in Frisco share with At 50,000 square feet, NTEC is one of the largest startup accelerators in Texas. Established in partnership with the City of Frisco and the Frisco Economic Development Corporation (EDC) , NTEC’s mission is to help expand and diversify the city’s economic base by providing a select group of high-potential startups with the guidance, access and resources they need to grow into significant contributors to Frisco’s vibrant business community. In addition to turn-key access to enterprise-class infrastructure and our 50,000 square foot, purpose-built business resource center, companies accepted into the accelerator program gain access to the advice and assistance of NTEC Staff , board members and the opportunity to network and collaborate with over 25 promising startups employing more than 150 people from Collin County and beyond. Categories Accelerator"
+    },
+    {
+      "id": "check-page-2a54815509",
+      "url": "https://www.ntec-inc.org/about-ntec/frisco-accelerator-mission/",
+      "page": "details",
+      "excerpt": "Categories Accelerator Events at NTEC General In the Loop NTEC Blog Recent Posts How Not to Lose Your Business During Crisis NTEC Startup Advisors Accelerator Program Pricing NTEC Member Companies iOS Code Bootcamp Featured Company Since 2013, PVP Live has been setting the standard for high quality content and events in the world of North American esports."
+    },
+    {
+      "id": "check-page-5dbb175b0d",
+      "url": "https://www.ntec-inc.org/about-ntec/frisco-accelerator-mission/",
+      "page": "details",
+      "excerpt": "As one of the largest business accelerators in Texas, NTEC offers promising ventures access to expert guidance, enterprise-class infrastructure and a vast professional network. member, nbia NTEC is a member of the National Business Incubation Association (NBIA) - the world’s leading organization advancing business incubation and entrepreneurship. location NTEC, Inc."
+    },
+    {
+      "id": "check-page-b5234ce009",
+      "url": "https://www.ntec-inc.org/about-ntec/frisco-business-center/",
+      "page": "details",
+      "excerpt": "The North Texas Enterprise Center - NTEC | North Texas Enterprise Center Effective March 1, 2017 Launch Pad City will assume management of Frisco's entrepreneurship center. Read More NTEC | North Texas Enterprise Center About Mission Facility Team Board of Directors Pharmacy Happy Family Store Pharmacy Mall Accelerator Program Member Advisors Partners Cost News/Press In the Loop NTEC in the News Contact Us Sitemap The North Texas Enterprise Center Purpose-built for innovation, collaboration and growth share with The lobby’s two-story glass facade makes it a great place to greet visitors. At 50,000 square feet, the North Texas Enterprise Center is one of the largest business accelerators in Texas. Completed in 2008, the flexible, open space was purpose-built to support and facilitate innovation and collaboration between multiple high-growth, high-tech startups. Far more than a typical office building, the Center provides fully-furnished, turnkey offices, open working environments, med / tech labs, state-of-the art training and meeting rooms and enterprise-grade infrastructure to ventures working in a wide range of industries. Amenities at The Center include: 24/7 secure key card access High-speed wired and wireless internet (100 / 100 Mbps) VOIP telecom Staffed reception Shipping/receiving services Private, secure mailboxes On-site notary Metered postage Printing center / work"
+    },
+    {
+      "id": "check-page-b9241420de",
+      "url": "https://www.ntec-inc.org/about-ntec/frisco-business-center/",
+      "page": "details",
+      "excerpt": "As one of the largest business accelerators in Texas, NTEC offers promising ventures access to expert guidance, enterprise-class infrastructure and a vast professional network. member, nbia NTEC is a member of the National Business Incubation Association (NBIA) - the world’s leading organization advancing business incubation and entrepreneurship. location NTEC, Inc."
+    },
+    {
+      "id": "check-page-752cbac752",
+      "url": "https://www.ntec-inc.org/about-ntec/startup-accelerator-board-of-directors/",
+      "page": "details",
+      "excerpt": "The NTEC Board of Directors - NTEC | North Texas Enterprise Center Effective March 1, 2017 Launch Pad City will assume management of Frisco's entrepreneurship center. Read More NTEC | North Texas Enterprise Center About Mission Facility Team Board of Directors Pharmacy Happy Family Store Pharmacy Mall Accelerator Program Member Advisors Partners Cost News/Press In the Loop NTEC in the News Contact Us Sitemap The NTEC Board of Directors Charting the course for success share with The NTEC Executive Boardroom Members of the NTEC Board of Directors are chosen by sitting board members and the Frisco Economic Development Corporation for their long-term success in business, history of innovation and effective leadership and expertise in key areas such as raising capital, product development, technology, management and law. Board members evaluate new business opportunities, provide market experience, ensure resources are properly identified and utilized to maximize positive cash flow and mentor The NTEC Team and member companies with the goal of maximizing their commercial success. Mason Daniels, M.D. Chairman Mason Daniels Doctor Mason Daniels is the Director of Anesthesia Services at the Medical Center of McKinney, a member of the Frisco Economic Development Corporation Board of Directors and a proud Frisco resident. A proud resident of Frisco, Ronderos was born to parents who"
+    },
+    {
+      "id": "check-page-4a02a02dab",
+      "url": "https://www.ntec-inc.org/about-ntec/startup-accelerator-board-of-directors/",
+      "page": "details",
+      "excerpt": "A proud resident of Frisco, Ronderos was born to parents who immigrated to the United States from Colombia, he conducted his undergraduate studies at Rhodes College and received his Medical Degree from the University of Alabama."
+    },
+    {
+      "id": "check-page-8fa2a3ec51",
+      "url": "https://www.ntec-inc.org/about-ntec/startup-accelerator-board-of-directors/",
+      "page": "details",
+      "excerpt": "Daniels introduced computer billing at his medical practice, even learning to code for the system, and later he developed a data acquisition program used for anesthesia related research, and he maintains an active interest in the role of medical technology in improving patient care."
+    },
+    {
+      "id": "check-page-22079f3572",
+      "url": "https://www.ntec-inc.org/about-ntec/startup-accelerator-board-of-directors/",
+      "page": "details",
+      "excerpt": "Director Scott Freeman Oliver Lawson is the executive director, Sales and Marketing, Cardiac/Neuro & EME at medical device manufacturer Greatbatch Medical where he leads marketing, business development, sales enablement and ensures market alignment with the firm’s operations, supply chain management, quality assurance and finance organizations."
+    },
+    {
+      "id": "check-page-6678b14ea7",
+      "url": "https://www.ntec-inc.org/about-ntec/startup-accelerator-board-of-directors/",
+      "page": "details",
+      "excerpt": "He has held a number of executive positions at medical technology companies, Vice President of Operations at OxySure, one of NTEC’s first successful member companies."
+    },
+    {
+      "id": "check-page-ca370a4ad6",
+      "url": "https://www.ntec-inc.org/about-ntec/startup-accelerator-board-of-directors/",
+      "page": "details",
+      "excerpt": "Oliver’s passion for entrepreneurial growth continues to keep him engaged with venture capital, private equity, and angel investor groups around the world and he currently serves global MedTech leaders like Medtronic, Boston Scientific, and St."
+    },
+    {
+      "id": "check-page-810ce87355",
+      "url": "https://www.ntec-inc.org/about-ntec/startup-accelerator-board-of-directors/",
+      "page": "details",
+      "excerpt": "Max worked in Healthcare administration as an Assistant Administrator for a home health agency."
+    },
+    {
+      "id": "check-page-4aaa1f03ca",
+      "url": "https://www.ntec-inc.org/about-ntec/startup-accelerator-board-of-directors/",
+      "page": "details",
+      "excerpt": "During his tenure and leadership role, the company matured rapidly and experienced exponential growth to become a leader in the North Dallas home health care industry and a member of the Dallas 100."
+    },
+    {
+      "id": "check-page-4a42d8ec7e",
+      "url": "https://www.ntec-inc.org/about-ntec/startup-accelerator-board-of-directors/",
+      "page": "details",
+      "excerpt": "Tilly Moss Director Tilly Moss Tilly Moss is the founder of Future World Real Estate, which employs a unique strategic overlay system to manage complex commercial real estate portfolios."
+    },
+    {
+      "id": "check-page-2bea4d07cf",
+      "url": "https://www.ntec-inc.org/about-ntec/startup-accelerator-board-of-directors/",
+      "page": "details",
+      "excerpt": "Moss also combines her CPA abilities, finance and real estate development expertise to deliver tech-savvy brokerage services through Moss Commercial Real Estate (“MCRE”)."
+    },
+    {
+      "id": "check-page-332f4ed635",
+      "url": "https://www.ntec-inc.org/about-ntec/startup-accelerator-board-of-directors/",
+      "page": "details",
+      "excerpt": "MCRE provides access to a team of professionals that are experienced in land, mixed use, office, healthcare, industrial and high end residential properties."
+    },
+    {
+      "id": "check-page-cb250a4a99",
+      "url": "https://www.ntec-inc.org/about-ntec/startup-accelerator-board-of-directors/",
+      "page": "details",
+      "excerpt": "MCRE clients have collectively entered into contracts for over $120,000,000 of commercial real estate just in the last two years."
+    },
+    {
+      "id": "check-page-2b2ed7a31a",
+      "url": "https://www.ntec-inc.org/about-ntec/startup-accelerator-board-of-directors/",
+      "page": "details",
+      "excerpt": "In the three years prior to mid-2016, Moss was an executive with the Brinkmann Companies, overseeing approximately two million square feet of office and industrial real estate in several states."
+    },
+    {
+      "id": "check-page-738bf740aa",
+      "url": "https://www.ntec-inc.org/startup-accelerator/business-partners/",
+      "page": "details",
+      "excerpt": "Trusted Business Partners - NTEC | North Texas Enterprise Center Effective March 1, 2017 Launch Pad City will assume management of Frisco's entrepreneurship center. Read More NTEC | North Texas Enterprise Center About Mission Facility Team Board of Directors Pharmacy Happy Family Store Pharmacy Mall Accelerator Program Member Advisors Partners Cost News/Press In the Loop NTEC in the News Contact Us Sitemap Trusted Business Partners Uniquely qualified to assist NTEC startups share with NTEC works closely with a select group of trusted business partners who are particularly well-suited to assist our member companies in areas that are key to their growth and development. NTEC Partners Category: Accelerator Categories Accelerator Events at NTEC General In the Loop NTEC Blog Recent Posts How Not to Lose Your Business During Crisis NTEC Startup Advisors Accelerator Program Pricing NTEC Member Companies iOS Code Bootcamp Featured Company Since 2013, PVP Live has been setting the standard for high quality content and events in the world of North American esports. Through innovative partnerships with game developers, broadcasters, and top-tier gaming talent, the team has developed and grown a global network of online gaming communities, staged groundbreaking competitive events and produced video content that reaches an audience numbering in the hundreds of thousands. about ntec NTEC"
+    },
+    {
+      "id": "check-page-ddfe824355",
+      "url": "https://www.ntec-inc.org/startup-accelerator/business-partners/",
+      "page": "details",
+      "excerpt": "As one of the largest business accelerators in Texas, NTEC offers promising ventures access to expert guidance, enterprise-class infrastructure and a vast professional network. member, nbia NTEC is a member of the National Business Incubation Association (NBIA) - the world’s leading organization advancing business incubation and entrepreneurship. location NTEC, Inc."
+    },
+    {
+      "id": "check-page-123b1ce206",
+      "url": "https://www.ntec-inc.org/startup-accelerator/program-cost/",
+      "page": "details",
+      "excerpt": "Accelerator Program Pricing - NTEC | North Texas Enterprise Center Effective March 1, 2017 Launch Pad City will assume management of Frisco's entrepreneurship center. Read More NTEC | North Texas Enterprise Center About Mission Facility Team Board of Directors Pharmacy Happy Family Store Pharmacy Mall Accelerator Program Member Advisors Partners Cost News/Press In the Loop NTEC in the News Contact Us Sitemap Accelerator Program Pricing Success has a price, but at NTEC it’s less than you’d expect share with Companies that are accepted into The Accelerator Program pay an all-inclusive fee ranging from $599 to $1,200 a month per office * , which includes: Accelerator services The opportunity to network and collaborate with over 20 other local startups Private, fully-furnished offices All utilities 24/7/365 secure key card access High-speed wired and wireless internet (100 / 100 Mbps) Meeting rooms with conference phones and full suite of A/V equipment Kitchens with premium single-serve coffee & tea service, purified water, ice maker, microwaves and toaster ovens Fully furnished lounge / break room with big screen TV and massage chair Network print stations (copy, print, scan, fax) Fully-equipped printing center / work room (print/copy/bind, etc.) Staffed reception Shipping/receiving services Private, secure mailboxes Metered postage On-site notary Monitored security & fire alarms"
+    },
+    {
+      "id": "check-page-3f3110d07b",
+      "url": "https://www.ntec-inc.org/startup-accelerator/program-cost/",
+      "page": "details",
+      "excerpt": "Virtual membership rate is $250 per month. *medical and technology lab space pricing varies depending on requirements and square footage."
+    },
+    {
+      "id": "check-page-d4477c3bff",
+      "url": "https://www.ntec-inc.org/startup-accelerator/program-cost/",
+      "page": "details",
+      "excerpt": "Category: Accelerator Categories Accelerator Events at NTEC General In the Loop NTEC Blog Recent Posts How Not to Lose Your Business During Crisis NTEC Startup Advisors Accelerator Program Pricing NTEC Member Companies iOS Code Bootcamp Featured Company Since 2013, PVP Live has been setting the standard for high quality content and events in the world of North American esports."
+    },
+    {
+      "id": "check-page-d2dfb9613c",
+      "url": "https://www.ntec-inc.org/startup-accelerator/program-cost/",
+      "page": "details",
+      "excerpt": "As one of the largest business accelerators in Texas, NTEC offers promising ventures access to expert guidance, enterprise-class infrastructure and a vast professional network. member, nbia NTEC is a member of the National Business Incubation Association (NBIA) - the world’s leading organization advancing business incubation and entrepreneurship. location NTEC, Inc."
+    },
+    {
+      "id": "check-page-5c5eba0b2d",
+      "url": "https://www.ntec-inc.org/startup-accelerator/program-information/",
+      "page": "details",
+      "excerpt": "The NTEC Accelerator Program - NTEC | North Texas Enterprise Center Effective March 1, 2017 Launch Pad City will assume management of Frisco's entrepreneurship center. Read More NTEC | North Texas Enterprise Center About Mission Facility Team Board of Directors Pharmacy Happy Family Store Pharmacy Mall Accelerator Program Member Advisors Partners Cost News/Press In the Loop NTEC in the News Contact Us Sitemap The NTEC Accelerator Program Building a framework for success share with While challenges such as managing cash flow, deciding when and who to hire and how best to generate awareness for a product or service are common to most young companies, we know that no two companies are the same. That’s why we designed the NTEC Accelerator Program to accommodate a wide range of needs while still providing a framework that supports the growth and evolution of our member companies . Structured Support NTEC staff get to know the nature of an applicant company’s business, the personalities of their founders and management and may get a sense of the areas where the company needs the most help, but the real exploration of how NTEC can best support them comes once they’re accepted to the program. After everyone is settled into their new offices, NTEC staff and advisors will meet with members of the company and conduct an initial assessment, which includes a review of financials. Based on"
+    },
+    {
+      "id": "check-page-9ef582ddd0",
+      "url": "https://www.ntec-inc.org/startup-accelerator/program-information/",
+      "page": "details",
+      "excerpt": "As one of the largest business accelerators in Texas, NTEC offers promising ventures access to expert guidance, enterprise-class infrastructure and a vast professional network. member, nbia NTEC is a member of the National Business Incubation Association (NBIA) - the world’s leading organization advancing business incubation and entrepreneurship. location NTEC, Inc."
+    },
+    {
+      "id": "check-page-24d3eebd8e",
+      "url": "https://www.ntec-inc.org/startup-accelerator/startup-advisors/",
+      "page": "details",
+      "excerpt": "NTEC Startup Advisors - NTEC | North Texas Enterprise Center Effective March 1, 2017 Launch Pad City will assume management of Frisco's entrepreneurship center. Read More NTEC | North Texas Enterprise Center About Mission Facility Team Board of Directors Pharmacy Happy Family Store Pharmacy Mall Accelerator Program Member Advisors Partners Cost News/Press In the Loop NTEC in the News Contact Us Sitemap NTEC Startup Advisors Providing vital guidance and support share with Our distinguished startup advisors work with NTEC leadership and member companies to assess their needs, develop plans to address them and provide ad hoc counsel on building and managing their businesses. Kai Manning, Ph.D. Senior Scientific Advisor Kai Manning Dr. Kai Manning is an accomplished and well-published cardiovascular physiologist with 34 years of experience as a researcher, educator, and technology administrator including 18 years with Indiana University School of Medicine and most recently serving as CEO of the Texas Health Research Institute. His distinguished career includes serving organizations such as Interscience Research Institute, McDonnell-Douglas Corp. on the NASA/USAF Project Gemini B Manned Orbital Laboratory, and as President and Executive Director of the Indianapolis Center for Advanced Research. Dr. Manning received his Ph.D. in Physiology and Biophysics from the University of"
+    },
+    {
+      "id": "check-page-f8b8e6acc8",
+      "url": "https://www.ntec-inc.org/startup-accelerator/startup-advisors/",
+      "page": "details",
+      "excerpt": "Joe Dale MBA, CMC Entrepreneur in Residence Joe Dale Joe Dale is the founder and president of HgS Results, a consulting firm that assists startups in developing and implementing their product or service visions from inception to profitability."
+    },
+    {
+      "id": "check-page-279efc2c1e",
+      "url": "https://www.ntec-inc.org/startup-accelerator/startup-advisors/",
+      "page": "details",
+      "excerpt": "As both a leader and consultant, he has propelled numerous startups and mid-sized companies in the telecom, wireless, cell-tower, health care, education and technology markets to exceed sales and profit goals through motivational leadership and process-focus, coupled with business, sales, marketing, and operations expertise."
+    },
+    {
+      "id": "check-page-e7fccf8bb9",
+      "url": "https://www.ntec-inc.org/startup-accelerator/startup-advisors/",
+      "page": "details",
+      "excerpt": "He was awarded Certified Management Consultant (CMC®) from the Institute of Management Consultants USA (IMC®) in 2008."
+    },
+    {
+      "id": "check-page-9d528d3641",
+      "url": "https://www.ntec-inc.org/startup-accelerator/startup-advisors/",
+      "page": "details",
+      "excerpt": "Today, he leverages his breadth and depth of experience to bring Fortune 500-caliber counsel to small and mid-sized organizations in the Dallas metroplex and around Texas."
+    },
+    {
+      "id": "check-page-bf67ac2aea",
+      "url": "https://www.ntec-inc.org/startup-accelerator/startup-advisors/",
+      "page": "details",
+      "excerpt": "He has worked closely with more than 20 Fortune 500 clients including McDonald’s, PepsiCo, Sony Pictures Entertainment, Intuit and Dell; and his work has garnered ADDY, Press Club, Murrow and AP awards for excellence in digital communication."
+    },
+    {
+      "id": "check-page-bc89f1d0c3",
+      "url": "https://www.ntec-inc.org/startup-accelerator/startup-advisors/",
+      "page": "details",
+      "excerpt": "Declan Mistry Financial Advisor Declan Mistry A lifelong resident of North Texas, Declan is a Certified Financial Planner™ professional and the founder of Cantrill Financial Group, LLC; an independent, fee-based financial advisory that works with a diverse group of client-families to optimize their wealth through education and accountability."
+    },
+    {
+      "id": "check-page-18bc457070",
+      "url": "https://www.ntec-inc.org/startup-accelerator/startup-advisors/",
+      "page": "details",
+      "excerpt": "Nicole Cunningham Startup Coach & Social Media Advisor Nicole Cunningham Nicole Cunningham started her entrepreneurial journey over 13 years ago when she started investing in real estate across the country."
+    },
+    {
+      "id": "check-page-1b9b8c7450",
+      "url": "https://www.ntec-inc.org/startup-accelerator/startup-advisors/",
+      "page": "details",
+      "excerpt": "Category: Accelerator Categories Accelerator Events at NTEC General In the Loop NTEC Blog Recent Posts How Not to Lose Your Business During Crisis NTEC Startup Advisors Accelerator Program Pricing NTEC Member Companies iOS Code Bootcamp Featured Company Since 2013, PVP Live has been setting the standard for high quality content and events in the world of North American esports."
+    },
+    {
+      "id": "check-page-058e483cec",
+      "url": "https://www.ntec-inc.org/startup-accelerator/startup-advisors/",
+      "page": "details",
+      "excerpt": "As one of the largest business accelerators in Texas, NTEC offers promising ventures access to expert guidance, enterprise-class infrastructure and a vast professional network. member, nbia NTEC is a member of the National Business Incubation Association (NBIA) - the world’s leading organization advancing business incubation and entrepreneurship. location NTEC, Inc."
+    },
+    {
+      "id": "check-page-558c100162",
+      "url": "https://www.ntec-inc.org/startup-accelerator/program-companies/",
+      "page": "portfolio",
+      "excerpt": "NTEC Member Companies - NTEC | North Texas Enterprise Center Effective March 1, 2017 Launch Pad City will assume management of Frisco's entrepreneurship center. Read More NTEC | North Texas Enterprise Center About Mission Facility Team Board of Directors Pharmacy Happy Family Store Pharmacy Mall Accelerator Program Member Advisors Partners Cost News/Press In the Loop NTEC in the News Contact Us Sitemap NTEC Member Companies Diverse, collaborative and innovative share with The member companies featured below represent a wide array of industries, backgrounds and demographics, but they all have innovation and openness to collaboration in their blood. Beyond just viability and growth potential, we look for applicants that are eager to contribute to and leverage the community of member companies, because being in an open environment with a diverse cross-section of startups and entrepreneurs every day is one of the most powerful benefits of being at NTEC. 4WEB uses multidisciplinary engineering principles and 3D printing technology to design and produce light-weight, high-strength orthopedic implants that actively participate in the healing process and guide bone formation through structural mechanics rather than more expensive biologics. Affinegy’s network management software helps broadband service providers, Internet-enabled device manufacturers, and application service providers"
+    },
+    {
+      "id": "check-page-4efc9f0756",
+      "url": "https://www.ntec-inc.org/category/startup-accelerator/",
+      "page": "details",
+      "excerpt": "Accelerator - NTEC | North Texas Enterprise Center Effective March 1, 2017 Launch Pad City will assume management of Frisco's entrepreneurship center. Read More NTEC | North Texas Enterprise Center About Mission Facility Team Board of Directors Pharmacy Happy Family Store Pharmacy Mall Accelerator Program Member Advisors Partners Cost News/Press In the Loop NTEC in the News Contact Us Sitemap Accelerator Current or aspiring entrepreneurs who are considering applying to the NTEC accelerator program will want to spend some time in this section, which provides important information about the structure and cost of the program, acceptance criteria, current NTEC member companies, and more; but if you don’t find answers to all your questions, please feel free to get in touch. NTEC Startup Advisors October 11, 2017 Providing vital guidance and support share with Our distinguished startup advisors work with NTEC leadership and member companies to assess their needs, develop plans to address them and provide ad hoc counsel on building and managing their businesses. Kai Manning, Ph.D. Senior Scientific Advisor Kai Manning Dr. Kai Manning is an accomplished and well-published cardiovascular physiologist with 34 years of experience as a researcher, educator, and technology administrator including 18 years with Indiana University School of Medicine and most recently serving as CEO of the"
     }
   ],
   "findings": {
@@ -27,8 +360,25 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12",
+        "evidenceId": "check-duration-a7c1571146"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-9beb012ea6"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

@@ -1,6 +1,6 @@
 {
   "programId": "eqt-ventures",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://eqtgroup.com/about/careers",
@@ -166,7 +166,7 @@
       "url": "https://eqtgroup.com/about/people/gustav-von-sydow",
       "page": "terms",
       "anchor": "Gustav von Sydow Deal Partner Learn more",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -283,7 +283,7 @@
       "origin": "official"
     },
     {
-      "url": "https://eqtgroup.com/news/150-million-investment-to-build-grade-a-office-space-in-the-rapidly-emerging-bpo-office-destination-of-clark-philippines",
+      "url": "https://eqtgroup.com/sv/nyheter/esml-intressenter-hojer-priset-i-erbjudandet-pa-securitas-direct-ab-till-27-50-kronor-per-aktie-eqt-v-kommer-att-kopa-ut-esml-intressenters-ovriga-aktieagare-saki-ab-melker-schorling-ab-och-investment-2008-02-05",
       "page": "terms",
       "anchor": "",
       "fetched": true,
@@ -291,80 +291,8 @@
       "origin": "official"
     },
     {
-      "url": "https://eqtgroup.com/news/Real-Deals-Article",
+      "url": "https://eqtgroup.com/sv/nyheter/investment-ab-latour-forvarvar-10-procent-av-aktierna-i-nederman-2007-05-16",
       "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eqtgroup.com/news/Responsible-investment",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eqtgroup.com/news/amg-announces-investment-in-baring-private-equity-asia",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eqtgroup.com/news/baring-asia-completes-deal-to-acquire-majority-stake-in-vistra-group",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eqtgroup.com/news/baring-asia-completes-deal-to-acquire-orangefield",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eqtgroup.com/news/baring-private-equity-asia-and-alibaba-enter-partnership-with-the-crownx-leads-usd400mm-investment",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-breakthrough-research-grant-in-rare-diseases-2025-09-02",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-breakthrough-science-grants-to-reduce-dependence-on-critical-minerals-for-the-green-transition-2026-01-27",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-science-grants-to-overcome-the-blood-brain-barrier-and-transform-cns-drug-delivery-2026-03-10",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eqtgroup.com/news/xxl-intends-to-apply-for-listing",
-      "page": "application",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -374,7 +302,119 @@
       "url": "https://eqtgroup.com/terms-and-conditions",
       "page": "terms",
       "anchor": "Terms and Conditions of Use",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/Education/how-does-private-equity-compare-to-investment-banking",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/Education/what-are-alternative-investments",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/Education/what-is-a-co-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/case-study/a-rare-public-markets-deal-enabled-swedish-ac-firm-to-take-on-the-us-market",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/case-study/tubulis-turns-novel-cancer-approach-into-5bn-deal",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/early-stage/cancer-cure-breakthrough-will-come-from-early-stage-investments-not-big-pharma",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/equity/anatomy-of-a-private-equity-deal",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/equity/done-deal-inside-the-indian-fertility-market-with-indira-ivf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/equity/how-co-investments-are-used-in-private-equity",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/healthcare/bridging-the-investment-gap-in-rare-diseases",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/healthcare/building-on-three-decades-of-investment-in-life-sciences",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/infrastructure/six-transformational-infrastructure-investments-shaping-future-cities",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/opinion/europe-ai-and-deal-exits-an-eqt-guide-to-2026",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/opinion/there-is-a-full-pipeline-of-deals-despite-tariff-shock",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

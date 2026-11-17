@@ -1,6 +1,6 @@
 {
   "programId": "sebrae",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://sebrae.com.br/ba/subsites/programa-qualificacao-peiex",
@@ -108,6 +108,46 @@
     },
     {
       "url": "https://sebrae.com.br/ms/subsites/programas/programa-peiex-ms",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sebrae.com.br/ms/subsites/programas/sebrae-moda-ms0",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sebrae.com.br/mt/subsites/programa-peiex",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sebrae.com.br/pb/conteudos/programa-peiex",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sebrae.com.br/sp/subsites/programas/programa-de-internacionalizacao-sebraesp",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sebrae.com.br/sp/subsites/programas/programa-loja-do-futuro",
       "page": "details",
       "anchor": "",
       "fetched": true,

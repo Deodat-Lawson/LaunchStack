@@ -1,59 +1,832 @@
 {
   "programId": "awesome",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "http://www.awesomeinc.org/",
-    "https://www.awesomeinc.org/events"
+    "https://awesomeinc.org/bootcamp/Components/ApplyForm/ApplyForm",
+    "https://awesomeinc.org/bootcamp/apply",
+    "https://awesomeinc.org/fellowship/Components/ApplyNowModal",
+    "https://awesomeinc.org/salesforce/apply",
+    "https://awesomeinc.org/india/faq",
+    "https://awesomeinc.org/learn/coding-club-faq",
+    "https://awesomeinc.org/terms",
+    "https://awesomeinc.org/timeline",
+    "https://awesomeinc.org/about",
+    "https://awesomeinc.org/fellowship",
+    "https://awesomeinc.org/india/about",
+    "https://awesomeinc.org/program",
+    "https://awesomeinc.org/program/ProgramLinkTree",
+    "https://awesomeinc.org/salesforce",
+    "https://www.awesomeinc.org/salesforce/apply",
+    "https://awesomeinc.org/",
+    "https://awesomeinc.org/assets/core-values.pdf",
+    "https://awesomeinc.org/program/programlinktree/",
+    "https://www.awesomeinc.org/india/about"
   ],
   "evidence": [
     {
-      "id": "check-email-1c6a5e2e4e",
-      "url": "https://www.awesomeinc.org/events",
-      "title": "Awesome Inc — details page checked by scrape.py",
+      "id": "check-duration-12c32a873f",
+      "url": "https://awesomeinc.org/bootcamp/Components/ApplyForm/ApplyForm",
+      "title": "Awesome Inc — application page",
+      "excerpt": "Access to full-time career coach Get a job in 3 months on average How did you hear about us? Please",
+      "page": "application"
+    },
+    {
+      "id": "check-email-0912a07e75",
+      "url": "https://awesomeinc.org/terms",
+      "title": "Awesome Inc — terms page",
+      "excerpt": "Main St. Lexington, KY 40507 Phone: (859) 960-4600 Email: info@awesomeinc.org Awesome Inc reserves the right to remove content alleged",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-09fefddc05",
+      "url": "https://www.awesomeinc.org/india/about",
+      "title": "Awesome Inc — program page",
+      "excerpt": "school in his home town. Bhopal, Madhya Pradesh, India info_india@awesomeinc.org quicklinks About Us Core Values courses Week of Code",
+      "page": "details"
+    },
+    {
+      "id": "check-email-14a3e40d9e",
+      "url": "https://awesomeinc.org/timeline",
+      "title": "Awesome Inc — batches page",
+      "excerpt": "info@awesomeinc.org",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-1ab5f3a207",
+      "url": "https://awesomeinc.org/india/faq",
+      "title": "Awesome Inc — terms page",
+      "excerpt": "info_india@awesomeinc.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-1c82ef0042",
+      "url": "https://awesomeinc.org/india/faq",
+      "title": "Awesome Inc — terms page",
+      "excerpt": "Program (price coming soon) Bhopal, Madhya Pradesh, India info_india@awesomeinc.org quicklinks About Us Core Values courses Week of Code",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-1cb9cf4dfd",
+      "url": "https://www.awesomeinc.org/india/about",
+      "title": "Awesome Inc — program page",
+      "excerpt": "info_india@awesomeinc.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-23e3202227",
+      "url": "https://awesomeinc.org/program",
+      "title": "Awesome Inc — program page",
+      "excerpt": "out this google form to apply 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up",
+      "page": "details"
+    },
+    {
+      "id": "check-email-287050b959",
+      "url": "https://awesomeinc.org/about",
+      "title": "Awesome Inc — program page",
+      "excerpt": "- Find us on social media - 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up",
+      "page": "details"
+    },
+    {
+      "id": "check-email-3907f86b8c",
+      "url": "https://awesomeinc.org/program",
+      "title": "Awesome Inc — program page",
       "excerpt": "info@awesomeinc.org",
       "page": "details"
     },
     {
+      "id": "check-email-3e0c119cb8",
+      "url": "https://awesomeinc.org/india/about",
+      "title": "Awesome Inc — program page",
+      "excerpt": "school in his home town. Bhopal, Madhya Pradesh, India info_india@awesomeinc.org quicklinks About Us Core Values courses Week of Code",
+      "page": "details"
+    },
+    {
+      "id": "check-email-40014b9bde",
+      "url": "https://awesomeinc.org/timeline",
+      "title": "Awesome Inc — batches page",
+      "excerpt": "organization. Key Milestones 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-43d494a46c",
+      "url": "https://awesomeinc.org/",
+      "title": "Awesome Inc — program page",
+      "excerpt": "info@awesomeinc.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-46b77f9ddb",
+      "url": "https://awesomeinc.org/learn/coding-club-faq",
+      "title": "Awesome Inc — terms page",
+      "excerpt": "info@awesomeinc.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-5274cf21a0",
+      "url": "https://awesomeinc.org/terms",
+      "title": "Awesome Inc — terms page",
+      "excerpt": "updated on Sept 22, 2019. 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-52a125267d",
+      "url": "https://awesomeinc.org/fellowship",
+      "title": "Awesome Inc — program page",
+      "excerpt": "info@awesomeinc.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-6154c2388f",
+      "url": "https://awesomeinc.org/terms",
+      "title": "Awesome Inc — terms page",
+      "excerpt": "info@awesomeinc.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-6cda45dc12",
+      "url": "https://awesomeinc.org/fellowship",
+      "title": "Awesome Inc — program page",
+      "excerpt": "Kent Oyler Randy Bufford 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up",
+      "page": "details"
+    },
+    {
+      "id": "check-email-72aa879154",
+      "url": "https://awesomeinc.org/bootcamp/apply",
+      "title": "Awesome Inc — application page",
+      "excerpt": "info@awesomeinc.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-7816f9ef7d",
+      "url": "https://awesomeinc.org/salesforce",
+      "title": "Awesome Inc — program page",
+      "excerpt": "info@awesomeinc.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-899f10dd18",
+      "url": "https://awesomeinc.org/bootcamp/apply",
+      "title": "Awesome Inc — application page",
+      "excerpt": "tuition rate of $15,500. 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up",
+      "page": "application"
+    },
+    {
       "id": "check-email-8c01448329",
       "url": "http://www.awesomeinc.org/",
-      "title": "Awesome Inc — homepage checked by scrape.py",
+      "title": "Awesome Inc — homepage",
+      "excerpt": "info@awesomeinc.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8d1a27a9b9",
+      "url": "https://awesomeinc.org/salesforce/apply",
+      "title": "Awesome Inc — application page",
+      "excerpt": "U.S. Department of Treasury. 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up",
+      "page": "application"
+    },
+    {
+      "id": "check-email-8ee62e3872",
+      "url": "https://www.awesomeinc.org/salesforce/apply",
+      "title": "Awesome Inc — application page",
+      "excerpt": "U.S. Department of Treasury. 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up",
+      "page": "application"
+    },
+    {
+      "id": "check-email-9b19ae0e42",
+      "url": "https://awesomeinc.org/about",
+      "title": "Awesome Inc — program page",
       "excerpt": "info@awesomeinc.org",
       "page": "details"
     },
     {
       "id": "check-email-a1ca4c171d",
       "url": "http://www.awesomeinc.org/",
-      "title": "Awesome Inc — homepage checked by scrape.py",
+      "title": "Awesome Inc — homepage",
       "excerpt": "a time on our calendar 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up",
       "page": "details"
     },
     {
-      "id": "check-email-fe40b2a96c",
-      "url": "https://www.awesomeinc.org/events",
-      "title": "Awesome Inc — details page checked by scrape.py",
-      "excerpt": "Pitch Competition 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up",
+      "id": "check-email-a4a42837eb",
+      "url": "https://www.awesomeinc.org/salesforce/apply",
+      "title": "Awesome Inc — application page",
+      "excerpt": "info@awesomeinc.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-a7ce2bd2a8",
+      "url": "https://awesomeinc.org/",
+      "title": "Awesome Inc — program page",
+      "excerpt": "a time on our calendar 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ae23db9ddc",
+      "url": "https://awesomeinc.org/salesforce/apply",
+      "title": "Awesome Inc — application page",
+      "excerpt": "info@awesomeinc.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-d1cfaa8eac",
+      "url": "https://awesomeinc.org/salesforce",
+      "title": "Awesome Inc — program page",
+      "excerpt": "have questions? contact us 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up",
+      "page": "details"
+    },
+    {
+      "id": "check-email-df1031eefa",
+      "url": "https://awesomeinc.org/terms",
+      "title": "Awesome Inc — terms page",
+      "excerpt": "accurate, current and complete. Please contact us at info@awesomeinc.org with any questions regarding these Terms (including any",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-e792afff36",
+      "url": "https://awesomeinc.org/india/about",
+      "title": "Awesome Inc — program page",
+      "excerpt": "info_india@awesomeinc.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f175c80ce7",
+      "url": "https://awesomeinc.org/learn/coding-club-faq",
+      "title": "Awesome Inc — terms page",
+      "excerpt": "assessment from our coaches. 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0da4975dfb",
+      "url": "https://awesomeinc.org/india/faq",
+      "title": "Awesome Inc — terms page",
+      "excerpt": "coding programs in person? Yes. We believe face to face, in person training and education provides accountability, focus and",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0e53f26a1e",
+      "url": "https://awesomeinc.org/salesforce",
+      "title": "Awesome Inc — program page",
+      "excerpt": "org Online collaboration tools to thrive in remote or hybrid work environments Career coaching to connect with",
+      "page": "details"
+    },
+    {
+      "id": "check-format-381a7ec958",
+      "url": "https://awesomeinc.org/india/faq",
+      "title": "Awesome Inc — terms page",
+      "excerpt": "Click here to meet the team. 5 Are the coding programs in person? Yes. We believe face to face, in person training and",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8222aeb7e1",
+      "url": "https://awesomeinc.org/salesforce",
+      "title": "Awesome Inc — program page",
+      "excerpt": "Salesforce org Online collaboration tools to thrive in remote or hybrid work environments Career coaching to connect",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b70f530cf2",
+      "url": "https://awesomeinc.org/salesforce",
+      "title": "Awesome Inc — program page",
+      "excerpt": "and broadband internet connection for video calls and remote learning. A smartphone or tablet is not sufficient for use",
+      "page": "details"
+    },
+    {
+      "id": "check-location-4689b81ebf",
+      "url": "https://awesomeinc.org/india/about",
+      "title": "Awesome Inc — program page",
+      "excerpt": "Bryce Anderson is an entrepreneur based in Lexington, KY (USA). He has founded multiple",
+      "page": "details"
+    },
+    {
+      "id": "check-location-75f59f762a",
+      "url": "https://www.awesomeinc.org/india/about",
+      "title": "Awesome Inc — program page",
+      "excerpt": "Bryce Anderson is an entrepreneur based in Lexington, KY (USA). He has founded multiple",
       "page": "details"
     },
     {
       "id": "check-name-088660ea3f",
       "url": "http://www.awesomeinc.org/",
-      "title": "Awesome Inc — homepage checked by scrape.py",
+      "title": "Awesome Inc — homepage",
       "excerpt": "us create custom software for your business. Welcome to Awesome Inc Pursue your Definition of Awesome We exist to create and",
       "page": "details"
     },
     {
-      "id": "check-phone-1909fad785",
-      "url": "https://www.awesomeinc.org/events",
-      "title": "Awesome Inc — details page checked by scrape.py",
+      "id": "check-phone-1cd7fc6139",
+      "url": "https://awesomeinc.org/salesforce/apply",
+      "title": "Awesome Inc — application page",
+      "excerpt": "859.960.4600",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-409c9dc82f",
+      "url": "https://awesomeinc.org/fellowship",
+      "title": "Awesome Inc — program page",
+      "excerpt": "859.960.4600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-41392f313b",
+      "url": "https://awesomeinc.org/program",
+      "title": "Awesome Inc — program page",
+      "excerpt": "859.960.4600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-4841274735",
+      "url": "https://awesomeinc.org/learn/coding-club-faq",
+      "title": "Awesome Inc — terms page",
+      "excerpt": "859.960.4600",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-683d888e39",
+      "url": "https://awesomeinc.org/salesforce",
+      "title": "Awesome Inc — program page",
+      "excerpt": "859.960.4600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-729e54ca78",
+      "url": "https://awesomeinc.org/bootcamp/apply",
+      "title": "Awesome Inc — application page",
+      "excerpt": "859.960.4600",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-7a33d6df75",
+      "url": "https://awesomeinc.org/",
+      "title": "Awesome Inc — program page",
+      "excerpt": "859.960.4600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-9d3a44a55b",
+      "url": "https://awesomeinc.org/about",
+      "title": "Awesome Inc — program page",
       "excerpt": "859.960.4600",
       "page": "details"
     },
     {
       "id": "check-phone-b60907486d",
       "url": "http://www.awesomeinc.org/",
-      "title": "Awesome Inc — homepage checked by scrape.py",
+      "title": "Awesome Inc — homepage",
       "excerpt": "859.960.4600",
       "page": "details"
+    },
+    {
+      "id": "check-phone-beb5506a22",
+      "url": "https://www.awesomeinc.org/salesforce/apply",
+      "title": "Awesome Inc — application page",
+      "excerpt": "859.960.4600",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-efcab91c00",
+      "url": "https://awesomeinc.org/terms",
+      "title": "Awesome Inc — terms page",
+      "excerpt": "859.960.4600",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-fc9a94d86e",
+      "url": "https://awesomeinc.org/timeline",
+      "title": "Awesome Inc — batches page",
+      "excerpt": "859.960.4600",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-1fbb475fe4",
+      "url": "https://awesomeinc.org/about",
+      "title": "Awesome Inc — program page",
+      "excerpt": "Startups → https://awesomeinc.org/fellowship",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2078fdf3db",
+      "url": "https://awesomeinc.org/terms",
+      "title": "Awesome Inc — terms page",
+      "excerpt": "Startups → https://awesomeinc.org/fellowship",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2ecd151890",
+      "url": "https://awesomeinc.org/salesforce",
+      "title": "Awesome Inc — program page",
+      "excerpt": "Startups → https://awesomeinc.org/fellowship",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-35c40dc025",
+      "url": "https://awesomeinc.org/learn/coding-club-faq",
+      "title": "Awesome Inc — terms page",
+      "excerpt": "Startups → https://awesomeinc.org/fellowship",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5718458256",
+      "url": "https://awesomeinc.org/fellowship",
+      "title": "Awesome Inc — program page",
+      "excerpt": "Portfolio → https://awesomeinc.org/fellowship/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-69171e3969",
+      "url": "https://awesomeinc.org/bootcamp/apply",
+      "title": "Awesome Inc — application page",
+      "excerpt": "Startups → https://awesomeinc.org/fellowship",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6eea31c638",
+      "url": "https://www.awesomeinc.org/salesforce/apply",
+      "title": "Awesome Inc — application page",
+      "excerpt": "Startups → https://awesomeinc.org/fellowship",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7d30c69a06",
+      "url": "https://awesomeinc.org/fellowship",
+      "title": "Awesome Inc — program page",
+      "excerpt": "const t=\"undefined\"!=typeof HTMLImageElement&&\"loading\"in HTMLImageElement.prototype;if(t){const t=document.querySelectorAll(\"img[data-main-image]\");for(let e of t){e.dataset.src&&(e.setAttribute(\"src\",e.dataset.src),e.removeAttribute(\"data-src\")),e.dataset.srcset&&(e.setAttribute(\"srcset\",e.dataset.srcset),e.removeAttribute(\"data-srcset\"));const t=e.parentNode.querySelectorAll(\"source[data-srcset]\");for(let e of t)e.setAttribute(\"srcset\",e.dataset.srcset),e.removeAttribute(\"data-srcset\");e.complete&&(e.style.opacity=1,e.parentNode.parentNode.querySelector(\"[data-placeholder-image]\").style.opacity=0)}} → https://awesomeinc.org/fellowship/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a1f341200c",
+      "url": "https://awesomeinc.org/",
+      "title": "Awesome Inc — program page",
+      "excerpt": "Startups → https://awesomeinc.org/fellowship",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a684e1c33a",
+      "url": "https://awesomeinc.org/salesforce/apply",
+      "title": "Awesome Inc — application page",
+      "excerpt": "Startups → https://awesomeinc.org/fellowship",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e43ae2aa8d",
+      "url": "https://awesomeinc.org/program",
+      "title": "Awesome Inc — program page",
+      "excerpt": "Startups → https://awesomeinc.org/fellowship",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-eb09d7fcee",
+      "url": "http://www.awesomeinc.org/",
+      "title": "Awesome Inc — homepage",
+      "excerpt": "Startups → https://awesomeinc.org/fellowship",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f3d7439235",
+      "url": "https://awesomeinc.org/timeline",
+      "title": "Awesome Inc — batches page",
+      "excerpt": "Startups → https://awesomeinc.org/fellowship",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-0d0635795a",
+      "url": "https://awesomeinc.org/salesforce",
+      "title": "Awesome Inc — program page",
+      "excerpt": "Apply now → https://awesomeinc.org/salesforce/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-428458a9f4",
+      "url": "https://awesomeinc.org/salesforce",
+      "title": "Awesome Inc — program page",
+      "excerpt": "Apply now → https://www.awesomeinc.org/salesforce/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-57d778a746",
+      "url": "https://awesomeinc.org/salesforce",
+      "title": "Awesome Inc — program page",
+      "excerpt": "Start your application → https://awesomeinc.org/salesforce/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d958c831d4",
+      "url": "https://awesomeinc.org/program",
+      "title": "Awesome Inc — program page",
+      "excerpt": "Fill out this google form to apply → https://docs.google.com/forms/d/1azJ9L8NBpe-3KYMTgFOQ7l0Hn-0y26a2SrHI6SebNm8/viewform?edit_requested=true",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-24c33e6e01",
+      "url": "http://www.awesomeinc.org/",
+      "page": "details",
+      "excerpt": "Hall of Fame 5 Across Finals Events Events Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Web & App Development Apax Software Web & App Development Web & App Development Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Be in the Room for Kentucky's Largest Startup Event The 5 Across Finals Pitch Competition Learn More Celebrate Kentucky at The 2026 Entrepreneur Hall of Fame Ceremony Learn More Your Exclusive Look at New Startups Fellowship Demo Day Coming Soon Learn More Learn to Code Everybody can and should learn to code, start today. Rent Workspace Rent a desk or space for events, meetings, and more. Accelerate your startup We will help grow your business with a"
+    },
+    {
+      "id": "check-page-2027ea35da",
+      "url": "http://www.awesomeinc.org/",
+      "page": "details",
+      "excerpt": "Accelerate your startup We will help grow your business with a mentor-driven, accelerator program."
+    },
+    {
+      "id": "check-page-0c0728489e",
+      "url": "http://www.awesomeinc.org/",
+      "page": "details",
+      "excerpt": "We do this by hosting community events, leading technology education courses, and offering a shared workspace environment."
+    },
+    {
+      "id": "check-page-1ddf2329b7",
+      "url": "http://www.awesomeinc.org/",
+      "page": "details",
+      "excerpt": "Accelerate Your Startup Our Fellowship Program is mentor-driven, designed to accelerate your high-tech startup."
+    },
+    {
+      "id": "check-page-224a4ff936",
+      "url": "http://www.awesomeinc.org/",
+      "page": "details",
+      "excerpt": "Workspace Join Our Workspace Functional Workspace An awesome space to work or host your next meeting."
+    },
+    {
+      "id": "check-page-ae92552354",
+      "url": "https://awesomeinc.org/bootcamp/Components/ApplyForm/ApplyForm",
+      "page": "application",
+      "excerpt": "Change your life today 100% Job Guarantee or your money back Access to full-time career coach Get a job in 3 months on average How did you hear about us? Please Select... Advertisement News Article Signage / Building Google Search Referral / Word of Mouth Event Facebook Other Join the Waitlist Join 175+ students"
+    },
+    {
+      "id": "check-page-6afbd12294",
+      "url": "https://awesomeinc.org/bootcamp/apply",
+      "page": "application",
+      "excerpt": "Hall of Fame 5 Across Finals Events Events Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Web & App Development Apax Software Web & App Development Web & App Development Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course WEB DEVELOPER BOOTCAMP APPLICATION HOME / LEARN / ADULTS / BOOTCAMP / APPLY Fill out this form to start your application process Pay nothing until you land a job! See how here Application Deadline for cohort 2025 ( S25 ): Tuesday, December 31 First Name Last Name Email Phone How did you find out about the Bootcamp? -Select- Advertisement News Article Signage / Building Google Search Referral / Word of Mouth Event Facebook Other If referred, who told you about"
+    },
+    {
+      "id": "check-page-0c39b2ba90",
+      "url": "https://awesomeinc.org/bootcamp/apply",
+      "page": "application",
+      "excerpt": "See how here Application Deadline for cohort 2025 ( S25 ): Tuesday, December 31 First Name Last Name Email Phone How did you find out about the Bootcamp? -Select- Advertisement News Article Signage / Building Google Search Referral / Word of Mouth Event Facebook Other If referred, who told you about the Bootcamp?"
+    },
+    {
+      "id": "check-page-5de8287451",
+      "url": "https://awesomeinc.org/fellowship/Components/ApplyNowModal",
+      "page": "application",
+      "excerpt": "Checked official page."
+    },
+    {
+      "id": "check-page-c7131e14f6",
+      "url": "https://awesomeinc.org/salesforce/apply",
+      "page": "application",
+      "excerpt": "Hall of Fame 5 Across Finals Events Events Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Web & App Development Apax Software Web & App Development Web & App Development Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course SALESFORCE CAREER ACCELERATOR APPLICATION HOME / LEARN / ADULTS / SALESFORCE / APPLY Fill out this form to start your application process First Name Last Name Email Phone How did you find out about this program? -Select- Advertisement News Article Signage / Building Google Search Referral / Word of Mouth Event Facebook Other If referred, who told you about the program? Submit The Cost Tuition The Salesforce Career Accelerator is available to Kentucky residents"
+    },
+    {
+      "id": "check-page-3e12864345",
+      "url": "https://awesomeinc.org/salesforce/apply",
+      "page": "application",
+      "excerpt": "Submit The Cost Tuition The Salesforce Career Accelerator is available to Kentucky residents for $3499."
+    },
+    {
+      "id": "check-page-222fb5ce72",
+      "url": "https://awesomeinc.org/salesforce/apply",
+      "page": "application",
+      "excerpt": "This program is being supported, in whole or in part, by federal award numbers SLFRP0292/SLFRP3418 awarded to Lexington-Fayette Urban County Government by the U.S."
+    },
+    {
+      "id": "check-page-c58470339e",
+      "url": "https://awesomeinc.org/india/faq",
+      "page": "terms",
+      "excerpt": "| This will be dynamic later Join Coding Club Today Awesome Inc About 1 Do you need a computer? Yes, your child will need to bring a laptop computer to the courses. This will allow them to work on projects at home if they wish to as well. 2 Is Food Provided? Snacks and drinks will be provided but no meals will be provided. Students are also welcome to bring food if they wish 3 What is Awesome Inc? We exist to create and grow high tech startups. We do this by hosting community events, leading technology education courses, and offering a shared workspace environment. Were excited to launch our first international program in Bhopal as a starting point to foster innovation and creativity in India. Click here \"for more information on our operations in the United States. 4 Who is leading the coding programs in Bhopal? Click here to meet the team. 5 Are the coding programs in person? Yes. We believe face to face, in person training and education provides accountability, focus and is more fun which leads to greater results for students. 6 What's the Cost? Week of Code Program is 5000₹ Coding Club Program (price coming soon) Bhopal, Madhya Pradesh, India info_india@awesomeinc.org quicklinks About Us Core Values courses Week of Code Coding Club (Coming Soon) About Privacy Policy Terms of Service"
+    },
+    {
+      "id": "check-page-4526f22bed",
+      "url": "https://awesomeinc.org/learn/coding-club-faq",
+      "page": "terms",
+      "excerpt": "Hall of Fame 5 Across Finals Events Events Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Web & App Development Apax Software Web & App Development Web & App Development Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course 1 How old do you have to be in the Coding Club? The Coding Club is designed for students ages 9-17. Please inquire if your student doesn't fit that age range but you still want him/her to participate - learn@awesomeinc.org 2 Does the student need to bring a computer? Yes. Each student will need to provide his/her own laptop for the course. Microsoft Windows-based PC's, Apple macOS computers, or Google Chromebooks will work, but iPads will not work for this"
+    },
+    {
+      "id": "check-page-3d21b501e2",
+      "url": "https://awesomeinc.org/terms",
+      "page": "terms",
+      "excerpt": "Hall of Fame 5 Across Finals Events Events Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Web & App Development Apax Software Web & App Development Web & App Development Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Terms of Service These Awesome Inc Terms of Use (“Terms”) govern the use of Awesome Ventures, LLC’s (“Awesome Inc”) Awesome Inc website, located at http://www.awesomeinc.org, information, text, curricula, apps and software. PLEASE READ THESE TERMS CAREFULLY BEFORE ACCESSING OR USING THE SERVICES. THESE TERMS CONTAIN IMPORTANT INFORMATION AND LIMITATIONS REGARDING YOUR LEGAL RIGHTS, INCLUDING, WITHOUT LIMITATION, A MANDATORY ARBITRATION CLAUSE AND A WAIVER OF"
+    },
+    {
+      "id": "check-page-1a5d2a5258",
+      "url": "https://awesomeinc.org/terms",
+      "page": "terms",
+      "excerpt": "Awesome Inc logos, trademarks and service marks which may appear on the Services (“Marks”), are the property of Awesome Inc and are protected under United States and foreign laws."
+    },
+    {
+      "id": "check-page-9f36f4a478",
+      "url": "https://awesomeinc.org/terms",
+      "page": "terms",
+      "excerpt": "Creative Commons License Awesome Inc hereby grants you a license in and to the Educational Content under the terms of the Creative Commons Attribution-NonCommercial-ShareAlike License (http://creativecommons.org/licenses/by-nc-sa/4.0/) (the “CC License”)."
+    },
+    {
+      "id": "check-page-0f862fe0f2",
+      "url": "https://awesomeinc.org/terms",
+      "page": "terms",
+      "excerpt": "Among other things, you agree to comply with all applicable laws regarding the transmission of technical data exported from the United States or the country in which you reside."
+    },
+    {
+      "id": "check-page-4e458e55f8",
+      "url": "https://awesomeinc.org/terms",
+      "page": "terms",
+      "excerpt": "The Services are controlled and operated from facilities in the United States."
+    },
+    {
+      "id": "check-page-4fdf61e03d",
+      "url": "https://awesomeinc.org/terms",
+      "page": "terms",
+      "excerpt": "Unless otherwise explicitly stated, all Services are solely directed to individuals, companies, or other entities located in the United States."
+    },
+    {
+      "id": "check-page-a91a6c7cfe",
+      "url": "https://awesomeinc.org/terms",
+      "page": "terms",
+      "excerpt": "With the exception of any claim by Awesome Inc (or by any of the other Awesome Inc Entities) for indemnification, under no circumstances is an arbitrator authorized to issue an award for, and the Parties hereby waive all rights to claim, punitive damages, liquidated damages, incidental or consequential damages, or attorneys’ fees."
+    },
+    {
+      "id": "check-page-715c1bbaae",
+      "url": "https://awesomeinc.org/timeline",
+      "page": "batches",
+      "excerpt": "Hall of Fame 5 Across Finals Events Events Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Web & App Development Apax Software Web & App Development Web & App Development Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course A History of Awesome Over the past two decades Awesome Inc and APAX Software have made a significant impact on entrepreneurship and education throughout the Commonwealth. This timeline highlights the key events and successes of our organization. Key Milestones 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up Quicklinks Careers Core Values Our Blog Programs & Events Press Contact Internships Schedule a"
+    },
+    {
+      "id": "check-page-ac784a51f6",
+      "url": "https://awesomeinc.org/about",
+      "page": "details",
+      "excerpt": "Hall of Fame 5 Across Finals Events Events Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Web & App Development Apax Software Web & App Development Web & App Development Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course We exist to help people pursue their definition of awesome. Awesome Inc was founded on the basis of the \"give-first\" mentality. Awesome Inc started in 2009 and has grown to be the epicenter for anything related to technology or business. We strive to make Lexington a better place to live and work. View Our Culture Book Read About Our Core Values What we accomplished in 2025 Watch our year in review video Read our impact report View our year in review poster"
+    },
+    {
+      "id": "check-page-c056aa4900",
+      "url": "https://awesomeinc.org/about",
+      "page": "details",
+      "excerpt": "View Our Culture Book Read About Our Core Values What we accomplished in 2025 Watch our year in review video Read our impact report View our year in review poster What We Do Accelerator Program Our space and network and provide an opportunity for entrepreneurs to get connected to who they need to be successful."
+    },
+    {
+      "id": "check-page-7bbd099869",
+      "url": "https://awesomeinc.org/about",
+      "page": "details",
+      "excerpt": "Our software arm, APAX Software, can build enterprise solutions suited for anyone."
+    },
+    {
+      "id": "check-page-4b094e0287",
+      "url": "https://awesomeinc.org/about",
+      "page": "details",
+      "excerpt": "Visit Site Workspace An 18,000 square foot space to get your best work done."
+    },
+    {
+      "id": "check-page-6181eb1fc0",
+      "url": "https://awesomeinc.org/about",
+      "page": "details",
+      "excerpt": "Offering private office space, coworking memberships, conference rooms, event space, and many more amenities."
+    },
+    {
+      "id": "check-page-1afc37711b",
+      "url": "https://awesomeinc.org/about",
+      "page": "details",
+      "excerpt": "Read More Awesome Fund A $5 Million pre-seed and seed stage fund that invests in tech startups in and near Kentucky, bringing new capital and resources to the region."
+    },
+    {
+      "id": "check-page-6c5e03caf5",
+      "url": "https://awesomeinc.org/about",
+      "page": "details",
+      "excerpt": "Read More Corporate Innovation Helping Kentucky companies discover, test, and implement innovative ideas through workshops, leadership development, and mentorship."
+    },
+    {
+      "id": "check-page-f2c6b6c8ae",
+      "url": "https://awesomeinc.org/fellowship",
+      "page": "details",
+      "excerpt": "Hall of Fame 5 Across Finals Events Events Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Web & App Development Apax Software Web & App Development Web & App Development Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course FELLOWSHIP A one year, mentor-driven program designed to accelerate your high tech startup. Apply Now Fellowship Metrics 98 Portfolio Companies $240.5M Outside Investment Raised 1,063 Jobs Created Our company took advantage of all of the services. They were incredibly helpful and well-timed for us. Kirsten Moorefield The Fellowship Program has been an incredible resource in Kentucky as WeatherCheck grows. Our team utilized many of the resources offered while"
+    },
+    {
+      "id": "check-page-a093ed70c4",
+      "url": "https://awesomeinc.org/fellowship",
+      "page": "details",
+      "excerpt": "Demetrius Gray The network I've developed through the Fellowship program includes some of my most trusted advisors as well as my lead investors."
+    },
+    {
+      "id": "check-page-f80bdf23c2",
+      "url": "https://awesomeinc.org/india/about",
+      "page": "details",
+      "excerpt": "| This will be dynamic later Join Coding Club Today Awesome Inc About we exist to help people to learn to code. Awesome Inc was founded on the basis of the \"give-first\" mentality. Awesome Inc started in 2009 and has grown beyond the US to help kids learn to code. Meet the team Bryce Anderson Bryce Anderson is an entrepreneur based in Lexington, KY (USA). He has founded multiple companies and currently runs four of them with over 900 employees. Having been involved with Awesome Inc in the US for the last 10 years, he’s excited to launch the coding school in Bhopal. He’s been to India several times visiting his family and can’t wait to spend more time there. Ashlin Mathews Ashlin is a Senior Software Engineer and has worked for Bloomberg LP for the past 11 years. He currently lives in Dallas, TX (USA) but grew up in Bhopal. Ashlin brings a high level of software experience and will serve as a Technical Advisor. He’s excited to help launch the Awesome Inc coding school in his home town. Bhopal, Madhya Pradesh, India info_india@awesomeinc.org quicklinks About Us Core Values courses Week of Code Coding Club (Coming Soon) About Privacy Policy Terms of Service"
+    },
+    {
+      "id": "check-page-2a9b0eb8dd",
+      "url": "https://awesomeinc.org/program",
+      "page": "details",
+      "excerpt": "Hall of Fame 5 Across Finals Events Events Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Web & App Development Apax Software Web & App Development Web & App Development Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Welcome to October 14, 2026 Tonight's Details Vote View Teams Judges Sponsors Podcasts Become a mentor Free ticket for next 5 across Startup pipeline More about awesome inc Tonight's Teams Roof & Claim Advisor Kinyoudoitall Vantage Exchange Zenyor Healthcare Flyover Automation Tonight's Judges Tim Metzner Founder and GP Fireroad Patrick Henshaw Managing Director Render Capital Brandon Bruce General Partner Market Square Ventures Andrew Wegrzyn Principal"
+    },
+    {
+      "id": "check-page-0a7770a8a8",
+      "url": "https://awesomeinc.org/program/ProgramLinkTree",
+      "page": "details",
+      "excerpt": "Awesome Inc | Program Link Tree Tonight's Details Vote View Teams Judges Sponsors Podcasts Become a mentor Free ticket for next 5 across Startup pipeline More about awesome inc"
+    },
+    {
+      "id": "check-page-651a549c6a",
+      "url": "https://awesomeinc.org/salesforce",
+      "page": "details",
+      "excerpt": "Hall of Fame 5 Across Finals Events Events Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Web & App Development Apax Software Web & App Development Web & App Development Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Salesforce career accelerator Start your application Get started now in 30 seconds or less This part-time course will put you on the path towards a promising career in the Salesforce ecosystem. Work together with our team and peers to earn your first Salesforce Certification and learn key tech career skills. UPCOMING PROGRAM DATES WINTER 2023 2.15.23 TO 05.15.23 SPRING 2023 03.15.23 TO 06.15.23 Let's chat Why learn salesforce? Career opportunities in the"
+    },
+    {
+      "id": "check-page-9fbbcc5e0b",
+      "url": "https://awesomeinc.org/salesforce",
+      "page": "details",
+      "excerpt": "Salesforce is the world's leading customer relationship management solution, used by organizations from Fortune 500 companies to government agencies and local non-profits."
+    },
+    {
+      "id": "check-page-7d755b3639",
+      "url": "https://awesomeinc.org/salesforce",
+      "page": "details",
+      "excerpt": "The role of Salesforce Administrator is a great starting point for a career in the ecosystem, and our Accelerator is a great place to learn the skills you need to get started."
+    },
+    {
+      "id": "check-page-51f901ffb7",
+      "url": "https://awesomeinc.org/salesforce",
+      "page": "details",
+      "excerpt": "Our Salesforce Career Accelerator program is designed to both teach you key technical skills, and to foster real-world connections to the material."
+    },
+    {
+      "id": "check-page-774bebcd1d",
+      "url": "https://awesomeinc.org/salesforce",
+      "page": "details",
+      "excerpt": "Prior Awesome Inc students have come from a variety of backgrounds, including manufacturing, retail, design, food service, law, healthcare, and more."
+    },
+    {
+      "id": "check-page-985c18457b",
+      "url": "https://awesomeinc.org/salesforce",
+      "page": "details",
+      "excerpt": "This program is being supported, in whole or in part, by federal award numbers SLFRP0292/SLFRP3418 awarded to Lexington-Fayette Apply now FAQs Do I need my own computer?"
+    },
+    {
+      "id": "check-page-d0f8a62bb5",
+      "url": "https://awesomeinc.org/salesforce",
+      "page": "details",
+      "excerpt": "The Salesforce Career Accelerator is designed for adult learners, age 21+."
+    },
+    {
+      "id": "check-page-3a17643f80",
+      "url": "https://www.awesomeinc.org/salesforce/apply",
+      "page": "application",
+      "excerpt": "Hall of Fame 5 Across Finals Events Events Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Web & App Development Apax Software Web & App Development Web & App Development Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course SALESFORCE CAREER ACCELERATOR APPLICATION HOME / LEARN / ADULTS / SALESFORCE / APPLY Fill out this form to start your application process First Name Last Name Email Phone How did you find out about this program? -Select- Advertisement News Article Signage / Building Google Search Referral / Word of Mouth Event Facebook Other If referred, who told you about the program? Submit The Cost Tuition The Salesforce Career Accelerator is available to Kentucky residents"
+    },
+    {
+      "id": "check-page-15d3601b37",
+      "url": "https://www.awesomeinc.org/salesforce/apply",
+      "page": "application",
+      "excerpt": "Submit The Cost Tuition The Salesforce Career Accelerator is available to Kentucky residents for $3499."
+    },
+    {
+      "id": "check-page-59c5dab30d",
+      "url": "https://www.awesomeinc.org/salesforce/apply",
+      "page": "application",
+      "excerpt": "This program is being supported, in whole or in part, by federal award numbers SLFRP0292/SLFRP3418 awarded to Lexington-Fayette Urban County Government by the U.S."
+    },
+    {
+      "id": "check-page-0b7497f0d1",
+      "url": "https://awesomeinc.org/",
+      "page": "details",
+      "excerpt": "Hall of Fame 5 Across Finals Events Events Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame Community Yearbook Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Workspace Schedule a Tour Workspace Events Coworking Private Office Conference Rooms Book Events Virtual Office Parking Web & App Development Apax Software Web & App Development Web & App Development Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Be Awesome About What We Do Blog Press Careers Internships Events Partnerships Learn to Code Youth Courses Adult Courses Kids Camps Salesforce Career Accelerator Adult Intro Course Be in the Room for Kentucky's Largest Startup Event The 5 Across Finals Pitch Competition Learn More Celebrate Kentucky at The 2026 Entrepreneur Hall of Fame Ceremony Learn More Your Exclusive Look at New Startups Fellowship Demo Day Coming Soon Learn More Learn to Code Everybody can and should learn to code, start today. Rent Workspace Rent a desk or space for events, meetings, and more. Accelerate your startup We will help grow your business with a"
+    },
+    {
+      "id": "check-page-4e413ed48d",
+      "url": "https://awesomeinc.org/",
+      "page": "details",
+      "excerpt": "Accelerate your startup We will help grow your business with a mentor-driven, accelerator program."
+    },
+    {
+      "id": "check-page-1de18c5749",
+      "url": "https://awesomeinc.org/",
+      "page": "details",
+      "excerpt": "We do this by hosting community events, leading technology education courses, and offering a shared workspace environment."
+    },
+    {
+      "id": "check-page-6e21c3e09d",
+      "url": "https://awesomeinc.org/",
+      "page": "details",
+      "excerpt": "Accelerate Your Startup Our Fellowship Program is mentor-driven, designed to accelerate your high-tech startup."
+    },
+    {
+      "id": "check-page-ca729cebc3",
+      "url": "https://awesomeinc.org/",
+      "page": "details",
+      "excerpt": "Workspace Join Our Workspace Functional Workspace An awesome space to work or host your next meeting."
+    },
+    {
+      "id": "check-page-fb3fc19ec5",
+      "url": "https://awesomeinc.org/assets/core-values.pdf",
+      "page": "details",
+      "excerpt": "%PDF-1.4 %���� 16 0 obj < > endobj xref 16 54 0000000016 00000 n 0000001630 00000 n 0000001693 00000 n 0000002101 00000 n 0000002214 00000 n 0000018342 00000 n 0000032883 00000 n 0000048212 00000 n 0000064862 00000 n 0000079836 00000 n 0000092958 00000 n 0000108123 00000 n 0000123741 00000 n 0000123815 00000 n 0000124924 00000 n 0000125627 00000 n 0000127837 00000 n 0000193425 00000 n 0000258987 00000 n 0000324575 00000 n 0000390163 00000 n 0000455751 00000 n 0000521339 00000 n 0000586927 00000 n 0000652515 00000 n 0000718103 00000 n 0000783691 00000 n 0000849279 00000 n 0000914867 00000 n 0000980455 00000 n 0001046043 00000 n 0001111631 00000 n 0001177219 00000 n 0001242807 00000 n 0001308395 00000 n 0001373983 00000 n 0001439571 00000 n 0001505159 00000 n 0001570747 00000 n 0001636335 00000 n 0001701923 00000 n 0001767511 00000 n 0001833099 00000 n 0001898687 00000 n 0001964275 00000 n 0002029863 00000 n 0002095451 00000 n 0002098663 00000 n 0002164251 00000 n 0002229839 00000 n 0002295427 00000 n 0002361015 00000 n 0002426603 00000 n 0000001376 00000 n trailer < < 410E98199E934A22B8668DB10A5D7F9F>]/Prev 2818562>> startxref 0 %%EOF 69 0 obj < >stream h�b```b``�����h�� ƀ b �@���q��a�` PD`��Q� .�fg�ҟ ���� �U�A�a+���[Ν ��d.(Y`,\"��o����T ҡx����� f � 2 L � x ؈ HH��,p@V �� � Z�g�4 ����� � 0@V�5 �Ϡ͠ Uq � ߈,\" endstream endobj 17 0 obj < > endobj 18 0 obj < >/Resources < >>>/Rotate"
+    },
+    {
+      "id": "check-page-6f28d2aa34",
+      "url": "https://awesomeinc.org/program/programlinktree/",
+      "page": "details",
+      "excerpt": "Awesome Inc | Program Link Tree Tonight's Details Vote View Teams Judges Sponsors Podcasts Become a mentor Free ticket for next 5 across Startup pipeline More about awesome inc"
+    },
+    {
+      "id": "check-page-af4aabcf60",
+      "url": "https://www.awesomeinc.org/india/about",
+      "page": "details",
+      "excerpt": "| This will be dynamic later Join Coding Club Today Awesome Inc About we exist to help people to learn to code. Awesome Inc was founded on the basis of the \"give-first\" mentality. Awesome Inc started in 2009 and has grown beyond the US to help kids learn to code. Meet the team Bryce Anderson Bryce Anderson is an entrepreneur based in Lexington, KY (USA). He has founded multiple companies and currently runs four of them with over 900 employees. Having been involved with Awesome Inc in the US for the last 10 years, he’s excited to launch the coding school in Bhopal. He’s been to India several times visiting his family and can’t wait to spend more time there. Ashlin Mathews Ashlin is a Senior Software Engineer and has worked for Bloomberg LP for the past 11 years. He currently lives in Dallas, TX (USA) but grew up in Bhopal. Ashlin brings a high level of software experience and will serve as a Technical Advisor. He’s excited to help launch the Awesome Inc coding school in his home town. Bhopal, Madhya Pradesh, India info_india@awesomeinc.org quicklinks About Us Core Values courses Week of Code Coding Club (Coming Soon) About Privacy Policy Terms of Service"
     }
   ],
   "findings": {
@@ -61,6 +834,10 @@
       {
         "value": "info@awesomeinc.org",
         "evidenceId": "check-email-8c01448329"
+      },
+      {
+        "value": "info_india@awesomeinc.org",
+        "evidenceId": "check-email-1ab5f3a207"
       }
     ],
     "phones": [
@@ -69,14 +846,71 @@
         "evidenceId": "check-phone-b60907486d"
       }
     ],
-    "routes": [],
-    "applicationUrl": [],
+    "routes": [
+      {
+        "value": "https://docs.google.com/forms/d/1azJ9L8NBpe-3KYMTgFOQ7l0Hn-0y26a2SrHI6SebNm8/viewform?edit_requested=true",
+        "evidenceId": "check-route-d958c831d4"
+      },
+      {
+        "value": "https://awesomeinc.org/salesforce/apply",
+        "evidenceId": "check-route-57d778a746"
+      },
+      {
+        "value": "https://www.awesomeinc.org/salesforce/apply",
+        "evidenceId": "check-route-428458a9f4"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://awesomeinc.org/salesforce/apply",
+        "evidenceId": "check-route-57d778a746"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-12c32a873f"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-381a7ec958"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-8222aeb7e1"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-0e53f26a1e"
+      }
+    ],
+    "location": [
+      {
+        "value": "Lexington",
+        "evidenceId": "check-location-4689b81ebf"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
-    "portfolioPages": [],
+    "dealComponents": [],
+    "portfolioPages": [
+      {
+        "value": "https://awesomeinc.org/fellowship",
+        "evidenceId": "check-portfolio-eb09d7fcee"
+      },
+      {
+        "value": "https://awesomeinc.org/fellowship/portfolio",
+        "evidenceId": "check-portfolio-7d30c69a06"
+      }
+    ],
     "name": [
       {
         "value": "Awesome Inc",

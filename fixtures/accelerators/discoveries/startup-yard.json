@@ -1,6 +1,6 @@
 {
   "programId": "startup-yard",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-17T00:44:46.000Z",
   "pages": [
     {
       "url": "https://startupyard.com/6-tips-to-make-your-startup-accelerator-application-standout/",
@@ -115,6 +115,14 @@
       "origin": "official"
     },
     {
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/startupyard-3-years-infographics-2/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://startupyard.com/category/accelerator/",
       "page": "details",
       "anchor": "Life at an Accelerator",
@@ -135,6 +143,38 @@
       "page": "terms",
       "anchor": "FAQ- Frequently Asked Questions",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/last-chance-to-apply-to-startupyard-2016/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/last-chance-to-apply-to-startupyard-2016/new_products/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/meet-carebot-the-doctors-second-pair-of-eyes/_the-application-is-used-by-the-team-of-carebot-as-a-demonstration-tool/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/one-month-left-to-apply-to-startupyard/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

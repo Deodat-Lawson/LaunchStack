@@ -1,6 +1,6 @@
 {
   "programId": "entrepreneurs-first",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://apply.joinef.com",
@@ -51,10 +51,18 @@
       "origin": "official"
     },
     {
+      "url": "https://www.joinef.com/about/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.joinef.com/about/careers/",
       "page": "details",
       "anchor": "Careers",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

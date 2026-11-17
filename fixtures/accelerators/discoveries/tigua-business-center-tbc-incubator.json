@@ -1,6 +1,6 @@
 {
   "programId": "tigua-business-center-tbc-incubator",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.ysletadelsurpueblo.org/about-us",
@@ -14,7 +14,39 @@
       "url": "https://www.ysletadelsurpueblo.org/about-us/who-we-are",
       "page": "details",
       "anchor": "Who We Are",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ysletadelsurpueblo.org/application-for-employment?position=29",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ysletadelsurpueblo.org/application-for-employment?position=50",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ysletadelsurpueblo.org/events/graduates-biography-deadline",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ysletadelsurpueblo.org/events/tribal-council-scholarship-deadline",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

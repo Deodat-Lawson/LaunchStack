@@ -1,6 +1,6 @@
 {
   "programId": "the-engine",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://engine.xyz/about",
@@ -51,22 +51,6 @@
       "origin": "official"
     },
     {
-      "url": "https://engine.xyz/accelerator/news/the-engine-blog",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://engine.xyz/accelerator/news/tough-tech-fundamentals",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://engine.xyz/careers",
       "page": "portfolio",
       "anchor": "Explore Open Jobs at The Engine and Resident Companies",
@@ -107,14 +91,6 @@
       "origin": "official"
     },
     {
-      "url": "https://engine.xyz/news/ge-vernova-plugs-in-to-the-tough-tech-ecosystem-with-the-engine-accelerator",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://engine.xyz/programs",
       "page": "details",
       "anchor": "Programs",
@@ -126,7 +102,7 @@
       "url": "https://engine.xyz/resident-companies",
       "page": "portfolio",
       "anchor": "Companies",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -134,6 +110,14 @@
       "url": "https://engine.xyz/spaces/residency/resident-programs",
       "page": "details",
       "anchor": "Resident Programs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://engine.xyz/whiteboard",
+      "page": "other",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

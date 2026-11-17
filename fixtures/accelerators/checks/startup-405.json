@@ -1,28 +1,258 @@
 {
   "programId": "startup-405",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
-    "https://www.startup405.com"
+    "https://www.startup405.com",
+    "https://startup405.com/event-rental-application",
+    "https://startup405.com/incubator-application",
+    "https://startup405.com/faq",
+    "https://startup405.com/",
+    "https://startup405.com/about"
   ],
   "evidence": [
     {
+      "id": "check-email-ba918eed42",
+      "url": "https://startup405.com/faq",
+      "title": "Startup 405 — terms page",
+      "excerpt": "info@startup405.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-e3d540e3bc",
+      "url": "https://startup405.com/faq",
+      "title": "Startup 405 — terms page",
+      "excerpt": "Startup 405, you can contact the front desk or email us at info@startup405.com to cancel your membership. Memberships must be canceled by",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8fee184ee6",
+      "url": "https://startup405.com/faq",
+      "title": "Startup 405 — terms page",
+      "excerpt": "monthly membership. Not a member? You can sign up for a virtual mailbox membership for $40/month. Can I cancel my",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-b280e86b5b",
+      "url": "https://startup405.com/",
+      "title": "Startup 405 — program page",
+      "excerpt": "alternative for freelancers, entrepreneurs, and remote workers who seek a productive and social work setting.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e3e819baf4",
+      "url": "https://www.startup405.com",
+      "title": "Startup 405 — homepage",
+      "excerpt": "alternative for freelancers, entrepreneurs, and remote workers who seek a productive and social work setting.",
+      "page": "details"
+    },
+    {
       "id": "check-name-92f26dff25",
       "url": "https://www.startup405.com",
-      "title": "Startup 405 — homepage checked by scrape.py",
+      "title": "Startup 405 — homepage",
       "excerpt": "Startup 405 Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week More",
       "page": "details"
+    },
+    {
+      "id": "check-route-1c86a4988e",
+      "url": "https://www.startup405.com",
+      "title": "Startup 405 — homepage",
+      "excerpt": "Incubator Application → https://startup405.com/incubator-application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-217d659314",
+      "url": "https://startup405.com/about",
+      "title": "Startup 405 — program page",
+      "excerpt": "Incubator Application → https://startup405.com/incubator-application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5e88eb61f2",
+      "url": "https://startup405.com/event-rental-application",
+      "title": "Startup 405 — application page",
+      "excerpt": "Incubator Application → https://startup405.com/incubator-application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c02700b4b1",
+      "url": "https://startup405.com/",
+      "title": "Startup 405 — program page",
+      "excerpt": "Incubator Application → https://startup405.com/incubator-application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e57bd972a7",
+      "url": "https://startup405.com/faq",
+      "title": "Startup 405 — terms page",
+      "excerpt": "Incubator Application → https://startup405.com/incubator-application",
+      "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-cbc2483b04",
+      "url": "https://www.startup405.com",
+      "page": "details",
+      "excerpt": "Startup 405 Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week More Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week Sign In Create Account My Account Signed in as: filler@godaddy.com My Account Sign out Signed in as: filler@godaddy.com Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week Account My Account Sign out Sign In My Account THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION Cleveland County's Only State-Certified Incubator Contact THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION Cleveland County's Only State-Certified Incubator Contact Incubator and Coworking Space Coming November 2026! Find out more Cleveland County's Ideation to Scale Solution Incubator Since 2001, Startup 405 has served as a catalyst for entrepreneurial innovation and growth, providing a nurturing environment for fledgling companies to flourish. We offer a shared workspace, mentorship, and a network of resources that empower startups to overcome initial challenges and accelerate their development. The collaborative setting fosters creativity, encourages knowledge exchange, and facilitates partnerships among"
+    },
+    {
+      "id": "check-page-fc113e8cbb",
+      "url": "https://www.startup405.com",
+      "page": "details",
+      "excerpt": "Learn More Accelerator Startup 405's coworking space is a dynamic and collaborative work environment that brings together individuals from diverse professional backgrounds to share a common workspace."
+    },
+    {
+      "id": "check-page-6a616c10ab",
+      "url": "https://www.startup405.com",
+      "page": "details",
+      "excerpt": "Venture Capital Advisory Services Enjoy the perks of a private office without the constraints of long-term leases + high overhead costs."
+    },
+    {
+      "id": "check-page-a9178ab4cb",
+      "url": "https://www.startup405.com",
+      "page": "details",
+      "excerpt": "Monthly workspace amenities are included!"
+    },
+    {
+      "id": "check-page-817db2dd89",
+      "url": "https://www.startup405.com",
+      "page": "details",
+      "excerpt": "Home Incubator Application Powered by This website uses cookies."
+    },
+    {
+      "id": "check-page-994ec1d025",
+      "url": "https://startup405.com/event-rental-application",
+      "page": "application",
+      "excerpt": "Event Rental Application Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week More Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week Sign In Create Account My Account Signed in as: filler@godaddy.com My Account Sign out Signed in as: filler@godaddy.com Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week Account My Account Sign out Sign In My Account EVENT RENTAL APPLICATION Business Strategy Consulting Financial Analysis and Planning Business Strategy Consulting Our business strategy consulting services will help you identify the right growth opportunities, optimize your operations, and navigate market challenges. We work with you to develop a customized strategy that aligns with your business goals and objectives. Sales and Marketing Support Financial Analysis and Planning Business Strategy Consulting Our sales and marketing support services will help you generate leads, close more deals, and increase revenue. We work with you to develop effective sales and marketing strategies, create compelling content, and implement targeted campaigns to drive results. Financial Analysis and Planning Financial Analysis and Planning Financial Analysis and Planning Our financial analysis and planning services will help you make informed decisions about your business. We provide financial modeling, forecasting, and analysis to help you understand your financial position and optimize"
+    },
+    {
+      "id": "check-page-74480a3763",
+      "url": "https://startup405.com/event-rental-application",
+      "page": "application",
+      "excerpt": "Startup 405 425 West Main Street, Norman, OK, USA Copyright © 2024 Startup 405 - All Rights Reserved."
+    },
+    {
+      "id": "check-page-7799f81a43",
+      "url": "https://startup405.com/event-rental-application",
+      "page": "application",
+      "excerpt": "Home Incubator Application Powered by This website uses cookies."
+    },
+    {
+      "id": "check-page-acc6d472ca",
+      "url": "https://startup405.com/incubator-application",
+      "page": "application",
+      "excerpt": "Incubator Application Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week More Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week Sign In Create Account My Account Signed in as: filler@godaddy.com My Account Sign out Signed in as: filler@godaddy.com Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week Account My Account Sign out Sign In My Account Center for Entrepreneurship and Innovation Application Copyright © 2024 Startup 405 - All Rights Reserved. Home Incubator Application Powered by This website uses cookies. We use cookies to analyze website traffic and optimize your website experience. By accepting our use of cookies, your data will be aggregated with all other user data. Accept"
+    },
+    {
+      "id": "check-page-59c749b874",
+      "url": "https://startup405.com/faq",
+      "page": "terms",
+      "excerpt": "FAQ Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week More Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week Sign In Create Account My Account Signed in as: filler@godaddy.com My Account Sign out Signed in as: filler@godaddy.com Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week Account My Account Sign out Sign In My Account FREQUENTLY ASKED QUESTIONS GENERAL Please reach us at if you cannot find an answer to your question. What are your hours? You’ll see our happy, caffeinated faces bright and early at 8 am, and we’ll lock up at 5 Monday - Friday. Startup 405 is closed on Federal holidays. However, Startup 405 members get 24/7 access to the space, which means there’s always an outlet for a 2 am stroke of genius. What is coworking Common BD strategies include market research and analysis, networking and relationship building, lead generation and qualification, and strategic partnerships and alliances. Can I bring my dog? Despite their powers of persuasion, Max and his furry friends need to stay behind. However, the beauty of suburban coworking is your ability to swing back home for lunchtime dog walks and other happy, slobbery midday reunions. MEMBERSHIP How does membership billing work? If you become a Startup 405 member in the middle of a month, you’ll pay a prorated rate for the rest of that month. Members are then charged automatically on the first of every"
+    },
+    {
+      "id": "check-page-86b00c6259",
+      "url": "https://startup405.com/faq",
+      "page": "terms",
+      "excerpt": "If you have a coworking membership at Startup 405, you can contact the front desk or email us at info@startup405.com to cancel your membership."
+    },
+    {
+      "id": "check-page-44161bbac9",
+      "url": "https://startup405.com/faq",
+      "page": "terms",
+      "excerpt": "INCUBATOR What is the experience of Startup 405 team members?"
+    },
+    {
+      "id": "check-page-cc2da4db16",
+      "url": "https://startup405.com/faq",
+      "page": "terms",
+      "excerpt": "Startup 405 works with businesses in a wide range of industries, including technology, finance, healthcare, and more."
+    },
+    {
+      "id": "check-page-e5b13562cf",
+      "url": "https://startup405.com/faq",
+      "page": "terms",
+      "excerpt": "Home Incubator Application Powered by This website uses cookies."
+    },
+    {
+      "id": "check-page-9d9af1b9a7",
+      "url": "https://startup405.com/",
+      "page": "details",
+      "excerpt": "Startup 405 Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week More Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week Sign In Create Account My Account Signed in as: filler@godaddy.com My Account Sign out Signed in as: filler@godaddy.com Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week Account My Account Sign out Sign In My Account THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION Cleveland County's Only State-Certified Incubator Contact THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION THE CENTER FOR ENTREPRENEURSHIP AND INNOVATION Cleveland County's Only State-Certified Incubator Contact Incubator and Coworking Space Coming November 2026! Find out more Cleveland County's Ideation to Scale Solution Incubator Since 2001, Startup 405 has served as a catalyst for entrepreneurial innovation and growth, providing a nurturing environment for fledgling companies to flourish. We offer a shared workspace, mentorship, and a network of resources that empower startups to overcome initial challenges and accelerate their development. The collaborative setting fosters creativity, encourages knowledge exchange, and facilitates partnerships among"
+    },
+    {
+      "id": "check-page-c05072a7d9",
+      "url": "https://startup405.com/",
+      "page": "details",
+      "excerpt": "Learn More Accelerator Startup 405's coworking space is a dynamic and collaborative work environment that brings together individuals from diverse professional backgrounds to share a common workspace."
+    },
+    {
+      "id": "check-page-8f9c8ce516",
+      "url": "https://startup405.com/",
+      "page": "details",
+      "excerpt": "Venture Capital Advisory Services Enjoy the perks of a private office without the constraints of long-term leases + high overhead costs."
+    },
+    {
+      "id": "check-page-2e0f4aa92f",
+      "url": "https://startup405.com/",
+      "page": "details",
+      "excerpt": "Monthly workspace amenities are included!"
+    },
+    {
+      "id": "check-page-2d2acba53e",
+      "url": "https://startup405.com/",
+      "page": "details",
+      "excerpt": "Home Incubator Application Powered by This website uses cookies."
+    },
+    {
+      "id": "check-page-208fd6cc73",
+      "url": "https://startup405.com/about",
+      "page": "details",
+      "excerpt": "ABOUT Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week More Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week Sign In Create Account My Account Signed in as: filler@godaddy.com My Account Sign out Signed in as: filler@godaddy.com Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week Account My Account Sign out Sign In My Account About Us Supporting Your Business Startup 405 is a business incubator certified by the Oklahoma Department of Commerce and operated by the Cleveland County Economic Development Coalition that helps startup companies grow, prosper, and develop within the state of Oklahoma by providing a supportive environment and access to tools, resources, and technical assistance through tailored programming. As an Oklahoma Department of Commerce certified business incubator, clients who are in good standing in the incubation program qualify for a ten-year state business income tax exemption. MISSION We want every client accepted into the incubator program to have every opportunity to achieve long-term success by offering a culture and program that encourages and fosters the growth and success of startups. VISION Create jobs in our county Enhance a community’s entrepreneurial climate Retain businesses in a community Build or accelerate growth in a local industry Diversify local economies Copyright © 2024 Startup 405 - All Rights Reserved. Home Incubator"
+    },
+    {
+      "id": "check-page-c34764e92c",
+      "url": "https://startup405.com/about",
+      "page": "details",
+      "excerpt": "Home Incubator Application Powered by This website uses cookies."
     }
   ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "info@startup405.com",
+        "evidenceId": "check-email-ba918eed42"
+      }
+    ],
     "phones": [],
-    "routes": [],
-    "applicationUrl": [],
+    "routes": [
+      {
+        "value": "https://startup405.com/incubator-application",
+        "evidenceId": "check-route-1c86a4988e"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://startup405.com/incubator-application",
+        "evidenceId": "check-route-1c86a4988e"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-e3e819baf4"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

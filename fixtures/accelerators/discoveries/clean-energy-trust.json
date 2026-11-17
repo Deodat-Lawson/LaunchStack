@@ -1,12 +1,20 @@
 {
   "programId": "clean-energy-trust",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://evergreeninno.org/501vc",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://evergreeninno.org/about-us",
       "page": "details",
       "anchor": "About Us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -14,7 +22,7 @@
       "url": "https://evergreeninno.org/about-us/our-impact",
       "page": "details",
       "anchor": "Our Impact",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -22,7 +30,7 @@
       "url": "https://evergreeninno.org/about-us/supporters",
       "page": "details",
       "anchor": "Supporters",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -30,6 +38,14 @@
       "url": "https://evergreeninno.org/apply",
       "page": "terms",
       "anchor": "Apply for Investment",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/contact-us",
+      "page": "other",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -51,14 +67,6 @@
       "origin": "official"
     },
     {
-      "url": "https://evergreeninno.org/events/spring-investment-cycle-information-session-2025",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://evergreeninno.org/explore/article/2017-cet-challenge-application-launch",
       "page": "application",
       "anchor": "",
@@ -67,72 +75,48 @@
       "origin": "official"
     },
     {
-      "url": "https://evergreeninno.org/explore/article/2020-new-investment-spotlight-renewance",
-      "page": "terms",
+      "url": "https://evergreeninno.org/microsites/heartland-about",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://evergreeninno.org/explore/article/an-environmentally-and-socially-conscious-food-supply-our-investment-in-agricycle",
-      "page": "terms",
+      "url": "https://evergreeninno.org/microsites/heartland-about-centrepolis",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://evergreeninno.org/explore/article/august-cleantech-roundup-new-investments-corporate-renewables",
-      "page": "terms",
+      "url": "https://evergreeninno.org/microsites/heartland-about-evergreen",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://evergreeninno.org/explore/article/clean-energy-trust-announces-970000-in-seed-investments-benefiting-midwest-cleantech-startups-at-co_invest-cleantech-event",
-      "page": "terms",
+      "url": "https://evergreeninno.org/microsites/heartland-about-mhub",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://evergreeninno.org/explore/article/clean-energy-trust-selects-finalists-2017-cet-challenge-investments",
-      "page": "terms",
+      "url": "https://evergreeninno.org/microsites/heartland-about-spark-innovation-center",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://evergreeninno.org/explore/article/clean-energy-trusts-investment-in-varunas-vision",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://evergreeninno.org/explore/article/february-2025-cleantech-roundup-trade-war-evolving-generation-mix-climate-tech-investment-data",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://evergreeninno.org/explore/article/investment-committee-formation-brings-additional-rigor-clean-energy-trusts-investment-model",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://evergreeninno.org/explore/article/may-cleantech-roundup-covid-evs-enormous-storage-investments-scooter-consolidation-insanely-cheap-solar",
-      "page": "terms",
+      "url": "https://evergreeninno.org/microsites/heartland-accelerators",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -147,10 +131,34 @@
       "origin": "official"
     },
     {
+      "url": "https://evergreeninno.org/senior-investment-analyst",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://evergreeninno.org/start-up-opportunities/award/501vc",
       "page": "terms",
       "anchor": "501vc® Investment Fund",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/start-up-opportunities/award/501vc-fund",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/wp-content/uploads/Evergreen_Climate_Innovations_2025-2026_Impact-Report-1.pdf",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

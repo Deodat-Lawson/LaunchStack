@@ -1,93 +1,1032 @@
 {
   "programId": "nyu-tandon-future-labs",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://engineering.nyu.edu/business/future-labs",
+    "https://engineering.nyu.edu/about",
+    "https://engineering.nyu.edu/about/brooklyn",
+    "https://engineering.nyu.edu/about/fast-facts",
+    "https://engineering.nyu.edu/about/history",
+    "https://engineering.nyu.edu/about/leadership-team",
+    "https://engineering.nyu.edu/about/mission",
+    "https://engineering.nyu.edu/about/our-engineers",
+    "https://engineering.nyu.edu/about/research-magazine",
+    "https://engineering.nyu.edu/about/visit-nyu-tandon",
     "https://engineering.nyu.edu/academics/programs/bachelor-science",
-    "https://engineering.nyu.edu/news/nyu-tandon-announces-2026-cohort-urban-future-labs-innovate-uk-global-incubator-programme",
-    "https://engineering.nyu.edu/news/nyu-tandon-opens-applications-vet-1-training-program-veteran-entrepreneurs"
+    "https://engineering.nyu.edu/academics/programs/certificate",
+    "https://engineering.nyu.edu/academics/programs/digital-learning",
+    "https://engineering.nyu.edu/academics/programs/digital-learning/current-students",
+    "https://engineering.nyu.edu/academics/programs/doctor-philosophy",
+    "https://engineering.nyu.edu/academics/programs/k12-stem-education",
+    "https://engineering.nyu.edu/academics/programs/master-science",
+    "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge",
+    "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge/frequently-asked-questions",
+    "https://engineering.nyu.edu/about/contact-us"
   ],
   "evidence": [
     {
+      "id": "check-duration-112da2ac54",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge/frequently-asked-questions",
+      "title": "NYU Tandon Future Labs — terms page",
+      "excerpt": "total program time typically ranges between 6-7 months, and learners have up to one year to complete",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-392ff24057",
+      "url": "https://engineering.nyu.edu/about/fast-facts",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "students are working, in school, or both within 6 months of graduation 29% recent undergraduates'",
+      "page": "details"
+    },
+    {
+      "id": "check-email-22f1d791e1",
+      "url": "https://engineering.nyu.edu/about/contact-us",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "admissions@nyu.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-9fd653bc58",
+      "url": "https://engineering.nyu.edu/about/contact-us",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "York University 400 Lafayette Street New York, NY 10003 admissions@nyu.edu 212-998-4500 Graduate Enrollment Management and Admissions",
+      "page": "details"
+    },
+    {
+      "id": "check-format-07a078b67c",
+      "url": "https://engineering.nyu.edu/about/fast-facts",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Top 5 Cybersecurity masters degrees CSO #7 Top augmented/virtual reality (AR/VR) colleges in the U.S. Animation Career",
+      "page": "details"
+    },
+    {
+      "id": "check-format-29003d887f",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning/current-students",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Connect with the Digital Learning community through in-person & virtual events along with professional channels i.e.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3fbd62d643",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "education. We design rigorous yet flexible online and hybrid programs that blend the depth of a STEM education with the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-64c12f28fc",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning/current-students",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Online access to NYU Libraries including daily access to a virtual librarian Supplemental learning resources to refresh and",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e3cc2802a3",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning/current-students",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Discord, etc Receive SWAG to proudly represent NYU Tandon Remote access to NYU campus resources Experiential Learning",
+      "page": "details"
+    },
+    {
       "id": "check-name-714009c332",
       "url": "https://engineering.nyu.edu/business/future-labs",
-      "title": "NYU Tandon Future Labs — homepage checked by scrape.py",
+      "title": "NYU Tandon Future Labs — homepage",
       "excerpt": "NYU Tandon Future Labs | NYU Tandon School of Engineering Skip to Main Content",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-09333d2335",
+      "url": "https://engineering.nyu.edu/about/contact-us",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0f9820e710",
+      "url": "https://engineering.nyu.edu/about",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0f9a67f680",
+      "url": "https://engineering.nyu.edu/about/our-engineers",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-152940dbb5",
+      "url": "https://engineering.nyu.edu/academics/programs/certificate",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-3a81258bd9",
+      "url": "https://engineering.nyu.edu/about/fast-facts",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-45da9c0d3b",
+      "url": "https://engineering.nyu.edu/about/leadership-team",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-5640df2de6",
+      "url": "https://engineering.nyu.edu/about/brooklyn",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-6c7a321ac0",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning/current-students",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
       "page": "details"
     },
     {
       "id": "check-phone-8ee15cc07d",
       "url": "https://engineering.nyu.edu/academics/programs/bachelor-science",
-      "title": "NYU Tandon Future Labs — details page checked by scrape.py",
+      "title": "NYU Tandon Future Labs — program page",
       "excerpt": "646-997-3600",
       "page": "details"
     },
     {
-      "id": "check-phone-d5d63429ed",
-      "url": "https://engineering.nyu.edu/news/nyu-tandon-announces-2026-cohort-urban-future-labs-innovate-uk-global-incubator-programme",
-      "title": "NYU Tandon Future Labs — batches page checked by scrape.py",
+      "id": "check-phone-9ad920c8d6",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge/frequently-asked-questions",
+      "title": "NYU Tandon Future Labs — terms page",
       "excerpt": "646-997-3600",
-      "page": "batches"
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-9e4e0d7845",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-9eb21ec7af",
+      "url": "https://engineering.nyu.edu/academics/programs/doctor-philosophy",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c3dc35f017",
+      "url": "https://engineering.nyu.edu/about/visit-nyu-tandon",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-cb53cde02c",
+      "url": "https://engineering.nyu.edu/about/research-magazine",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-cd8a13b1f7",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
+      "page": "details"
     },
     {
       "id": "check-phone-ec5c798572",
       "url": "https://engineering.nyu.edu/business/future-labs",
-      "title": "NYU Tandon Future Labs — homepage checked by scrape.py",
+      "title": "NYU Tandon Future Labs — homepage",
       "excerpt": "646-997-3600",
       "page": "details"
     },
     {
-      "id": "check-phone-fab70a73e0",
-      "url": "https://engineering.nyu.edu/news/nyu-tandon-opens-applications-vet-1-training-program-veteran-entrepreneurs",
-      "title": "NYU Tandon Future Labs — application page checked by scrape.py",
+      "id": "check-phone-ed15c6afbc",
+      "url": "https://engineering.nyu.edu/about/history",
+      "title": "NYU Tandon Future Labs — program page",
       "excerpt": "646-997-3600",
-      "page": "application"
+      "page": "details"
     },
     {
-      "id": "check-portfolio-013e9c5d5d",
-      "url": "https://engineering.nyu.edu/news/nyu-tandon-opens-applications-vet-1-training-program-veteran-entrepreneurs",
-      "title": "NYU Tandon Future Labs — application page checked by scrape.py",
-      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
-      "page": "application"
+      "id": "check-phone-ee7239271b",
+      "url": "https://engineering.nyu.edu/academics/programs/master-science",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
+      "page": "details"
     },
     {
-      "id": "check-portfolio-7e62c11af3",
-      "url": "https://engineering.nyu.edu/news/nyu-tandon-announces-2026-cohort-urban-future-labs-innovate-uk-global-incubator-programme",
-      "title": "NYU Tandon Future Labs — batches page checked by scrape.py",
+      "id": "check-phone-f379ff544c",
+      "url": "https://engineering.nyu.edu/academics/programs/k12-stem-education",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-fd2c58f036",
+      "url": "https://engineering.nyu.edu/about/mission",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "646-997-3600",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-07c5324b4e",
+      "url": "https://engineering.nyu.edu/about/mission",
+      "title": "NYU Tandon Future Labs — program page",
       "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
-      "page": "batches"
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3aa477092d",
+      "url": "https://engineering.nyu.edu/about/leadership-team",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-423b0a0642",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning/current-students",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "NYU Tandon Alumni Association → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-44d0b000d7",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge/frequently-asked-questions",
+      "title": "NYU Tandon Future Labs — terms page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5275f45f94",
+      "url": "https://engineering.nyu.edu/academics/programs/doctor-philosophy",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5e90c39c5e",
+      "url": "https://engineering.nyu.edu/about/our-engineers",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Featured Alumni → https://engineering.nyu.edu/about/our-engineers/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6c6f323ecc",
+      "url": "https://engineering.nyu.edu/about/our-engineers",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "https://engineering.nyu.edu/about/our-engineers/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-71fabecf27",
+      "url": "https://engineering.nyu.edu/about/fast-facts",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-953f19bd2c",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9712eb8948",
+      "url": "https://engineering.nyu.edu/about/research-magazine",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a0ec3f91ea",
+      "url": "https://engineering.nyu.edu/academics/programs/certificate",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a5221370ad",
+      "url": "https://engineering.nyu.edu/about/contact-us",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-acb2795d2c",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning/current-students",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b44fdaa6f8",
+      "url": "https://engineering.nyu.edu/about/brooklyn",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-becf1e3c02",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-caa580b219",
+      "url": "https://engineering.nyu.edu/about/history",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ce78080028",
+      "url": "https://engineering.nyu.edu/about/visit-nyu-tandon",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d181ea0c31",
+      "url": "https://engineering.nyu.edu/academics/programs/master-science",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d7ca133a76",
+      "url": "https://engineering.nyu.edu/academics/programs/k12-stem-education",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
     },
     {
       "id": "check-portfolio-e1b4671afc",
       "url": "https://engineering.nyu.edu/business/future-labs",
-      "title": "NYU Tandon Future Labs — homepage checked by scrape.py",
+      "title": "NYU Tandon Future Labs — homepage",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e8c8577717",
+      "url": "https://engineering.nyu.edu/about",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ec8b91b71a",
+      "url": "https://engineering.nyu.edu/about/our-engineers",
+      "title": "NYU Tandon Future Labs — program page",
       "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
       "page": "details"
     },
     {
       "id": "check-portfolio-f8c16eba05",
       "url": "https://engineering.nyu.edu/academics/programs/bachelor-science",
-      "title": "NYU Tandon Future Labs — details page checked by scrape.py",
+      "title": "NYU Tandon Future Labs — program page",
       "excerpt": "Alumni → https://engineering.nyu.edu/engage/alumni",
       "page": "details"
     },
     {
       "id": "check-route-539ede526e",
       "url": "https://engineering.nyu.edu/business/future-labs",
-      "title": "NYU Tandon Future Labs — homepage checked by scrape.py",
+      "title": "NYU Tandon Future Labs — homepage",
       "excerpt": "https://engineering.nyu.edu/news/nyu-tandon-opens-applications-vet-1-training-program-veteran-entrepreneurs",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5928d6f008",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge/frequently-asked-questions",
+      "title": "NYU Tandon Future Labs — terms page",
+      "excerpt": "admissions requirements → https://engineering.nyu.edu/admissions/graduate/apply/requirements",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-c39c20bb14",
+      "url": "https://engineering.nyu.edu/about/contact-us",
+      "title": "NYU Tandon Future Labs — program page",
+      "excerpt": "apply.engineering.nyu.edu → https://apply.engineering.nyu.edu/apply/",
       "page": "details"
     },
     {
       "id": "check-route-c4e361283b",
       "url": "https://engineering.nyu.edu/business/future-labs",
-      "title": "NYU Tandon Future Labs — homepage checked by scrape.py",
+      "title": "NYU Tandon Future Labs — homepage",
       "excerpt": "NYU Tandon Opens Applications for VET-1, Training Program for Veteran Entrepreneurs → https://engineering.nyu.edu/news/nyu-tandon-opens-applications-vet-1-training-program-veteran-entrepreneurs",
       "page": "details"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-202ef10905",
+      "url": "https://engineering.nyu.edu/business/future-labs",
+      "page": "details",
+      "excerpt": "NYU Tandon Future Labs | NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions"
+    },
+    {
+      "id": "check-page-d34dac38b0",
+      "url": "https://engineering.nyu.edu/business/future-labs",
+      "page": "details",
+      "excerpt": "The NYU Tandon Future Labs is the first public-private partnership with New York City tasked with creating a sustainable incubation program focused on increasing the success rate of new ventures and generating positive economic impact."
+    },
+    {
+      "id": "check-page-e7c54ea4c7",
+      "url": "https://engineering.nyu.edu/business/future-labs",
+      "page": "details",
+      "excerpt": "If your startup is focused on AI, digital media, clean energy, or any other world-changing tech — or if you’re a military veteran seeking to transition to civilian life as an entrepreneur — you’ll find the guidance, expertise, resources, and community you need to succeed in today’s innovation economy."
+    },
+    {
+      "id": "check-page-c0df3bd5c7",
+      "url": "https://engineering.nyu.edu/business/future-labs",
+      "page": "details",
+      "excerpt": "Urban Future Lab Our Urban Future Lab is New York City’s hub for smart cities, clean energy, and smart grid technology."
+    },
+    {
+      "id": "check-page-0d0ba5d1c6",
+      "url": "https://engineering.nyu.edu/business/future-labs",
+      "page": "details",
+      "excerpt": "Veterans Future Lab Located in Brooklyn’s Sunset Park neighborhood, VFL houses early stage businesses led by military veterans and contains a prototyping space available to the public via membership."
+    },
+    {
+      "id": "check-page-63c3989caf",
+      "url": "https://engineering.nyu.edu/about",
+      "page": "details",
+      "excerpt": "About NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions Undergraduate Graduate"
+    },
+    {
+      "id": "check-page-5591b51a96",
+      "url": "https://engineering.nyu.edu/about",
+      "page": "details",
+      "excerpt": "Innovation and entrepreneurship suffuse everything here — from our course offerings to our student competitions to our labs and prototyping spaces."
+    },
+    {
+      "id": "check-page-55724bd848",
+      "url": "https://engineering.nyu.edu/about/brooklyn",
+      "page": "details",
+      "excerpt": "Brooklyn | NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions Undergraduate Graduate"
+    },
+    {
+      "id": "check-page-1055c395e5",
+      "url": "https://engineering.nyu.edu/about/brooklyn",
+      "page": "details",
+      "excerpt": "In addition, the Commons is home to the NYU Tandon MakerSpace , a hub for hands-on education and the place where ideas are made a reality."
+    },
+    {
+      "id": "check-page-c83ca5d0cc",
+      "url": "https://engineering.nyu.edu/about/brooklyn",
+      "page": "details",
+      "excerpt": "Together these spaces host several centers and research institutes including: C2SMARTER aims to accelerate transportation opportunities arising from unprecedented recent advances in communication and smart technologies."
+    },
+    {
+      "id": "check-page-b94949389e",
+      "url": "https://engineering.nyu.edu/about/brooklyn",
+      "page": "details",
+      "excerpt": "Making an Innovation Coastline a Reality in the Borough of Makers What started as a Tech Triangle has burgeoned into an entire Innovation Coastline, radiating from the waterfront and encompassing the entire borough and all of New York City."
+    },
+    {
+      "id": "check-page-354d0ef57f",
+      "url": "https://engineering.nyu.edu/about/brooklyn",
+      "page": "details",
+      "excerpt": "A 14,000-square-foot production and research facility, NYU Tandon @ The Yard is bringing research-grade emerging technology within reach of media, entertainment, and cultural sectors of the city, allowing companies, museums and other arts organizations, and independent creatives to have an equitable platform in which to engage in new tools and techniques."
+    },
+    {
+      "id": "check-page-132a6abcb0",
+      "url": "https://engineering.nyu.edu/about/brooklyn",
+      "page": "details",
+      "excerpt": "NYU Tandon @ The Yard – The volumetric capture studio Brooklyn is the leading driver of the innovation economy in New York State, and New York City is the fastest-growing hub of technology on the planet."
+    },
+    {
+      "id": "check-page-756a0e71c7",
+      "url": "https://engineering.nyu.edu/about/brooklyn",
+      "page": "details",
+      "excerpt": "Be a part of that talent pool and continue to keep New York City on top for innovation and technology."
+    },
+    {
+      "id": "check-page-5b5ef85065",
+      "url": "https://engineering.nyu.edu/about/fast-facts",
+      "page": "details",
+      "excerpt": "Fast Facts | NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions Undergraduate"
+    },
+    {
+      "id": "check-page-0b19d13c21",
+      "url": "https://engineering.nyu.edu/about/fast-facts",
+      "page": "details",
+      "excerpt": "News & World Report Ranking #1 Best master's in civil engineering Intelligent.com #8 Master's program in Robotics Tech Guide Top 5 Cybersecurity masters degrees CSO #7 Top augmented/virtual reality (AR/VR) colleges in the U.S."
+    },
+    {
+      "id": "check-page-1cb3faf8bb",
+      "url": "https://engineering.nyu.edu/about/history",
+      "page": "details",
+      "excerpt": "Our History: Roots of Greatness | NYU Tandon School of Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions"
+    },
+    {
+      "id": "check-page-dd6a7569a2",
+      "url": "https://engineering.nyu.edu/about/history",
+      "page": "details",
+      "excerpt": "Find more significant accomplishments on the Faculty Awards & Honors page ."
+    },
+    {
+      "id": "check-page-087028329c",
+      "url": "https://engineering.nyu.edu/about/history",
+      "page": "details",
+      "excerpt": "Mark, generally known as the Father of Polymer Science, joined the faculty and established the Polymer Research Institute."
+    },
+    {
+      "id": "check-page-866aeb8d6d",
+      "url": "https://engineering.nyu.edu/about/history",
+      "page": "details",
+      "excerpt": "1945 Professor and President Ernst Weber (‘58-’69) founded the Microwave Research Institute which developed electromagnetic and microwave defense and communication systems."
+    },
+    {
+      "id": "check-page-1afc17912e",
+      "url": "https://engineering.nyu.edu/about/history",
+      "page": "details",
+      "excerpt": "1957 Eugene Kleiner (’48) helped found Fairchild Semiconductor, a pioneer in transistor and integrated-circuit manufacturing."
+    },
+    {
+      "id": "check-page-a5dee2aaaa",
+      "url": "https://engineering.nyu.edu/about/history",
+      "page": "details",
+      "excerpt": "Kleiner later co-founded a venture capital firm that provided funding for such now-iconic companies as Amazon, Google and AOL."
+    },
+    {
+      "id": "check-page-3b59adb4a2",
+      "url": "https://engineering.nyu.edu/about/history",
+      "page": "details",
+      "excerpt": "1973 Renamed Polytechnic Institute of New York after encompassing the faculty, programs, and students of New York University College of Engineering."
+    },
+    {
+      "id": "check-page-c4c570e69d",
+      "url": "https://engineering.nyu.edu/about/history",
+      "page": "details",
+      "excerpt": "1984 Eleanor Baum (’64) became the first female dean of an engineering school in the United States, at Pratt Institute in Brooklyn and 1995 first woman president for American Society for Engineering Education (ASEE)."
+    },
+    {
+      "id": "check-page-32f24777a5",
+      "url": "https://engineering.nyu.edu/about/history",
+      "page": "details",
+      "excerpt": "2008 An affiliation is forged between Polytechnic and New York University, creating the Polytechnic Institute of NYU and paving the way for an official merger."
+    },
+    {
+      "id": "check-page-50ddfb4325",
+      "url": "https://engineering.nyu.edu/about/history",
+      "page": "details",
+      "excerpt": "2009 Ursula Burns (’80) was appointed CEO of Xerox, becoming the first African-American woman ever to head a Fortune 500 company."
+    },
+    {
+      "id": "check-page-f975bb36a2",
+      "url": "https://engineering.nyu.edu/about/history",
+      "page": "details",
+      "excerpt": "Turing Award from the Association for Computing Machinery for his fundamental contributions to artificial intelligence."
+    },
+    {
+      "id": "check-page-0f945e5f23",
+      "url": "https://engineering.nyu.edu/about/history",
+      "page": "details",
+      "excerpt": "2014 Merger with New York University becomes official — name changes to the NYU Polytechnic School of Engineering."
+    },
+    {
+      "id": "check-page-b3c9e594c7",
+      "url": "https://engineering.nyu.edu/about/history",
+      "page": "details",
+      "excerpt": "2016 CSAW, the world’s biggest student-run cybersecurity event, becomes international with competitions in India, the Middle East and North Africa."
+    },
+    {
+      "id": "check-page-9c1fae39ed",
+      "url": "https://engineering.nyu.edu/about/leadership-team",
+      "page": "details",
+      "excerpt": "Tandon Leadership Team | NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions"
+    },
+    {
+      "id": "check-page-2d78729e1d",
+      "url": "https://engineering.nyu.edu/about/leadership-team",
+      "page": "details",
+      "excerpt": "In these roles, he leads cross-university, multidisciplinary, and globally focused initiatives aimed at accelerating NYU's science and technology enterprise to address humanity's most pressing challenges."
+    },
+    {
+      "id": "check-page-4e6547035d",
+      "url": "https://engineering.nyu.edu/about/leadership-team",
+      "page": "details",
+      "excerpt": "Shustek Professor of Computer Science; Affiliated Faculty, NYU Center for Data Science Ramesh Karri Electrical and Computer Engineering Department Chair; Professor of ECE Nizar Touzi Finance and Risk Engineering Department Chair; Professor Katsuo Kurabayashi Mechanical and Aerospace Engineering Department Chair R."
+    },
+    {
+      "id": "check-page-5bcf6e3635",
+      "url": "https://engineering.nyu.edu/about/mission",
+      "page": "details",
+      "excerpt": "Mission and Values | NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions Undergraduate"
+    },
+    {
+      "id": "check-page-b6b3962b19",
+      "url": "https://engineering.nyu.edu/about/mission",
+      "page": "details",
+      "excerpt": "NYU Tandon's research and education are strategically directed toward six cross-disciplinary impact areas ."
+    },
+    {
+      "id": "check-page-b6db86d649",
+      "url": "https://engineering.nyu.edu/about/mission",
+      "page": "details",
+      "excerpt": "We believe the diversity of our students, faculty, and staff is essential to excellence and innovation."
+    },
+    {
+      "id": "check-page-0ca0cf5d8b",
+      "url": "https://engineering.nyu.edu/about/our-engineers",
+      "page": "details",
+      "excerpt": "Our Engineers | NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions Undergraduate"
+    },
+    {
+      "id": "check-page-2f7895eab1",
+      "url": "https://engineering.nyu.edu/about/our-engineers",
+      "page": "details",
+      "excerpt": "Faculty & Staff Directory Featured Faculty Brilliant, renowned, distinguished, award-winning: you can describe our faculty members many ways, but the most important description just might be dedicated."
+    },
+    {
+      "id": "check-page-5034e3087b",
+      "url": "https://engineering.nyu.edu/about/research-magazine",
+      "page": "details",
+      "excerpt": "Research Magazine | NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions Undergraduate"
+    },
+    {
+      "id": "check-page-9ce5b0bb1b",
+      "url": "https://engineering.nyu.edu/about/research-magazine",
+      "page": "details",
+      "excerpt": "Read the Story Three Unanswered Questions About Spaceflight Long-term space flights require long-term solutions for astronauts’ health and safety."
+    },
+    {
+      "id": "check-page-c7472976ea",
+      "url": "https://engineering.nyu.edu/about/research-magazine",
+      "page": "details",
+      "excerpt": "Read the Story LLMs, Ransomware and the AI Boom’s Cybersecurity Challenges Cybersecurity professionals face down new attack vectors."
+    },
+    {
+      "id": "check-page-cc296ecc1a",
+      "url": "https://engineering.nyu.edu/about/research-magazine",
+      "page": "details",
+      "excerpt": "Read the Story Expert Opinions How Are Cybersecurity Researchers Trying To Stop Cyberstalking?"
+    },
+    {
+      "id": "check-page-ba0bbe8e00",
+      "url": "https://engineering.nyu.edu/about/research-magazine",
+      "page": "details",
+      "excerpt": "30 NEW FACULTY have joined NYU Tandon since Fall 2025 It begins with extraordinary people."
+    },
+    {
+      "id": "check-page-13bded665f",
+      "url": "https://engineering.nyu.edu/about/research-magazine",
+      "page": "details",
+      "excerpt": "This fall, we welcomed 17 exceptional new faculty , including LaShanda Korley , a nationally recognized leader in sustainable polymer design, as Chair of Chemical and Biomolecular Engineering."
+    },
+    {
+      "id": "check-page-53c15b01e9",
+      "url": "https://engineering.nyu.edu/about/research-magazine",
+      "page": "details",
+      "excerpt": "They are part of a faculty distinguished not only by the caliber of their individual scholarship, but by their ambition to pursue breakthroughs that extend well beyond the boundaries of any one discipline.We are reforming our research enterprise around the solutions we are seeking."
+    },
+    {
+      "id": "check-page-5e741cb1b5",
+      "url": "https://engineering.nyu.edu/about/research-magazine",
+      "page": "details",
+      "excerpt": "The new Center joins the Institute for Engineering Health , the Earth Systems Institute , the NYU Quantum Institute , Urban Institute , Center for Robotics and Embodied Intelligence , and our newly unified Computer Science Department with the Courant Institute School of Mathematics, Computing, and Data Science ."
+    },
+    {
+      "id": "check-page-aa84285b1f",
+      "url": "https://engineering.nyu.edu/about/research-magazine",
+      "page": "details",
+      "excerpt": "Each shares a fundamental premise: the hardest problems to solve do not fit neatly within departments, disciplines, or schools, so our research enterprise cannot either."
+    },
+    {
+      "id": "check-page-9d2756ac49",
+      "url": "https://engineering.nyu.edu/about/research-magazine",
+      "page": "details",
+      "excerpt": "This fall, New York City announced a $29.2 million investment in NYU’s new Quantum Fabrication Facility at NYU’s new home for Science and Technology at 770 Broadway."
+    },
+    {
+      "id": "check-page-e209b26cce",
+      "url": "https://engineering.nyu.edu/about/research-magazine",
+      "page": "details",
+      "excerpt": "Researchers, students, startups, and industry will work alongside one another, while a partnership with CUNY will create new pathways into quantum careers."
+    },
+    {
+      "id": "check-page-0f253213c4",
+      "url": "https://engineering.nyu.edu/about/research-magazine",
+      "page": "details",
+      "excerpt": "AI is becoming integral to engineering practice, so it must become integral to engineering education."
+    },
+    {
+      "id": "check-page-eb141e91ab",
+      "url": "https://engineering.nyu.edu/about/research-magazine",
+      "page": "details",
+      "excerpt": "This fall, a new AI foundations course became part of our undergraduate curriculum, alongside faculty development, program-level human-centered AI strategies, and an ongoing effort to determine — with faculty and students — how these tools can strengthen learning rather than substitute for it."
+    },
+    {
+      "id": "check-page-fae7507fbc",
+      "url": "https://engineering.nyu.edu/about/visit-nyu-tandon",
+      "page": "details",
+      "excerpt": "Visit NYU Tandon | NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions Undergraduate"
+    },
+    {
+      "id": "check-page-1da1d08995",
+      "url": "https://engineering.nyu.edu/about/visit-nyu-tandon",
+      "page": "details",
+      "excerpt": "Our Graduate Virtual Tour lets you explore buildings around campus as well as view video testimonials on academics, research, student life, career services and much more."
+    },
+    {
+      "id": "check-page-50f3452d14",
+      "url": "https://engineering.nyu.edu/about/visit-nyu-tandon",
+      "page": "details",
+      "excerpt": "From Westchester, Downstate New York, and Connecticut: Take either I-87 South (Major Deegan Expressway/New York State Thruway) or I-95 South (New England Thruway) to I-278 West to Tillary Street (Exit 29)."
+    },
+    {
+      "id": "check-page-eea2b3f870",
+      "url": "https://engineering.nyu.edu/academics/programs/bachelor-science",
+      "page": "details",
+      "excerpt": "Bachelor of Science | NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions"
+    },
+    {
+      "id": "check-page-93405fdfef",
+      "url": "https://engineering.nyu.edu/academics/programs/bachelor-science",
+      "page": "details",
+      "excerpt": "Biomedical engineers develop emerging technological innovations that contribute to improving human health and quality of life."
+    },
+    {
+      "id": "check-page-6965fddb68",
+      "url": "https://engineering.nyu.edu/academics/programs/certificate",
+      "page": "details",
+      "excerpt": "Certificate Programs | NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions"
+    },
+    {
+      "id": "check-page-f9844697ab",
+      "url": "https://engineering.nyu.edu/academics/programs/certificate",
+      "page": "details",
+      "excerpt": "Executive & Professional Education Flexible, career-innovating programs for every stage of professional life."
+    },
+    {
+      "id": "check-page-2716d32ef7",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning",
+      "page": "details",
+      "excerpt": "Online and Digital Learning | NYU Tandon Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions Undergraduate Graduate"
+    },
+    {
+      "id": "check-page-024691f58e",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning",
+      "page": "details",
+      "excerpt": "Prospective Digital Learning Students Explore the extensive online degree, professional education and executive programs offered by the NYU Tandon School of Engineering."
+    },
+    {
+      "id": "check-page-22256a0553",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning",
+      "page": "details",
+      "excerpt": "Faculty & Academic Department Support We partner with faculty and staff to promote innovative teaching strategies for learning."
+    },
+    {
+      "id": "check-page-363af1b35b",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning",
+      "page": "details",
+      "excerpt": "About the Digital Learning Department at NYU Tandon At NYU Tandon Digital Learning, we bring together ambitious learners, world-class faculty, and forward-thinking industry partners to shape the future of engineering and technology education."
+    },
+    {
+      "id": "check-page-f2d628b7f9",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning",
+      "page": "details",
+      "excerpt": "We design rigorous yet flexible online and hybrid programs that blend the depth of a STEM education with the adaptability today's learners need."
+    },
+    {
+      "id": "check-page-7b8d9a019b",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning/current-students",
+      "page": "details",
+      "excerpt": "Current Digital Learning Students | NYU Tandon School of Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions"
+    },
+    {
+      "id": "check-page-8646af8a15",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning/current-students",
+      "page": "details",
+      "excerpt": "Academic Excellence Achieve degree completion through personalized academic planning that aligns academic interests and career goals with curriculum and co-curricular opportunities while addressing additional learning needs and developing the skills to succeed in online education."
+    },
+    {
+      "id": "check-page-4b65ed624a",
+      "url": "https://engineering.nyu.edu/academics/programs/digital-learning/current-students",
+      "page": "details",
+      "excerpt": "Receive an NYUCard to access campus buildings Not in NYC?"
+    },
+    {
+      "id": "check-page-9604c1053a",
+      "url": "https://engineering.nyu.edu/academics/programs/doctor-philosophy",
+      "page": "details",
+      "excerpt": "Ph.D. Degree Programs | NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions"
+    },
+    {
+      "id": "check-page-06f5b10f19",
+      "url": "https://engineering.nyu.edu/academics/programs/doctor-philosophy",
+      "page": "details",
+      "excerpt": "The Biomedical Engineering Ph.D. program provides you with all of the necessary skills to develop technological innovations that contribute to improved human health and quality of life."
+    },
+    {
+      "id": "check-page-5ab6f8978f",
+      "url": "https://engineering.nyu.edu/academics/programs/doctor-philosophy",
+      "page": "details",
+      "excerpt": "Ph.D. students in our Computer Science program can conduct groundbreaking research with the faculty of our interdisciplinary Center for Cyber Security."
+    },
+    {
+      "id": "check-page-1552e22056",
+      "url": "https://engineering.nyu.edu/academics/programs/doctor-philosophy",
+      "page": "details",
+      "excerpt": "The Ph.D. in Electrical Engineering program is filled with students and faculty who prize the School of Engineering's emphasis on invention, innovation, and entrepreneurship through top-flight laboratories and a fierce dedication to advanced research."
+    },
+    {
+      "id": "check-page-e0d60c77d4",
+      "url": "https://engineering.nyu.edu/academics/programs/doctor-philosophy",
+      "page": "details",
+      "excerpt": "On Campus Transportation Systems, Ph.D."
+    },
+    {
+      "id": "check-page-55045af79a",
+      "url": "https://engineering.nyu.edu/academics/programs/doctor-philosophy",
+      "page": "details",
+      "excerpt": "Individuals interested in the highest calling for the pursuit of knowledge in the science of transportation systems should consider the Ph.D. program in Transportation Systems."
+    },
+    {
+      "id": "check-page-71c9b5d26e",
+      "url": "https://engineering.nyu.edu/academics/programs/k12-stem-education",
+      "page": "details",
+      "excerpt": "K12 STEM Education Programs | NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions"
+    },
+    {
+      "id": "check-page-03f8f1068f",
+      "url": "https://engineering.nyu.edu/academics/programs/k12-stem-education",
+      "page": "details",
+      "excerpt": "Visit NYU Tandon's Center for K12 STEM Alongside Tandon faculty, the Center has created and executed dozens of innovative programs for two decades."
+    },
+    {
+      "id": "check-page-906151bf69",
+      "url": "https://engineering.nyu.edu/academics/programs/master-science",
+      "page": "details",
+      "excerpt": "Master of Science | NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions Undergraduate"
+    },
+    {
+      "id": "check-page-a61b8a681f",
+      "url": "https://engineering.nyu.edu/academics/programs/master-science",
+      "page": "details",
+      "excerpt": "Biomedical engineering, a multi-disciplinary field, is behind some of the most important medical breakthroughs today, and has significantly contributed to improved health care and quality of life."
+    },
+    {
+      "id": "check-page-eb388eb172",
+      "url": "https://engineering.nyu.edu/academics/programs/master-science",
+      "page": "details",
+      "excerpt": "On Campus Biotechnology and Entrepreneurship, M.S."
+    },
+    {
+      "id": "check-page-02bd3b7758",
+      "url": "https://engineering.nyu.edu/academics/programs/master-science",
+      "page": "details",
+      "excerpt": "Analysts predict biotechnology will be one of the most important applied sciences in the 21st century."
+    },
+    {
+      "id": "check-page-e9dcd9ef89",
+      "url": "https://engineering.nyu.edu/academics/programs/master-science",
+      "page": "details",
+      "excerpt": "On Campus Biotechnology, M.S."
+    },
+    {
+      "id": "check-page-31f900f186",
+      "url": "https://engineering.nyu.edu/academics/programs/master-science",
+      "page": "details",
+      "excerpt": "Biotechnology is a swiftly growing industry."
+    },
+    {
+      "id": "check-page-a3a7bb768a",
+      "url": "https://engineering.nyu.edu/academics/programs/master-science",
+      "page": "details",
+      "excerpt": "From the food grown at our farms to the medicine we buy and the ways we clean up the environment, biotechnology affects many facets of our daily lives."
+    },
+    {
+      "id": "check-page-95459b83b4",
+      "url": "https://engineering.nyu.edu/academics/programs/master-science",
+      "page": "details",
+      "excerpt": "On Campus Cybersecurity Risk and Strategy, M.S."
+    },
+    {
+      "id": "check-page-7dee3214b2",
+      "url": "https://engineering.nyu.edu/academics/programs/master-science",
+      "page": "details",
+      "excerpt": "Offered jointly by the NYU School of Law and NYU Tandon School of Engineering, the Master's in Cybersecurity Risk and Strategy is a one-year program for experienced professionals who seek a deeper understanding of the topic."
+    },
+    {
+      "id": "check-page-9e6574ea3d",
+      "url": "https://engineering.nyu.edu/academics/programs/master-science",
+      "page": "details",
+      "excerpt": "Blended (On Campus and Online) On Campus Online Cybersecurity, M.S."
+    },
+    {
+      "id": "check-page-f21cce9146",
+      "url": "https://engineering.nyu.edu/academics/programs/master-science",
+      "page": "details",
+      "excerpt": "In today's rapidly evolving world, artificial intelligence is no longer just a specialized field; it's a fundamental skill transforming every industry."
+    },
+    {
+      "id": "check-page-deec9dd853",
+      "url": "https://engineering.nyu.edu/academics/programs/master-science",
+      "page": "details",
+      "excerpt": "At the School of Engineering our Environmental Engineering program has an urban environmental systems emphasis with a unique concentration in many challenges that New York City and major cities of the world face."
+    },
+    {
+      "id": "check-page-77f602f837",
+      "url": "https://engineering.nyu.edu/academics/programs/master-science",
+      "page": "details",
+      "excerpt": "One of the most versatile engineering fields, mechanical engineering plays a central role in many areas from the automotive and aerospace industries to robotics, electronics, automation and manufacturing."
+    },
+    {
+      "id": "check-page-b16c9072af",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge",
+      "page": "details",
+      "excerpt": "NYU Tandon Bridge | NYU Tandon | Digital Learning | NYU Tandon Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions"
+    },
+    {
+      "id": "check-page-cb615685ac",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge",
+      "page": "details",
+      "excerpt": "Developed and taught by faculty in the Department of Computer Science and Engineering, the Bridge Program provides a rigorous introduction to computer science fundamentals, mathematical reasoning, and programming."
+    },
+    {
+      "id": "check-page-9c1b6d4bc2",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge",
+      "page": "details",
+      "excerpt": "Advance Your Career or Education: Use the Bridge certificate to strengthen your credentials for graduate study or signal technical readiness for career opportunities in data, software, or emerging tech."
+    },
+    {
+      "id": "check-page-7bc1e657d6",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge",
+      "page": "details",
+      "excerpt": "Student Testimonials Kelly Lunghamer Cybersecurity, MS Sr."
+    },
+    {
+      "id": "check-page-d87d45f98a",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge",
+      "page": "details",
+      "excerpt": "Being a Bridge student gave me the tools I needed to excel in my Masters of Cybersecurity and really prepared me to succeed in a dynamic field.” Tyler Amend Computer Science, MS Quantitative Strategist at Balyasny Asset Management The Bridge Program has completely opened up a world that I thought was unreachable."
+    },
+    {
+      "id": "check-page-ef6675dbeb",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge",
+      "page": "details",
+      "excerpt": "Without NYU Tandon Bridge, I can honestly say I would not be where I am today.” Brunnell Velazquez Computer Science, MS IT Product Owner, NYC I can now engage more with engineering as we talk about technical topics, I can translate technical concepts to non-technical audiences, I have more intuition on what's possible technically as I propose solutions.\" Ready to Get Started?"
+    },
+    {
+      "id": "check-page-b1a1af6e56",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge/frequently-asked-questions",
+      "page": "terms",
+      "excerpt": "NYU Tandon Bridge FAQs | NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions"
+    },
+    {
+      "id": "check-page-2f58f790e0",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge/frequently-asked-questions",
+      "page": "terms",
+      "excerpt": "To access your courses, you will use NYU Continuing Education Brightspace."
+    },
+    {
+      "id": "check-page-64861e48c6",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge/frequently-asked-questions",
+      "page": "terms",
+      "excerpt": "If you are located outside of the United States, the fee may be subject to local taxes, which are the sole responsibility of the participants."
+    },
+    {
+      "id": "check-page-40756cdab9",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge/frequently-asked-questions",
+      "page": "terms",
+      "excerpt": "Please see New York University’s Veteran Benefits website for additional information."
+    },
+    {
+      "id": "check-page-87597fcae3",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge/frequently-asked-questions",
+      "page": "terms",
+      "excerpt": "Please see New York University’s Tuition Remission website for employees for additional information."
+    },
+    {
+      "id": "check-page-91719a2c37",
+      "url": "https://engineering.nyu.edu/academics/programs/nyu-tandon-bridge/frequently-asked-questions",
+      "page": "terms",
+      "excerpt": "Support What are the hardware, software, or international requirements for this program?"
+    },
+    {
+      "id": "check-page-9c0e417306",
+      "url": "https://engineering.nyu.edu/about/contact-us",
+      "page": "details",
+      "excerpt": "Contact Us | NYU Tandon School of Engineering Skip to Main Content NYU Tandon Logo NYU Tandon Logo Undergraduate Graduate Digital Learning Departments Applied Physics Biomedical Engineering Center for Urban Science and Progress Chemical and Biomolecular Engineering Civil, Urban, and Environmental Engineering Computer Science and Engineering Electrical and Computer Engineering Finance and Risk Engineering Mathematics Mechanical and Aerospace Engineering Technology, Culture and Society Technology Management and Innovation Degrees & Programs Bachelor of Science Master of Science Doctor of Philosophy Digital Learning Certificate Programs NYU Tandon Bridge K12 STEM Resources Undergraduate Graduate Records & Registration Digital Learning Services Teaching Innovation Sustainability Quantum Embodied Intelligence Engineering Health Systems Engineering Engineering & Culture Office of Research Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry Engagement Overview Mission Fast Facts History Leadership Research Magazine Community Our Engineers Brooklyn Visit News & Events News Events Social Media Search NYU Tandon Fulltext search Looking for News or Events ? Admissions + Academics + Impact Areas + Research + Life at Tandon + Engage + About + Admissions Undergraduate"
+    }
+  ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "admissions@nyu.edu",
+        "evidenceId": "check-email-22f1d791e1"
+      }
+    ],
     "phones": [
       {
         "value": "646-997-3600",
@@ -98,18 +1037,68 @@
       {
         "value": "https://engineering.nyu.edu/news/nyu-tandon-opens-applications-vet-1-training-program-veteran-entrepreneurs",
         "evidenceId": "check-route-539ede526e"
+      },
+      {
+        "value": "https://engineering.nyu.edu/admissions/graduate/apply/requirements",
+        "evidenceId": "check-route-5928d6f008"
+      },
+      {
+        "value": "mailto:admissions@nyu.edu",
+        "evidenceId": "check-email-22f1d791e1"
+      },
+      {
+        "value": "https://apply.engineering.nyu.edu/apply/",
+        "evidenceId": "check-route-c39c20bb14"
       }
     ],
-    "applicationUrl": [],
+    "applicationUrl": [
+      {
+        "value": "https://engineering.nyu.edu/news/nyu-tandon-opens-applications-vet-1-training-program-veteran-entrepreneurs",
+        "evidenceId": "check-route-539ede526e"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-392ff24057"
+      },
+      {
+        "value": "7 months",
+        "evidenceId": "check-duration-112da2ac54"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-07a078b67c"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-3fbd62d643"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-29003d887f"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://engineering.nyu.edu/engage/alumni",
         "evidenceId": "check-portfolio-e1b4671afc"
+      },
+      {
+        "value": "https://engineering.nyu.edu/about/our-engineers/alumni",
+        "evidenceId": "check-portfolio-6c6f323ecc"
       }
     ],
     "name": [

@@ -1,10 +1,18 @@
 {
   "programId": "emergent-incubator",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.etibio.com"
   ],
   "evidence": [],
+  "pageQuotes": [
+    {
+      "id": "check-page-d2859d31eb",
+      "url": "https://www.etibio.com",
+      "page": "details",
+      "excerpt": "Home - Emergent Technologies Emergent Technologies Access Our Innovation Engine who we are management what we do portfolio companies news why and how we do it our mission our methodology contact emergent is a liberator of technological breakthroughs. we unleash promising ideas and underutilized intellectual properties, converting them into game-changing, real world solutions. emergent helps organizations realize the value in their patent portfolio: we transform underutilized technology into commercial potential. many technology breakthroughs lack profitable applications. emergent identifies the commercial viability of the technology, expands its applications, and brings it to market. emergent has technology solutions to enhance and differentiate products in the marketplace; emergent helps companies gain new proprietary positions and extend patent life. access our innovation engine What sets emergent apart is our method and mindset. We strip away preconceptions while exploring the many possibilities of each technology platform. In the tradition of Bell Labs, our multi-disciplinary team uses a variety of methods and tools to discover and deploy real-world applications. We offer this knowledge and innovation access to: Start-ups and Inventors seeking capital to grow a new business. Small Businesses seeking industry partners to deploy an innovation. Industry Leaders seeking"
+    }
+  ],
   "findings": {
     "emails": [],
     "phones": [],
@@ -13,8 +21,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

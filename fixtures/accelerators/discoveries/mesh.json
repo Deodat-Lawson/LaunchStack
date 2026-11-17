@@ -1,6 +1,6 @@
 {
   "programId": "mesh",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://meshcommunity.com/about/",
@@ -52,6 +52,46 @@
     },
     {
       "url": "https://meshcommunity.com/da/oslo/program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://meshcommunity.com/da/program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://meshcommunity.com/da/program/oiw25",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://meshcommunity.com/da/program/techbbq",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://meshcommunity.com/da/program/vixencafe",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://meshcommunity.com/da/trondheim/program",
       "page": "details",
       "anchor": "",
       "fetched": true,

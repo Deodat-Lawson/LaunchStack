@@ -1,5 +1,30 @@
 {
   "programId": "hub-for-innovation-and-entrepreneurship-nycrin",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
-  "pages": []
+  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "pages": [
+    {
+      "url": "https://www.nycinnovationhotspot.org/frequently-asked-questions-faq",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nycinnovationhotspot.org/post/march-innovation-hot-spot-meeting-showcases-ny-resources-new-companies",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nycinnovationhotspot.org/post/ny-i-corps-alumni-companies-boost-opportunities-with-techconnect-bootcamp",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

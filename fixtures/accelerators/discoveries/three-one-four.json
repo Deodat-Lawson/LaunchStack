@@ -1,18 +1,26 @@
 {
   "programId": "three-one-four",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://jobs.3one4capital.com/",
       "page": "portfolio",
       "anchor": "Portfolio Jobs",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://www.3one4capital.com/blogs/3one4-capital-backs-zerocircle-innovative-bio-materials-from-regenerative-resources-designed-for-high-performance-global-applications",
       "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/blogs/3one4-capital-portfolio-companies-win-at-the-economic-times-supply-chain-awards-2026",
+      "page": "portfolio",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -43,8 +51,32 @@
       "origin": "official"
     },
     {
+      "url": "https://www.3one4capital.com/blogs/budget-2023-tax-rates-need-to-be-on-par-for-listed-companies-start-ups",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/blogs/india-must-build-its-space-tech-companies-the-way-nasa-built-spacex",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.3one4capital.com/blogs/not-an-angel-tax-its-a-tax-on-investment-from-indians",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/blogs/nruthya-madappa-recognized-for-driving-portfolio-success-elevated-to-partner-at-3one4-capital",
+      "page": "portfolio",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -107,6 +139,14 @@
       "origin": "official"
     },
     {
+      "url": "https://www.3one4capital.com/policy/policy-overview-for-responsible-early-stage-investing-and-esg",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.3one4capital.com/portfolio",
       "page": "portfolio",
       "anchor": "Portfolio",
@@ -150,7 +190,7 @@
       "url": "https://www.3one4capital.com/team/anand-batra",
       "page": "terms",
       "anchor": "Anand Batra Investments",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },

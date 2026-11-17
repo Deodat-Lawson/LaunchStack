@@ -1,6 +1,6 @@
 {
   "programId": "microsoft-for-startups",
-  "checkedAt": "2026-11-14T20:59:02.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.microsoft.com/en-us/startups",
     "https://azure.microsoft.com/resources/developers/",
@@ -16,14 +16,82 @@
     "https://www.microsoft.com/en-us/education/products/office?icid=EDU_office365_FAQ",
     "https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products?ocid=cmmtjeb37jb?icid=deals-page_AllDealsTab_R2_CP2_M365Offer_HOLFY27",
     "https://www.microsoft.com/en-us/store/b/XBOXconsoles?icid=deals-page_XBOXTab_R1_CP2_XBOX-PayPal_HOLFY27",
-    "https://www.microsoft.com/en-us/store/b/certified-refurbished-products?icid=StudentDeals_R4_CP1_RefurbishedDevices_06202025"
+    "https://www.microsoft.com/en-us/store/b/certified-refurbished-products?icid=StudentDeals_R4_CP1_RefurbishedDevices_06202025",
+    "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+    "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+    "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+    "https://www.microsoft.com/en-us/store/b/online-computer-shopping-appointments?icid=students_FAQ_personalshopping",
+    "https://www.microsoft.com/en-us/store/b/price-protection-terms-and-conditions"
   ],
   "evidence": [
+    {
+      "id": "check-deal-016ed2fc04",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "in for up to $1000 cash back Trade in your MacBook Pro and get up to $1,000*** cash back on Surface Laptop Ultra or trade in another eligible",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-0212908840",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "in for up to $1000 cash back Trade in your MacBook Pro and get up to $1,000 *** cash back on Surface Laptop Ultra or trade in another eligible",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-0771825c0a",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "in for up to $1000 cash back Trade in your MacBook Pro and get up to $1,000*** cash back on Surface Laptop Ultra or trade in another eligible",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-0beec3008d",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "Laptop Ultra or trade in another eligible device and get up to $500** cash back. Shop Surface Laptop Ultra for Business Ready for new",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-116dc816f8",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "your device’s eligibility Limited-time offer Trade in for up to $1000 cash back Trade in your MacBook Pro and get up to $1,000 *** cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-1b36a4ecd8",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "in for up to $1000 cash back Trade in your MacBook Pro and get up to $1,000*** cash back on Surface Laptop Ultra or trade in another eligible",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-22c933c4e6",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "via check within 14 days. Limited-time offer Trade in for up to $1,000 cash back Trade in your MacBook Pro and get up to $1,000 cash back ^",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-270c539d5f",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "Laptop Ultra or trade in another eligible device and get up to $500 cash back. ** Shop now Get cash for your used consoles Upgrade to a",
+      "page": "terms"
+    },
     {
       "id": "check-deal-277372c657",
       "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_AllDealsTab_R2_CP3_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
       "title": "Microsoft for Startups — terms page",
       "excerpt": "cards Licensing Unlocked stories View Sitemap Trade in and get up to $500 extra cash back. Learn more** Optional 5G available Uncompromising",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-39da27040a",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "Laptop Ultra or trade in another eligible device and get up to $500 ** cash back. Shop Surface Laptop Ultra for Business Ready for new",
       "page": "terms"
     },
     {
@@ -34,6 +102,48 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-61887bfe0a",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "via check within 15 days. Limited-time offer Trade in and get up to $500 cash back Get your device's full trade-in value, plus cash back on",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-61d2c48235",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "Laptop Ultra or trade in another eligible device and get up to $500 ** cash back. Shop Surface Laptop Ultra for Business Ready for new",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-62b58d9beb",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "via check within 14 days. Limited-time offer Trade in for up to $1,000 cash back Trade in your MacBook Pro and get up to $1,000 cash back ^",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-663e841290",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "in for up to $1000 cash back Trade in your MacBook Pro and get up to $1,000 *** cash back on Surface Laptop Ultra or trade in another eligible",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-68bc72df83",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "Check your device's eligibility Limited-time offer Get up to $500 with a qualified trade-in Just in time for the holidays. For a",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6e8e0e0735",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "Check your device's eligibility Limited-time offer Get up to $500 with a qualified trade-in Just in time for the holidays. For a",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-74119b1add",
       "url": "https://azure.microsoft.com/resources/developers/",
       "title": "Microsoft for Startups — application page",
@@ -41,10 +151,122 @@
       "page": "application"
     },
     {
+      "id": "check-deal-768dbd5ba7",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "following inspection. For XBOX console promotions, you can get up to $180 cash back, but exact amounts depend on model and condition. Where can",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-7f2d4e9727",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "via check within 15 days. Limited-time offer Trade in and get up to $500 cash back Get your device's full trade-in value, plus cash back on",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-825404f3bb",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "via check within 15 days. Limited-time offer Trade in and get up to $500 cash back Get your device's full trade-in value, plus cash back on",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-86a1a03585",
       "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
       "title": "Microsoft for Startups — terms page",
       "excerpt": "cards Licensing Unlocked stories View Sitemap Trade in and get up to $500 extra cash back. Learn more** Optional 5G available The most flexible",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a83ec3deda",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "via check within 14 days. Limited-time offer Trade in for up to $1,000 cash back Trade in your MacBook Pro and get up to $1,000 cash back ^",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-aa58b84394",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "Check your device's eligibility Limited-time offer Get up to $500 with a qualified trade-in Just in time for the holidays. For a",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-b28d0c7fd2",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "your device’s eligibility Limited-time offer Trade in for up to $1000 cash back Trade in your MacBook Pro and get up to $1,000*** cash back",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ba6db68abb",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "your device’s eligibility Limited-time offer Trade in for up to $1000 cash back Trade in your MacBook Pro and get up to $1,000 *** cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-bb5b1d43f0",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "Laptop Ultra or trade in another eligible device and get up to $500 cash back. ** Shop now Get cash for your used consoles Upgrade to a",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-be91029669",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "Laptop Ultra or trade in another eligible device and get up to $500** cash back. Shop Surface Laptop Ultra for Business Ready for new",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c2d082aace",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "your device’s eligibility Limited-time offer Trade in for up to $1000 cash back Trade in your MacBook Pro and get up to $1,000*** cash back",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c36440164b",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "in for up to $1000 cash back Trade in your MacBook Pro and get up to $1,000 *** cash back on Surface Laptop Ultra or trade in another eligible",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c4b16619a7",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "via check within 14 days. Limited-time offer Trade in and get up to $500 cash back Get your device's full trade-in value, plus cash back on",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c5a008b379",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "Laptop Ultra or trade in another eligible device and get up to $500 ** cash back. Shop Surface Laptop Ultra for Business Ready for new",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-cabd504b38",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "Laptop Ultra or trade in another eligible device and get up to $500 cash back. ** Shop now Get cash for your used consoles Upgrade to a",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-cdc8be250c",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "for up to $1,000 cash back Trade in your MacBook Pro and get up to $1,000 cash back ^ on Surface Laptop Ultra or trade in another eligible",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ce55d522bb",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "Laptop Ultra or trade in another eligible device and get up to $500** cash back. Shop Surface Laptop Ultra for Business Ready for new",
       "page": "terms"
     },
     {
@@ -55,10 +277,59 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-e06d47d92f",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "via check within 14 days. Limited-time offer Trade in and get up to $500 cash back Get your device's full trade-in value, plus cash back on",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-e490bbe231",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "for up to $1,000 cash back Trade in your MacBook Pro and get up to $1,000 cash back ^ on Surface Laptop Ultra or trade in another eligible",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-e880de9440",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "your device’s eligibility Limited-time offer Trade in for up to $1000 cash back Trade in your MacBook Pro and get up to $1,000 *** cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-eb51483453",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "your device’s eligibility Limited-time offer Trade in for up to $1000 cash back Trade in your MacBook Pro and get up to $1,000*** cash back",
+      "page": "terms"
+    },
+    {
       "id": "check-deal-ec98ba4390",
       "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_AllDealsTab_R3_CP1_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
       "title": "Microsoft for Startups — terms page",
       "excerpt": "cards Licensing Unlocked stories View Sitemap Trade in and get up to $500 extra cash back. Learn more** Optional 5G available The most flexible",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-edf32a84cf",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "for up to $1,000 cash back Trade in your MacBook Pro and get up to $1,000 cash back ^ on Surface Laptop Ultra or trade in another eligible",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f24816f86b",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "following inspection. For XBOX console promotions, you can get up to $180 cash back, but exact amounts depend on model and condition. Where can",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f3ea7ea827",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "following inspection. For XBOX console promotions, you can get up to $180 cash back, but exact amounts depend on model and condition. Where can",
       "page": "terms"
     },
     {
@@ -73,6 +344,13 @@
       "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
       "title": "Microsoft for Startups — terms page",
       "excerpt": "• • $ • • • • • • Shop now Limited-time offer New Trade in for up to $1000 cash back Trade in your MacBook Pro and get up to $1,000⁴ cash back",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-fba28a356c",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "via check within 14 days. Limited-time offer Trade in and get up to $500 cash back Get your device's full trade-in value, plus cash back on",
       "page": "terms"
     },
     {
@@ -314,10 +592,31 @@
       "page": "application"
     },
     {
+      "id": "check-phone-67b8e5dcc8",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "call Teladvance at 1-800-351-6864",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-6898acc552",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "call Teladvance at 1-800-351-6864",
+      "page": "terms"
+    },
+    {
       "id": "check-phone-868b292c31",
       "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
       "title": "Microsoft for Startups — terms page",
       "excerpt": "1 800-642-7676",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-883e906b32",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "title": "Microsoft for Startups — terms page",
+      "excerpt": "call Teladvance at 1-800-351-6864",
       "page": "terms"
     },
     {
@@ -424,91 +723,1465 @@
       "id": "check-page-bcbb25372b",
       "url": "https://www.microsoft.com/en-us/startups",
       "page": "details",
-      "excerpt": "Microsoft for Startups | Microsoft This is the Trace Id: 737701e012d285980849f38d1fcbe489 Skip to main content Microsoft for Startups Support Blog Success Stories Enterprise Readiness Investor information Startups hub Set up your Azure account Best ways to use Startup credits Introduction to Azure Build applications with Azure Azure documentation Microsoft Developer AI learning hub Microsoft Foundry Discord community Get started Sign in Microsoft 365 Azure Copilot Windows Surface XBOX Deals Small Business Support Windows Apps Outlook OneDrive Microsoft Teams OneNote Microsoft Edge Moving from Skype to Teams Computers Shop XBOX Accessories VR & mixed reality Certified Refurbished Trade-in for cash XBOX Game Pass Ultimate PC Game Pass XBOX games PC games Microsoft AI Microsoft Security Dynamics 365 Microsoft 365 for business Microsoft Power Platform Windows 365 Small Business Digital Sovereignty Azure Microsoft Developer Microsoft Learn Support for AI marketplace apps Microsoft Tech Community Microsoft Marketplace Software companies Visual Studio Microsoft Rewards Free downloads & security Education Gift cards Licensing Unlocked stories View Sitemap Take your startup further with Imagine Cup, Microsoft’s annual startup competition Apply today Build fast, scale smart, and sell more with Microsoft Access up to $150K USD in Startup credits to build, test, and scale on Azure with"
+      "excerpt": "Microsoft for Startups | Microsoft This is the Trace Id: c5e91183f18399114581a7fe4a7a633f Skip to main content Microsoft for Startups Support Blog Success Stories Enterprise Readiness Investor information Startups hub Set up your Azure account Best ways to use Startup credits Introduction to Azure Build applications with Azure Azure documentation Microsoft Developer AI learning hub Microsoft Foundry Discord community Get started Sign in Microsoft 365 Azure Copilot Windows Surface XBOX Deals Small Business Support Windows Apps Outlook OneDrive Microsoft Teams OneNote Microsoft Edge Moving from Skype to Teams Computers Shop XBOX Accessories VR & mixed reality Certified Refurbished Trade-in for cash XBOX Game Pass Ultimate PC Game Pass XBOX games PC games Microsoft AI Microsoft Security Dynamics 365 Microsoft 365 for business Microsoft Power Platform Windows 365 Small Business Digital Sovereignty Azure Microsoft Developer Microsoft Learn Support for AI marketplace apps Microsoft Tech Community Microsoft Marketplace Software companies Visual Studio Microsoft Rewards Free downloads & security Education Gift cards Licensing Unlocked stories View Sitemap Take your startup further with Imagine Cup, Microsoft’s annual startup competition Apply today Build fast, scale smart, and sell more with Microsoft Access up to $150K USD in Startup credits to build, test, and scale on Azure with"
+    },
+    {
+      "id": "check-page-efe1dce320",
+      "url": "https://www.microsoft.com/en-us/startups",
+      "page": "details",
+      "excerpt": "Run real production workloads backed by enterprise‑grade security, privacy, and Microsoft’s global customer ecosystem."
+    },
+    {
+      "id": "check-page-4b4e1d672a",
+      "url": "https://www.microsoft.com/en-us/startups",
+      "page": "details",
+      "excerpt": "“The bar for enterprise AI isn’t whether it can hold a conversation."
+    },
+    {
+      "id": "check-page-abb618597d",
+      "url": "https://www.microsoft.com/en-us/startups",
+      "page": "details",
+      "excerpt": "Read the blog Startup stories Building fintech for greater financial access: How Welcount uses AI to serve more customers See how Welcount uses Azure and AI to expand financial access for newcomers across Europe."
+    },
+    {
+      "id": "check-page-868e210137",
+      "url": "https://www.microsoft.com/en-us/startups",
+      "page": "details",
+      "excerpt": "Read the blog Resolution, not deflection: How Maven uses AI agents to transform the enterprise customer journey Learn how Maven’s AI agents resolve support issues faster and improve customer satisfaction."
+    },
+    {
+      "id": "check-page-791d0cfa2b",
+      "url": "https://www.microsoft.com/en-us/startups",
+      "page": "details",
+      "excerpt": "Read the blog From AI promise to enterprise-ready growth: Why data quality matters Explore why reliable, high-quality data is essential for enterprise-ready AI growth."
+    },
+    {
+      "id": "check-page-0bcf653a2e",
+      "url": "https://www.microsoft.com/en-us/startups",
+      "page": "details",
+      "excerpt": "Read the blog How Neubird AI uses agentic AI on Azure to transform cloud operations and incident response Discover how Neubird AI uses Azure to modernize incident investigation and cloud operations."
+    },
+    {
+      "id": "check-page-071cf92603",
+      "url": "https://www.microsoft.com/en-us/startups",
+      "page": "details",
+      "excerpt": "Read the blog How Notch ships action-taking AI agents safely in regulated customer support See how Notch builds secure AI agents for regulated customer-support environments."
+    },
+    {
+      "id": "check-page-42f33e0957",
+      "url": "https://www.microsoft.com/en-us/startups",
+      "page": "details",
+      "excerpt": "Read the blog How Overcut builds secure, enterprise ready agentic workflows on Azure Learn how Overcut builds secure agentic workflows for complex enterprise delivery stacks."
+    },
+    {
+      "id": "check-page-8ed593b30f",
+      "url": "https://www.microsoft.com/en-us/startups",
+      "page": "details",
+      "excerpt": "Read the blog How AI-powered collaborations are transforming healthcare and life sciences Explore how startups and enterprises are applying AI across care, research, and population health."
+    },
+    {
+      "id": "check-page-96240524be",
+      "url": "https://www.microsoft.com/en-us/startups",
+      "page": "details",
+      "excerpt": "Read the blog Operationalize supply chain sustainability with Microsoft for Startups and TrusTrace Discover how TrusTrace helps supply chains improve traceability, compliance, and sustainability."
+    },
+    {
+      "id": "check-page-9b88d30c80",
+      "url": "https://www.microsoft.com/en-us/startups",
+      "page": "details",
+      "excerpt": "Read the blog Shaping the future: Lessons from women founders in AI Learn how women founders are advancing innovation, leadership, and AI technology."
+    },
+    {
+      "id": "check-page-51884c4ded",
+      "url": "https://www.microsoft.com/en-us/startups",
+      "page": "details",
+      "excerpt": "Read the blog 5 prevalent AI themes for both startups and enterprise Explore five AI themes shaping how startups and enterprises build, adopt, and scale."
     },
     {
       "id": "check-page-742d9ffdbf",
       "url": "https://azure.microsoft.com/resources/developers/",
       "page": "application",
-      "excerpt": "Developer Resources for App Development | Microsoft Azure This is the Trace Id: bef84d6f994436aa42991012895a20bd Skip to main content Azure Get to know Azure Microsoft as Customer Zero View all products (200+) Microsoft Foundry Azure Copilot GitHub Copilot Azure Kubernetes Service (AKS) Azure Cosmos DB Azure Database for PostgreSQL Azure Arc Microsoft Fabric Linux virtual machines in Azure Foundry Models Foundry Agent Service Foundry IQ Foundry Tools Foundry Control Plane Observability in Foundry Control Plane Azure OpenAI in Foundry Models Azure Speech in Foundry Tools Azure Machine Learning View all databases Azure Cosmos DB Azure DocumentDB Azure SQL Azure Database for PostgreSQL Azure Managed Redis Microsoft Fabric Azure Databricks Linux virtual machines in Azure Windows Server on Azure Azure Functions Azure Virtual Machine Scale Sets Azure API Management Azure Container Apps Azure Kubernetes Service (AKS) Azure Kubernetes Fleet Manager Azure Container Registry Azure Red Hat OpenShift Azure Container Instances Azure Container Storage Azure Arc Azure Local Microsoft Defender for Cloud Azure Monitor Microsoft Sentinel Azure Migrate View all solutions (40+) Cloud solutions for small and medium businesses Cloud migration and modernization center Data analytics for AI Azure Databases AI apps and agents Microsoft Marketplace Microsoft Sovereign Cloud AI apps and agents"
+      "excerpt": "Developer Resources for App Development | Microsoft Azure This is the Trace Id: 9760343b68e9d7b181dd81af947d5c45 Skip to main content Azure Get to know Azure Microsoft as Customer Zero View all products (200+) Microsoft Foundry Azure Copilot GitHub Copilot Azure Kubernetes Service (AKS) Azure Cosmos DB Azure Database for PostgreSQL Azure Arc Microsoft Fabric Linux virtual machines in Azure Foundry Models Foundry Agent Service Foundry IQ Foundry Tools Foundry Control Plane Observability in Foundry Control Plane Azure OpenAI in Foundry Models Azure Speech in Foundry Tools Azure Machine Learning View all databases Azure Cosmos DB Azure DocumentDB Azure SQL Azure Database for PostgreSQL Azure Managed Redis Microsoft Fabric Azure Databricks Linux virtual machines in Azure Windows Server on Azure Azure Functions Azure Virtual Machine Scale Sets Azure API Management Azure Container Apps Azure Kubernetes Service (AKS) Azure Kubernetes Fleet Manager Azure Container Registry Azure Red Hat OpenShift Azure Container Instances Azure Container Storage Azure Arc Azure Local Microsoft Defender for Cloud Azure Monitor Microsoft Sentinel Azure Migrate View all solutions (40+) Cloud solutions for small and medium businesses Cloud migration and modernization center Data analytics for AI Azure Databases AI apps and agents Microsoft Marketplace Microsoft Sovereign Cloud AI apps and agents"
+    },
+    {
+      "id": "check-page-26f9fdf358",
+      "url": "https://azure.microsoft.com/resources/developers/",
+      "page": "application",
+      "excerpt": "Put AI and data science to work for your organization."
+    },
+    {
+      "id": "check-page-7fdd7cb509",
+      "url": "https://azure.microsoft.com/resources/developers/",
+      "page": "application",
+      "excerpt": "Streamline development Power Apps Quickly build apps for any device and bring AI to your apps—with this low-code platform that seamlessly works with Azure services."
+    },
+    {
+      "id": "check-page-716c17f07f",
+      "url": "https://azure.microsoft.com/resources/developers/",
+      "page": "application",
+      "excerpt": "Build your skills Discover Azure AI tools, products, and services for developers."
+    },
+    {
+      "id": "check-page-4a8eace1b8",
+      "url": "https://azure.microsoft.com/resources/developers/",
+      "page": "application",
+      "excerpt": "Learn about machine learning tools for data scientists and engineers."
+    },
+    {
+      "id": "check-page-20cab235d1",
+      "url": "https://azure.microsoft.com/resources/developers/",
+      "page": "application",
+      "excerpt": "Explore 30 Days to Learn It Build, Publish and sell through marketplace ISV Success supports ISVs in building, publishing and selling software applications through a rich set of technical benefits offered as part of the Microsoft Cloud Partner Program."
+    },
+    {
+      "id": "check-page-5d36939862",
+      "url": "https://azure.microsoft.com/resources/developers/",
+      "page": "application",
+      "excerpt": "What is machine learning?"
+    },
+    {
+      "id": "check-page-fda568067e",
+      "url": "https://azure.microsoft.com/resources/developers/",
+      "page": "application",
+      "excerpt": "English (United States) Your Privacy Choices Consumer Health Privacy Sitemap Contact Microsoft Privacy Manage cookies Terms of use Trademarks Safety & eco Recycling About our ads"
     },
     {
       "id": "check-page-706e5c6a1c",
       "url": "https://azure.microsoft.com/en-us/solutions/migration/web-applications/",
       "page": "application",
-      "excerpt": "Application Migration to Azure | Microsoft Azure This is the Trace Id: 71d62610d8245a75babc34856c5d838e Skip to main content Azure Get to know Azure Microsoft as Customer Zero View all products (200+) Microsoft Foundry Azure Copilot GitHub Copilot Azure Kubernetes Service (AKS) Azure Cosmos DB Azure Database for PostgreSQL Azure Arc Microsoft Fabric Linux virtual machines in Azure Foundry Models Foundry Agent Service Foundry IQ Foundry Tools Foundry Control Plane Observability in Foundry Control Plane Azure OpenAI in Foundry Models Azure Speech in Foundry Tools Azure Machine Learning View all databases Azure Cosmos DB Azure DocumentDB Azure SQL Azure Database for PostgreSQL Azure Managed Redis Microsoft Fabric Azure Databricks Linux virtual machines in Azure Windows Server on Azure Azure Functions Azure Virtual Machine Scale Sets Azure API Management Azure Container Apps Azure Kubernetes Service (AKS) Azure Kubernetes Fleet Manager Azure Container Registry Azure Red Hat OpenShift Azure Container Instances Azure Container Storage Azure Arc Azure Local Microsoft Defender for Cloud Azure Monitor Microsoft Sentinel Azure Migrate View all solutions (40+) Cloud solutions for small and medium businesses Cloud migration and modernization center Data analytics for AI Azure Databases AI apps and agents Microsoft Marketplace Microsoft Sovereign Cloud AI apps and agents Responsible AI"
+      "excerpt": "Application Migration to Azure | Microsoft Azure This is the Trace Id: 326bcf738ae8314f9e7c1b173c5016e4 Skip to main content Azure Get to know Azure Microsoft as Customer Zero View all products (200+) Microsoft Foundry Azure Copilot GitHub Copilot Azure Kubernetes Service (AKS) Azure Cosmos DB Azure Database for PostgreSQL Azure Arc Microsoft Fabric Linux virtual machines in Azure Foundry Models Foundry Agent Service Foundry IQ Foundry Tools Foundry Control Plane Observability in Foundry Control Plane Azure OpenAI in Foundry Models Azure Speech in Foundry Tools Azure Machine Learning View all databases Azure Cosmos DB Azure DocumentDB Azure SQL Azure Database for PostgreSQL Azure Managed Redis Microsoft Fabric Azure Databricks Linux virtual machines in Azure Windows Server on Azure Azure Functions Azure Virtual Machine Scale Sets Azure API Management Azure Container Apps Azure Kubernetes Service (AKS) Azure Kubernetes Fleet Manager Azure Container Registry Azure Red Hat OpenShift Azure Container Instances Azure Container Storage Azure Arc Azure Local Microsoft Defender for Cloud Azure Monitor Microsoft Sentinel Azure Migrate View all solutions (40+) Cloud solutions for small and medium businesses Cloud migration and modernization center Data analytics for AI Azure Databases AI apps and agents Microsoft Marketplace Microsoft Sovereign Cloud AI apps and agents Responsible AI"
+    },
+    {
+      "id": "check-page-6433351f5e",
+      "url": "https://azure.microsoft.com/en-us/solutions/migration/web-applications/",
+      "page": "application",
+      "excerpt": "Learn more Innovate faster with AI Realize your AI ambitions using Azure platform as a service (PaaS) and familiar development tools."
+    },
+    {
+      "id": "check-page-e21e59b668",
+      "url": "https://azure.microsoft.com/en-us/solutions/migration/web-applications/",
+      "page": "application",
+      "excerpt": "Learn more Landing zone accelerator Follow open-source landing zone accelerator guidance to speed up Azure App Service deployment at scale."
+    },
+    {
+      "id": "check-page-86f6009527",
+      "url": "https://azure.microsoft.com/en-us/solutions/migration/web-applications/",
+      "page": "application",
+      "excerpt": "Learn more Azure OpenAI in Foundry Models Apply generative AI to a variety of use cases."
+    },
+    {
+      "id": "check-page-a14406409f",
+      "url": "https://azure.microsoft.com/en-us/solutions/migration/web-applications/",
+      "page": "application",
+      "excerpt": "Read the report Microsoft is a Leader in the 2024 Gartner® Magic Quadrant™ for Cloud AI Developer Services 1 Explore the impact on cost savings, developer productivity, and time to market with Azure app innovation in this 2023 Forrester Consulting study commissioned by Microsoft."
+    },
+    {
+      "id": "check-page-d0bfea621f",
+      "url": "https://azure.microsoft.com/en-us/solutions/migration/web-applications/",
+      "page": "application",
+      "excerpt": "Read the study Forrester Total Economic Impact™ of Microsoft Azure App Innovation, 2023 CUSTOMER STORIES Trusted by the world’s most innovative brands Previous Slide Next Slide KPMG Australia “A major part of KymChat’s scalability comes from Azure App Service, which allows it to automatically scale based on live metrics and events within the business."
+    },
+    {
+      "id": "check-page-f6e939b2f5",
+      "url": "https://azure.microsoft.com/en-us/solutions/migration/web-applications/",
+      "page": "application",
+      "excerpt": "We can add new use cases and ingest new data sets without any degradation of service.\" Robert Finlayson: Senior Product Manager, KPMG Australia Products Azure Cosmos DB Azure OpenAI in Foundry Models Azure App Service Read the story NBA “It was a natural evolution for us, moving from on-premises hosted .NET applications over to the Microsoft Azure cloud environment ..."
+    },
+    {
+      "id": "check-page-3c98259236",
+      "url": "https://azure.microsoft.com/en-us/solutions/migration/web-applications/",
+      "page": "application",
+      "excerpt": "Explore Microsoft solutions [1] Gartner , Magic Quadrant for Cloud AI Developer Services, Jim Scheibmeir, Arun Batchu, and Mike Fang, April 29, 2024."
+    },
+    {
+      "id": "check-page-2a573dac1d",
+      "url": "https://azure.microsoft.com/en-us/solutions/migration/web-applications/",
+      "page": "application",
+      "excerpt": "What is machine learning?"
+    },
+    {
+      "id": "check-page-169452329b",
+      "url": "https://azure.microsoft.com/en-us/solutions/migration/web-applications/",
+      "page": "application",
+      "excerpt": "English (United States) Your Privacy Choices Consumer Health Privacy Sitemap Contact Microsoft Privacy Manage cookies Terms of use Trademarks Safety & eco Recycling About our ads"
     },
     {
       "id": "check-page-5dfe3fd6f1",
       "url": "https://www.microsoft.com/en-us/power-platform/products/power-apps/",
       "page": "application",
-      "excerpt": "Microsoft Power Apps: Low-Code AI App Builder | Microsoft This is the Trace Id: a8b786cf23df993fdd265519af723e53 Skip to main content Power Platform Power Apps Build an agentic enterprise Get Started Guided Tours Security & Governance Dataverse Connectors Power BI Desktop Pro Premium Embedded Report Server Power Apps Power Automate Power Pages Copilot Studio Pricing Partners Power Apps Learn Power Apps Blog Documentation Power Apps Support Power Apps Community App Development Topics Buy now Start free Sign in Discover new features coming to Power Platform and Copilot Studio in our online update event. Register now Power Apps Transform your business with modern, AI-first applications. Rapidly build and deploy full-stack applications, governed at enterprise scale and powered by AI. Try for free Take a guided tour Features Features Use cases Analyst reports Pricing Solutions Partners Customer stories Resources FAQ Next steps Sign in Try for free Sign in Try for free FEATURES Build enterprise solutions Elevate development Build with ease Bring AI to users at every step Scale with confidence Previous Next Plan smarter Quickly turn ideas into working solutions. Capture requirements, map processes, and shape data models in Power Apps, aligning your team before building a single component. Define your vision Use natural language to outline goals, roles, and workflows. AI instantly"
+      "excerpt": "Microsoft Power Apps: Low-Code AI App Builder | Microsoft This is the Trace Id: 4c29d0c8d00a2eeb6e889014cd10a6c5 Skip to main content Power Platform Power Apps Build an agentic enterprise Get Started Guided Tours Security & Governance Dataverse Connectors Power BI Desktop Pro Premium Embedded Report Server Power Apps Power Automate Power Pages Copilot Studio Pricing Partners Power Apps Learn Power Apps Blog Documentation Power Apps Support Power Apps Community App Development Topics Buy now Start free Sign in Discover new features coming to Power Platform and Copilot Studio in our online update event. Register now Power Apps Transform your business with modern, AI-first applications. Rapidly build and deploy full-stack applications, governed at enterprise scale and powered by AI. Try for free Take a guided tour Features Features Use cases Analyst reports Pricing Solutions Partners Customer stories Resources FAQ Next steps Sign in Try for free Sign in Try for free FEATURES Build enterprise solutions Elevate development Build with ease Bring AI to users at every step Scale with confidence Previous Next Plan smarter Quickly turn ideas into working solutions. Capture requirements, map processes, and shape data models in Power Apps, aligning your team before building a single component. Define your vision Use natural language to outline goals, roles, and workflows. AI instantly"
+    },
+    {
+      "id": "check-page-279f091d04",
+      "url": "https://www.microsoft.com/en-us/power-platform/products/power-apps/",
+      "page": "application",
+      "excerpt": "AI instantly translates your intent into structured solution blueprints."
+    },
+    {
+      "id": "check-page-81acf17199",
+      "url": "https://www.microsoft.com/en-us/power-platform/products/power-apps/",
+      "page": "application",
+      "excerpt": "Structure your data Design secure, scalable data models with AI-assisted suggestions."
+    },
+    {
+      "id": "check-page-7e493eac22",
+      "url": "https://www.microsoft.com/en-us/power-platform/products/power-apps/",
+      "page": "application",
+      "excerpt": "Easily refine tables, relationships, and fields using a visual data workspace."
+    },
+    {
+      "id": "check-page-b58876571c",
+      "url": "https://www.microsoft.com/en-us/power-platform/products/power-apps/",
+      "page": "application",
+      "excerpt": "Move rapidly from concept to creation Build apps your way—drag and drop, generative AI, or custom code."
+    },
+    {
+      "id": "check-page-f7c248def8",
+      "url": "https://www.microsoft.com/en-us/power-platform/products/power-apps/",
+      "page": "application",
+      "excerpt": "Innovate faster Accelerate UI design and data modeling work with AI assistance using natural language instructions, templates, and reusable components."
+    },
+    {
+      "id": "check-page-cced41f6cd",
+      "url": "https://www.microsoft.com/en-us/power-platform/products/power-apps/",
+      "page": "application",
+      "excerpt": "Empower your teams Empower business users and developers to collaborate in one workspace."
+    },
+    {
+      "id": "check-page-78703c385f",
+      "url": "https://www.microsoft.com/en-us/power-platform/products/power-apps/",
+      "page": "application",
+      "excerpt": "Monitor agent activity in one place Oversee, collaborate with, and guide AI agents inside your apps."
+    },
+    {
+      "id": "check-page-f8d118dbd4",
+      "url": "https://www.microsoft.com/en-us/power-platform/products/power-apps/",
+      "page": "application",
+      "excerpt": "Work smarter Speed up data entry and reduce errors with AI that autofills forms from emails, chats, documents, and images, eliminating repetitive work and boosting productivity."
+    },
+    {
+      "id": "check-page-fa8956898c",
+      "url": "https://www.microsoft.com/en-us/power-platform/products/power-apps/",
+      "page": "application",
+      "excerpt": "Use natural language for data exploration in adaptive grids and charts, and get fast insights through AI-generated summaries."
+    },
+    {
+      "id": "check-page-be08c8014c",
+      "url": "https://www.microsoft.com/en-us/power-platform/products/power-apps/",
+      "page": "application",
+      "excerpt": "Governance and resilience at enterprise scale Deploy and manage apps at enterprise scale."
+    },
+    {
+      "id": "check-page-3abf1a537d",
+      "url": "https://www.microsoft.com/en-us/power-platform/products/power-apps/",
+      "page": "application",
+      "excerpt": "One platform for all kinds of apps—pro code, no code, low code, and generated apps Leverage a managed platform to deploy code-first apps with confidence, flexibility, and enterprise-grade controls."
+    },
+    {
+      "id": "check-page-fee2ad1240",
+      "url": "https://www.microsoft.com/en-us/power-platform/products/power-apps/",
+      "page": "application",
+      "excerpt": "1 Read the report Learn why Microsoft is a Leader in the 2025 Gartner® Magic Quadrant™ for Enterprise Low-Code Application Platforms."
     },
     {
       "id": "check-page-32a0257851",
       "url": "https://www.microsoft.com/en-us/store/b/education",
       "page": "terms",
-      "excerpt": "Education & Student Discounts on Laptops, Microsoft 365, Windows, Surface | Microsoft Store This is the Trace Id: ba7ac727d3854dfadb993eebd6482b4a Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Microsoft 365 Azure Copilot Windows Surface XBOX Deals Small Business Support Windows Apps Outlook OneDrive Microsoft Teams OneNote Microsoft Edge"
+      "excerpt": "Education & Student Discounts on Laptops, Microsoft 365, Windows, Surface | Microsoft Store This is the Trace Id: 2e2addeb480e26df48d195ba8d55af47 Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Microsoft 365 Azure Copilot Windows Surface XBOX Deals Small Business Support Windows Apps Outlook OneDrive Microsoft Teams OneNote Microsoft Edge"
+    },
+    {
+      "id": "check-page-a02b4a1faf",
+      "url": "https://www.microsoft.com/en-us/store/b/education",
+      "page": "terms",
+      "excerpt": "Shop now Learn more Ace the assignment with Copilot Build a study guide, outline ideas, refine assignments—Surface with built-in AI helps you move from draft to done, faster."
+    },
+    {
+      "id": "check-page-614a1586f2",
+      "url": "https://www.microsoft.com/en-us/store/b/education",
+      "page": "terms",
+      "excerpt": "Download the Copilot app Get Office 365 Education for free Students and teachers can study smarter with Microsoft Teams, Word, Excel, PowerPoint, and OneNote on all their devices."
+    },
+    {
+      "id": "check-page-146c12065c",
+      "url": "https://www.microsoft.com/en-us/store/b/education",
+      "page": "terms",
+      "excerpt": "Sign up now Gear up for school Shop Surface, student offers, and more with personalized help from AI Ask a question Student discounts Laptops for coding PCs for creative work Explore more for students Recharge with XBOX Make the most of your study breaks with great deals on XBOX devices and accessories."
+    },
+    {
+      "id": "check-page-87c386d9b0",
+      "url": "https://www.microsoft.com/en-us/store/b/education",
+      "page": "terms",
+      "excerpt": "Yes, Microsoft offers an Education discount available to K-12 and higher education students, faculty, and parents."
+    },
+    {
+      "id": "check-page-accd35aba1",
+      "url": "https://www.microsoft.com/en-us/store/b/education",
+      "page": "terms",
+      "excerpt": "The education discount is only valid on select products, and may not be combinable with other offers."
+    },
+    {
+      "id": "check-page-3a9f939915",
+      "url": "https://www.microsoft.com/en-us/store/b/education",
+      "page": "terms",
+      "excerpt": "Students and educators at eligible institutions can sign up for Office 365 Education for free , including Word, Excel, PowerPoint, OneNote, and now Microsoft Teams, plus additional classroom tools."
+    },
+    {
+      "id": "check-page-9408b1e7bf",
+      "url": "https://www.microsoft.com/en-us/store/b/education",
+      "page": "terms",
+      "excerpt": "The education discount is available to K-12 and higher education students, faculty, and parents."
+    },
+    {
+      "id": "check-page-961d3ef847",
+      "url": "https://www.microsoft.com/en-us/store/b/education",
+      "page": "terms",
+      "excerpt": "Our student computer and laptop discounts are available to K-12 and higher education students, faculty, and parents."
+    },
+    {
+      "id": "check-page-8e91442ded",
+      "url": "https://www.microsoft.com/en-us/store/b/education",
+      "page": "terms",
+      "excerpt": "Check with your school or educational institution to find out how to get Microsoft 365 free for students , faculty and staff, and teachers."
+    },
+    {
+      "id": "check-page-8cdc3da723",
+      "url": "https://www.microsoft.com/en-us/store/b/education",
+      "page": "terms",
+      "excerpt": "Price protection: Microsoft Store Price Adjustment : Holiday extended price protection valid on purchases of qualifying physical consumer products purchased from Microsoft Store online and Microsoft Experience centers in select markets between October 1, 2026 – December 2, 2026."
+    },
+    {
+      "id": "check-page-88c73564c0",
+      "url": "https://www.microsoft.com/en-us/store/b/education",
+      "page": "terms",
+      "excerpt": "Purchases made outside the window of October 1, 2026 – December 2, 2026: Price adjustment available on purchases of qualifying physical consumer products made at Microsoft Store and Microsoft Experience Centers in select markets for 60 days from the date product is received."
+    },
+    {
+      "id": "check-page-781692e77f",
+      "url": "https://www.microsoft.com/en-us/store/b/education",
+      "page": "terms",
+      "excerpt": "Trade-In: Available only through the Microsoft Store online in the United States."
     },
     {
       "id": "check-page-0b3bd74b4c",
       "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
       "page": "terms",
-      "excerpt": "Microsoft Store - Deals on Laptops, Windows Computers & Other Sales This is the Trace Id: c73a108ac721c533caef91e403b1c5e4 Skip to main content Microsoft 365 Azure Copilot Windows Surface XBOX Deals Small Business Support Windows Apps Outlook OneDrive Microsoft Teams OneNote Microsoft Edge Moving from Skype to Teams Computers Shop XBOX Accessories VR & mixed reality Certified Refurbished Trade-in for cash XBOX Game Pass Ultimate PC Game Pass XBOX games PC games Microsoft AI Microsoft Security Dynamics 365 Microsoft 365 for business Microsoft Power Platform Windows 365 Small Business Digital Sovereignty Azure Microsoft Developer Microsoft Learn Support for AI marketplace apps Microsoft Tech Community Microsoft Marketplace Software companies Visual Studio Microsoft Rewards Free downloads & security Education Gift cards Licensing Unlocked stories View Sitemap Get extended free returns and price protection on gifts through Jan 31, 2027. Sign in for faster checkout Get extended free returns and price protection on gifts through Jan 31, 2027. Microsoft Store Deals Find gifts for everyone on your list with help from AI Top gifts for gamers Best Surface gifts Microsoft exclusives Shop deals by category All deals New Surface Pro, 13-inch (12th Edition) Make spirits bright with a Surface that delivers all the power of a laptop in a thin, light tablet powered by Snapdragon® X2"
+      "excerpt": "Microsoft Store - Deals on Laptops, Windows Computers & Other Sales This is the Trace Id: d74d0ee0aaf6b246afd266f18cf0c40c Skip to main content Microsoft 365 Azure Copilot Windows Surface XBOX Deals Small Business Support Windows Apps Outlook OneDrive Microsoft Teams OneNote Microsoft Edge Moving from Skype to Teams Computers Shop XBOX Accessories VR & mixed reality Certified Refurbished Trade-in for cash XBOX Game Pass Ultimate PC Game Pass XBOX games PC games Microsoft AI Microsoft Security Dynamics 365 Microsoft 365 for business Microsoft Power Platform Windows 365 Small Business Digital Sovereignty Azure Microsoft Developer Microsoft Learn Support for AI marketplace apps Microsoft Tech Community Microsoft Marketplace Software companies Visual Studio Microsoft Rewards Free downloads & security Education Gift cards Licensing Unlocked stories View Sitemap Get extended free returns and price protection on gifts through Jan 31, 2027. Sign in for faster checkout Get extended free returns and price protection on gifts through Jan 31, 2027. Microsoft Store Deals Find gifts for everyone on your list with help from AI Top gifts for gamers Best Surface gifts Microsoft exclusives Shop deals by category All deals New Surface Pro, 13-inch (12th Edition) Make spirits bright with a Surface that delivers all the power of a laptop in a thin, light tablet powered by Snapdragon® X2"
+    },
+    {
+      "id": "check-page-cafec7e089",
+      "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
+      "page": "terms",
+      "excerpt": "Maximize your workday with and exclusive features like Live Captions and Windows Studio Effects. $ • • • • • • $ • • • • • • Shop now Surface Laptop, 13.8-inch (7th Edition) Power through the holidays with all-day battery and advanced AI."
+    },
+    {
+      "id": "check-page-7a75c04c1d",
+      "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
+      "page": "terms",
+      "excerpt": "Choose between Snapdragon® X Plus (10 Core) or Snapdragon® X Elite (12 Core) processors. $ • • • • • • $ • • • • • • Shop now Surface Laptop, 13-inch (1st Edition) When your holiday list keeps growing, AI-powered performance helps you brainstorm, draft, and research, faster."
+    },
+    {
+      "id": "check-page-3fbe02ab87",
+      "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
+      "page": "terms",
+      "excerpt": "Shop now Learn more Wrap up fun Give the best value in gaming: XBOX Series S."
+    },
+    {
+      "id": "check-page-22c61bbcef",
+      "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
+      "page": "terms",
+      "excerpt": "Microsoft closed most of its physical retail stores in 2020 and shifted to digital sales and support."
+    },
+    {
+      "id": "check-page-7929d05384",
+      "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
+      "page": "terms",
+      "excerpt": "Microsoft offers software like Windows OS and Microsoft 365 , enterprise tools including Azure, Dynamics 365, and Teams, and hardware such as Surface Pro & Surface Laptop devices, XBOX consoles , and PC accessories."
+    },
+    {
+      "id": "check-page-ba346da610",
+      "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
+      "page": "terms",
+      "excerpt": "It also provides developer tools, cybersecurity solutions, and AI-powered experiences like Copilot, which brings intelligent assistance to apps and workflows."
+    },
+    {
+      "id": "check-page-72a33190cd",
+      "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
+      "page": "terms",
+      "excerpt": "Consumers and businesses can access support, explore financing options, and find great deals on their favorite products."
+    },
+    {
+      "id": "check-page-22c61bbcef",
+      "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
+      "page": "terms",
+      "excerpt": "Microsoft closed most of its physical retail stores in 2020 and shifted to digital sales and support."
+    },
+    {
+      "id": "check-page-642fd98521",
+      "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
+      "page": "terms",
+      "excerpt": "Price protection: Microsoft Store Price Adjustment : Holiday extended price protection valid on purchases of qualifying physical consumer products purchased from Microsoft Store online and Microsoft Experience centers in select markets between October 1, 2026 – December 2, 2026."
+    },
+    {
+      "id": "check-page-9f6ba06da4",
+      "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
+      "page": "terms",
+      "excerpt": "Purchases made outside the window of October 1, 2026 – December 2, 2026: Price adjustment available on purchases of qualifying physical consumer products made at Microsoft Store and Microsoft Experience Centers in select markets for 60 days from the date product is received."
+    },
+    {
+      "id": "check-page-811b6e2098",
+      "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
+      "page": "terms",
+      "excerpt": "Trade-In: Available only through the Microsoft Store online in the United States."
+    },
+    {
+      "id": "check-page-b3902b0e82",
+      "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
+      "page": "terms",
+      "excerpt": "All trade-ins and reimbursements are subject to Teladvance’s sole discretion and approval. * Eligibility Education discount available to students in primary through higher education, faculty, and parents of students in grades K-12 and higher education institutions."
     },
     {
       "id": "check-page-1d3fcc414d",
       "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_AllDealsTab_R2_CP3_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
       "page": "terms",
-      "excerpt": "Surface Laptop for Business, 13.8 and 15-In. (7th Ed.) | Intel - Microsoft Store This is the Trace Id: 56dedbd8772512999ae9f6f880575b8d Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Small Business Surface Pro, 13-inch (12th Edition) | Intel Surface Pro, 12-inch (2nd Edition) | Snapdragon Surface Pro, 13-inch (12th Edition) | Snapdragon"
+      "excerpt": "Surface Laptop for Business, 13.8 and 15-In. (7th Ed.) | Intel - Microsoft Store This is the Trace Id: c53f30692da3fd689d00caed8f4652af Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Small Business Surface Pro, 13-inch (12th Edition) | Intel Surface Pro, 12-inch (2nd Edition) | Snapdragon Surface Pro, 13-inch (12th Edition) | Snapdragon"
+    },
+    {
+      "id": "check-page-9cb6a9df21",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_AllDealsTab_R2_CP3_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Need Surface for Business at enterprise scale?"
+    },
+    {
+      "id": "check-page-a155a0581c",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_AllDealsTab_R2_CP3_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Find authorized resellers Overview Tech specs Sustainability Accessibility Compare Previous Next Exceptional performance and AI capabilities Impressive, reliable power Built with Intel ® Core ™ Ultra processors (Series 2), enjoy powerful performance, reliable power, and AI capabilities."
+    },
+    {
+      "id": "check-page-aec5c2748f",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_AllDealsTab_R2_CP3_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "3 More powerful AI processing The Intel ® AI Boost NPU features up to 48 TOPS, 4 designed to accelerate AI experiences."
+    },
+    {
+      "id": "check-page-82d05fc19e",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_AllDealsTab_R2_CP3_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "A dedicated Copilot key 8 seamlessly engages your AI assistant."
+    },
+    {
+      "id": "check-page-3a7728592a",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_AllDealsTab_R2_CP3_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Best in class security, built for trust Protect your business data Surface Laptop for Business is a Secured-core PC, designed to elevate the benefits of Windows 11 Pro security, providing additional hardware and software protection."
+    },
+    {
+      "id": "check-page-89fd379931",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_AllDealsTab_R2_CP3_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "10 Protect against evolving threats Windows is secure by default, with layers of hardware-backed protection and a reported 62% drop in security incidents."
+    },
+    {
+      "id": "check-page-5fa6e41814",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_AllDealsTab_R2_CP3_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Achieve more with less time and effort Get organized in a snap with Windows 11 Pro business AI and features that increase workflow speed by 50% on average."
+    },
+    {
+      "id": "check-page-82c44483d8",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_AllDealsTab_R2_CP3_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "13 Enhanced Copilot+ PC 1 AI experiences Better video calling Get enhanced brightness and color accuracy with the HD 1080p Surface Studio Camera paired with AI-powered Windows Studio Effects."
+    },
+    {
+      "id": "check-page-5af5931fe9",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_AllDealsTab_R2_CP3_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Respond quickly to threats Copilot for Security is a natural language, AI-powered security analysis tool that works with Microsoft security products."
+    },
+    {
+      "id": "check-page-0605247535",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_AllDealsTab_R2_CP3_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Surface Laptop for Business, 13-inch | Intel From $1,299.99 From $1,299.99 The most portable Surface Laptop delivers built-in AI experiences and impressive..."
+    },
+    {
+      "id": "check-page-0442eef330",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_AllDealsTab_R2_CP3_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "A Copilot+ PC is a PC built for AI experiences, with a powerful NPU that can run AI tasks on the device."
+    },
+    {
+      "id": "check-page-843c9a3293",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_AllDealsTab_R2_CP3_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "This helps enable faster, more efficient AI features while keeping work moving smoothly, even when you’re multitasking or on the go."
     },
     {
       "id": "check-page-78b2a10f88",
       "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_SurfaceTab_R2_CP2_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
       "page": "terms",
-      "excerpt": "Surface Laptop for Business, 13.8 and 15-In. (7th Ed.) | Intel - Microsoft Store This is the Trace Id: 9fb4823392d2fca6f6bdbbed2e7e3a75 Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Small Business Surface Pro, 13-inch (12th Edition) | Intel Surface Pro, 12-inch (2nd Edition) | Snapdragon Surface Pro, 13-inch (12th Edition) | Snapdragon"
+      "excerpt": "Surface Laptop for Business, 13.8 and 15-In. (7th Ed.) | Intel - Microsoft Store This is the Trace Id: 91968a07016eff45dc08300567b7febe Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Small Business Surface Pro, 13-inch (12th Edition) | Intel Surface Pro, 12-inch (2nd Edition) | Snapdragon Surface Pro, 13-inch (12th Edition) | Snapdragon"
+    },
+    {
+      "id": "check-page-75a83b9b2e",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_SurfaceTab_R2_CP2_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Need Surface for Business at enterprise scale?"
+    },
+    {
+      "id": "check-page-37801b5dd7",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_SurfaceTab_R2_CP2_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Find authorized resellers Overview Tech specs Sustainability Accessibility Compare Previous Next Exceptional performance and AI capabilities Impressive, reliable power Built with Intel ® Core ™ Ultra processors (Series 2), enjoy powerful performance, reliable power, and AI capabilities."
+    },
+    {
+      "id": "check-page-34a23d2b16",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_SurfaceTab_R2_CP2_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "3 More powerful AI processing The Intel ® AI Boost NPU features up to 48 TOPS, 4 designed to accelerate AI experiences."
+    },
+    {
+      "id": "check-page-b4f37e1857",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_SurfaceTab_R2_CP2_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "A dedicated Copilot key 8 seamlessly engages your AI assistant."
+    },
+    {
+      "id": "check-page-5c7ea13258",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_SurfaceTab_R2_CP2_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Best in class security, built for trust Protect your business data Surface Laptop for Business is a Secured-core PC, designed to elevate the benefits of Windows 11 Pro security, providing additional hardware and software protection."
+    },
+    {
+      "id": "check-page-fea2bb349d",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_SurfaceTab_R2_CP2_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "10 Protect against evolving threats Windows is secure by default, with layers of hardware-backed protection and a reported 62% drop in security incidents."
+    },
+    {
+      "id": "check-page-5f9912b29b",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_SurfaceTab_R2_CP2_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Achieve more with less time and effort Get organized in a snap with Windows 11 Pro business AI and features that increase workflow speed by 50% on average."
+    },
+    {
+      "id": "check-page-6562b561e6",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_SurfaceTab_R2_CP2_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "13 Enhanced Copilot+ PC 1 AI experiences Better video calling Get enhanced brightness and color accuracy with the HD 1080p Surface Studio Camera paired with AI-powered Windows Studio Effects."
+    },
+    {
+      "id": "check-page-d4b5edce57",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_SurfaceTab_R2_CP2_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Respond quickly to threats Copilot for Security is a natural language, AI-powered security analysis tool that works with Microsoft security products."
+    },
+    {
+      "id": "check-page-23ac647c67",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_SurfaceTab_R2_CP2_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Surface Laptop for Business, 13-inch | Intel From $1,299.99 From $1,299.99 The most portable Surface Laptop delivers built-in AI experiences and impressive..."
+    },
+    {
+      "id": "check-page-a8676cb3b0",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_SurfaceTab_R2_CP2_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "A Copilot+ PC is a PC built for AI experiences, with a powerful NPU that can run AI tasks on the device."
+    },
+    {
+      "id": "check-page-daeeaf7fb6",
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_SurfaceTab_R2_CP2_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "This helps enable faster, more efficient AI features while keeping work moving smoothly, even when you’re multitasking or on the go."
     },
     {
       "id": "check-page-e806e0f331",
       "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_AllDealsTab_R3_CP1_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
       "page": "terms",
-      "excerpt": "Surface Pro for Business, 13-In. (11th Ed.) | Snapdragon, 2-in-1 Laptop – Microsoft Store This is the Trace Id: fd6d0ab56e65dba6f94e2db594c247f4 Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Small Business Surface Pro, 13-inch (12th Edition) | Intel Surface Pro, 12-inch (2nd Edition) | Snapdragon Surface Pro, 13-inch (12th Edition) |"
+      "excerpt": "Surface Pro for Business, 13-In. (11th Ed.) | Snapdragon, 2-in-1 Laptop – Microsoft Store This is the Trace Id: e68ea9fffddf8e2662d05341948a7b34 Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Small Business Surface Pro, 13-inch (12th Edition) | Intel Surface Pro, 12-inch (2nd Edition) | Snapdragon Surface Pro, 13-inch (12th Edition) |"
+    },
+    {
+      "id": "check-page-61d2d94425",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_AllDealsTab_R3_CP1_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Need Surface for Business at enterprise scale?"
+    },
+    {
+      "id": "check-page-1c33f636f8",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_AllDealsTab_R3_CP1_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "15 With unique AI experiences, you can uncover new opportunities, solve problems faster, and create compelling content."
+    },
+    {
+      "id": "check-page-9687c78ee0",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_AllDealsTab_R3_CP1_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Section Lightning-fast speeds and AI-accelerated power Unleash unprecedented speed With blazing-fast processing power, breeze through the toughest tasks—up to 90% faster than Surface Pro 9."
+    },
+    {
+      "id": "check-page-1632f99589",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_AllDealsTab_R3_CP1_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Streamline tasks with a smarter PC The most powerful NPU available for a Windows PC unlocks unique AI features that make your device smarter and faster."
+    },
+    {
+      "id": "check-page-98cc4f695e",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_AllDealsTab_R3_CP1_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Accelerate your productivity and creativity with Copilot 3 Enhance your camera feed with AI AI-powered, unique Windows Studio Effects combined with the ultra-wide Quad-HD Surface Studio camera provides a new way to present yourself in calls, including automatic framing."
+    },
+    {
+      "id": "check-page-d0d35cbec7",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_AllDealsTab_R3_CP1_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Advanced security enhanced with AI Deliver advanced security, support, and the latest Al features by managing your Windows 11 Pro Copilot+ PC with Microsoft Intune in compliance with your security policies."
+    },
+    {
+      "id": "check-page-53111062e3",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_AllDealsTab_R3_CP1_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "More energy efficient Energy Saver is a built-in, one-toggle feature to help you extend your battery life."
+    },
+    {
+      "id": "check-page-149b2bc0b7",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_AllDealsTab_R3_CP1_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "4 Connect with a business product expert Our experts will help you find the right solutions for hardware, software, financing, and more for your business."
+    },
+    {
+      "id": "check-page-00ad3674de",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_AllDealsTab_R3_CP1_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Surface Laptop for Business, 13-inch | Intel From $1,299.99 From $1,299.99 The most portable Surface Laptop delivers built-in AI experiences and impressive..."
+    },
+    {
+      "id": "check-page-4e861a6300",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_AllDealsTab_R3_CP1_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "A Copilot+ PC is a PC built for AI experiences, with a powerful NPU that can run AI tasks on the device."
+    },
+    {
+      "id": "check-page-2a5198cd2b",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_AllDealsTab_R3_CP1_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "This helps enable faster, more efficient AI features while keeping work moving smoothly, even when you’re multitasking or on the go."
+    },
+    {
+      "id": "check-page-e22943c296",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_AllDealsTab_R3_CP1_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Surface Pro for Business stands out as one of the top laptops for business and personal use, delivering powerful performance, ultra-portability, and enterprise-grade security in a versatile 2-in-1 design."
     },
     {
       "id": "check-page-2b533d2674",
       "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
       "page": "terms",
-      "excerpt": "Surface Pro for Business, 13-In. (11th Ed.) | Snapdragon, 2-in-1 Laptop – Microsoft Store This is the Trace Id: a3ef195ddba4112f01e421da5fa48580 Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Small Business Surface Pro, 13-inch (12th Edition) | Intel Surface Pro, 12-inch (2nd Edition) | Snapdragon Surface Pro, 13-inch (12th Edition) |"
+      "excerpt": "Surface Pro for Business, 13-In. (11th Ed.) | Snapdragon, 2-in-1 Laptop – Microsoft Store This is the Trace Id: fd24fec5c88ecec7b2ab7279678bf9da Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Small Business Surface Pro, 13-inch (12th Edition) | Intel Surface Pro, 12-inch (2nd Edition) | Snapdragon Surface Pro, 13-inch (12th Edition) |"
+    },
+    {
+      "id": "check-page-ebc90e9218",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Need Surface for Business at enterprise scale?"
+    },
+    {
+      "id": "check-page-2ba007e86f",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "15 With unique AI experiences, you can uncover new opportunities, solve problems faster, and create compelling content."
+    },
+    {
+      "id": "check-page-9961dfda73",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Section Lightning-fast speeds and AI-accelerated power Unleash unprecedented speed With blazing-fast processing power, breeze through the toughest tasks—up to 90% faster than Surface Pro 9."
+    },
+    {
+      "id": "check-page-c950768d3d",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Streamline tasks with a smarter PC The most powerful NPU available for a Windows PC unlocks unique AI features that make your device smarter and faster."
+    },
+    {
+      "id": "check-page-ec4dd47e51",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Accelerate your productivity and creativity with Copilot 3 Enhance your camera feed with AI AI-powered, unique Windows Studio Effects combined with the ultra-wide Quad-HD Surface Studio camera provides a new way to present yourself in calls, including automatic framing."
+    },
+    {
+      "id": "check-page-6a07bde0c8",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Advanced security enhanced with AI Deliver advanced security, support, and the latest Al features by managing your Windows 11 Pro Copilot+ PC with Microsoft Intune in compliance with your security policies."
+    },
+    {
+      "id": "check-page-ac8b725701",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "More energy efficient Energy Saver is a built-in, one-toggle feature to help you extend your battery life."
+    },
+    {
+      "id": "check-page-2f7c1cef8a",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "4 Connect with a business product expert Our experts will help you find the right solutions for hardware, software, financing, and more for your business."
+    },
+    {
+      "id": "check-page-778059484b",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Surface Laptop for Business, 13-inch | Intel From $1,299.99 From $1,299.99 The most portable Surface Laptop delivers built-in AI experiences and impressive..."
+    },
+    {
+      "id": "check-page-30c54c79df",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "A Copilot+ PC is a PC built for AI experiences, with a powerful NPU that can run AI tasks on the device."
+    },
+    {
+      "id": "check-page-6931528a99",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "This helps enable faster, more efficient AI features while keeping work moving smoothly, even when you’re multitasking or on the go."
+    },
+    {
+      "id": "check-page-18038d956a",
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "excerpt": "Surface Pro for Business stands out as one of the top laptops for business and personal use, delivering powerful performance, ultra-portability, and enterprise-grade security in a versatile 2-in-1 design."
     },
     {
       "id": "check-page-fdb3e39c27",
       "url": "https://www.microsoft.com/en-us/d/xbox-series-s/942j774tp9jn?icid=deals-page_XBOXTab_R1_CP3_XBOX-SeriesS_HOLFY27",
       "page": "terms",
-      "excerpt": "Buy XBOX Series S: 512GB or 1TB White | Microsoft Store This is the Trace Id: 92ec089bd6b251cf1623131cf742ccf7 Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Gaming All XBOX consoles XBOX Series X XBOX Series S XBOX Certified Refurbished All XBOX accessories XBOX controllers XBOX headsets XBOX repair parts VR & Mixed Reality Compare all"
+      "excerpt": "Buy XBOX Series S: 512GB or 1TB White | Microsoft Store This is the Trace Id: ca5703b8ac7f6f33fd09908d8d4d0ddb Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Gaming All XBOX consoles XBOX Series X XBOX Series S XBOX Certified Refurbished All XBOX accessories XBOX controllers XBOX headsets XBOX repair parts VR & Mixed Reality Compare all"
+    },
+    {
+      "id": "check-page-a4f0ebadbb",
+      "url": "https://www.microsoft.com/en-us/d/xbox-series-s/942j774tp9jn?icid=deals-page_XBOXTab_R1_CP3_XBOX-SeriesS_HOLFY27",
+      "page": "terms",
+      "excerpt": "1 120 Up to 120 FPS 3D 3D spatial sound 4K Gaming and 8K ready 1TB Up to 1TB custom SSD Smart delivery XBOX Smart Delivery ensures you play the best available version of your game no matter which console you're playing on."
+    },
+    {
+      "id": "check-page-7343003501",
+      "url": "https://www.microsoft.com/en-us/d/xbox-series-s/942j774tp9jn?icid=deals-page_XBOXTab_R1_CP3_XBOX-SeriesS_HOLFY27",
+      "page": "terms",
+      "excerpt": "Play on console or PC, connect with millions, and enjoy enhanced backwards compatibility for endless gaming options."
+    },
+    {
+      "id": "check-page-141adeaf6f",
+      "url": "https://www.microsoft.com/en-us/d/xbox-series-s/942j774tp9jn?icid=deals-page_XBOXTab_R1_CP3_XBOX-SeriesS_HOLFY27",
+      "page": "terms",
+      "excerpt": "Price protection: Microsoft Store Price Adjustment : Holiday extended price protection valid on purchases of qualifying physical consumer products purchased from Microsoft Store online and Microsoft Experience centers in select markets between October 1, 2026 – December 2, 2026."
+    },
+    {
+      "id": "check-page-a074413cbc",
+      "url": "https://www.microsoft.com/en-us/d/xbox-series-s/942j774tp9jn?icid=deals-page_XBOXTab_R1_CP3_XBOX-SeriesS_HOLFY27",
+      "page": "terms",
+      "excerpt": "Purchases made outside the window of October 1, 2026 – December 2, 2026: Price adjustment available on purchases of qualifying physical consumer products made at Microsoft Store and Microsoft Experience Centers in select markets for 60 days from the date product is received."
+    },
+    {
+      "id": "check-page-dc255a49fe",
+      "url": "https://www.microsoft.com/en-us/d/xbox-series-s/942j774tp9jn?icid=deals-page_XBOXTab_R1_CP3_XBOX-SeriesS_HOLFY27",
+      "page": "terms",
+      "excerpt": "Trade-In: Available only through the Microsoft Store online in the United States."
+    },
+    {
+      "id": "check-page-4dc54a6342",
+      "url": "https://www.microsoft.com/en-us/d/xbox-series-s/942j774tp9jn?icid=deals-page_XBOXTab_R1_CP3_XBOX-SeriesS_HOLFY27",
+      "page": "terms",
+      "excerpt": "Video Capabilities Gaming resolution: 1440p Performance target: Up to 120 FPS HDMI features: Auto Low Latency Mode."
+    },
+    {
+      "id": "check-page-4dc54a6342",
+      "url": "https://www.microsoft.com/en-us/d/xbox-series-s/942j774tp9jn?icid=deals-page_XBOXTab_R1_CP3_XBOX-SeriesS_HOLFY27",
+      "page": "terms",
+      "excerpt": "Video Capabilities Gaming resolution: 1440p Performance target: Up to 120 FPS HDMI features: Auto Low Latency Mode."
+    },
+    {
+      "id": "check-page-952f542719",
+      "url": "https://www.microsoft.com/en-us/d/xbox-series-s/942j774tp9jn?icid=deals-page_XBOXTab_R1_CP3_XBOX-SeriesS_HOLFY27",
+      "page": "terms",
+      "excerpt": "Forza Horizon 6 Limited Edition Accessories Collection From $89.99 From $89.99 Explore breathtaking Japan."
+    },
+    {
+      "id": "check-page-6bbc2c6798",
+      "url": "https://www.microsoft.com/en-us/d/xbox-series-s/942j774tp9jn?icid=deals-page_XBOXTab_R1_CP3_XBOX-SeriesS_HOLFY27",
+      "page": "terms",
+      "excerpt": "Inspired by the winding Touge roads of Japan, the XBOX..."
+    },
+    {
+      "id": "check-page-c3e154e57f",
+      "url": "https://www.microsoft.com/en-us/d/xbox-series-s/942j774tp9jn?icid=deals-page_XBOXTab_R1_CP3_XBOX-SeriesS_HOLFY27",
+      "page": "terms",
+      "excerpt": "Shop all accessories to make sure you have what you need to get gaming."
+    },
+    {
+      "id": "check-page-f9830be6ec",
+      "url": "https://www.microsoft.com/en-us/d/xbox-series-s/942j774tp9jn?icid=deals-page_XBOXTab_R1_CP3_XBOX-SeriesS_HOLFY27",
+      "page": "terms",
+      "excerpt": "XBOX Series S is designed for disc-free gaming at 1440p (with the ability to upscale to 4K) and you can choose between 512GB SSD or 1TB SSD storage."
+    },
+    {
+      "id": "check-page-3e386179dd",
+      "url": "https://www.microsoft.com/en-us/d/xbox-series-s/942j774tp9jn?icid=deals-page_XBOXTab_R1_CP3_XBOX-SeriesS_HOLFY27",
+      "page": "terms",
+      "excerpt": "XBOX Series S is an all-digital gaming console for disc-free gaming."
     },
     {
       "id": "check-page-6722079c88",
       "url": "https://www.microsoft.com/en-us/education/products/office?icid=EDU_office365_FAQ",
       "page": "terms",
-      "excerpt": "Free Microsoft Office 365 for Schools | Microsoft Education This is the Trace Id: fa9cf74f5b6b6b02b107e6d804cfca43 Skip to main content Education Azure for education Copilot in education Devices Edge Microsoft 365 Microsoft Teams Minecraft Education Office 365 OneNote Windows 11 Accessibility tools AI in education Cybersecurity solutions Learning Accelerators Learning tools Social-emotional learning K12 education leaders Higher education leaders IT leaders Educators Students Education blog Education events Frequently asked questions Learn Educator Center Resource Center Contact Sales Shop for home Why Microsoft Education Contact a sales partner Office 365 Education Get started with Office 365 Office 365 delivers familiar productivity apps powered by the cloud, enabling people to work, collaborate, and communicate from anywhere. Get started for institutions Get started for students Benefits Benefits Related products Pricing College student offer Education stories Training and resources FAQ Contact a sales partner Contact a sales partner BENEFITS Powerful tools for the classroom Keep your content in one place Organize class materials and easily collaborate with students and colleagues using OneNote, the ultimate digital notebook. Get access anytime, anywhere, from any device Bring conversations, content, and apps together all from a single Office 365 Education experience."
+      "excerpt": "Free Microsoft Office 365 for Schools | Microsoft Education This is the Trace Id: 79fcb1d92bd4c34afd3a8cff3d106b47 Skip to main content Education Azure for education Copilot in education Devices Edge Microsoft 365 Microsoft Teams Minecraft Education Office 365 OneNote Windows 11 Accessibility tools AI in education Cybersecurity solutions Learning Accelerators Learning tools Social-emotional learning K12 education leaders Higher education leaders IT leaders Educators Students Education blog Education events Frequently asked questions Learn Educator Center Resource Center Contact Sales Shop for home Why Microsoft Education Contact a sales partner Office 365 Education Get started with Office 365 Office 365 delivers familiar productivity apps powered by the cloud, enabling people to work, collaborate, and communicate from anywhere. Get started for institutions Get started for students Benefits Benefits Related products Pricing College student offer Education stories Training and resources FAQ Contact a sales partner Contact a sales partner BENEFITS Powerful tools for the classroom Keep your content in one place Organize class materials and easily collaborate with students and colleagues using OneNote, the ultimate digital notebook. Get access anytime, anywhere, from any device Bring conversations, content, and apps together all from a single Office 365 Education experience."
+    },
+    {
+      "id": "check-page-8891d3e587",
+      "url": "https://www.microsoft.com/en-us/education/products/office?icid=EDU_office365_FAQ",
+      "page": "terms",
+      "excerpt": "Set up classes and groups for Teams, Microsoft Intune for Education, and OneNote class notebooks with School Data Sync."
+    },
+    {
+      "id": "check-page-7537b6805f",
+      "url": "https://www.microsoft.com/en-us/education/products/office?icid=EDU_office365_FAQ",
+      "page": "terms",
+      "excerpt": "Equip your students for success Get students career-ready with Office 365 Education in the classroom."
+    },
+    {
+      "id": "check-page-825c3b2c21",
+      "url": "https://www.microsoft.com/en-us/education/products/office?icid=EDU_office365_FAQ",
+      "page": "terms",
+      "excerpt": "Related products Help students achieve their full potential Accelerate learning with Microsoft solutions and AI technology."
+    },
+    {
+      "id": "check-page-20ae1ef142",
+      "url": "https://www.microsoft.com/en-us/education/products/office?icid=EDU_office365_FAQ",
+      "page": "terms",
+      "excerpt": "Learn about Microsoft Education offerings Microsoft 365 Copilot AI built directly into the Microsoft 365 Education apps to support teaching, learning, and operations."
+    },
+    {
+      "id": "check-page-c41d181a6f",
+      "url": "https://www.microsoft.com/en-us/education/products/office?icid=EDU_office365_FAQ",
+      "page": "terms",
+      "excerpt": "Excel Analyze, comprehend, and display your data with ease using Excel, included in Office 365 and Microsoft 365 Education subscriptions."
+    },
+    {
+      "id": "check-page-b60679924f",
+      "url": "https://www.microsoft.com/en-us/education/products/office?icid=EDU_office365_FAQ",
+      "page": "terms",
+      "excerpt": "Teams for Education Enhance collaboration and communication through video conferencing, file sharing, notes, and assignments all integrated into Microsoft Teams for Education."
+    },
+    {
+      "id": "check-page-e6164412a8",
+      "url": "https://www.microsoft.com/en-us/education/products/office?icid=EDU_office365_FAQ",
+      "page": "terms",
+      "excerpt": "Faculty licenses Student licenses Previous Next Office 365 A1 Includes the web-based versions of core Office apps."
+    },
+    {
+      "id": "check-page-abd074ae97",
+      "url": "https://www.microsoft.com/en-us/education/products/office?icid=EDU_office365_FAQ",
+      "page": "terms",
+      "excerpt": "Robust security management, including Microsoft Defender for Office, to safeguard sensitive data Advanced analytics systems, such as Power BI Pro, for making informed decisions based on insights Back to tabs College student offer Free for students: Our ultimate AI and productivity subscription For a limited time, use your college email and get 12 months of Microsoft 365 Premium on us."
+    },
+    {
+      "id": "check-page-1486b2d3b0",
+      "url": "https://www.microsoft.com/en-us/education/products/office?icid=EDU_office365_FAQ",
+      "page": "terms",
+      "excerpt": "2 Learn more EDUCATION STORIES Explore education stories View all education stories Education stories Office Previous Next Previous Slide Next Slide “To deploy just 20 devices back in the day with all the different management tools you needed to use, and the applications you had to install, was daunting."
+    },
+    {
+      "id": "check-page-e716b5bfce",
+      "url": "https://www.microsoft.com/en-us/education/products/office?icid=EDU_office365_FAQ",
+      "page": "terms",
+      "excerpt": "Previous Slide Next Slide For education leaders and educators Support for Office 365 Get answers to your questions, discover resources, and connect with a community of experts—all in the Education support center."
+    },
+    {
+      "id": "check-page-907e26a987",
+      "url": "https://www.microsoft.com/en-us/education/products/office?icid=EDU_office365_FAQ",
+      "page": "terms",
+      "excerpt": "Get support For education leaders Office training tutorials Learn how to get the most out of your Microsoft Office 365 subscription, for all skill levels."
+    },
+    {
+      "id": "check-page-59dd999275",
+      "url": "https://www.microsoft.com/en-us/education/products/office?icid=EDU_office365_FAQ",
+      "page": "terms",
+      "excerpt": "Start the training For education leaders and educators Become a Microsoft Educator expert Learn about the professional certifications designed to help education leaders and educators become proficient in Microsoft technologies."
     },
     {
       "id": "check-page-ca53988de4",
       "url": "https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products?ocid=cmmtjeb37jb?icid=deals-page_AllDealsTab_R2_CP2_M365Offer_HOLFY27",
       "page": "terms",
-      "excerpt": "Compare Microsoft 365 Plans & Pricing (Formerly Office 365) - Microsoft Store This is the Trace Id: ac0421a49f4759741717f9d3e7a8ccbe Skip to main content Microsoft 365 Explore Microsoft 365 apps Pricing for individuals Microsoft 365 Personal Microsoft 365 Family Microsoft 365 Premium Microsoft 365 Pro Student discount pricing Pricing for business Microsoft 365 Business Standard with Copilot Microsoft 365 Business Premium with Copilot For small business For schools For government Pricing for enterprise Microsoft 365 E3 Microsoft 365 E5 Microsoft 365 E7 For enterprise For frontline workers For nonprofits For government Pricing for Copilot Explore Copilot Microsoft Teams Word Excel PowerPoint Outlook OneDrive SharePoint Planner See all apps and services Microsoft Office Windows 365 Microsoft Viva Microsoft Edge Microsoft Agent 365 Plans and pricing Customer stories Trust Center What's new Blog and community Frontier program Product Roadmap Getting started Learning Center Templates Rollout and adoption Setup and install Deployment assistance Self-help resources Billing support Community Contact Microsoft Support FAQ Self-help resources Admin self-help Support plans Find a partner Contact Sales Community Self-help resources Account management Educator Center Community Contact Microsoft Support Request support FAQ Become a partner Partner resources See all support Buy now See how"
+      "excerpt": "Compare Microsoft 365 Plans & Pricing (Formerly Office 365) - Microsoft Store This is the Trace Id: 827fd32321e4f268d871f097c81e7031 Skip to main content Microsoft 365 Explore Microsoft 365 apps Pricing for individuals Microsoft 365 Personal Microsoft 365 Family Microsoft 365 Premium Microsoft 365 Pro Student discount pricing Pricing for business Microsoft 365 Business Standard with Copilot Microsoft 365 Business Premium with Copilot For small business For schools For government Pricing for enterprise Microsoft 365 E3 Microsoft 365 E5 Microsoft 365 E7 For enterprise For frontline workers For nonprofits For government Pricing for Copilot Explore Copilot Microsoft Teams Word Excel PowerPoint Outlook OneDrive SharePoint Planner See all apps and services Microsoft Office Windows 365 Microsoft Viva Microsoft Edge Microsoft Agent 365 Plans and pricing Customer stories Trust Center What's new Blog and community Frontier program Product Roadmap Getting started Learning Center Templates Rollout and adoption Setup and install Deployment assistance Self-help resources Billing support Community Contact Microsoft Support FAQ Self-help resources Admin self-help Support plans Find a partner Contact Sales Community Self-help resources Account management Educator Center Community Contact Microsoft Support Request support FAQ Become a partner Partner resources See all support Buy now See how"
+    },
+    {
+      "id": "check-page-3a6232f33f",
+      "url": "https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products?ocid=cmmtjeb37jb?icid=deals-page_AllDealsTab_R2_CP2_M365Offer_HOLFY27",
+      "page": "terms",
+      "excerpt": "Discover more Limited-time offer Save 30% and get more from Microsoft 365 Start with Microsoft 365 Premium, now $19.99 $13.99 for your first month, and bring together powerful productivity apps with Copilot, extensive AI usage and exclusive features, 1 and advanced security—all in one plan."
+    },
+    {
+      "id": "check-page-4f187c4447",
+      "url": "https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products?ocid=cmmtjeb37jb?icid=deals-page_AllDealsTab_R2_CP2_M365Offer_HOLFY27",
+      "page": "terms",
+      "excerpt": "Renew now Explore even more benefits of Microsoft 365 Powerful productivity apps with AI Streamline your day with desktop versions of apps like Word, Excel, PowerPoint, Outlook, and OneNote with Microsoft Copilot."
+    },
+    {
+      "id": "check-page-5be119a6c2",
+      "url": "https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products?ocid=cmmtjeb37jb?icid=deals-page_AllDealsTab_R2_CP2_M365Offer_HOLFY27",
+      "page": "terms",
+      "excerpt": "You have selected: Microsoft 365 Premium $19.99 $13.99/first month Cancel Continue Copilot in Microsoft 365 Create, organize, and move faster with AI-powered help across your Microsoft 365 apps."
+    },
+    {
+      "id": "check-page-15e8b9e283",
+      "url": "https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products?ocid=cmmtjeb37jb?icid=deals-page_AllDealsTab_R2_CP2_M365Offer_HOLFY27",
+      "page": "terms",
+      "excerpt": "Microsoft 365 Personal, Microsoft 365 Family, Microsoft 365 Premium, and Microsoft 365 Pro are subscriptions that include powerful productivity apps and creativity tools with AI-powered features."
+    },
+    {
+      "id": "check-page-ded3e5cb06",
+      "url": "https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products?ocid=cmmtjeb37jb?icid=deals-page_AllDealsTab_R2_CP2_M365Offer_HOLFY27",
+      "page": "terms",
+      "excerpt": "Microsoft 365 Premium includes extensive AI usage and access to exclusive Copilot features."
+    },
+    {
+      "id": "check-page-bee26a6c66",
+      "url": "https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products?ocid=cmmtjeb37jb?icid=deals-page_AllDealsTab_R2_CP2_M365Offer_HOLFY27",
+      "page": "terms",
+      "excerpt": "If you want extensive AI usage and access to exclusive Copilot features, 1 Microsoft 365 Premium can provide added value to help you tackle demanding tasks, from researching business ideas and analyzing complex data to creating high-impact presentations."
+    },
+    {
+      "id": "check-page-fd65f0a104",
+      "url": "https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products?ocid=cmmtjeb37jb?icid=deals-page_AllDealsTab_R2_CP2_M365Offer_HOLFY27",
+      "page": "terms",
+      "excerpt": "It provides extensive AI usage and exclusive Copilot features, 1 advanced security, 2 TB of cloud storage, and productivity apps with Copilot 1 built in to help manage clients, projects, finances, and business communications."
+    },
+    {
+      "id": "check-page-847d418c8d",
+      "url": "https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products?ocid=cmmtjeb37jb?icid=deals-page_AllDealsTab_R2_CP2_M365Offer_HOLFY27",
+      "page": "terms",
+      "excerpt": "For students who want the ultimate AI and productivity experience, Microsoft 365 Premium is an excellent choice."
+    },
+    {
+      "id": "check-page-0c0a357601",
+      "url": "https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products?ocid=cmmtjeb37jb?icid=deals-page_AllDealsTab_R2_CP2_M365Offer_HOLFY27",
+      "page": "terms",
+      "excerpt": "It combines extensive AI usage and exclusive Copilot features, 1 advanced security, spacious cloud storage, and productivity apps with Copilot 1 built in that can help students stay organized, manage coursework, collaborate on projects, and tackle academic responsibilities with confidence."
+    },
+    {
+      "id": "check-page-01f4917e57",
+      "url": "https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products?ocid=cmmtjeb37jb?icid=deals-page_AllDealsTab_R2_CP2_M365Offer_HOLFY27",
+      "page": "terms",
+      "excerpt": "Can I share my AI benefits with others?"
+    },
+    {
+      "id": "check-page-9489c51fb6",
+      "url": "https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products?ocid=cmmtjeb37jb?icid=deals-page_AllDealsTab_R2_CP2_M365Offer_HOLFY27",
+      "page": "terms",
+      "excerpt": "AI features included in Microsoft 365 Family, Microsoft 365 Premium, and Microsoft 365 Pro plans are only available to the subscription owner and cannot be shared with others."
+    },
+    {
+      "id": "check-page-a17587c423",
+      "url": "https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products?ocid=cmmtjeb37jb?icid=deals-page_AllDealsTab_R2_CP2_M365Offer_HOLFY27",
+      "page": "terms",
+      "excerpt": "Your Microsoft 365 Personal, Family, Premium, or Pro subscription unlocks higher AI usage limits to experience and engage with Copilot in your Microsoft 365 apps, the Microsoft Copilot app, and beyond."
     },
     {
       "id": "check-page-fd0878347d",
       "url": "https://www.microsoft.com/en-us/store/b/XBOXconsoles?icid=deals-page_XBOXTab_R1_CP2_XBOX-PayPal_HOLFY27",
       "page": "terms",
-      "excerpt": "Buy New XBOX Series X|S Consoles - See Deals & Pricing | Microsoft Store This is the Trace Id: 01eb6830c30289f5aeca8ff0301d1df2 Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Gaming All XBOX consoles XBOX Series X XBOX Series S XBOX Certified Refurbished All XBOX accessories XBOX controllers XBOX headsets XBOX repair parts VR & Mixed"
+      "excerpt": "Buy New XBOX Series X|S Consoles - See Deals & Pricing | Microsoft Store This is the Trace Id: 4912d90d04f0c608e7d1284ff9135e84 Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Gaming All XBOX consoles XBOX Series X XBOX Series S XBOX Certified Refurbished All XBOX accessories XBOX controllers XBOX headsets XBOX repair parts VR & Mixed"
+    },
+    {
+      "id": "check-page-1c0fdeb417",
+      "url": "https://www.microsoft.com/en-us/store/b/XBOXconsoles?icid=deals-page_XBOXTab_R1_CP2_XBOX-PayPal_HOLFY27",
+      "page": "terms",
+      "excerpt": "Find the right console, games, and more with AI-powered suggestions Ask a question Compare XBOX X|S Why buy Refurbished Trade-in program XBOX Deals Shop all New Return to XBOX with the Master Chief."
+    },
+    {
+      "id": "check-page-75c49c48e6",
+      "url": "https://www.microsoft.com/en-us/store/b/XBOXconsoles?icid=deals-page_XBOXTab_R1_CP2_XBOX-PayPal_HOLFY27",
+      "page": "terms",
+      "excerpt": "Save up to $100.00 XBOX Series S – 1TB (Certified Refurbished) Originally $599.99 now $499.99 $599.99 $499.99 Experience the best value in gaming with XBOX Series S (Certified Refurbished), now..."
+    },
+    {
+      "id": "check-page-ef5217965e",
+      "url": "https://www.microsoft.com/en-us/store/b/XBOXconsoles?icid=deals-page_XBOXTab_R1_CP2_XBOX-PayPal_HOLFY27",
+      "page": "terms",
+      "excerpt": "Back to Next and Previous controls End of XBOX Consoles XBOX Accessories Showing %{start} through %{end} of %{total} items See all Skip XBOX Accessories Previous slide Next slide Forza Horizon 6 Limited Edition Accessories Collection $89.99 $89.99 Explore breathtaking Japan."
+    },
+    {
+      "id": "check-page-27cd3e5a45",
+      "url": "https://www.microsoft.com/en-us/store/b/XBOXconsoles?icid=deals-page_XBOXTab_R1_CP2_XBOX-PayPal_HOLFY27",
+      "page": "terms",
+      "excerpt": "Inspired by the winding Touge roads of Japan, the XBOX..."
+    },
+    {
+      "id": "check-page-0f2debd578",
+      "url": "https://www.microsoft.com/en-us/store/b/XBOXconsoles?icid=deals-page_XBOXTab_R1_CP2_XBOX-PayPal_HOLFY27",
+      "page": "terms",
+      "excerpt": "Add to cart Forza Horizon 6 Limited Edition Accessories Collection $134.99 $134.99 Explore breathtaking Japan."
+    },
+    {
+      "id": "check-page-1c747b0efb",
+      "url": "https://www.microsoft.com/en-us/store/b/XBOXconsoles?icid=deals-page_XBOXTab_R1_CP2_XBOX-PayPal_HOLFY27",
+      "page": "terms",
+      "excerpt": "Feel the pulse of the Horizon Festival and the energy of..."
+    },
+    {
+      "id": "check-page-59d4ae6e58",
+      "url": "https://www.microsoft.com/en-us/store/b/XBOXconsoles?icid=deals-page_XBOXTab_R1_CP2_XBOX-PayPal_HOLFY27",
+      "page": "terms",
+      "excerpt": "XBOX Series S is designed for disc-free gaming at 1440p (with the ability to upscale to 4K) and is equipped with a custom 512GB SSD."
+    },
+    {
+      "id": "check-page-a8626b9eeb",
+      "url": "https://www.microsoft.com/en-us/store/b/XBOXconsoles?icid=deals-page_XBOXTab_R1_CP2_XBOX-PayPal_HOLFY27",
+      "page": "terms",
+      "excerpt": "Shop all accessories to make sure you have what you need to get gaming."
+    },
+    {
+      "id": "check-page-a8626b9eeb",
+      "url": "https://www.microsoft.com/en-us/store/b/XBOXconsoles?icid=deals-page_XBOXTab_R1_CP2_XBOX-PayPal_HOLFY27",
+      "page": "terms",
+      "excerpt": "Shop all accessories to make sure you have what you need to get gaming."
+    },
+    {
+      "id": "check-page-105823335d",
+      "url": "https://www.microsoft.com/en-us/store/b/XBOXconsoles?icid=deals-page_XBOXTab_R1_CP2_XBOX-PayPal_HOLFY27",
+      "page": "terms",
+      "excerpt": "The XBOX Series S is an all-digital gaming console for disc-free gaming."
+    },
+    {
+      "id": "check-page-94f98be027",
+      "url": "https://www.microsoft.com/en-us/store/b/XBOXconsoles?icid=deals-page_XBOXTab_R1_CP2_XBOX-PayPal_HOLFY27",
+      "page": "terms",
+      "excerpt": "Price protection: Microsoft Store Price Adjustment : Holiday extended price protection valid on purchases of qualifying physical consumer products purchased from Microsoft Store online and Microsoft Experience centers in select markets between October 1, 2026 – December 2, 2026."
+    },
+    {
+      "id": "check-page-e7ecfb44fd",
+      "url": "https://www.microsoft.com/en-us/store/b/XBOXconsoles?icid=deals-page_XBOXTab_R1_CP2_XBOX-PayPal_HOLFY27",
+      "page": "terms",
+      "excerpt": "Purchases made outside the window of October 1, 2026 – December 2, 2026: Price adjustment available on purchases of qualifying physical consumer products made at Microsoft Store and Microsoft Experience Centers in select markets for 60 days from the date product is received."
     },
     {
       "id": "check-page-48c2598e41",
       "url": "https://www.microsoft.com/en-us/store/b/certified-refurbished-products?icid=StudentDeals_R4_CP1_RefurbishedDevices_06202025",
       "page": "terms",
-      "excerpt": "Shop Certified Refurbished Computers & Game Consoles by Surface and XBOX - Microsoft Store. This is the Trace Id: 6e8cab3608691bfecaa23086b37d226e Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Microsoft 365 Azure Copilot Windows Surface XBOX Deals Small Business Support Windows Apps Outlook OneDrive Microsoft Teams OneNote Microsoft Edge"
+      "excerpt": "Shop Certified Refurbished Computers & Game Consoles by Surface and XBOX - Microsoft Store. This is the Trace Id: ed846ba9e7e150040566647fc0afd0eb Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Microsoft 365 Azure Copilot Windows Surface XBOX Deals Small Business Support Windows Apps Outlook OneDrive Microsoft Teams OneNote Microsoft Edge"
+    },
+    {
+      "id": "check-page-43f97e1619",
+      "url": "https://www.microsoft.com/en-us/store/b/certified-refurbished-products?icid=StudentDeals_R4_CP1_RefurbishedDevices_06202025",
+      "page": "terms",
+      "excerpt": "Save up to $100.00 XBOX Series S – 1TB (Certified Refurbished) Originally $599.99 now $499.99 $599.99 $499.99 Experience the best value in gaming with XBOX Series S (Certified Refurbished), now..."
+    },
+    {
+      "id": "check-page-d8e63cce46",
+      "url": "https://www.microsoft.com/en-us/store/b/certified-refurbished-products?icid=StudentDeals_R4_CP1_RefurbishedDevices_06202025",
+      "page": "terms",
+      "excerpt": "Where can I buy refurbished laptop computers and electronics?"
+    },
+    {
+      "id": "check-page-9261b65176",
+      "url": "https://www.microsoft.com/en-us/store/b/certified-refurbished-products?icid=StudentDeals_R4_CP1_RefurbishedDevices_06202025",
+      "page": "terms",
+      "excerpt": "You can buy refurbished laptop computers and electronics from Microsoft Store , the trusted destination for Certified Refurbished devices."
+    },
+    {
+      "id": "check-page-c2c7b11f4f",
+      "url": "https://www.microsoft.com/en-us/store/b/certified-refurbished-products?icid=StudentDeals_R4_CP1_RefurbishedDevices_06202025",
+      "page": "terms",
+      "excerpt": "What warranty and return options come with refurbished laptops and electronics?"
+    },
+    {
+      "id": "check-page-46dda4e5af",
+      "url": "https://www.microsoft.com/en-us/store/b/certified-refurbished-products?icid=StudentDeals_R4_CP1_RefurbishedDevices_06202025",
+      "page": "terms",
+      "excerpt": "Certified Refurbished devices from Microsoft Store come with a hardware warranty—12 months on Surface devices and 90 days on Xbox consoles—plus additional extended warranty options ."
+    },
+    {
+      "id": "check-page-ac65a20a64",
+      "url": "https://www.microsoft.com/en-us/store/b/certified-refurbished-products?icid=StudentDeals_R4_CP1_RefurbishedDevices_06202025",
+      "page": "terms",
+      "excerpt": "Price protection: Microsoft Store Price Adjustment : Holiday extended price protection valid on purchases of qualifying physical consumer products purchased from Microsoft Store online and Microsoft Experience centers in select markets between October 1, 2026 – December 2, 2026."
+    },
+    {
+      "id": "check-page-e3fe02c68a",
+      "url": "https://www.microsoft.com/en-us/store/b/certified-refurbished-products?icid=StudentDeals_R4_CP1_RefurbishedDevices_06202025",
+      "page": "terms",
+      "excerpt": "Purchases made outside the window of October 1, 2026 – December 2, 2026: Price adjustment available on purchases of qualifying physical consumer products made at Microsoft Store and Microsoft Experience Centers in select markets for 60 days from the date product is received."
+    },
+    {
+      "id": "check-page-3474c8d443",
+      "url": "https://www.microsoft.com/en-us/store/b/certified-refurbished-products?icid=StudentDeals_R4_CP1_RefurbishedDevices_06202025",
+      "page": "terms",
+      "excerpt": "Trade-In: Available only through the Microsoft Store online in the United States."
+    },
+    {
+      "id": "check-page-d67b906535",
+      "url": "https://www.microsoft.com/en-us/store/b/certified-refurbished-products?icid=StudentDeals_R4_CP1_RefurbishedDevices_06202025",
+      "page": "terms",
+      "excerpt": "Available only in Microsoft Store United States & Canada."
+    },
+    {
+      "id": "check-page-a2febc22f5",
+      "url": "https://www.microsoft.com/en-us/store/b/certified-refurbished-products?icid=StudentDeals_R4_CP1_RefurbishedDevices_06202025",
+      "page": "terms",
+      "excerpt": "Microsoft Store Price Adjustment: Valid on purchases of qualifying physical consumer products and Surface for Business devices made at Microsoft Store and Microsoft Experience Centers in select markets for 60 days from the date product is received."
+    },
+    {
+      "id": "check-page-63514241e3",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "page": "terms",
+      "excerpt": "Microsoft Trade-In Program - Laptop, XBOX, Surface and More | Microsoft Store This is the Trace Id: a432d5a35643c94ccab6a4a8b1764bd7 Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Microsoft 365 Azure Copilot Windows Surface XBOX Deals Small Business Support Windows Apps Outlook OneDrive Microsoft Teams OneNote Microsoft Edge Moving from"
+    },
+    {
+      "id": "check-page-ca3a211286",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "page": "terms",
+      "excerpt": "For personal For business Previous Next How trade-in works The Microsoft Store Trade-in Program is powered by Teladvance, a company that specializes in electronics reuse and recycling."
+    },
+    {
+      "id": "check-page-c5a90a6a63",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "page": "terms",
+      "excerpt": "Save up to $100.00 XBOX Series S – 1TB (Certified Refurbished) Originally $599.99 now $499.99 $599.99 $499.99 Experience the best value in gaming with XBOX Series S (Certified Refurbished), now..."
+    },
+    {
+      "id": "check-page-5eb04de64d",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "page": "terms",
+      "excerpt": "Price protection: Microsoft Store Price Adjustment : Holiday extended price protection valid on purchases of qualifying physical consumer products purchased from Microsoft Store online and Microsoft Experience centers in select markets between October 1, 2026 – December 2, 2026."
+    },
+    {
+      "id": "check-page-d3207e14aa",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "page": "terms",
+      "excerpt": "Purchases made outside the window of October 1, 2026 – December 2, 2026: Price adjustment available on purchases of qualifying physical consumer products made at Microsoft Store and Microsoft Experience Centers in select markets for 60 days from the date product is received."
+    },
+    {
+      "id": "check-page-d8939494b4",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "page": "terms",
+      "excerpt": "Trade-In: Available only through the Microsoft Store online in the United States."
+    },
+    {
+      "id": "check-page-99b3b3406f",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "page": "terms",
+      "excerpt": "Available only through the Microsoft Store online in the United States and Canada."
+    },
+    {
+      "id": "check-page-99b3b3406f",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "page": "terms",
+      "excerpt": "Available only through the Microsoft Store online in the United States and Canada."
+    },
+    {
+      "id": "check-page-99b3b3406f",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "page": "terms",
+      "excerpt": "Available only through the Microsoft Store online in the United States and Canada."
+    },
+    {
+      "id": "check-page-f80d113c09",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "page": "terms",
+      "excerpt": "How business trade-in works The Microsoft Store Trade-in Program is powered by Teladvance, a company that specializes in electronics reuse and recycling."
+    },
+    {
+      "id": "check-page-823b9de558",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "page": "terms",
+      "excerpt": "Surface Laptop for Business, 13-inch | Intel From $1,299.99 From $1,299.99 The most portable Surface Laptop delivers built-in AI experiences and impressive..."
+    },
+    {
+      "id": "check-page-ad1ee0a6e3",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "page": "terms",
+      "excerpt": "Surface Keyboard for Business (2nd Edition) $149.99 $149.99 The Copilot¹˒² key on Surface Keyboard for Business brings the power of AI to your..."
+    },
+    {
+      "id": "check-page-c5be894e9d",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in",
+      "page": "terms",
+      "excerpt": "Teladvance is a U.S.-based company that specializes in consumer electronic trade-ins, IT asset disposition, and reverse logistics."
+    },
+    {
+      "id": "check-page-b71c76c07b",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Microsoft Trade-In Program - Laptop, XBOX, Surface and More | Microsoft Store This is the Trace Id: 5eebd3f5eb96e82fd34b042e1d70d397 Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Microsoft 365 Azure Copilot Windows Surface XBOX Deals Small Business Support Windows Apps Outlook OneDrive Microsoft Teams OneNote Microsoft Edge Moving from"
+    },
+    {
+      "id": "check-page-d6cfd03d20",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "For personal For business Previous Next How trade-in works The Microsoft Store Trade-in Program is powered by Teladvance, a company that specializes in electronics reuse and recycling."
+    },
+    {
+      "id": "check-page-056dea5c95",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Save up to $100.00 XBOX Series S – 1TB (Certified Refurbished) Originally $599.99 now $499.99 $599.99 $499.99 Experience the best value in gaming with XBOX Series S (Certified Refurbished), now..."
+    },
+    {
+      "id": "check-page-058cc96d62",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Price protection: Microsoft Store Price Adjustment : Holiday extended price protection valid on purchases of qualifying physical consumer products purchased from Microsoft Store online and Microsoft Experience centers in select markets between October 1, 2026 – December 2, 2026."
+    },
+    {
+      "id": "check-page-0305e22940",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Purchases made outside the window of October 1, 2026 – December 2, 2026: Price adjustment available on purchases of qualifying physical consumer products made at Microsoft Store and Microsoft Experience Centers in select markets for 60 days from the date product is received."
+    },
+    {
+      "id": "check-page-187cc0158c",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Trade-In: Available only through the Microsoft Store online in the United States."
+    },
+    {
+      "id": "check-page-ce295591df",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Available only through the Microsoft Store online in the United States and Canada."
+    },
+    {
+      "id": "check-page-ce295591df",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Available only through the Microsoft Store online in the United States and Canada."
+    },
+    {
+      "id": "check-page-ce295591df",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Available only through the Microsoft Store online in the United States and Canada."
+    },
+    {
+      "id": "check-page-52ec653704",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "How business trade-in works The Microsoft Store Trade-in Program is powered by Teladvance, a company that specializes in electronics reuse and recycling."
+    },
+    {
+      "id": "check-page-fc50e3f825",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Surface Laptop for Business, 13-inch | Intel From $1,299.99 From $1,299.99 The most portable Surface Laptop delivers built-in AI experiences and impressive..."
+    },
+    {
+      "id": "check-page-ee813995a8",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Surface Keyboard for Business (2nd Edition) $149.99 $149.99 The Copilot¹˒² key on Surface Keyboard for Business brings the power of AI to your..."
+    },
+    {
+      "id": "check-page-27e3a00808",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_AllDealsTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Teladvance is a U.S.-based company that specializes in consumer electronic trade-ins, IT asset disposition, and reverse logistics."
+    },
+    {
+      "id": "check-page-8b7bed2909",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Microsoft Trade-In Program - Laptop, XBOX, Surface and More | Microsoft Store This is the Trace Id: 0205e40f811254daad037b23a09b4a2d Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Microsoft 365 Azure Copilot Windows Surface XBOX Deals Small Business Support Windows Apps Outlook OneDrive Microsoft Teams OneNote Microsoft Edge Moving from"
+    },
+    {
+      "id": "check-page-e7d1c1cbf3",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "For personal For business Previous Next How trade-in works The Microsoft Store Trade-in Program is powered by Teladvance, a company that specializes in electronics reuse and recycling."
+    },
+    {
+      "id": "check-page-1f02c86941",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Save up to $100.00 XBOX Series S – 1TB (Certified Refurbished) Originally $599.99 now $499.99 $599.99 $499.99 Experience the best value in gaming with XBOX Series S (Certified Refurbished), now..."
+    },
+    {
+      "id": "check-page-defa424de2",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Price protection: Microsoft Store Price Adjustment : Holiday extended price protection valid on purchases of qualifying physical consumer products purchased from Microsoft Store online and Microsoft Experience centers in select markets between October 1, 2026 – December 2, 2026."
+    },
+    {
+      "id": "check-page-0557b168b5",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Purchases made outside the window of October 1, 2026 – December 2, 2026: Price adjustment available on purchases of qualifying physical consumer products made at Microsoft Store and Microsoft Experience Centers in select markets for 60 days from the date product is received."
+    },
+    {
+      "id": "check-page-3941fb6b11",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Trade-In: Available only through the Microsoft Store online in the United States."
+    },
+    {
+      "id": "check-page-2a7682c280",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Available only through the Microsoft Store online in the United States and Canada."
+    },
+    {
+      "id": "check-page-2a7682c280",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Available only through the Microsoft Store online in the United States and Canada."
+    },
+    {
+      "id": "check-page-2a7682c280",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Available only through the Microsoft Store online in the United States and Canada."
+    },
+    {
+      "id": "check-page-2d90a78140",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "How business trade-in works The Microsoft Store Trade-in Program is powered by Teladvance, a company that specializes in electronics reuse and recycling."
+    },
+    {
+      "id": "check-page-941b4a8c1c",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Surface Laptop for Business, 13-inch | Intel From $1,299.99 From $1,299.99 The most portable Surface Laptop delivers built-in AI experiences and impressive..."
+    },
+    {
+      "id": "check-page-ae56afc5fc",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Surface Keyboard for Business (2nd Edition) $149.99 $149.99 The Copilot¹˒² key on Surface Keyboard for Business brings the power of AI to your..."
+    },
+    {
+      "id": "check-page-49489fa087",
+      "url": "https://www.microsoft.com/en-us/store/b/microsoft-trade-in?icid=deals-page_SurfaceTab_R1_CP3_CTA2_Trade-in_HOLFY27",
+      "page": "terms",
+      "excerpt": "Teladvance is a U.S.-based company that specializes in consumer electronic trade-ins, IT asset disposition, and reverse logistics."
+    },
+    {
+      "id": "check-page-e7a391df6c",
+      "url": "https://www.microsoft.com/en-us/store/b/online-computer-shopping-appointments?icid=students_FAQ_personalshopping",
+      "page": "terms",
+      "excerpt": "Microsoft Store Support & Return Policy for Surface, Xbox & More This is the Trace Id: 87f8660e48bf35878352283aaef2b915 Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Microsoft 365 Azure Copilot Windows Surface XBOX Deals Small Business Support Windows Apps Outlook OneDrive Microsoft Teams OneNote Microsoft Edge Moving from Skype to Teams"
+    },
+    {
+      "id": "check-page-5d84ed65e1",
+      "url": "https://www.microsoft.com/en-us/store/b/online-computer-shopping-appointments?icid=students_FAQ_personalshopping",
+      "page": "terms",
+      "excerpt": "You can also self-serve with a variety of topics in our Support Hub.​ Find the answers you need Shop with confidence Surface Laptop, Copilot+ PC Get more done with an AI-powered companion featuring all-day battery life and a sleek, light design."
+    },
+    {
+      "id": "check-page-10a0fab604",
+      "url": "https://www.microsoft.com/en-us/store/b/online-computer-shopping-appointments?icid=students_FAQ_personalshopping",
+      "page": "terms",
+      "excerpt": "Start building yours Surface Pro, Copilot+ PC Multitask from anywhere with a powerful laptop-to-tablet packed with AI features—available in two sizes."
+    },
+    {
+      "id": "check-page-e671012ec9",
+      "url": "https://www.microsoft.com/en-us/store/b/online-computer-shopping-appointments?icid=students_FAQ_personalshopping",
+      "page": "terms",
+      "excerpt": "Start building yours Play your way with Xbox Find everything you need for next-level gaming and score deals on consoles, accessories, and more."
+    },
+    {
+      "id": "check-page-0daad5ad11",
+      "url": "https://www.microsoft.com/en-us/store/b/online-computer-shopping-appointments?icid=students_FAQ_personalshopping",
+      "page": "terms",
+      "excerpt": "Price protection: Microsoft Store Price Adjustment : Holiday extended price protection valid on purchases of qualifying physical consumer products purchased from Microsoft Store online and Microsoft Experience centers in select markets between October 1, 2026 – December 2, 2026."
+    },
+    {
+      "id": "check-page-857002ad2d",
+      "url": "https://www.microsoft.com/en-us/store/b/online-computer-shopping-appointments?icid=students_FAQ_personalshopping",
+      "page": "terms",
+      "excerpt": "Purchases made outside the window of October 1, 2026 – December 2, 2026: Price adjustment available on purchases of qualifying physical consumer products made at Microsoft Store and Microsoft Experience Centers in select markets for 60 days from the date product is received."
+    },
+    {
+      "id": "check-page-d59f1958b5",
+      "url": "https://www.microsoft.com/en-us/store/b/online-computer-shopping-appointments?icid=students_FAQ_personalshopping",
+      "page": "terms",
+      "excerpt": "Trade-In: Available only through the Microsoft Store online in the United States."
+    },
+    {
+      "id": "check-page-964d7b215d",
+      "url": "https://www.microsoft.com/en-us/store/b/online-computer-shopping-appointments?icid=students_FAQ_personalshopping",
+      "page": "terms",
+      "excerpt": "Learn about price protection Solutions for your small business Find everything you need to grow your company, from next-gen tech with AI features to industry-leading software and support services."
+    },
+    {
+      "id": "check-page-12634fc0d8",
+      "url": "https://www.microsoft.com/en-us/store/b/online-computer-shopping-appointments?icid=students_FAQ_personalshopping",
+      "page": "terms",
+      "excerpt": "Microsoft Store Price Adjustment : Valid on purchases of qualifying physical consumer products and Surface for Business devices made at Microsoft Store and Microsoft Experience Centers in select markets for 60 days from the date product is received."
+    },
+    {
+      "id": "check-page-964d7b215d",
+      "url": "https://www.microsoft.com/en-us/store/b/online-computer-shopping-appointments?icid=students_FAQ_personalshopping",
+      "page": "terms",
+      "excerpt": "Learn about price protection Solutions for your small business Find everything you need to grow your company, from next-gen tech with AI features to industry-leading software and support services."
+    },
+    {
+      "id": "check-page-5851900783",
+      "url": "https://www.microsoft.com/en-us/store/b/online-computer-shopping-appointments?icid=students_FAQ_personalshopping",
+      "page": "terms",
+      "excerpt": "Microsoft Store Price Adjustment: Valid on purchases of qualifying physical consumer products and Surface for Business devices made at Microsoft Store and Microsoft Experience Centers in select markets for 60 days from the date product is received."
+    },
+    {
+      "id": "check-page-a0d8cd80d1",
+      "url": "https://www.microsoft.com/en-us/store/b/price-protection-terms-and-conditions",
+      "page": "terms",
+      "excerpt": "Microsoft Store Price Protection Full Terms and Conditions This is the Trace Id: d4aa006d21f260787bd28b7637e4a98b Translate to English You are shopping Microsoft Store in: {0} Are you looking for Microsoft Store in: {0}? Stay in {0} Go to {0} Sign me up Thank you! Stay informed about special deals, the latest products, and more from Microsoft Store. Email address (required) Location (required) Argentina Australia Austria Belgium Brazil Canada Chile Colombia Czech Republic Denmark Finland France Germany Hungary India Ireland Israel Italy Japan Luxembourg Mexico Netherlands New Zealand Norway Poland Portugal Singapore South Africa South Korea Spain Sweden Turkey Switzerland United Kingdom United States I would like information, tips, and offers about Microsoft Store and other Microsoft products and services. Privacy statement . By clicking sign up, I agree that I would like to hear from Microsoft and its family of companies about Microsoft Store and other Microsoft products and services. To withdraw consent or manage your contact preferences, visit the Promotional Communications Manager . Privacy statement . Sign Up You’re now signed up to receive Microsoft Store emails. Thank you! Skip to main content Microsoft 365 Azure Copilot Windows Surface XBOX Deals Small Business Support Windows Apps Outlook OneDrive Microsoft Teams OneNote Microsoft Edge Moving from Skype to Teams"
+    },
+    {
+      "id": "check-page-a94524678f",
+      "url": "https://www.microsoft.com/en-us/store/b/price-protection-terms-and-conditions",
+      "page": "terms",
+      "excerpt": "For purchases made between October 1, 2025 – December 2, 2025: Holiday extended price protection valid on purchases of qualifying physical consumer products purchased from Microsoft Store online and Microsoft Experience centers in select markets between October 1, 2025 – December 2, 2025."
+    },
+    {
+      "id": "check-page-9bdcb186a1",
+      "url": "https://www.microsoft.com/en-us/store/b/price-protection-terms-and-conditions",
+      "page": "terms",
+      "excerpt": "Eligible Retailer Price Adjustment An Eligible Retailer Price Adjustment is valid on purchases of qualifying new physical consumer products made at Microsoft Store online and at Microsoft Experience Centers in select markets for 60 days from the date the product is received."
+    },
+    {
+      "id": "check-page-96821fd9b4",
+      "url": "https://www.microsoft.com/en-us/store/b/price-protection-terms-and-conditions",
+      "page": "terms",
+      "excerpt": "Eligible Retailers United States Surface: Best Buy, Amazon Xbox: Best Buy, Amazon, Target, GameStop, Walmart Canada Surface: Best Buy, Amazon Xbox: Best Buy, Amazon Terms and limitations When requesting the price adjustment, customer must refer the Microsoft associate to the published advertisement or product sale listing of the eligible retailer."
+    },
+    {
+      "id": "check-page-b54845f788",
+      "url": "https://www.microsoft.com/en-us/store/b/price-protection-terms-and-conditions",
+      "page": "terms",
+      "excerpt": "Pricing due to typographical errors, “Marketplace” prices from third party or private sellers."
+    },
+    {
+      "id": "check-page-a94524678f",
+      "url": "https://www.microsoft.com/en-us/store/b/price-protection-terms-and-conditions",
+      "page": "terms",
+      "excerpt": "For purchases made between October 1, 2025 – December 2, 2025: Holiday extended price protection valid on purchases of qualifying physical consumer products purchased from Microsoft Store online and Microsoft Experience centers in select markets between October 1, 2025 – December 2, 2025."
+    },
+    {
+      "id": "check-page-9bdcb186a1",
+      "url": "https://www.microsoft.com/en-us/store/b/price-protection-terms-and-conditions",
+      "page": "terms",
+      "excerpt": "Eligible Retailer Price Adjustment An Eligible Retailer Price Adjustment is valid on purchases of qualifying new physical consumer products made at Microsoft Store online and at Microsoft Experience Centers in select markets for 60 days from the date the product is received."
+    },
+    {
+      "id": "check-page-96821fd9b4",
+      "url": "https://www.microsoft.com/en-us/store/b/price-protection-terms-and-conditions",
+      "page": "terms",
+      "excerpt": "Eligible Retailers United States Surface: Best Buy, Amazon Xbox: Best Buy, Amazon, Target, GameStop, Walmart Canada Surface: Best Buy, Amazon Xbox: Best Buy, Amazon Terms and limitations When requesting the price adjustment, customer must refer the Microsoft associate to the published advertisement or product sale listing of the eligible retailer."
+    },
+    {
+      "id": "check-page-b54845f788",
+      "url": "https://www.microsoft.com/en-us/store/b/price-protection-terms-and-conditions",
+      "page": "terms",
+      "excerpt": "Pricing due to typographical errors, “Marketplace” prices from third party or private sellers."
     }
   ],
   "findings": {
@@ -529,6 +2202,10 @@
       {
         "value": "1 800-642-7676",
         "evidenceId": "check-phone-9c36622ba2"
+      },
+      {
+        "value": "1-800-351-6864",
+        "evidenceId": "check-phone-67b8e5dcc8"
       }
     ],
     "routes": [
@@ -669,6 +2346,18 @@
           "condition": "up to"
         },
         "evidenceId": "check-deal-537ffdd6cd"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "180",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-f3ea7ea827"
       }
     ],
     "portfolioPages": [

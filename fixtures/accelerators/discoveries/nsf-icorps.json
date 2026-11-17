@@ -1,12 +1,12 @@
 {
   "programId": "nsf-icorps",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.nsf.gov/about",
       "page": "details",
       "anchor": "About NSF",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -14,7 +14,7 @@
       "url": "https://www.nsf.gov/about/budget",
       "page": "details",
       "anchor": "Budget, Performance & Financial Reporting",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -22,7 +22,15 @@
       "url": "https://www.nsf.gov/about/congress",
       "page": "details",
       "anchor": "Congress",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nsf.gov/about/congress/coronavirus",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -171,8 +179,16 @@
       "origin": "official"
     },
     {
-      "url": "https://www.nsf.gov/pubs/2018/nsf18057/nsf18057.jsp",
+      "url": "https://www.nsf.gov/impacts",
       "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nsf.gov/od/updates/nsf-announces-organizational-realignment",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,

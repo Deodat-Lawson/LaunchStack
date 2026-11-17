@@ -1,35 +1,67 @@
 {
   "programId": "new-york-institute-of-technology",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
-      "url": "https://www.nyit.edu/apply",
-      "page": "application",
-      "anchor": "Apply",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nyit.edu/about/offices/academic-affairs/tech-talks/",
-      "page": "details",
-      "anchor": "Tech Talks: Promoting Civil Discourse",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nyit.edu/medicine/college-of-osteopathic-medicine/about",
-      "page": "details",
-      "anchor": "About",
+      "url": "https://alumni.nyit.edu/donate",
+      "page": "portfolio",
+      "anchor": "Give",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.nyit.edu/medicine/college-of-osteopathic-medicine/about/labs-and-facilities",
-      "page": "details",
-      "anchor": "Labs & Facilities",
+      "url": "https://apply.nyit.edu/apply/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.nyit.edu/apply/status",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.nyit.edu/portal/events_nyitcom",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.nyit.edu/portal/finaid_appointments",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.nyit.edu/portal/nyitcomepp",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.nyit.edu/register/inquire",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://blogs.nyit.edu/etic_updates",
+      "page": "batches",
+      "anchor": "News Blog",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -38,6 +70,14 @@
       "url": "https://www.nyit.edu/about/",
       "page": "details",
       "anchor": "About Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/artificial-intelligence/",
+      "page": "details",
+      "anchor": "Artificial Intelligence",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -59,9 +99,17 @@
       "origin": "official"
     },
     {
-      "url": "https://www.nyit.edu/about/our-campuses",
+      "url": "https://www.nyit.edu/about/consumer_information",
       "page": "details",
-      "anchor": "Our Campuses",
+      "anchor": "Consumer Information",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/contact",
+      "page": "details",
+      "anchor": "Contact",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -75,14 +123,6 @@
       "origin": "official"
     },
     {
-      "url": "https://www.nyit.edu/about/rankings-and-recognition/",
-      "page": "details",
-      "anchor": "Rankings & Recognition",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.nyit.edu/about/offices",
       "page": "details",
       "anchor": "Office Directory",
@@ -91,57 +131,33 @@
       "origin": "official"
     },
     {
-      "url": "https://www.nyit.edu/about/artificial-intelligence/",
+      "url": "https://www.nyit.edu/about/offices/academic-affairs/tech-talks/",
       "page": "details",
-      "anchor": "Artificial Intelligence",
+      "anchor": "Tech Talks: Promoting Civil Discourse",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.nyit.edu/research/ospar/",
+      "url": "https://www.nyit.edu/about/offices/center-for-faculty-excellence/thank-a-professor-program/faq/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/our-campuses",
       "page": "details",
-      "anchor": "Office of Sponsored Programs & Research (OSPAR)",
+      "anchor": "Our Campuses",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.nyit.edu/alumni",
-      "page": "portfolio",
-      "anchor": "Alumni",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nyit.edu/academics/engineering-and-computing-sciences/etic-partners/",
-      "page": "portfolio",
-      "anchor": "partner companies",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nyit.edu/engineering/etic_application",
-      "page": "application",
-      "anchor": "Become an ETIC Partner Company",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nyit.edu/academics/engineering-and-computing-sciences/etic/student-opportunities",
+      "url": "https://www.nyit.edu/about/rankings-and-recognition/",
       "page": "details",
-      "anchor": "Find Out About Student Opportunities",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nyit.edu/about/contact",
-      "page": "details",
-      "anchor": "Contact",
+      "anchor": "Rankings & Recognition",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -156,16 +172,160 @@
     },
     {
       "url": "https://www.nyit.edu/about/terms_and_conditions",
-      "page": "details",
+      "page": "terms",
       "anchor": "Terms & Conditions",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.nyit.edu/about/consumer_information",
+      "url": "https://www.nyit.edu/academics/engineering-and-computing-sciences/etic-partners/",
+      "page": "portfolio",
+      "anchor": "partner companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/academics/engineering-and-computing-sciences/etic/student-opportunities",
       "page": "details",
-      "anchor": "Consumer Information",
+      "anchor": "Find Out About Student Opportunities",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/admissions/costs-and-aid/financial-aid/how-to-apply/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/admissions/costs-and-aid/financial-aid/how-to-apply/eligibility/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/admissions/costs-and-aid/financial-aid/how-to-apply/one-big-beautiful-bill-act-fsa-changes/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/admissions/costs-and-aid/financial-aid/how-to-apply/special-appeals/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/admissions/costs-and-aid/financial-aid/how-to-apply/verification/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/admissions/transfer",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/alumni",
+      "page": "portfolio",
+      "anchor": "Alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/apply",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/apply/check-application-status/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/engineering/etic_application",
+      "page": "application",
+      "anchor": "Become an ETIC Partner Company",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/medicine/college-of-osteopathic-medicine/about",
+      "page": "details",
+      "anchor": "About",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/medicine/college-of-osteopathic-medicine/about/labs-and-facilities",
+      "page": "details",
+      "anchor": "Labs & Facilities",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/medicine/college-of-osteopathic-medicine/admissions-and-aid/apply-to-emigre-physicians-program/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/medicine/college-of-osteopathic-medicine/admissions-and-aid/apply-to-emigre-physicians-program/admitted-students/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/medicine/college-of-osteopathic-medicine/admissions-and-aid/apply/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/medicine/college-of-osteopathic-medicine/admissions-and-aid/financial-aid/how-to-apply/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/research/ospar/",
+      "page": "details",
+      "anchor": "Office of Sponsored Programs & Research (OSPAR)",
       "fetched": false,
       "blocked": null,
       "origin": "official"

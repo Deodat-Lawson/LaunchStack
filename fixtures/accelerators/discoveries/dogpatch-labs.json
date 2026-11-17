@@ -1,6 +1,6 @@
 {
   "programId": "dogpatch-labs",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://dogpatchlabs.com/2050-accelerator/",
@@ -115,6 +115,14 @@
       "origin": "official"
     },
     {
+      "url": "https://dogpatchlabs.com/partners/jr-portfolio-data-analyst/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://dogpatchlabs.com/partners/ndrc-programme-associate-contractor/",
       "page": "details",
       "anchor": "",
@@ -140,6 +148,22 @@
     },
     {
       "url": "https://dogpatchlabs.com/partners/programme-manager-2/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dogpatchlabs.com/partners/programme-manager-ndrc/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dogpatchlabs.com/tag/accelerator/",
       "page": "details",
       "anchor": "",
       "fetched": true,

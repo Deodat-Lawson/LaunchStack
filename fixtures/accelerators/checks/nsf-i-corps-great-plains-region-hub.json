@@ -1,75 +1,576 @@
 {
   "programId": "nsf-i-corps-great-plains-region-hub",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://gp-icorps.org/",
-    "https://gp-icorps.org/about/",
+    "https://gp-icorps.org/programs/national-i-corps/apply/",
     "https://gp-icorps.org/faq/",
-    "https://gp-icorps.org/get-involved/"
+    "https://gp-icorps.org/get-involved/",
+    "https://gp-icorps.org/great-plains-i-corps-wraps-first-ever-discovery-60-cohort/",
+    "https://gp-icorps.org/about/",
+    "https://gp-icorps.org/news-und-e-team-program/",
+    "https://gp-icorps.org/programs/",
+    "https://gp-icorps.org/programs/national-i-corps/",
+    "https://gp-icorps.org/programs/regional-i-corps-training/",
+    "https://gp-icorps.org/all-about-mentorship/",
+    "https://gp-icorps.org/national-i-corps/",
+    "https://gp-icorps.org/events/category/regional-cohort/",
+    "https://gp-icorps.org/events/dsu-sdsmt-cohort/",
+    "https://gp-icorps.org/events/fall-cohort/"
   ],
   "evidence": [
     {
+      "id": "check-announced-20e75fbae9",
+      "url": "https://gp-icorps.org/events/dsu-sdsmt-cohort/",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page",
+      "excerpt": "your spot in our upcoming cohort, apply well before the application deadline. SCHEDULE Monday, January 27 | 4:00-5:00 pm MT / 5:00-6:00 pm CT Thursday, January 30 |",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-fbfede460f",
+      "url": "https://gp-icorps.org/events/fall-cohort/",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page",
+      "excerpt": "Events Blog Resources « All Events This event has passed. Fall Cohort APPLICATION DEADLINE: FRIDAY, SEPTEMBER 15 APPLY NOW October 5, 2023 @ 9:00 am - November 2, 2023 @ 12:00 pm",
+      "page": "batches"
+    },
+    {
+      "id": "check-deal-ce5be8ce8a",
+      "url": "https://gp-icorps.org/news-und-e-team-program/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "enter Pioneer , the first stage of VentureWell’s program, receiving $5,000 in grant funding and intensive entrepreneurship training to help them",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2b9814be85",
+      "url": "https://gp-icorps.org/all-about-mentorship/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "hours per week engaging with the team over a 5-week time period. What are the benefits? Mentors",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e87e4eb2be",
+      "url": "https://gp-icorps.org/events/fall-cohort/",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page",
+      "excerpt": "2, 2023 @ 12:00 pm CST Enroll in this free 5-week online course to engage in an experiential",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-ebac1c4c25",
+      "url": "https://gp-icorps.org/programs/regional-i-corps-training/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "I-CORPS The Great Plains I-Corps offers a free 5-week training program that provides training to",
+      "page": "details"
+    },
+    {
+      "id": "check-email-0776b07eea",
+      "url": "https://gp-icorps.org/programs/regional-i-corps-training/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "details"
+    },
+    {
       "id": "check-email-0f40a49766",
       "url": "https://gp-icorps.org/",
-      "title": "NSF I-Corps Great Plains Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps Great Plains Region Hub — homepage",
       "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "details"
+    },
+    {
+      "id": "check-email-111cd2de95",
+      "url": "https://gp-icorps.org/programs/national-i-corps/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "$50,000 grant from the NSF. For more information, contact info@gp-icorps.org APPLY FOR A NATIONAL I-CORPS PROGRAM NSF I-Corps Hub Great",
+      "page": "details"
+    },
+    {
+      "id": "check-email-1374c2b8ef",
+      "url": "https://gp-icorps.org/news-und-e-team-program/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "details"
+    },
+    {
+      "id": "check-email-20eca9270e",
+      "url": "https://gp-icorps.org/events/dsu-sdsmt-cohort/",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page",
+      "excerpt": "info@gp-icorps.org",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-21ddb4fd94",
+      "url": "https://gp-icorps.org/programs/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "details"
+    },
+    {
+      "id": "check-email-249eadf6d2",
+      "url": "https://gp-icorps.org/events/category/regional-cohort/",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page",
+      "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-28d731dea5",
+      "url": "https://gp-icorps.org/national-i-corps/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "info@gp-icorps.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-442ec45175",
+      "url": "https://gp-icorps.org/all-about-mentorship/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "info@gp-icorps.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-44eb98e614",
+      "url": "https://gp-icorps.org/programs/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "info@gp-icorps.org",
       "page": "details"
     },
     {
       "id": "check-email-4a7d388673",
       "url": "https://gp-icorps.org/about/",
-      "title": "NSF I-Corps Great Plains Region Hub — details page checked by scrape.py",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
       "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
       "page": "details"
     },
     {
       "id": "check-email-52f493f8af",
       "url": "https://gp-icorps.org/get-involved/",
-      "title": "NSF I-Corps Great Plains Region Hub — batches page checked by scrape.py",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page",
       "excerpt": "info@gp-icorps.org",
       "page": "batches"
     },
     {
       "id": "check-email-5582a3ac5a",
       "url": "https://gp-icorps.org/get-involved/",
-      "title": "NSF I-Corps Great Plains Region Hub — batches page checked by scrape.py",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page",
+      "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-652c226c41",
+      "url": "https://gp-icorps.org/programs/national-i-corps/apply/",
+      "title": "NSF I-Corps Great Plains Region Hub — application page",
+      "excerpt": "Please read through all steps carefully and reach out to info@gp-icorps.org if you have any questions. Eligibility requirements",
+      "page": "application"
+    },
+    {
+      "id": "check-email-694a4742ca",
+      "url": "https://gp-icorps.org/programs/regional-i-corps-training/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "info@gp-icorps.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-6d2309a056",
+      "url": "https://gp-icorps.org/national-i-corps/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "details"
+    },
+    {
+      "id": "check-email-6fe69ddec8",
+      "url": "https://gp-icorps.org/events/category/regional-cohort/",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page",
+      "excerpt": "info@gp-icorps.org",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-706442acb6",
+      "url": "https://gp-icorps.org/events/fall-cohort/",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page",
+      "excerpt": "contact us! (info@gp-icorps.org)",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-759ddb6e59",
+      "url": "https://gp-icorps.org/great-plains-i-corps-wraps-first-ever-discovery-60-cohort/",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page",
+      "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-77b97e0b21",
+      "url": "https://gp-icorps.org/events/fall-cohort/",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page",
+      "excerpt": "info@gp-icorps.org",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-8799742c36",
+      "url": "https://gp-icorps.org/programs/national-i-corps/apply/",
+      "title": "NSF I-Corps Great Plains Region Hub — application page",
+      "excerpt": "info@gp-icorps.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-8c5a93e1c8",
+      "url": "https://gp-icorps.org/programs/national-i-corps/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8c68e9c0c2",
+      "url": "https://gp-icorps.org/national-i-corps/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "$50,000 grant from the NSF. For more information, contact info@gp-icorps.org APPLY FOR A NATIONAL I-CORPS PROGRAM NSF I-Corps Hub Great",
+      "page": "details"
+    },
+    {
+      "id": "check-email-9307421b53",
+      "url": "https://gp-icorps.org/programs/national-i-corps/apply/",
+      "title": "NSF I-Corps Great Plains Region Hub — application page",
+      "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "application"
+    },
+    {
+      "id": "check-email-ab383504f2",
+      "url": "https://gp-icorps.org/events/dsu-sdsmt-cohort/",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page",
       "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
       "page": "batches"
     },
     {
       "id": "check-email-b10289ec77",
       "url": "https://gp-icorps.org/faq/",
-      "title": "NSF I-Corps Great Plains Region Hub — terms page checked by scrape.py",
+      "title": "NSF I-Corps Great Plains Region Hub — terms page",
       "excerpt": "info@gp-icorps.org",
       "page": "terms"
     },
     {
+      "id": "check-email-bac81dcf61",
+      "url": "https://gp-icorps.org/programs/national-i-corps/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "info@gp-icorps.org",
+      "page": "details"
+    },
+    {
       "id": "check-email-be16ed9e65",
       "url": "https://gp-icorps.org/about/",
-      "title": "NSF I-Corps Great Plains Region Hub — details page checked by scrape.py",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
       "excerpt": "info@gp-icorps.org",
       "page": "details"
     },
     {
       "id": "check-email-bfcf514185",
       "url": "https://gp-icorps.org/faq/",
-      "title": "NSF I-Corps Great Plains Region Hub — terms page checked by scrape.py",
+      "title": "NSF I-Corps Great Plains Region Hub — terms page",
       "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
       "page": "terms"
     },
     {
       "id": "check-email-cb50b65330",
       "url": "https://gp-icorps.org/",
-      "title": "NSF I-Corps Great Plains Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps Great Plains Region Hub — homepage",
       "excerpt": "info@gp-icorps.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-cfff6f3b47",
+      "url": "https://gp-icorps.org/events/fall-cohort/",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page",
+      "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-f312aec706",
+      "url": "https://gp-icorps.org/great-plains-i-corps-wraps-first-ever-discovery-60-cohort/",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page",
+      "excerpt": "info@gp-icorps.org",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-f606b58dc4",
+      "url": "https://gp-icorps.org/news-und-e-team-program/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "info@gp-icorps.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-fe9709e108",
+      "url": "https://gp-icorps.org/all-about-mentorship/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "details"
+    },
+    {
+      "id": "check-format-616852f327",
+      "url": "https://gp-icorps.org/great-plains-i-corps-wraps-first-ever-discovery-60-cohort/",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page",
+      "excerpt": "in just eight weeks. The program culminated with a virtual showcase, where teams presented on their learnings, shared",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-26626f8a11",
+      "url": "https://gp-icorps.org/national-i-corps/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "APPLY FOR A NATIONAL I-CORPS PROGRAM → https://gp-icorps.org/programs/national-i-corps/apply/",
       "page": "details"
     },
     {
       "id": "check-route-369265d811",
       "url": "https://gp-icorps.org/",
-      "title": "NSF I-Corps Great Plains Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps Great Plains Region Hub — homepage",
       "excerpt": "https://gp-icorps.org",
       "page": "details"
+    },
+    {
+      "id": "check-route-4191f4cd2d",
+      "url": "https://gp-icorps.org/programs/national-i-corps/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "APPLY FOR A NATIONAL I-CORPS PROGRAM → https://gp-icorps.org/programs/national-i-corps/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-62ad891cf4",
+      "url": "https://gp-icorps.org/all-about-mentorship/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "APPLY TO BE A MENTOR → https://forms.zohopublic.com/greatplainsicorpshub/form/MentorInterestForm/formperma/42QZKE_lcF-YZTONDoBrdWq2Q1bXbLJNAoI8XBUmHNQ",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b1d07a17ed",
+      "url": "https://gp-icorps.org/programs/regional-i-corps-training/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "APPLY FOR AN UPCOMING REGIONAL I-CORPS COURSE → https://gp-icorps.org/events/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b81c9bca2e",
+      "url": "https://gp-icorps.org/programs/regional-i-corps-training/",
+      "title": "NSF I-Corps Great Plains Region Hub — program page",
+      "excerpt": "NSF I-Corps National Teams program → https://gp-icorps.org/programs/national-i-corps/apply/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-4f74740be8",
+      "url": "https://gp-icorps.org/",
+      "page": "details",
+      "excerpt": "Home - NSF I-Corps Hub Great Plains Skip to content About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources invention to impact LEARN ABOUT I-CORPS TRANSFORMING INVENTION TO IMPACT The Great Plains I-Corps Hub provides immersive, entrepreneurial training for scientists, researchers, engineers and innovators alike. With emphasis on customer discovery, I-Corps is a free resource to help validate ideas and research, find market fit and build entrepreneurial ecosystems. WHAT IS I-CORPS? The National Science Foundation’s Innovation Corps (I-Corps™) program uses experiential education to help innovators gain valuable insight into entrepreneurship. WHAT IS I-CORPS APPLY FOR A COHORT Immerse yourself in an I-Corps cohort to gain the skills and knowledge needed to accelerate your innovation journey towards successful commercialization. APPLY FOR A COHORT GET INVOLVED Engage with the our ecosystem to access valuable networking opportunities that contribute to the growth and impact of the region’s thriving innovation community. GET INVOLVED IN A COHORT OUR PARTNERS \"There is certainly value in learning more about the perspective of the customer, but that wasn't the greatest reward of the I-Corps program. I still benefit from the networking"
+    },
+    {
+      "id": "check-page-750e99b527",
+      "url": "https://gp-icorps.org/programs/national-i-corps/apply/",
+      "page": "application",
+      "excerpt": "NSF I-Corps Application Process - NSF I-Corps Hub Great Plains Skip to content About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources National NSF I-CORPS™ APPLICATION PROCESS The process below is for the National NSF I-Corps program only, not a Regional I-Corps program. The completion of a Regional I-Corps program is required to be eligible for National I-Corps. Please read through all steps carefully and reach out to info@gp-icorps.org if you have any questions. Eligibility requirements Required team consisting of: Technical Lead / Primary Investigator: A faculty member who is the technology inventor and serves as principal investigator, or a postdoctoral researcher who has expertise in the core technology area. Entrepreneurial Lead: A graduate student or postdoctoral researcher who leads the team and is committed to commercialization. Industry Mentor: An industry expert with business/entrepreneurial experience who is independent from the technology development and team. Obtain prior NSF lineage Successful completion of a regional I-Corps program and a minimum of 20 customer interviews. Develop a deep technology/STEM innovation Have the right to pursue the Intellectual Property (sponsoring university owns it) Commit to attending all"
+    },
+    {
+      "id": "check-page-a9879a9b7c",
+      "url": "https://gp-icorps.org/programs/national-i-corps/apply/",
+      "page": "application",
+      "excerpt": "You will need to work with your university’s Principal Investigator (PI) and Faculty Lead."
+    },
+    {
+      "id": "check-page-36b77f6e68",
+      "url": "https://gp-icorps.org/programs/national-i-corps/apply/",
+      "page": "application",
+      "excerpt": "The letter should be from your academic institution’s Hub leadership team (Primary Investigator or Faculty Lead) that is the most familiar with the team."
+    },
+    {
+      "id": "check-page-989f51ab26",
+      "url": "https://gp-icorps.org/faq/",
+      "page": "terms",
+      "excerpt": "FAQ - NSF I-Corps Hub Great Plains Skip to content About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources frequently asked questions Who can apply? Anyone committed to exploring the commercial potential of an idea can apply! However, you may improve your outcomes by building a team with these 3 roles: Entrepreneurial Lead – An undergraduate or graduate student, postdoctoral researcher, or community innovator who leads the team and is committed to conducting customer interviews and reporting insights throughout the program. Technical Lead – A technical expert, faculty member, staff member, advisor, researcher, or business partner who supports the team by offering deep knowledge of the core product or technology being explored. Industry Mentor – An individual with entrepreneurial, industry, or commercialization experience who guides the team by offering insight into real-world applications, market fit, and customer engagement. Do applicants need to be affiliated with a university or hub member institution? No – Anyone committed to exploring the commercial potential of an idea can apply! However, to qualify for the National I-Corps Teams Program, individuals must have a technology connection to a higher education or research institution. The"
+    },
+    {
+      "id": "check-page-bf192fb368",
+      "url": "https://gp-icorps.org/faq/",
+      "page": "terms",
+      "excerpt": "To be a mentor for the Great Plains Regional I-Corps, you should be an experienced entrepreneur or corporate innovator comfortable working with early-stage, deep-tech teams."
+    },
+    {
+      "id": "check-page-c476349b31",
+      "url": "https://gp-icorps.org/faq/",
+      "page": "terms",
+      "excerpt": "Mentors help the team recognize and reduce confirmation bias throughout the customer discovery process."
+    },
+    {
+      "id": "check-page-4eeb672b8b",
+      "url": "https://gp-icorps.org/get-involved/",
+      "page": "batches",
+      "excerpt": "GET INVOLVED - NSF I-Corps Hub Great Plains Skip to content About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources Get involved mentor A mentor plays a vital role in guiding and supporting teams throughout the commercialization of their innovation by providing advice, facilitating industry connections, delivering candid feedback, and offering a wide range of other valuable support. PARTICIPANT I-Corps regional training offers an immersive learning experience where innovators gain valuable insights, develop entrepreneurial skills, and receive guidance on customer discovery and market validation to drive the successful commercialization of their ideas. instructor Instructing is a rewarding role that involves imparting specialized knowledge of the I-Corps methodology to support and guide emerging entrepreneurs. Through training and mentorship, instructors play a crucial part in equipping innovators with the skills and mindset necessary to navigate the challenging path of commercializing their ideas. NSF I-Corps Hub Great Plains Facebook Linkedin Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102 www.gp-icorps.org"
+    },
+    {
+      "id": "check-page-68fd44d4bd",
+      "url": "https://gp-icorps.org/great-plains-i-corps-wraps-first-ever-discovery-60-cohort/",
+      "page": "batches",
+      "excerpt": "Great Plains I-Corps Wraps First-Ever Discovery 60 Cohort - NSF I-Corps Hub Great Plains Skip to content About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources Great Plains I-Corps Wraps First-Ever Discovery 60 Cohort August 28, 2025 The NSF Great Plains I-Corps Hub has officially wrapped up its first Discovery 60 cohort, an intensive eight-week program designed to help researchers and entrepreneurs refine their business models, get to know their potential customers , and move closer toward commercialization. Discovery 60 builds upon participants’ earlier I-Corps experience by requiring 60+ customer discovery interviews, which is 3 times the number completed in a standard regional cohort . Through this process, participants gain a deeper understanding of their market, analyze customer decision-making, refine go-to-market strategies, and build a profitable, scalable business model. “Our teams have worked really hard throughout these eight weeks. They’ve gone out, met with customers, and gathered the kind of qualitative data that truly vets and validates their ideas,” said Brenna Johansen, Innovation Outreach Specialist for the Great Plains I-Corps Hub. “We want them to leave in the best position to move forward, whatever that looks like for"
+    },
+    {
+      "id": "check-page-4ee7d96ba0",
+      "url": "https://gp-icorps.org/about/",
+      "page": "details",
+      "excerpt": "About - NSF I-Corps Hub Great Plains Skip to content About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About Us The National Science Foundation Innovation Corps (I-Corps) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. I-Corps prepares innovators to extend their focus beyond ideation to increase the economic and societal impact of NSF-funded and other basic research projects. I-Corps Hubs bring together institutions of higher education within a distinct geographical region to collaborate and deliver a standardized curriculum. The curriculum explores the commercial potential of deep technologies with members of the scientific community and other interested parties in the Hub’s region. The Great Plains Region is a consortium of eleven partner universities in North Dakota, South Dakota, Nebraska, Montana, Kansas, and Wyoming. The partner universities bring together their researchers’ expertise and the universities’ resources to support the Hub’s activities. Each university has a culture of cultivating entrepreneurship. North Dakota State University is the lead institution and is responsible for the overall operation of the Hub. Our Vision To connect innovators and"
+    },
+    {
+      "id": "check-page-42b5357107",
+      "url": "https://gp-icorps.org/about/",
+      "page": "details",
+      "excerpt": "Technical Lead – A technical expert, faculty member, staff member, advisor, researcher, or business partner who supports the team by offering deep knowledge of the core product or technology being explored."
+    },
+    {
+      "id": "check-page-a2c6810843",
+      "url": "https://gp-icorps.org/about/",
+      "page": "details",
+      "excerpt": "However, to qualify for the National I-Corps Teams Program, individuals must have a technology connection to a higher education or research institution."
+    },
+    {
+      "id": "check-page-442133f1dd",
+      "url": "https://gp-icorps.org/about/",
+      "page": "details",
+      "excerpt": "To be a mentor for the Great Plains Regional I-Corps, you should be an experienced entrepreneur or corporate innovator comfortable working with early-stage, deep-tech teams."
+    },
+    {
+      "id": "check-page-60db98ccf8",
+      "url": "https://gp-icorps.org/about/",
+      "page": "details",
+      "excerpt": "Mentors help the team recognize and reduce confirmation bias throughout the customer discovery process."
+    },
+    {
+      "id": "check-page-5d0b3b7bf3",
+      "url": "https://gp-icorps.org/news-und-e-team-program/",
+      "page": "details",
+      "excerpt": "UND I-Corps Team Selected for VentureWell's 2026 E-Team Program - NSF I-Corps Hub Great Plains Skip to content About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources UND I-Corps Team Selected for VentureWell’s 2026 E-Team Program December 30, 2025 Neuroclear Pro Park, a student innovation team from the University of North Dakota , has been selected to join the Winter 2026 cohort of VentureWell’s competitive E-Team Program . Only twenty-two student ventures nationwide were chosen for this cohort, representing emerging technologies aimed at improving healthcare, sustainability, information technology, and other critical sectors. Neuroclear Pro Park is developing a continuous-monitoring wearable designed to track biological changes linked to the progression of Parkinson’s disease. The goal is to support earlier intervention, provide clinicians with actionable data, and enable more personalized treatment pathways for individuals living with the disease. Participation in the E-Team Program marks a major milestone for the team as they move from early hypothesis testing to broader commercialization planning. As part of the cohort, Neuroclear Pro Park will enter Pioneer , the first stage of VentureWell’s program, receiving $5,000 in grant funding"
+    },
+    {
+      "id": "check-page-b75d8edcf2",
+      "url": "https://gp-icorps.org/news-und-e-team-program/",
+      "page": "details",
+      "excerpt": "As part of the cohort, Neuroclear Pro Park will enter Pioneer , the first stage of VentureWell’s program, receiving $5,000 in grant funding and intensive entrepreneurship training to help them identify the best market fit for their solution."
+    },
+    {
+      "id": "check-page-f5822bb0cd",
+      "url": "https://gp-icorps.org/news-und-e-team-program/",
+      "page": "details",
+      "excerpt": "Earlier this year, the group completed 22 customer discovery interviews through the NSF Great Plains I-Corps Hub regional program , under the team name, MindMend Biotech LLC, where they began validating the clinical need and refining their problem statement."
+    },
+    {
+      "id": "check-page-92a8289a43",
+      "url": "https://gp-icorps.org/programs/",
+      "page": "details",
+      "excerpt": "Programs - NSF I-Corps Hub Great Plains Skip to content About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources Programs offered Our team of experienced instructors, trainers, and mentors provide personalized mentoring on ideation, as well as comprehensive support in de-risking and other funding opportunities. Support is offered to ensure the process of moving from the laboratory to the marketplace is not only smooth and efficient, but also highly valuable. Regional i-corps A course that helps participants explore the commercial viability of their technology-based innovation ideas. LEARN ABOUT REGIONAL I-CORPS National i-corps A world renowned course that will push participant’s innovations to the next level. LEARN ABOUT NATIONAL I-CORPS NSF I-Corps Hub Great Plains Facebook Linkedin Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102 www.gp-icorps.org"
+    },
+    {
+      "id": "check-page-892d3c8ea9",
+      "url": "https://gp-icorps.org/programs/national-i-corps/",
+      "page": "details",
+      "excerpt": "National I-Corps - NSF I-Corps Hub Great Plains Skip to content About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources nATIONAL I-CORPS The National Science Foundation Innovation Corps (I-Corps™) program aims to equip scientists and engineers with the skills and knowledge required to transform their NSF-supported research into commercially viable products. Through extensive customer engagement, teams assess potential applications of their technology. The immersive seven-week program is designed to prevent the creation of a product without adequately identifying a need in the marketplace, which is the primary reason startups fail. Teams composed of academic researchers, student entrepreneurs and business mentors participate in the curriculum through one of the NSF I-Corps™ Hubs. Throughout the seven-week program, teams are expected to complete a minimum of a hundred interviews with potential customers. For more information on the I-Corps program, visit the NSF I-Corps Teams page. For more information on the application process, click the apply button. Benefits of the Program Understanding the value of your technology and its target audience. Identifying new markets for your technology that had not been previously considered. Build a network"
+    },
+    {
+      "id": "check-page-444a61b007",
+      "url": "https://gp-icorps.org/programs/national-i-corps/",
+      "page": "details",
+      "excerpt": "Build a network of peers, instructors, investors, customers, and mentors who share like-minded interests and goals."
+    },
+    {
+      "id": "check-page-110d0c3f4d",
+      "url": "https://gp-icorps.org/programs/regional-i-corps-training/",
+      "page": "details",
+      "excerpt": "Regional I-Corps Training - NSF I-Corps Hub Great Plains Skip to content About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources REGIONAL I-CORPS The Great Plains I-Corps offers a free 5-week training program that provides training to graduate students, post-docs, researchers, faculty members, inventors and entrepreneurs interested in moving ideas and technology to commercialization. The Regional I-Corps training provides teams with the opportunity to learn the best practices about customer discovery needed to understand their ecosystem and stakeholders more thoroughly. Throughout the process, teams will acquire feedback on their best path forward from trained instructors and mentors, and identify key milestones and commercialization pathway. This unique program gives teams the opportunity to connect with like-minded innovators across the Great Plains Region. Benefits of the program: Gain valuable market insight to inform the next steps in your research and/or development Become eligible for the NSF I-Corps National Teams program and $50,000 grant for qualifying technologies and teams Cultivate network connections and receive mentoring from experienced industry experts and entrepreneurs Develop the entrepreneurial mindset and toolset needed"
+    },
+    {
+      "id": "check-page-5b6bf619c1",
+      "url": "https://gp-icorps.org/all-about-mentorship/",
+      "page": "details",
+      "excerpt": "All About Mentorship - NSF I-Corps Hub Great Plains Skip to content About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources All About Mentorship April 25, 2023 APPLY TO BE A MENTOR Serving as an industry mentor for the Great Plains I-Corps Hub is a great way to give back to the community and help further build our local entrepreneurial ecosystems. In the world of entrepreneurship, having a mentor can be a game-changer for a team’s success. This is particularly true in I-Corps, where mentors provide a variety of roles to help teams transition their technology out of academic labs and into the marketplace. These mentors are typically experienced or emerging entrepreneurs who have a deep understanding of the industry and can help teams navigate the complicated process of customer discovery. One critical role of a mentor is to serve as a third-party resource for the team. They can help the team recognize and reduce confirmation bias throughout the customer discovery process. A mentor is typically someone that has industry contacts and knows the ecosystem of the target market area. They participate in all cohort activities, whether at the Regional, or National I-Corps level. Eligibility To be a mentor for the Great Plains Regional I-Corps, you"
+    },
+    {
+      "id": "check-page-9ad3043463",
+      "url": "https://gp-icorps.org/all-about-mentorship/",
+      "page": "details",
+      "excerpt": "Eligibility To be a mentor for the Great Plains Regional I-Corps, you should be an experienced entrepreneur or corporate innovator comfortable working with early-stage, deep-tech teams."
+    },
+    {
+      "id": "check-page-34a0c334d1",
+      "url": "https://gp-icorps.org/all-about-mentorship/",
+      "page": "details",
+      "excerpt": "Mentors should teach teams how to network, engage with customers, and conduct interviews to understand customer unmet needs."
+    },
+    {
+      "id": "check-page-94b6899a83",
+      "url": "https://gp-icorps.org/all-about-mentorship/",
+      "page": "details",
+      "excerpt": "While the time commitment varies, Great Plains Regional I-Corps mentors typically spend 10-15 hours per week engaging with the team over a 5-week time period."
+    },
+    {
+      "id": "check-page-7c76058db4",
+      "url": "https://gp-icorps.org/all-about-mentorship/",
+      "page": "details",
+      "excerpt": "Mentors benefit from working closely with incredibly smart, motivated technologists and help them make an impact in the world by establishing a foundation to turn their innovations into marketable products."
+    },
+    {
+      "id": "check-page-1de8cf0506",
+      "url": "https://gp-icorps.org/all-about-mentorship/",
+      "page": "details",
+      "excerpt": "You will learn about cutting-edge technology that has the potential to disrupt the status quo and network with other mentors."
+    },
+    {
+      "id": "check-page-a96038d7f6",
+      "url": "https://gp-icorps.org/all-about-mentorship/",
+      "page": "details",
+      "excerpt": "Mentors may also have the opportunity to advance into an instructor role, if appropriate."
+    },
+    {
+      "id": "check-page-390f7ddf2d",
+      "url": "https://gp-icorps.org/all-about-mentorship/",
+      "page": "details",
+      "excerpt": "If you are an experienced entrepreneur or corporate innovator, comfortable working with early-stage, deep-tech teams, and have the time to commit, consider becoming a mentor."
+    },
+    {
+      "id": "check-page-663bb48e72",
+      "url": "https://gp-icorps.org/all-about-mentorship/",
+      "page": "details",
+      "excerpt": "The key to the success of offering our Regional I-Corps training program is having high-quality mentors."
+    },
+    {
+      "id": "check-page-39144136fa",
+      "url": "https://gp-icorps.org/all-about-mentorship/",
+      "page": "details",
+      "excerpt": "Mentors are an extension of the teaching team and share responsibility for the success or failure of their teams."
+    },
+    {
+      "id": "check-page-053c247bbd",
+      "url": "https://gp-icorps.org/all-about-mentorship/",
+      "page": "details",
+      "excerpt": "Your expertise can make a significant difference in helping teams transition their technology out of academic labs and into the marketplace."
+    },
+    {
+      "id": "check-page-834c4be4a7",
+      "url": "https://gp-icorps.org/national-i-corps/",
+      "page": "details",
+      "excerpt": "National I-Corps - NSF I-Corps Hub Great Plains Skip to content About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources nATIONAL I-CORPS The National Science Foundation Innovation Corps (I-Corps™) program aims to equip scientists and engineers with the skills and knowledge required to transform their NSF-supported research into commercially viable products. Through extensive customer engagement, teams assess potential applications of their technology. The immersive seven-week program is designed to prevent the creation of a product without adequately identifying a need in the marketplace, which is the primary reason startups fail. Teams composed of academic researchers, student entrepreneurs and business mentors participate in the curriculum through one of the NSF I-Corps™ Hubs. Throughout the seven-week program, teams are expected to complete a minimum of a hundred interviews with potential customers. For more information on the I-Corps program, visit the NSF I-Corps Teams page. For more information on the application process, click the apply button. Benefits of the Program Understanding the value of your technology and its target audience. Identifying new markets for your technology that had not been previously considered. Build a network"
+    },
+    {
+      "id": "check-page-57d9f51b6e",
+      "url": "https://gp-icorps.org/national-i-corps/",
+      "page": "details",
+      "excerpt": "Build a network of peers, instructors, investors, customers, and mentors who share like-minded interests and goals."
+    },
+    {
+      "id": "check-page-b2077a94ca",
+      "url": "https://gp-icorps.org/events/category/regional-cohort/",
+      "page": "batches",
+      "excerpt": "Events from January 25, 2027 › Regional Cohort › – NSF I-Corps Hub Great Plains Skip to content About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources 1 event found. Regional Cohort Events Regional Cohort Events Events Search and Views Navigation Search Enter Keyword. Search for Events by Keyword. Find Events Event Views Navigation List List Month Today Upcoming Upcoming Select date. January 2027 Mon 25 GPH Regional I-Corps | Taught by North Dakota State University January 25, 2027 @ 8:00 am - 5:00 pm CST The dates for this cohort are TBD* The Regional I-Corps training at North Dakota State University spans five weeks, offering a blended approach to assess the market potential of your technology. This program welcomes both researchers and entrepreneurs, the curriculum explores the commercial potential of deep technology solutions across any industry sector. It prepares researchers […] Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file NSF I-Corps Hub Great Plains Facebook Linkedin Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102 www.gp-icorps.org"
+    },
+    {
+      "id": "check-page-a1b6a3c7c2",
+      "url": "https://gp-icorps.org/events/dsu-sdsmt-cohort/",
+      "page": "batches",
+      "excerpt": "GPH Regional I-Corps | Taught By Dakota State University & South Dakota School of Mines and Technology Regional Cohort - NSF I-Corps Hub Great Plains Skip to content About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources « All Events This event has passed. GPH Regional I-Corps | Taught By Dakota State University & South Dakota School of Mines and Technology Regional Cohort A free innovation boot camp focused on customer discovery. I-Corps is designed to equip participants with skills for designing products and services that benefit customers and gain insights for developing a strategy to transition technology from lab to market. The course provides structured lectures and best practices to support teams in engaging with customers effectively. The application deadline is Wednesday, January 15, 2025. Applications are reviewed as they are received. To have the best chance of reserving your spot in our upcoming cohort, apply well before the application deadline. SCHEDULE Monday, January 27 | 4:00-5:00 pm MT / 5:00-6:00 pm CT Thursday, January 30 | 8:00-10:30 am MT / 9:00-11:30 am CT Thursday, February 6 | 8:00-10:30 am MT / 9:00-11:30 am CT Thursday, February 13 | 8:00-10:30 am MT / 9:00-11:30 am CT Thursday, February 20 | 8:00-10:30 am MT /"
+    },
+    {
+      "id": "check-page-6b8a3548c8",
+      "url": "https://gp-icorps.org/events/fall-cohort/",
+      "page": "batches",
+      "excerpt": "Fall Cohort - NSF I-Corps Hub Great Plains Skip to content About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources About WHAT WE DO WHO WE ARE FAQ Programs Regional I-Corps National I-Corps Events Blog Resources « All Events This event has passed. Fall Cohort APPLICATION DEADLINE: FRIDAY, SEPTEMBER 15 APPLY NOW October 5, 2023 @ 9:00 am - November 2, 2023 @ 12:00 pm CST Enroll in this free 5-week online course to engage in an experiential learning process centered around customer discovery. The course is specifically designed to equip teams with the necessary skills to effectively design products and services that offer tangible benefits to customers. By participating in this course, teams will gain valuable insights that can be used to develop a focused commercialization strategy that facilitates the transition of technology from the lab to the marketplace. The primary focus of the course is on improving communication with the customer ecosystem. Teams will be taught how to accurately represent the voice of the customer, which will provide investors and partners with an unbiased perspective on the strategies used for commercialization. Through a series of structured lectures and best practices, the course aims to support teams in their efforts to engage with customers in a meaningful way. WHO CAN APPLY? Anyone with an entrepreneurial"
     }
   ],
   "findings": {
@@ -80,7 +581,20 @@
       }
     ],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://gp-icorps.org/programs/national-i-corps/apply/",
+        "evidenceId": "check-route-4191f4cd2d"
+      },
+      {
+        "value": "https://gp-icorps.org/events/",
+        "evidenceId": "check-route-b1d07a17ed"
+      },
+      {
+        "value": "https://forms.zohopublic.com/greatplainsicorpshub/form/MentorInterestForm/formperma/42QZKE_lcF-YZTONDoBrdWq2Q1bXbLJNAoI8XBUmHNQ",
+        "evidenceId": "check-route-62ad891cf4"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://gp-icorps.org",
@@ -90,8 +604,52 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "January",
+        "evidenceId": "check-announced-20e75fbae9"
+      },
+      {
+        "value": "SEPTEMBER",
+        "evidenceId": "check-announced-fbfede460f"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "5",
+        "evidenceId": "check-duration-ebac1c4c25"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-616852f327"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "enter Pioneer , the first stage of VentureWell’s program, receiving $5,000 in grant funding and intensive entrepreneurship training to help them",
+        "evidenceId": "check-deal-ce5be8ce8a"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "5000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-ce5be8ce8a"
+      }
+    ],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

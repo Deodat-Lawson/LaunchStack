@@ -1,30 +1,70 @@
 {
   "programId": "yes-delft",
-  "checkedAt": "2026-11-14T20:59:02.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://yesdelft.com/",
     "https://yesdelft.com/support/",
     "https://yesdelft.com/vacancies/open-application/",
     "https://yesdelft.com/faq/",
-    "https://yesdelft.com/news/agridata-innovations-adi-closes-investment-round/",
-    "https://yesdelft.com/news/arceon-receives-an-investment/",
-    "https://yesdelft.com/news/decipher-received-pre-seed-investment-from-graduate-ventures/",
-    "https://yesdelft.com/news/deep-breath-received-an-pre-seed-investment-from-graduate-entrepreneur-fund/",
-    "https://yesdelft.com/news/fiducial-secures-e2m-seed-investment-to-advance-autonomous-drone-technology/",
-    "https://yesdelft.com/news/liion-power-selected-for-european-investment-platform-invesdor/",
-    "https://yesdelft.com/news/lyla-receives-pre-seed-investment-from-graduate-entrepreneur/",
-    "https://yesdelft.com/news/merqato-has-secured-an-investment-from-smarter-ventures/",
-    "https://yesdelft.com/news/nextdriver-receives-logistics-investment-to-scale-data-driven-driver-coaching-platform/",
-    "https://yesdelft.com/news/nurtio-technologies-investment-round-is-open/",
-    "https://yesdelft.com/news/perciv-ai-secures-e2-5m-seed-investment/"
+    "https://yesdelft.com/startups/faqtory/",
+    "https://yesdelft.com/about/",
+    "https://yesdelft.com/about/mentors/",
+    "https://yesdelft.com/about/online-info-session/",
+    "https://yesdelft.com/about/work-at-yesdelft/",
+    "https://yesdelft.com/incubator-programs/",
+    "https://yesdelft.com/incubator-programs/accelerator-program/",
+    "https://yesdelft.com/incubator-programs/meet-your-co-founder/",
+    "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+    "https://yesdelft.com/incubator-programs/validation-program/",
+    "https://yesdelft.com/incubator-programs/vertical-deep-dives/",
+    "https://yesdelft.com/incubator-programs/vertical-deep-dives/circular-technology/",
+    "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+    "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+    "https://yesdelft.com/incubator-programs/vertical-deep-dives/energy/",
+    "https://yesdelft.com/incubator-programs/vertical-deep-dives/hortiscience/"
   ],
   "evidence": [
+    {
+      "id": "check-deadline-0846e1d5dd",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "title": "YES!Delft — program page",
+      "excerpt": "you can count on our \"pre-program support\". Application deadline 01 Mar 2027 Start date 07 Apr 2027 End date 25 Jun 2027 Summary The",
+      "page": "details"
+    },
+    {
+      "id": "check-deadline-3ec8dd2e6c",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "title": "YES!Delft — program page",
+      "excerpt": "– May 2027 Location: Delft, the Netherlands Application deadline: 11 January 2027 Content: Kick-off with the Ministry of Defence and LRS.",
+      "page": "details"
+    },
+    {
+      "id": "check-deadline-4e2c881561",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "title": "YES!Delft — program page",
+      "excerpt": "processed on a first-come, first-served basis. Application deadline 22 Nov 2026 Start date 12 Jan 2027 End date 25 Mar 2027 Summary The",
+      "page": "details"
+    },
     {
       "id": "check-deal-1748580899",
       "url": "https://yesdelft.com/faq/",
       "title": "YES!Delft — terms page",
       "excerpt": "€3,500 excl. VAT per team. The Accelerator contract also includes a €25,000 excl. VAT success fee, payable once the company reaches either",
       "page": "terms"
+    },
+    {
+      "id": "check-deal-1c30a5fb12",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "title": "YES!Delft — program page",
+      "excerpt": "participation fee is €3,500 excl. VAT per team and a success fee of €25k triggered at €1 million in additional annual revenue. Apply What",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-29b2246ef0",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "title": "YES!Delft — program page",
+      "excerpt": "and accelerate traction in the market. The participation fee is €3,500 excl. VAT per team and a success fee of €25k triggered at €1 million",
+      "page": "details"
     },
     {
       "id": "check-deal-4862d6294f",
@@ -62,6 +102,13 @@
       "page": "terms"
     },
     {
+      "id": "check-deal-f62b75f515",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "title": "YES!Delft — program page",
+      "excerpt": "founders. The Validation Program has a participation contribution of € 900,- (excl. VAT) per team of two founders. Apply What What is this",
+      "page": "details"
+    },
+    {
       "id": "check-duration-036189a9ff",
       "url": "https://yesdelft.com/faq/",
       "title": "YES!Delft — terms page",
@@ -74,6 +121,20 @@
       "title": "YES!Delft — terms page",
       "excerpt": "weeks on a part-time basis. The Accelerator is a 3-month structured program, after which startups remain",
       "page": "terms"
+    },
+    {
+      "id": "check-duration-2900b0e9f5",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "title": "YES!Delft — program page",
+      "excerpt": "What What is this program? The Accelerator takes 3-months including 5 years support. Get connected to an",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-464acb7f18",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/",
+      "title": "YES!Delft — program page",
+      "excerpt": "be a founder of a startup. Ready to start within 6 months. A business idea is not required. Participation",
+      "page": "details"
     },
     {
       "id": "check-duration-47691649f9",
@@ -97,6 +158,20 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-65e0a168e2",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "title": "YES!Delft — program page",
+      "excerpt": "two founders. Apply What What is this program? A 10-week part-time program where you will find your",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-6ba0953e78",
+      "url": "https://yesdelft.com/incubator-programs/",
+      "title": "YES!Delft — program page",
+      "excerpt": "Program Test your idea, start your business A 10-week part-time program to find your problem-solution",
+      "page": "details"
+    },
+    {
       "id": "check-duration-8e1fa35129",
       "url": "https://yesdelft.com/faq/",
       "title": "YES!Delft — terms page",
@@ -111,6 +186,27 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-ab9eeb9539",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "title": "YES!Delft — program page",
+      "excerpt": "25 Mar 2027 Summary The Validation Program is a 10-week program for tech startups with at least two",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-abe95ffeed",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "title": "YES!Delft — program page",
+      "excerpt": "network, and mentorship to get there. A 10-week, part-time program for early-stage technology",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ced986f769",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+      "title": "YES!Delft — program page",
+      "excerpt": "founder of a tech startup. Ready to start within 6 months. A business idea is not required. Participation",
+      "page": "details"
+    },
+    {
       "id": "check-location-243bdb6efa",
       "url": "https://yesdelft.com/faq/",
       "title": "YES!Delft — terms page",
@@ -118,17 +214,45 @@
       "page": "terms"
     },
     {
-      "id": "check-location-f16b02a664",
-      "url": "https://yesdelft.com/news/perciv-ai-secures-e2-5m-seed-investment/",
-      "title": "YES!Delft — terms page",
-      "excerpt": "Partners, a pan-European venture fund based in Amsterdam and London with a focus on",
-      "page": "terms"
-    },
-    {
       "id": "check-name-ddbc05d848",
       "url": "https://yesdelft.com/",
       "title": "YES!Delft — homepage",
       "excerpt": "YES!Delft | Tech Startup Incubator YES!Delft Search Menu Building",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d774a05213",
+      "url": "https://yesdelft.com/startups/faqtory/",
+      "title": "YES!Delft — terms page",
+      "excerpt": "All startups → https://yesdelft.com/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ecc7e1b694",
+      "url": "https://yesdelft.com/startups/faqtory/",
+      "title": "YES!Delft — terms page",
+      "excerpt": "Our startups → https://yesdelft.com/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-26e0698888",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/hortiscience/",
+      "title": "YES!Delft — program page",
+      "excerpt": "Apply → https://yes-delft.typeform.com/to/h6xUfXYv?typeform-source=yesdelft.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-28e832208b",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+      "title": "YES!Delft — program page",
+      "excerpt": "Apply → https://yes-delft.typeform.com/to/h6xUfXYv",
+      "page": "details"
+    },
+    {
+      "id": "check-route-422063b29a",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "title": "YES!Delft — program page",
+      "excerpt": "Apply → https://yes-delft.typeform.com/to/h6xUfXYv",
       "page": "details"
     },
     {
@@ -153,10 +277,45 @@
       "page": "application"
     },
     {
+      "id": "check-route-a5e5ced7f6",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "title": "YES!Delft — program page",
+      "excerpt": "Apply → https://yes-delft.typeform.com/to/h6xUfXYv",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b21bd17e45",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "title": "YES!Delft — program page",
+      "excerpt": "Apply → https://yes-delft.typeform.com/to/h6xUfXYv",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bc1fa12d2b",
+      "url": "https://yesdelft.com/about/mentors/",
+      "title": "YES!Delft — program page",
+      "excerpt": "Apply → https://yesdelft.com/support/",
+      "page": "details"
+    },
+    {
       "id": "check-route-c5cdf5f4be",
       "url": "https://yesdelft.com/",
       "title": "YES!Delft — homepage",
       "excerpt": "YES!Delft → https://yesdelft.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d9a1d7e555",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/circular-technology/",
+      "title": "YES!Delft — program page",
+      "excerpt": "Apply → https://yes-delft.typeform.com/to/h6xUfXYv",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e3cad7f52c",
+      "url": "https://yesdelft.com/about/work-at-yesdelft/",
+      "title": "YES!Delft — program page",
+      "excerpt": "Open application → https://yesdelft.com/vacancies/open-application/",
       "page": "details"
     }
   ],
@@ -165,7 +324,73 @@
       "id": "check-page-68eeb44b4e",
       "url": "https://yesdelft.com/",
       "page": "details",
-      "excerpt": "YES!Delft | Tech Startup Incubator YES!Delft Search Menu Building tomorrow’s leading deeptech firms Turning breakthrough technologies into global companies. Apply YES!Delft transforms scientific breakthroughs into globally scalable deeptech companies. About YES!Delft 600+ 600+ Startups More than 600 startups supported already, and counting. 82% 82% Still in business Most of the accelerated startups are still in business or acquired. >€1B >€1B Capital More than one billion euros raised by our startups. Latest news More news Strong comeback for Hardt Hyperloop with multi-million euro investment Unfiltered feedback, big ambitions, and a Silicon Valley mindset: Wibe Wagemans at YES!Delft We are looking for a Program Coordinator More news Startups Tech startups thrive at the YES!Delft incubator. Elephate.ai VYTL QPhoton Gyromotics Lobster Mainblades Inspections Delft Circuits perClass Tarnoc VIKTOR Somnox Binkies 3D SenTech AI BV PerfectXL (Infotron) Atmos UAV We got your back Our experienced mentors offer you their expert support throughout your entire startup journey. Pavel Cholakov Wanda Stevens Jin Han Francesca Devrient Haiyan Che Josefien Groot Jan Willem Deutekom David Cerda Salzmann Geert van Kuyck Engbert Wilmink Charles de Monchy Simon van der Jagt Ian Wachters Paul de Backker Incubator & accelerator Validate your startup idea. Accelerate growth. Become a successful tech"
+      "excerpt": "YES!Delft | Tech Startup Incubator YES!Delft Search Menu Building tomorrow’s leading deeptech firms Turning breakthrough technologies into global companies. Apply YES!Delft transforms scientific breakthroughs into globally scalable deeptech companies. About YES!Delft 600+ 600+ Startups More than 600 startups supported already, and counting. 82% 82% Still in business Most of the accelerated startups are still in business or acquired. >€1B >€1B Capital More than one billion euros raised by our startups. Latest news More news Strong comeback for Hardt Hyperloop with multi-million euro investment Unfiltered feedback, big ambitions, and a Silicon Valley mindset: Wibe Wagemans at YES!Delft We are looking for a Program Coordinator More news Startups Tech startups thrive at the YES!Delft incubator. QPhoton Elephate.ai VYTL CyberHydra Feedback Fruits Passguard Actiflow Access2bone Source.ag Medvice CleVR Elemental Water Makers Datafloq Lox Solutions Whiffle We got your back Our experienced mentors offer you their expert support throughout your entire startup journey. Francesca Devrient Jan Willem Deutekom Charles de Monchy Wanda Stevens David Cerda Salzmann Haiyan Che Geert van Kuyck Paul de Backker Josefien Groot Simon van der Jagt Engbert Wilmink Ian Wachters Jin Han Pavel Cholakov Incubator & accelerator Validate your startup idea. Accelerate growth. Become a successful tech"
+    },
+    {
+      "id": "check-page-324bba933b",
+      "url": "https://yesdelft.com/",
+      "page": "details",
+      "excerpt": "The accelerator strengthens your startup’s foundation and connects you to a large network, without taking equity."
+    },
+    {
+      "id": "check-page-388f17e121",
+      "url": "https://yesdelft.com/",
+      "page": "details",
+      "excerpt": "Spark design & innovation ASR TNO Ondernemersfonds Delft The Hague Tech Forgeon Mindbase Rabobank Berytech Gemeente Rotterdam Gemeente Delft Siemens Erasmus Medical Center Drechtsteden EY The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-36d41640db",
+      "url": "https://yesdelft.com/",
+      "page": "details",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-058e0be588",
+      "url": "https://yesdelft.com/",
+      "page": "details",
+      "excerpt": "Jesse van der Linden Co-Founder at Fluxthor The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-0c56d5c869",
+      "url": "https://yesdelft.com/",
+      "page": "details",
+      "excerpt": "Maxim & Tristan Founders at Arkmon The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-1523ddfd8f",
+      "url": "https://yesdelft.com/",
+      "page": "details",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-10123140f2",
+      "url": "https://yesdelft.com/",
+      "page": "details",
+      "excerpt": "Jelle Tiemensma CTO at Smartship The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-56e741f8f4",
+      "url": "https://yesdelft.com/",
+      "page": "details",
+      "excerpt": "Iskander Hannivoort Founder at Manukai The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-7e02c958b4",
+      "url": "https://yesdelft.com/",
+      "page": "details",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-f269ad60dd",
+      "url": "https://yesdelft.com/",
+      "page": "details",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company."
+    },
+    {
+      "id": "check-page-81c275b761",
+      "url": "https://yesdelft.com/",
+      "page": "details",
+      "excerpt": "Ernst van der Wal Founder at Lyla YES!Delft is one of the leading tech incubators in Europe where startups with promising ideas grow into successful companies."
     },
     {
       "id": "check-page-d23b78bd65",
@@ -174,10 +399,118 @@
       "excerpt": "Join the best tech startup incubator and accelerator in Europe | YES!Delft YES!Delft Search Menu Support for startups Apply for our startup incubator support. Apply Contact us Entry requirements At least two co-founders * A clear business idea An innovative technology Based in or moving to The Netherlands *If you're a single entrepreneur, then find your co-founder first by joining the Meet your co-founder workshop . What you get Once accepted at the YES!Delft incubator, startups enjoy many benefits, including: Apply now Access to mentors, experts and partners A vibrant community of entrepreneurs Programs that help you grow and succeed Access to funding support Access to talent to grow your team Access to facilities, offices, workspaces and makerspaces Incubator & accelerator Validate your startup idea. Accelerate growth. Become a successful tech company. Validate Validate your business idea, find your market. Test your assumptions, meet your first customers, and acquire the right skills and connections to run your company. Accelerate Grow your startup into a successful business. The accelerator strengthens your startup’s foundation and connects you to a large network, without taking equity. Deep-dive Validate and accelerate with focus on your sector. Targeted programs to validate or accelerate your path to market with more precision and greater confidence. Info session Get a"
     },
     {
+      "id": "check-page-fac95d122a",
+      "url": "https://yesdelft.com/support/",
+      "page": "application",
+      "excerpt": "Info session Get a taste of what it is like at the tech incubator and ask all your questions in just an hour."
+    },
+    {
+      "id": "check-page-c377c5906d",
+      "url": "https://yesdelft.com/support/",
+      "page": "application",
+      "excerpt": "Book a call with our Investment Director Talk to our startup scout Contact us The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-8c98945e98",
+      "url": "https://yesdelft.com/support/",
+      "page": "application",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-33252ea4f5",
+      "url": "https://yesdelft.com/support/",
+      "page": "application",
+      "excerpt": "Jesse van der Linden Co-Founder at Fluxthor The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-01d63b01b2",
+      "url": "https://yesdelft.com/support/",
+      "page": "application",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company."
+    },
+    {
+      "id": "check-page-84d6c98a24",
+      "url": "https://yesdelft.com/support/",
+      "page": "application",
+      "excerpt": "Ernst van der Wal Founder at Lyla The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-189e5a3227",
+      "url": "https://yesdelft.com/support/",
+      "page": "application",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-f10c759167",
+      "url": "https://yesdelft.com/support/",
+      "page": "application",
+      "excerpt": "Maxim & Tristan Founders at Arkmon The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-d690fa0d2e",
+      "url": "https://yesdelft.com/support/",
+      "page": "application",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-05c92b3eb9",
+      "url": "https://yesdelft.com/support/",
+      "page": "application",
+      "excerpt": "Iskander Hannivoort Founder at Manukai What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-e89ecce6fa",
+      "url": "https://yesdelft.com/support/",
+      "page": "application",
+      "excerpt": "Jelle Tiemensma CTO at Smartship YES!Delft is one of the leading tech incubators in Europe where startups with promising ideas grow into successful companies."
+    },
+    {
       "id": "check-page-3675ed2204",
       "url": "https://yesdelft.com/vacancies/open-application/",
       "page": "application",
-      "excerpt": "Open application | YES!Delft YES!Delft Search Menu Vacancies Open application Would you like to join our team, but you did not find a suitable vacancy? We welcome you to reach out to us and send us your open application. Even if we don’t currently have any vacancies here at YES!Delft, or none that you think would be a perfect fit for you, you can always contact us and send us your CV. We are a small and driven team and love to get in touch with tech enthusiasts who want to strengthen our organization. Contact us The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators. Iskandar Tange Co-Founder at Coding the Curbs The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist. The program is structured yet flexible, a perfect combination for startups looking to grow! Teun van ’t Veer Founder & CEO at Renset The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel! Iskander Hannivoort Founder at Manukai The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market. Maxim & Tristan Founders at Arkmon The accelerator brought"
+      "excerpt": "Open application | YES!Delft YES!Delft Search Menu Vacancies Open application Would you like to join our team, but you did not find a suitable vacancy? We welcome you to reach out to us and send us your open application. Even if we don’t currently have any vacancies here at YES!Delft, or none that you think would be a perfect fit for you, you can always contact us and send us your CV. We are a small and driven team and love to get in touch with tech enthusiasts who want to strengthen our organization. Contact us The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company. Ernst van der Wal Founder at Lyla The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started. Think of this program as your first driving lessons. Can you really skip those? Stephan Rutten CEO | Co-Founder at Lobster Robotics The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist. The program is structured yet flexible, a perfect combination for startups looking to grow! Teun van ’t Veer Founder & CEO at Renset The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a"
+    },
+    {
+      "id": "check-page-e71230bca2",
+      "url": "https://yesdelft.com/vacancies/open-application/",
+      "page": "application",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-6a0a0602f3",
+      "url": "https://yesdelft.com/vacancies/open-application/",
+      "page": "application",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-32d08939e1",
+      "url": "https://yesdelft.com/vacancies/open-application/",
+      "page": "application",
+      "excerpt": "Maxim & Tristan Founders at Arkmon What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-6800eaefc1",
+      "url": "https://yesdelft.com/vacancies/open-application/",
+      "page": "application",
+      "excerpt": "Jelle Tiemensma CTO at Smartship The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-573c763701",
+      "url": "https://yesdelft.com/vacancies/open-application/",
+      "page": "application",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-72ae8bc9b3",
+      "url": "https://yesdelft.com/vacancies/open-application/",
+      "page": "application",
+      "excerpt": "Jesse van der Linden Co-Founder at Fluxthor The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-fb377810dc",
+      "url": "https://yesdelft.com/vacancies/open-application/",
+      "page": "application",
+      "excerpt": "Iskander Hannivoort Founder at Manukai YES!Delft is one of the leading tech incubators in Europe where startups with promising ideas grow into successful companies."
     },
     {
       "id": "check-page-2896da7879",
@@ -186,70 +519,1192 @@
       "excerpt": "FAQ | YES!Delft YES!Delft Search Menu Frequently Asked Questions Search Category All General Joining the incubator Validation Program Accelerator Program Startup Jobs Funding and investments Partners and collaborations Office and locations News and events Contacting YES!Delft General How many startups has YES!Delft supported? As of 2026, YES!Delft has supported more than 600 startups, 82% of which are still active or have been acquired, collectively raising over €1 billion in funding. What happens to startups after they finish a YES!Delft program? After completing the Accelerator, a startup becomes a YES!Delft alumni and keeps access to mentors, experts, investors, and partners for at least 5 years. This long-term support is reflected in the outcomes: of the 560+ startups YES!Delft has supported, 83% are still active or have been acquired. YES!Delft is widely regarded as one of the leading deeptech incubators & accelerators in Europe. What is the difference between the Validation Program, the Accelerator, and the Deep-dive tracks? The Validation Program helps early-stage founders test their business idea and reach first customers. The Accelerator supports startups that already have a validated idea and helps them scale, without taking equity. The Deep-dive (sector-focused) modules are targeted, industry-specific tracks layered on top of the Incubator (Validation) and"
     },
     {
-      "id": "check-page-9a90cc45eb",
-      "url": "https://yesdelft.com/news/agridata-innovations-adi-closes-investment-round/",
+      "id": "check-page-2d0399f28d",
+      "url": "https://yesdelft.com/faq/",
       "page": "terms",
-      "excerpt": "AgriData Innovations (ADI) closes investment round | YES!Delft YES!Delft Search Menu Latest AgriData Innovations (ADI) closes investment round Published February 1st, 2024 AgriData Innovations (ADI) closes investment round to accelerate market expansion and technology development. Investment round ADI concluded last year on a high note, marking significant milestones that underscore the success of our innovative technology for agriculture. We are thrilled to share the exciting news that our angel investors, who have been a driving force behind our journey, have demonstrated their unwavering confidence in our vision by doubling down on their investments. This is a testament to the potential they see in ADI’s transformative role in the agricultural sector. Breaking even and beyond: A pivotal moment Closing the fiscal year right on the edge of breaking even is a monumental achievement for any startup, and for ADI, it represents a pivotal moment in our growth trajectory. It showcases the market potential of our technology. The investment round allows us to scale up our operations, which in turn enables further development of our camera systems and crop monitoring AI software. Unveiling our growth blueprint ADI’s imaging technology is operational in 4 countries across Europe. It is used in different crop types and for different applications ranging from germination analysis for"
+      "excerpt": "The Deep-dive (sector-focused) modules are targeted, industry-specific tracks layered on top of the Incubator (Validation) and Accelerator."
     },
     {
-      "id": "check-page-8aea7a7c0d",
-      "url": "https://yesdelft.com/news/arceon-receives-an-investment/",
+      "id": "check-page-cbebe4ded1",
+      "url": "https://yesdelft.com/faq/",
       "page": "terms",
-      "excerpt": "Arceon receives an investment | YES!Delft YES!Delft Search Menu Latest Arceon receives an investment Published October 28th, 2024 Tenzing Alpha invests in material science startup Arceon, founded by TU Delft alumni, to support the development of their advanced materials for extreme environments. Tenzing Alpha has invested in Arceon , an emerging leader in advanced engineering materials designed for extreme environments. The investment highlights Tenzing Alpha’s confidence in Arceon’s future potential as they develop groundbreaking technologies. A follow-on investment is also being considered to support Arceon’s next phase of growth. Arceon’s technical strength lies in its team’s deep expertise in creating advanced materials for extreme and harsh environments, such as aerospace and high-performance industries. With Tenzing Alpha’s assistance, the company will focus on expanding its commercial capabilities, market reach, and operational efficiency to transform its technical success into a strong business presence. About Arceon Arceon specializes in creating advanced materials designed to withstand extreme environments. Their team is dedicated to pioneering technologies that address complex engineering challenges, setting the stage for future leadership in their sector. About Tenzing Alpha Tenzing Alpha is a venture capital firm that invests in early-stage and high-growth"
+      "excerpt": "YES!Delft is a startup incubator and accelerator based in Delft, Netherlands, founded in 2005, affiliated with TU Delft, that supports deeptech startups from early validation through scale-up, connecting them with mentors, investors, and industry partners."
     },
     {
-      "id": "check-page-8fd79f2a2d",
-      "url": "https://yesdelft.com/news/decipher-received-pre-seed-investment-from-graduate-ventures/",
+      "id": "check-page-799fe90408",
+      "url": "https://yesdelft.com/faq/",
       "page": "terms",
-      "excerpt": "DecipHER received Pre-Seed investment from Graduate Ventures | YES!Delft YES!Delft Search Menu Latest DecipHER received Pre-Seed investment from Graduate Ventures Published June 22nd, 2026 DecipHER women secures investment to advance AI-driven early detection and prevention of peripartum and postpartum depression. Women’s health startup DecipHER women has secured new pre-seed investment from Graduate Ventures to accelerate the development of its AI-driven platform for the early detection and prevention of peripartum and postpartum depression. The investment marks an important milestone in the company’s mission to transform maternal mental healthcare through earlier intervention and more personalised care. Peripartum and postpartum depression affects an estimated 10–20% of mothers worldwide, yet care pathways remain largely reactive, with intervention often occurring only after symptoms become severe. With approximately 130 million births globally each year, the need for earlier, more precise detection has become increasingly urgent. DecipHER is addressing this challenge by developing a diagnostic platform designed to identify women at risk before symptoms escalate into crisis. By enabling healthcare providers to intervene earlier, the company aims to improve outcomes for mothers while reducing long-term healthcare burdens. At the core of DecipHER’s innovation is a proprietary"
+      "excerpt": "What support does YES!Delft provide to startups?"
     },
     {
-      "id": "check-page-d37ee870d3",
-      "url": "https://yesdelft.com/news/deep-breath-received-an-pre-seed-investment-from-graduate-entrepreneur-fund/",
+      "id": "check-page-4f7879e942",
+      "url": "https://yesdelft.com/faq/",
       "page": "terms",
-      "excerpt": "Deep Breath received an pre-seed investment from graduate entrepreneur fund | YES!Delft YES!Delft Search Menu Latest Deep Breath received pre-seed investment from Graduate Entrepreneur Fund Published August 30th, 2024 YES!Delft startup Deep Breath received pre-seed funding from Graduate Entrepreneur Deep Breath is a cutting-edge MedTech startup on a mission to transform the landscape of intensive care unit (ICU) treatment. They specialize in software as a medical device that detects unsafe modes during mechanical lung ventilation with AI algorithms, offering critical insights to optimize treatment and improve patient outcomes. The startup joined YES!Delft accelerator program in 2023 October. The potential of Deep Breaths technology is considerable. With up to 20 million people requiring ICU admission annually and 40-50% of them needing mechanical ventilation annually, the need for optimized lung ventilation support is critical. By providing timely and precise adjustments to ventilator settings, Deep Breath can ICU stays by up to 20% on average, increasing hospital capacity and easing the load on medical staff. Traditionally, managing mechanical ventilation in ICUs has been a complex and labour-intensive. This increases the risk of errors and places a heavy burden on medical staff. Deep breath recognized these challenges during Covid-19 and set out to develop an intelligent"
+      "excerpt": "YES!Delft gives deeptech startups structured access to network, knowledge, talent, markets, capital, and facilities."
     },
     {
-      "id": "check-page-92b2cf6214",
-      "url": "https://yesdelft.com/news/fiducial-secures-e2m-seed-investment-to-advance-autonomous-drone-technology/",
+      "id": "check-page-59d75eb3db",
+      "url": "https://yesdelft.com/faq/",
       "page": "terms",
-      "excerpt": "Fiducial Secures €2M+ Seed Investment to Advance Autonomous Drone Technology | YES!Delft YES!Delft Search Menu Latest Fiducial secures €2M+ seed investment to advance autonomous drone technology Published April 30th, 2026 Fiducial, a dual-use technology company developing advanced computer vision software for autonomous drone operations, has announced the successful closing of a seed funding round exceeding €2 million. The round was led by Graduate Ventures and supported by SecFund, with additional debt financing provided by Rabobank . Addressing complex operational environments Fiducial focuses on enabling drones to operate autonomously in challenging and high-pressure environments. Its software allows aerial systems to navigate and respond effectively where conventional GPS-based navigation or radar systems may be unreliable or ineffective. The company’s platform is designed to support both defence and civilian applications, including drone detection, infrastructure inspection, and security monitoring, reflecting growing demand for resilient autonomous systems across sectors. Strategic position in a growing market The investment comes at a time when Europe is accelerating efforts to strengthen defence capabilities while also expanding the use of autonomous technologies in civil infrastructure. Fiducial’s dual-use positioning places it at the intersection of these"
+      "excerpt": "This includes programs, workshops, and masterclasses; a network of 100+ mentors and experts and 300+ investors; recruitment support drawing on TU Delft and Erasmus University; corporate and public-sector market connections; and facilities such as offices, the Makerzone, and field labs on the TU Delft campus."
     },
     {
-      "id": "check-page-ed22835cc9",
-      "url": "https://yesdelft.com/news/liion-power-selected-for-european-investment-platform-invesdor/",
+      "id": "check-page-20276967a9",
+      "url": "https://yesdelft.com/faq/",
       "page": "terms",
-      "excerpt": "Liion Power selected for European investment platform Invesdor | YES!Delft YES!Delft Search Menu Latest Liion Power selected for European investment platform Invesdor Published November 27th, 2025 The greentech startup Liion Power was selected for Invesdor, the largest European platform for impact investments in startups Liion Power, founded by Jardo Stammeshaus, who was named ‘Most Innovative Student Entrepreneur of the Netherlands’ in 2021 during his physics studies for this idea, has been selected for Invesdor, the largest European platform for impact investments in startups, after a year of discussions. This marks an important step in Liion Power’s ambition to make smart charging technology widely available, not only for consumers but also, in the future, as AI-trained software integration for manufacturers of electronics and light electric vehicles. The first product from Liion Power is Leo, a device that extends the lifespan of users’ electronics by charging smarter. In 2024, Liion Power raised over 250,000 euros in pre-orders with Leo and won several international innovation awards, including the CES Las Vegas Innovation Award 2025 and the Postcode Lottery Green Challenge. The selection by Invesdor now opens the door to European investors, from professional funds to private individuals, who can participate in the company’s further growth under the same conditions. Leo,"
+      "excerpt": "Accelerator startups remain part of this ecosystem and receive support for at least 5 years."
     },
     {
-      "id": "check-page-0e2362d4ca",
-      "url": "https://yesdelft.com/news/lyla-receives-pre-seed-investment-from-graduate-entrepreneur/",
+      "id": "check-page-0b871cc486",
+      "url": "https://yesdelft.com/faq/",
       "page": "terms",
-      "excerpt": "LYLA receives pre-seed investment from Graduate Entrepreneur | YES!Delft YES!Delft Search Menu Latest LYLA receives pre-seed investment from Graduate Entrepreneur Published June 11th, 2025 Graduate Entrepreneur invested in LYLA, a medtech startup that helps curing cancer through transforming quality control (QC) of radiopharmaceuticals. We are pleased to announce that Graduate Entrepreneur invested in LYLA , a medtech startup that helps curing cancer through transforming quality control (QC) of radiopharmaceuticals. Radiopharmaceuticals are an emerging cancer treatment with high potential, but their widespread adoption is hindered by quality control. LYLA’s compact scanner streamlines the QC workflow of this next-generation cancer therapy, making it more accessible and reliable. ‍Radiopharmaceuticals offer a promising treatment for metastatic cancers, targeting cancer cells while sparing healthy tissue. However, current QC methods are inefficient, requiring a four-hour waiting period to measure isotope effectiveness, reducing treatment potency. This delay complicates scheduling and limits flexibility. Additionally, existing QC technologies are unsuitable for newer therapies like Target Alpha Therapy (TAT), leading to unreliable results. ‍To overcome these challenges, LYLA is developing a compact, automated scanner that radically simplifies and accelerates QC for"
+      "excerpt": "In one sentence, what does YES!Delft do?"
     },
     {
-      "id": "check-page-6fca2cdf8a",
-      "url": "https://yesdelft.com/news/merqato-has-secured-an-investment-from-smarter-ventures/",
+      "id": "check-page-b9e196f18d",
+      "url": "https://yesdelft.com/faq/",
       "page": "terms",
-      "excerpt": "Merqato has secured an investment from Smarter Ventures | YES!Delft YES!Delft Search Menu Latest Merqato has secured an investment from Smarter Ventures Published October 4th, 2024 Merqato is excited to announce an investment from Smarter Ventures, marking a key milestone in the company's growth. This partnership will drive Merqato’s mission to help fruit and vegetable businesses across Europe reduce costs and minimize food waste. With a strong presence in the Netherlands, Germany, Spain, the UK, Italy, and Peru, Merqato looks forward to continued innovation and collaboration with trusted partners. About Merqato Merqato is an AI-powered platform with all the software, data, and resources you need to optimize your operational planning. Merqato’s connected platform enables you to grow your business faster by improving the accuracy and process of matching supply and demand. The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards. They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor. Jesse van der Linden Co-Founder at Fluxthor The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company. Ernst van der Wal Founder at"
+      "excerpt": "YES!Delft transforms scientific breakthroughs into globally scalable deeptech companies."
     },
     {
-      "id": "check-page-ab371e392a",
-      "url": "https://yesdelft.com/news/nextdriver-receives-logistics-investment-to-scale-data-driven-driver-coaching-platform/",
+      "id": "check-page-ce5fe28470",
+      "url": "https://yesdelft.com/faq/",
       "page": "terms",
-      "excerpt": "NEXTdriver Receives Logistics Investment to Scale Data-Driven Driver Coaching Platform | YES!Delft YES!Delft Search Menu Latest NEXTdriver receives logistics investment to scale data-driven driver coaching platform Published February 20th, 2025 NEXTdriver, the leading platform for coaching and supporting professional drivers and delivery personnel, has received a strategic investment from several logistics companies. This capital injection will support the further growth of the platform. NEXTdriver differentiates itself by combining data-driven coaching with a personalized approach for drivers. The platform allows coaches to efficiently support over 100 drivers daily. It integrates seamlessly with various onboard computer systems and remains system-agnostic, enabling fair driver comparisons. This data-driven approach helps drivers adopt safer and more sustainable driving behaviors—without requiring additional hardware. Measurable sustainability and cost savings On average, NEXTdriver customers reduce fuel consumption by nearly 4.5%, leading to an annual saving of around 1,150 liters per truck and a reduction of 3 tons of CO₂ emissions. This translates into direct fuel cost savings of over €1,500 per driver per year and a lower CO₂ tax burden for businesses. The more logistics companies promote the platform’s benefits among drivers and within their organizations, the greater"
+      "excerpt": "What is the difference between an incubator and an accelerator?"
     },
     {
-      "id": "check-page-c104da8cd6",
-      "url": "https://yesdelft.com/news/nurtio-technologies-investment-round-is-open/",
+      "id": "check-page-4e71132e7e",
+      "url": "https://yesdelft.com/faq/",
       "page": "terms",
-      "excerpt": "Nurtio Technologies: investment round is open! | YES!Delft YES!Delft Search Menu Latest Nurtio Technologies: Investment Round is Open! Published November 27th, 2023 Nurtio Technologies is opening an investment round. The round is open to both institutional investors with a minimal ticket of 500K, and individual investors via a CLA with a ticket as small as 50K. With their products, Nurtio Technologies is reinventing the whole commercial plantscaping industry (or, to put it simply: the companies that take care of the plants in commercial real estate), which is a very steadily growing yet often overlooked market. One of the products of the company, Nurtio Insight, is the software technology to digitalize the field operations of plantscaping companies, save them a lot of time (and cost) that goes into admin tasks, and bring transparency to their cost structure. The second product of the company is Nurtio Protect, a connected plant care technology that allows plantscaping companies to remotely monitor their most valuable plant assets (specimen trees, winter gardens, living walls) and take action before it’s too late. Finally, the third product that the company is currently making is Nurtio Assist, another connected technology that leverages plant data to dramatically reduce the number of service visits required and eventually make indoor plants more affordable and more available"
+      "excerpt": "An incubator supports very early-stage startups as they shape and validate an idea over a flexible timeline, while an accelerator helps a more mature startup with a working product scale up through a fixed-term, structured program."
     },
     {
-      "id": "check-page-ee0e321380",
-      "url": "https://yesdelft.com/news/perciv-ai-secures-e2-5m-seed-investment/",
+      "id": "check-page-4096044ac3",
+      "url": "https://yesdelft.com/faq/",
       "page": "terms",
-      "excerpt": "Perciv AI Secures €2.5M Seed Investment | YES!Delft YES!Delft Search Menu Latest Perciv AI Secures €2.5M Seed Investment Published December 12th, 2024 Perciv AI has raised a €2.5 million seed round led by DayOne Capital and Keen Venture Partners, joined by Vinci Venture Capital, to deliver AI-driven radar perception software for autonomous systems across various industries. Perciv AI, a deep-tech startup pioneering dedicated AI for radar perception, has secured €2.5 million in a seed funding round led by DayOne Capital and Keen Venture Partners, joined by Vinci Venture Capital. The investment supports Perciv AI’s mission to democratize autonomous technology by making perception safe, reliable, and affordable. Already in production with select partners, Perciv AI will use the funding to expand its operations further and scale its radar-based perception solutions across various industries such as automotive, robotics, and aerospace. Automation in these industries is costly due to expensive LiDAR sensors, or technically challenging due to limitations of traditional radar perception. Perciv AI addresses these challenges by delivering LiDAR-like performance at a fraction of the cost through next-generation AI-driven radar and radar-camera fusion technology. This approach enables automated systems, robots, and vehicles to perceive their environment reliably under any conditions,"
+      "excerpt": "YES!Delft does both: the 10-week Validation Program acts as the incubator stage for founders still testing their idea, and the 3-month Accelerator is the structured scale-up program for startups that already have a prototype and early traction."
+    },
+    {
+      "id": "check-page-cd0bcedb7a",
+      "url": "https://yesdelft.com/faq/",
+      "page": "terms",
+      "excerpt": "Is YES!Delft an incubator or an accelerator?"
+    },
+    {
+      "id": "check-page-7b262fdbc1",
+      "url": "https://yesdelft.com/startups/faqtory/",
+      "page": "terms",
+      "excerpt": "FAQtory | YES!Delft YES!Delft Search Menu Our startups Startup FAQtory Founders Martijn Vogten Founded in 2009 Sectors ICT, Software & Cloud Services Introduction FAQtory offers a cost-effective and efficient communication solution to companies that need to handle many questions from their customers. By using open source libraries and open standards FAQtory creates user friendly and scalable software. FAQtory links management of incoming e-mail to a dynamic FAQ page on the customer’s website. By providing answers directly on the website organisations can dramatically cut the cost of their customer support. FAQtory leverages the increasing quality of open source technologies and components available on the web today to deliver applications at lower cost with maximum performance and scalability. Visit website Latest news More latest news Strong comeback for Hardt Hyperloop with multi-million euro investment Unfiltered feedback, big ambitions, and a Silicon Valley mindset: Wibe Wagemans at YES!Delft We are looking for a Program Coordinator More latest news See also All startups Join YES!Delft What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process. Jelle Tiemensma CTO at Smartship The YES!Delft Accelerator Program helped us"
+    },
+    {
+      "id": "check-page-7f85b9b11c",
+      "url": "https://yesdelft.com/startups/faqtory/",
+      "page": "terms",
+      "excerpt": "Jelle Tiemensma CTO at Smartship The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-54b75f5446",
+      "url": "https://yesdelft.com/startups/faqtory/",
+      "page": "terms",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-3fe194768b",
+      "url": "https://yesdelft.com/startups/faqtory/",
+      "page": "terms",
+      "excerpt": "Iskander Hannivoort Founder at Manukai The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-be4121686e",
+      "url": "https://yesdelft.com/startups/faqtory/",
+      "page": "terms",
+      "excerpt": "Maxim & Tristan Founders at Arkmon The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company."
+    },
+    {
+      "id": "check-page-9208e2c490",
+      "url": "https://yesdelft.com/startups/faqtory/",
+      "page": "terms",
+      "excerpt": "Ernst van der Wal Founder at Lyla The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-16f463f4a8",
+      "url": "https://yesdelft.com/startups/faqtory/",
+      "page": "terms",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-fbf5fff38d",
+      "url": "https://yesdelft.com/startups/faqtory/",
+      "page": "terms",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-070c97a322",
+      "url": "https://yesdelft.com/startups/faqtory/",
+      "page": "terms",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-dcc635fdfc",
+      "url": "https://yesdelft.com/startups/faqtory/",
+      "page": "terms",
+      "excerpt": "Jesse van der Linden Co-Founder at Fluxthor YES!Delft is one of the leading tech incubators in Europe where startups with promising ideas grow into successful companies."
+    },
+    {
+      "id": "check-page-e3bf26b2ee",
+      "url": "https://yesdelft.com/about/",
+      "page": "details",
+      "excerpt": "About YES!Delft | YES!Delft YES!Delft Search Menu About YES!Delft A leading European deeptech incubator and accelerator, connecting science, entrepreneurship, investors and industry to create the companies of tomorrow. Team We provide tailored services with an extensive ecosystem to our startups, without taking equity. Ecosystem Together with our shareholders TU Delft, Municipality of Delft and the Erasmus University and many partners, investors, mentors, municipalities and other incubators and accelerators we are an ecosystem. Located at the TU Delft Campus in Delft, the technology hub in the South of Holland. TU Delft Campus is the international breeding ground for radical innovations, shaping the future of Robotics, AI, Quantum, MedTech and Energy Transition. Join the ecosystem Meet our team YES!Delft team is made of entrepreneurs, innovators and tech enthusiasts. We know how it is to run a company because many of us have started one in the past. Our team is dedicated to sharing their knowledge, connecting you to the right people and organisations and bringing value to the entrepreneurs that enter the incubator. Ras Lalmy Managing Director Mail Linkedin Nannila Zevenhuizen Head of Brand and Projects Mail Linkedin Freek Smoes Head of Incubator Mail Linkedin Moshe Sijben Head of Strategic Partnerships Mail Linkedin Jan Geert van Hall Investment Director Mail Linkedin Amber"
+    },
+    {
+      "id": "check-page-3f3a2452f0",
+      "url": "https://yesdelft.com/about/",
+      "page": "details",
+      "excerpt": "Lucas van Vliet Chairman Dean of the Faculty of Electrical Engineering, Mathematics and Computer Science, TU Delft Ir."
+    },
+    {
+      "id": "check-page-367fce63f4",
+      "url": "https://yesdelft.com/about/",
+      "page": "details",
+      "excerpt": "Eline van Beest Medtech & Biotech Entrepreneur, Investor & Boardmember Ir."
+    },
+    {
+      "id": "check-page-40172325ed",
+      "url": "https://yesdelft.com/about/",
+      "page": "details",
+      "excerpt": "Maaike Zwart Alderman for Sustainability, Work & Income and Economy at Municipality Delft Peter Goedvolk Entrepreneur, Founder & Investor at First Dutch Dr."
+    },
+    {
+      "id": "check-page-5d6688abc1",
+      "url": "https://yesdelft.com/about/",
+      "page": "details",
+      "excerpt": "Joris Meijaard Lecturer at Department of Strategic Management and Entrepreneurship, Rotterdam School of Management (RSM) and Erasmus University Rotterdam Board member details Close Board Member Name Board Member Function Job title of this member LinkedIn Offices & makerspace If you are interested in renting an office in the YES!Delft building, please reach out to TDVG ."
+    },
+    {
+      "id": "check-page-dd73a06fd8",
+      "url": "https://yesdelft.com/about/",
+      "page": "details",
+      "excerpt": "Startups that have participated in the YES!Delft programs get priority when renting an office in the building."
+    },
+    {
+      "id": "check-page-926030b1ab",
+      "url": "https://yesdelft.com/about/",
+      "page": "details",
+      "excerpt": "See also Visit us Incubator & accelerator Contact us The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-cd2be8bd31",
+      "url": "https://yesdelft.com/about/",
+      "page": "details",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-4b3ed0003b",
+      "url": "https://yesdelft.com/about/",
+      "page": "details",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-eb391dec4b",
+      "url": "https://yesdelft.com/about/",
+      "page": "details",
+      "excerpt": "Iskander Hannivoort Founder at Manukai The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-f6c67c0da5",
+      "url": "https://yesdelft.com/about/",
+      "page": "details",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-da31bda79f",
+      "url": "https://yesdelft.com/about/",
+      "page": "details",
+      "excerpt": "Jesse van der Linden Co-Founder at Fluxthor What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-a8e7c733c5",
+      "url": "https://yesdelft.com/about/",
+      "page": "details",
+      "excerpt": "Jelle Tiemensma CTO at Smartship The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-25ebe9b82c",
+      "url": "https://yesdelft.com/about/mentors/",
+      "page": "details",
+      "excerpt": "YES!Delft | Tech Startup Incubator YES!Delft Search Menu Building tomorrow’s leading deeptech firms Turning breakthrough technologies into global companies. Apply YES!Delft transforms scientific breakthroughs into globally scalable deeptech companies. About YES!Delft 600+ 600+ Startups More than 600 startups supported already, and counting. 82% 82% Still in business Most of the accelerated startups are still in business or acquired. >€1B >€1B Capital More than one billion euros raised by our startups. Latest news More news Strong comeback for Hardt Hyperloop with multi-million euro investment Unfiltered feedback, big ambitions, and a Silicon Valley mindset: Wibe Wagemans at YES!Delft We are looking for a Program Coordinator More news Startups Tech startups thrive at the YES!Delft incubator. QPhoton Elephate.ai VYTL Elarix Labs Flexous Voyc Exo-L Pelagen Laevo Partners with Sun Diwama Acoustic Insight Ocean Protocol RESONIKS Ubiqu We got your back Our experienced mentors offer you their expert support throughout your entire startup journey. Geert van Kuyck Paul de Backker David Cerda Salzmann Pavel Cholakov Wanda Stevens Simon van der Jagt Francesca Devrient Josefien Groot Jan Willem Deutekom Charles de Monchy Ian Wachters Haiyan Che Engbert Wilmink Jin Han Incubator & accelerator Validate your startup idea. Accelerate growth. Become a successful tech company. Validate Validate"
+    },
+    {
+      "id": "check-page-2e90be2061",
+      "url": "https://yesdelft.com/about/mentors/",
+      "page": "details",
+      "excerpt": "The accelerator strengthens your startup’s foundation and connects you to a large network, without taking equity."
+    },
+    {
+      "id": "check-page-011c824200",
+      "url": "https://yesdelft.com/about/mentors/",
+      "page": "details",
+      "excerpt": "Van Gelder Tenzing Alpha Erasmus Enterprise Gemeente Rotterdam Drechtsteden Siemens Gemeente Lansingerland HortiScience Innovation Center Berytech Infinite Ondernemersfonds Delft UbiOps Rotterdam Square Politie IDE+ Group The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-4fbb0f22c7",
+      "url": "https://yesdelft.com/about/mentors/",
+      "page": "details",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-5cceb5071b",
+      "url": "https://yesdelft.com/about/mentors/",
+      "page": "details",
+      "excerpt": "Jelle Tiemensma CTO at Smartship The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-bf9cb78757",
+      "url": "https://yesdelft.com/about/mentors/",
+      "page": "details",
+      "excerpt": "Maxim & Tristan Founders at Arkmon The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-94886ea7e6",
+      "url": "https://yesdelft.com/about/mentors/",
+      "page": "details",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-c3ba0a1d3d",
+      "url": "https://yesdelft.com/about/mentors/",
+      "page": "details",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-0d74117e5b",
+      "url": "https://yesdelft.com/about/mentors/",
+      "page": "details",
+      "excerpt": "Jesse van der Linden Co-Founder at Fluxthor The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-08d3817dda",
+      "url": "https://yesdelft.com/about/mentors/",
+      "page": "details",
+      "excerpt": "Iskander Hannivoort Founder at Manukai The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company."
+    },
+    {
+      "id": "check-page-5e37322c49",
+      "url": "https://yesdelft.com/about/mentors/",
+      "page": "details",
+      "excerpt": "Ernst van der Wal Founder at Lyla The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-0d3cece4eb",
+      "url": "https://yesdelft.com/about/mentors/",
+      "page": "details",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs YES!Delft is one of the leading tech incubators in Europe where startups with promising ideas grow into successful companies."
+    },
+    {
+      "id": "check-page-4896224d92",
+      "url": "https://yesdelft.com/about/online-info-session/",
+      "page": "details",
+      "excerpt": "Online info session | YES!Delft YES!Delft Search Menu About Online info session Upcoming sessions During an online info session we’ll tell you about YES!Delft, what it’s like at our incubator and answer all your questions in just an hour. Our online info session is a recurring online meeting, accessible to anyone interested in joining our incubator. You will get a taste of what it’s like at YES!Delft and be able to ask all your questions which we will be happy to answer. Participation is free, but we do ask you to register in advance. Upcoming sessions Thursday 26th of November Final registration date: 25 November Thursday 17th of December Final registration date: 16 December Virtual tour Virtual tour Can't wait to see more? Watch this short video to get a quick impression instantly of what it’s like being a startup at our tech incubator and part of our vibrant and innovative community. See also FAQ About us Upcoming events The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards. They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor. Jesse van der Linden Co-Founder at Fluxthor The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-05b414bad6",
+      "url": "https://yesdelft.com/about/online-info-session/",
+      "page": "details",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-81d3e98b30",
+      "url": "https://yesdelft.com/about/online-info-session/",
+      "page": "details",
+      "excerpt": "Jelle Tiemensma CTO at Smartship The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-965ef2162d",
+      "url": "https://yesdelft.com/about/online-info-session/",
+      "page": "details",
+      "excerpt": "Iskander Hannivoort Founder at Manukai The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-87a309321f",
+      "url": "https://yesdelft.com/about/online-info-session/",
+      "page": "details",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-d656ec884f",
+      "url": "https://yesdelft.com/about/online-info-session/",
+      "page": "details",
+      "excerpt": "Maxim & Tristan Founders at Arkmon The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-ee8765618e",
+      "url": "https://yesdelft.com/about/online-info-session/",
+      "page": "details",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company."
+    },
+    {
+      "id": "check-page-95a45efa13",
+      "url": "https://yesdelft.com/about/online-info-session/",
+      "page": "details",
+      "excerpt": "Ernst van der Wal Founder at Lyla YES!Delft is one of the leading tech incubators in Europe where startups with promising ideas grow into successful companies."
+    },
+    {
+      "id": "check-page-c79fd1165a",
+      "url": "https://yesdelft.com/about/work-at-yesdelft/",
+      "page": "details",
+      "excerpt": "Work at YES!Delft - Join our Team, Find Vacancies | YES!Delft YES!Delft Search Menu About Welcome to YES!Delft Do you want to work in a vibrant startup ecosystem? Vacancies Contact us We offer a dynamic work environment with entrepreneurs, partners, inspiring events, and a preview in the technology of tomorrow. Here at YES!Delft, we are passionate about creating an environment that fosters growth, creativity, and collaboration. We know you will play an integral role in bringing this vision to life. We are confident that you will thrive in this dynamic and challenging work environment, and we can’t wait to see what great things we can achieve together. Ready to work at YES!Delft? Find our job openings on this page. Our mission We believe in the impact tech companies can have. Through innovation, they provide a crucial contribution to our society and economy. Our services turn promising ideas and teams into solid tech startups and help them grow into successful companies. By connecting our unique startup programs & services with our regional ecosystem of experts, mentors, partners, and investors, we help build tomorrow’s leading tech firms . Vacancies Program coordinator Open application Work for a startup? If you are looking to work for one of our startups, go to jobs at startups. Our core values These are the values we stand for. Accelerate together Through teamwork we focus"
+    },
+    {
+      "id": "check-page-0e4016fcc4",
+      "url": "https://yesdelft.com/about/work-at-yesdelft/",
+      "page": "details",
+      "excerpt": "See also Locations Jobs at startups Become a startup The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-6860593a6f",
+      "url": "https://yesdelft.com/about/work-at-yesdelft/",
+      "page": "details",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-ee0a91db60",
+      "url": "https://yesdelft.com/about/work-at-yesdelft/",
+      "page": "details",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-5ca564a477",
+      "url": "https://yesdelft.com/about/work-at-yesdelft/",
+      "page": "details",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-a6dc8fe87d",
+      "url": "https://yesdelft.com/about/work-at-yesdelft/",
+      "page": "details",
+      "excerpt": "Jesse van der Linden Co-Founder at Fluxthor The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-d1fd441eb3",
+      "url": "https://yesdelft.com/about/work-at-yesdelft/",
+      "page": "details",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-dd740fdcc4",
+      "url": "https://yesdelft.com/about/work-at-yesdelft/",
+      "page": "details",
+      "excerpt": "Jelle Tiemensma CTO at Smartship The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company."
+    },
+    {
+      "id": "check-page-9f81079f85",
+      "url": "https://yesdelft.com/about/work-at-yesdelft/",
+      "page": "details",
+      "excerpt": "Ernst van der Wal Founder at Lyla The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-b57c598f17",
+      "url": "https://yesdelft.com/about/work-at-yesdelft/",
+      "page": "details",
+      "excerpt": "Iskander Hannivoort Founder at Manukai The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-bc7c24211f",
+      "url": "https://yesdelft.com/about/work-at-yesdelft/",
+      "page": "details",
+      "excerpt": "Maxim & Tristan Founders at Arkmon YES!Delft is one of the leading tech incubators in Europe where startups with promising ideas grow into successful companies."
+    },
+    {
+      "id": "check-page-c279d4544c",
+      "url": "https://yesdelft.com/incubator-programs/",
+      "page": "details",
+      "excerpt": "Incubator & Programs for Startups | YES!Delft YES!Delft Search Menu Incubator & accelerator Sign up to get the support you need to succeed as a startup. Sign up Online info session Validate your startup idea. Accelerate your growth. Become a successful tech company with support of an extensive expert ecosystem. Validate Every journey begins with a first step. If you still need to build your team or validate your idea, this program is for you. Validation Program Test your idea, start your business A 10-week part-time program to find your problem-solution fit, talk to potential customers, validate your assumptions and understand what it takes to run your business. Read more Accelerate You started your business with a committed team and a solid idea. You're ready to join our extensive ecosystem. Accelerator Accelerate traction in the market The Accelerator offers tailored workshops, masterclasses and 1-on-1 expert sessions. After completing the program you are and will remain part of the YES!Delft ecosystem and we support you for a period of at least 5 years. Read more Deep-dive Expert tracks alongside our programs. Sector-focused deep-dives Targeted, sector focused support on top of our validation and accelerator programs Read more Info session Get a taste of what it is like at the tech incubator and ask all your questions in just an hour. Online info session About YES!Delft At"
+    },
+    {
+      "id": "check-page-72aa153b21",
+      "url": "https://yesdelft.com/incubator-programs/",
+      "page": "details",
+      "excerpt": "Online info session About YES!Delft At YES!Delft we help make a positive impact on the world through entrepreneurship, our extensive startup ecosystem and our set of services."
+    },
+    {
+      "id": "check-page-577f383a99",
+      "url": "https://yesdelft.com/incubator-programs/",
+      "page": "details",
+      "excerpt": "Startups can apply to join our incubator when they think they are ready."
+    },
+    {
+      "id": "check-page-8caba9fa22",
+      "url": "https://yesdelft.com/incubator-programs/",
+      "page": "details",
+      "excerpt": "To join as a startup means participating in our Accelerator , after which the startup will become part of the YES!Delft ecosystem, and we will continue to support you for at least 5 years."
+    },
+    {
+      "id": "check-page-4d3d90703d",
+      "url": "https://yesdelft.com/incubator-programs/",
+      "page": "details",
+      "excerpt": "Sign up for one of our programs What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-75a5b39a69",
+      "url": "https://yesdelft.com/incubator-programs/",
+      "page": "details",
+      "excerpt": "Jelle Tiemensma CTO at Smartship The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-827629053e",
+      "url": "https://yesdelft.com/incubator-programs/",
+      "page": "details",
+      "excerpt": "Maxim & Tristan Founders at Arkmon The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-d8875f19f6",
+      "url": "https://yesdelft.com/incubator-programs/",
+      "page": "details",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-c02ac0c622",
+      "url": "https://yesdelft.com/incubator-programs/",
+      "page": "details",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-33d02d9a31",
+      "url": "https://yesdelft.com/incubator-programs/",
+      "page": "details",
+      "excerpt": "Iskander Hannivoort Founder at Manukai The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company."
+    },
+    {
+      "id": "check-page-38eb0d8118",
+      "url": "https://yesdelft.com/incubator-programs/",
+      "page": "details",
+      "excerpt": "Ernst van der Wal Founder at Lyla The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-b1a6f9b1b1",
+      "url": "https://yesdelft.com/incubator-programs/",
+      "page": "details",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-fb5c243a1f",
+      "url": "https://yesdelft.com/incubator-programs/",
+      "page": "details",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-825e765711",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "page": "details",
+      "excerpt": "Accelerator Program | YES!Delft YES!Delft Search Menu Incubator & accelerator Accelerator Strengthen the foundation of your startup and accelerate your traction in the market. Apply Talk to a startup scout You have founded a tech startup, built a prototype or MVP and have some initial traction in the market. Now it’s time to strengthen the foundation and accelerate traction. We help you to focus on the essential steps to build a company with a scalable, profitable, and repeatable business model. As a YES!Delft startup, you will have check-ins with experienced serial entrepreneurs and ongoing (at least 5 years) access to our support and access to our ecosystem of mentors, experts, corporate and service partners, investors, and fellow entrepreneurs. In the Accelerator you will get access to funding , talent , market and facilities . Timeline The Accelerator takes place two times every year. Please note that registration is possible throughout the year. Prior to the program you can count on our \"pre-program support\". Application deadline 01 Mar 2027 Start date 07 Apr 2027 End date 25 Jun 2027 Summary The Accelerator is a three-month program followed by at least five years of support - it will strengthen the foundation of your startup and accelerate traction in the market. The participation fee is €3,500 excl. VAT per team and a success fee of €25k triggered at €1 million in"
+    },
+    {
+      "id": "check-page-ee58b740c9",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "page": "details",
+      "excerpt": "The Accelerator takes 3-months including 5 years support."
+    },
+    {
+      "id": "check-page-498aa55049",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "page": "details",
+      "excerpt": "Hardware and digital startups with a committed founding team that has a validated problem-solution fit, built a working prototype or MVP, has some traction in the market, and the potential to scale."
+    },
+    {
+      "id": "check-page-d477f4becf",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "page": "details",
+      "excerpt": "Info session Get a taste of what it is like at the tech incubator and ask all your questions in just an hour."
+    },
+    {
+      "id": "check-page-b8c3152141",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "page": "details",
+      "excerpt": "Online info session See also Startup support The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-c763bd58b5",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "page": "details",
+      "excerpt": "Iskander Hannivoort Founder at Manukai What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-b312a67aa4",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "page": "details",
+      "excerpt": "Jelle Tiemensma CTO at Smartship The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company."
+    },
+    {
+      "id": "check-page-122bb9448a",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "page": "details",
+      "excerpt": "Ernst van der Wal Founder at Lyla The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-5e65200d26",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "page": "details",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-3dfadb3306",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "page": "details",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-d68423b4fc",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "page": "details",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-f48322d26c",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "page": "details",
+      "excerpt": "Jesse van der Linden Co-Founder at Fluxthor The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-0966843c98",
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "page": "details",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-3b16ea3a09",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/",
+      "page": "details",
+      "excerpt": "Join a session to find your future co-founder and build a startup | YES!Delft YES!Delft Search Menu Incubator & accelerator Meet your co-founder Meet your co-founder is a live matchmaking event to find a promising tech start-up to join or to find a co-founder that can strengthen your tech company. Sign up Upcoming sessions A free, half-day session on teamwork at YES!Delft, where we challenge you to network with fellow entrepreneurs. During the meet your co-founder, you will get the opportunity to either pitch your tech start-up or present yourself to potentially find a talent match. A s a single founder, founding team, or entrepreneurial-minded person, you’ll get the tools and connections to find that new member of your dream team to help you reach the top! For who? Everyone who wants to be a founder of a startup. Ready to start within 6 months. A business idea is not required. Participation is free, but registration is necessary as we will select participants based on the best potential matches. The Session Insights in teamwork. Get the tools, knowledge and connections to find your co-founder or team member. Find out why it is so hard to begin your startup journey. Introduction and a sneak peek into YES!Delft’s services and programs. Meet your co-founder video Watch the video to get an impression of the event. Upcoming Meet your co-founder session Tuesday 8th of December"
+    },
+    {
+      "id": "check-page-2c7b4a75f4",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/",
+      "page": "details",
+      "excerpt": "Upcoming Meet your co-founder session Tuesday 8th of December Final registration date: 30 November See also Startup support The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-e2af436b4d",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/",
+      "page": "details",
+      "excerpt": "Maxim & Tristan Founders at Arkmon The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-f66424be12",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/",
+      "page": "details",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-43704cacd7",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/",
+      "page": "details",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-6471068e83",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/",
+      "page": "details",
+      "excerpt": "Iskander Hannivoort Founder at Manukai The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-cf1b6f7622",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/",
+      "page": "details",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-31e3885363",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/",
+      "page": "details",
+      "excerpt": "Jesse van der Linden Co-Founder at Fluxthor The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-4528644fa3",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/",
+      "page": "details",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-807200b827",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/",
+      "page": "details",
+      "excerpt": "Jelle Tiemensma CTO at Smartship The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company."
+    },
+    {
+      "id": "check-page-8a022abb61",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/",
+      "page": "details",
+      "excerpt": "Ernst van der Wal Founder at Lyla YES!Delft is one of the leading tech incubators in Europe where startups with promising ideas grow into successful companies."
+    },
+    {
+      "id": "check-page-0c22634add",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+      "page": "details",
+      "excerpt": "Meet your co-founder | YES!Delft YES!Delft Search Menu Upcoming events Meet your co-founder Dec 8th Meet your co-founder is a live matchmaking event to find a promising tech startup to join or to find a co-founder who can strengthen your tech company. 13:30 - 17:00 Tuesday 8th of December Meet your co-founder is organised by the team of YES!Delft together with Erasmus Enterprise. This edition will take place at the Erasmus University campus in Rotterdam (exact location will folllow) During the Meet your co-founder, you’ll have the opportunity to either pitch your tech startup or present yourself to potentially find a talent match. Whether you are a single founder, part of a founding team, or an entrepreneurial-minded individual, you’ll gain the tools and connections necessary to find a co-founder for your startup. For who? Everyone who wants to be a founder of a tech startup. Ready to start within 6 months. A business idea is not required. Participation is free, but registration is necessary. We will select participants based on the best potential matches and a fit with YES!Delft. At YES!Delft, we focus on startups that are driven by technological innovation, particularly in hardware and deep tech. This includes areas like robotics, medical technology, aerospace, artificial intelligence, and sustainable energy solutions. While software and platforms can qualify, they should be"
+    },
+    {
+      "id": "check-page-d684cc080d",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+      "page": "details",
+      "excerpt": "If your idea is mainly a marketplace, agency, or standard SaaS tool without a clear technological edge, you probably don’t fit."
+    },
+    {
+      "id": "check-page-0bb268e926",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+      "page": "details",
+      "excerpt": "Introduction and a sneak peek into YES!Delft’s services and programs."
+    },
+    {
+      "id": "check-page-175ed64c5b",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+      "page": "details",
+      "excerpt": "Where At Erasmus University in Rotterdam When 8 December 2026 13:30 - 17:00 More sessions This edition is in collaboration with Erasmus Enterprise Final registration date 30 November 2026 Cost Free of charge See also More events The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-dfcae95de1",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+      "page": "details",
+      "excerpt": "Maxim & Tristan Founders at Arkmon The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-75cb28ba5f",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+      "page": "details",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-4e6750bd3f",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+      "page": "details",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-22b4c80772",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+      "page": "details",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-99cd9f9efb",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+      "page": "details",
+      "excerpt": "Iskander Hannivoort Founder at Manukai The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-77fef618a5",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+      "page": "details",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-dd3e32a6da",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+      "page": "details",
+      "excerpt": "Jesse van der Linden Co-Founder at Fluxthor The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company."
+    },
+    {
+      "id": "check-page-a1b7af89c9",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+      "page": "details",
+      "excerpt": "Ernst van der Wal Founder at Lyla What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-9434bd84b5",
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+      "page": "details",
+      "excerpt": "Jelle Tiemensma CTO at Smartship YES!Delft is one of the leading tech incubators in Europe where startups with promising ideas grow into successful companies."
+    },
+    {
+      "id": "check-page-f837ab2a3b",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "page": "details",
+      "excerpt": "Validation Program | YES!Delft YES!Delft Search Menu Incubator & accelerator Validation Program You have a clear business idea and technology, now it’s time to validate your idea and find your market. Apply Talk to a startup scout Whether you are validating a research-driven idea, building toward your first paying customers, or preparing for your first funding round, the YES!Delft Incubator gives you the framework, network, and mentorship to get there. A 10-week, part-time program for early-stage technology startups working toward problem–solution fit . Teams test assumptions through customer interviews, refine their target market and value proposition, and receive coaching on topics including business models, legal/IP, funding, team development and pitching. The Validation Program is open for complex hardware and digital startups. We help first time founders and experienced entrepreneurs that are looking to find the right customers and market and want to benefit from the mentors and experts in our ecosystem. The application process consists of an online submission, review by a startup scout, an intake conversation, a pitch-deck assignment and, for shortlisted teams, a Selection Day jury pitch. Timeline The Validation Program takes place 3 times per year. The timeline below is for the upcoming program. Please note that registration is open all year and processed on a"
+    },
+    {
+      "id": "check-page-55e76d3544",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "page": "details",
+      "excerpt": "You will acquire the right skills, receive an extensive toolset and get support from our ecosystem of mentors, experts, investors and corporate partners."
+    },
+    {
+      "id": "check-page-f463cc33de",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "page": "details",
+      "excerpt": "Info session Get a taste of what it is like at the tech incubator and ask all your questions in just an hour."
+    },
+    {
+      "id": "check-page-f55a80f330",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "page": "details",
+      "excerpt": "Online info session See also Startup support The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-d3a9e62f60",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "page": "details",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-a851e34a14",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "page": "details",
+      "excerpt": "Maxim & Tristan Founders at Arkmon The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-d8c4a6611e",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "page": "details",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-ea0a982eac",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "page": "details",
+      "excerpt": "Iskander Hannivoort Founder at Manukai The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-4abe64df0c",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "page": "details",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-d1e2390ad3",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "page": "details",
+      "excerpt": "Jesse van der Linden Co-Founder at Fluxthor What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-e9d00fc27b",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "page": "details",
+      "excerpt": "Jelle Tiemensma CTO at Smartship The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-fe2b363427",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "page": "details",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company."
+    },
+    {
+      "id": "check-page-c8fcfcf58d",
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "page": "details",
+      "excerpt": "Ernst van der Wal Founder at Lyla YES!Delft is one of the leading tech incubators in Europe where startups with promising ideas grow into successful companies."
+    },
+    {
+      "id": "check-page-3753d2d06b",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/",
+      "page": "details",
+      "excerpt": "Vertical Deep dives | YES!Delft YES!Delft Search Menu Incubator & accelerator Vertical Deep Dives On top of the general validation program or accelerator, we offer vertical deep dive modules to get access to deeper, more relevant support and networks. Focusing on your sector specifically, you gain access to specialized knowledge, experience, and a network that truly understands your market. Focus on your business Validation and accelerator vertical deep dives, specifically designed for your sector, to provide you with truly relevant support. Maritime Are you a startup developing maritime technology and looking to validate your idea or accelerate your traction in the market? Read more Dual-Use Aerospace Are you a startup developing dual-use aerospace technology and looking to scale your business? Read more Circular Are you a startup developing circular technology and looking to validate your idea? Read more MedTech Are you a startup developing MedTech technology looking to accelerate your business and get traction in the market? Read more Cybersecurity Are you a startup developing cyber security technology and looking to validate your idea or accelerate your traction in the market? Read more Energy Are you a startup in the energy sector looking to accelerate your business? Read more Horticulture Are you a startup in the horti sector and looking to accelerate your business? Read"
+    },
+    {
+      "id": "check-page-9fa1212831",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/",
+      "page": "details",
+      "excerpt": "Read more The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-85f900353b",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/",
+      "page": "details",
+      "excerpt": "Maxim & Tristan Founders at Arkmon What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-63ff54073d",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/",
+      "page": "details",
+      "excerpt": "Jelle Tiemensma CTO at Smartship The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-98c5ab48c6",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/",
+      "page": "details",
+      "excerpt": "Iskander Hannivoort Founder at Manukai The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-29a9cd277c",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/",
+      "page": "details",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company."
+    },
+    {
+      "id": "check-page-19cd1c667e",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/",
+      "page": "details",
+      "excerpt": "Ernst van der Wal Founder at Lyla The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-348ed35148",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/",
+      "page": "details",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-1b97aad9f9",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/",
+      "page": "details",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-5619e66897",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/",
+      "page": "details",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-641b048e26",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/",
+      "page": "details",
+      "excerpt": "Jesse van der Linden Co-Founder at Fluxthor YES!Delft is one of the leading tech incubators in Europe where startups with promising ideas grow into successful companies."
+    },
+    {
+      "id": "check-page-22c7f06f12",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/circular-technology/",
+      "page": "details",
+      "excerpt": "Circular technology | YES!Delft YES!Delft Search Menu Vertical Deep dives Circular technology Special module for Circular startups Apply Are you a startup developing circular technology and looking to validate your idea? In a collaboration with BueCity , we have created a special program for Circular startups. When completing the Circular Program, you will benefit the YES!Delft ecosystem, where you will build your tech startup, and BlueCity’s ecosystem with specific circular expertise and experience. About the program The Circular Program offers access to: A circular startup community Lab facilities Circular experts Technical knowledge and support Business knowledge and support Please find the date for the next Validation Program here: YES!Delft Validation Program Who can apply Early-stage startups that want to validate their idea (problem-solution fit), have a clear idea and preferably a team of at least two founders. About YES!Delft With a strong focus on deep tech, YES!Delft supports startups with high-impact solutions in AI, cleantech, and MedTech, fostering the development of next-generation innovations. By connecting our unique startup programs & services with our regional ecosystem of experts, mentors, partners, and investors, we help build tomorrow’s leading tech firms. About BlueCity In 2025, BlueCity is a model city for the circular and blue economy and home to 55"
+    },
+    {
+      "id": "check-page-6df6077ef8",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/circular-technology/",
+      "page": "details",
+      "excerpt": "The circular program is organised and supported by: The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company."
+    },
+    {
+      "id": "check-page-a826bdb251",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/circular-technology/",
+      "page": "details",
+      "excerpt": "Ernst van der Wal Founder at Lyla The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-598759a462",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/circular-technology/",
+      "page": "details",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-e2626c2082",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/circular-technology/",
+      "page": "details",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-5e6f7715fd",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/circular-technology/",
+      "page": "details",
+      "excerpt": "Jesse van der Linden Co-Founder at Fluxthor The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-f8acaccb3f",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/circular-technology/",
+      "page": "details",
+      "excerpt": "Iskander Hannivoort Founder at Manukai What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-640ebaecb9",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/circular-technology/",
+      "page": "details",
+      "excerpt": "Jelle Tiemensma CTO at Smartship The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-794c13ba87",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/circular-technology/",
+      "page": "details",
+      "excerpt": "Maxim & Tristan Founders at Arkmon The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-7686ee48f1",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/circular-technology/",
+      "page": "details",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-21eb571664",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/circular-technology/",
+      "page": "details",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs YES!Delft is one of the leading tech incubators in Europe where startups with promising ideas grow into successful companies."
+    },
+    {
+      "id": "check-page-30abb34c48",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+      "page": "details",
+      "excerpt": "Cybersecurity | YES!Delft YES!Delft Search Menu Vertical Deep dives Cybersecurity technology Special module for cybersecurity startups Apply Are you a startup developing cyber security technology and looking to validate your idea or accelerate your traction in the market? In collaboration with the Municipality of The Hague and InnovationQuarter, we are looking for startups with innovative ideas to address the growing challenges in cyber security. The cyber security programs offers the tools, resources, and support to help turn these ideas into impactful businesses. Cyber threats are becoming more frequent and carry a greater sting than ever. AI is creating new attack possibilities, while ransomware — where hackers hold systems hostage for ransom — has returned with a vengeance. Cybercriminals are getting bolder, attacking high-value targets such as banks, hospitals, public utilities and government agencies. (Source: https://sifted.eu/pro/briefings/cybersecurity-2024 ) To counter these threats we are looking for startups with the ambition to make a difference! About the programs In a collaboration with InnovationQuarter & The Hague Municipality we have created a special program for cyber security startups. You will take part in the regular YES!Delft Validation Program or the Accelerator Program in Delft. In addition to our proven startup support you will receive support from"
+    },
+    {
+      "id": "check-page-9c17039af0",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+      "page": "details",
+      "excerpt": "In addition to our proven startup support you will receive support from renowned cyber security experts and companies."
+    },
+    {
+      "id": "check-page-ef3244de25",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+      "page": "details",
+      "excerpt": "The Cyber Security Programs offer startups access to: An extensive network of partners and potential launching customers , including TNO , Siemens and Google ."
+    },
+    {
+      "id": "check-page-6cbe0d860f",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+      "page": "details",
+      "excerpt": "Our startup scout will inform you about the details of the Cyber Security program after signing up."
+    },
+    {
+      "id": "check-page-8427910180",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+      "page": "details",
+      "excerpt": "About the Municipality of The Hague The Hague is renowned as the international city of peace and justice, and it has also established a strong reputation in the field of cybersecurity."
+    },
+    {
+      "id": "check-page-03615c50c9",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+      "page": "details",
+      "excerpt": "The city has built a unique network that brings together knowledge and innovation in the field of cyber security."
+    },
+    {
+      "id": "check-page-0cedd1c0f5",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+      "page": "details",
+      "excerpt": "In close collaboration with all major corporations and many SME’s, educational and research institutes as well as government organisations, they align the efforts required to design a brighter tomorrow."
+    },
+    {
+      "id": "check-page-eff560dbf3",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+      "page": "details",
+      "excerpt": "The incubator programs are organised by: Supported by, among others, the Ministry of Economic Affairs, dcypher, TNO, the Ministry of Justice and Security, ROM-NL, Security Delta (HSD), HSD Campus, TU Delft, Top Sector ICT, and are in line with the vision and approach of the KIA Security and KIA Digitalization partnership."
+    },
+    {
+      "id": "check-page-8e5e59e04e",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+      "page": "details",
+      "excerpt": "The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-c5b73097e7",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+      "page": "details",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-0a9942e5a4",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+      "page": "details",
+      "excerpt": "Jelle Tiemensma CTO at Smartship The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-7d0f4753bb",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+      "page": "details",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-c3e1cc729f",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+      "page": "details",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-6d316e562a",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "page": "details",
+      "excerpt": "Dual-use technology | YES!Delft YES!Delft Search Menu Vertical Deep dives Dual-use Aerospace technology Special deep-dive for dual-use aerospace startups Apply Developing aerospace technology with potential applications in Defence? Take your technology further with YES!Delft and the Dutch Ministry of Defence. Through our Dual-Use Aerospace Deep Dive, startups get the opportunity to work directly with Defence experts, including LRS (Lucht- en Ruimtevaartsystemen), the aerospace engineering organisation of the Ministry of Defence. Gain valuable insights into technical requirements, explore potential military applications for your technology and connect with experts who understand the challenges of bringing innovation into Defence. About the programme The Dual-Use Aerospace Deep Dive combines the YES!Delft Validation Program or Accelerator with specialised sessions focused on the defence aerospace sector. Alongside YES!Delft’s startup support, participants take part in dedicated workshops and 1-on-1 sessions with experts from LRS and MindBase. These sessions help founders understand the technical and operational requirements of Defence, receive feedback on their technology and explore opportunities within the defence ecosystem. What you can expect Direct access to Defence expertise: Engage with technical experts from LRS and MindBase and receive feedback on your technology and"
+    },
+    {
+      "id": "check-page-20f47c20d8",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "page": "details",
+      "excerpt": "What you can expect Direct access to Defence expertise: Engage with technical experts from LRS and MindBase and receive feedback on your technology and its potential applications."
+    },
+    {
+      "id": "check-page-a18fb33548",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "page": "details",
+      "excerpt": "Insights into Defence requirements: Better understand technical standards, certification considerations and operational challenges relevant to military aerospace."
+    },
+    {
+      "id": "check-page-295dc81cfe",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "page": "details",
+      "excerpt": "Explore potential customer opportunities: Learn about Defence needs and explore opportunities to connect with potential launching customers."
+    },
+    {
+      "id": "check-page-487ba33565",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "page": "details",
+      "excerpt": "A strong dual-use network: Connect with other founders, experienced mentors and industry experts."
+    },
+    {
+      "id": "check-page-af81028175",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "page": "details",
+      "excerpt": "Access to investors: Meet investors interested in dual-use and aerospace technologies."
+    },
+    {
+      "id": "check-page-17b5bd6f69",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "page": "details",
+      "excerpt": "Startup support: Benefit from YES!Delft’s Validation Program or Accelerator to validate your business and prepare for growth."
+    },
+    {
+      "id": "check-page-bea4debd88",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "page": "details",
+      "excerpt": "We are looking for ambitious aerospace startups developing technologies with potential civilian and military applications."
+    },
+    {
+      "id": "check-page-66271f788e",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "page": "details",
+      "excerpt": "Early-stage technology startups working towards problem-solution fit with a promising dual-use application."
+    },
+    {
+      "id": "check-page-03ef21b4e7",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "page": "details",
+      "excerpt": "Technologies we’re looking for We are particularly interested in innovations in: Counter-Unmanned Aerial Systems (C-UAS) Ballistic protection Sensors Radar Cross-Section (RCS) minimisation Positioning, Navigation and Timing (PNT) Autonomous systems and AI integration Engines and propulsion Working on an aerospace technology relevant to Defence that isn’t listed above?"
+    },
+    {
+      "id": "check-page-215745b73d",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "page": "details",
+      "excerpt": "Programme timeline Programme period: March – May 2027 Location: Delft, the Netherlands Application deadline: 11 January 2027 Content: Kick-off with the Ministry of Defence and LRS."
+    },
+    {
+      "id": "check-page-963cd51cb9",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "page": "details",
+      "excerpt": "Programme final day Ready to explore your technology’s potential in Defence?"
+    },
+    {
+      "id": "check-page-7564c24fa9",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "page": "details",
+      "excerpt": "Work with experts, strengthen your business and connect with the Dutch defence ecosystem."
+    },
+    {
+      "id": "check-page-fa4a39ce88",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/energy/",
+      "page": "details",
+      "excerpt": "Energy | YES!Delft YES!Delft Search Menu Vertical Deep dives New Energy Challenge For startups working in the energy transition. Learn more Are you a startup developing innovations accelerating the energy transition? The New Energy Challenge (NEC) is an annual challenge focused on innovations accelerating the energy transition. In 2026, the NEC is back for its 11th edition! This open innovation competition connects promising ventures with investors and industry experts – offering access to insights, funding opportunities, and real-world support to help scale your technology. Finalists will join an intensive accelerator program, complete with workshops, tailored training and strategic guidance to supercharge your growth. The NEC 2026 applications open up in September. More detailed information can be found on the New Energy Challenge website. Organised by Rockstart , Shell , Unknown , and YES!Delft . What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process. Jelle Tiemensma CTO at Smartship The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market. Maxim & Tristan Founders at Arkmon The YES!Delft Validation Program is a"
+    },
+    {
+      "id": "check-page-5a069d18fd",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/energy/",
+      "page": "details",
+      "excerpt": "Maxim & Tristan Founders at Arkmon The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-60c5863e42",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/energy/",
+      "page": "details",
+      "excerpt": "Iskander Hannivoort Founder at Manukai The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company."
+    },
+    {
+      "id": "check-page-63f6f55af9",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/energy/",
+      "page": "details",
+      "excerpt": "Ernst van der Wal Founder at Lyla The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-f5cfb4d8c3",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/energy/",
+      "page": "details",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-2825397b53",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/energy/",
+      "page": "details",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-a016d5ce2c",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/energy/",
+      "page": "details",
+      "excerpt": "Jesse van der Linden Co-Founder at Fluxthor The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-80d8fe3f80",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/energy/",
+      "page": "details",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-97a9f87f3f",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/energy/",
+      "page": "details",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset YES!Delft is one of the leading tech incubators in Europe where startups with promising ideas grow into successful companies."
+    },
+    {
+      "id": "check-page-a5176a2100",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/hortiscience/",
+      "page": "details",
+      "excerpt": "Hortiscience | YES!Delft YES!Delft Search Menu Vertical Deep dives Hortiscience Innovation Apply HIC Website HortiScience Innovation Center (HIC) supports startups in greenhouse horticulture through a combination of venture building, testing facilities, expert guidance, and ecosystem access. Key services for horti startups include: Venture studio support HIC helps founders turn horticulture ideas into scalable startups. Support includes venture creation, business development, strategic guidance, and access to financing and co-building partners. Greenhouse testing facilities Startups can validate technologies in real greenhouse environments. HIC provides access to pilot locations, feasibility testing, cultivation expertise, and practical validation support. Access to scientific and technical expertise Through partners such as Wageningen University & Research , Delphy Improvement Center , YES!Delft , and StartLife , startups gain access to horticultural research, crop science, automation expertise, and commercialization support. Industry network and ecosystem connections HIC connects startups with growers, corporates, researchers, investors, and international partners in the greenhouse horticulture sector. Funding and IP support The venture studio collaborates with partners for grant and funding acquisition and EP&C for intellectual property strategy and patent support. Shared"
+    },
+    {
+      "id": "check-page-bd61093d95",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/hortiscience/",
+      "page": "details",
+      "excerpt": "By signing up we help connect you to the right people in the Hortiscience Innovation Center."
+    },
+    {
+      "id": "check-page-4eb3762b50",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/hortiscience/",
+      "page": "details",
+      "excerpt": "Sign up The Accelerator Program really opened our eyes to what it means to be a founder when we were just getting started."
+    },
+    {
+      "id": "check-page-45f8e3242e",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/hortiscience/",
+      "page": "details",
+      "excerpt": "Stephan Rutten CEO | Co-Founder at Lobster Robotics The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market."
+    },
+    {
+      "id": "check-page-03f9803513",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/hortiscience/",
+      "page": "details",
+      "excerpt": "Maxim & Tristan Founders at Arkmon The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company."
+    },
+    {
+      "id": "check-page-e469a64a25",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/hortiscience/",
+      "page": "details",
+      "excerpt": "Ernst van der Wal Founder at Lyla The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators."
+    },
+    {
+      "id": "check-page-925b04055c",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/hortiscience/",
+      "page": "details",
+      "excerpt": "Iskandar Tange Co-Founder at Coding the Curbs The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards."
+    },
+    {
+      "id": "check-page-61ed00ad8e",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/hortiscience/",
+      "page": "details",
+      "excerpt": "They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor."
+    },
+    {
+      "id": "check-page-d6b77ea063",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/hortiscience/",
+      "page": "details",
+      "excerpt": "Jesse van der Linden Co-Founder at Fluxthor The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist."
+    },
+    {
+      "id": "check-page-78aebefe61",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/hortiscience/",
+      "page": "details",
+      "excerpt": "Teun van ’t Veer Founder & CEO at Renset What makes the YES!Delft team stand out is that all the people we get in touch with through the platform are ambitious and have an entrepreneurial mindset, resulting in a high success rate during the hiring process."
+    },
+    {
+      "id": "check-page-a06b091478",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/hortiscience/",
+      "page": "details",
+      "excerpt": "Jelle Tiemensma CTO at Smartship The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel!"
+    },
+    {
+      "id": "check-page-d4eb9e6c2a",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/hortiscience/",
+      "page": "details",
+      "excerpt": "Iskander Hannivoort Founder at Manukai YES!Delft is one of the leading tech incubators in Europe where startups with promising ideas grow into successful companies."
     }
   ],
   "findings": {
@@ -263,6 +1718,14 @@
       {
         "value": "https://yes-delft.typeform.com/to/h6xUfXYv",
         "evidenceId": "check-route-56618b8a5b"
+      },
+      {
+        "value": "https://yesdelft.com/vacancies/open-application/",
+        "evidenceId": "check-route-e3cad7f52c"
+      },
+      {
+        "value": "https://yes-delft.typeform.com/to/h6xUfXYv?typeform-source=yesdelft.com",
+        "evidenceId": "check-route-26e0698888"
       }
     ],
     "applicationUrl": [
@@ -273,7 +1736,20 @@
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
-    "deadlines": [],
+    "deadlines": [
+      {
+        "value": "2027-03-01",
+        "evidenceId": "check-deadline-0846e1d5dd"
+      },
+      {
+        "value": "2026-11-22",
+        "evidenceId": "check-deadline-4e2c881561"
+      },
+      {
+        "value": "2027-01-11",
+        "evidenceId": "check-deadline-3ec8dd2e6c"
+      }
+    ],
     "rolling": [],
     "announcedIntake": [],
     "cohortStarts": [],
@@ -296,10 +1772,6 @@
       {
         "value": "Delft",
         "evidenceId": "check-location-243bdb6efa"
-      },
-      {
-        "value": "Amsterdam",
-        "evidenceId": "check-location-f16b02a664"
       }
     ],
     "selectivity": [],
@@ -367,7 +1839,12 @@
         "evidenceId": "check-deal-e83f0f6e6a"
       }
     ],
-    "portfolioPages": [],
+    "portfolioPages": [
+      {
+        "value": "https://yesdelft.com/startups/",
+        "evidenceId": "check-portfolio-ecc7e1b694"
+      }
+    ],
     "name": [
       {
         "value": "YES!Delft",

@@ -1,72 +1,20 @@
 {
   "programId": "vertex-ventures",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://vvus.com/",
     "https://vvus.com/faq/",
     "https://vvus.com/news/announcing-our-investment-in-cleric/",
     "https://vvus.com/news/our-investment-in-orkes-9-3m-in-funding-to-optimize-workflow-and-microservices-at-scale/",
-    "https://vvus.com/news/we-have-200m-reasons-to-be-excited-about-enterprise-founders/",
-    "https://vvus.com/portfolio/",
-    "https://vvus.com/portfolio/Vividly/",
-    "https://vvus.com/portfolio/ambi-robotics/",
-    "https://vvus.com/portfolio/bellhop/",
-    "https://vvus.com/portfolio/broker-buddha/",
-    "https://vvus.com/portfolio/cakewalk/",
-    "https://vvus.com/portfolio/clearpol/",
-    "https://vvus.com/portfolio/cleric/",
-    "https://vvus.com/portfolio/cloud-academy/",
-    "https://vvus.com/portfolio/cloudera/"
+    "https://vvus.com/news/we-have-200m-reasons-to-be-excited-about-enterprise-founders/"
   ],
   "evidence": [
-    {
-      "id": "check-email-00dbf22af4",
-      "url": "https://vvus.com/portfolio/bellhop/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"email\": \"office@vvus.com\"",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-email-0829bfeb60",
-      "url": "https://vvus.com/portfolio/cleric/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"email\": \"office@vvus.com\"",
-      "page": "portfolio"
-    },
     {
       "id": "check-email-0c333af6d5",
       "url": "https://vvus.com/news/our-investment-in-orkes-9-3m-in-funding-to-optimize-workflow-and-microservices-at-scale/",
       "title": "Vertex Ventures — terms page",
       "excerpt": "\"email\": \"office@vvus.com\"",
       "page": "terms"
-    },
-    {
-      "id": "check-email-3855459907",
-      "url": "https://vvus.com/portfolio/cakewalk/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"email\": \"office@vvus.com\"",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-email-38c686a0e4",
-      "url": "https://vvus.com/portfolio/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"email\": \"office@vvus.com\"",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-email-4baf84b3f5",
-      "url": "https://vvus.com/portfolio/cloud-academy/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"email\": \"office@vvus.com\"",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-email-504eb3be06",
-      "url": "https://vvus.com/portfolio/cloudera/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"email\": \"office@vvus.com\"",
-      "page": "portfolio"
     },
     {
       "id": "check-email-89c5713bc2",
@@ -76,25 +24,11 @@
       "page": "details"
     },
     {
-      "id": "check-email-8cc31f5296",
-      "url": "https://vvus.com/portfolio/clearpol/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"email\": \"office@vvus.com\"",
-      "page": "portfolio"
-    },
-    {
       "id": "check-email-ad9cc58423",
       "url": "https://vvus.com/faq/",
       "title": "Vertex Ventures — terms page",
       "excerpt": "\"email\": \"office@vvus.com\"",
       "page": "terms"
-    },
-    {
-      "id": "check-email-b85c09e885",
-      "url": "https://vvus.com/portfolio/Vividly/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"email\": \"office@vvus.com\"",
-      "page": "portfolio"
     },
     {
       "id": "check-email-dc41ad8ef6",
@@ -104,32 +38,11 @@
       "page": "terms"
     },
     {
-      "id": "check-email-e0e15b28af",
-      "url": "https://vvus.com/portfolio/broker-buddha/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"email\": \"office@vvus.com\"",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-email-e71f889e44",
-      "url": "https://vvus.com/portfolio/ambi-robotics/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"email\": \"office@vvus.com\"",
-      "page": "portfolio"
-    },
-    {
       "id": "check-email-ed2c624c04",
       "url": "https://vvus.com/",
       "title": "Vertex Ventures — homepage",
       "excerpt": "\"email\": \"office@vvus.com\"",
       "page": "details"
-    },
-    {
-      "id": "check-format-d8a0058979",
-      "url": "https://vvus.com/portfolio/ambi-robotics/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "less bias, and a more efficient hiring process metaview Remote, burstable software testing Testlio is the originator of",
-      "page": "portfolio"
     },
     {
       "id": "check-location-840059112e",
@@ -146,27 +59,6 @@
       "page": "details"
     },
     {
-      "id": "check-phone-31935672fe",
-      "url": "https://vvus.com/portfolio/ambi-robotics/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"telephone\": \"+1-650-285-5224\"",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-phone-38cdfc2397",
-      "url": "https://vvus.com/portfolio/cakewalk/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"telephone\": \"+1-650-285-5224\"",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-phone-62a97b14df",
-      "url": "https://vvus.com/portfolio/cloud-academy/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"telephone\": \"+1-650-285-5224\"",
-      "page": "portfolio"
-    },
-    {
       "id": "check-phone-709afac213",
       "url": "https://vvus.com/news/our-investment-in-orkes-9-3m-in-funding-to-optimize-workflow-and-microservices-at-scale/",
       "title": "Vertex Ventures — terms page",
@@ -174,53 +66,11 @@
       "page": "terms"
     },
     {
-      "id": "check-phone-7b3cdfbd93",
-      "url": "https://vvus.com/portfolio/clearpol/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"telephone\": \"+1-650-285-5224\"",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-phone-7e4043e6a4",
-      "url": "https://vvus.com/portfolio/broker-buddha/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"telephone\": \"+1-650-285-5224\"",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-phone-85f98a347a",
-      "url": "https://vvus.com/portfolio/cleric/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"telephone\": \"+1-650-285-5224\"",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-phone-8ece9538c2",
-      "url": "https://vvus.com/portfolio/bellhop/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"telephone\": \"+1-650-285-5224\"",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-phone-8f37223232",
-      "url": "https://vvus.com/portfolio/Vividly/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"telephone\": \"+1-650-285-5224\"",
-      "page": "portfolio"
-    },
-    {
       "id": "check-phone-935410c67f",
       "url": "https://vvus.com/news/we-have-200m-reasons-to-be-excited-about-enterprise-founders/",
       "title": "Vertex Ventures — program page",
       "excerpt": "\"telephone\": \"+1-650-285-5224\"",
       "page": "details"
-    },
-    {
-      "id": "check-phone-b242659ba9",
-      "url": "https://vvus.com/portfolio/cloudera/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"telephone\": \"+1-650-285-5224\"",
-      "page": "portfolio"
     },
     {
       "id": "check-phone-b8bba7f0f5",
@@ -244,39 +94,11 @@
       "page": "terms"
     },
     {
-      "id": "check-phone-c997bbaab7",
-      "url": "https://vvus.com/portfolio/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "\"telephone\": \"+1-650-285-5224\"",
-      "page": "portfolio"
-    },
-    {
       "id": "check-portfolio-06fcac8215",
       "url": "https://vvus.com/news/announcing-our-investment-in-cleric/",
       "title": "Vertex Ventures — terms page",
       "excerpt": "Portfolio → https://vvus.com/portfolio/",
       "page": "terms"
-    },
-    {
-      "id": "check-portfolio-14a3408ed1",
-      "url": "https://vvus.com/portfolio/clearpol/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-2591a07286",
-      "url": "https://vvus.com/portfolio/cleric/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Back to portfolio home page → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-3042cce910",
-      "url": "https://vvus.com/portfolio/Vividly/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/#portfolio",
-      "page": "portfolio"
     },
     {
       "id": "check-portfolio-3a4486e3e3",
@@ -286,74 +108,11 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-3c3968d63b",
-      "url": "https://vvus.com/portfolio/ambi-robotics/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Back to portfolio home page → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-3cb2ccf09d",
-      "url": "https://vvus.com/portfolio/cloud-academy/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/#portfolio",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-3e3b90d584",
-      "url": "https://vvus.com/portfolio/ambi-robotics/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/#portfolio",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-3e9f10442e",
-      "url": "https://vvus.com/portfolio/clearpol/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/#portfolio",
-      "page": "portfolio"
-    },
-    {
       "id": "check-portfolio-48bc9a34ad",
       "url": "https://vvus.com/news/we-have-200m-reasons-to-be-excited-about-enterprise-founders/",
       "title": "Vertex Ventures — program page",
       "excerpt": "Portfolio → https://vvus.com/#portfolio",
       "page": "details"
-    },
-    {
-      "id": "check-portfolio-4fd11bf402",
-      "url": "https://vvus.com/portfolio/cloud-academy/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-52e82f3e6f",
-      "url": "https://vvus.com/portfolio/cleric/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/#portfolio",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-5a585de25c",
-      "url": "https://vvus.com/portfolio/cakewalk/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Back to portfolio home page → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-5c7c2689d1",
-      "url": "https://vvus.com/portfolio/ambi-robotics/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "See more projects → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-5def37197a",
-      "url": "https://vvus.com/portfolio/Vividly/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Back to portfolio home page → https://vvus.com/portfolio/",
-      "page": "portfolio"
     },
     {
       "id": "check-portfolio-641202c85b",
@@ -363,41 +122,6 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-693be35621",
-      "url": "https://vvus.com/portfolio/bellhop/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Back to portfolio home page → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-69e2c5d23a",
-      "url": "https://vvus.com/portfolio/broker-buddha/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-6a18f61279",
-      "url": "https://vvus.com/portfolio/cakewalk/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-83d8266169",
-      "url": "https://vvus.com/portfolio/cakewalk/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/#portfolio",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-8c52e18f8e",
-      "url": "https://vvus.com/portfolio/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/#portfolio",
-      "page": "portfolio"
-    },
-    {
       "id": "check-portfolio-932d0b884f",
       "url": "https://vvus.com/news/announcing-our-investment-in-cleric/",
       "title": "Vertex Ventures — terms page",
@@ -405,67 +129,11 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-9f0ef87d4e",
-      "url": "https://vvus.com/portfolio/clearpol/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Back to portfolio home page → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-a1d6ebfcbe",
-      "url": "https://vvus.com/portfolio/broker-buddha/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/#portfolio",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-a6620f034d",
-      "url": "https://vvus.com/portfolio/broker-buddha/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Back to portfolio home page → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-aa10a2f50b",
-      "url": "https://vvus.com/portfolio/cleric/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-aa6cc3734e",
-      "url": "https://vvus.com/portfolio/bellhop/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
       "id": "check-portfolio-b08e256e36",
       "url": "https://vvus.com/faq/",
       "title": "Vertex Ventures — terms page",
       "excerpt": "Portfolio → https://vvus.com/#portfolio",
       "page": "terms"
-    },
-    {
-      "id": "check-portfolio-bdeec9a361",
-      "url": "https://vvus.com/portfolio/Vividly/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-c0acfa64df",
-      "url": "https://vvus.com/portfolio/cloud-academy/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Back to portfolio home page → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-c120a3aa49",
-      "url": "https://vvus.com/portfolio/cloudera/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Back to portfolio home page → https://vvus.com/portfolio/",
-      "page": "portfolio"
     },
     {
       "id": "check-portfolio-c4675bb0b8",
@@ -489,34 +157,6 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-d4c316dd70",
-      "url": "https://vvus.com/portfolio/bellhop/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/#portfolio",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-e075ee66a1",
-      "url": "https://vvus.com/portfolio/ambi-robotics/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-e75c5e7a6f",
-      "url": "https://vvus.com/portfolio/cloudera/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/portfolio/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-f81eb31c17",
-      "url": "https://vvus.com/portfolio/cloudera/",
-      "title": "Vertex Ventures — portfolio page",
-      "excerpt": "Portfolio → https://vvus.com/#portfolio",
-      "page": "portfolio"
-    },
-    {
       "id": "check-route-73f4eb4078",
       "url": "https://vvus.com/",
       "title": "Vertex Ventures — homepage",
@@ -532,10 +172,106 @@
       "excerpt": "Vertex Ventures US | Vertex Ventures Team Portfolio News Perspectives Events FAQ We’re VCs who get it. As founders and operators, we’ve been in your shoes. We partner with and invest in early-stage founders building infrastructure and SaaS companies. Lead or Co-lead Seed & Series A Check sizes $500k - $10M our story We started Vertex US from a desire to pay it forward We saw the positive impact of high-conviction and highly present investors when we were building our companies, so we founded Vertex US to do the same. Our special power is partnering with technical founders to nail the go-to-market and assemble exceptional teams. We’ll share lessons learned from our journeys as company builders and bring curiosity and candor to every step. \"I remember meeting Vertex for the first time[...] I instantly felt a bit more comfortable because they were founders, and so I didn't feel like I had to put on a suit and tie and do the investor dance. I felt like I could talk about product, I could talk about the value that we're bringing to our customers and even ask questions, get mentored. I think that was what made me choose Vertex at the end of the day when we had multiple term sheets. There's a lot of money in Silicon Valley, but former founders who've seen the movie once or twice, and then seen it at the scale that the Vertex team has seen it, is very rare. \" Jerry Ting, cofounder of"
     },
     {
+      "id": "check-page-d99f7b6081",
+      "url": "https://vvus.com/",
+      "page": "details",
+      "excerpt": "We’re thankful for their support.\" Rajoshi Ghosh, Co-founder & COO of Hasura \"The Vertex Ventures US partners' experiences as operators and empathy for the early-stage sets them apart from many other VCs."
+    },
+    {
+      "id": "check-page-834fb7accb",
+      "url": "https://vvus.com/",
+      "page": "details",
+      "excerpt": "We invest in people, not products."
+    },
+    {
+      "id": "check-page-9f1e4e1d6f",
+      "url": "https://vvus.com/",
+      "page": "details",
+      "excerpt": "Filters All Active Recent Exited Categories Infrastructure Developer tools Data Security SaaS AI/ML Open-source Fintech Deep Tech Team member In Sik Rhee Jonathan Heiliger Team Members In Sik Rhee Jonathan Heiliger Clear filters Feature Management Platform."
+    },
+    {
+      "id": "check-page-2bb88ca8b0",
+      "url": "https://vvus.com/",
+      "page": "details",
+      "excerpt": "DLP is effective for only 1% of companies - Cyberhaven has the other 99% covered. cyberhaven A connected data and process management platform that connects the people, machines, devices, and the systems used in a production or logistics process in a physical location. tulip Evisort automates your entire contracting process from a single platform."
+    },
+    {
+      "id": "check-page-cef1514082",
+      "url": "https://vvus.com/",
+      "page": "details",
+      "excerpt": "The result is happier candidates, less bias, and a more efficient hiring process metaview Onshore (formerly SPRX Tax) uses AI to help companies of all sizes complete the R&D tax credit process in days, rather than weeks."
+    },
+    {
+      "id": "check-page-913604c587",
+      "url": "https://vvus.com/",
+      "page": "details",
+      "excerpt": "With this approach, Onshore is poised to democratize access to these kinds of tax credits and help bring the field of tax accounting as a whole into the future. onshore Load more Events and Community Hosted by Vertex's Megan Reynolds, infra.community hosts a regular series of meetups for software infrastructure software builders, founders, and operators in New York City and San Francisco."
+    },
+    {
+      "id": "check-page-289d65d733",
+      "url": "https://vvus.com/",
+      "page": "details",
+      "excerpt": "Sign up to get notified about the next infra.NYC and infra.SF events!"
+    },
+    {
+      "id": "check-page-8f25dbe141",
+      "url": "https://vvus.com/",
+      "page": "details",
+      "excerpt": "Learn More Our Global Network Vertex US is part of the global network of venture capital funds."
+    },
+    {
+      "id": "check-page-4030c5d234",
+      "url": "https://vvus.com/",
+      "page": "details",
+      "excerpt": "In addition to the U.S., the Vertex Global Network is comprised of affiliates in Israel, China, Southeast Asia and India and Japan."
+    },
+    {
       "id": "check-page-ab8ee8d89b",
       "url": "https://vvus.com/faq/",
       "page": "terms",
       "excerpt": "Vertex Ventures US - Frequently Asked Questions | Vertex Ventures Team Portfolio News Perspectives Events FAQ Frequently Asked Questions What kinds of companies do you invest in? We invest broadly in enterprise software, which has grown to include enterprise services-as-software (i.e. services delivered by AI, not humans). However, we get excited any time we encounter visionary, execution-driven technical teams that are going after critical problems in large, overlooked markets. If that describes you, we’d love to have a chat — even if your company doesn’t fit neatly into a well-understood market category. (Note: We do not invest in companies building consumer products/services, nor do we invest in anything related to cryptocurrency.) If you want to get more familiar with our portfolio companies, you can find an overview here . What do you like to see in a potential investment? Every company’s journey is different, so we don’t have a one-sized-fits-all approach to assessing potential investments. We’ve led rounds in pre-revenue companies, and passed on companies with multiple millions in revenue. The factors we consider include TAM/company upside, execution risk, founder dilution, stage, and check size. Generally speaking, the more mature your company is, the higher our expectations are for market traction, product development, team composition, sales motion, and so on. In"
+    },
+    {
+      "id": "check-page-f70c51d1ec",
+      "url": "https://vvus.com/faq/",
+      "page": "terms",
+      "excerpt": "When we invest, we take the time to work closely with you and your team for as many years as your startup journey takes, so it’s important that we form a rapport early on."
+    },
+    {
+      "id": "check-page-6e22c3d697",
+      "url": "https://vvus.com/faq/",
+      "page": "terms",
+      "excerpt": "That said, we seldom take board seats in pre-seed companies as we believe companies at that stage operate the fastest without the encumbrance of a board."
+    },
+    {
+      "id": "check-page-73ce38dd8d",
+      "url": "https://vvus.com/faq/",
+      "page": "terms",
+      "excerpt": "Other Vertex funds include Vertex Ventures Israel, Vertex Ventures SEA and India, Vertex Growth, Vertex Ventures China, Vertex Healthcare, and Vertex Ventures Japan."
+    },
+    {
+      "id": "check-page-70d2b70d47",
+      "url": "https://vvus.com/faq/",
+      "page": "terms",
+      "excerpt": "There's a lot of money in Silicon Valley, but former founders who've seen the movie once or twice, and then seen it at the scale that the Vertex team has seen it, is very rare."
+    },
+    {
+      "id": "check-page-8b5ed1e149",
+      "url": "https://vvus.com/faq/",
+      "page": "terms",
+      "excerpt": "We’re thankful for their support.\" Rajoshi Ghosh, Co-founder & COO of Hasura \"The Vertex Ventures US partners' experiences as operators and empathy for the early-stage sets them apart from many other VCs."
+    },
+    {
+      "id": "check-page-556b7995df",
+      "url": "https://vvus.com/faq/",
+      "page": "terms",
+      "excerpt": "\" Marc Minor, CEO and co-founder of HighArc Our Global Network Vertex US is part of the global network of venture capital funds."
+    },
+    {
+      "id": "check-page-7decf664a2",
+      "url": "https://vvus.com/faq/",
+      "page": "terms",
+      "excerpt": "In addition to the U.S., the Vertex Global Network is comprised of affiliates in Israel, China, Southeast Asia and India and Japan."
     },
     {
       "id": "check-page-d44c721e98",
@@ -554,66 +290,6 @@
       "url": "https://vvus.com/news/we-have-200m-reasons-to-be-excited-about-enterprise-founders/",
       "page": "details",
       "excerpt": "We have 200M Reasons to be Excited About Enterprise Founders | Vertex Ventures Team Portfolio News Perspectives Events FAQ Back to all news We have 200M Reasons to be Excited About Enterprise Founders Sandeep Bhadra 27 Sept 2022 Link copied A venture capital firm’s fund and portfolio size drives its strategy – i.e. how its investors choose what to do and what not to do . As the power-law curve of venture returns gets steeper with $10B+ exits, new funds have emerged to index across swaths of the startup universe with expansive portfolios – from $200M-500M seed-only vehicles that index a sector to $3B-10B growth funds focused on being in every company post product-market fit (PMF) – subjecting partners to shard their attention across dozens of companies. This multiplies for seed/A investors as funds stack up and companies need active management even at growth stages. Time is the ultimate non-fungible constraint and large portfolios have stretched investor time and attention to its limits. At the same time, the dynamics of how software companies are built and funded has misaligned these venture strategies with founders’ interests. For many companies, especially in SaaS and cloud infrastructure software where we specialize, the aggregate capital required to engineer a product and experiment with distribution until PMF is lower than ever, but the tactics or time needed are hard to"
-    },
-    {
-      "id": "check-page-18d4abf416",
-      "url": "https://vvus.com/portfolio/",
-      "page": "portfolio",
-      "excerpt": "Vertex Ventures US Portfolio | Vertex Ventures Team Portfolio News Perspectives Events FAQ our investments You’re in the best company. We invest in people, not products. Filters All Active Recent Exited Categories Infrastructure Developer tools Data Security SaaS AI/ML Open-source Fintech Deep Tech Team member In Sik Rhee Jonathan Heiliger Team Members In Sik Rhee Jonathan Heiliger Clear filters Feature Management Platform. Ship Fast. Rest Easy. Get total control of your code to ship quicker, reduce risk, and reclaim your nights and weekends. launchdarkly Since 2012, HUMAN Security has safeguarded every step of the customer’s online journey defending against bots, fraud, and digital risk. We verify over 20 trillion digital interactions weekly, empowering 500+ global brands with unparalleled telemetry for rapid, real-time response to even the most sophisticated threats. human security Cyberhaven’s Dynamic Data Tracing technology is a transformative approach to preventing IP theft and other insider threats. DLP is effective for only 1% of companies - Cyberhaven has the other 99% covered. cyberhaven A connected data and process management platform that connects the people, machines, devices, and the systems used in a production or logistics process in a physical location. tulip Evisort automates your entire contracting process from a single platform. Acquired by Workday (2024)."
-    },
-    {
-      "id": "check-page-0398f34141",
-      "url": "https://vvus.com/portfolio/Vividly/",
-      "page": "portfolio",
-      "excerpt": "Vertex Portfolio - Vividly | Vertex Ventures Team Portfolio News Perspectives Events FAQ Back to portfolio home page Vividly Trade Promotion Management Built By CPG For CPG. Powerful data analytics engine that understands the world of trade management for indirect-heavy businesses. Visit the website Our Global Network Vertex US is part of the global network of venture capital funds. In addition to the U.S., the Vertex Global Network is comprised of affiliates in Israel, China, Southeast Asia and India and Japan. Leveraging the combined experience and resources of our extensive partner network enables our portfolio companies to realize their full potential. Portfolio Team News Blog Why Vertex US Investor login FAQ Contact us Legal © 2026 by Vertex Ventures US. All rights reserved."
-    },
-    {
-      "id": "check-page-3f54631b28",
-      "url": "https://vvus.com/portfolio/ambi-robotics/",
-      "page": "portfolio",
-      "excerpt": "Vertex Portfolio - Ambi Robotics | Vertex Ventures Team Portfolio News Perspectives Events FAQ Back to portfolio home page Ambi Robotics Adaptable AI robotics to simplify the supply chain. Modular, scalable robotic systems customized to your needs. Pick-and-Pack millions of unique items on day one. AI-powered modular kitting line and robotic putwall. Spun out of UC Berkeley. Visit the website Latest news See all news Investments We have 20+ years’ experience transforming operations, technology, and investments at foundational companies. Collectively we have founded 6 companies with a market capitalization of more than $6B. The future of the internet will be dominated by tool calls, not clicks. Smithery is accelerating the economy of AI-native services, building the infrastructure for agents to seamlessly interact with the world. smithery Concept to construction in days, not months. Design, sell in 3D, and get permit-ready construction documents — all in one place. higharc RAD Security (formerly known as KSOC) is a cloud native security company that empowers engineering and security teams to push boundaries, build technology and drive innovation so they can focus on growth versus security problems. rad security Cyberhaven’s Dynamic Data Tracing technology is a transformative approach to preventing IP theft and other insider threats. DLP is effective for only 1% of companies -"
-    },
-    {
-      "id": "check-page-903c5fa7d0",
-      "url": "https://vvus.com/portfolio/bellhop/",
-      "page": "portfolio",
-      "excerpt": "Vertex Portfolio - Bellhop | Vertex Ventures Team Portfolio News Perspectives Events FAQ Back to portfolio home page Bellhop Bellhop automates customer service and support using artificial intelligence and natural language processing to deliver unprecedented precision and quality. Bellhop is transforming how process-driven enterprise workflows are defined and executed. Visit the website Our Global Network Vertex US is part of the global network of venture capital funds. In addition to the U.S., the Vertex Global Network is comprised of affiliates in Israel, China, Southeast Asia and India and Japan. Leveraging the combined experience and resources of our extensive partner network enables our portfolio companies to realize their full potential. Portfolio Team News Blog Why Vertex US Investor login FAQ Contact us Legal © 2026 by Vertex Ventures US. All rights reserved."
-    },
-    {
-      "id": "check-page-15f5b2bda6",
-      "url": "https://vvus.com/portfolio/broker-buddha/",
-      "page": "portfolio",
-      "excerpt": "Vertex Portfolio - Broker Buddha | Vertex Ventures Team Portfolio News Perspectives Events FAQ Back to portfolio home page Broker Buddha Broker Buddha helps commercial insurance brokers grow sales by simplifying the application and renewal process for you and your clients. Visit the website Our Global Network Vertex US is part of the global network of venture capital funds. In addition to the U.S., the Vertex Global Network is comprised of affiliates in Israel, China, Southeast Asia and India and Japan. Leveraging the combined experience and resources of our extensive partner network enables our portfolio companies to realize their full potential. Portfolio Team News Blog Why Vertex US Investor login FAQ Contact us Legal © 2026 by Vertex Ventures US. All rights reserved."
-    },
-    {
-      "id": "check-page-8867a36579",
-      "url": "https://vvus.com/portfolio/cakewalk/",
-      "page": "portfolio",
-      "excerpt": "Vertex Portfolio - Cakewalk | Vertex Ventures Team Portfolio News Perspectives Events FAQ Back to portfolio home page Cakewalk Cakewalk is here to simplify IAM and manage Identity Governance on behalf of our customers. Simplicity is, first and foremost, a product principle: building a platform that is powerful, yet easy to use. Visit the website Our Global Network Vertex US is part of the global network of venture capital funds. In addition to the U.S., the Vertex Global Network is comprised of affiliates in Israel, China, Southeast Asia and India and Japan. Leveraging the combined experience and resources of our extensive partner network enables our portfolio companies to realize their full potential. Portfolio Team News Blog Why Vertex US Investor login FAQ Contact us Legal © 2026 by Vertex Ventures US. All rights reserved."
-    },
-    {
-      "id": "check-page-76098a0e3e",
-      "url": "https://vvus.com/portfolio/clearpol/",
-      "page": "portfolio",
-      "excerpt": "Vertex Portfolio - Clearpol | Vertex Ventures Team Portfolio News Perspectives Events FAQ Back to portfolio home page Clearpol Your AI Ally in Post-Acute & Long-Term Care. Clearpol empowers post-acute and long-term care providers to navigate complexities with ease. Move beyond manual processes and embrace the future of AI in healthcare. Visit the website Our Global Network Vertex US is part of the global network of venture capital funds. In addition to the U.S., the Vertex Global Network is comprised of affiliates in Israel, China, Southeast Asia and India and Japan. Leveraging the combined experience and resources of our extensive partner network enables our portfolio companies to realize their full potential. Portfolio Team News Blog Why Vertex US Investor login FAQ Contact us Legal © 2026 by Vertex Ventures US. All rights reserved."
-    },
-    {
-      "id": "check-page-8a167a651b",
-      "url": "https://vvus.com/portfolio/cleric/",
-      "page": "portfolio",
-      "excerpt": "Vertex Portfolio - Cleric | Vertex Ventures Team Portfolio News Perspectives Events FAQ Back to portfolio home page Cleric Turn reactive ops into proactive engineering. Cleric learns your systems, traces incidents to their root causes, and transforms noisy alerts into engineering insight. Visit the website Our Global Network Vertex US is part of the global network of venture capital funds. In addition to the U.S., the Vertex Global Network is comprised of affiliates in Israel, China, Southeast Asia and India and Japan. Leveraging the combined experience and resources of our extensive partner network enables our portfolio companies to realize their full potential. Portfolio Team News Blog Why Vertex US Investor login FAQ Contact us Legal © 2026 by Vertex Ventures US. All rights reserved."
-    },
-    {
-      "id": "check-page-02bd1ede2c",
-      "url": "https://vvus.com/portfolio/cloud-academy/",
-      "page": "portfolio",
-      "excerpt": "Vertex Portfolio - Cloud Academy | Vertex Ventures Team Portfolio News Perspectives Events FAQ Back to portfolio home page Cloud Academy We help both companies and individual users learn everything about Cloud Computing, providing the best content and training in the industry. Cloud Academy was acquired by QA Learning in 2019. Visit the website Our Global Network Vertex US is part of the global network of venture capital funds. In addition to the U.S., the Vertex Global Network is comprised of affiliates in Israel, China, Southeast Asia and India and Japan. Leveraging the combined experience and resources of our extensive partner network enables our portfolio companies to realize their full potential. Portfolio Team News Blog Why Vertex US Investor login FAQ Contact us Legal © 2026 by Vertex Ventures US. All rights reserved."
-    },
-    {
-      "id": "check-page-72009ed2d5",
-      "url": "https://vvus.com/portfolio/cloudera/",
-      "page": "portfolio",
-      "excerpt": "Vertex Portfolio - Cloudera | Vertex Ventures Team Portfolio News Perspectives Events FAQ Back to portfolio home page Cloudera Cloudera is the first big data platform company to provide Apache Hadoop based software, support, and services to enterprise customers. Visit the website Our Global Network Vertex US is part of the global network of venture capital funds. In addition to the U.S., the Vertex Global Network is comprised of affiliates in Israel, China, Southeast Asia and India and Japan. Leveraging the combined experience and resources of our extensive partner network enables our portfolio companies to realize their full potential. Portfolio Team News Blog Why Vertex US Investor login FAQ Contact us Legal © 2026 by Vertex Ventures US. All rights reserved."
     }
   ],
   "findings": {
@@ -643,12 +319,7 @@
     "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [],
-    "format": [
-      {
-        "value": "remote",
-        "evidenceId": "check-format-d8a0058979"
-      }
-    ],
+    "format": [],
     "location": [
       {
         "value": "Palo Alto",

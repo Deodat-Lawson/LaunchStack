@@ -1,6 +1,6 @@
 {
   "programId": "koffman-southern-tier-incubator",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://southerntierincubator.com/"
   ],
@@ -8,16 +8,60 @@
     {
       "id": "check-name-65eb0626c2",
       "url": "https://southerntierincubator.com/",
-      "title": "Koffman Southern Tier Incubator — homepage checked by scrape.py",
+      "title": "Koffman Southern Tier Incubator — homepage",
       "excerpt": "Opened in 2017 in the heart of Binghamton, NY, the Koffman Southern Tier Incubator is a vibrant hub for start-up activity in the Southern",
       "page": "details"
     },
     {
       "id": "check-phone-017466bd28",
       "url": "https://southerntierincubator.com/",
-      "title": "Koffman Southern Tier Incubator — homepage checked by scrape.py",
+      "title": "Koffman Southern Tier Incubator — homepage",
       "excerpt": "(607) 777-5094",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-aae383c192",
+      "url": "https://southerntierincubator.com/",
+      "page": "details",
+      "excerpt": "Home Page | Koffman Incubator | Binghamton N.Y. Skip to content About About Our Team Koffman Staff Program Advisors SBDC TAAC Board Members Membership Spaces Startups Members Programs Business Incubator Program Clean Energy Incubator Program Digital Platform Accelerator Equity In Innovation Family Enrichment Series NSF I-Corps NENY ChargeUp Accelerator Funding Resources Students Students New York Student Business Plan Competition Partners News Contact About About Our Team Koffman Staff Program Advisors SBDC TAAC Board Members Membership Spaces Startups Members Programs Business Incubator Program Clean Energy Incubator Program Digital Platform Accelerator Equity In Innovation Family Enrichment Series NSF I-Corps NENY ChargeUp Accelerator Funding Resources Students Students New York Student Business Plan Competition Partners News Contact PROPELLING YOUR​ START-UP FORWARD Creating the next generation entrepreneurship ecosystem. Powered by Binghamton University Become a Member Stay in Touch Current Start-ups 0 in Economic Impact $ 0 M Raised by members $ 0 M Jobs Created 0 About the Koffman Turning Ideas Into Innovations Opened in 2017 in the heart of Binghamton, NY, the Koffman Southern Tier Incubator is a vibrant hub for start-up activity in the Southern Tier region and beyond. Spanning 35,000 square feet, the facility features co-working spaces, offices, high-tech laboratories,"
+    },
+    {
+      "id": "check-page-a9f31ec376",
+      "url": "https://southerntierincubator.com/",
+      "page": "details",
+      "excerpt": "Spanning 35,000 square feet, the facility features co-working spaces, offices, high-tech laboratories, and common areas designed to foster collaboration and creativity."
+    },
+    {
+      "id": "check-page-c1eaac822c",
+      "url": "https://southerntierincubator.com/",
+      "page": "details",
+      "excerpt": "October 19, 2026 | by Katie Liu, Binghamton University In the […] Read More June 23, 2026 New Member Feature: Respire Energy Brings Next-Generation Battery Innovation to New York June 23, 2026 For David Hsu, the path to founding Respire Energy began long before the company was incorporated."
+    },
+    {
+      "id": "check-page-b64f754304",
+      "url": "https://southerntierincubator.com/",
+      "page": "details",
+      "excerpt": "An engineer by training with degrees […] Read More June 15, 2026 Binghamton University student team wins Binghamton Business Plan Competition June 15, 2026 Students take first place in the Binghamton Business Plan Competition […] Read More View All Upcoming Events There are no upcoming events."
+    },
+    {
+      "id": "check-page-8c5082cdbf",
+      "url": "https://southerntierincubator.com/",
+      "page": "details",
+      "excerpt": "The Koffman welcomes all ideas, big or small, from students, community members, and clean energy start-ups."
+    },
+    {
+      "id": "check-page-1bbc73f477",
+      "url": "https://southerntierincubator.com/",
+      "page": "details",
+      "excerpt": "As a member, you’ll gain access to mentors, a supportive start-up community, and programs designed to advance your venture."
+    },
+    {
+      "id": "check-page-f73fb7e8e7",
+      "url": "https://southerntierincubator.com/",
+      "page": "details",
+      "excerpt": "Binghamton, NY 13901 (607) 777-5094 [email protected] Get Started Become a Member Current Members Spaces About Us About the Koffman Our Team News Binghamton U Entrepreneurship Follow Us on Social Linkedin Facebook Instagram Youtube © 2024 KOFFMAN SOUTHERN TIER INCUBATOR."
     }
   ],
   "findings": {
@@ -33,8 +77,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

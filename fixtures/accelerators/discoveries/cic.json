@@ -1,51 +1,11 @@
 {
   "programId": "cic",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
-    {
-      "url": "https://cic.com/36for75",
-      "page": "other",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://cic.com/about/",
       "page": "details",
       "anchor": "About Learn about the people and offerings that make CIC the global leader in innovation",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://cic.com/blog/2023-5-9-cics-international-soft-landing-opens-cohort-application-window/",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://cic.com/blog/cic-massachusetts-social-impact-cohort-entries/",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://cic.com/blog/providing-a-runway-for-success-cic-st-louis-welcomes-third-social-impact-cohort/",
-      "page": "batches",
-      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -54,7 +14,7 @@
       "url": "https://cic.com/catalyst/about/",
       "page": "details",
       "anchor": "About",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -62,45 +22,69 @@
       "url": "https://cic.com/catalyst/programs/",
       "page": "details",
       "anchor": "Programs",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://cic.com/de/blog/cic-nimmt-jetzt-bewerbungen-fuer-die-neue-massachusetts-social-impact-cohort-entgegen/",
-      "page": "batches",
+      "url": "https://cic.com/de/internationale-connect-programme/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://cic.com/nl/blog/cic-accepteert-nu-inschrijvingen-voor-nieuw-sociaal-impactcohort-in-massachusetts/",
-      "page": "batches",
+      "url": "https://cic.com/de/programme/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://cic.com/nl/blog/cic-zoekt-impactgerichte-ondernemers-voor-36for75-cohort/",
-      "page": "batches",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://cic.com/nl/blog/cics-internationale-zachte-landing-opent-inschrijvingsvenster-voor-cohort/",
-      "page": "batches",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-miami/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://cic.com/nl/blog/een-startbaan-voor-succes-cic-st-louis-verwelkomt-derde-social-impact-cohort/",
-      "page": "batches",
+      "url": "https://cic.com/de/programme/internationale-sanfte-landung/internationale-sanfte-landung-rotterdam/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cic.com/de/programme/japan-schreibtisch/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cic.com/de/programme/japan-schreibtisch/anfrageformular-fuer-innovationstouren/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cic.com/international-connect-programs/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -131,6 +115,22 @@
       "origin": "official"
     },
     {
+      "url": "https://cic.com/nl/internationale-connect-programmas/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cic.com/nl/programmas/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://cic.com/programs/",
       "page": "details",
       "anchor": "Programs",
@@ -148,6 +148,22 @@
     },
     {
       "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cic.com/programs/social-impact-cohort/philadelphia/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cic.com/programs/social-impact-cohort/st-louis/",
       "page": "batches",
       "anchor": "",
       "fetched": true,

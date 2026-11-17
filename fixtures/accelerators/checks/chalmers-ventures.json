@@ -1,11 +1,8 @@
 {
   "programId": "chalmers-ventures",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://chalmersventures.com/",
-    "https://chalmersventures.com/news/application-startup-camp-open/tw_1024x512_startupcamp_big3/",
-    "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26-2/",
-    "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26/",
     "https://chalmersventures.com/career/investment-manager-2020-klar-justerad-2/",
     "https://chalmersventures.com/career/investment-manager-2020/",
     "https://chalmersventures.com/chalmers-ventures-investment-network-form/",
@@ -16,15 +13,23 @@
     "https://chalmersventures.com/investments/development/",
     "https://chalmersventures.com/investments/e-mail-badge/",
     "https://chalmersventures.com/investments/garden-plant-view-from-above-pattern-green-texture-leaves-jungle-background_t20_jjr0zk/",
-    "https://chalmersventures.com/investments/jonas-bergman-cirkel/"
+    "https://chalmersventures.com/investments/jonas-bergman-cirkel/",
+    "https://chalmersventures.com/investments/night-sky_t20_kj9aer/",
+    "https://chalmersventures.com/investments/pontus-ottosson-chalmers-ventures-2/",
+    "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-48-57/",
+    "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-49-05/",
+    "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-51-21/",
+    "https://chalmersventures.com/investments/sectors-2024-2/",
+    "https://chalmersventures.com/investments/sectors/",
+    "https://chalmersventures.com/investments/ska%cc%88rmavbild-2022-08-15-kl-11-14-19/"
   ],
   "evidence": [
     {
-      "id": "check-email-0f03798744",
-      "url": "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26/",
-      "title": "Chalmers Ventures — application page",
-      "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
-      "page": "application"
+      "id": "check-email-1429beda93",
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-49-05/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "info@chalmersventures.com",
+      "page": "terms"
     },
     {
       "id": "check-email-193f4df4f1",
@@ -43,6 +48,13 @@
     {
       "id": "check-email-24879b9a33",
       "url": "https://chalmersventures.com/chalmers-ventures-investment-network-form/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-2cb754fd8a",
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-49-05/",
       "title": "Chalmers Ventures — terms page",
       "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
       "page": "terms"
@@ -76,11 +88,25 @@
       "page": "terms"
     },
     {
-      "id": "check-email-4c308b3908",
-      "url": "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26/",
-      "title": "Chalmers Ventures — application page",
+      "id": "check-email-3f1d407463",
+      "url": "https://chalmersventures.com/investments/sectors-2024-2/",
+      "title": "Chalmers Ventures — terms page",
       "excerpt": "info@chalmersventures.com",
-      "page": "application"
+      "page": "terms"
+    },
+    {
+      "id": "check-email-46e8489214",
+      "url": "https://chalmersventures.com/investments/pontus-ottosson-chalmers-ventures-2/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-56db8bd838",
+      "url": "https://chalmersventures.com/investments/sectors/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "info@chalmersventures.com",
+      "page": "terms"
     },
     {
       "id": "check-email-5ee38a5af6",
@@ -90,18 +116,18 @@
       "page": "terms"
     },
     {
-      "id": "check-email-609f28d99d",
-      "url": "https://chalmersventures.com/news/application-startup-camp-open/tw_1024x512_startupcamp_big3/",
-      "title": "Chalmers Ventures — application page",
-      "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
-      "page": "application"
+      "id": "check-email-62fb80e035",
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-51-21/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "info@chalmersventures.com",
+      "page": "terms"
     },
     {
-      "id": "check-email-68f7ae72fe",
-      "url": "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26-2/",
-      "title": "Chalmers Ventures — application page",
+      "id": "check-email-699583068a",
+      "url": "https://chalmersventures.com/investments/pontus-ottosson-chalmers-ventures-2/",
+      "title": "Chalmers Ventures — terms page",
       "excerpt": "info@chalmersventures.com",
-      "page": "application"
+      "page": "terms"
     },
     {
       "id": "check-email-6a53a4894b",
@@ -111,17 +137,24 @@
       "page": "terms"
     },
     {
-      "id": "check-email-7878d144fa",
-      "url": "https://chalmersventures.com/news/application-startup-camp-open/tw_1024x512_startupcamp_big3/",
-      "title": "Chalmers Ventures — application page",
-      "excerpt": "info@chalmersventures.com",
-      "page": "application"
+      "id": "check-email-77601a523c",
+      "url": "https://chalmersventures.com/investments/ska%cc%88rmavbild-2022-08-15-kl-11-14-19/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
+      "page": "terms"
     },
     {
       "id": "check-email-79b5e8c0f5",
       "url": "https://chalmersventures.com/investments/development-2024-2/",
       "title": "Chalmers Ventures — terms page",
       "excerpt": "info@chalmersventures.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-811d46fb1e",
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-51-21/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
       "page": "terms"
     },
     {
@@ -146,8 +179,22 @@
       "page": "terms"
     },
     {
+      "id": "check-email-9990774363",
+      "url": "https://chalmersventures.com/investments/night-sky_t20_kj9aer/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "info@chalmersventures.com",
+      "page": "terms"
+    },
+    {
       "id": "check-email-9ccac8c722",
       "url": "https://chalmersventures.com/investments/garden-plant-view-from-above-pattern-green-texture-leaves-jungle-background_t20_jjr0zk/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9e3d6c2028",
+      "url": "https://chalmersventures.com/investments/sectors/",
       "title": "Chalmers Ventures — terms page",
       "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
       "page": "terms"
@@ -162,6 +209,13 @@
     {
       "id": "check-email-a46d92da23",
       "url": "https://chalmersventures.com/investments/development/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-a5800186b8",
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-48-57/",
       "title": "Chalmers Ventures — terms page",
       "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
       "page": "terms"
@@ -188,6 +242,13 @@
       "page": "terms"
     },
     {
+      "id": "check-email-b6679e8bc7",
+      "url": "https://chalmersventures.com/investments/sectors-2024-2/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
+      "page": "terms"
+    },
+    {
       "id": "check-email-baab45ea26",
       "url": "https://chalmersventures.com/career/investment-manager-2020-klar-justerad-2/",
       "title": "Chalmers Ventures — terms page",
@@ -195,8 +256,29 @@
       "page": "terms"
     },
     {
+      "id": "check-email-c45ed47147",
+      "url": "https://chalmersventures.com/investments/night-sky_t20_kj9aer/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
+      "page": "terms"
+    },
+    {
       "id": "check-email-c850fae5d0",
       "url": "https://chalmersventures.com/career/investment-manager-2020/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "info@chalmersventures.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-ce3a94847f",
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-48-57/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "info@chalmersventures.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-d247aea2cc",
+      "url": "https://chalmersventures.com/investments/ska%cc%88rmavbild-2022-08-15-kl-11-14-19/",
       "title": "Chalmers Ventures — terms page",
       "excerpt": "info@chalmersventures.com",
       "page": "terms"
@@ -230,13 +312,6 @@
       "page": "terms"
     },
     {
-      "id": "check-email-fea858f8c2",
-      "url": "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26-2/",
-      "title": "Chalmers Ventures — application page",
-      "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
-      "page": "application"
-    },
-    {
       "id": "check-name-ca3e48c32e",
       "url": "https://chalmersventures.com/",
       "title": "Chalmers Ventures — homepage",
@@ -248,6 +323,13 @@
       "url": "https://chalmersventures.com/investments/development-2024-2/",
       "title": "Chalmers Ventures — terms page",
       "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-0d12d43b59",
+      "url": "https://chalmersventures.com/investments/ska%cc%88rmavbild-2022-08-15-kl-11-14-19/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "Portfolio → https://www.chalmersventures.com/startups/#current",
       "page": "terms"
     },
     {
@@ -265,10 +347,24 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-257c8610d5",
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-49-05/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-262be47963",
       "url": "https://chalmersventures.com/career/investment-manager-2020-klar-justerad-2/",
       "title": "Chalmers Ventures — terms page",
       "excerpt": "Portfolio → https://www.chalmersventures.com/startups/#current",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2836cdfb12",
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-51-21/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
       "page": "terms"
     },
     {
@@ -277,13 +373,6 @@
       "title": "Chalmers Ventures — terms page",
       "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
       "page": "terms"
-    },
-    {
-      "id": "check-portfolio-2b7380c108",
-      "url": "https://chalmersventures.com/news/application-startup-camp-open/tw_1024x512_startupcamp_big3/",
-      "title": "Chalmers Ventures — application page",
-      "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
-      "page": "application"
     },
     {
       "id": "check-portfolio-2ee113f41a",
@@ -300,6 +389,20 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-404c1e99bc",
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-49-05/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "Portfolio → https://www.chalmersventures.com/startups/#current",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-41b22054a8",
+      "url": "https://chalmersventures.com/investments/night-sky_t20_kj9aer/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-46a2e97640",
       "url": "https://chalmersventures.com/investments/development/",
       "title": "Chalmers Ventures — terms page",
@@ -307,15 +410,36 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-53b4df7d78",
-      "url": "https://chalmersventures.com/news/application-startup-camp-open/tw_1024x512_startupcamp_big3/",
-      "title": "Chalmers Ventures — application page",
+      "id": "check-portfolio-4c153bec56",
+      "url": "https://chalmersventures.com/investments/sectors/",
+      "title": "Chalmers Ventures — terms page",
       "excerpt": "Portfolio → https://www.chalmersventures.com/startups/#current",
-      "page": "application"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-55ffd62607",
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-51-21/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "Portfolio → https://www.chalmersventures.com/startups/#current",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-56e8397fed",
       "url": "https://chalmersventures.com/investments/jonas-bergman-cirkel/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5fac0693e0",
+      "url": "https://chalmersventures.com/investments/sectors-2024-2/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "Portfolio → https://www.chalmersventures.com/startups/#current",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-64d36a10d3",
+      "url": "https://chalmersventures.com/investments/sectors-2024-2/",
       "title": "Chalmers Ventures — terms page",
       "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
       "page": "terms"
@@ -326,13 +450,6 @@
       "title": "Chalmers Ventures — terms page",
       "excerpt": "Portfolio → https://www.chalmersventures.com/startups/#current",
       "page": "terms"
-    },
-    {
-      "id": "check-portfolio-6a16fdf9ff",
-      "url": "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26/",
-      "title": "Chalmers Ventures — application page",
-      "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
-      "page": "application"
     },
     {
       "id": "check-portfolio-6e8a5b44ab",
@@ -377,18 +494,39 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-aba296d593",
-      "url": "https://chalmersventures.com/investments/bjo%cc%88rn-westman/",
+      "id": "check-portfolio-a5af141b05",
+      "url": "https://chalmersventures.com/investments/pontus-ottosson-chalmers-ventures-2/",
       "title": "Chalmers Ventures — terms page",
       "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-b481269de4",
-      "url": "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26/",
-      "title": "Chalmers Ventures — application page",
+      "id": "check-portfolio-a6d4db4bb3",
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-48-57/",
+      "title": "Chalmers Ventures — terms page",
       "excerpt": "Portfolio → https://www.chalmersventures.com/startups/#current",
-      "page": "application"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a73b345030",
+      "url": "https://chalmersventures.com/investments/night-sky_t20_kj9aer/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "Portfolio → https://www.chalmersventures.com/startups/#current",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a9b726216b",
+      "url": "https://chalmersventures.com/investments/sectors/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-aba296d593",
+      "url": "https://chalmersventures.com/investments/bjo%cc%88rn-westman/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-b64b4cb1a0",
@@ -398,8 +536,22 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-bcf66f46b0",
+      "url": "https://chalmersventures.com/investments/pontus-ottosson-chalmers-ventures-2/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "Portfolio → https://www.chalmersventures.com/startups/#current",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-c3583bcde3",
       "url": "https://chalmersventures.com/career/investment-manager-2020-klar-justerad-2/",
+      "title": "Chalmers Ventures — terms page",
+      "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c4c6576588",
+      "url": "https://chalmersventures.com/investments/ska%cc%88rmavbild-2022-08-15-kl-11-14-19/",
       "title": "Chalmers Ventures — terms page",
       "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
       "page": "terms"
@@ -433,13 +585,6 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-e06125c080",
-      "url": "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26-2/",
-      "title": "Chalmers Ventures — application page",
-      "excerpt": "Portfolio → https://www.chalmersventures.com/startups/#current",
-      "page": "application"
-    },
-    {
       "id": "check-portfolio-e24b5ca542",
       "url": "https://chalmersventures.com/investments/development/",
       "title": "Chalmers Ventures — terms page",
@@ -447,11 +592,11 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-eb6f59f861",
-      "url": "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26-2/",
-      "title": "Chalmers Ventures — application page",
+      "id": "check-portfolio-fce111595c",
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-48-57/",
+      "title": "Chalmers Ventures — terms page",
       "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
-      "page": "application"
+      "page": "terms"
     },
     {
       "id": "check-route-6575f05152",
@@ -469,22 +614,10 @@
       "excerpt": "- Chalmers Ventures | Tech Investor and Venture Builder - Chalmers Ventures | Tech Investor and Venture Builder × Contact us Investments Portfolio Program and Tracks Venture Building Programme The Mentorship Programme Tech Transfer Startup Camp Deep Tech 2026 Tech Matching Open Coaching Offers | Deals | Support Startup Stories News & Media News feed Newsletter Media Our team Contact About About CV Career Privacy policy Accessibility Statement Investments Portfolio Venture Building Startup Camp Deep Tech Tech Matching Team Menu Venture Builder | Tech Investor Leading deep tech investor and venture builder in the Nordics – from lab to market Portfolio Investments Program From Lab to Market By combining venture creation and investment under the same roof – we transform breakthrough research into successful, impact-driven companies. Chalmers Ventures is the deep-tech investor within in the Chalmers entrepreneurial ecosystem, supporting researchers, entrepreneurs and startups. Realising the evergreen model that is Chalmers – our returns are reinvested to fuel new research and innovation. As partner, we stay committed throughout the journey – from idea to exit. Startup Stories Take a peek into the lives of the portfolio companies. Atley Solutions opens new doors in the fight against cancer Read More » Atium renar vatten från tunga metaller Read More » Trine får andra företag att"
     },
     {
-      "id": "check-page-77bd00308a",
-      "url": "https://chalmersventures.com/news/application-startup-camp-open/tw_1024x512_startupcamp_big3/",
-      "page": "application",
-      "excerpt": "Tw_1024x512_startupcamp_big3 - Chalmers Ventures Tw_1024x512_startupcamp_big3 - Chalmers Ventures × Contact us Investments Portfolio Program and Tracks Venture Building Programme The Mentorship Programme Tech Transfer Startup Camp Deep Tech 2026 Tech Matching Open Coaching Offers | Deals | Support Startup Stories News & Media News feed Newsletter Media Our team Contact About About CV Career Privacy policy Accessibility Statement Investments Portfolio Venture Building Startup Camp Deep Tech Tech Matching Team Menu Tw_1024x512_startupcamp_big3 2019-06-20 12:34 by Admin Chalmers Ventures To all innovators, entrepreneurs and pioneers of tomorrow. Our promise is to take every dream and idea with potential into game changing business. Together we’ll be the heart of venture creation – a boundless community, dedicated to stretch what’s possible. Supported by world leading competence and knowledge. Powered by true passion, curiosity and courage. Keep connected linkedin.com/company/chalmers-ventures facebook.com/chalmersventures © Chalmers Ventures AB2026. All rights reserved. Newsletter Sign up to recieve our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4 trp Göteborg"
-    },
-    {
-      "id": "check-page-5cf7451a3a",
-      "url": "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26-2/",
-      "page": "application",
-      "excerpt": "Screenshot-2019-01-30-08.27.26 - Chalmers Ventures Screenshot-2019-01-30-08.27.26 - Chalmers Ventures × Contact us Investments Portfolio Program and Tracks Venture Building Programme The Mentorship Programme Tech Transfer Startup Camp Deep Tech 2026 Tech Matching Open Coaching Offers | Deals | Support Startup Stories News & Media News feed Newsletter Media Our team Contact About About CV Career Privacy policy Accessibility Statement Investments Portfolio Venture Building Startup Camp Deep Tech Tech Matching Team Menu Screenshot-2019-01-30-08.27.26 2019-01-30 08:30 by Admin Chalmers Ventures To all innovators, entrepreneurs and pioneers of tomorrow. Our promise is to take every dream and idea with potential into game changing business. Together we’ll be the heart of venture creation – a boundless community, dedicated to stretch what’s possible. Supported by world leading competence and knowledge. Powered by true passion, curiosity and courage. Keep connected linkedin.com/company/chalmers-ventures facebook.com/chalmersventures © Chalmers Ventures AB2026. All rights reserved. Newsletter Sign up to recieve our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4 trp Göteborg"
-    },
-    {
-      "id": "check-page-c7c33b25b1",
-      "url": "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26/",
-      "page": "application",
-      "excerpt": "Screenshot 2019-01-30 08.27.26 - Chalmers Ventures Screenshot 2019-01-30 08.27.26 - Chalmers Ventures × Contact us Investments Portfolio Program and Tracks Venture Building Programme The Mentorship Programme Tech Transfer Startup Camp Deep Tech 2026 Tech Matching Open Coaching Offers | Deals | Support Startup Stories News & Media News feed Newsletter Media Our team Contact About About CV Career Privacy policy Accessibility Statement Investments Portfolio Venture Building Startup Camp Deep Tech Tech Matching Team Menu Screenshot 2019-01-30 08.27.26 2019-01-30 08:28 by Admin Chalmers Ventures To all innovators, entrepreneurs and pioneers of tomorrow. Our promise is to take every dream and idea with potential into game changing business. Together we’ll be the heart of venture creation – a boundless community, dedicated to stretch what’s possible. Supported by world leading competence and knowledge. Powered by true passion, curiosity and courage. Keep connected linkedin.com/company/chalmers-ventures facebook.com/chalmersventures © Chalmers Ventures AB2026. All rights reserved. Newsletter Sign up to recieve our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4 trp Göteborg"
+      "id": "check-page-07f2ed18aa",
+      "url": "https://chalmersventures.com/",
+      "page": "details",
+      "excerpt": "Our deal flow criteria – Deep tech / research based tech – University spinouts – Global commercial and impact potential Our investment process – We identify market potential in research-based tech – We match the team – We invest in and startup the company – We attract competent capital with external VCs – We have active ownership until exit 1."
     },
     {
       "id": "check-page-4f28735978",
@@ -509,6 +642,48 @@
       "url": "https://chalmersventures.com/investments/",
       "page": "terms",
       "excerpt": "Investments - Chalmers Ventures Investments - Chalmers Ventures × Contact us Investments Portfolio Program and Tracks Venture Building Programme The Mentorship Programme Tech Transfer Startup Camp Deep Tech 2026 Tech Matching Open Coaching Offers | Deals | Support Startup Stories News & Media News feed Newsletter Media Our team Contact About About CV Career Privacy policy Accessibility Statement Investments Portfolio Venture Building Startup Camp Deep Tech Tech Matching Team Menu Invest in a world-class dealflow of deep tech start ups The Chalmers Ventures portfolio consists of tech companies based on knowledge & research that resolve global challenges and offer great business potential . The portfolio includes companies at all stages of development. We invest in a wide range of industries, domains and applications. The goals of sustainability , profitability and equality are common to all. Investment Strategy Chalmers Ventures is an evergreen structure that invests in tech companies that resolve both global challenges and offer great business potential. Chalmers Ventures invests in early stages with the capacity to provide growth capital to selected companies. Chalmers Ventures is always looking to syndicate with other investors and has a large network of active players, from the very earliest stages to the later ones, leveraging the capital invested in the companies."
+    },
+    {
+      "id": "check-page-91b748664f",
+      "url": "https://chalmersventures.com/investments/",
+      "page": "terms",
+      "excerpt": "Investment Criteria Selection Chalmers Ventures invests in technology-based and innovative companies with growth potential."
+    },
+    {
+      "id": "check-page-6fc3983c0a",
+      "url": "https://chalmersventures.com/investments/",
+      "page": "terms",
+      "excerpt": "MSEK INVESTED CAPITAL 0 EXTERNAL SYNDICATION 0 x EXITS 0 Portfolio Development and Realised Capital click images to enlarge INVEST WITH US This is your opportunity to co-invest – with us – in some of the most exciting early startups in Sweden!"
+    },
+    {
+      "id": "check-page-b08fe9b7d6",
+      "url": "https://chalmersventures.com/investments/",
+      "page": "terms",
+      "excerpt": "Pre-seed Up to 1 MSEK Investments by Chalmers Ventures."
+    },
+    {
+      "id": "check-page-664612d0d1",
+      "url": "https://chalmersventures.com/investments/",
+      "page": "terms",
+      "excerpt": "Seed capital Up to 5 MSEK Investments with co-investors."
+    },
+    {
+      "id": "check-page-b08fe9b7d6",
+      "url": "https://chalmersventures.com/investments/",
+      "page": "terms",
+      "excerpt": "Pre-seed Up to 1 MSEK Investments by Chalmers Ventures."
+    },
+    {
+      "id": "check-page-664612d0d1",
+      "url": "https://chalmersventures.com/investments/",
+      "page": "terms",
+      "excerpt": "Seed capital Up to 5 MSEK Investments with co-investors."
+    },
+    {
+      "id": "check-page-a79cd8192a",
+      "url": "https://chalmersventures.com/investments/",
+      "page": "terms",
+      "excerpt": "As an accredited partner to Vinnova, we have the authority to allocate means of verification and the opportunity to finance patent applications through the department of education."
     },
     {
       "id": "check-page-8176aaece9",
@@ -551,6 +726,54 @@
       "url": "https://chalmersventures.com/investments/jonas-bergman-cirkel/",
       "page": "terms",
       "excerpt": "Jonas Bergman cirkel - Chalmers Ventures Jonas Bergman cirkel - Chalmers Ventures × Contact us Investments Portfolio Program and Tracks Venture Building Programme The Mentorship Programme Tech Transfer Startup Camp Deep Tech 2026 Tech Matching Open Coaching Offers | Deals | Support Startup Stories News & Media News feed Newsletter Media Our team Contact About About CV Career Privacy policy Accessibility Statement Investments Portfolio Venture Building Startup Camp Deep Tech Tech Matching Team Menu Jonas Bergman cirkel Jonas Bergman cirkel Chalmers Ventures To all innovators, entrepreneurs and pioneers of tomorrow. Our promise is to take every dream and idea with potential into game changing business. Together we’ll be the heart of venture creation – a boundless community, dedicated to stretch what’s possible. Supported by world leading competence and knowledge. Powered by true passion, curiosity and courage. Keep connected linkedin.com/company/chalmers-ventures facebook.com/chalmersventures © Chalmers Ventures AB2026. All rights reserved. Newsletter Sign up to recieve our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4 trp Göteborg"
+    },
+    {
+      "id": "check-page-72492dcced",
+      "url": "https://chalmersventures.com/investments/night-sky_t20_kj9aer/",
+      "page": "terms",
+      "excerpt": "night sky investments - Chalmers Ventures night sky investments - Chalmers Ventures × Contact us Investments Portfolio Program and Tracks Venture Building Programme The Mentorship Programme Tech Transfer Startup Camp Deep Tech 2026 Tech Matching Open Coaching Offers | Deals | Support Startup Stories News & Media News feed Newsletter Media Our team Contact About About CV Career Privacy policy Accessibility Statement Investments Portfolio Venture Building Startup Camp Deep Tech Tech Matching Team Menu night sky investments night sky investments Chalmers Ventures To all innovators, entrepreneurs and pioneers of tomorrow. Our promise is to take every dream and idea with potential into game changing business. Together we’ll be the heart of venture creation – a boundless community, dedicated to stretch what’s possible. Supported by world leading competence and knowledge. Powered by true passion, curiosity and courage. Keep connected linkedin.com/company/chalmers-ventures facebook.com/chalmersventures © Chalmers Ventures AB2026. All rights reserved. Newsletter Sign up to recieve our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4 trp Göteborg"
+    },
+    {
+      "id": "check-page-c67223346d",
+      "url": "https://chalmersventures.com/investments/pontus-ottosson-chalmers-ventures-2/",
+      "page": "terms",
+      "excerpt": "Pontus-Ottosson-Chalmers-Ventures - Chalmers Ventures Pontus-Ottosson-Chalmers-Ventures - Chalmers Ventures × Contact us Investments Portfolio Program and Tracks Venture Building Programme The Mentorship Programme Tech Transfer Startup Camp Deep Tech 2026 Tech Matching Open Coaching Offers | Deals | Support Startup Stories News & Media News feed Newsletter Media Our team Contact About About CV Career Privacy policy Accessibility Statement Investments Portfolio Venture Building Startup Camp Deep Tech Tech Matching Team Menu Pontus-Ottosson-Chalmers-Ventures Chalmers Ventures To all innovators, entrepreneurs and pioneers of tomorrow. Our promise is to take every dream and idea with potential into game changing business. Together we’ll be the heart of venture creation – a boundless community, dedicated to stretch what’s possible. Supported by world leading competence and knowledge. Powered by true passion, curiosity and courage. Keep connected linkedin.com/company/chalmers-ventures facebook.com/chalmersventures © Chalmers Ventures AB2026. All rights reserved. Newsletter Sign up to recieve our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4 trp Göteborg"
+    },
+    {
+      "id": "check-page-6ef043baa5",
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-48-57/",
+      "page": "terms",
+      "excerpt": "portfolio chalmers ventures - Chalmers Ventures portfolio chalmers ventures - Chalmers Ventures × Contact us Investments Portfolio Program and Tracks Venture Building Programme The Mentorship Programme Tech Transfer Startup Camp Deep Tech 2026 Tech Matching Open Coaching Offers | Deals | Support Startup Stories News & Media News feed Newsletter Media Our team Contact About About CV Career Privacy policy Accessibility Statement Investments Portfolio Venture Building Startup Camp Deep Tech Tech Matching Team Menu portfolio chalmers ventures portfolio chalmers ventures Chalmers Ventures To all innovators, entrepreneurs and pioneers of tomorrow. Our promise is to take every dream and idea with potential into game changing business. Together we’ll be the heart of venture creation – a boundless community, dedicated to stretch what’s possible. Supported by world leading competence and knowledge. Powered by true passion, curiosity and courage. Keep connected linkedin.com/company/chalmers-ventures facebook.com/chalmersventures © Chalmers Ventures AB2026. All rights reserved. Newsletter Sign up to recieve our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4 trp Göteborg"
+    },
+    {
+      "id": "check-page-c257cb6e0a",
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-49-05/",
+      "page": "terms",
+      "excerpt": "Screenshot 2023-03-08 at 11.49.05 - Chalmers Ventures Screenshot 2023-03-08 at 11.49.05 - Chalmers Ventures × Contact us Investments Portfolio Program and Tracks Venture Building Programme The Mentorship Programme Tech Transfer Startup Camp Deep Tech 2026 Tech Matching Open Coaching Offers | Deals | Support Startup Stories News & Media News feed Newsletter Media Our team Contact About About CV Career Privacy policy Accessibility Statement Investments Portfolio Venture Building Startup Camp Deep Tech Tech Matching Team Menu Screenshot 2023-03-08 at 11.49.05 Chalmers Ventures To all innovators, entrepreneurs and pioneers of tomorrow. Our promise is to take every dream and idea with potential into game changing business. Together we’ll be the heart of venture creation – a boundless community, dedicated to stretch what’s possible. Supported by world leading competence and knowledge. Powered by true passion, curiosity and courage. Keep connected linkedin.com/company/chalmers-ventures facebook.com/chalmersventures © Chalmers Ventures AB2026. All rights reserved. Newsletter Sign up to recieve our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4 trp Göteborg"
+    },
+    {
+      "id": "check-page-3476ac5a19",
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-51-21/",
+      "page": "terms",
+      "excerpt": "Screenshot 2023-03-08 at 11.51.21 - Chalmers Ventures Screenshot 2023-03-08 at 11.51.21 - Chalmers Ventures × Contact us Investments Portfolio Program and Tracks Venture Building Programme The Mentorship Programme Tech Transfer Startup Camp Deep Tech 2026 Tech Matching Open Coaching Offers | Deals | Support Startup Stories News & Media News feed Newsletter Media Our team Contact About About CV Career Privacy policy Accessibility Statement Investments Portfolio Venture Building Startup Camp Deep Tech Tech Matching Team Menu Screenshot 2023-03-08 at 11.51.21 Chalmers Ventures To all innovators, entrepreneurs and pioneers of tomorrow. Our promise is to take every dream and idea with potential into game changing business. Together we’ll be the heart of venture creation – a boundless community, dedicated to stretch what’s possible. Supported by world leading competence and knowledge. Powered by true passion, curiosity and courage. Keep connected linkedin.com/company/chalmers-ventures facebook.com/chalmersventures © Chalmers Ventures AB2026. All rights reserved. Newsletter Sign up to recieve our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4 trp Göteborg"
+    },
+    {
+      "id": "check-page-16c62cf4cd",
+      "url": "https://chalmersventures.com/investments/sectors-2024-2/",
+      "page": "terms",
+      "excerpt": "Sectors 2024 - Chalmers Ventures Sectors 2024 - Chalmers Ventures × Contact us Investments Portfolio Program and Tracks Venture Building Programme The Mentorship Programme Tech Transfer Startup Camp Deep Tech 2026 Tech Matching Open Coaching Offers | Deals | Support Startup Stories News & Media News feed Newsletter Media Our team Contact About About CV Career Privacy policy Accessibility Statement Investments Portfolio Venture Building Startup Camp Deep Tech Tech Matching Team Menu Sectors 2024 Chalmers Ventures To all innovators, entrepreneurs and pioneers of tomorrow. Our promise is to take every dream and idea with potential into game changing business. Together we’ll be the heart of venture creation – a boundless community, dedicated to stretch what’s possible. Supported by world leading competence and knowledge. Powered by true passion, curiosity and courage. Keep connected linkedin.com/company/chalmers-ventures facebook.com/chalmersventures © Chalmers Ventures AB2026. All rights reserved. Newsletter Sign up to recieve our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4 trp Göteborg"
+    },
+    {
+      "id": "check-page-23b161fcfe",
+      "url": "https://chalmersventures.com/investments/sectors/",
+      "page": "terms",
+      "excerpt": "Sectors - Chalmers Ventures Sectors - Chalmers Ventures × Contact us Investments Portfolio Program and Tracks Venture Building Programme The Mentorship Programme Tech Transfer Startup Camp Deep Tech 2026 Tech Matching Open Coaching Offers | Deals | Support Startup Stories News & Media News feed Newsletter Media Our team Contact About About CV Career Privacy policy Accessibility Statement Investments Portfolio Venture Building Startup Camp Deep Tech Tech Matching Team Menu Sectors Chalmers Ventures To all innovators, entrepreneurs and pioneers of tomorrow. Our promise is to take every dream and idea with potential into game changing business. Together we’ll be the heart of venture creation – a boundless community, dedicated to stretch what’s possible. Supported by world leading competence and knowledge. Powered by true passion, curiosity and courage. Keep connected linkedin.com/company/chalmers-ventures facebook.com/chalmersventures © Chalmers Ventures AB2026. All rights reserved. Newsletter Sign up to recieve our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4 trp Göteborg"
+    },
+    {
+      "id": "check-page-704c3064ba",
+      "url": "https://chalmersventures.com/investments/ska%cc%88rmavbild-2022-08-15-kl-11-14-19/",
+      "page": "terms",
+      "excerpt": "phases investments chalmers ventures - Chalmers Ventures phases investments chalmers ventures - Chalmers Ventures × Contact us Investments Portfolio Program and Tracks Venture Building Programme The Mentorship Programme Tech Transfer Startup Camp Deep Tech 2026 Tech Matching Open Coaching Offers | Deals | Support Startup Stories News & Media News feed Newsletter Media Our team Contact About About CV Career Privacy policy Accessibility Statement Investments Portfolio Venture Building Startup Camp Deep Tech Tech Matching Team Menu phases investments chalmers ventures phases investments chalmers ventures Chalmers Ventures To all innovators, entrepreneurs and pioneers of tomorrow. Our promise is to take every dream and idea with potential into game changing business. Together we’ll be the heart of venture creation – a boundless community, dedicated to stretch what’s possible. Supported by world leading competence and knowledge. Powered by true passion, curiosity and courage. Keep connected linkedin.com/company/chalmers-ventures facebook.com/chalmersventures © Chalmers Ventures AB2026. All rights reserved. Newsletter Sign up to recieve our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4 trp Göteborg"
     }
   ],
   "findings": {

@@ -1,30 +1,112 @@
 {
   "programId": "german-accelerator",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.germanaccelerator.com/",
     "https://www.germanaccelerator.com/apply-now",
     "https://www.germanaccelerator.com/about-us/faq",
     "https://www.germanaccelerator.com/about-us",
-    "https://www.germanaccelerator.com/blog",
-    "https://www.germanaccelerator.com/blog/5-reasons-for-german-startups-to-expand-to-singapore",
-    "https://www.germanaccelerator.com/blog/5-reasons-why-india-is-a-promising-market-for-german-startups",
-    "https://www.germanaccelerator.com/blog/beyond-data-how-crelora-found-its-next-growth-market-in-india",
-    "https://www.germanaccelerator.com/blog/building-circular-supply-chains-from-munich-to-south-africa",
-    "https://www.germanaccelerator.com/blog/dream-big-5-reasons-startups-should-think-about-internationalization-early",
-    "https://www.germanaccelerator.com/blog/from-aachen-to-fukuoka-how-fibrecoat-cracked-the-japanese-market",
-    "https://www.germanaccelerator.com/blog/from-founder-to-ecosystem-architect-how-one-exit-shaped-a-new-vision-for-europes-deep-tech-future-copy-9lsma",
-    "https://www.germanaccelerator.com/blog/from-munich-to-asia-how-irubis-is-transforming-bioprocessing-through-global-expansion",
-    "https://www.germanaccelerator.com/blog/germany-and-brazil-strengthen-startup-collaboration-at-hannover-messe-2026",
-    "https://www.germanaccelerator.com/blog/how-greyd-turned-a-working-product-into-a-scalable-business"
+    "https://www.germanaccelerator.com/check-your-eligibility",
+    "https://www.germanaccelerator.com/contact-us",
+    "https://www.germanaccelerator.com/exclusive-consultation-ticket",
+    "https://www.germanaccelerator.com/global-connections",
+    "https://www.germanaccelerator.com/globals",
+    "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+    "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+    "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+    "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+    "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+    "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+    "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+    "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+    "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+    "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+    "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access"
   ],
   "evidence": [
+    {
+      "id": "check-deadline-1f2a6c80d4",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "2027 In-Country Dates: April 26 - May 7, 2027 Application Deadline: January 15, 2027 Format: Workshops, 1-1 Mentoring, Immersion Week, Pitch",
+      "page": "details"
+    },
+    {
+      "id": "check-deadline-8a0eba0aa9",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "of startups. Check Eligibility Check Eligibility Apply Now Deadline: January 15, 2027 Southeast Asia Market Access Turn momentum into traction",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-0658c00f8f",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "4, 2026 Format: Workshops, Panel Discussions, 1-on-1 Mentoring Cost: €500 per Startup Apply Now Apply Now Test Meet all Startup Stories \"I",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-1c497e6c57",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "2026 Format: Workshops, Panel Discussions, 1-on-1 Mentoring Cost: €500 per Startup Apply Now Apply Now *Optional Attendance at Hongqiao Tech",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-329dc005d7",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "2026 Format: Workshops, Panel Discussions, 1-on-1 Mentoring Cost: €500 per Startup Apply Now Apply Now Test Meet all Startup Stories \"I",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-42bb0cfa3b",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "title": "German Accelerator — program page",
+      "excerpt": "while the Market Discovery program has a small participation fee of €500 per startup for up to 3 participants. ‍ We provide unbiased advice,",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-59b96548aa",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "2026 Format: Workshops, Panel Discussions, 1-on-1 Mentoring Cost: €500 per Startup Apply Now Apply Now Test Meet all Startup Stories \"I",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-7179612387",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "Application Deadline: November 9, 2026 Format: Virtual Program Cost: €500 per Startup Apply Now Apply Now Test Meet all Startup Stories \"I",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-a7d28c106a",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "title": "German Accelerator — program page",
+      "excerpt": "Venios Frequently Asked Questions What does the program cost? EUR 500 per startup. Travel and accommodation are not included. The fee",
+      "page": "details"
+    },
     {
       "id": "check-deal-bcb11f639c",
       "url": "https://www.germanaccelerator.com/about-us/faq",
       "title": "German Accelerator — terms page",
       "excerpt": "charge. ‍ Each Market Discovery program has a participation fee of €500. The fee applies per startup, per program, and covers up to 3",
       "page": "terms"
+    },
+    {
+      "id": "check-duration-084c7ba6da",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "title": "German Accelerator — program page",
+      "excerpt": "sufficient funding, usually for the next 6 to 9 months (usually Seed or Series A as well as extended",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0c9c1d8183",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "title": "German Accelerator — program page",
+      "excerpt": "into those conversations organically takes 12–18 months — if it happens at all. THE PIVOT Through the",
+      "page": "details"
     },
     {
       "id": "check-duration-21495be2b8",
@@ -34,10 +116,31 @@
       "page": "details"
     },
     {
+      "id": "check-duration-221f665274",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "title": "German Accelerator — program page",
+      "excerpt": "within 3 months - compressing a typical 12–18 month B2B sales cycle. Partnership with SENAI, the",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-297fbf1dab",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "and set workstreams and SMART goals for your 3-month journey. Phase 2 Immersion and Execution",
+      "page": "details"
+    },
+    {
       "id": "check-duration-2f0ab94857",
       "url": "https://www.germanaccelerator.com/",
       "title": "German Accelerator — homepage",
       "excerpt": "on your own Market Analysis 1-3 month 2 weeks ‍ (Kickstart Program) Strategy, Validation &",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-33a19b6905",
+      "url": "https://www.germanaccelerator.com/globals",
+      "title": "German Accelerator — program page",
+      "excerpt": "days, free, early exploration Market Discovery 5-7 weeks, EUR 500, testing market Market Access 3-6",
       "page": "details"
     },
     {
@@ -52,6 +155,20 @@
       "url": "https://www.germanaccelerator.com/",
       "title": "German Accelerator — homepage",
       "excerpt": "Analysis & Strategy Development 1-3 months 2 weeks Validation & Testing 4-6 months 4 weeks (incl.",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-4b6e0cd32b",
+      "url": "https://www.germanaccelerator.com/globals",
+      "title": "German Accelerator — program page",
+      "excerpt": "weeks, EUR 500, testing market Market Access 3-6 months, free, market entry Compare All Programs Focus",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-4c32bd3888",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "title": "German Accelerator — program page",
+      "excerpt": "meeting pipeline ahead of the on-site week. ‍ 02 02 Week 4 Discovery Sprint, Johannesburg and Cape Town",
       "page": "details"
     },
     {
@@ -83,10 +200,31 @@
       "page": "details"
     },
     {
+      "id": "check-duration-840278a8fd",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "title": "German Accelerator — program page",
+      "excerpt": "soon Program Structure and Experience 01 01 Weeks 1 to 3 Hypotheses, Market Framing and Meeting",
+      "page": "details"
+    },
+    {
       "id": "check-duration-8a442f7aa4",
       "url": "https://www.germanaccelerator.com/",
       "title": "German Accelerator — homepage",
       "excerpt": "Program) Strategy, Validation & Testing 4-6 months 5-7 weeks (Market Discovery Program)",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9361e7a884",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "May 14, 2027 Program Overview Program Overview A 3-month program with a 2-week immersion in Singapore",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-96b7bff06e",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "traction, clarity, and a plan for the next 6–12 months in the region. Apply Now Apply Now What You Get",
       "page": "details"
     },
     {
@@ -104,6 +242,41 @@
       "page": "details"
     },
     {
+      "id": "check-duration-9c97174bfd",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "title": "German Accelerator — program page",
+      "excerpt": "Buenos Aires. First customer in Argentina within 3 months - compressing a typical 12–18 month B2B sales",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-a035629a82",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "corporates, and media Action plan for the next 6–12 months in Southeast Asia Is This Program Right for You?",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-a1c14eaee8",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "with a strategy review that defines your next 6–12 months in the region and ensures you leave with a",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-aa62d4bb07",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "Program Overview A 3-month program with a 2-week immersion in Singapore plus one additional SEA",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b068bb2b2a",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "and set clear, measurable objectives for your 3-month journey. Strategy and Focus Workstream and SMART",
+      "page": "details"
+    },
+    {
       "id": "check-duration-b3a8219a83",
       "url": "https://www.germanaccelerator.com/",
       "title": "German Accelerator — homepage",
@@ -115,6 +288,13 @@
       "url": "https://www.germanaccelerator.com/",
       "title": "German Accelerator — homepage",
       "excerpt": "Accelerator fast-tracks your global growth in 4 months with expert guidance, key partnerships, and a",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-bcf4997909",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "strategy session that defines your next 6–12 months in Southeast Asia. Program Details Location:",
       "page": "details"
     },
     {
@@ -132,6 +312,27 @@
       "page": "details"
     },
     {
+      "id": "check-duration-e691180f66",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "scaling plan. What You'll Experience A 3-month Market Access program designed to turn your",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ee583071b6",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "title": "German Accelerator — program page",
+      "excerpt": "for internationalization is now - whether you’re 3 months or 3 years away from expanding globally, it’s",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f21526296c",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "title": "German Accelerator — program page",
+      "excerpt": "hospitals, payers and partners face to face. 03 03 Weeks 5 to 6 Decision and Strategy Final decision",
+      "page": "details"
+    },
+    {
       "id": "check-duration-fa4054c799",
       "url": "https://www.germanaccelerator.com/",
       "title": "German Accelerator — homepage",
@@ -146,10 +347,248 @@
       "page": "details"
     },
     {
+      "id": "check-email-105d040926",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "title": "German Accelerator — program page",
+      "excerpt": "‍ 149 New Montgomery St San Francisco, CA 94105 ‍ info@germanaccelerator.com Singapore Asia Strategically located in Asia, Singapore is",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2a6b59e2d6",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "title": "German Accelerator — program page",
+      "excerpt": "in Düsseldorf Kasernenstraße 6740213 Düsseldorf ‍ info@germanaccelerator.com Footer Main Programs Kickstart - Scaling & Growth Market",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2c098892a6",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "title": "German Accelerator — program page",
+      "excerpt": "in Berlin AI Campus Max-Urich-Straße 313355 Berlin ‍ info@germanaccelerator.com Düsseldorf Europe Düsseldorf's thriving startup scene and",
+      "page": "details"
+    },
+    {
+      "id": "check-email-47f98495e8",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "title": "German Accelerator — program page",
+      "excerpt": "‍ 1 Chome-17-1 Toranomon Minato City, Tokyo 105-0001 ‍ info@germanaccelerator.com Shanghai Asia In Shanghai, German Accelerator is situated",
+      "page": "details"
+    },
+    {
+      "id": "check-email-48b6230cb3",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "title": "German Accelerator — program page",
+      "excerpt": "in Munich ‍ Balanstraße 73 | Haus 19 B/ EG 81541 Munich ‍ info@germanaccelerator.com Berlin Europe Our office at the AI Campus in Berlin places",
+      "page": "details"
+    },
+    {
+      "id": "check-email-4991a908c3",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "title": "German Accelerator — program page",
+      "excerpt": "Campos Salles 1300, C1429 Cdad. Autónoma de Buenos Aires ‍ info@germanaccelerator.com Munich Europe Munich's robust infrastructure, access to",
+      "page": "details"
+    },
+    {
       "id": "check-email-4f427f5cf3",
       "url": "https://www.germanaccelerator.com/about-us",
       "title": "German Accelerator — program page",
       "excerpt": "to global success - reach out if you have questions: info@germanaccelerator.com . Daniel Böckenförde Prof. Matthias Notz Location Germany",
+      "page": "details"
+    },
+    {
+      "id": "check-email-70ae87fe5a",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "title": "German Accelerator — program page",
+      "excerpt": "in New York ‍ 215 Park Ave S New York, NY 10003 ‍ info@germanaccelerator.com San Francisco U.S. Located among neighbors like Apple,",
+      "page": "details"
+    },
+    {
+      "id": "check-email-72466e3d9f",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "title": "German Accelerator — program page",
+      "excerpt": "info@germanaccelerator.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b0afbe0922",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "title": "German Accelerator — program page",
+      "excerpt": "Crescent #02-16 JTC LaunchPad, Block 75 Singapore 139953 info@germanaccelerator.com Tokyo Asia Located in CIC Tokyo in the Toranomon Hills",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d32bb75b1d",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "title": "German Accelerator — program page",
+      "excerpt": "Fute North RoadChina (Shanghai) Pilot Free Trade Zone ‍ info@germanaccelerator.com Buenos Aires South America Argentina has emerged as a",
+      "page": "details"
+    },
+    {
+      "id": "check-email-dd8e7c82f7",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "title": "German Accelerator — program page",
+      "excerpt": "Center One Broadway | 14th Floor Cambridge, MA 02142 info@germanaccelerator.com New York U.S. Our office is located in the heart of New",
+      "page": "details"
+    },
+    {
+      "id": "check-format-044c983fb4",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "Story Julian Kellermann Managing Director \"A ten-minute in-person meeting saved a lot of paperwork. Being physically present",
+      "page": "details"
+    },
+    {
+      "id": "check-format-04d0819e89",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "Story Julian Kellermann Managing Director \"A ten-minute in-person meeting saved a lot of paperwork. Being physically present",
+      "page": "details"
+    },
+    {
+      "id": "check-format-0a4ce930c7",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "& Experience Phase 1 Hypotheses & Market Framing (Virtual) Market overview, regulatory context, and founder reality",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1a8e481092",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "and how to de-risk early decisions. ‍ Through a mix of virtual learning and in-market immersion, you’ll connect with",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3fc3f3f595",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "title": "German Accelerator — program page",
+      "excerpt": "time does the program take? 4 hours per week during the virtual phases, plus the full on-site week from 16 to 20 November.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-40fca725b6",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "Story Julian Kellermann Managing Director \"A ten-minute in-person meeting saved a lot of paperwork. Being physically present",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4b0739c06f",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "Story Julian Kellermann Managing Director \"A ten-minute in-person meeting saved a lot of paperwork. Being physically present",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4bdf207a8a",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "title": "German Accelerator — program page",
+      "excerpt": "and diagnostic AI, telehealth and remote care delivery, remote patient monitoring, hospital and clinical workflow",
+      "page": "details"
+    },
+    {
+      "id": "check-format-50b507f31d",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "Story Julian Kellermann Managing Director \"A ten-minute in-person meeting saved a lot of paperwork. Being physically present",
+      "page": "details"
+    },
+    {
+      "id": "check-format-54a3e85944",
+      "url": "https://www.germanaccelerator.com/exclusive-consultation-ticket",
+      "title": "German Accelerator — program page",
+      "excerpt": "Story Julian Kellermann Managing Director \"A ten-minute in-person meeting saved a lot of paperwork. Being physically present",
+      "page": "details"
+    },
+    {
+      "id": "check-format-551c26e67b",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "Story Julian Kellermann Managing Director \"A ten-minute in-person meeting saved a lot of paperwork. Being physically present",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5979a9794b",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "‍ Phase 2 Market Signal Generation Curated 1:1 meetings (virtual + on-site) with experts, partners, and customers. On-site",
+      "page": "details"
+    },
+    {
+      "id": "check-format-60a0bb2395",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "title": "German Accelerator — program page",
+      "excerpt": "1 to 3 Hypotheses, Market Framing and Meeting Pipeline (Virtual) Company deep dives, South African health system and",
+      "page": "details"
+    },
+    {
+      "id": "check-format-69a3159944",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "11, 2026 Application Deadline: November 9, 2026 Format: Virtual Program Cost: €500 per Startup Apply Now Apply Now Test",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6bfd1ccc36",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "and customer acquisition. In-Market Access and Visibility In-Person Immersion: Singapore + One Other Market Meet potential",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6f7a681825",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "Apply Now Deadline: November 9, 2026 Asia Market Discovery Virtual | November 16 - December 11, 2026 Program Overview Program",
+      "page": "details"
+    },
+    {
+      "id": "check-format-73b72c3c3b",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "title": "German Accelerator — program page",
+      "excerpt": "are designed with flexibility in mind. Most sessions are virtual and workshop-based, making it easier to fit into a busy",
+      "page": "details"
+    },
+    {
+      "id": "check-format-773a3fe1b6",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "title": "German Accelerator — program page",
+      "excerpt": "validated opportunities. Program Details Location: Hybrid: Online, plus Johannesburg and Cape Town, South Africa",
+      "page": "details"
+    },
+    {
+      "id": "check-format-88053d20b8",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "title": "German Accelerator — program page",
+      "excerpt": "Story Julian Kellermann Managing Director \"A ten-minute in-person meeting saved a lot of paperwork. Being physically present",
+      "page": "details"
+    },
+    {
+      "id": "check-format-aaced7080f",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "Story Julian Kellermann Managing Director \"A ten-minute in-person meeting saved a lot of paperwork. Being physically present",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b72f99f241",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "Story Julian Kellermann Managing Director \"A ten-minute in-person meeting saved a lot of paperwork. Being physically present",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ba6c0d267c",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "for your 3-month journey. Phase 2 Immersion and Execution (In-Person | Singapore + One Other Market) You execute your GTM plan",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c598db00c8",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "validated opportunities. ‍ Program Details Location: Hybrid (Online/ South Africa) Program Dates: May 25 – July 05,",
       "page": "details"
     },
     {
@@ -160,10 +599,45 @@
       "page": "details"
     },
     {
-      "id": "check-location-84a7a2e0d6",
-      "url": "https://www.germanaccelerator.com/blog/5-reasons-for-german-startups-to-expand-to-singapore",
+      "id": "check-format-d0fa7df247",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
       "title": "German Accelerator — program page",
-      "excerpt": "have their Asia Regional headquarters based in Singapore . Singapore also offers startups easy",
+      "excerpt": "Story Julian Kellermann Managing Director \"A ten-minute in-person meeting saved a lot of paperwork. Being physically present",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e03de8e142",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "follow-up beyond the program. Upcoming Cohort Location: Remote & South Korea (optional) Program Dates: September 28 -",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e5baaa2d1d",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "Asia. Apply Now Apply Now Program Details Location: Asia (Remote) Program Dates: November 16 - December 11, 2026",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e63f35ce1e",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "Story Julian Kellermann Managing Director \"A ten-minute in-person meeting saved a lot of paperwork. Being physically present",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ebbb0dadb8",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "title": "German Accelerator — program page",
+      "excerpt": "support, imaging and diagnostic AI, telehealth and remote care delivery, remote patient monitoring, hospital and",
+      "page": "details"
+    },
+    {
+      "id": "check-location-a9ec202cd3",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "title": "German Accelerator — program page",
+      "excerpt": "Singapore Asia Strategically located in Asia, Singapore is a cosmopolitan city and",
       "page": "details"
     },
     {
@@ -181,36 +655,22 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-111a7f9bdd",
-      "url": "https://www.germanaccelerator.com/blog/how-greyd-turned-a-working-product-into-a-scalable-business",
+      "id": "check-portfolio-182173b2ff",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
       "title": "German Accelerator — program page",
       "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
       "page": "details"
     },
     {
-      "id": "check-portfolio-1d81a72720",
-      "url": "https://www.germanaccelerator.com/blog/from-munich-to-asia-how-irubis-is-transforming-bioprocessing-through-global-expansion",
+      "id": "check-portfolio-298c25a77b",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
       "title": "German Accelerator — program page",
       "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
       "page": "details"
     },
     {
-      "id": "check-portfolio-2baa0f8652",
-      "url": "https://www.germanaccelerator.com/blog/germany-and-brazil-strengthen-startup-collaboration-at-hannover-messe-2026",
-      "title": "German Accelerator — program page",
-      "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-4bce8f429b",
-      "url": "https://www.germanaccelerator.com/blog/from-aachen-to-fukuoka-how-fibrecoat-cracked-the-japanese-market",
-      "title": "German Accelerator — program page",
-      "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-511bbbfb0d",
-      "url": "https://www.germanaccelerator.com/blog/building-circular-supply-chains-from-munich-to-south-africa",
+      "id": "check-portfolio-4695f89f48",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
       "title": "German Accelerator — program page",
       "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
       "page": "details"
@@ -223,15 +683,43 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-8401f3e823",
-      "url": "https://www.germanaccelerator.com/blog/from-founder-to-ecosystem-architect-how-one-exit-shaped-a-new-vision-for-europes-deep-tech-future-copy-9lsma",
+      "id": "check-portfolio-5a7219c2b1",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
       "title": "German Accelerator — program page",
       "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
       "page": "details"
     },
     {
-      "id": "check-portfolio-93c88fc463",
-      "url": "https://www.germanaccelerator.com/blog/dream-big-5-reasons-startups-should-think-about-internationalization-early",
+      "id": "check-portfolio-5ab4f526d9",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5d453fff3e",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "title": "German Accelerator — program page",
+      "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5e8603e0c4",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-73f25921e5",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8228aab8bb",
+      "url": "https://www.germanaccelerator.com/check-your-eligibility",
       "title": "German Accelerator — program page",
       "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
       "page": "details"
@@ -244,17 +732,31 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-a266f6bb3a",
-      "url": "https://www.germanaccelerator.com/blog/dream-big-5-reasons-startups-should-think-about-internationalization-early",
+      "id": "check-portfolio-c9627fd71c",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
       "title": "German Accelerator — program page",
-      "excerpt": "Celonis → https://old.germanaccelerator.com/companies/#celonis",
+      "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
       "page": "details"
     },
     {
-      "id": "check-portfolio-a36575d7bc",
-      "url": "https://www.germanaccelerator.com/blog/dream-big-5-reasons-startups-should-think-about-internationalization-early",
+      "id": "check-portfolio-ce771aedf9",
+      "url": "https://www.germanaccelerator.com/exclusive-consultation-ticket",
       "title": "German Accelerator — program page",
-      "excerpt": "N26 → https://old.germanaccelerator.com/companies/#n26",
+      "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d04d648356",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "title": "German Accelerator — program page",
+      "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d6396647fc",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "title": "German Accelerator — program page",
+      "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
       "page": "details"
     },
     {
@@ -265,29 +767,8 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-dbd4a82219",
-      "url": "https://www.germanaccelerator.com/blog/5-reasons-for-german-startups-to-expand-to-singapore",
-      "title": "German Accelerator — program page",
-      "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-e6eb8811d7",
-      "url": "https://www.germanaccelerator.com/blog/beyond-data-how-crelora-found-its-next-growth-market-in-india",
-      "title": "German Accelerator — program page",
-      "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-ef29d028b9",
-      "url": "https://www.germanaccelerator.com/blog/5-reasons-why-india-is-a-promising-market-for-german-startups",
-      "title": "German Accelerator — program page",
-      "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-f4ed6e4afc",
-      "url": "https://www.germanaccelerator.com/blog",
+      "id": "check-portfolio-dcc46f7d61",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
       "title": "German Accelerator — program page",
       "excerpt": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups. → https://www.germanaccelerator.com/alumni",
       "page": "details"
@@ -300,94 +781,10 @@
       "page": "application"
     },
     {
-      "id": "check-route-19a54a21e5",
-      "url": "https://www.germanaccelerator.com/blog/5-reasons-why-india-is-a-promising-market-for-german-startups",
-      "title": "German Accelerator — program page",
-      "excerpt": "Apply now to the India Market Discovery program → https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
-      "page": "details"
-    },
-    {
-      "id": "check-route-302a4d094b",
-      "url": "https://www.germanaccelerator.com/blog/from-founder-to-ecosystem-architect-how-one-exit-shaped-a-new-vision-for-europes-deep-tech-future-copy-9lsma",
-      "title": "German Accelerator — program page",
-      "excerpt": "Our Programs Our Programs → https://www.germanaccelerator.com/apply-now",
-      "page": "details"
-    },
-    {
-      "id": "check-route-46a3ef5d5f",
-      "url": "https://www.germanaccelerator.com/blog/building-circular-supply-chains-from-munich-to-south-africa",
-      "title": "German Accelerator — program page",
-      "excerpt": "Our Programs Our Programs → https://www.germanaccelerator.com/apply-now",
-      "page": "details"
-    },
-    {
-      "id": "check-route-5b3f5c0c97",
-      "url": "https://www.germanaccelerator.com/blog/how-greyd-turned-a-working-product-into-a-scalable-business",
-      "title": "German Accelerator — program page",
-      "excerpt": "Our Programs Our Programs → https://www.germanaccelerator.com/apply-now",
-      "page": "details"
-    },
-    {
-      "id": "check-route-63aba1f347",
-      "url": "https://www.germanaccelerator.com/blog/beyond-data-how-crelora-found-its-next-growth-market-in-india",
-      "title": "German Accelerator — program page",
-      "excerpt": "Our Programs Our Programs → https://www.germanaccelerator.com/apply-now",
-      "page": "details"
-    },
-    {
       "id": "check-route-8f9524b4ad",
       "url": "https://www.germanaccelerator.com/",
       "title": "German Accelerator — homepage",
       "excerpt": "Network Network → https://www.germanaccelerator.com/",
-      "page": "details"
-    },
-    {
-      "id": "check-route-abe0d67ab7",
-      "url": "https://www.germanaccelerator.com/blog/germany-and-brazil-strengthen-startup-collaboration-at-hannover-messe-2026",
-      "title": "German Accelerator — program page",
-      "excerpt": "Our Programs Our Programs → https://www.germanaccelerator.com/apply-now",
-      "page": "details"
-    },
-    {
-      "id": "check-route-c71d0e33ec",
-      "url": "https://www.germanaccelerator.com/blog/5-reasons-why-india-is-a-promising-market-for-german-startups",
-      "title": "German Accelerator — program page",
-      "excerpt": "Our Programs Our Programs → https://www.germanaccelerator.com/apply-now",
-      "page": "details"
-    },
-    {
-      "id": "check-route-c7fcaac917",
-      "url": "https://www.germanaccelerator.com/blog/5-reasons-for-german-startups-to-expand-to-singapore",
-      "title": "German Accelerator — program page",
-      "excerpt": "Our Programs Our Programs → https://www.germanaccelerator.com/apply-now",
-      "page": "details"
-    },
-    {
-      "id": "check-route-c8b295e978",
-      "url": "https://www.germanaccelerator.com/blog/5-reasons-for-german-startups-to-expand-to-singapore",
-      "title": "German Accelerator — program page",
-      "excerpt": "apply now to the Asia Market Access Program → https://www.germanaccelerator.com/our-programs/market-access",
-      "page": "details"
-    },
-    {
-      "id": "check-route-e57d5dd00c",
-      "url": "https://www.germanaccelerator.com/blog/from-aachen-to-fukuoka-how-fibrecoat-cracked-the-japanese-market",
-      "title": "German Accelerator — program page",
-      "excerpt": "Our Programs Our Programs → https://www.germanaccelerator.com/apply-now",
-      "page": "details"
-    },
-    {
-      "id": "check-route-ed2060832c",
-      "url": "https://www.germanaccelerator.com/blog/from-munich-to-asia-how-irubis-is-transforming-bioprocessing-through-global-expansion",
-      "title": "German Accelerator — program page",
-      "excerpt": "Our Programs Our Programs → https://www.germanaccelerator.com/apply-now",
-      "page": "details"
-    },
-    {
-      "id": "check-route-f555304d04",
-      "url": "https://www.germanaccelerator.com/blog/dream-big-5-reasons-startups-should-think-about-internationalization-early",
-      "title": "German Accelerator — program page",
-      "excerpt": "Our Programs Our Programs → https://www.germanaccelerator.com/apply-now",
       "page": "details"
     }
   ],
@@ -399,10 +796,154 @@
       "excerpt": "Home Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us Contact Us Resources"
     },
     {
+      "id": "check-page-011cee19e8",
+      "url": "https://www.germanaccelerator.com/",
+      "page": "details",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-75ceed0727",
+      "url": "https://www.germanaccelerator.com/",
+      "page": "details",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-534a4eb57a",
+      "url": "https://www.germanaccelerator.com/",
+      "page": "details",
+      "excerpt": "Check Eligibility Check Eligibility Grow Your Startup Beyond Borders Our programs help you internationalize and scale into leading innovation hubs in the U.S., Asia, Latin America, Africa, and Europe."
+    },
+    {
+      "id": "check-page-0f4fa0f477",
+      "url": "https://www.germanaccelerator.com/",
+      "page": "details",
+      "excerpt": "Explore Explore More than just an accelerator German Accelerator offers programs to help German startups expand into international markets by providing access to global markets, expert mentorship, and valuable industry connections."
+    },
+    {
+      "id": "check-page-e863d0c4d7",
+      "url": "https://www.germanaccelerator.com/",
+      "page": "details",
+      "excerpt": "Being physically present in Asia made all the difference.\" Otto Klemke Co-Founder and CEO Read story Read story Startup Quote “With our market plans to expand into the U.S., the mentors immensely helped us by giving deep insights on how to improve our pitch, our market focus and segmentation, our approach, and our communication and branding.” Dr."
+    },
+    {
+      "id": "check-page-d8ed5f577a",
+      "url": "https://www.germanaccelerator.com/",
+      "page": "details",
+      "excerpt": "Arne Kruse Co-Founder Read story Read story Startup Quote \"It’s all about meeting the right people, so the German Accelerator network was most relevant to our success,” said Pentenrieder."
+    },
+    {
+      "id": "check-page-c9546d903c",
+      "url": "https://www.germanaccelerator.com/",
+      "page": "details",
+      "excerpt": "But with German Accelerator’s program being well known in Germany’s startup space, we decided to apply."
+    },
+    {
+      "id": "check-page-e107837585",
+      "url": "https://www.germanaccelerator.com/",
+      "page": "details",
+      "excerpt": "Mentors 0 1 2 3 4 5 6 7 8 1 0 1 2 3 4 5 6 7 8 3 0 1 2 3 4 5 6 7 8 0 0 1 2 3 4 5 6 7 8 0 + Mentors who support startups all across the globe."
+    },
+    {
+      "id": "check-page-44df500f79",
+      "url": "https://www.germanaccelerator.com/",
+      "page": "details",
+      "excerpt": "Market Matching Programs Market Access Market Access Life Sciences Market Discovery Climate Tech Market Discovery AI OPPORTUNITIES FOR GERMAN STARTUPs 01 Diverse Market Highly-diversified market with incredible access to funding, exceptional talent, and business infrastructure."
+    },
+    {
+      "id": "check-page-41a134b243",
+      "url": "https://www.germanaccelerator.com/",
+      "page": "details",
+      "excerpt": "03 Venture Capital & Funding Vibrant venture capital ecosystems to secure funding due to the large number of venture capital firms, angel investors, and accelerators."
+    },
+    {
+      "id": "check-page-fc82cfa264",
+      "url": "https://www.germanaccelerator.com/",
+      "page": "details",
+      "excerpt": "Learn More Learn More Latin America Latin Amerika Market Matching programs LatAm Market Discovery LatAm Market Access OPPORTUNITIES FOR GERMAN STARTUPs 01 Untapped Markets Latin America’s expanding middle class offers a significant market opportunity, particularly in underserved sectors like financial services, infrastructure, e-commerce, and more."
+    },
+    {
+      "id": "check-page-7eabc0364b",
+      "url": "https://www.germanaccelerator.com/",
+      "page": "details",
+      "excerpt": "02 Venture Capital Stage In 2021, Latin America led the globe in venture capital growth, driven by a wave of seasoned entrepreneurs and increased foreign investment."
+    },
+    {
       "id": "check-page-eaf0186134",
       "url": "https://www.germanaccelerator.com/apply-now",
       "page": "application",
       "excerpt": "Apply Now Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us Contact Us"
+    },
+    {
+      "id": "check-page-e5a127bee2",
+      "url": "https://www.germanaccelerator.com/apply-now",
+      "page": "application",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-4013c3d41b",
+      "url": "https://www.germanaccelerator.com/apply-now",
+      "page": "application",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-a6f26ec4af",
+      "url": "https://www.germanaccelerator.com/apply-now",
+      "page": "application",
+      "excerpt": "Explore Explore Europe Kickstart: The Global Mindset Activation West Africa A high-energy, 1-day experience for founders who want to build something that matters beyond their local market and build their network."
+    },
+    {
+      "id": "check-page-8f24dfbf56",
+      "url": "https://www.germanaccelerator.com/apply-now",
+      "page": "application",
+      "excerpt": "Apply Now Apply Now Kickstart: The Scaling Clarity A hands-on bootcamp for founders who are serious about growth and global expansion."
+    },
+    {
+      "id": "check-page-bdef55fea8",
+      "url": "https://www.germanaccelerator.com/apply-now",
+      "page": "application",
+      "excerpt": "Apply Now Apply Now UK Market Discovery Life Sciences The UK Market Discovery Life Sciences program is a dedicated program for Life Sciences startups looking to assess the suitability of their business model in the UK market. ‍ Apply Now Apply Now United States U.S."
+    },
+    {
+      "id": "check-page-08fee8d2ba",
+      "url": "https://www.germanaccelerator.com/apply-now",
+      "page": "application",
+      "excerpt": "Market Access program equips startups with the tools and mentorship needed to enter the U.S. market."
+    },
+    {
+      "id": "check-page-56f496d47a",
+      "url": "https://www.germanaccelerator.com/apply-now",
+      "page": "application",
+      "excerpt": "Market Access Life Sciences The U.S."
+    },
+    {
+      "id": "check-page-0ec8845b9e",
+      "url": "https://www.germanaccelerator.com/apply-now",
+      "page": "application",
+      "excerpt": "Market Discovery Life Sciences Prepare for the U.S. healthcare market, sharpen your market assumptions, and build relevant ecosystem context around the World Medical Innovation Forum in Boston."
+    },
+    {
+      "id": "check-page-33d374ac64",
+      "url": "https://www.germanaccelerator.com/apply-now",
+      "page": "application",
+      "excerpt": "Apply Now Apply Now Asia Southeast Asia Market Access The Southeast Asia Market Access program equips startups with the tools and mentorship needed to enter the Southeast Asian markets."
+    },
+    {
+      "id": "check-page-47141d81fb",
+      "url": "https://www.germanaccelerator.com/apply-now",
+      "page": "application",
+      "excerpt": "Apply Now Apply Now Southeast Asia Market Discovery The Southeast Asia Market Discovery program equips startups with the knowledge needed to assess the suitability of your business model in Southeast Asia."
+    },
+    {
+      "id": "check-page-522fc37c2f",
+      "url": "https://www.germanaccelerator.com/apply-now",
+      "page": "application",
+      "excerpt": "Apply Now Apply Now Japan Market Access The Japan Market Access program equips startups with the tools and mentorship needed to enter the Japanese market."
+    },
+    {
+      "id": "check-page-2f43287485",
+      "url": "https://www.germanaccelerator.com/apply-now",
+      "page": "application",
+      "excerpt": "Apply Now Apply Now Japan Market Discovery The Japan Market Discovery program equips startups with the knowledge needed to assess the suitability of your business model in Japan."
     },
     {
       "id": "check-page-3c0411a9cd",
@@ -411,76 +952,1240 @@
       "excerpt": "FAQ Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us Contact Us Resources"
     },
     {
+      "id": "check-page-303c53be74",
+      "url": "https://www.germanaccelerator.com/about-us/faq",
+      "page": "terms",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-22c54e7638",
+      "url": "https://www.germanaccelerator.com/about-us/faq",
+      "page": "terms",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-bb65db7376",
+      "url": "https://www.germanaccelerator.com/about-us/faq",
+      "page": "terms",
+      "excerpt": "Explore Explore Eligibility Eligibility Costs Costs Application Application Program Content Program Content Program Administration Program Administration Eligibility 01 01 Does my company qualify for the German Accelerator programs?"
+    },
+    {
+      "id": "check-page-3293610bab",
+      "url": "https://www.germanaccelerator.com/about-us/faq",
+      "page": "terms",
+      "excerpt": "To qualify for any German Accelerator program, your company has to meet our selection criteria: Your company must be incorporated in Germany with one of the following legal forms: UG; AG; GmbH; GmbH & Co."
+    },
+    {
+      "id": "check-page-b9206fa12a",
+      "url": "https://www.germanaccelerator.com/about-us/faq",
+      "page": "terms",
+      "excerpt": "Market Traction: For non-healthcare or life science companies, your product or service should have a solid number of customers and traction in Germany."
+    },
+    {
+      "id": "check-page-bf55b1809c",
+      "url": "https://www.germanaccelerator.com/about-us/faq",
+      "page": "terms",
+      "excerpt": "Healthcare and life science companies should demonstrate a high unmet or under-met market need for the proposed solution."
+    },
+    {
+      "id": "check-page-cdeb2cc8f3",
+      "url": "https://www.germanaccelerator.com/about-us/faq",
+      "page": "terms",
+      "excerpt": "Runway: Startups with sufficient funding, usually for the next 6 to 9 months (usually Seed or Series A as well as extended Series A, Series B, and C) are ready for our programs in the U.S. and Asia, as well as for the Life Sciences program."
+    },
+    {
+      "id": "check-page-9565105202",
+      "url": "https://www.germanaccelerator.com/about-us/faq",
+      "page": "terms",
+      "excerpt": "Physical Presence: For our Japan Market Access program, a physical presence in Japan is required. ‍ For our Kickstart program , we consider the following minimum criteria to ensure your company is ready to start working on the basics for international expansion: Team: Core team functions (such as founding team, team quality, and dynamics) set up."
+    },
+    {
+      "id": "check-page-1fe37653a4",
+      "url": "https://www.germanaccelerator.com/about-us/faq",
+      "page": "terms",
+      "excerpt": "For our China Market Discovery program , participation in the China Essentials workshop is a prerequisite."
+    },
+    {
+      "id": "check-page-46bf37d86e",
+      "url": "https://www.germanaccelerator.com/about-us/faq",
+      "page": "terms",
+      "excerpt": "The basic requirements for your company to apply to any of our programs are: Your company must be incorporated in Germany with one of the following legal forms: UG; AG; GmbH; GmbH & Co."
+    },
+    {
+      "id": "check-page-aa4c89aca7",
+      "url": "https://www.germanaccelerator.com/about-us/faq",
+      "page": "terms",
+      "excerpt": "Qualify as a small and medium-sized enterprise (SME) based on the EU definition of a SME Be under the limit of the official EU De-minimis aid regulation 03 03 Can I apply if my company’s founder(s) is not German?"
+    },
+    {
+      "id": "check-page-06ea41a272",
+      "url": "https://www.germanaccelerator.com/about-us/faq",
+      "page": "terms",
+      "excerpt": "As long as your company meets our selection criteria, and is incorporated in Germany, you are welcome to apply."
+    },
+    {
       "id": "check-page-24e3f349b1",
       "url": "https://www.germanaccelerator.com/about-us",
       "page": "details",
       "excerpt": "About us Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us Contact Us"
     },
     {
-      "id": "check-page-6e6f61a2dd",
-      "url": "https://www.germanaccelerator.com/blog",
+      "id": "check-page-0a284d294d",
+      "url": "https://www.germanaccelerator.com/about-us",
       "page": "details",
-      "excerpt": "Blog Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us Contact Us Resources"
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
     },
     {
-      "id": "check-page-1d2309659a",
-      "url": "https://www.germanaccelerator.com/blog/5-reasons-for-german-startups-to-expand-to-singapore",
+      "id": "check-page-a90e82f956",
+      "url": "https://www.germanaccelerator.com/about-us",
       "page": "details",
-      "excerpt": "German Accelerator Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
     },
     {
-      "id": "check-page-dd4957879c",
-      "url": "https://www.germanaccelerator.com/blog/5-reasons-why-india-is-a-promising-market-for-german-startups",
+      "id": "check-page-9c0aaa85fe",
+      "url": "https://www.germanaccelerator.com/about-us",
       "page": "details",
-      "excerpt": "German Accelerator Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+      "excerpt": "Check Eligibility Check Eligibility About us Where German Startups Grow Beyond Borders We empower Germany's future unicorns with international networks, mentorship, and the knowledge needed to scale globally."
     },
     {
-      "id": "check-page-d78ac704ad",
-      "url": "https://www.germanaccelerator.com/blog/beyond-data-how-crelora-found-its-next-growth-market-in-india",
+      "id": "check-page-5c68f9cfdd",
+      "url": "https://www.germanaccelerator.com/about-us",
       "page": "details",
-      "excerpt": "German Accelerator Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+      "excerpt": "Explore Explore Our Mission German Accelerator breaks down barriers and cultivates an interconnected ecosystem where innovation and startups thrive on a global stage."
     },
     {
-      "id": "check-page-4a2f276ca6",
-      "url": "https://www.germanaccelerator.com/blog/building-circular-supply-chains-from-munich-to-south-africa",
+      "id": "check-page-e01f49e055",
+      "url": "https://www.germanaccelerator.com/about-us",
       "page": "details",
-      "excerpt": "German Accelerator Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+      "excerpt": "More Than Just an Accelerator For more than 12 years, German Accelerator empowers high-potential German startups and scale-ups to thrive on a global scale."
     },
     {
-      "id": "check-page-781210714c",
-      "url": "https://www.germanaccelerator.com/blog/dream-big-5-reasons-startups-should-think-about-internationalization-early",
+      "id": "check-page-07bd36b494",
+      "url": "https://www.germanaccelerator.com/about-us",
       "page": "details",
-      "excerpt": "German Accelerator Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+      "excerpt": "Mentors 0 1 2 3 4 5 6 7 8 1 0 1 2 3 4 5 6 7 8 0 0 1 2 3 4 5 6 7 8 0 0 1 2 3 4 5 6 7 8 0 + Mentors who support startups all across the globe."
     },
     {
-      "id": "check-page-a242c758dc",
-      "url": "https://www.germanaccelerator.com/blog/from-aachen-to-fukuoka-how-fibrecoat-cracked-the-japanese-market",
+      "id": "check-page-4bf731464d",
+      "url": "https://www.germanaccelerator.com/about-us",
       "page": "details",
-      "excerpt": "German Accelerator Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+      "excerpt": "Mentors 0 1 2 3 4 5 6 7 8 1 0 1 2 3 4 5 6 7 8 3 0 1 2 3 4 5 6 7 8 0 0 1 2 3 4 5 6 7 8 0 + Mentors who support startups all across the globe."
     },
     {
-      "id": "check-page-717be53a11",
-      "url": "https://www.germanaccelerator.com/blog/from-founder-to-ecosystem-architect-how-one-exit-shaped-a-new-vision-for-europes-deep-tech-future-copy-9lsma",
+      "id": "check-page-5cb7ee63eb",
+      "url": "https://www.germanaccelerator.com/about-us",
       "page": "details",
-      "excerpt": "German Accelerator Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+      "excerpt": "Collective Backed by the German Government Financed by Startup Growth Financially Supported German Accelerator is proudly financed by the German Federal Ministry for Economic Affairs and Energy (BMWE) – it is their belief that supporting startups is key to driving innovation."
     },
     {
-      "id": "check-page-90281f26cb",
-      "url": "https://www.germanaccelerator.com/blog/from-munich-to-asia-how-irubis-is-transforming-bioprocessing-through-global-expansion",
+      "id": "check-page-2e4c4c4519",
+      "url": "https://www.germanaccelerator.com/about-us",
       "page": "details",
-      "excerpt": "German Accelerator Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+      "excerpt": "Run by Accelerating Innovation on a Global Scale German Accelerator is run by Start2 Group, a premier startup ecosystem platform, helping growth-oriented startups to shape and scale ventures."
     },
     {
-      "id": "check-page-46b7858000",
-      "url": "https://www.germanaccelerator.com/blog/germany-and-brazil-strengthen-startup-collaboration-at-hannover-messe-2026",
+      "id": "check-page-481ceae5b5",
+      "url": "https://www.germanaccelerator.com/about-us",
       "page": "details",
-      "excerpt": "German Accelerator Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+      "excerpt": "Part of On the Road to Startup Nation Germany German Accelerator is a central program of the German startup strategy, designed to position the country as a global leader in innovation and entrepreneurship."
     },
     {
-      "id": "check-page-61610a0503",
-      "url": "https://www.germanaccelerator.com/blog/how-greyd-turned-a-working-product-into-a-scalable-business",
+      "id": "check-page-a14baa9bc3",
+      "url": "https://www.germanaccelerator.com/about-us",
       "page": "details",
-      "excerpt": "German Accelerator Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+      "excerpt": "Autónoma de Buenos Aires Learn more Learn more Asia Asia Asia Singapore 75 Ayer Rajah Crescent #02-16 JTC LaunchPad, Block 75 Singapore 139953 Tokyo Allamanda Work Court​ 2-7-13 Kita Aoyama, Minato-ku Tokyo 107-0061 Shanghai Room 368, Section 302, No."
+    },
+    {
+      "id": "check-page-93b2da5b1d",
+      "url": "https://www.germanaccelerator.com/about-us",
+      "page": "details",
+      "excerpt": "211 Fute North Road China (Shanghai) Pilot Free Trade Zone Learn more Learn more Contact Do You Have Any Questions?"
+    },
+    {
+      "id": "check-page-5f56676704",
+      "url": "https://www.germanaccelerator.com/check-your-eligibility",
+      "page": "details",
+      "excerpt": "Check Your Eligibilty Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+    },
+    {
+      "id": "check-page-f29eeedbd1",
+      "url": "https://www.germanaccelerator.com/check-your-eligibility",
+      "page": "details",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-a35337ca68",
+      "url": "https://www.germanaccelerator.com/check-your-eligibility",
+      "page": "details",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-fd18792e7b",
+      "url": "https://www.germanaccelerator.com/check-your-eligibility",
+      "page": "details",
+      "excerpt": "Check Eligibility Check Eligibility check your eligibility Find Out if You're Eligible for Our Programs German Accelerator offers programs to help German startups expand into international markets by providing access to global markets, expert mentorship, and valuable industry connections."
+    },
+    {
+      "id": "check-page-4e131e07f1",
+      "url": "https://www.germanaccelerator.com/check-your-eligibility",
+      "page": "details",
+      "excerpt": "Asia Latin America Europe Other Press FAQ Contact Imprint Privacy Policy Cookies"
+    },
+    {
+      "id": "check-page-c84a201c8d",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "page": "details",
+      "excerpt": "Contact Us Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us Contact Us"
+    },
+    {
+      "id": "check-page-bf4130bff1",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "page": "details",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-cb47d0f686",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "page": "details",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-3f91fee349",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "page": "details",
+      "excerpt": "Locations Our Offices Boston – Cambridge U.S."
+    },
+    {
+      "id": "check-page-ffbeb7a382",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "page": "details",
+      "excerpt": "Our Cambridge office, located in the Cambridge Innovation Center, sits at the core of a thriving life sciences hub, surrounded by leading biotech companies, top universities, and hospitals. ‍ German Accelerator in Boston Cambridge Innovation Center One Broadway | 14th Floor Cambridge, MA 02142 info@germanaccelerator.com New York U.S."
+    },
+    {
+      "id": "check-page-cbe487c9ea",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "page": "details",
+      "excerpt": "Our office is located in the heart of New York City, a global hub for finance, media, and technology innovation."
+    },
+    {
+      "id": "check-page-a90b2f524a",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "page": "details",
+      "excerpt": "Situated within the vibrant startup community, we are surrounded by world-class institutions, industry leaders, and a diverse talent pool. ‍ German Accelerator in New York ‍ 215 Park Ave S New York, NY 10003 ‍ info@germanaccelerator.com San Francisco U.S."
+    },
+    {
+      "id": "check-page-d5f101b18a",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "page": "details",
+      "excerpt": "German Accelerator in Singapore ‍ 75 Ayer Rajah Crescent #02-16 JTC LaunchPad, Block 75 Singapore 139953 info@germanaccelerator.com Tokyo Asia Located in CIC Tokyo in the Toranomon Hills Business Tower, we're right in the middle of the city’s esteemed business hub, the Toranomon district of Minato-ku."
+    },
+    {
+      "id": "check-page-9c108e0cee",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "page": "details",
+      "excerpt": "German Accelerator in Tokyo ‍ 1 Chome-17-1 Toranomon Minato City, Tokyo 105-0001 ‍ info@germanaccelerator.com Shanghai Asia In Shanghai, German Accelerator is situated in the dynamic and rapidly growing business district of Pudong. ‍ German Accelerator in Shanghai ‍ Room 368, Section 302, No."
+    },
+    {
+      "id": "check-page-60f1577e78",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "page": "details",
+      "excerpt": "211 Fute North RoadChina (Shanghai) Pilot Free Trade Zone ‍ info@germanaccelerator.com Buenos Aires South America Argentina has emerged as a leading hub for technology and innovation in South America."
+    },
+    {
+      "id": "check-page-a332249bf5",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "page": "details",
+      "excerpt": "Our hub in Buenos Aires serves a gateway to other regions and markets in South America. ‍ German Accelerator in Buenos Aires ‍ Parque de Innovación +54lab Campos Salles 1300, C1429 Cdad."
+    },
+    {
+      "id": "check-page-58ec289387",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "page": "details",
+      "excerpt": "German Accelerator in Berlin AI Campus Max-Urich-Straße 313355 Berlin ‍ info@germanaccelerator.com Düsseldorf Europe Düsseldorf's thriving startup scene and strategic location in Germany make it an ideal base for startups looking to grow and scale."
+    },
+    {
+      "id": "check-page-11bc4949dc",
+      "url": "https://www.germanaccelerator.com/contact-us",
+      "page": "details",
+      "excerpt": "German Accelerator in Düsseldorf Kasernenstraße 6740213 Düsseldorf ‍ info@germanaccelerator.com Footer Main Programs Kickstart - Scaling & Growth Market Discovery Market Access Ready to Scale Globally?"
+    },
+    {
+      "id": "check-page-debf36ac3d",
+      "url": "https://www.germanaccelerator.com/exclusive-consultation-ticket",
+      "page": "details",
+      "excerpt": "Exclusive Consultation Ticket Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future."
+    },
+    {
+      "id": "check-page-73c54dc3a4",
+      "url": "https://www.germanaccelerator.com/exclusive-consultation-ticket",
+      "page": "details",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-bcaf61036e",
+      "url": "https://www.germanaccelerator.com/exclusive-consultation-ticket",
+      "page": "details",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-91d7d058d0",
+      "url": "https://www.germanaccelerator.com/exclusive-consultation-ticket",
+      "page": "details",
+      "excerpt": "Being physically present in Asia made all the difference.\" Read Story Otto Klemke Co-Founder and CEO \"With our market plans to expand into the U.S., the mentors immensely helped us by giving deep insights on how to improve our pitch, our market focus and segmentation, our approach, and our communication and branding.\" Read Story Dr."
+    },
+    {
+      "id": "check-page-030c9da198",
+      "url": "https://www.germanaccelerator.com/exclusive-consultation-ticket",
+      "page": "details",
+      "excerpt": "Arne Kruse Co-Founder \"It’s all about meeting the right people, so the German Accelerator network was most relevant to our success,” said Pentenrieder."
+    },
+    {
+      "id": "check-page-4600b7298d",
+      "url": "https://www.germanaccelerator.com/exclusive-consultation-ticket",
+      "page": "details",
+      "excerpt": "Asia Latin America Europe Other Press FAQ Contact Imprint Privacy Policy Cookies"
+    },
+    {
+      "id": "check-page-abf52ac55d",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "page": "details",
+      "excerpt": "Global Connections Benefits Our Offer Success Story Markets & Programs FAQ Check Eligibility Check Eligibility Scale With The Right Connections Trusted by over 1600 German startups scaling worldwide - backed by a global mentor network, industry partners, and ecosystem contacts. Proven alumni outcomes, and public funding from the Federal Ministry for Economic Affairs and Energy. Funded Support for Your Next International Growth Step You have built a solid foundation in Germany. Now the next challenge is getting into new markets - not just knowing which market to enter, but getting in front of the right people. Doing it alone can take months, if not years - that's where German Accelerator steps in. German Accelerator's free and publicly funded programs give German startups structured access to a global network of mentors, industry partners, and ecosystem contacts - with warm introductions, partnership support, and local expertise that help you enter with credibility right from the start. Because participation is funded by the Federal Ministry of Economic Affairs and Energy, admission is based on defined eligibility and fit criteria. Check Your Eligibility for Free WHAT'S IN IT FOR YOU What You Gain WHAT'S IN IT FOR YOU What You Gain Access Reach the people who matter to you. ‍ Get warm introductions to potential customers, partners, operators, and local ecosystem players -"
+    },
+    {
+      "id": "check-page-c54ca63dd9",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "page": "details",
+      "excerpt": "Trust Enter with credibility and a trusted network German Accelerator is government-backed and built on a broad, trusted global network of mentors, partners, investors, operators, and ecosystem experts who can help open the right doors."
+    },
+    {
+      "id": "check-page-a521429982",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "page": "details",
+      "excerpt": "Through German Accelerator, you can tap into regional expertise, and get warm introductions to potential customers, partners, investors, and operators."
+    },
+    {
+      "id": "check-page-a7b892c722",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "page": "details",
+      "excerpt": "Tailored Mentoring and Guidance Every startup enters internationalization with different questions, risks, and priorities."
+    },
+    {
+      "id": "check-page-fefe39ebd1",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "page": "details",
+      "excerpt": "That’s why our support is tailored to your stage, target market, and growth goals - with 1:1 mentoring, expert sessions, workshops, and practical feedback to help you make better expansion decisions. ‍ Check Your Eligibility Check Your Eligibility Why German Accelerator?"
+    },
+    {
+      "id": "check-page-f0408094d0",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "page": "details",
+      "excerpt": "Mentors 0 1 2 3 4 5 6 7 8 1 0 1 2 3 4 5 6 7 8 3 0 1 2 3 4 5 6 7 8 0 0 1 2 3 4 5 6 7 8 0 + Mentors who support startups all across the globe."
+    },
+    {
+      "id": "check-page-c71fb1a713",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "page": "details",
+      "excerpt": "INTERNATIONALIZATION CASE STUDY How connections helped Gizil win its first LATAM customer and build partnerships Guided by German Accelerator, Gizil entered Latin America with the right introductions and credibility - and closed a pilot with TGS, one of the region's largest gas operators, in a fraction of the typical timeline."
+    },
+    {
+      "id": "check-page-30cc986f9c",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "page": "details",
+      "excerpt": "Gizil is an industrial SaaS company building digital twin technology for asset-intensive industries."
+    },
+    {
+      "id": "check-page-5a1178460e",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "page": "details",
+      "excerpt": "Strong product, real traction in Germany."
+    },
+    {
+      "id": "check-page-8e6c6be8fd",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "page": "details",
+      "excerpt": "But entering Latin America meant starting from zero: no local network, no brand recognition, and no insight into how enterprise procurement worked in the region's heavy industrial sector."
+    },
+    {
+      "id": "check-page-c62bf47241",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "page": "details",
+      "excerpt": "THE PIVOT Through the program, Gizil worked with mentors to validate market potential in Brazil and Argentina, sharpen its go-to-market strategy, and refine its messaging for local industrial buyers."
+    },
+    {
+      "id": "check-page-f1990b6677",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "page": "details",
+      "excerpt": "Working with German Accelerator, Gizil made a critical shift in how they talked about their product."
+    },
+    {
+      "id": "check-page-6a928b3cc5",
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "page": "details",
+      "excerpt": "Instead of leading with technology, they reframed around what LATAM industrial operators actually care about: faster implementation, lower costs, reliable asset data, and a clear path from one use case to enterprise-wide transformation."
+    },
+    {
+      "id": "check-page-7b234bde46",
+      "url": "https://www.germanaccelerator.com/globals",
+      "page": "details",
+      "excerpt": "Globals German Accelerator empowers German startups Global Reach No Equity Government-backed Programs Programs By stage Kickstart 1-3 days, free, early exploration Market Discovery 5-7 weeks, EUR 500, testing market Market Access 3-6 months, free, market entry Compare All Programs Focus Area Life Sciences Artificial intelligence Climate Tech Start Eligibility Check Start Eligibility Check Markets Markets U.S Boston Silicon Valley New York Asia Japan Singapore Japan Latin Brazil EUrope UK Africa South Africa See All Markets Expansion Guide Expansion Guide Resources Resources Success Stories Read founder expansion stories Alumni Database Explore German Accelerator alumni Next Events Lorem ipsum dolar set acumet About About About Us Our Team Our Mentors Our Partners FAQ Contact Check Eligibility Check Eligibility Join the Movement Subscribe to our network insights and be the first to know about upcoming program intakesand ecosystem news. Subscribe Now Subscribe Now Explore Our Network Mentors Success Stories Our Partners Alumni Directory Programs Kickstart Market Discovery Market Access Program Finder Our Markets U.S. Asia Europe Latin America Other About Media & PR FAQ Contact Join the Movement © 2026 German Accelerator Imprint Privacy Policy Cookies"
+    },
+    {
+      "id": "check-page-60cc93bd89",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "page": "details",
+      "excerpt": "South Africa Market Discovery Program Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the"
+    },
+    {
+      "id": "check-page-8b16e26ace",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "page": "details",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-f751d5442f",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "page": "details",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-39456af3b8",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "page": "details",
+      "excerpt": "Check Eligibility Check Eligibility Apply Now South Africa MD South Africa Market Discovery Validate your expansion into South Africa’s CleanTech & Energy markets — before you commit capital."
+    },
+    {
+      "id": "check-page-13249e976d",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "page": "details",
+      "excerpt": "Cape Town | South Africa May – July 2026 Program Overview Program Overview APPLICATIONS CLOSED South Africa Market Discovery Validate your expansion into South Africa’s CleanTech & Energy markets — before you commit capital."
+    },
+    {
+      "id": "check-page-8ddcfe5d90",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "page": "details",
+      "excerpt": "Cape Town | South Africa May – July 2026 Program Overview Program Overview For German CleanTech & Energy startups exploring South Africa as a strategic growth market Make a confident market entry decision — based on real signals, not assumptions."
+    },
+    {
+      "id": "check-page-7f87a7d2f8",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "page": "details",
+      "excerpt": "South Africa offers access to sophisticated enterprise customers and a growing green economy ecosystem, particularly in the Western Cape."
+    },
+    {
+      "id": "check-page-0880c1e51d",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "page": "details",
+      "excerpt": "For German CleanTech and Energy startups, it can serve as a structured entry point into Sub-Saharan Africa."
+    },
+    {
+      "id": "check-page-d97f50238a",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "page": "details",
+      "excerpt": "South Africa Market Discovery is a high-touch program designed to test clear market hypotheses through curated access, structured validation, and on-the-ground exposure."
+    },
+    {
+      "id": "check-page-2aa28745f6",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "page": "details",
+      "excerpt": "Apply Now Apply Now Why South Africa Market Discovery?"
+    },
+    {
+      "id": "check-page-2760b081e7",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "page": "details",
+      "excerpt": "Diversified Industrial Hub in Southern Africa South Africa has Sub-Saharan Africa’s most diversified industrial base, with rising demand in energy and infrastructure — and serves as a gateway to Southern Africa."
+    },
+    {
+      "id": "check-page-204c8905fe",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "page": "details",
+      "excerpt": "Depth over volume ‍ Fewer workshops, more 1:1 expert interactions tailored to your technology, customer segment, and maturity. ‍ ‍ Talk to the right people ‍ You don’t just “enter” South Africa — you engage with founders, corporates, and ecosystem players as equals. ‍ ‍ What You Get with South Africa Market Discovery?"
+    },
+    {
+      "id": "check-page-7516043c97",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "page": "details",
+      "excerpt": "Structured Market Validation Evidence-based testing of your South Africa market hypotheses. ‍ ‍ Curated Access High-quality introductions to industry experts, potential customers, partners, and ecosystem stakeholders."
+    },
+    {
+      "id": "check-page-dafef160f1",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "page": "details",
+      "excerpt": "South Africa Market Discovery: Life Sciences & HealthTech Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas"
+    },
+    {
+      "id": "check-page-db87a325a6",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "page": "details",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-64f8af800f",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "page": "details",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-40ccaed487",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "page": "details",
+      "excerpt": "Check Eligibility Check Eligibility APPLICATION CLOSED South Africa Market Discovery: Life Sciences and HealthTech Validate your expansion into South Africa's Life Sciences and HealthTech markets and assess your product-market fit."
+    },
+    {
+      "id": "check-page-5fba425223",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "page": "details",
+      "excerpt": "For German Life Sciences and HealthTech companies it is both a commercial market in its own right and a realistic entry point into Sub-Saharan Africa."
+    },
+    {
+      "id": "check-page-55eddb266a",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "page": "details",
+      "excerpt": "Healthcare runs on two tiers: a private sector funded by medical schemes, and a public system that procures at national scale."
+    },
+    {
+      "id": "check-page-fcb427d9b8",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "page": "details",
+      "excerpt": "Add SAHPRA registration timelines, tender procurement rules and distributor-led sales, and the cost of guessing rises quickly. ‍ South Africa Market Discovery is a high-touch program that tests your specific market hypotheses through curated access to the institutions that decide whether a health technology gets adopted."
+    },
+    {
+      "id": "check-page-10a5869174",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "page": "details",
+      "excerpt": "Application closed Application starting soon What You Gain Structured Market Validation Evidence-based testing of your South Africa market hypotheses, specific to your segment and your buyer."
+    },
+    {
+      "id": "check-page-5402e937a3",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "page": "details",
+      "excerpt": "Curated Access High-quality 1:1 introduction to hospitals, laboratories, payers, regulators, universities and corporates."
+    },
+    {
+      "id": "check-page-85f0f6870f",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "page": "details",
+      "excerpt": "Founder-Level Support Experienced mentors who understand both European and South African healthcare operating realities."
+    },
+    {
+      "id": "check-page-1e5b3754b3",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "page": "details",
+      "excerpt": "05 05 We are on the ground, locally Our South African program manager lives and works in the market."
+    },
+    {
+      "id": "check-page-15e381c1f1",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "page": "details",
+      "excerpt": "Culture, hierarchy and how decisions actually get made are not things we research from Germany."
+    },
+    {
+      "id": "check-page-86dd2ec575",
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
+      "page": "details",
+      "excerpt": "Then we do the difficult part, which is getting you in front of the people in South Africa who can answer it."
+    },
+    {
+      "id": "check-page-44e9007512",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "page": "details",
+      "excerpt": "Asia Market Discovery New Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+    },
+    {
+      "id": "check-page-39702248b6",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "page": "details",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-56aabad847",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "page": "details",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-202c3918d9",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "page": "details",
+      "excerpt": "Check Eligibility Check Eligibility Apply Now Deadline: November 9, 2026 Asia Market Discovery Virtual | November 16 - December 11, 2026 Program Overview Program Overview Find your best-fit market in Asia and define your next steps – backed by expert workshops, mentoring, and founder insights."
+    },
+    {
+      "id": "check-page-4fbcfe1847",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "page": "details",
+      "excerpt": "With expert-led sessions and mentoring, you will build a clear rationale for why Asia fits your expansion strategy, use a structured framework to compare and shortlist the most relevant markets, and work through the practical fundamentals of setting up and operating in the region."
+    },
+    {
+      "id": "check-page-c359b7b74f",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "page": "details",
+      "excerpt": "You will also gain hands-on cultural guidance and country deep-dive insights (China, Southeast Asia, Japan, India, South Korea), plus real founder perspectives, so you can move forward with focus, confidence, and a clear set of next steps."
+    },
+    {
+      "id": "check-page-3f38182b20",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "page": "details",
+      "excerpt": "Your company must be incorporated in Germany with one of the following legal forms: UG; AG; GmbH; GmbH & Co."
+    },
+    {
+      "id": "check-page-a017d90537",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "page": "details",
+      "excerpt": "We also consider GbRs on a case-by-case basis Qualify as a small and medium-sized enterprise (SME) based on the EU definition of a SME Be under the limit of the official EU De-minimis aid regulation Apply Now Apply Now What You Will Work On During the Program These are some of the topics we will cover during the program with the help of workshops and one-on-one mentoring sessions."
+    },
+    {
+      "id": "check-page-eb756ec964",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "page": "details",
+      "excerpt": "Market Entry Fundamentals How to Set Up and Operate in Asia Get an overview of legal, tax, and regulatory fundamentals across Asia to make market entry logistics more predictable and manageable."
+    },
+    {
+      "id": "check-page-c13f87d6ae",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "page": "details",
+      "excerpt": "Culture and Ways of Doing Business Understanding and Navigating Asian Business Cultures Learn how business behaviors, communication styles, and work norms differ across Asian countries, with emphasis on Southeast Asia."
+    },
+    {
+      "id": "check-page-8552fd90d7",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "page": "details",
+      "excerpt": "Market-Specific Insights Country Deep Dives: China, Southeast Asia, Japan, India, South Korea Explore opportunities, customer expectations, and entry barriers across five key Asian markets to refine your regional strategy."
+    },
+    {
+      "id": "check-page-43c738e29f",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "page": "details",
+      "excerpt": "What You'll Experience A structured Market Discovery program combining expert-led guidance and mentoring to help you compare Asian markets, sharpen your priorities, and define your next steps."
+    },
+    {
+      "id": "check-page-ff93a14a87",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "page": "details",
+      "excerpt": "Being physically present in Asia made all the difference.\" Read Story Otto Klemke Co-Founder and CEO \"With our market plans to expand into the U.S., the mentors immensely helped us by giving deep insights on how to improve our pitch, our market focus and segmentation, our approach, and our communication and branding.\" Read Story Dr."
+    },
+    {
+      "id": "check-page-9029cd0df4",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "page": "details",
+      "excerpt": "China Market Discovery Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+    },
+    {
+      "id": "check-page-ac1f5cd6c8",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "page": "details",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-34d0330248",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "page": "details",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-c1d98f649b",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "page": "details",
+      "excerpt": "Check Eligibility Check Eligibility Apply Now Deadline: October 18, 2026 China Market Discovery Build the foundation to enter China China | November 2 - December 4, 2026 Program Overview Program Overview De-risk and validate your expansion to China with the right positioning, stakeholders, and entry fundamentals."
+    },
+    {
+      "id": "check-page-5146365fa8",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "page": "details",
+      "excerpt": "Program Overview China is a complex, big, dynamic and trend setting where success depends on strong local relevance, clear positioning, and knowing how to navigate business, regulation, and partnerships."
+    },
+    {
+      "id": "check-page-fe85c59a3f",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "page": "details",
+      "excerpt": "Through expert-led workshops and mentoring, you will work on market entry fundamentals, positioning and readiness, stakeholder engagement, and practical regulatory considerations to support early validation and decision-making. ‍ Through customized 1:1 match-making with industry experts, mentors and potential business partners you will accelerate your decision-making when it comes to China."
+    },
+    {
+      "id": "check-page-f2a89a18ca",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "page": "details",
+      "excerpt": "Apply Now Apply Now What You Get with China Market Discovery Save time and money You avoid costly missteps early."
+    },
+    {
+      "id": "check-page-bf9198bb04",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "page": "details",
+      "excerpt": "Apply Now Apply Now Walk Away With Concrete Deliverables Market entry baseline and key assumptions to validate Stakeholder and partnership approach Positioning and messaging adjustments for local relevance Regulatory and compliance fundamentals checklist China-ready pitch improvements for investor and partner conversations Is This Program Right for You?"
+    },
+    {
+      "id": "check-page-ef1d190a43",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "page": "details",
+      "excerpt": "Your company must be incorporated in Germany with one of the following legal forms: UG; AG; GmbH; GmbH & Co."
+    },
+    {
+      "id": "check-page-5665841c88",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "page": "details",
+      "excerpt": "We also consider GbRs on a case-by-case basis Qualify as a small and medium-sized enterprise (SME) based on the EU definition of a SME Be under the limit of the official EU De-minimis aid regulation Apply Now Apply Now What You Will Work On During the Program These are some of the topics we will cover during the program with the help of workshops and one-on-one mentoring sessions."
+    },
+    {
+      "id": "check-page-9ac3477deb",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "page": "details",
+      "excerpt": "Business Culture & Negotiation Navigating Chinese Business Culture & Negotiation Styles Gain insight into business etiquette, communication norms, and negotiation tactics essential for building trust and successful partnerships in China."
+    },
+    {
+      "id": "check-page-27bf4fa930",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "page": "details",
+      "excerpt": "Ecosystem Landscape Understanding China’s Startup Ecosystem & Government Landscape Explore the structure, players, and regional characteristics of China’s startup scene."
+    },
+    {
+      "id": "check-page-690ec4b615",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "page": "details",
+      "excerpt": "Learn how to engage with local government initiatives and navigate public-private partnerships."
+    },
+    {
+      "id": "check-page-dc97040026",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "page": "details",
+      "excerpt": "India Market Access Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+    },
+    {
+      "id": "check-page-77f055dfb4",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "page": "details",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-34d97c587a",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "page": "details",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-71c15e9f2b",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "page": "details",
+      "excerpt": "Check Eligibility Check Eligibility Apply Now Deadline: July 17, 2026 India Market Access Execute your India entry with focus and momentum."
+    },
+    {
+      "id": "check-page-1444dbd4d6",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "page": "details",
+      "excerpt": "India | August 10 - November 13, 2026 Program Overview Program Overview Turn India expansion goals into structured execution with the right experts, clear priorities, and measurable progress."
+    },
+    {
+      "id": "check-page-bd85121b96",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "page": "details",
+      "excerpt": "Program Overview India offers scale and speed – but progress often depends on choosing the right priorities early and executing them in the right order."
+    },
+    {
+      "id": "check-page-8d28f00db2",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "page": "details",
+      "excerpt": "India Market Access is built to reduce trial-and-error and accelerate traction by aligning expansion goals with practical workstreams that move the business forward. ‍ The program starts by clarifying the current state, traction, and why India matters, then translates that into a focused execution plan across the workstreams most relevant for India entry."
+    },
+    {
+      "id": "check-page-e8284710f8",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "page": "details",
+      "excerpt": "With curated mentorship and expert workshops, support stays practical and targeted – from pricing and partnerships to hiring and localization."
+    },
+    {
+      "id": "check-page-6539eb6e2d",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "page": "details",
+      "excerpt": "Regular milestone check-ins keep momentum high, help resolve challenges early, and ensure priorities stay aligned as the India plan evolves."
+    },
+    {
+      "id": "check-page-084205d3b0",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "page": "details",
+      "excerpt": "Apply Now Apply Now What You Get with India Market Access Save time and money Faster prioritization and fewer wrong turns."
+    },
+    {
+      "id": "check-page-a66b760831",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "page": "details",
+      "excerpt": "Accelerate growth More momentum on India entry milestones."
+    },
+    {
+      "id": "check-page-30e281437c",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "page": "details",
+      "excerpt": "Navigate complexity Clarity on critical next steps for India expansion."
+    },
+    {
+      "id": "check-page-c7c9555c52",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "page": "details",
+      "excerpt": "Apply Now Apply Now Walk Away With Concrete Deliverables Deep-dive business and India expansion goals summary Goals across workstreams Prioritized India workstream plan Curated mentorship and expert workshop plan matched to priorities Milestone review outputs and updated execution priorities Is This Program Right for You?"
+    },
+    {
+      "id": "check-page-ae5a732d3b",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "page": "details",
+      "excerpt": "India Market Discovery New Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact"
+    },
+    {
+      "id": "check-page-3eafd2732f",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "page": "details",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-6a3d9c68c4",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "page": "details",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-42ec11a75b",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "page": "details",
+      "excerpt": "Check Eligibility Check Eligibility Apply Now Deadline: September 20, 2026 India Market Discovery Test and sharpen your India go-to-market – with the right message, sales approach, and legal basics."
+    },
+    {
+      "id": "check-page-2b1c08d053",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "page": "details",
+      "excerpt": "India | October 5 - November 13, 2026 Program Overview Program Overview A structured journey that helps you validate product-market fit, understand your audience, and refine how you sell and pitch in India – with expert feedback and individual mentorship, so you can move forward with confidence."
+    },
+    {
+      "id": "check-page-d419980380",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "page": "details",
+      "excerpt": "Program Overview India is a high-velocity market where winning often depends on getting your positioning, sales motion, and communication right early."
+    },
+    {
+      "id": "check-page-7e02e529f1",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "page": "details",
+      "excerpt": "Through expert-led workshops and mentoring, you will work on product-market fit, customer personas and messaging, pitch readiness, legal and regulatory basics, and a scalable sales strategy for India."
+    },
+    {
+      "id": "check-page-ab06805ab1",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "page": "details",
+      "excerpt": "Apply Now Apply Now What You Get with India Market Discovery Save time and money You avoid costly missteps early."
+    },
+    {
+      "id": "check-page-fbc569b302",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "page": "details",
+      "excerpt": "Your company must be incorporated in Germany with one of the following legal forms: UG; AG; GmbH; GmbH & Co."
+    },
+    {
+      "id": "check-page-955748d0e8",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "page": "details",
+      "excerpt": "We also consider GbRs on a case-by-case basis Qualify as a small and medium-sized enterprise (SME) based on the EU definition of a SME Be under the limit of the official EU De-minimis aid regulation Apply Now Apply Now What You Will Work On During the Program These are some of the topics we will cover during the program with the help of workshops and one-on-one mentoring sessions."
+    },
+    {
+      "id": "check-page-b2aac99f57",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "page": "details",
+      "excerpt": "Sales Strategy for India Sales Strategy – The Ultimate Guide to Sales Build a scalable and repeatable sales strategy, including funnel design, sales playbooks, and how to close enterprise-level deals with confidence."
+    },
+    {
+      "id": "check-page-3f261f9cca",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "page": "details",
+      "excerpt": "What You'll Experience A structured Market Discovery program combining workshops and mentoring to help you adapt your approach for China and define your next steps with confidence."
+    },
+    {
+      "id": "check-page-86909ebc98",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "page": "details",
+      "excerpt": "Sales Readiness You will build a scalable sales approach designed for winning enterprise customers in a new market."
+    },
+    {
+      "id": "check-page-8e40341327",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+      "page": "details",
+      "excerpt": "Japan Market Access New Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+    },
+    {
+      "id": "check-page-835d887c49",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+      "page": "details",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-ee87f4b640",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+      "page": "details",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-be692ec584",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+      "page": "details",
+      "excerpt": "Check Eligibility Check Eligibility Apply Now Deadline: July 31, 2026 Japan Market Access Turn potential into market entry."
+    },
+    {
+      "id": "check-page-fbbe0db5f3",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+      "page": "details",
+      "excerpt": "Japan | September 7 - November 27, 2026 Program Overview Program Overview Customized to startup needs, designed to keep priorities moving and accelerate traction in Japan through expert guidance, tailored support, and focused execution."
+    },
+    {
+      "id": "check-page-106e0cb7a0",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+      "page": "details",
+      "excerpt": "Program Overview Japan rewards focus and follow-through, but many startups lose momentum when priorities are unclear, support is too generic, or execution gets stuck in loops."
+    },
+    {
+      "id": "check-page-179d41289c",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+      "page": "details",
+      "excerpt": "Japan Market Access is built to keep Japan expansion moving by turning the most important priorities into action quickly and consistently."
+    },
+    {
+      "id": "check-page-65b8850e08",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+      "page": "details",
+      "excerpt": "With tailored workshops and mentoring, execution becomes sharper and faster, while regular check-ins help remove blockers early and keep momentum high."
+    },
+    {
+      "id": "check-page-ea1e98b148",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+      "page": "details",
+      "excerpt": "The result is clearer direction, stronger progress on Japan milestones, and a practical path forward for what to do next."
+    },
+    {
+      "id": "check-page-08da47ede4",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+      "page": "details",
+      "excerpt": "Apply Now Apply Now What You Get with Japan Market Access Save time and money Faster prioritization and fewer wrong turns."
+    },
+    {
+      "id": "check-page-9afa9d49a9",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+      "page": "details",
+      "excerpt": "Accelerate growth More momentum on Japan entry milestones."
+    },
+    {
+      "id": "check-page-fb260ac494",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+      "page": "details",
+      "excerpt": "Apply Now Apply Now Walk Away With Concrete Deliverables Deep-dive needs and readiness assessment Prioritized workstreams and scoped program plan Customized mentorship and workshops matched to cohort needs Milestone tracking and progress review outputs Is This Program Right for You?"
+    },
+    {
+      "id": "check-page-7fcda9e327",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+      "page": "details",
+      "excerpt": "Your company must be incorporated in Germany with one of the following legal forms: UG; AG; GmbH; GmbH & Co."
+    },
+    {
+      "id": "check-page-77a6823017",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "page": "details",
+      "excerpt": "Japan Market Discovery Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+    },
+    {
+      "id": "check-page-3558383aca",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "page": "details",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-bbf6017a9b",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "page": "details",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-08836ece91",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "page": "details",
+      "excerpt": "Check Eligibility Check Eligibility Apply Now Deadline: September 4, 2026 Japan Market Discovery Build credibility and traction in Japan – with the right pitch, positioning, and local know-how."
+    },
+    {
+      "id": "check-page-b59743fe08",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "page": "details",
+      "excerpt": "Japan | October 26 - December 4, 2026 Program Overview Program Overview A structured Market Discovery journey that helps you understand how Japan works, adapt how you communicate, and prepare a market-ready approach for customers, partners, and investors."
+    },
+    {
+      "id": "check-page-691b89ec00",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "page": "details",
+      "excerpt": "Program Overview Japan is a relationship-driven, high-expectation market where trust, clarity, and cultural fit strongly influence how deals move forward."
+    },
+    {
+      "id": "check-page-afdf68ae3a",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "page": "details",
+      "excerpt": "This program helps you understand the startup ecosystem, learn how business is done, and translate your value into what Japanese stakeholders expect. ‍ With expert-led workshops and individual mentoring, you will refine your pitch, strengthen your market presence, and work through the practical fundamentals of operating in Japan – from legal and regulatory setup to hiring and localized collateral."
+    },
+    {
+      "id": "check-page-212475e20e",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "page": "details",
+      "excerpt": "Apply Now Apply Now What You Get with Japan Market Discovery Save time and money You avoid costly missteps early."
+    },
+    {
+      "id": "check-page-52311d8c10",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "page": "details",
+      "excerpt": "Apply Now Apply Now Walk Away With Concrete Deliverables Japan-tailored elevator pitch and investor presentation Japan business culture and etiquette readiness Japan legal, visa, and taxation setup fundamentals Japan market positioning and branding approach Is This Program Right for You?"
+    },
+    {
+      "id": "check-page-648f2a14e6",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "page": "details",
+      "excerpt": "Your company must be incorporated in Germany with one of the following legal forms: UG; AG; GmbH; GmbH & Co."
+    },
+    {
+      "id": "check-page-a79b6794a6",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "page": "details",
+      "excerpt": "We also consider GbRs on a case-by-case basis Qualify as a small and medium-sized enterprise (SME) based on the EU definition of a SME Be under the limit of the official EU De-minimis aid regulation Apply Now Apply Now What You Will Work On During the Program These are some of the topics we will cover during the program with the help of workshops and one-on-one mentoring sessions."
+    },
+    {
+      "id": "check-page-0da569a333",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "page": "details",
+      "excerpt": "Ecosystem and Entry Context Introduction to Japan Startup Ecosystem Get a comprehensive overview of Japan’s startup landscape, ecosystem strengths, emerging industries, and government-backed support systems."
+    },
+    {
+      "id": "check-page-52f3381574",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "page": "details",
+      "excerpt": "Ecosystem and Entry Context Basics of Doing Business in Japan Understand how business actually gets done in Japan, including differences in management styles, leadership expectations, and decision-making."
+    },
+    {
+      "id": "check-page-a88719598e",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "page": "details",
+      "excerpt": "South Korea Market Access Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact Us"
+    },
+    {
+      "id": "check-page-b70b910944",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "page": "details",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-432a287b2d",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "page": "details",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-908573da30",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "page": "details",
+      "excerpt": "Check Eligibility Check Eligibility Apply Now Deadline: September 11, 2026 South Korea Market Access Scale and expand your business in one of Asia’s most dynamic innovation hubs."
+    },
+    {
+      "id": "check-page-677bef627b",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "page": "details",
+      "excerpt": "South Korea | September 28 – December 18, 2026 Program Overview Program Overview Grow in one of the world’s top innovation ecosystems — combining strong funding momentum, R&D-driven industries, dense talent clusters, and active government support to reduce market entry risks and avoid costly expansion mistakes."
+    },
+    {
+      "id": "check-page-4ab6308b7b",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "page": "details",
+      "excerpt": "Turn local access and partnerships into real market traction South Korea offers exceptional opportunities for German startups — from global corporates and advanced industries to fast-moving consumer and digital markets."
+    },
+    {
+      "id": "check-page-4ab6ad48ab",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "page": "details",
+      "excerpt": "Apply Now Apply Now What You Get with South Korea Market Access Localized Go-to-Market Strategy Develop and refine a Korea-specific positioning and entry strategy aligned with local customer behavior and decision-making dynamics."
+    },
+    {
+      "id": "check-page-89e345fc94",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "page": "details",
+      "excerpt": "Investor Exposure in Korea & Asia Connect with relevant Korean and regional investors aligned with your sector, growth stage, and expansion ambitions."
+    },
+    {
+      "id": "check-page-09ee79ff18",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "page": "details",
+      "excerpt": "Direct Access to Key Ecosystem Players Gain introductions to corporates, customers, and key ecosystem organizations — including KITIA , Wadiz , and KITA."
+    },
+    {
+      "id": "check-page-59cb77fff6",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "page": "details",
+      "excerpt": "Apply Now Apply Now Walk Away With Clear Outcomes A validated Korea-specific go-to-market strategy A prioritized target customer and partner landscape Initial commercial and partnership pipelines First-hand insights into competition and market dynamics A clear post-program roadmap for continued expansion Is This Program Right for You?"
+    },
+    {
+      "id": "check-page-20ecbcc0c2",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "page": "details",
+      "excerpt": "Wadiz Korean leader in B2C launch and consumer channels, enabling validated market tests, crowdfunding, and brand-to-consumer exposure."
+    },
+    {
+      "id": "check-page-e2c0ef8951",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "page": "details",
+      "excerpt": "KITA Korea International Trade Association supports export, trade insights, and market access programs bridging Korea with international business opportunities."
+    },
+    {
+      "id": "check-page-df6e1d8b73",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "page": "details",
+      "excerpt": "Why South Korea Matters for German Startups Semiconductors & Supply Chain Global hub for semiconductors with direct access to Tier-1 manufacturers, suppliers,and R&D-driven industrial partners."
+    },
+    {
+      "id": "check-page-b876cf7d22",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "page": "details",
+      "excerpt": "South Korea Market Discovery Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future. Contact"
+    },
+    {
+      "id": "check-page-2e238e7ea6",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "page": "details",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-9c2d0038f9",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "page": "details",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-52e0bb2f59",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "page": "details",
+      "excerpt": "Check Eligibility Check Eligibility Apply Now Deadline: September 26, 2026 South Korea Market Discovery Validate demand and partnership potential in South Korea."
+    },
+    {
+      "id": "check-page-4a2523ef41",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "page": "details",
+      "excerpt": "South Korea | November 9 - December 18, 2026 Program Overview Program Overview Expert-led sessions, mentoring, and in-market exposure - so you can test assumptions, refine your approach, and move forward with clarity."
+    },
+    {
+      "id": "check-page-fccada9e9b",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "page": "details",
+      "excerpt": "Program Overview South Korea is a highly network-driven market with a strong innovation ecosystem, active investors, and significant opportunities for B2B collaboration – especially through corporates and high-performing SMEs."
+    },
+    {
+      "id": "check-page-5add9c0a54",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "page": "details",
+      "excerpt": "This program helps you understand where you fit, who you should meet, and how to de-risk early decisions. ‍ Through a mix of virtual learning and in-market immersion, you’ll connect with relevant stakeholders, get expert guidance on market entry and compliance, and pressure-test your pitch and partnership approach for South Korea."
+    },
+    {
+      "id": "check-page-0ab4846b9c",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "page": "details",
+      "excerpt": "Apply Now Apply Now POWERING YOUR EXPANSION Our Strategic Ecosystem Partners KITIA Korea Core Industrial Technology Investment Association is our strategic partner for B2B matchmaking and investment facilitation, especially within industrial technologies, parts & materials sectors, and R&D-driven commercialization."
+    },
+    {
+      "id": "check-page-0d8b9de91f",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "page": "details",
+      "excerpt": "Wadiz Korean leader in B2C launch and consumer channels, enabling validated market tests, crowdfunding, and brand-to-consumer exposure."
+    },
+    {
+      "id": "check-page-1c2c054543",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "page": "details",
+      "excerpt": "KITA Korea International Trade Association supports export, trade insights, and market access programs bridging Korea with international business opportunities."
+    },
+    {
+      "id": "check-page-563916673c",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "page": "details",
+      "excerpt": "What You Get with South Korea Market Discovery Save time and money You avoid costly entry missteps."
+    },
+    {
+      "id": "check-page-d853077d18",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "page": "details",
+      "excerpt": "Your company must be incorporated in Germany with one of the following legal forms: UG; AG; GmbH; GmbH & Co."
+    },
+    {
+      "id": "check-page-4f4a5995c5",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "page": "details",
+      "excerpt": "We also consider GbRs on a case-by-case basis Qualify as a small and medium-sized enterprise (SME) based on the EU definition of a SME Be under the limit of the official EU De-minimis aid regulation Apply Now Apply Now What You Will Work On During the Program These are some of the topics we will cover during the program with the help of workshops and one-on-one mentoring sessions."
+    },
+    {
+      "id": "check-page-89e626618a",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "page": "details",
+      "excerpt": "Southeast Asia Market Access New Markets Markets Markets Markets U.S. U.S. Scale into the world’s largest and most competitive market. Asia Asia Unlock growth in the world’s fastest-evolving economies. Latin America Latin America Tap into the rising opportunities of dynamic emerging markets. Other Europe Europe South Africa South Africa Southeast Asia Southeast Asia Japan Japan India India South Korea South Korea China China Programs Programs Programs Programs Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one. Market Discovery Market Discovery Validate the suitability of your business model in new markets. Market Access Market Access Launch and expand your business in new markets across the globe. Focus Areas Life Sciences U.S. Life Sciences U.S. Life Sciences UK Life Sciences UK Life Sciences South Africa Life Sciences South Africa Future Industries Future Industries Dual Use Dual Use Tech Tech Network Network Network Network Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators. Partners Partners Leverage the power of a global network and unlock exclusive partner benefits. Alumni Alumni You’re in good company – follow in the footsteps of top German startups. Become a Partner Partner with us to support and accelerate groundbreaking ideas that shape the future."
+    },
+    {
+      "id": "check-page-1d73d2ff75",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "page": "details",
+      "excerpt": "Knowledge Hub FAQ FAQ About About About About About Us About Us Learn more about German Accelerator and how we empower top German startups."
+    },
+    {
+      "id": "check-page-e13edc742b",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "page": "details",
+      "excerpt": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator."
+    },
+    {
+      "id": "check-page-b6e4967359",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "page": "details",
+      "excerpt": "Check Eligibility Check Eligibility Apply Now Deadline: January 15, 2027 Southeast Asia Market Access Turn momentum into traction with a clear strategy."
+    },
+    {
+      "id": "check-page-229c33367a",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "page": "details",
+      "excerpt": "Southeast Asia | February 22 - May 14, 2027 Program Overview Program Overview A 3-month program with a 2-week immersion in Singapore plus one additional SEA market to help you win customers and partners faster and build traction with expert support."
+    },
+    {
+      "id": "check-page-b6a0dc3802",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "page": "details",
+      "excerpt": "Program Overview Southeast Asia is a high-opportunity region, but scaling here requires a plan."
+    },
+    {
+      "id": "check-page-80efd020d6",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "page": "details",
+      "excerpt": "You need a clear go-to-market plan for your beachhead markets, the right stakeholders around the table, and the discipline to execute. ‍ Southeast Asia Market Access is designed for startups that are ready to move from exploration to action."
+    },
+    {
+      "id": "check-page-4f31505ad0",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "page": "details",
+      "excerpt": "Over three months, you will sharpen your GTM priorities, break them into concrete workstreams, and work through them with tailored mentorship, hands-on workshops, and in-market immersion – so you leave with traction, clarity, and a plan for the next 6–12 months in the region."
+    },
+    {
+      "id": "check-page-7222f20c7e",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "page": "details",
+      "excerpt": "Apply Now Apply Now What You Get with Southeast Asia Market Access Save time and money You shorten the time it takes to turn strategy into action."
+    },
+    {
+      "id": "check-page-6024ed6720",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "page": "details",
+      "excerpt": "Build connections and partnerships You access facilitated introductions to the right corporates, ecosystem partners, and stakeholders."
+    },
+    {
+      "id": "check-page-720fb9cad6",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "page": "details",
+      "excerpt": "Your company must be incorporated in Germany with one of the following legal forms: UG; AG; GmbH; GmbH & Co."
+    },
+    {
+      "id": "check-page-78d401e3aa",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "page": "details",
+      "excerpt": "We also consider GbRs on a case-by-case basis Qualify as a small and medium-sized enterprise (SME) based on the EU definition of a SME Be under the limit of the official EU De-minimis aid regulation Apply Now Apply Now What You Will Work On During the Program These are some of the topics we will cover during the program with the help of workshops and one-on-one mentoring sessions."
+    },
+    {
+      "id": "check-page-c75d29dcec",
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "page": "details",
+      "excerpt": "Execution Support Tailored Mentorship and Workshops Access curated mentorship from industry experts, corporate executives, and investors in your target markets, plus hands-on workshops on sales strategy, channel building, and customer acquisition."
     }
   ],
   "findings": {
@@ -491,20 +2196,7 @@
       }
     ],
     "phones": [],
-    "routes": [
-      {
-        "value": "https://www.germanaccelerator.com/our-programs/market-access",
-        "evidenceId": "check-route-c8b295e978"
-      },
-      {
-        "value": "https://www.germanaccelerator.com/apply-now",
-        "evidenceId": "check-route-c7fcaac917"
-      },
-      {
-        "value": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
-        "evidenceId": "check-route-19a54a21e5"
-      }
-    ],
+    "routes": [],
     "applicationUrl": [
       {
         "value": "https://www.germanaccelerator.com/",
@@ -513,7 +2205,12 @@
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
-    "deadlines": [],
+    "deadlines": [
+      {
+        "value": "2027-01-15",
+        "evidenceId": "check-deadline-8a0eba0aa9"
+      }
+    ],
     "rolling": [],
     "announcedIntake": [],
     "cohortStarts": [],
@@ -547,12 +2244,24 @@
       {
         "value": "in-person",
         "evidenceId": "check-format-c8f44f9c17"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-73b72c3c3b"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-c598db00c8"
       }
     ],
     "location": [
       {
         "value": "Singapore",
         "evidenceId": "check-location-ae2942c1be"
+      },
+      {
+        "value": "Asia",
+        "evidenceId": "check-location-a9ec202cd3"
       }
     ],
     "selectivity": [],
@@ -560,6 +2269,26 @@
       {
         "value": "charge. ‍ Each Market Discovery program has a participation fee of €500. The fee applies per startup, per program, and covers up to 3",
         "evidenceId": "check-deal-bcb11f639c"
+      },
+      {
+        "value": "while the Market Discovery program has a small participation fee of €500 per startup for up to 3 participants. ‍ We provide unbiased advice,",
+        "evidenceId": "check-deal-42bb0cfa3b"
+      },
+      {
+        "value": "Venios Frequently Asked Questions What does the program cost? EUR 500 per startup. Travel and accommodation are not included. The fee",
+        "evidenceId": "check-deal-a7d28c106a"
+      },
+      {
+        "value": "Application Deadline: November 9, 2026 Format: Virtual Program Cost: €500 per Startup Apply Now Apply Now Test Meet all Startup Stories \"I",
+        "evidenceId": "check-deal-7179612387"
+      },
+      {
+        "value": "2026 Format: Workshops, Panel Discussions, 1-on-1 Mentoring Cost: €500 per Startup Apply Now Apply Now *Optional Attendance at Hongqiao Tech",
+        "evidenceId": "check-deal-1c497e6c57"
+      },
+      {
+        "value": "2026 Format: Workshops, Panel Discussions, 1-on-1 Mentoring Cost: €500 per Startup Apply Now Apply Now Test Meet all Startup Stories \"I",
+        "evidenceId": "check-deal-59b96548aa"
       }
     ],
     "dealComponents": [
@@ -574,20 +2303,36 @@
           "condition": "up to"
         },
         "evidenceId": "check-deal-bcb11f639c"
+      },
+      {
+        "value": {
+          "kind": "fee",
+          "amount": "500",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Fee",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-a7d28c106a"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "500",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-7179612387"
       }
     ],
     "portfolioPages": [
       {
         "value": "https://www.germanaccelerator.com/alumni",
         "evidenceId": "check-portfolio-da354ca879"
-      },
-      {
-        "value": "https://old.germanaccelerator.com/companies/#celonis",
-        "evidenceId": "check-portfolio-a266f6bb3a"
-      },
-      {
-        "value": "https://old.germanaccelerator.com/companies/#n26",
-        "evidenceId": "check-portfolio-a36575d7bc"
       }
     ],
     "name": [

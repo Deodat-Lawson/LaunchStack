@@ -1,6 +1,6 @@
 {
   "programId": "accelerace",
-  "checkedAt": "2026-11-14T20:59:02.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://accelerace.io/",
     "https://accelerace.io/apply-now-the-worlds-only-soundtech-accelerator-program/",
@@ -9,14 +9,19 @@
     "https://accelerace.io/accelerace-invest-donkey-republic-raises-double-digit-series-investment/",
     "https://accelerace.io/accelerace-raises-1-7-million-investment-help-startups-succeed/",
     "https://accelerace.io/antag-therapeutics-raises-3m-usd-series-investment-novo-seeds/",
-    "https://accelerace.io/category/investments/",
     "https://accelerace.io/exclusive-network-ensures-qualified-investment-growth-startups/",
     "https://accelerace.io/faq/",
     "https://accelerace.io/funding/",
     "https://accelerace.io/investment-monta-biosciences-raises-investment-promising-cancer-treatment-2/",
     "https://accelerace.io/investment-readiness-test-vita/",
     "https://accelerace.io/investment-readiness-test/",
-    "https://platform.accelerace.io/apply/tools"
+    "https://platform.accelerace.io/apply/tools",
+    "https://accelerace.io/new-investment-lexsee-are-cracking-the-dyslexia-code/",
+    "https://accelerace.io/new-investment-used-by-clubs-from-premier-league-and-champions-league/",
+    "https://accelerace.io/tinyfarms-investment/",
+    "https://accelerace.io/tunebutler-investment/",
+    "https://accelerace.io/umamamia-investment/",
+    "https://accelerace.io/wudpecker_investment/"
   ],
   "evidence": [
     {
@@ -258,6 +263,13 @@
       "page": "terms"
     },
     {
+      "id": "check-format-1031e96f9e",
+      "url": "https://accelerace.io/umamamia-investment/",
+      "title": "Accelerace — terms page",
+      "excerpt": "their offerings, producing great tasting plant based or hybrid products. Umamamia have a collaboration with DTU Food",
+      "page": "terms"
+    },
+    {
       "id": "check-format-e4da16be35",
       "url": "https://accelerace.io/funding/",
       "title": "Accelerace — terms page",
@@ -279,8 +291,22 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-20389f534d",
+      "url": "https://accelerace.io/tinyfarms-investment/",
+      "title": "Accelerace — terms page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-5348112bf6",
       "url": "https://accelerace.io/funding/",
+      "title": "Accelerace — terms page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-58f41b3506",
+      "url": "https://accelerace.io/new-investment-used-by-clubs-from-premier-league-and-champions-league/",
       "title": "Accelerace — terms page",
       "excerpt": "Portfolio → https://accelerace.io/startups/",
       "page": "terms"
@@ -307,6 +333,20 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-9976719dbb",
+      "url": "https://accelerace.io/umamamia-investment/",
+      "title": "Accelerace — terms page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9b9d50fd99",
+      "url": "https://accelerace.io/tunebutler-investment/",
+      "title": "Accelerace — terms page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-9dd1c045c1",
       "url": "https://accelerace.io/",
       "title": "Accelerace — homepage",
@@ -330,6 +370,20 @@
     {
       "id": "check-portfolio-bb5ed4a9cc",
       "url": "https://accelerace.io/antag-therapeutics-raises-3m-usd-series-investment-novo-seeds/",
+      "title": "Accelerace — terms page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-cd39e869de",
+      "url": "https://accelerace.io/wudpecker_investment/",
+      "title": "Accelerace — terms page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d0d8324405",
+      "url": "https://accelerace.io/new-investment-lexsee-are-cracking-the-dyslexia-code/",
       "title": "Accelerace — terms page",
       "excerpt": "Portfolio → https://accelerace.io/startups/",
       "page": "terms"
@@ -363,13 +417,6 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-f2df390fbb",
-      "url": "https://accelerace.io/category/investments/",
-      "title": "Accelerace — terms page",
-      "excerpt": "Portfolio → https://accelerace.io/startups/",
-      "page": "terms"
-    },
-    {
       "id": "check-portfolio-f4ee1738e0",
       "url": "https://accelerace.io/accelerace-alumnus-sensohive-receives-double-digit-million-investment/",
       "title": "Accelerace — terms page",
@@ -397,6 +444,78 @@
       "url": "https://accelerace.io/",
       "page": "details",
       "excerpt": "Accelerace – Leading Pre-Seed Investor & Accelerator Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Home of the Nordic founders building the great companies of tomorrow We are the leading pre-seed investor and startup accelerator in the Nordics This is Accelerace Since 2008, Accelerace has been the first stop for 2000+ parents, university students, c-level executives, first-timers, crazy people and everyone in-between that today lead some of Europe’s most promising startups and scaleups. Pre-seed funding We invest in Nordic and Baltic pre-seed stage startups and invite you to our lifelong founders community, Accelerace Allstars. Get funding Partner programmes We co-manage several accelerator and mentoring programmes around Europe for startups in different industries and stages. Get accelerated Corporate matchmaking We leverage our understanding of both startups and corporates, to find the perfect curated matches, that benefits everyone. Match now Accelerace allstars Pre-seed funding and support from top founders By becoming a portfolio company of Accelerace, you automatically become part of Accelerace Allstars. This is a lifelong community for founders in the Nordics and Baltics, where we help you prepare to raise seed"
+    },
+    {
+      "id": "check-page-907e71f556",
+      "url": "https://accelerace.io/",
+      "page": "details",
+      "excerpt": "This is a lifelong community for founders in the Nordics and Baltics, where we help you prepare to raise seed funding, and connect you with our Allstars mentors."
+    },
+    {
+      "id": "check-page-42437e6b41",
+      "url": "https://accelerace.io/",
+      "page": "details",
+      "excerpt": "The Allstars mentors are Accelerace’s most successful alumni — the founders of Templafy , Penneo , Actimo , Coinify , Densou , Axdraft , Graduateland and Dreamplan ."
+    },
+    {
+      "id": "check-page-346a17ecdd",
+      "url": "https://accelerace.io/",
+      "page": "details",
+      "excerpt": "Allstars mentors Investment program Investor day Community activities Get funding Accelerace Allstars mentors take the test How likely are you to raise funding from Accelerace?"
+    },
+    {
+      "id": "check-page-3ebc1d8252",
+      "url": "https://accelerace.io/",
+      "page": "details",
+      "excerpt": "Accelerace is run by founders, and we have seen firsthand what mistakes that kill startups at an early stage, and it is (quite literally) our mission to make sure that you avoid them. + startups accelerated % survival rate % startups raised capital Meet our portfolio Don't just take our word for it We do not like to brag, but we do not mind letting our startups do it for us."
+    },
+    {
+      "id": "check-page-1632f54f75",
+      "url": "https://accelerace.io/",
+      "page": "details",
+      "excerpt": "If you do that, they'll help you.\" Peter Lucas, Co-founder of Hedia \"Thanks for team Accelerace's continued support for founders and startups, you are instrumental in taking start-ups to scale-ups.\" Hans Henrik Hoffmeyer, Co-founder of Coinify Latest stories This is what we have been up to recently!"
+    },
+    {
+      "id": "check-page-2d11d818ba",
+      "url": "https://accelerace.io/",
+      "page": "details",
+      "excerpt": "View all Jabbr raises $ 5 mio. from powerful players Jabbr reaches another milestone with the announcement of its $5 million seed round — a major step forward in reshaping how combat sports are analyzed, produced, and experienced."
+    },
+    {
+      "id": "check-page-5c4f314c82",
+      "url": "https://accelerace.io/",
+      "page": "details",
+      "excerpt": "By combining AI and computer […] Hans Christian Mandøe Oct 20 BioInnovation Institute and Accelerace merge: Aim to create Europe’s strongest launchpad for startups BioInnovation Institute (BII) and Accelerace are merging, and Accelerace will henceforth be an integrated part of BII’s organisation."
+    },
+    {
+      "id": "check-page-a9ba96f394",
+      "url": "https://accelerace.io/",
+      "page": "details",
+      "excerpt": "Through this merger, BII and Accelerace aim to strengthen the Danish innovation ecosystem by supporting even more university-based startups – not only within biotech and life sciences, but also in tech, AI, and quantum technology."
+    },
+    {
+      "id": "check-page-a09ca5bc5c",
+      "url": "https://accelerace.io/",
+      "page": "details",
+      "excerpt": "“At BII, […] Hans Christian Mandøe Oct 1 AI-matchmaking make SMEs more productive."
+    },
+    {
+      "id": "check-page-dad47178b4",
+      "url": "https://accelerace.io/",
+      "page": "details",
+      "excerpt": "A new matchmaking program is connecting Danish SMEs with cutting-edge AI startups, which can boost their productivity and save them valuable time and costs by helping them find the exact digital solution that works for their business."
+    },
+    {
+      "id": "check-page-cc4f5e1e72",
+      "url": "https://accelerace.io/",
+      "page": "details",
+      "excerpt": "If the initiative is successful, the ambition is to expand the collaboration model to many other areas where […] Hans Christian Mandøe May 19 Dreamplan raise seed-round Accelerace portfolio company, Dreamplan, have raised a seed round of DKK 20 mio."
+    },
+    {
+      "id": "check-page-aea480e562",
+      "url": "https://accelerace.io/",
+      "page": "details",
+      "excerpt": "MederiAI is developing an AI-powered software solution that assists gastroenterologists in analysing capsule endoscopy videos faster, more accurately, and at a significantly lower cost."
     },
     {
       "id": "check-page-c5ca7d761b",
@@ -435,12 +554,6 @@
       "excerpt": "Antag Therapeutics raises 3M USD in a Series A investment from Novo Seeds » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Antag Therapeutics raises 3M USD in a Series A investment from Novo Seeds Share: Share this on WhatsApp Share this on FaceBook Share this on Twitter"
     },
     {
-      "id": "check-page-4cf6dc61d0",
-      "url": "https://accelerace.io/category/investments/",
-      "page": "terms",
-      "excerpt": "Investments Archives » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Category: Investments Search Tags: new investment MederiAI targets the gut to save lives Endoscopies are vital procedures in detecting life threatening conditions, but they can often be slow, invasive and subject to human error – MederiAI aims to change that. MederiAI is developing an AI-powered software solution that assists gastroenterologists in analysing capsule endoscopy videos faster, more accurately, and at a significantly lower cost. Capsule endoscopy is a […] Hans Christian Mandøe Mar 27 Mar 26 A more diverse involvement in business decisions Accelerace have invested in Involved, who are dedicated to enhancing decision-making by providing leaders with access to diverse perspectives from employees and stakeholders. Imagine a large meeting room, filled with stakeholders who have insights and opinions on the company’s next major focus area – the reason for today’s meeting. But somehow, even though more than […] Hans Christian Mandøe Mar 12 Mar 12 EV charging for apartment buildings is finally here! Accelerace have invested in Elby, a company that gives private apartment complexes the ability to install EV charging points directly into their"
-    },
-    {
       "id": "check-page-18c3a5a479",
       "url": "https://accelerace.io/exclusive-network-ensures-qualified-investment-growth-startups/",
       "page": "terms",
@@ -453,10 +566,154 @@
       "excerpt": "FAQ » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact FAQ - what people ask us Please look through our frequently asked questions sections below. If you still did not find the answer to your question please do not hesitate to reach out to us by mail or through the info form . Are we going to a pitch session in order to get selected? No, our selection will be based on personal interviews with your personal Business Accelerator – not a pitch session. In our experience, we get to know you a lot better in this way – and you get to know us a lot better. It’s not only us that select you – you should also feel that you want to spend your valuable time with us. This forms the basis for a great relationship going forward! Is it possible to include IP documents in the application? Yes, you can attach documents to your application. If you scroll down the application page (For startups/Apply) you will be able to attach files. All your documents and other details will be kept confidential. What stage should the participating startups be at? It depends a little on technology and market, but from the level of MVP, prototype or more. Our focus is market development. What is the outline of the contents of the program? Our program is"
     },
     {
+      "id": "check-page-f355927850",
+      "url": "https://accelerace.io/faq/",
+      "page": "terms",
+      "excerpt": "The content is centered around learning labs, workshops, mentoring and coaching that are tailored to your needs."
+    },
+    {
+      "id": "check-page-b487ed8a4d",
+      "url": "https://accelerace.io/faq/",
+      "page": "terms",
+      "excerpt": "We’re a specialized scaling platform rather than a traditional acceleration program."
+    },
+    {
+      "id": "check-page-bda895df68",
+      "url": "https://accelerace.io/faq/",
+      "page": "terms",
+      "excerpt": "Do I need to relocate my company to Denmark to participate?"
+    },
+    {
+      "id": "check-page-3496cbc05c",
+      "url": "https://accelerace.io/faq/",
+      "page": "terms",
+      "excerpt": "You don’t necessarily need to relocate since we can do the mentoring remotely."
+    },
+    {
+      "id": "check-page-6acd5f9617",
+      "url": "https://accelerace.io/faq/",
+      "page": "terms",
+      "excerpt": "However, you do need to register your company in Denmark (CVR number) and have some activity here e.g. participating in camps and client or investor meetings."
+    },
+    {
+      "id": "check-page-850794f659",
+      "url": "https://accelerace.io/faq/",
+      "page": "terms",
+      "excerpt": "If you do wish to relocate to Copenhagen, we will help you with administrative tasks, logistics, discounts and help you get in touch with the right people."
+    },
+    {
+      "id": "check-page-38e6394557",
+      "url": "https://accelerace.io/faq/",
+      "page": "terms",
+      "excerpt": "Most other programs are incubators or early stage accelerators."
+    },
+    {
+      "id": "check-page-17af318d6a",
+      "url": "https://accelerace.io/faq/",
+      "page": "terms",
+      "excerpt": "2) We match you directly with our leading corporate partners that are interested in your technology and which in return will offer your know-how, insights and expertise."
+    },
+    {
+      "id": "check-page-c197320833",
+      "url": "https://accelerace.io/faq/",
+      "page": "terms",
+      "excerpt": "Our business accelerators & investors spend 180 hours with your startup."
+    },
+    {
+      "id": "check-page-419c9809cf",
+      "url": "https://accelerace.io/faq/",
+      "page": "terms",
+      "excerpt": "4) Think of it as a shortcut to the Northern European markets ."
+    },
+    {
+      "id": "check-page-1892b59b29",
+      "url": "https://accelerace.io/faq/",
+      "page": "terms",
+      "excerpt": "Not only is our startup tech scene vibrant and booming, but we also offer a hotbed for clean tech, food and life science and a gateway to the Nordic countries."
+    },
+    {
+      "id": "check-page-2f1bacd700",
+      "url": "https://accelerace.io/faq/",
+      "page": "terms",
+      "excerpt": "Denmark is home to 22% of the scaleups in the Nordics – and together the Nordic countries have almost 6 times as many scaleups as the average country in continental Europe, and 9 times more than in Southern Europe."
+    },
+    {
       "id": "check-page-8a55842a4c",
       "url": "https://accelerace.io/funding/",
       "page": "terms",
       "excerpt": "Funding » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Pre-seed funding and support from top founders Submit pitch deck Accelerace Allstars is a community of successful founders in the Nordics and Baltics — the ones that made it big like Templafy , Penneo and Coinify , and the ones that will. We invest 1 000 000 DKK and deliver value beyond money. If you want to get mentored by the Accelerace Allstars mentors (a.k.a. our most successful alumni founders), close a seed round and get access to community activities, we are the pre-seed investor you need. Support and funding from founders that have One major benefit of becoming a portfolio company of Accelerace Invest II is access to the Allstars mentors — the founders of Templafy , Penneo , Actimo , Coinify , Densou , Axdraft , Graduateland and Dreamplan ! The Allstars mentors are Accelerace’s most successful alumni founders. After building companies that got publicly listed, acquired by industry-leading players and raised millions of dollars, they have returned to Accelerace to support the next generation of founders as mentors and investors. the deal 1 000 000 DKK convertible loans We invest 1 000 000 DKK before you have customers, revenue or traction, using a"
+    },
+    {
+      "id": "check-page-1b2a9469f8",
+      "url": "https://accelerace.io/funding/",
+      "page": "terms",
+      "excerpt": "After building companies that got publicly listed, acquired by industry-leading players and raised millions of dollars, they have returned to Accelerace to support the next generation of founders as mentors and investors. the deal 1 000 000 DKK convertible loans We invest 1 000 000 DKK before you have customers, revenue or traction, using a standardized convertible loan with a conversion cap."
+    },
+    {
+      "id": "check-page-7a0ca54b10",
+      "url": "https://accelerace.io/funding/",
+      "page": "terms",
+      "excerpt": "As the most aggressive early-stage investor in Denmark, we do not have the bandwidth for individual negotiations."
+    },
+    {
+      "id": "check-page-480fe1144b",
+      "url": "https://accelerace.io/funding/",
+      "page": "terms",
+      "excerpt": "The terms are market conforming, meaning they are somewhat similar to offerings by other pre-seed stage investors."
+    },
+    {
+      "id": "check-page-17d0587436",
+      "url": "https://accelerace.io/funding/",
+      "page": "terms",
+      "excerpt": "Scaling veterans as mentors Access to 1:1 mentoring sessions with the Allstars mentors and Accelerace’s Investment Managers, whose knowledge and advice come from building and scaling their own startups."
+    },
+    {
+      "id": "check-page-03800720d0",
+      "url": "https://accelerace.io/funding/",
+      "page": "terms",
+      "excerpt": "You pitch and we match you with the right investors to close that seed round."
+    },
+    {
+      "id": "check-page-0174f0dd74",
+      "url": "https://accelerace.io/funding/",
+      "page": "terms",
+      "excerpt": "Once a year, we will invite you to our Allstars Community Event, where we promise you never-ending inspiration, surprises, networking, and knowledge — by and for our founder community."
+    },
+    {
+      "id": "check-page-261f6a1e85",
+      "url": "https://accelerace.io/funding/",
+      "page": "terms",
+      "excerpt": "Founder Talks by Allstars Mentors Get practical advice from our Allstars mentors and learn about their (bumpy) journey towards product-market fit, how to get talented people to leave high-paying jobs, when to step down as CEO, etc."
+    },
+    {
+      "id": "check-page-ed35d91024",
+      "url": "https://accelerace.io/funding/",
+      "page": "terms",
+      "excerpt": "It is important to us for you to get a seed round with quality investors in it."
+    },
+    {
+      "id": "check-page-0c5049b750",
+      "url": "https://accelerace.io/funding/",
+      "page": "terms",
+      "excerpt": "Live interview and Q&A with Allstar mentors."
+    },
+    {
+      "id": "check-page-750f114861",
+      "url": "https://accelerace.io/funding/",
+      "page": "terms",
+      "excerpt": "How many of your portfolio companies raised seed funding?"
+    },
+    {
+      "id": "check-page-bb0163f4e7",
+      "url": "https://accelerace.io/funding/",
+      "page": "terms",
+      "excerpt": "Do you take a board seat after we raise a seed round?"
+    },
+    {
+      "id": "check-page-77bc108671",
+      "url": "https://accelerace.io/funding/",
+      "page": "terms",
+      "excerpt": "Very rarely — we are there to support you every step of raising your seed round, but let the seed VCs take the lead afterwards."
     },
     {
       "id": "check-page-fbd6cefacd",
@@ -468,19 +725,505 @@
       "id": "check-page-dc1f84ba44",
       "url": "https://accelerace.io/investment-readiness-test-vita/",
       "page": "terms",
-      "excerpt": "Investment readiness test - Vita » Accelerace Investment readiness test – Vita Test how ready you are for getting an investment from Vita Accelerator Answer the 12 questions below and instantly see how likely your startup is to get an investment offer from Vita Accelerator. The test should take less than 15 minutes and we only ask for your contact information so we can explore an actual investment. Step 1 of 14 7% Phone This field is for validation purposes and should be left unchanged. Which team description below best describes your current team? * The team is defined as the founding team, which means team members with significant upside in the company. Typically, that includes founders and founding employees. Agencies, freelancers, and interns are not founding team members. Incomplete founding team. Your team still lacks one or more co-founders. Complete founding team, with no startup experience, and no industry experience. Your team is complete enough to obtain product-market-fit. None of the founders have been founders or founding employees in a startup before. Nor have any of the founders work experience from the industry. Complete founding team, little startup experience, little industry experience. Your team is complete enough to obtain product-market-fit. One (or more) of the founders have been founders or founding employees in a short-lived startup. One (or more) of"
+      "excerpt": "Investment readiness test - Vita » Accelerace Investment readiness test – Vita Test how ready you are for getting an investment from Vita Accelerator Answer the 12 questions below and instantly see how likely your startup is to get an investment offer from Vita Accelerator. The test should take less than 15 minutes and we only ask for your contact information so we can explore an actual investment. Step 1 of 14 7% Company This field is for validation purposes and should be left unchanged. Which team description below best describes your current team? * The team is defined as the founding team, which means team members with significant upside in the company. Typically, that includes founders and founding employees. Agencies, freelancers, and interns are not founding team members. Incomplete founding team. Your team still lacks one or more co-founders. Complete founding team, with no startup experience, and no industry experience. Your team is complete enough to obtain product-market-fit. None of the founders have been founders or founding employees in a startup before. Nor have any of the founders work experience from the industry. Complete founding team, little startup experience, little industry experience. Your team is complete enough to obtain product-market-fit. One (or more) of the founders have been founders or founding employees in a short-lived startup. One (or more)"
+    },
+    {
+      "id": "check-page-1263f9790f",
+      "url": "https://accelerace.io/investment-readiness-test-vita/",
+      "page": "terms",
+      "excerpt": "B2B: Leter of Intent For B2B you have a signed letter of intent from a relevant customer."
+    },
+    {
+      "id": "check-page-7f72a3943b",
+      "url": "https://accelerace.io/investment-readiness-test-vita/",
+      "page": "terms",
+      "excerpt": "For consumer startups, people have signed up on a waitlist."
+    },
+    {
+      "id": "check-page-6b382e044e",
+      "url": "https://accelerace.io/investment-readiness-test-vita/",
+      "page": "terms",
+      "excerpt": "B2B: Proof of Concept For B2B you have an agreement of doing a proof of concept with customers."
+    },
+    {
+      "id": "check-page-7f72a3943b",
+      "url": "https://accelerace.io/investment-readiness-test-vita/",
+      "page": "terms",
+      "excerpt": "For consumer startups, people have signed up on a waitlist."
+    },
+    {
+      "id": "check-page-e26361fca5",
+      "url": "https://accelerace.io/investment-readiness-test-vita/",
+      "page": "terms",
+      "excerpt": "B2B: Pilot customer For B2B you have an agreement of doing a pilot to prove an articulated business outcome for the customer."
+    },
+    {
+      "id": "check-page-26b1976167",
+      "url": "https://accelerace.io/investment-readiness-test-vita/",
+      "page": "terms",
+      "excerpt": "For consumer startups, people are using the beta version."
+    },
+    {
+      "id": "check-page-010c1d9cb1",
+      "url": "https://accelerace.io/investment-readiness-test-vita/",
+      "page": "terms",
+      "excerpt": "B2B: Customers For B2B you have paying customer that is using the product in “production”."
+    },
+    {
+      "id": "check-page-016ff24889",
+      "url": "https://accelerace.io/investment-readiness-test-vita/",
+      "page": "terms",
+      "excerpt": "For consumer startups, people are relying on your product to solve their problem."
+    },
+    {
+      "id": "check-page-a73db05899",
+      "url": "https://accelerace.io/investment-readiness-test-vita/",
+      "page": "terms",
+      "excerpt": "B2B: Returning customer For B2B you have several customers that have renewed or in other ways shown that they are planning to remain customers for a significant time."
+    },
+    {
+      "id": "check-page-e758d67e22",
+      "url": "https://accelerace.io/investment-readiness-test-vita/",
+      "page": "terms",
+      "excerpt": "For consumer startups, people can no imagine a life without your product to solve their problem."
+    },
+    {
+      "id": "check-page-268a280826",
+      "url": "https://accelerace.io/investment-readiness-test-vita/",
+      "page": "terms",
+      "excerpt": "B2C: Waitlist For B2C you have a waitlist where potential users have provided their e-mail."
+    },
+    {
+      "id": "check-page-7bc22e867e",
+      "url": "https://accelerace.io/investment-readiness-test-vita/",
+      "page": "terms",
+      "excerpt": "B2C: Closed Beta For B2C you have a waitlist where beta users have gotten access to the product."
     },
     {
       "id": "check-page-618d1b691d",
       "url": "https://accelerace.io/investment-readiness-test/",
       "page": "terms",
-      "excerpt": "Test Your Investment Readiness - Accelerace Invest Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Test how ready you are for getting an investment from Accelerace Answer the 12 questions below and instantly see how likely your startup is to get an investment offer from Accelerace. The test should take less than 15 minutes and we only ask for your contact information so we can explore an actual investment. Step 1 of 14 7% Company This field is for validation purposes and should be left unchanged. Which team description below best describes your current team? * The team is defined as the founding team, which means team members with significant upside in the company. Typically, that includes founders and founding employees. Agencies, freelancers, and interns are not founding team members. Incomplete founding team. Your team still lacks one or more co-founders. Complete founding team, with no startup experience, and no industry experience. Your team is complete enough to obtain product-market-fit. None of the founders have been founders or founding employees in a startup before. Nor have any of the founders work experience from the industry. Complete founding team, little startup experience, little industry experience. Your team"
+      "excerpt": "Test Your Investment Readiness - Accelerace Invest Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Test how ready you are for getting an investment from Accelerace Answer the 12 questions below and instantly see how likely your startup is to get an investment offer from Accelerace. The test should take less than 15 minutes and we only ask for your contact information so we can explore an actual investment. Step 1 of 14 7% Phone This field is for validation purposes and should be left unchanged. Which team description below best describes your current team? * The team is defined as the founding team, which means team members with significant upside in the company. Typically, that includes founders and founding employees. Agencies, freelancers, and interns are not founding team members. Incomplete founding team. Your team still lacks one or more co-founders. Complete founding team, with no startup experience, and no industry experience. Your team is complete enough to obtain product-market-fit. None of the founders have been founders or founding employees in a startup before. Nor have any of the founders work experience from the industry. Complete founding team, little startup experience, little industry experience. Your team is"
+    },
+    {
+      "id": "check-page-73806159c8",
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "page": "terms",
+      "excerpt": "B2B: Leter of Intent For B2B you have a signed letter of intent from a relevant customer."
+    },
+    {
+      "id": "check-page-0179990376",
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "page": "terms",
+      "excerpt": "For consumer startups, people have signed up on a waitlist."
+    },
+    {
+      "id": "check-page-d38117ff4b",
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "page": "terms",
+      "excerpt": "B2B: Proof of Concept For B2B you have an agreement of doing a proof of concept with customers."
+    },
+    {
+      "id": "check-page-0179990376",
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "page": "terms",
+      "excerpt": "For consumer startups, people have signed up on a waitlist."
+    },
+    {
+      "id": "check-page-d4200c3198",
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "page": "terms",
+      "excerpt": "B2B: Pilot customer For B2B you have an agreement of doing a pilot to prove an articulated business outcome for the customer."
+    },
+    {
+      "id": "check-page-c18cc1a229",
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "page": "terms",
+      "excerpt": "For consumer startups, people are using the beta version."
+    },
+    {
+      "id": "check-page-78fb764195",
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "page": "terms",
+      "excerpt": "B2B: Customers For B2B you have paying customer that is using the product in “production”."
+    },
+    {
+      "id": "check-page-9ca444d8fd",
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "page": "terms",
+      "excerpt": "For consumer startups, people are relying on your product to solve their problem."
+    },
+    {
+      "id": "check-page-402d381435",
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "page": "terms",
+      "excerpt": "B2B: Returning customer For B2B you have several customers that have renewed or in other ways shown that they are planning to remain customers for a significant time."
+    },
+    {
+      "id": "check-page-692ecb47e0",
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "page": "terms",
+      "excerpt": "For consumer startups, people can no imagine a life without your product to solve their problem."
+    },
+    {
+      "id": "check-page-c763f7ddb0",
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "page": "terms",
+      "excerpt": "B2C: Waitlist For B2C you have a waitlist where potential users have provided their e-mail."
+    },
+    {
+      "id": "check-page-046963074a",
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "page": "terms",
+      "excerpt": "B2C: Closed Beta For B2C you have a waitlist where beta users have gotten access to the product."
     },
     {
       "id": "check-page-078895ad9b",
       "url": "https://platform.accelerace.io/apply/tools",
       "page": "application",
       "excerpt": "We use cookies This website uses cookies in order to enhance the overall user experience. Only essentials Accept all Customize Essential cookies There are some cookies that we have to include in order for certain web pages to function. For this reason, they do not require your consent. laravel_cookie_consent 1 year 1 month 1 day Used to store the user's cookie consent preferences. laravel_session 1 day Used to identify the user's browsing session. XSRF-TOKEN 1 day Used to secure both the user and our website against cross-site request forgery attacks. introjs-dontShowAgain 1 year 1 month 1 day Used by Accelerace to remember if you have seen the Introjs tutorial laravel_cookie_consent 1 year 1 month 1 day Used by Accelerace to remember your cookie consent tool_ref_* 1 year 1 month 1 day Used by Accelerace to remember which tool you last used __cf_bm 1 year 1 month 1 day Used by Vimeo to distinguish between humans and bots OptanonAlertBoxClosed 1 year 1 month 1 day Used by Vimeo to remember if you have seen the cookie consent popup OptanonConsent 1 year 1 month 1 day Used by Vimeo to remember your cookie consent _abexps 1 year 1 month 1 day Used by Vimeo to remember settings you have made player 1 year 1 month 1 day Used by Vimeo to remember settings you have made language 1 year 1 month 1 day Used by Vimeo to remember your language settings is_logged_in 1 year 1 month 1 day"
+    },
+    {
+      "id": "check-page-545cb1b86d",
+      "url": "https://accelerace.io/new-investment-lexsee-are-cracking-the-dyslexia-code/",
+      "page": "terms",
+      "excerpt": "New investment Lexsee are cracking the dyslexia code » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact New investment Lexsee are cracking the dyslexia code Share: Share this on WhatsApp Share this on FaceBook Share this on Twitter The challenges and fear around reading, for dyslexic people, can be crippling. Dyslexia can be successfully overcome, but many can’t afford expensive private tutors, and struggle to get help in resource-strapped US school systems. Lexsee are out to democratise reading for dyslexic people. Young people with dyslexia in busy classrooms, are often perceived by peers and teachers, and many times also themselves, as less intelligent due to their reading deficits. But dyslexia is a learning challenge that has nothing to do with intelligence. When we read a word, or a collection of words, our brain visually analyses the text and relates this visual input to how they would sound. And it is not until after this that meanings and associations are formed from those sounds, and it is that process that is extremely challenging to dyslexic people. The result of their difficulty is psychological stress and far more frequently dropping out of the education system, eventually choosing careers that avoid"
+    },
+    {
+      "id": "check-page-86b75d0edc",
+      "url": "https://accelerace.io/new-investment-lexsee-are-cracking-the-dyslexia-code/",
+      "page": "terms",
+      "excerpt": "The result of their difficulty is psychological stress and far more frequently dropping out of the education system, eventually choosing careers that avoid reading and writing, which in the end can lead to lesser earning opportunities."
+    },
+    {
+      "id": "check-page-c487e16c0e",
+      "url": "https://accelerace.io/new-investment-lexsee-are-cracking-the-dyslexia-code/",
+      "page": "terms",
+      "excerpt": "AI-powered features include example-driven micro-learning moments, speech to text, text to speech, social learning, realtime pronunciation analysis and feedback, as well as comprehension boosters like contextual definitions and summaries."
+    },
+    {
+      "id": "check-page-bd4cd12e6f",
+      "url": "https://accelerace.io/new-investment-lexsee-are-cracking-the-dyslexia-code/",
+      "page": "terms",
+      "excerpt": "The knowledge transfer, networking, and mentoring continue to be invaluable for our growth."
+    },
+    {
+      "id": "check-page-23e553cdc3",
+      "url": "https://accelerace.io/new-investment-lexsee-are-cracking-the-dyslexia-code/",
+      "page": "terms",
+      "excerpt": "We are industry agnostic and invest in pre-seed stage startups based in the Nordics and Baltics."
+    },
+    {
+      "id": "check-page-1ddac62ace",
+      "url": "https://accelerace.io/new-investment-lexsee-are-cracking-the-dyslexia-code/",
+      "page": "terms",
+      "excerpt": "Get the secrets to product market fit and raising funding, FOR FREE About Accelerace: Since 2008, Accelerace has supported 900+ Danish and international startups, including Trustpilot and Templafy , through our accelerator program, made 110+ pre-seed investments and matched startups with industry-leading companies such as Tetra Pak , Arla , and Elia ."
+    },
+    {
+      "id": "check-page-a8a847f712",
+      "url": "https://accelerace.io/new-investment-lexsee-are-cracking-the-dyslexia-code/",
+      "page": "terms",
+      "excerpt": "Accelerace is also responsible for the management of NOME (Nordic Mentor Network for Entrepreneurship), an elite mentoring program for Nordic life science startups."
+    },
+    {
+      "id": "check-page-d2c5ccae95",
+      "url": "https://accelerace.io/new-investment-lexsee-are-cracking-the-dyslexia-code/",
+      "page": "terms",
+      "excerpt": "By making approximately 30 new investments/year in pre-seed startups based in the Nordics and Baltics, the ambition is to be Denmark’s most aggressive early-stage investor."
+    },
+    {
+      "id": "check-page-d7df18a211",
+      "url": "https://accelerace.io/new-investment-lexsee-are-cracking-the-dyslexia-code/",
+      "page": "terms",
+      "excerpt": "Previous post IDUN Audio Raises New Round and Keeps Door Open for Further Investors Next post Tinyfarms and Accelerace: Pioneering STEM Education in the EU Nordics's Leading Pre-Seed Accelerator and Investor."
+    },
+    {
+      "id": "check-page-13b1058c31",
+      "url": "https://accelerace.io/new-investment-lexsee-are-cracking-the-dyslexia-code/",
+      "page": "terms",
+      "excerpt": "What we do Pre-seed funding Partner programs Matching with corporates About us About Accelerace Team Careers Presskit Contact More Stories Accelerace Investment Portfolio FAQ"
+    },
+    {
+      "id": "check-page-985ce1ca3a",
+      "url": "https://accelerace.io/new-investment-used-by-clubs-from-premier-league-and-champions-league/",
+      "page": "terms",
+      "excerpt": "New investment used by clubs from Premier League and Champions League » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact New investment used by clubs from Premier League and Champions League Share: Share this on WhatsApp Share this on FaceBook Share this on Twitter The next evolution in sports optimisation is within communication, and Vokalo are revolutionising the way professional athletes exploit communication to their advantage. Vokalo is a sports tech company that uses advanced audio technology and AI to improve performance and bring fans closer to the game. They capture and analyse sports communication, providing a brand new dimension to sports analytics and enhancing fan experiences. Their product suite includes a cloud-based platform for detailed communication analysis, supported by an audio wearable that delivers premium sound to the clubs and athletes. “First it was nutrition and physical output data that was used to give teams and athletes the edge over their competitors, then we saw things like throw ins in football be under exceptional scrutiny, and now finally we have come to communication – a crucial part of especially team sports” – Claus Kristensen, partner at Accelerace. Clubs from the Premier"
+    },
+    {
+      "id": "check-page-67cd2a5bce",
+      "url": "https://accelerace.io/new-investment-used-by-clubs-from-premier-league-and-champions-league/",
+      "page": "terms",
+      "excerpt": "We are industry agnostic and invest in pre-seed stage startups based in the Nordics and Baltics."
+    },
+    {
+      "id": "check-page-7ef944e5d8",
+      "url": "https://accelerace.io/new-investment-used-by-clubs-from-premier-league-and-champions-league/",
+      "page": "terms",
+      "excerpt": "Get the secrets to product market fit and raising funding, FOR FREE About Accelerace: Since 2008, Accelerace has supported 1000+ Danish and international startups, including Trustpilot and Templafy, through our accelerator program, made 200+ pre-seed investments and matched startups with industry-leading companies such as Tetra Pak, Arla, and Elia."
+    },
+    {
+      "id": "check-page-f3f615f492",
+      "url": "https://accelerace.io/new-investment-used-by-clubs-from-premier-league-and-champions-league/",
+      "page": "terms",
+      "excerpt": "Accelerace is also responsible for the management of NOME (Nordic Mentor Network for Entrepreneurship), an elite mentoring program for Nordic life science startups."
+    },
+    {
+      "id": "check-page-bbe3b79a60",
+      "url": "https://accelerace.io/new-investment-used-by-clubs-from-premier-league-and-champions-league/",
+      "page": "terms",
+      "excerpt": "By making approximately 30 new investments/year in pre-seed startups based in the Nordics and Baltics, the ambition is to be Denmark’s most aggressive early-stage investor."
+    },
+    {
+      "id": "check-page-931f5d1a26",
+      "url": "https://accelerace.io/new-investment-used-by-clubs-from-premier-league-and-champions-league/",
+      "page": "terms",
+      "excerpt": "Previous post Exo360 wins Innobooster grant Next post Melatech democratising cancer diagnosis Nordics's Leading Pre-Seed Accelerator and Investor."
+    },
+    {
+      "id": "check-page-36f57fd5ae",
+      "url": "https://accelerace.io/new-investment-used-by-clubs-from-premier-league-and-champions-league/",
+      "page": "terms",
+      "excerpt": "What we do Pre-seed funding Partner programs Matching with corporates About us About Accelerace Team Careers Presskit Contact More Stories Accelerace Investment Portfolio FAQ"
+    },
+    {
+      "id": "check-page-94448d9969",
+      "url": "https://accelerace.io/tinyfarms-investment/",
+      "page": "terms",
+      "excerpt": "Tinyfarms and Accelerace: Pioneering STEM Education in the EU » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Tinyfarms and Accelerace: Pioneering STEM Education in the EU Share: Share this on WhatsApp Share this on FaceBook Share this on Twitter Accelerace has recently invested in Tinyfarms, an innovative startup emerging from Denmark’s Technical University (DTU). This strategic move is aimed at addressing the critical shortage of STEM (Science, Technology, Engineering, Mathematics) workers in the European Union, a concern highlighted by Cedefop. The Urgency of STEM Education: Europe’s Labor Crisis Cedefop’s report on the labor market reveal a persistent shortage of skilled professionals in science and engineering sectors. This gap poses a significant threat to addressing global challenges, such as environmental issues. Tinyfarms, a Danish EdTech company, is stepping up to address this by fostering a passion for sciences from a young age. Tinyfarms comes from exactly the STEM field of education, and are currently located at DTU Skylab, where they each day assemble, develop and distribute the small boxes to Danish primary schools. Co-founders Samy Tessier and Andreas Væring coupled the lack of interest in STEM"
+    },
+    {
+      "id": "check-page-e2ed627da2",
+      "url": "https://accelerace.io/tinyfarms-investment/",
+      "page": "terms",
+      "excerpt": "Co-founders Samy Tessier and Andreas Væring coupled the lack of interest in STEM subjects to the often very theoretical subject matter, and are now, along with their team and chairman David Johan Christensen, founder of Shape Robotics, looking to make education more interactive."
+    },
+    {
+      "id": "check-page-3233e69255",
+      "url": "https://accelerace.io/tinyfarms-investment/",
+      "page": "terms",
+      "excerpt": "Bridging the Gap: Making Science Real for Students Tinyfarms strives to create a tangible connection between students’ perceptions of the real world and scientific education."
+    },
+    {
+      "id": "check-page-e71c342487",
+      "url": "https://accelerace.io/tinyfarms-investment/",
+      "page": "terms",
+      "excerpt": "Tinyfarms makes this possible by enabling students to control environmental conditions within the Tinyfarm through basic block programming” Expansion Plans: Scaling Tinyfarms’ Educational Impact Currently implemented in 14 primary schools across Denmark, Tinyfarms plans to use Accelerace’s investment to expand its reach."
+    },
+    {
+      "id": "check-page-75057b4e7c",
+      "url": "https://accelerace.io/tinyfarms-investment/",
+      "page": "terms",
+      "excerpt": "The funding will support further product development, manufacturing enhancements, and the integration of Tinyfarms into more schools."
+    },
+    {
+      "id": "check-page-522980ed0c",
+      "url": "https://accelerace.io/tinyfarms-investment/",
+      "page": "terms",
+      "excerpt": "The involvement of David Johan Christensen, underscores the company’s commitment to revolutionising STEM education."
+    },
+    {
+      "id": "check-page-2594767c7d",
+      "url": "https://accelerace.io/tinyfarms-investment/",
+      "page": "terms",
+      "excerpt": "We are industry agnostic and invest in pre-seed stage startups based in the Nordics and Baltics."
+    },
+    {
+      "id": "check-page-9b38c7e2a9",
+      "url": "https://accelerace.io/tinyfarms-investment/",
+      "page": "terms",
+      "excerpt": "Get the secrets to product market fit and raising funding, FOR FREE About Accelerace: Since 2008, Accelerace has supported 900+ Danish and international startups, including Trustpilot and Templafy , through our accelerator program, made 110+ pre-seed investments and matched startups with industry-leading companies such as Tetra Pak , Arla , and Elia ."
+    },
+    {
+      "id": "check-page-212f2f2a51",
+      "url": "https://accelerace.io/tinyfarms-investment/",
+      "page": "terms",
+      "excerpt": "Accelerace is also responsible for the management of NOME (Nordic Mentor Network for Entrepreneurship), an elite mentoring program for Nordic life science startups."
+    },
+    {
+      "id": "check-page-f7025876d1",
+      "url": "https://accelerace.io/tinyfarms-investment/",
+      "page": "terms",
+      "excerpt": "By making approximately 30 new investments/year in pre-seed startups based in the Nordics and Baltics, the ambition is to be Denmark’s most aggressive early-stage investor."
+    },
+    {
+      "id": "check-page-7288d4e093",
+      "url": "https://accelerace.io/tinyfarms-investment/",
+      "page": "terms",
+      "excerpt": "Nordics's Leading Pre-Seed Accelerator and Investor."
+    },
+    {
+      "id": "check-page-ae5f79d1eb",
+      "url": "https://accelerace.io/tinyfarms-investment/",
+      "page": "terms",
+      "excerpt": "What we do Pre-seed funding Partner programs Matching with corporates About us About Accelerace Team Careers Presskit Contact More Stories Accelerace Investment Portfolio FAQ"
+    },
+    {
+      "id": "check-page-ec727b0ffb",
+      "url": "https://accelerace.io/tunebutler-investment/",
+      "page": "terms",
+      "excerpt": "Accelerace believes, and invests, in music and video curation for companies. » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Accelerace believes, and invests, in music and video curation for companies. Share: Share this on WhatsApp Share this on FaceBook Share this on Twitter Tune Butler provides companies with a background music and video solution that makes it as easy and flexible as possible to enhance the customer experience. When you’re focused on building and maintaining your business, you might have your thoughts elsewhere than: how do I control the background music and video screens at my physical location? But background music and video screens in stores, hotels, etc. can be absolutely essential to the customer experience. It should be seen as an opportunity, rather than an inconvenience for businesses. Something as important as controlling the audio-visual presentation of your business should be much easier than it currently is. We believe that more and more businesses will open their eyes to the immersive opportunity of audio and video, when it becomes a simplified process, and that is why we’ve invested in Tune Butler – Claus Kristensen, partner at Accelerace. Accelerace will work with the TuneButler"
+    },
+    {
+      "id": "check-page-266c5e975d",
+      "url": "https://accelerace.io/tunebutler-investment/",
+      "page": "terms",
+      "excerpt": "Accelerace will work with the TuneButler team and Allstar mentors towards raising the next round of investment."
+    },
+    {
+      "id": "check-page-266c5e975d",
+      "url": "https://accelerace.io/tunebutler-investment/",
+      "page": "terms",
+      "excerpt": "Accelerace will work with the TuneButler team and Allstar mentors towards raising the next round of investment."
+    },
+    {
+      "id": "check-page-61e8e3de73",
+      "url": "https://accelerace.io/tunebutler-investment/",
+      "page": "terms",
+      "excerpt": "We are industry agnostic and invest in pre-seed stage startups based in the Nordics and Baltics."
+    },
+    {
+      "id": "check-page-f0bd6f614e",
+      "url": "https://accelerace.io/tunebutler-investment/",
+      "page": "terms",
+      "excerpt": "Get the secrets to product market fit and raising funding, FOR FREE About Accelerace: Since 2008, Accelerace has supported 900+ Danish and international startups, including Trustpilot and Templafy , through our accelerator program, made 110+ pre-seed investments and matched startups with industry-leading companies such as Tetra Pak , Arla , and Elia ."
+    },
+    {
+      "id": "check-page-9621dcc768",
+      "url": "https://accelerace.io/tunebutler-investment/",
+      "page": "terms",
+      "excerpt": "Accelerace is also responsible for the management of NOME (Nordic Mentor Network for Entrepreneurship), an elite mentoring program for Nordic life science startups."
+    },
+    {
+      "id": "check-page-2550e2726f",
+      "url": "https://accelerace.io/tunebutler-investment/",
+      "page": "terms",
+      "excerpt": "By making approximately 30 new investments/year in pre-seed startups based in the Nordics and Baltics, the ambition is to be Denmark’s most aggressive early-stage investor."
+    },
+    {
+      "id": "check-page-adb06d9c31",
+      "url": "https://accelerace.io/tunebutler-investment/",
+      "page": "terms",
+      "excerpt": "Previous post New portfolio company brings umami flavour to plant-based products Next post Accelerace joins international VCs in AI-investment Nordics's Leading Pre-Seed Accelerator and Investor."
+    },
+    {
+      "id": "check-page-54d49ff41c",
+      "url": "https://accelerace.io/tunebutler-investment/",
+      "page": "terms",
+      "excerpt": "What we do Pre-seed funding Partner programs Matching with corporates About us About Accelerace Team Careers Presskit Contact More Stories Accelerace Investment Portfolio FAQ"
+    },
+    {
+      "id": "check-page-20777a7cc4",
+      "url": "https://accelerace.io/umamamia-investment/",
+      "page": "terms",
+      "excerpt": "New portfolio company brings umami flavour to plant-based products » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact New portfolio company brings umami flavour to plant-based products Share: Share this on WhatsApp Share this on FaceBook Share this on Twitter The newest investment from Accelerace, has created a game changer for plant based alternatives to meat. When Martin Decara, the founder of Umamamia, decided to reduce his meat consumption, he, like many others, found it much harder than expected. He sought to understand why and discovered that most plants contain very little to no umami, while meat is rich in umami, which makes it difficult to give up. This realisation sparked an idea: what if umami could be added to plant-based products in a clean way using biotechnology? At that time, Martin had been fermenting food and beverages as a hobby for over 10 years, and understood firsthand, how simple food ingredients could transform from relatively plain to complex and delicious through fermentation. However, the challenge he aimed to address – making plant-based food tastier on a large scale for maximum impact – required more than what the traditional fermentation techniques had to offer. These methods were hard"
+    },
+    {
+      "id": "check-page-a74ffa0ccf",
+      "url": "https://accelerace.io/umamamia-investment/",
+      "page": "terms",
+      "excerpt": "So he teamed up with co-founder and biotech engineer Jakob Einfeldt, and he developed a scalable production method for Umamamia’s new clean label umami product, UmamiFix, made from only peas and salt."
+    },
+    {
+      "id": "check-page-0ed3c8b43a",
+      "url": "https://accelerace.io/umamamia-investment/",
+      "page": "terms",
+      "excerpt": "The team combines Jakob’s expertise in biotechnology for producing umami, Charlotte’s technical insight into umami taste and food technology, and Martin’s skills in process and innovation to address customer needs and build a business around it using technology."
+    },
+    {
+      "id": "check-page-95276c617f",
+      "url": "https://accelerace.io/umamamia-investment/",
+      "page": "terms",
+      "excerpt": "We are industry agnostic and invest in pre-seed stage startups based in the Nordics and Baltics."
+    },
+    {
+      "id": "check-page-a7b0c73cdd",
+      "url": "https://accelerace.io/umamamia-investment/",
+      "page": "terms",
+      "excerpt": "Get the secrets to product market fit and raising funding, FOR FREE About Accelerace: Since 2008, Accelerace has supported 900+ Danish and international startups, including Trustpilot and Templafy , through our accelerator program, made 110+ pre-seed investments and matched startups with industry-leading companies such as Tetra Pak , Arla , and Elia ."
+    },
+    {
+      "id": "check-page-102cf8d323",
+      "url": "https://accelerace.io/umamamia-investment/",
+      "page": "terms",
+      "excerpt": "Accelerace is also responsible for the management of NOME (Nordic Mentor Network for Entrepreneurship), an elite mentoring program for Nordic life science startups."
+    },
+    {
+      "id": "check-page-4d5956cb1c",
+      "url": "https://accelerace.io/umamamia-investment/",
+      "page": "terms",
+      "excerpt": "By making approximately 30 new investments/year in pre-seed startups based in the Nordics and Baltics, the ambition is to be Denmark’s most aggressive early-stage investor."
+    },
+    {
+      "id": "check-page-116345dc48",
+      "url": "https://accelerace.io/umamamia-investment/",
+      "page": "terms",
+      "excerpt": "Nordics's Leading Pre-Seed Accelerator and Investor."
+    },
+    {
+      "id": "check-page-651a6eb560",
+      "url": "https://accelerace.io/umamamia-investment/",
+      "page": "terms",
+      "excerpt": "What we do Pre-seed funding Partner programs Matching with corporates About us About Accelerace Team Careers Presskit Contact More Stories Accelerace Investment Portfolio FAQ"
+    },
+    {
+      "id": "check-page-a527515634",
+      "url": "https://accelerace.io/wudpecker_investment/",
+      "page": "terms",
+      "excerpt": "Accelerace joins international VCs in AI-investment » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Accelerace joins international VCs in AI-investment Share: Share this on WhatsApp Share this on FaceBook Share this on Twitter Wudpecker is addressing the challenges of time wastage and information loss that arise from the growing number of communication applications used within organisations. An increasing amount of time is wasted in organisations searching for information across various platforms as organisations expand their use of communication channels and online meetings become increasingly prevalent. With the recent technological advances in Large Language Models (LLMs), the opportunity is there to increase efficiency. Wudpecker is using these advances to enter the AI arena with a tool developed to help professionals extract answers from a vast amount of data across the aforementioned communication and data applications. From notes to files, emails, and online meetings, Wudpecker allows you to obtain answers using simple prompts for the AI. “Wudpecker is taking a unique, user-centric approach to knowledge management to create something for which the market demand has increased significantly. And because of"
+    },
+    {
+      "id": "check-page-0cba2f2c9c",
+      "url": "https://accelerace.io/wudpecker_investment/",
+      "page": "terms",
+      "excerpt": "And because of the emergence of LLMs, it is now possible to meet those demands,” Peter Marculans, Venture Partner at Accelerace."
+    },
+    {
+      "id": "check-page-3f803886e5",
+      "url": "https://accelerace.io/wudpecker_investment/",
+      "page": "terms",
+      "excerpt": "Accelerace have invested alongside Trind VC and Sofokus Ventures to help Wudpecker perfect and expand their product, propelling them toward the next investment round."
+    },
+    {
+      "id": "check-page-d8c5b096d9",
+      "url": "https://accelerace.io/wudpecker_investment/",
+      "page": "terms",
+      "excerpt": "“Accelerace’s track record in propelling pre-seed startups is impressive."
+    },
+    {
+      "id": "check-page-6f295fc8a2",
+      "url": "https://accelerace.io/wudpecker_investment/",
+      "page": "terms",
+      "excerpt": "We are industry agnostic and invest in pre-seed stage startups based in the Nordics and Baltics."
+    },
+    {
+      "id": "check-page-ddd96ee980",
+      "url": "https://accelerace.io/wudpecker_investment/",
+      "page": "terms",
+      "excerpt": "Get the secrets to product market fit and raising funding, FOR FREE About Accelerace: Since 2008, Accelerace has supported 900+ Danish and international startups, including Trustpilot and Templafy , through our accelerator program, made 110+ pre-seed investments and matched startups with industry-leading companies such as Tetra Pak , Arla , and Elia ."
+    },
+    {
+      "id": "check-page-854b7b77ac",
+      "url": "https://accelerace.io/wudpecker_investment/",
+      "page": "terms",
+      "excerpt": "Accelerace is also responsible for the management of NOME (Nordic Mentor Network for Entrepreneurship), an elite mentoring program for Nordic life science startups."
+    },
+    {
+      "id": "check-page-b37d092e08",
+      "url": "https://accelerace.io/wudpecker_investment/",
+      "page": "terms",
+      "excerpt": "By making approximately 30 new investments/year in pre-seed startups based in the Nordics and Baltics, the ambition is to be Denmark’s most aggressive early-stage investor."
+    },
+    {
+      "id": "check-page-8a945fbd99",
+      "url": "https://accelerace.io/wudpecker_investment/",
+      "page": "terms",
+      "excerpt": "Next post Melatech looking to decrease huge wait times for dermatologists Nordics's Leading Pre-Seed Accelerator and Investor."
+    },
+    {
+      "id": "check-page-32e8ec5018",
+      "url": "https://accelerace.io/wudpecker_investment/",
+      "page": "terms",
+      "excerpt": "What we do Pre-seed funding Partner programs Matching with corporates About us About Accelerace Team Careers Presskit Contact More Stories Accelerace Investment Portfolio FAQ"
     }
   ],
   "findings": {

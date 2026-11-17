@@ -1,6 +1,6 @@
 {
   "programId": "cchub",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://cchub.africa/about/",
@@ -140,6 +140,46 @@
     },
     {
       "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/bffafrica-banner-08/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/ig-a/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/govote-champions-call-for-application/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/govote-champions-call-for-application/govote-champs-opt-2-v2-1/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/govote-champions-call-for-application/govote-champs-opt-2-v2/",
       "page": "application",
       "anchor": "",
       "fetched": true,

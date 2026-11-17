@@ -1,6 +1,6 @@
 {
   "programId": "urban-us",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://thirdsphere.com/about/",
@@ -43,26 +43,10 @@
       "origin": "official"
     },
     {
-      "url": "https://thirdsphere.com/portfolio/air-water-food/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://thirdsphere.com/portfolio/all/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://thirdsphere.com/portfolio/clean-water-sanitation/",
       "page": "portfolio",
       "anchor": "Clean Water & Sanitation",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -70,7 +54,7 @@
       "url": "https://thirdsphere.com/portfolio/climate-action/",
       "page": "portfolio",
       "anchor": "Climate Action",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -78,15 +62,7 @@
       "url": "https://thirdsphere.com/portfolio/connected-transportation-logistics/",
       "page": "portfolio",
       "anchor": "Connected Transportation & Logistics",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://thirdsphere.com/portfolio/exited/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -94,15 +70,7 @@
       "url": "https://thirdsphere.com/portfolio/industry-innovation-infrastructure/",
       "page": "portfolio",
       "anchor": "Industry, Innovation & Infrastructure",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://thirdsphere.com/portfolio/pre-seed/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },

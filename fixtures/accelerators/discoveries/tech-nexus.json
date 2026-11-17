@@ -1,6 +1,6 @@
 {
   "programId": "tech-nexus",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://pulse.technexus.com/",
@@ -139,6 +139,14 @@
       "origin": "official"
     },
     {
+      "url": "https://www.technexus.com/the-ai-imperative-in-mro-why-generative-ai-changes-everything-and-what-to-do-about-it/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.technexus.com/the-most-expensive-decision-in-cvc-isn-t-a-bad-investment-it-s-inaction/",
       "page": "terms",
       "anchor": "",
@@ -149,6 +157,38 @@
     {
       "url": "https://www.technexus.com/the-silent-deal-killer-why-enterprise-sales-stalls-beyond-the-champion/",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-building-an-innovation-ecosystem/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-generative-ai/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-strategic-and-financial-venture-returns/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/what-corporations-need-to-know-about-sustainable-mobility/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,

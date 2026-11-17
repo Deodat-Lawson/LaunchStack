@@ -1,30 +1,189 @@
 {
   "programId": "hub-for-innovation-and-entrepreneurship-nycrin",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
-    "https://www.nycinnovationhotspot.org"
+    "https://www.nycinnovationhotspot.org",
+    "https://www.nycinnovationhotspot.org/frequently-asked-questions-faq",
+    "https://www.nycinnovationhotspot.org/post/march-innovation-hot-spot-meeting-showcases-ny-resources-new-companies",
+    "https://www.nycinnovationhotspot.org/post/ny-i-corps-alumni-companies-boost-opportunities-with-techconnect-bootcamp"
   ],
   "evidence": [
     {
+      "id": "check-email-527c4cbdf5",
+      "url": "https://www.nycinnovationhotspot.org/post/ny-i-corps-alumni-companies-boost-opportunities-with-techconnect-bootcamp",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — portfolio page",
+      "excerpt": "Commercialization For any general inquiries, please email info@nycinnovationhotspot.org Follow us on LinkedIn ! © NYC Innovation Hot Spot, 2026",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-6cdbc0c999",
+      "url": "https://www.nycinnovationhotspot.org/post/march-innovation-hot-spot-meeting-showcases-ny-resources-new-companies",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — portfolio page",
+      "excerpt": "info@nycinnovationhotspot.org",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-7346fe9196",
       "url": "https://www.nycinnovationhotspot.org",
-      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — homepage checked by scrape.py",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — homepage",
       "excerpt": "consideration. For any general inquiries, please email info@nycinnovationhotspot.org Follow us on LinkedIn ! © NYC Innovation Hot Spot, 2026",
       "page": "details"
     },
     {
+      "id": "check-email-847010b57f",
+      "url": "https://www.nycinnovationhotspot.org/frequently-asked-questions-faq",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — terms page",
+      "excerpt": "NYBPC Rulebook . For any general inquiries, please email info@nycinnovationhotspot.org Follow us on LinkedIn ! © NYC Innovation Hot Spot, 2026",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-a00ea57e20",
+      "url": "https://www.nycinnovationhotspot.org/post/ny-i-corps-alumni-companies-boost-opportunities-with-techconnect-bootcamp",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — portfolio page",
+      "excerpt": "info@nycinnovationhotspot.org",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-cfef4c4fa7",
+      "url": "https://www.nycinnovationhotspot.org/post/march-innovation-hot-spot-meeting-showcases-ny-resources-new-companies",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — portfolio page",
+      "excerpt": "Commercialization For any general inquiries, please email info@nycinnovationhotspot.org Follow us on LinkedIn ! © NYC Innovation Hot Spot, 2026",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-facf081637",
+      "url": "https://www.nycinnovationhotspot.org/frequently-asked-questions-faq",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — terms page",
+      "excerpt": "info@nycinnovationhotspot.org",
+      "page": "terms"
+    },
+    {
       "id": "check-email-ff7884687f",
       "url": "https://www.nycinnovationhotspot.org",
-      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — homepage checked by scrape.py",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — homepage",
       "excerpt": "info@nycinnovationhotspot.org",
+      "page": "details"
+    },
+    {
+      "id": "check-format-aca5b242c3",
+      "url": "https://www.nycinnovationhotspot.org/post/ny-i-corps-alumni-companies-boost-opportunities-with-techconnect-bootcamp",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — portfolio page",
+      "excerpt": "and coaching on site during the conference, and a final virtual session where each company presented key insights and",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-d4710005a2",
+      "url": "https://www.nycinnovationhotspot.org/post/ny-i-corps-alumni-companies-boost-opportunities-with-techconnect-bootcamp",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — portfolio page",
+      "excerpt": "take part in the Bootcamp, which included a pre-conference virtual prep session, support and coaching on site during the",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-d757c1b5a0",
+      "url": "https://www.nycinnovationhotspot.org/post/ny-i-corps-alumni-companies-boost-opportunities-with-techconnect-bootcamp",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — portfolio page",
+      "excerpt": "itself were well worth the time and effort. The final virtual Bootcamp session closed with advice and counsel from the",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-407672dc0e",
+      "url": "https://www.nycinnovationhotspot.org",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — homepage",
+      "excerpt": "encourage job creation. The Hot Spot, based in Harlem, coordinates a rich regional",
       "page": "details"
     },
     {
       "id": "check-route-550688f61b",
       "url": "https://www.nycinnovationhotspot.org",
-      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — homepage checked by scrape.py",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — homepage",
       "excerpt": "https://www.nycinnovationhotspot.org",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-e4e66ae8cd",
+      "url": "https://www.nycinnovationhotspot.org",
+      "page": "details",
+      "excerpt": "Home | NYC Innovation Hot Spot top of page The TCO facilitates transfer of CUNY innovations to industry by nurturing collaboration between academia and industry, by championing sponsored research at various facilities within the University, by licensing of CUNY intellectual property to sponsors and other industry partners, and by supporting formation of new start-up companies. The TCO facilitates transfer of CUNY innovations to industry by nurturing collaboration between academia and industry, by championing sponsored research at various facilities within the University, by licensing of CUNY intellectual property to sponsors and other industry partners, and by supporting formation of new start-up companies. About Benefits Programs NY I-Corps Hub Empire Corps: SBIR/STTR FAST Network Resources Monthly Resource Roundup Ecosystem Partners Stories More... Use tab to navigate through the menu items. About About The NYC Innovation Hot Spot provides business incubator services to qualified entities to facilitate company growth and encourage job creation. The Hot Spot, based in Harlem, coordinates a rich regional entrepreneurial ecosystem, partnering with 45 local incubators across all five boroughs of NYC. Operated in coordination with the leadership of the NY I-Corps Hub at the City University of New York , the Hot Spot provides these incubators and their members opportunities to"
+    },
+    {
+      "id": "check-page-587bbe3ba8",
+      "url": "https://www.nycinnovationhotspot.org",
+      "page": "details",
+      "excerpt": "Operated in coordination with the leadership of the NY I-Corps Hub at the City University of New York , the Hot Spot provides these incubators and their members opportunities to participate in NSF I-Corps Lean LaunchPad entrepreneurship training and to access certain New York State tax benefits."
+    },
+    {
+      "id": "check-page-963bfcda06",
+      "url": "https://www.nycinnovationhotspot.org",
+      "page": "details",
+      "excerpt": "The Hot Spot accepts referrals from these incubators for Innovation Hot Spot consideration."
+    },
+    {
+      "id": "check-page-9f221653f2",
+      "url": "https://www.nycinnovationhotspot.org",
+      "page": "details",
+      "excerpt": "For any general inquiries, please email info@nycinnovationhotspot.org Follow us on LinkedIn ! © NYC Innovation Hot Spot, 2026 bottom of page"
+    },
+    {
+      "id": "check-page-e6c269afbb",
+      "url": "https://www.nycinnovationhotspot.org/frequently-asked-questions-faq",
+      "page": "terms",
+      "excerpt": "Frequently Asked Questions (FAQ) | NYCInnovationHotSpot top of page The TCO facilitates transfer of CUNY innovations to industry by nurturing collaboration between academia and industry, by championing sponsored research at various facilities within the University, by licensing of CUNY intellectual property to sponsors and other industry partners, and by supporting formation of new start-up companies. The TCO facilitates transfer of CUNY innovations to industry by nurturing collaboration between academia and industry, by championing sponsored research at various facilities within the University, by licensing of CUNY intellectual property to sponsors and other industry partners, and by supporting formation of new start-up companies. About Benefits Programs NY I-Corps Hub Empire Corps: SBIR/STTR FAST Network Resources Monthly Resource Roundup Ecosystem Partners Stories More... Use tab to navigate through the menu items. Frequently Asked Questions: What is the application process for NYC-BPC Spring 2021? All Teams who would like to compete must begin by completing the 2021 Student Application . Applications for NYC-BPC are due March 22, 2021 PLEASE NOTE WHEN APPLYING: For the New York City Regionals (NYC-BPC), you are not required to submit a slide deck or video in the application. Who is eligible to compete in the New York Business Plan Competition (NYBPC)? Eligible applicants"
+    },
+    {
+      "id": "check-page-cae5b781b1",
+      "url": "https://www.nycinnovationhotspot.org/frequently-asked-questions-faq",
+      "page": "terms",
+      "excerpt": "Eligible applicants are any graduate, undergraduate, and/or community college students enrolled part- or full-time in accredited New York colleges and universities during the current academic year (2020 - 2021)."
+    },
+    {
+      "id": "check-page-fda38c3571",
+      "url": "https://www.nycinnovationhotspot.org/frequently-asked-questions-faq",
+      "page": "terms",
+      "excerpt": "Training #1 – NYC BPC Lean Bootcamp Program The Lean Bootcamp Program (LBC) covers Customer Discovery, the Business Model Canvas, specifically Value Propositions and Customer Segments, and Agile Development."
+    },
+    {
+      "id": "check-page-1cec6a0e8f",
+      "url": "https://www.nycinnovationhotspot.org/frequently-asked-questions-faq",
+      "page": "terms",
+      "excerpt": "How do I enroll in the optional training program offered by the NYC-BPC?"
+    },
+    {
+      "id": "check-page-f21280e9c2",
+      "url": "https://www.nycinnovationhotspot.org/frequently-asked-questions-faq",
+      "page": "terms",
+      "excerpt": "After applying, you will receive an email within 3-5 days from the NYC-BPC Program Team with further details on enrolling."
+    },
+    {
+      "id": "check-page-acab1c7e3e",
+      "url": "https://www.nycinnovationhotspot.org/frequently-asked-questions-faq",
+      "page": "terms",
+      "excerpt": "Please include “NYC-BPC” in your email subject line."
+    },
+    {
+      "id": "check-page-941f1039a1",
+      "url": "https://www.nycinnovationhotspot.org/frequently-asked-questions-faq",
+      "page": "terms",
+      "excerpt": "You will receive an email from the NYC-BPC Program Team on March 22, 2021, the application deadline, with full details on the competition and Final Slide submission instructions."
+    },
+    {
+      "id": "check-page-27153c599a",
+      "url": "https://www.nycinnovationhotspot.org/frequently-asked-questions-faq",
+      "page": "terms",
+      "excerpt": "For any general inquiries, please email info@nycinnovationhotspot.org Follow us on LinkedIn ! © NYC Innovation Hot Spot, 2026 bottom of page"
+    },
+    {
+      "id": "check-page-e9f2163846",
+      "url": "https://www.nycinnovationhotspot.org/post/march-innovation-hot-spot-meeting-showcases-ny-resources-new-companies",
+      "page": "portfolio",
+      "excerpt": "March Innovation Hot Spot Meeting Showcases NY Resources, New Companies top of page The TCO facilitates transfer of CUNY innovations to industry by nurturing collaboration between academia and industry, by championing sponsored research at various facilities within the University, by licensing of CUNY intellectual property to sponsors and other industry partners, and by supporting formation of new start-up companies. The TCO facilitates transfer of CUNY innovations to industry by nurturing collaboration between academia and industry, by championing sponsored research at various facilities within the University, by licensing of CUNY intellectual property to sponsors and other industry partners, and by supporting formation of new start-up companies. About Benefits Programs NY I-Corps Hub Empire Corps: SBIR/STTR FAST Network Resources Monthly Resource Roundup Ecosystem Partners Stories More... Use tab to navigate through the menu items. All Posts Search March Innovation Hot Spot Meeting Showcases NY Resources, New Companies Mar 11, 2024 3 min read In early March 2024, the NYC Innovation Hot Spot hosted an inaugural Network Resources Meeting at CUNY’s John Jay College of Criminal Justice to highlight resources available to startups that have already participated in regional and national I-Corps. In conjunction with the event, for the first time, CUNY I-Corps awarded 30 startups up"
+    },
+    {
+      "id": "check-page-321bd3604f",
+      "url": "https://www.nycinnovationhotspot.org/post/ny-i-corps-alumni-companies-boost-opportunities-with-techconnect-bootcamp",
+      "page": "portfolio",
+      "excerpt": "NY I-Corps Alumni Companies Leverage NYC Innovation Hot Spot Opportunities Through Discovery Bootcamp at TechConnect top of page The TCO facilitates transfer of CUNY innovations to industry by nurturing collaboration between academia and industry, by championing sponsored research at various facilities within the University, by licensing of CUNY intellectual property to sponsors and other industry partners, and by supporting formation of new start-up companies. The TCO facilitates transfer of CUNY innovations to industry by nurturing collaboration between academia and industry, by championing sponsored research at various facilities within the University, by licensing of CUNY intellectual property to sponsors and other industry partners, and by supporting formation of new start-up companies. About Benefits Programs NY I-Corps Hub Empire Corps: SBIR/STTR FAST Network Resources Monthly Resource Roundup Ecosystem Partners Stories More... Use tab to navigate through the menu items. All Posts Search NY I-Corps Alumni Companies Leverage NYC Innovation Hot Spot Opportunities Through Discovery Bootcamp at TechConnect Jan 27 4 min read Updated: Feb 3 The NYC Innovation Hot Spot, NY I-Corps Hub, and Empire Corps joined forces for a third time to host a Discovery Bootcamp for select I-Corps graduate companies participating in the November 2025 TechConnect conference held in National"
     }
   ],
   "findings": {
@@ -45,8 +204,25 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-d4710005a2"
+      }
+    ],
+    "location": [
+      {
+        "value": "Harlem",
+        "evidenceId": "check-location-407672dc0e"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

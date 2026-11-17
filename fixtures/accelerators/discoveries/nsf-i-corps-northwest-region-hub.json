@@ -1,7 +1,143 @@
 {
   "programId": "nsf-i-corps-northwest-region-hub",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://www.nwicorps.org/blog/category/UC+Berkeley+Alumni",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/national-i-corps-program-old",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/national-i-corps-program-old-11-july",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1",
+      "page": "details",
+      "anchor": "National I-Corps Program",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1-1",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-1-1-1",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-1-1-1-2",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/national-icorps-program-1-1-1-1-2",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/national-icorps-program-2",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/regional-program",
+      "page": "details",
+      "anchor": "Learn More",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nwicorps.org/regional-program-1",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.nwicorps.org/regional-program-2",
       "page": "details",
@@ -11,18 +147,10 @@
       "origin": "official"
     },
     {
-      "url": "https://www.nwicorps.org/national-icorps-program-1-1",
+      "url": "https://www.nwicorps.org/regional-program-3",
       "page": "details",
-      "anchor": "National I-Corps Program",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nwicorps.org/regional-program",
-      "page": "details",
-      "anchor": "Learn More",
-      "fetched": false,
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

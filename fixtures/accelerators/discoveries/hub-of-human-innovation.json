@@ -1,11 +1,43 @@
 {
   "programId": "hub-of-human-innovation",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "http://hubofhumaninnovation.org/about-us/",
       "page": "details",
       "anchor": "About Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "anchor": "Clients",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://hubofhumaninnovation.org/about-us/contact-us/",
+      "page": "details",
+      "anchor": "Contact Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "anchor": "FAQ’s",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
+      "page": "details",
+      "anchor": "Focus Areas",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -27,42 +59,10 @@
       "origin": "official"
     },
     {
-      "url": "http://hubofhumaninnovation.org/about-us/clients/",
-      "page": "details",
-      "anchor": "Clients",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "http://hubofhumaninnovation.org/about-us/team/partners-and-sponsors/",
       "page": "details",
       "anchor": "Partners and Sponsors",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "http://hubofhumaninnovation.org/about-us/focus-areas/",
-      "page": "details",
-      "anchor": "Focus Areas",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "http://hubofhumaninnovation.org/about-us/contact-us/",
-      "page": "details",
-      "anchor": "Contact Us",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "http://hubofhumaninnovation.org/about-us/faqs/",
-      "page": "terms",
-      "anchor": "FAQ’s",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -75,18 +75,18 @@
       "origin": "official"
     },
     {
-      "url": "http://hubofhumaninnovation.org/programs",
+      "url": "http://hubofhumaninnovation.org/programas/",
       "page": "details",
-      "anchor": "Programs",
-      "fetched": false,
+      "anchor": "Programas",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "http://hubofhumaninnovation.org/programs/shift-program/",
+      "url": "http://hubofhumaninnovation.org/programs",
       "page": "details",
-      "anchor": "“Shift” Program",
-      "fetched": false,
+      "anchor": "Programs",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -94,7 +94,7 @@
       "url": "http://hubofhumaninnovation.org/programs/clean-energy-incubator-program/",
       "page": "details",
       "anchor": "Clean Energy Incubator Program",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -102,7 +102,7 @@
       "url": "http://hubofhumaninnovation.org/programs/clean-energy-partners-program/",
       "page": "details",
       "anchor": "Clean Energy Partners Program",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -110,7 +110,7 @@
       "url": "http://hubofhumaninnovation.org/programs/manufacturing-partners-program/",
       "page": "details",
       "anchor": "Manufacturing Partners Program",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -118,7 +118,15 @@
       "url": "http://hubofhumaninnovation.org/programs/service-providers-program/",
       "page": "details",
       "anchor": "Service Providers Program",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://hubofhumaninnovation.org/programs/shift-program/",
+      "page": "details",
+      "anchor": "“Shift” Program",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -126,7 +134,7 @@
       "url": "http://hubofhumaninnovation.org/programs/soft-landing-pad/",
       "page": "details",
       "anchor": "Soft Landing Pad",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -134,15 +142,39 @@
       "url": "http://hubofhumaninnovation.org/programs/team-mentor-program/",
       "page": "details",
       "anchor": "Team Mentor Program",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "http://hubofhumaninnovation.org/programas/",
+      "url": "https://hubofhumaninnovation.org/about-us/",
       "page": "details",
-      "anchor": "Programas",
-      "fetched": false,
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hubofhumaninnovation.org/about-us/clients/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hubofhumaninnovation.org/about-us/faqs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hubofhumaninnovation.org/apply/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

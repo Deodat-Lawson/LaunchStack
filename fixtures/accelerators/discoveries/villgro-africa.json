@@ -1,10 +1,34 @@
 {
   "programId": "villgro-africa",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://villgroafrica.org/5-steps-to-becoming-investment-ready/",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/a-lite-cnn-african-voices-changemakers-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/about-advisory-services/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/about/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -22,7 +46,7 @@
       "url": "https://villgroafrica.org/about/healthcare-innovation-partnerships/",
       "page": "details",
       "anchor": "Partnerships",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -38,7 +62,7 @@
       "url": "https://villgroafrica.org/about/values/",
       "page": "details",
       "anchor": "How We Deliver Impact",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

@@ -1,6 +1,6 @@
 {
   "programId": "seedstars",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "http://seedstars.com/about/",
@@ -108,6 +108,46 @@
     },
     {
       "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/kitovu-technology-company/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/lombaz-swift-ltd/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/moja-ride/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/pickmeup-technologies-inc/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/plugngrow/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/powerlive-zimbabwe/",
       "page": "terms",
       "anchor": "",
       "fetched": true,

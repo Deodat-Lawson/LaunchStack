@@ -1,109 +1,168 @@
 {
   "programId": "verge-entrepreneurship-hub-foundation-verge",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.vergeokc.com",
-    "https://www.vergeokc.com/about",
-    "https://www.vergeokc.com/faqs"
+    "https://www.vergeokc.com/faqs",
+    "https://www.vergeokc.com/about"
   ],
   "evidence": [
     {
+      "id": "check-duration-13a461430c",
+      "url": "https://www.vergeokc.com/faqs",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page",
+      "excerpt": "after expiry or renew for another 6-12 month term. How do I use the printer? The Verge uses",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5eac6762f5",
+      "url": "https://www.vergeokc.com/faqs",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page",
+      "excerpt": "We are flexible with this and offer 6-month or 12-month memberships and can go month-to-month after",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a8ab0b972a",
+      "url": "https://www.vergeokc.com/faqs",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page",
+      "excerpt": "last? We are flexible with this and offer 6-month or 12-month memberships and can go",
+      "page": "terms"
+    },
+    {
       "id": "check-email-0c5e4d2b2a",
       "url": "https://www.vergeokc.com/faqs",
-      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page checked by scrape.py",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page",
       "excerpt": "it out. For any other questions, please send an email to hello@vergeokc.com . × Take your business to new heights with The Verge *",
       "page": "terms"
     },
     {
       "id": "check-email-2a5b7566f9",
       "url": "https://www.vergeokc.com/faqs",
-      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page checked by scrape.py",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page",
       "excerpt": "Hello@VergeOKC.com",
       "page": "terms"
     },
     {
       "id": "check-email-3550ecae09",
       "url": "https://www.vergeokc.com/faqs",
-      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page checked by scrape.py",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page",
       "excerpt": "hello@vergeokc.com",
       "page": "terms"
     },
     {
       "id": "check-email-77e8026ed7",
       "url": "https://www.vergeokc.com/about",
-      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — details page checked by scrape.py",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — program page",
       "excerpt": "Anna Sheeley Membership Success Coordinator Contact us: hello@vergeokc.com Our Board Tyler Tokarczyk Board President and Senior",
       "page": "details"
     },
     {
       "id": "check-email-8a97e08150",
       "url": "https://www.vergeokc.com/about",
-      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — details page checked by scrape.py",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — program page",
       "excerpt": "Robinson Ave, #500 Oklahoma City, OK 73102 (405) 362-0756 Hello@VergeOKC.com M-F / 9a–5p An independent 501(c)(3) nonprofit. This Is",
       "page": "details"
     },
     {
       "id": "check-email-9621c6451e",
       "url": "https://www.vergeokc.com",
-      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — homepage checked by scrape.py",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — homepage",
       "excerpt": "Hello@VergeOKC.com",
       "page": "details"
     },
     {
       "id": "check-email-996f385b80",
       "url": "https://www.vergeokc.com",
-      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — homepage checked by scrape.py",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — homepage",
       "excerpt": "Robinson Ave, #500 Oklahoma City, OK 73102 (405) 362-0756 Hello@VergeOKC.com M-F / 9a–5p An independent 501(c)(3) nonprofit. This Is",
       "page": "details"
     },
     {
       "id": "check-email-a4ce45bd95",
       "url": "https://www.vergeokc.com/about",
-      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — details page checked by scrape.py",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — program page",
       "excerpt": "Hello@VergeOKC.com",
       "page": "details"
     },
     {
       "id": "check-email-c896041fc2",
       "url": "https://www.vergeokc.com/faqs",
-      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page checked by scrape.py",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page",
       "excerpt": "Robinson Ave, #500 Oklahoma City, OK 73102 (405) 362-0756 Hello@VergeOKC.com M-F / 9a–5p An independent 501(c)(3) nonprofit. This Is",
       "page": "terms"
     },
     {
       "id": "check-email-d324838218",
       "url": "https://www.vergeokc.com/faqs",
-      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page checked by scrape.py",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page",
       "excerpt": "the team to get setup. If that still didn't work, email hello@vergeokc.com and we'll help figure it out. For any other questions,",
       "page": "terms"
     },
     {
       "id": "check-phone-1b5ebcef6a",
       "url": "https://www.vergeokc.com/about",
-      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — details page checked by scrape.py",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — program page",
       "excerpt": "(405) 362-0756",
       "page": "details"
     },
     {
       "id": "check-phone-3635a543bd",
       "url": "https://www.vergeokc.com/faqs",
-      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page checked by scrape.py",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page",
       "excerpt": "(405) 362-0756",
       "page": "terms"
     },
     {
       "id": "check-phone-644888d7ac",
       "url": "https://www.vergeokc.com",
-      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — homepage checked by scrape.py",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — homepage",
       "excerpt": "(405) 362-0756",
       "page": "details"
     },
     {
-      "id": "check-route-cbe86ef358",
-      "url": "https://www.vergeokc.com/about",
-      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — details page checked by scrape.py",
+      "id": "check-route-4541ab5bb4",
+      "url": "https://www.vergeokc.com/faqs",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page",
       "excerpt": "https://www.vergeokc.com/",
-      "page": "details"
+      "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-e62580e57b",
+      "url": "https://www.vergeokc.com",
+      "page": "details",
+      "excerpt": "Home - The Verge OKC Join the Newsletter About Who We Serve Ecosystem Spaces & Rentals News & Events Giving / Impact Getting Started FAQs Join the Newsletter This is where OKC builds. Become a Member Book a Tour The community for scaling entrepreneurs. Many OKC resources do one thing well: funding, acceleration, space. The Verge connects you to all of them: Connections, Mentorship, Programming, and Workspace. As a 501(c)(3) nonprofit organization, we help scaling entrepreneurs accelerate their business and drive economic impact in Oklahoma City. The Verge is OKC’s home base for entrepreneurs at every stage of the journey. We connect people who are building something to the resources, relationships, and community they need to actually make it. We’re the place you come when you don’t know where to go next and the place you stay because you find your people here. Our Process 01 Start You're building. Join a community of founders at your stage. 02 Ascend You have traction. Get matched with mentors, capital partners, and programs. 03 Soar You're growing. Join the state-certified incubator with a private office and ongoing coaching. × Take your business to new heights with The Verge * indicates required Email Address * First Name Last Name 600 N. Robinson Ave, #500 Oklahoma City, OK 73102 (405) 362-0756 Hello@VergeOKC.com M-F / 9a–5p An independent 501(c)(3) nonprofit. This Is Where"
+    },
+    {
+      "id": "check-page-e264b9ee19",
+      "url": "https://www.vergeokc.com/faqs",
+      "page": "terms",
+      "excerpt": "FAQs - The Verge OKC Join the Newsletter About Who We Serve Ecosystem Spaces & Rentals News & Events Giving / Impact Getting Started FAQs Join the Newsletter Let’s see if your question has a quick answer: Is The Verge a coworking space? We have workspace, but we're a nonprofit entrepreneurship hub. Membership is about connections, mentors, and programming. All members and guests can enter the Citizen building via N. Robinson Ave. Meet us on the 5th floor to checkin, meet the community, and grow your business. What are the parking options? Paid street parking can be used with the Flowbird app. Other paid lots are located around the area. Valet service is available for $8. Those wishing to get monthly parking passes can work with The Verge staff for various options. Street Parking is free after 6 pm and on the weekends. Can The Verge fund my startup? We don't invest directly. We connect members to capital partners and programs when they're ready. Is The Verge right for me if I only have an idea? Our membership is built for founders who are already building. If you're earlier, we'll point you to the right starting resources and public events. How can I pay for my membership? The Verge uses OfficeRnD for both one-time and monthly payments. Non-members can visit our E-Commerce site . How can I support The Verge? Donate, mentor, sponsor an event, or partner with us. Learn more here"
+    },
+    {
+      "id": "check-page-cb18255127",
+      "url": "https://www.vergeokc.com/faqs",
+      "page": "terms",
+      "excerpt": "For private office/incubator membership, you get 4 hours/month for free."
+    },
+    {
+      "id": "check-page-7403181be7",
+      "url": "https://www.vergeokc.com/about",
+      "page": "details",
+      "excerpt": "About - The Verge OKC Join the Newsletter About Who We Serve Ecosystem Spaces & Rentals News & Events Giving / Impact Getting Started FAQs Join the Newsletter Centralizing our community’s entrepreneurial resources The Verge Team Kristin Garcia Executive Director Nathan Friels Operations Director Anna Sheeley Membership Success Coordinator Contact us: hello@vergeokc.com Our Board Tyler Tokarczyk Board President and Senior Program Officer, Inasmuch Foundation Whitney Randall Board Treasurer and Senior Vice President - Director of Small Business and Entrepreneurial Engagement, Citizens Bank of Edmond Dr. Tabatha Carr, ND Board Secretary and Owner & Founder, Good Girl Chocolate Rob McLaughlin Managing Partner, Square Deal Capital Ron Bolen Associate Professor of Entrepreneurship, The University of Oklahoma Hart Brown President, AI & Transformation, SAXUM Kevin Dunnington Board Advisor and Attorney, Resolution Legal Group A place where you can do your best work The Verge OKC connects our rising entrepreneurial community to the people and resources they need to progress their vision, helping transform great ideas into impactful businesses. Our Values We’re a connector. We exist to get our entrepreneurs to the right resources. That means everyone in the ecosystem matters. Learn More Entrepreneurship is for everyone. Work with purpose. Collaboration over competition. Bring a listening"
+    },
+    {
+      "id": "check-page-ba64d6e4ac",
+      "url": "https://www.vergeokc.com/about",
+      "page": "details",
+      "excerpt": "The result is much more than a coworking space."
+    },
+    {
+      "id": "check-page-ca6b8c89a6",
+      "url": "https://www.vergeokc.com/about",
+      "page": "details",
+      "excerpt": "We offer a centralized space for education, curated events, flexible workspaces, and an invaluable network of people and resources."
     }
   ],
   "findings": {
@@ -123,14 +182,30 @@
     "applicationUrl": [
       {
         "value": "https://www.vergeokc.com/",
-        "evidenceId": "check-route-cbe86ef358"
+        "evidenceId": "check-route-4541ab5bb4"
       }
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-a8ab0b972a"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-5eac6762f5"
+      }
+    ],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

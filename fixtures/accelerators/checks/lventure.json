@@ -1,11 +1,8 @@
 {
   "programId": "lventure",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://zestgroup.vc/en",
-    "https://zestgroup.vc/en/blog/exe-engineering-eni-cdp-venture-capital-investment",
-    "https://zestgroup.vc/en/blog/proptech-newarc-closes-800k-seed-investment-round",
-    "https://zestgroup.vc/en/blog/truescreen-secures-2-4-million-seed-round-investment",
     "https://zestgroup.vc/en/contact-us-investments",
     "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
     "https://zestgroup.vc/en/governance/internal-dealing",
@@ -14,9 +11,17 @@
     "https://zestgroup.vc/it/investments",
     "https://zestgroup.vc/storage/files/190533b9-9a95-43a1-a65c-225c63ec57ef/Internal-Dealing-Gay-20-dicembre-2024_1INFO.pdf",
     "https://zestgroup.vc/storage/files/1dcc2277-e3cf-4e31-a3e4-46fbe1389293/Internal-dealing-Gay-20062024.pdf",
-    "https://zestgroup.vc/storage/files/2019/05/01072016-COMUNICAZIONE-INTERNAL-DEALING.pdf",
-    "https://zestgroup.vc/storage/files/2019/05/02102015-COMUNICAZIONE-INTERNAL-DEALING.pdf",
-    "https://zestgroup.vc/storage/files/2019/05/04032013-COMUNICAZIONE-INTERNAL-DEALING.pdf"
+    "https://zestgroup.vc/storage/files/2d8fc303-33b4-49ce-9be9-4fd59dc9b58b/Internal-Dealing-_-Capello_-Aumento-di-Capitale_1info.pdf",
+    "https://zestgroup.vc/storage/files/32d1d007-ae16-4729-8de6-e7e2ca1edd3b/Internal-dealing-Gay-19072024.pdf",
+    "https://zestgroup.vc/storage/files/36e11fab-8ff5-4282-b6cb-3766cbf2d2f0/Internal-Dealing-_-LVEN_-Aumento-di-Capitale_1info.pdf",
+    "https://zestgroup.vc/storage/files/3c9e0977-e6b2-4540-ae51-235544fd40f8/Internal-dealing-Gay-01072024.pdf",
+    "https://zestgroup.vc/storage/files/4779cde6-0fc0-4fa4-948d-5cd50ad1aabb/Internal-Dealing-Gay-18-ottobre-2024.pdf",
+    "https://zestgroup.vc/storage/files/4e5a5367-69aa-4f68-803b-faa9d766c7eb/Internal-dealing-Gay-26-agosto-2024.pdf",
+    "https://zestgroup.vc/storage/files/4ed2d409-9286-40fa-852d-9e2a9712b311/Internal-dealing-Gay-26072024.pdf",
+    "https://zestgroup.vc/storage/files/507ebb1b-7661-4ad5-9d52-874f19cf43bf/Internal-dealing-Gay-12062024.pdf",
+    "https://zestgroup.vc/storage/files/5b7ff5ca-3237-4c7f-9235-2a1e20d75fa1/Zest---Procedura-internal-dealing.pdf",
+    "https://zestgroup.vc/storage/files/5d839de2-1c28-407e-9ff6-3f6161678295/Internal-Dealing-_-Levante_-Aumento-di-Capitale_1info-(1).pdf",
+    "https://zestgroup.vc/storage/files/64d7d4c4-9c37-413a-af19-4d1d7fb386c9/Internal-dealing-Gay-07102024.pdf"
   ],
   "evidence": [
     {
@@ -69,27 +74,6 @@
       "page": "terms"
     },
     {
-      "id": "check-email-0246c15c7d",
-      "url": "https://zestgroup.vc/en/blog/proptech-newarc-closes-800k-seed-investment-round",
-      "title": "LVenture Group — terms page",
-      "excerpt": "Contact Us (info@zestgroup.vc)",
-      "page": "terms"
-    },
-    {
-      "id": "check-email-0885245f2d",
-      "url": "https://zestgroup.vc/en/blog/exe-engineering-eni-cdp-venture-capital-investment",
-      "title": "LVenture Group — terms page",
-      "excerpt": "info@zestgroup.vc",
-      "page": "terms"
-    },
-    {
-      "id": "check-email-125ae652b8",
-      "url": "https://zestgroup.vc/en/blog/truescreen-secures-2-4-million-seed-round-investment",
-      "title": "LVenture Group — terms page",
-      "excerpt": "Contact Us (info@zestgroup.vc)",
-      "page": "terms"
-    },
-    {
       "id": "check-email-1267652a70",
       "url": "https://zestgroup.vc/en/governance/internal-dealing",
       "title": "LVenture Group — terms page",
@@ -106,13 +90,6 @@
     {
       "id": "check-email-3805ebdb40",
       "url": "https://zestgroup.vc/en/governance/internal-dealing",
-      "title": "LVenture Group — terms page",
-      "excerpt": "Google Privacy Policy and Terms of Service apply. Email: info@zestgroup.vc Certified Email (PEC): zestgroup.pec@legalmail.it VAT",
-      "page": "terms"
-    },
-    {
-      "id": "check-email-3cf60fab12",
-      "url": "https://zestgroup.vc/en/blog/exe-engineering-eni-cdp-venture-capital-investment",
       "title": "LVenture Group — terms page",
       "excerpt": "Google Privacy Policy and Terms of Service apply. Email: info@zestgroup.vc Certified Email (PEC): zestgroup.pec@legalmail.it VAT",
       "page": "terms"
@@ -167,22 +144,8 @@
       "page": "terms"
     },
     {
-      "id": "check-email-6f38fd7a60",
-      "url": "https://zestgroup.vc/en/blog/proptech-newarc-closes-800k-seed-investment-round",
-      "title": "LVenture Group — terms page",
-      "excerpt": "Google Privacy Policy and Terms of Service apply. Email: info@zestgroup.vc Certified Email (PEC): zestgroup.pec@legalmail.it VAT",
-      "page": "terms"
-    },
-    {
       "id": "check-email-70c8ffc7a9",
       "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
-      "title": "LVenture Group — terms page",
-      "excerpt": "info@zestgroup.vc",
-      "page": "terms"
-    },
-    {
-      "id": "check-email-723721c6e9",
-      "url": "https://zestgroup.vc/en/blog/proptech-newarc-closes-800k-seed-investment-round",
       "title": "LVenture Group — terms page",
       "excerpt": "info@zestgroup.vc",
       "page": "terms"
@@ -223,13 +186,6 @@
       "page": "terms"
     },
     {
-      "id": "check-email-aa57108d12",
-      "url": "https://zestgroup.vc/en/blog/truescreen-secures-2-4-million-seed-round-investment",
-      "title": "LVenture Group — terms page",
-      "excerpt": "info@zestgroup.vc",
-      "page": "terms"
-    },
-    {
       "id": "check-email-c94bcd790c",
       "url": "https://zestgroup.vc/en/contact-us-investments",
       "title": "LVenture Group — terms page",
@@ -256,20 +212,6 @@
       "title": "LVenture Group — homepage",
       "excerpt": "Contact Us (info@zestgroup.vc)",
       "page": "details"
-    },
-    {
-      "id": "check-email-eb4dbb9eb4",
-      "url": "https://zestgroup.vc/en/blog/truescreen-secures-2-4-million-seed-round-investment",
-      "title": "LVenture Group — terms page",
-      "excerpt": "Google Privacy Policy and Terms of Service apply. Email: info@zestgroup.vc Certified Email (PEC): zestgroup.pec@legalmail.it VAT",
-      "page": "terms"
-    },
-    {
-      "id": "check-email-f243a24f4a",
-      "url": "https://zestgroup.vc/en/blog/exe-engineering-eni-cdp-venture-capital-investment",
-      "title": "LVenture Group — terms page",
-      "excerpt": "Contact Us (info@zestgroup.vc)",
-      "page": "terms"
     },
     {
       "id": "check-email-f77d4e898e",
@@ -328,20 +270,6 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-84e64cb074",
-      "url": "https://zestgroup.vc/en/blog/truescreen-secures-2-4-million-seed-round-investment",
-      "title": "LVenture Group — terms page",
-      "excerpt": "Portfolio → https://zestgroup.vc/en/portfolio",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-8f08ea5f1d",
-      "url": "https://zestgroup.vc/en/blog/proptech-newarc-closes-800k-seed-investment-round",
-      "title": "LVenture Group — terms page",
-      "excerpt": "Portfolio → https://zestgroup.vc/en/portfolio",
-      "page": "terms"
-    },
-    {
       "id": "check-portfolio-9898a6e96a",
       "url": "https://zestgroup.vc/en",
       "title": "LVenture Group — homepage",
@@ -353,13 +281,6 @@
       "url": "https://zestgroup.vc/it/investments",
       "title": "LVenture Group — terms page",
       "excerpt": "Portfolio → https://zestgroup.vc/it/portfolio",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-a517b57ec0",
-      "url": "https://zestgroup.vc/en/blog/exe-engineering-eni-cdp-venture-capital-investment",
-      "title": "LVenture Group — terms page",
-      "excerpt": "Portfolio → https://zestgroup.vc/en/portfolio",
       "page": "terms"
     },
     {
@@ -406,22 +327,34 @@
       "excerpt": "Zest | Venture Capital and Open Innovation in Italy Investor relations Governance Contact Us it en About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review Investor relations Governance Contact Us FUTURE.FASTER. Leading Innovation We are the best at discovering top talent and transforming startups into successful businesses, delivering innovation to companies and to the market Discover More FUTURE.FASTER. We turn talent into businesses We invest in ambitious founders with the courage to disrupt the market, backed by capital, expertise, and a unique network for a 360° perspective Discover More FUTURE.FASTER. We accelerate the transformation We drive technological transformation and innovation for businesses and institutions through dedicated programs Discover More FUTURE. FASTER. Investments Discover More Innovation Discover More The Hub Discover More Zest stands for: 1 20 years of innovation 2 Leadership in early-stage venture capital 3 Investments in high-impact technologies 4 Acceleration of top startups 5 Strategic mentorship and resources for founders 6 Corporate technological transformation 7 An international network We are a team of passionate individuals united by a common goal and ambition: to drive"
     },
     {
-      "id": "check-page-f6dd07e260",
-      "url": "https://zestgroup.vc/en/blog/exe-engineering-eni-cdp-venture-capital-investment",
-      "page": "terms",
-      "excerpt": "EXE Engineering: €550K funding round with Eni and CDP Venture Capital Investor relations Governance Contact Us it en About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review Investor relations Governance Contact Us EXE Engineering closes €550K funding round EXE Engineering secures €550K investment from Eni and CDP Venture Capital to expand in Europe and Africa Eni invests together with CDP Venture Capital €550K and announces a collaboration with the startup EXE Engineering in the field of carbon offsetting initiatives in Africa. These new resources will allow the startup to accelerate its roadmap and support the expansion of projects into new operational contexts, including international growth in Europe and Africa. The round was led by Zero and Eni Next, Eni’s corporate venture capital company created to invest in innovative, high-tech startups. Zero is a program of the National Network of Accelerators of CDP Venture Capital – implemented in collaboration with Zest and Elis – with Eni as the main corporate partner through Joule, its school for entrepreneurship, and involving additional companies in the sector. EXE Engineering participated in the Zero acceleration program between 2024 and 2025 and developed a"
+      "id": "check-page-8224bb1cee",
+      "url": "https://zestgroup.vc/en",
+      "page": "details",
+      "excerpt": "Zest is the market leader in Italy in early stage venture capital investments and startup acceleration, Open Innovation and Corporate Venturing."
     },
     {
-      "id": "check-page-bdf91db348",
-      "url": "https://zestgroup.vc/en/blog/proptech-newarc-closes-800k-seed-investment-round",
-      "page": "terms",
-      "excerpt": "PropTech Newarc Closes €800K Seed Investment Round Investor relations Governance Contact Us it en About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review Investor relations Governance Contact Us NEWS PropTech Startup Newarc Closes €800K Seed Investment Round Accelerated by HabiSmart , the PropTech acceleration program of the CDP Venture Capital National Accelerator Network , managed by Zest . The startup develops AI-based digital services that streamline the processes of property buying, renovation, and enhancement. Newarc , a PropTech startup offering AI-powered digital services to facilitate property transactions, renovation, and enhancement, has closed a €800,000 seed investment round. The capital raise was subscribed by a group of business angels and the follow-on investment from the HabiSmart PropTech Accelerator of the CDP Venture Capital National Accelerator Network , with investors including the CDP Venture Capital Accelerator Fund , Zest , Nova Capital , and COIMA . Newarc: Revolutionizing Real Estate with AI Newarc simplifies and enhances real estate transactions through digital solutions and AI technologies, offering a range of services that cover the entire real estate value chain, aiming to maximize"
+      "id": "check-page-b2a9bbff48",
+      "url": "https://zestgroup.vc/en",
+      "page": "details",
+      "excerpt": "7 Acceleration programs 250+ Startups in the Portfolio 20k+ Startups in our dealflow 13 Investment Vehicles 2 Joint Ventures “Industry Driven” Know How We invest in cutting-edge technologies that are reshaping markets and society, driven by industry-specific expertise."
     },
     {
-      "id": "check-page-9d8366e7f3",
-      "url": "https://zestgroup.vc/en/blog/truescreen-secures-2-4-million-seed-round-investment",
-      "page": "terms",
-      "excerpt": "TrueScreen Secures €2.4 Million Seed Round Investment Investor relations Governance Contact Us it en About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review Investor relations Governance Contact Us NEWS TrueScreen Secures €2.4 Million Seed Round Investment CYSERO EuVECA , Italy's only fund dedicated to cybersecurity, robotics, and AI, promoted by AVM Gestioni SGR S.p.A. (EuVECA Società Benefit Manager), in partnership with Kilometro Rosso , the Bergamo-based scientific and technological park, has led a €2.4 million seed round investment in TrueScreen . The cybersecurity company specializes in the acquisition, certification, and management of data with legal and evidentiary value. Recognized in 2023 by PwC Luxembourg as one of the five most promising global startups in cybersecurity, TrueScreen already serves major banks, insurance companies, and multinational organizations. Its technology ensures the authenticity and immutability of digital content such as photos, videos, screenshots, emails, signatures, and data streams. By providing legally binding and tamper-proof services, TrueScreen not only prevents data manipulation but also counters the creation of deepfakes enabled by AI. Alongside Cysero VC, the round"
+      "id": "check-page-f6757dc153",
+      "url": "https://zestgroup.vc/en",
+      "page": "details",
+      "excerpt": "Discover our Portfolio Open Innovation & Corporate Venturing Driving Innovation for Companies and Institutions We innovate companies and institutions by creating synergies with startups."
+    },
+    {
+      "id": "check-page-9489dcfd75",
+      "url": "https://zestgroup.vc/en",
+      "page": "details",
+      "excerpt": "Through “tailor made” advisory services, we intercept the need for technological transformation and innovation, support companies and institutions to face change and evolve by providing our know-how and years of experience in Open Innovation and Corporate Venturing."
+    },
+    {
+      "id": "check-page-7cb84bf650",
+      "url": "https://zestgroup.vc/en",
+      "page": "details",
+      "excerpt": "Read more Zest Innovation and UNIDO ITPO Italy together for innovation in Iraq Training program completed for five Iraqi managers to develop new Innovation Hubs in Iraq."
     },
     {
       "id": "check-page-f91493e6e5",
@@ -436,6 +369,60 @@
       "excerpt": "Investimenti e finanziamenti startup early stage | Zest Investor relations Governance Contact Us it en About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review Investor relations Governance Contact Us Scouting Ticket Get €10K for Your Startup Now Zest invests €10K in ambitious founders who are validating an idea, prototype or MVP with the potential to become a high-growth business . For 8 weeks , we work side by side to validate your product, market and first customers. If the results prove the potential, we can keep investing and support you on the path to scale . Apply now Where we see potential, we invest. We are Italy’s leading private investor, with 250+ startups in our portfolio. We help you validate your idea, build the right team and get investor-ready. Zest, Italy’s leading startup accelerator and early-stage investor, is the right partner to help you turn an idea into a startup . We work with founders who already have a startup ready to go to market, as well as those who are still at the stage of an idea, prototype or MVP . We look for founders who deeply understand a problem, believe they can solve it, and are ready to rapidly validate a solution . The Scouting Ticket is our first step towards"
     },
     {
+      "id": "check-page-702f874fc4",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "page": "terms",
+      "excerpt": "Early-stage funding for innovative startups, designed for the stage where speed and validation matter most ."
+    },
+    {
+      "id": "check-page-3eaf6135a8",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "page": "terms",
+      "excerpt": "02 Acceleration Program & Hands-On Support For 8 weeks , we work side by side through hands-on sessions covering product, business model, go-to-market, fundraising and execution , supporting you through the decisions that matter most."
+    },
+    {
+      "id": "check-page-3d0bbe8186",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "page": "terms",
+      "excerpt": "05 Ecosystem & Perks Join the Zest ecosystem and get access to a community of founders, mentors, investors and corporate partners, plus exclusive events, resources and perks for startups across our network."
+    },
+    {
+      "id": "check-page-65c4b3812c",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "page": "terms",
+      "excerpt": "You can be a solo founder or already have a team, have an incorporated startup or still be at the idea stage."
+    },
+    {
+      "id": "check-page-78fe146241",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "page": "terms",
+      "excerpt": "We work with pre-seed startups and founders who are still building their venture."
+    },
+    {
+      "id": "check-page-f58b9f5c54",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "page": "terms",
+      "excerpt": "Yes, as long as your startup is still at a very early stage ."
+    },
+    {
+      "id": "check-page-af9345b5c5",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "page": "terms",
+      "excerpt": "How to Fund a Startup at the Early Stage?"
+    },
+    {
+      "id": "check-page-16b9a1a58a",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "page": "terms",
+      "excerpt": "Is Zest a startup incubator?"
+    },
+    {
+      "id": "check-page-568efa402a",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "page": "terms",
+      "excerpt": "Zest is a startup accelerator and early-stage investor ."
+    },
+    {
       "id": "check-page-b2f0fdd6c5",
       "url": "https://zestgroup.vc/en/governance/internal-dealing",
       "page": "terms",
@@ -446,6 +433,54 @@
       "url": "https://zestgroup.vc/en/investments",
       "page": "terms",
       "excerpt": "Zest Investments | Early-Stage Startup Investments Investor relations Governance Contact Us it en About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review Investor relations Governance Contact Us Zest Investments We Invest in Talent We Invest in early-stage startups in the pre-seed and seed stage DISCOVER MORE Zest Investments Broad Vision, Focused Impact We are industry agnostic with a focus on tech verticals Discover more Zest Investments Together to Win Working closely with our founders to help them grow and succeed. We connect them into the Zest Ecosystem. Discover more Zest Investments The Italian Leader in Early-Stage investments Pioneering investments, focusing on talent Zest Investments continuously scouts for visionary entrepreneurs that are looking for a partner that can work with them and help them grow. The unique Zest ecosystem of investors, Founders and Corporates, combined with over 20 years of experience and expertise grants our portfolio with the needed support to become market leaders. Zest Investments is always on the lookout for the next trends that are shaping the market and investing at an early stage that allows us to have the pulse on what is happening in the ecosystem around us. Our"
+    },
+    {
+      "id": "check-page-5636e7142f",
+      "url": "https://zestgroup.vc/en/investments",
+      "page": "terms",
+      "excerpt": "Get in Touch Vertical Focuses We invest in cutting-edge technologies that are reshaping markets and society, driven by industry-specific expertise."
+    },
+    {
+      "id": "check-page-40665b1812",
+      "url": "https://zestgroup.vc/en/investments",
+      "page": "terms",
+      "excerpt": "Artificial Intelligence Cybersecurity CleanTech Data & Business Software HealthTech InsurTech & FinTech Smart City & Factory Track record 230+ Startups in Portfolio €50M Fair Value Portfolio 16 Exit 20K+ Startups in Dealflow Our Portfolio Gevi GEVI designs vertical-axis wind turbines with AI-driven blade pitch control, adapting to..."
+    },
+    {
+      "id": "check-page-b7e8a55a28",
+      "url": "https://zestgroup.vc/en/investments",
+      "page": "terms",
+      "excerpt": "Read more Elai Elai is the first AI agent for Data Science that autonomously creates predictive..."
+    },
+    {
+      "id": "check-page-d88b614b7b",
+      "url": "https://zestgroup.vc/en/investments",
+      "page": "terms",
+      "excerpt": "Read more Discover More Joint Ventures Apside Apside is the joint venture of Zest and Intesa Sanpaolo with an endowment of 15 million euros to accelerate the scale-up of startups with digital technologies in the Fintech & Insurtech, Proptech, and other areas potentially related to the Intesa Sanpaolo Group's target industries in an “open innovation” logic."
+    },
+    {
+      "id": "check-page-efca9baf4a",
+      "url": "https://zestgroup.vc/en/investments",
+      "page": "terms",
+      "excerpt": "Discover more Open T Open T is the joint venture of Zest and Tinexta with an endowment of 5 million euros to accelerate the scale-up of startups with digital technologies, including artificial intelligence, in areas potentially related to the Tinexta Group's target industries, in an “open innovation” approach."
+    },
+    {
+      "id": "check-page-9d9b94058b",
+      "url": "https://zestgroup.vc/en/investments",
+      "page": "terms",
+      "excerpt": "Discover more News EXE Engineering closes €550K funding round EXE Engineering announces a €550K investment from Eni and CDP Venture Capital."
+    },
+    {
+      "id": "check-page-dd7a956436",
+      "url": "https://zestgroup.vc/en/investments",
+      "page": "terms",
+      "excerpt": "The round will support technology development and expand carbon offsetting projects across Europe and Africa."
+    },
+    {
+      "id": "check-page-ba2ef2f1bc",
+      "url": "https://zestgroup.vc/en/investments",
+      "page": "terms",
+      "excerpt": "Read more BandoSubito chiude un round da €2 M con l'obiettivo di rendere accessibili i fondi pubblici a tutte le imprese italiane Read more Intuos closes €720K round Intuos closes a €720K round led by Argo and Techstars to accelerate the development of its integrated IoT and software platform and support its entry into the U.S. market."
     },
     {
       "id": "check-page-4423dc08f7",
@@ -460,6 +495,42 @@
       "excerpt": "Venture Capital per startup pre-seed e seed | Zest Investments Investor relations Governance Contattaci en it Chi siamo Investments Scouting Ticket Innovation The Hub - Eventi Portfolio People Content Hub News Rassegna stampa Chi siamo Investments Scouting Ticket Innovation The Hub - Eventi Portfolio People Content Hub News Rassegna stampa Investor relations Governance Contattaci Zest Investments Investiamo nel talento Investiamo in startup early-stage nelle fasi pre-seed e seed Scopri di più Zest Investments Innovazione Senza Confini Siamo \"industry agnostic\" con un focus su trend tecnologici Scopri di più Zest Investments Insieme per Crescere Guidiamo la crescita e il successo dei nostri founder inserendoli nell'Ecosistema Zest Scopri di più Zest Investments Il leader italiano negli investimenti early-stage venture capital Investimenti pionieristici, concentrati sul talento Zest Investments seleziona imprenditori visionari che cercano un partner con cui collaborare e crescere. L'ecosistema unico di Zest, che comprende investitori, founder e aziende, unito a oltre 20 anni di esperienza e competenza, offre al nostro portfolio il supporto necessario per diventare leader di mercato. Siamo sempre alla ricerca delle nuove tendenze che stanno plasmando il futuro con investimenti pre-seed e seed venture capital. Il nostro “ingrediente segreto” è il nostro background imprenditoriale"
     },
     {
+      "id": "check-page-c64058121a",
+      "url": "https://zestgroup.vc/it/investments",
+      "page": "terms",
+      "excerpt": "Intelligenza Artificiale UrbanTech CleanTech Data & Business Software HealthTech InsurTech & FinTech Smart City & Factory Track record 230+ Startup nel Portfolio €50M Fair Value Portfolio 16 Exit 20K+ Startup nel dealflow Il nostro Portfolio Gevi GEVI progetta turbine eoliche ad asse verticale con controllo attivo dell'angolo delle pale ottimizzato dall'AI..."
+    },
+    {
+      "id": "check-page-8b07fe134e",
+      "url": "https://zestgroup.vc/it/investments",
+      "page": "terms",
+      "excerpt": "Scopri di più Elai Elai è il primo AI Agent per la Data Science in grado di creare autonomamente modelli predittivi..."
+    },
+    {
+      "id": "check-page-5d67ee3c7e",
+      "url": "https://zestgroup.vc/it/investments",
+      "page": "terms",
+      "excerpt": "Scopri di più Open T Open T è la joint venture di Zest e Tinexta con una dotazione di 5 milioni di euro per accelerare lo scale-up di startup con tecnologie digitali, tra cui l'intelligenza artificiale, in aree potenzialmente correlate alle industrie di riferimento del Gruppo Tinexta, in una logica di “open innovation”."
+    },
+    {
+      "id": "check-page-ee877b0080",
+      "url": "https://zestgroup.vc/it/investments",
+      "page": "terms",
+      "excerpt": "Scopri di più News EXE Engineering chiude un round da 550 mila euro EXE Engineering annuncia un investimento da 550 mila euro da Eni e CDP Venture Capital."
+    },
+    {
+      "id": "check-page-4d7e516804",
+      "url": "https://zestgroup.vc/it/investments",
+      "page": "terms",
+      "excerpt": "Il round sostiene lo sviluppo tecnologico e l’espansione dei progetti di carbon offsetting in Europa e Africa."
+    },
+    {
+      "id": "check-page-8c475876cd",
+      "url": "https://zestgroup.vc/it/investments",
+      "page": "terms",
+      "excerpt": "Scopri di più BandoSubito chiude un round da €2 M con l'obiettivo di rendere accessibili i fondi pubblici a tutte le imprese italiane Scopri di più Intuos chiude round da 720mila euro La startup Intuos chiude un round da 720mila euro guidato da Argo e Techstars per accelerare lo sviluppo della propria piattaforma integrata IoT e software e avviare l’ingresso nel mercato statunitense."
+    },
+    {
       "id": "check-page-58a29b35ce",
       "url": "https://zestgroup.vc/storage/files/190533b9-9a95-43a1-a65c-225c63ec57ef/Internal-Dealing-Gay-20-dicembre-2024_1INFO.pdf",
       "page": "terms",
@@ -472,22 +543,76 @@
       "excerpt": "%PDF-1.7 4 0 obj < < /Filter /FlateDecode /Length 20125 >> stream x���K��:�, < �Uh��)��(JZ� � �Y� D����?�� \"�p0ޏ��� Ey�AQ �� �q ˿&�B�?Z��)��܅�R�ϟ��� v1�G�t��G� �n7,���� �s� ���3 ����������r���%?�O� v���KMλ�}�� ��s���[�럯6 Ƃ���]F; ����G4��\\C��]`� ��î[ϟvy(h��G���~��rl ��.g�� i� G��e ��ni�c��+|_������힛�~��~��i�I���0-Kay+�r�~�w�{X'����,� < � ����r_ ���1-ol N�� ،7��*O�f�9��n9d < �Ǩ�D � a91 ���> � � � ΀cYL�e�9� e�ￆ�ܟ �ݔ��U0�R�!�x �o��]�0�㸛���&�����A��w, �\"�sV�n &��n�RX L��c, ��S�N�\" ʘ���E � ]���es��E�A�h/�H�uq�0��]F0��� Y�@y^���](�1 c��*2�m�c, L9���Ho���K�� �t �x�U�/� �� �]�\"Hc�� ˴@ :��u չ�o縱��,�� I�4��h�y�� �S� �-7�'� �[Z ��S�e7�|. �9��� < ��*x�E�H�Q���Fs\\yEX��DZ�k�@�� TX> ��h/zs�re�:S�42� c�Ngl]�p�T [� ��\\���V� ?��� �U��` |����;�EB O��x��Z� �;���u��hi��=�� ��6�ǯ%��� ����\\Ga�����Q ֥Z ��0'�Ż�|� � r*(`�E�ɞ|�ȋ���R%�\"e���\"u�ϵ� ��NeP�ۦ2�ç>��]ǥ{C*���N��\\]���j֛���XΝ`�]?�I���+� �YP��r5 �rWٴ� et�S�#� �? ;hH � �Kɻ�;����)��Ki9� `��g��[@yb � �ʆ�O�� �ָ��p�,'�� r���*t��� DW�z� l� b �H T�%���(�g�H�y9�[ �%ښ�֢�x T�Ju. � �� ��& � ��Wh��̨�� �\\R �?jՄW�V /|p ~� �x�K�V1���q�� ���m�@O���68T�#4L�\\�;Z �r�� Z�S�8y[ �� �� < � ! �}BXe��� ���� 9� � 7*~G�$zKtsm�c��Fu��L�� ��n� ��񅪃tv�=�m��MxO� � ��N��� ��_Ƚ�[E�p�A�L�q��T�@B���\"& l ���Ɣ�� 5+نU���C��% t|s��Y�u� z;��k�� 碐-J�P b�8�w� e�� �(�.b���m�-z�M�[�p%�:g oyQ�� �A�P�T �� ��hY ��w2V����ia-�^=�3̃�iz���� �/��= Hl�,#8A�����G�E � �πL�W'\"�8��Ax}� �\"��* t�ڊ e��\\��n_"
     },
     {
-      "id": "check-page-13845fbdc6",
-      "url": "https://zestgroup.vc/storage/files/2019/05/01072016-COMUNICAZIONE-INTERNAL-DEALING.pdf",
+      "id": "check-page-129c37f58b",
+      "url": "https://zestgroup.vc/storage/files/2d8fc303-33b4-49ce-9be9-4fd59dc9b58b/Internal-Dealing-_-Capello_-Aumento-di-Capitale_1info.pdf",
       "page": "terms",
-      "excerpt": "%PDF-1.4 %���� 3 0 obj < >stream x��[�r�8 ��)p�S�P$ �퍖h�[4鐔g��E��D���H���g�'�G� @�!���ڙ�� |�n4� �o'��� �tI�pB-� �β ��>��H@��'�a�D�a� �L�4�~#���_'� &G � �f�i1���C2��4����4� giD QZ�d %�_a^��,Ɉ��w����r{F� � ,$Y��� ��p 'qzI�3�D.� x �$+�yD� R�aZ�� � $�.� < �f !x&Q���b���Y�|��J^�� ,}� J,* B8Ȭ�m� �� K����Q� ��@�,�� � W4 =���! � �'�O�����.(̰���\" f� %�/'̰�g�pg�� ��97˓�b %� R���! h�E{��V����ի�\\|�-�\"\\|�P�7L X�܀��}{�� ������An���Ґ�q ݆i �YM��0 ?O�l�I�G�T� ��6 �S ��A�i� -�\"���I���yx Oc�VqK�R�Iv�Y.5|~��!� rJ��x�� axF�l Ge����\\ ? 7� %p� �T F�i _�%8� �C { � �! � ���$��.� �V����I S�3�7�$��5� �w�� �� ��y{ 4�&�_� Ǡ�80 o0@ǖ\\aofcH�V��R 9~ a����y��Y�d�xZ\"7l2�������ֈRr����Z !���p��´�RL30��\\@8�B� � {�7D {�R3p �4�p < \\ � ��u�*������|~� �] �p � I��v�LU�l�d�^M�Ľ w��MV�&��4�_:����U-���g��,����n��& K �0�!�����% N��j���լxiEl��O� ! ��� ҋȏ �Ֆ�6�3��k\"�G�� � h�� ݬvߑB���\\q���*d-�H}F��A ��� ��ϫ�b}�Z �)��F�pU]sPR���1N�&�KC��o� � ߭3��v;��O 9#��� H�7��y#��α:�h ᪂��C� �ؼ�Wr.7۾� Kw[��mhz�j6�������� < �p�� i�ќ� }�&�g�fE�-��7��0Ƴ ���M6�(k�. ��x�� 6��|� � \"�7�� ш�� զ���c�-�S�t�N̓^�]� �]V�� H��� �Y�X��]��vY��X� ���]��_=�R�V@��C'h�۽ P�� P�Q�^y� ��]W�� H�Ѯ+-� �!���� h < � �v] ��F� hbo� � ]D�_� ����+� 4ѯ �z�&���P �E��#�9p �1���� � ĺ� C� =D^ �� � ��N� �i3�� �Uw���@l�o(�N ���`�+��\"x x�F�6Y�k 7-) R��nu�P������0�� 4�N)1uC��n�����G� H B�a�A�ad� �\"�^Wg, ���.B8) ���~�Y}��Ð�� �7 �t�Z�EWV�� �� �Z\\�j�@�d��(�'�ī�..��̊R~��"
+      "excerpt": "%PDF-1.7 %���� 1 0 obj < > endobj 2 0 obj < > endobj 3 0 obj < > endobj 4 0 obj < >/ProcSet[/PDF/Text/ImageB/ImageC/ImageI]/XObject < >>>/Type/Page>> endobj 5 0 obj < >/DR < < >>/F 132/FT/Sig/P 4 0 R /Rect[ 0 0 0 0]/Subtype/Widget/T(Signature1)/Type/Annot/V 7 0 R >> endobj 6 0 obj < >/Subtype/Form/Type/XObject>>stream x� endstream endobj 7 0 obj < /Filter/Adobe.PPKLite/M(D:20251202195430+01'00')/Name(francesco sgambati)/Reason()/SubFilter/adbe.pkcs7.detached/Type/Sig>> endobj 8 0 obj < >stream x�+� � | endstream endobj 9 0 obj < >stream x��Y�v�J �� ��� �jI�Ɋ��a�� �ޓ��F�6� \" �$�� ���z� �����ԒP I 1-uUWw}_Uu�K�ݢ� < �[ Y�:6 � .��������!Y lBm ����=�?��O����d�� �n�Q/=^t>v�t�ސ l� �� ��x݁�2� q�. �C���w��d��7p���ٽ��I�j6�;Xp��_pZ=�| gf�ٍ\\s`[=�l�29�t���z���m�u�ޠ o}�֕j}m�T� # �(� � �t+�? ���[8���! �Z.b�8� � � ��! |�� ��y �� S MK E2N� �� < �䚧A�I�n�bo�K���.0HjjK���^�%8�/'� ݐ�Z�Z�Z ڎ׃��K ݛ9�͝}T��I�(׋���)��_�� @� �?�5�l ����1 �̞F[� �IJ� �����ª���!\\��*�c�ʜ��Pa� *� x� ����� �pK�q �؍��c�Pa �Ry� d�W����H� �a�@���$z*ǌx굏�ZP� P=#��� L0 u�W��68V�\\� �$�Tg?DI(k�K�� l�Y��) 8 < ��AzH ��N�� �e�����t2_̠f����X���UXVY�%y ���� �Mn� ���1�c, ��g@ �4�� ��� T��%� � ᴇ�V,!��50�C�i���U��t 5�������C �}���� ` l�i�� �E��G��W�� �v ~�A ? #Z�b�� ���١ ]R��� R��y��(�@ m Ů] ���� Wm��m��XV]�[Z �| � Qgm� �� ՗�/�( �; J ��.T� �Q @(� d�[���� �@� �a� C�W +���$�_�z �LV� Uʁ� �/2+І�k�[r(�� �Tl#�� C �^E�&fO8� d 5:'�P �= � ah �� gpB��"
     },
     {
-      "id": "check-page-a31c19421d",
-      "url": "https://zestgroup.vc/storage/files/2019/05/02102015-COMUNICAZIONE-INTERNAL-DEALING.pdf",
+      "id": "check-page-582108e031",
+      "url": "https://zestgroup.vc/storage/files/32d1d007-ae16-4729-8de6-e7e2ca1edd3b/Internal-dealing-Gay-19072024.pdf",
       "page": "terms",
-      "excerpt": "%PDF-1.4 %���� 3 0 obj < >stream x�ŝ�r G���� }7r �?�K��$l� ����7\\��pC\"e��ݹ�3� ��mUw%��̓��و����'�A ���?Ef��W?�_Um6��l��UY�� < ���&���ӷE6����z�X��� �m�f���f����a� �~ �ܫ��d>}6�� < {� < _doV����j�:[���n��b�].7����r����n�:ۮ�Yє?� |���v�}����:�v��?�;B5���Gx�Z�6������v�uy��^^���m��-6����;�e�[�]�v�7�� �1���!�^?\\��p���������>�2+�.�̋�C�� (+r � ���88�# � < �\\ #6p��:/�X��W?���U>��m�� eS� `R�ռ� �xUO�lZ� Q3k'u���ͫ�;[�����w��d� ����򨚋j1=T�}�g B � l���l�7� 3 �|�N��FE��ύ�u1�.����f��V���f�tg����b���;K�֋�rׇ��O�� ��g� �� ��#>�bRdo �U��,�� oWg+�i�hk_Z�� ~\\і���f��k���a�[]�Vn����r{�Z� �S�/��ޝ�W�{w$?a�� ?ɮ6���j��� w�o���~u��)���@�D�r����ɴ���b������l6q�Ĝcj�����Ti7 ��d:5 �ܟ �^͛Ii ��//�`p.����?�H=���]wM�( k �|� �z�p�x��] �Q �u ��g ���I��L����?����}� O�'tC� >���;+��[w �G�x�_n4��1 < ��(�|�6E���V:��� �]{ϏNMw��7 \\ �~� ��|�ܟ���/wk�� �R��~ �����j ��]N�O.|�1� �y� ��o��������o>����L�O�l�Ӽ8u!T����*qM �L�l��a�%w�('�f���-��1�-..�;w�:�n��_�n ������v��Ƨ������Ew�� �����l�~��W�~һ;��b�Kl���y�h �Ӗ's6� ��́w�{?Zw�7��j�o���*[m��ե�^���r��W!we\\����Deg�km��|��X�� LS�?%������#�����z��t9]{����f��7��{w]�� �۫��=H �4�7 ��k�̰wWԅ�� ��{�p��>�F��o����m]iw|�0�β�����) �������S��7Ų���W���NB->y*��! < �*�_Q��l �6 �Ԉ�ᢎ�u]�[�R��jU� \\��� l%��7w�� n�w �߿�˜2��+u��_� |��OY�>��r�I$����f~T͕���'� u^�S�� '��E�|����?�\\([7oµ�{d��M!�\\�-�� < ��硟EGO���Y�+�n��s���Y�r=��&�f�. nF�� w��pW��O�EčЉ7���m�:�Lg��l�| �? �+�� x�߹o�8�fr� �tW�7�i�� ??�n����H��P"
+      "excerpt": "%PDF-1.7 %���� 1 0 obj < > endobj 2 0 obj < > endobj 3 0 obj < > endobj 4 0 obj < >/ProcSet[/PDF/Text/ImageB/ImageC/ImageI]/XObject < >>>/Type/Page>> endobj 5 0 obj < >/DR < < >>/F 132/FT/Sig/P 4 0 R /Rect[ 0 0 0 0]/Subtype/Widget/T(Signature1)/Type/Annot/V 7 0 R >> endobj 6 0 obj < >/Subtype/Form/Type/XObject>>stream x� endstream endobj 7 0 obj < /Filter/Adobe.PPKLite/M(D:20240719154456+02'00')/Name(CRISTINA CARAVELLI)/Reason()/SubFilter/adbe.pkcs7.detached/Type/Sig>> endobj 8 0 obj < >stream x�+� � | endstream endobj 9 0 obj < >stream x��Z�r�8 }�W�-r�C �IJ� [�іc;���L酖 �����S��|�����l7@��x �ݩ�� � �� �G�Ӵ��d@}2]tl6�� y� ��v�7F�d��tG������7�� �q1�g�}jL� �0��~ |� �B�m���� �ck n�[h��p�I�&����Z�� 8 w < � ��%O�}��c@�}�.� Nx̣�H�mH�r�U� ]�RP$��� ���FlE�� �%� @�M� ��P�Y��+|� ��:'� ��@ � l� � q � ��)��ֈx F�� �%�I ��X ����9F��� H,�^�h%�+� ���G &3�� >�g� ��1��S �׿r� 5_ E��]j ���)� ����J��* ) ?l�lI �F4��� ��M�Ӡl� �C'߯��=�s {��Z��| � �����Nw�e� ��W�Z�T��� x�u���M���l[�4 W!P)� �� a}Hɜo�!m`�]J� `�* �����Ә[�xC� 殌� Dڂ�#(� K >\\aJWk b*ɏ}�&�X� ȹ~ �U| �&� ���* �o�J ��'(� � �A� � 9!iQ ��9���. � ;� < ��x�&. ���.��a$? +� �� �al�h��%�xq eA�o�=�H��_v < � �� ���^0�� H` �s�^0�p� ��7 @& {( �. �5 {(.P��& ,v2ЩB�� ���H΃�!9�\\�`�V d&��Yw��,H��\",��.B ��M����D�K0 Y� �n��u < �v�t~���N � � ��h� Mp�?De�@H\\ � �β�gȬ��:��m �� {��?�� �W> �&?%&J oT�}�Z.٤�Tk�yRx�������V�� _ ꫧ� 4F � ��L�b�w- � �l#ե/����� ,���zȪ��5,"
     },
     {
-      "id": "check-page-95af7ebc78",
-      "url": "https://zestgroup.vc/storage/files/2019/05/04032013-COMUNICAZIONE-INTERNAL-DEALING.pdf",
+      "id": "check-page-dfaeefb0eb",
+      "url": "https://zestgroup.vc/storage/files/36e11fab-8ff5-4282-b6cb-3766cbf2d2f0/Internal-Dealing-_-LVEN_-Aumento-di-Capitale_1info.pdf",
       "page": "terms",
-      "excerpt": "%PDF-1.5 %���� 12 0 obj < > endobj 13 0 obj < /Keywords /Author /Title /Producer /ModDate < 443a32303133303330343230303730332b303127303027>/Creator >> endobj 2 0 obj < > endobj 14 0 obj < > stream x�+ r r endstream endobj 15 0 obj < > stream x�+ r r endstream endobj 16 0 obj < > stream x��[Ɏ � � �R� R�VR�J��n ]�}� ���E� >�>ɖ C @���/�������6�� �\\�r���Edu��N��t����w�v�w� �e �lL�lx�V' �N��'���g�o�o T�RN��� < U�C����Bw��y� ��z��� ��;����q ��R�M� ���� ׻o�?��]�$�$nL���z '_&n>-n�=؟ą *Eol$y\\�� �B�茅���l����� �&�>(A^k\\`�Z� p�8N�m�ڔ�0�wc��c���l��z6ZϤqj���q�|��s ��(�݃�=Զ�G� *d� �p�B8��݃��)��x8��)e�d9 ���!�Л���zm ��[�p��q�m[.h�G?�z� )�!4 ��b� o z��$S �k�) n��0 ��ڏȎ`� p�����K��h� w ��3�@ �����$>�k �cL�Ut�P ě��O�믿���: �d_���=�hr>��� %� s~ g Ņ�G��1���5J��4D�� W�g 5� �2a U�5V ��G��6� ޫM��C� ��A\"f*�� �F Ҍ���j�� ��\\_%lUP���hж ze 2I��Jee���Jc�1l�#�6&�U�&� �>�P < $�$�;6C&�4�G� V���P ���R a�1vc���Ub��0[$ ��FVy� H�23�*�.0��k/#���nf��u t������e�� � ` �� l���Eܠ`C�6��CoC�S0=*��) ��* �� �c �N��@���I�>i;�;�0 �2Z��� � - ?ů�y���!M�%(i {.������ �ze�F A� ؤ��� � ���k�Bm�:%���I\\ c� � � �� ��f� �LtؤN�=(l4v� 1�Lw4�t1P��(��b��� < ��^Nj���w9 �~�� � � �ƅ�; PdG��u� ���q}�z9d�Ț�Y����� �� ��!� �8ݓ*� �CҪҨ�xj*�d����� FG :�?����2�� �� =Շ�' ���KS0 V�0구 �q �P�/�!F`> ,&���SjB� �� �$��3�bS+@W��yB < � < �N��ڰN ��]ɲ]�Ԃ@��S��@��eu�(4� 9�I��Z�54� ��(�� �'}}~���*�- � ܻ ��W3��Ȩ��^A� Ӭ,Z < ;4�Á�ng��D��� �{�����1�]�TP�����$��k�.1�1"
+      "excerpt": "%PDF-1.7 %���� 1 0 obj < > endobj 2 0 obj < > endobj 3 0 obj < > endobj 4 0 obj < >/ProcSet[/PDF/Text/ImageB/ImageC/ImageI]/XObject < >>>/Type/Page>> endobj 5 0 obj < >/DR < < >>/F 132/FT/Sig/P 4 0 R /Rect[ 0 0 0 0]/Subtype/Widget/T(Signature1)/Type/Annot/V 7 0 R >> endobj 6 0 obj < >/Subtype/Form/Type/XObject>>stream x� endstream endobj 7 0 obj < /Filter/Adobe.PPKLite/M(D:20251202195710+01'00')/Name(francesco sgambati)/Reason()/SubFilter/adbe.pkcs7.detached/Type/Sig>> endobj 8 0 obj < >stream x�+� � | endstream endobj 9 0 obj < >stream x��Y[wں ~�W�mӵ �� f�� n� P ݗ��〒� ��6�j���8���Ͷ|��� �5����F3��އuϰ���h��a} < Y�Z7 m ?�h��O��;�z��z>tg3��w�����`� }����-��\"� �!Jçp B[�h :@�G v�xz|܅ EG ��!\"OO$MOA � ����l^ \" �7a \"��N > �3��)�*g`; ���> < �I�' WT �E�4���(�=�0&�>��ΝM���.�# J��`O `]�$�& ;�hM�� ��)�����������50��e�-� � � < ��� �^ ���.LC� �X�P�d�=7w����¦6(8��-L_P�B����+ �� �� # 3� :H˾ �Y���ONU\\���B�~�K{����מ6 # k���/� ?�`� ��t� l��������d��`d !�ƃ��I��0� XpK�e�`� }c{���-�s�����B o�z+no�\\q�gY�`T �� �jq������L#��t��6 k��=#���V���M+� lR͢X)�� �a�@��5 ��$u ��9o�q b�@!iɢH�ɡ����� MH ���ڭZl� nq�� ⚺ j(��s ��� ��n�}�[�|- �i p�E�fζrg7�U4I �z�g�� ��?�� @� �?r$���U�� �5�gў ?�q�� ��*�M�YU �~ x� �4�N��-Z-��gߌ ��x� *^P 0duǐ�8�*A�R �[�m�� ntUy� ���� �La��$�4��(%i�$=�hJP�� U)(A\\��� U-��N %Z�z%��B���:�hgѥ:z %!Ox���S�c{=��tás� �)y��uj%�t��׽��g�j���q顉�s�f �VVq� �r5���ֿ_� �ƽB����� ��/>{h����� �l�z��y����|"
+    },
+    {
+      "id": "check-page-d490d6d029",
+      "url": "https://zestgroup.vc/storage/files/3c9e0977-e6b2-4540-ae51-235544fd40f8/Internal-dealing-Gay-01072024.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.7 %���� 1 0 obj < > endobj 2 0 obj < > endobj 3 0 obj < > endobj 4 0 obj < >/ProcSet[/PDF/Text/ImageB/ImageC/ImageI]/XObject < >>>/Type/Page>> endobj 5 0 obj < >/DR < < >>/F 132/FT/Sig/P 4 0 R /Rect[ 0 0 0 0]/Subtype/Widget/T(Signature1)/Type/Annot/V 7 0 R >> endobj 6 0 obj < >/Subtype/Form/Type/XObject>>stream x� endstream endobj 7 0 obj < /Filter/Adobe.PPKLite/M(D:20240701104821+02'00')/Name(CRISTINA CARAVELLI)/Reason()/SubFilter/adbe.pkcs7.detached/Type/Sig>> endobj 8 0 obj < >stream x�+� � | endstream endobj 9 0 obj < >stream x��Y�r�8 ��)p �ʦ � ��d[�hˑ IIM�t�%��D*$�Trڧ�y�m A�ϔ < )WD��� �� �����j@\\�.Zm ��.11 6 }�h�V�����v�q�� M����V� \\��& Є? }|�Yv 2P �O���\"��d fA #�x��8X�n W�W���%���>��4 /� L �GQ���Y �;�0��?𙽻x9��]�� ��o��F�]���& ?GhE�� ��1N��g`���� �eظ�Y�e � /O7�8=&� � |��`�,���g�Hʥ���)���>��'���� M �8| wa � qù 3Kw?��[�^� �e�F)�� a���g� ��O�� B������ ���Y < '��n�S �ׅ�/n��h֞� � � �1&� s�_�W�&O �+A��؁ � 8���c�� ��+ٮe��B���B� >���+X-�B?���h�Q�ӳL�F�ܘ � K�o�^Yt?p ��J��� O a֗> ��Y �� F�m��lBH��� �-f��E+I� ��0��eo �0i A� �w���F]�[`\\�� N� ��� .� �}5_X�� �M��Š�!�?� - N B� !�3_���/��PU%?� �\"��@U #�� � �E I�;�DӒ��?�JE �JVu����'�A��ʮd�� �l��.�It�K��i( �K�� ��Z��]��ps� �1] q�Y�%�kv ���f:_M�t9����}�k�7ͪ�%��.�w� Z�n�_'� `c*��g���� �Ṭ�4� (�`�ǃ4,��j Px�;�ี ?��Az.� ��/� � �yqg &�]}cu� < ��2YG ؚ�l{^ � �8^ < ���_f��]����3үP:;��H��d�G�� ܮ �ր�;ӯcU�*i ��z�� ݇Y�� ޞ IF7�!� � ��| 2٭}?�"
+    },
+    {
+      "id": "check-page-e206741a7f",
+      "url": "https://zestgroup.vc/storage/files/4779cde6-0fc0-4fa4-948d-5cd50ad1aabb/Internal-Dealing-Gay-18-ottobre-2024.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.7 %���� 1 0 obj < > endobj 2 0 obj < > endobj 3 0 obj < > endobj 4 0 obj < >/ProcSet[/PDF/Text/ImageB/ImageC/ImageI]/XObject < >>>/Type/Page>> endobj 5 0 obj < >/DR < < >>/F 132/FT/Sig/P 4 0 R /Rect[ 0 0 0 0]/Subtype/Widget/T(Signature1)/Type/Annot/V 7 0 R >> endobj 6 0 obj < >/Subtype/Form/Type/XObject>>stream x� endstream endobj 7 0 obj < /Filter/Adobe.PPKLite/M(D:20241018124312+02'00')/Name(francesco sgambati)/Reason()/SubFilter/adbe.pkcs7.detached/Type/Sig>> endobj 8 0 obj < >stream x�+� � | endstream endobj 9 0 obj < >stream x��Y�r۶ ��S�ʌM IQ͕b+��8�c)��� Z�l�H�BR�$W�)N_� � ������ ��X`�o� ~�}X� �G�u��#k�KL,�� 1 �Ŧ� ��NnƋ��x6���n�W�2 �� (���� ��t���:B�8�6�*D��V���(�S n������V � �� �� Ͳc��b��y�TV� є&�( �1B��^��u�p�{ X~�9 �v�>J31 �`* < �gI̜E�x�� *� ����� ~o�$F` | wt ޅi �\"�s� tw�2�7qR� < [�5��/�źg�5� � � < ]m����^l ��O� ���� �#)�z ��h��v�>|�I ���� ���h e M 7��0�t�C�� ��\\�N9�mi�� ��g�=ӝ 7 � m > � Ą��=�?��'�WAUX�ō�m?�'���޷�m��Ё5�_���� < �`� �#�b 6�E�PB{�6� ��n����5� -6��� ܰy�/�-�A������F�9tl�E�ܘ m{s�o��.��y�k 5Ex ���0 H ���, `n #ߵlP�!�;N�!�-f��M�$G�Oj{ +��5� $�^\" �VR74��x �� �' IK�E N �� < �fa�M�ߦ��( � ��!a�+� �x=�`��� k k1� k�踾 �[i��-���`7�5,I )��5� �r�/X. h � VN �p�� �5ҳxG �$�� �Q�t܀{UU� &p ݄�ID� < � �}5_8�� �M���@Ð� C� � !π�Ӛ/|R� Nc�ʒ���| g �*� z�!� ;E I�'�D3���=�JE �RV���� '����ʮd�c M�\\G �$�T���4 �%�| �|� �)�px8���.��ά� � � ���z2[L�d>����~�kַ���%�� < ��fc�0��|"
+    },
+    {
+      "id": "check-page-0f9fc423bb",
+      "url": "https://zestgroup.vc/storage/files/4e5a5367-69aa-4f68-803b-faa9d766c7eb/Internal-dealing-Gay-26-agosto-2024.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.7 %�쏢 %%Invocation: path/gswinc.exe -dDisplayFormat=198788 -dDisplayResolution=120 -dBATCH -dNOPAUSE -dSAFER -dALLOWPSTRANSPARENCY -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress -sOutputFile=? -dCompatibilityLevel=1.7 -dAutoRotatePages=/PageByPage -dEmbedAllFonts=true %%+ -dSubsetFonts=true -dProcessColorModel=/DeviceRGB -dColorConversionStrategy=/LeaveColorUnchanged -dPreserveAnnots=true -dAutoFilterColorImages=true -dAutoFilterGrayImages=true -dAutoFilterMonoImages=true -r300 -dColorImageResolution=300 %%+ -dGrayImageResolution=300 -dMonoImageResolution=300 -dDownsampleColorImages=true -dColorImageDownsampleType=/Bicubic -dColorImageDownsampleThreshold=1.0 -dDownsampleGrayImages=true -dGrayImageDownsampleType=/Bicubic -dGrayImageDownsampleThreshold=1.0 %%+ -dDownsampleMonoImages=true -dMonoImageDownsampleType=/Subsample -dMonoImageDownsampleThreshold=1.0 -dPassThroughJPEGImages=false ? ? -f ? 5 0 obj < > stream x��]�� �q�K�w����b� �ؐ� < �^�]�B !/� 8� ��` � چ� }��4ߑvvo��#M� `�Yi43 ͌F���WyV֫�� �=��z'_�YU5]�zd��&o��^=�)kե?Cˇ��Ý/v�_}��c^}sߠ���m[� ��g�V/�� < �vѮt�麮W��v�3��oR�ʦɪ�^���t�W��v>Z�٦T:��n��JwY^���AS���TU���MY�Y�4k�=j�W�m�u�Z_�(ۮ�Y�� O �_o~s��Ν�ȡ̫՝��jն��� Y �)Z��] � ���)T뽍a1��n��7fP3|������Z^&�.��' � P ����H��֬�U 3�� ���5O�^ ��*�ʚP�D�f�!1� �1� � E�����&�@� ��~���.뚎�#69 �T� �6S��� �A o ���N�u�b�\\� �,ڬUV�{�� hd(٣� #�Eÿݴ�Y,F�0 ?�4y��m��̡9 4� � ��.%{��W TM11 F���1eB�T��"
+    },
+    {
+      "id": "check-page-2e8a525038",
+      "url": "https://zestgroup.vc/storage/files/4e5a5367-69aa-4f68-803b-faa9d766c7eb/Internal-dealing-Gay-26-agosto-2024.pdf",
+      "page": "terms",
+      "excerpt": "Sa�*�静�Q � �ֶeL��S�C� �) ��n �g�x�8y�Ͻ ,q��I � G45s��R�3=��e��C���\"]0������ �+�1�� �7m�)Zt��ԯ�l{ ���g�% endstream endobj 44 0 obj < >stream x�eSI��@ �� ����5��x*'��׀�ȚT�v�H5 �e��%���~��Ă < >���ϑd� �� ڥ�}XR���MV�wb3�6Y�� ��K�h���^�N�� �:� �p�+�� �^ s� �S)��M��+6� �7eH>1 � S�� 9[; {."
+    },
+    {
+      "id": "check-page-a2f5511405",
+      "url": "https://zestgroup.vc/storage/files/4ed2d409-9286-40fa-852d-9e2a9712b311/Internal-dealing-Gay-26072024.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.7 %���� 1 0 obj < > endobj 2 0 obj < > endobj 3 0 obj < > endobj 4 0 obj < >/ProcSet[/PDF/Text/ImageB/ImageC/ImageI]/XObject < >>>/Type/Page>> endobj 5 0 obj < >/DR < < >>/F 132/FT/Sig/P 4 0 R /Rect[ 0 0 0 0]/Subtype/Widget/T(Signature1)/Type/Annot/V 7 0 R >> endobj 6 0 obj < >/Subtype/Form/Type/XObject>>stream x� endstream endobj 7 0 obj < /Filter/Adobe.PPKLite/M(D:20240726153440+02'00')/Name(CRISTINA CARAVELLI)/Reason()/SubFilter/adbe.pkcs7.detached/Type/Sig>> endobj 8 0 obj < >stream x�+� � | endstream endobj 9 0 obj < >stream x��Z_sں �S��Й ,۲�}� ��;)I�vN��� %�Sۤ�>�Oq�׽� �e����� �wW?i �Zm���~�� 4r ���\\ < � ]bo@�x�;Fc�z��'77� ���p2�O�|��w�R ;L �X��?& ��&h �}�Ǐ�:B������8�S m����a �A (J^h�_ƈ>>� �Icb��- �z���G�? K��v$� av�0 ��X�cn �� 8��'w < �C�R�\\ �V� {|R�0��e���h�~� C\\oU�FF��p�@��� � �3�b c��b��]O�)�.�W�W�/����SտDw���v>A����˄ nL�o�� >���| �N|P�ҋZ�̀� ~w>(Â ڮA � �� $� < ��̇ � D8� �1H�PƋ'�=p\"�� + ����` N�hް���﶐�� y&W�>ϖ�����3үP:;�2O���wg�o8ܯ �7��[�/q+I�kt�{�\\���� ��l�A!��d� �;yV /5����� �N���y�� /�ݳ���Ϡ�h��� /�AV�� H�W����U � �B v ��u���z � �+ߟٶ ]��� R�g�� �! � �S��� �h��!#�x�� �g� i9R�;�b�: < ĨSx(E�r��� 6��� �9y+�z�F�V�հd�&y{#����ܪ�5�֩� ��u G�1�G{(����Pad�� ��_�&c < 3��I-Yϭ�k jO��% _ �����~��HX]� ��k^�� P祺謡Y�c\\'���� Y�' �n�3t����'� ����_�� \\ ���8g+�q����� � �H��|ԍ�RQ1��,���8>��Ұ�xa� ��8n��P �H��F�F�ޥ�e��s*�Y�J/��4 6i)( /���,��8 �� �M ㊃q���7��`l8 W � �[f��U���� A -"
+    },
+    {
+      "id": "check-page-bc9d071b22",
+      "url": "https://zestgroup.vc/storage/files/507ebb1b-7661-4ad5-9d52-874f19cf43bf/Internal-dealing-Gay-12062024.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.4 %���� 3 0 obj < >stream x��Z�r�� ��)�nI� � � �I�S v��6[��alk \" ���� g_w{�43 I �)�a�鯿���{����h�h��x� � {���� 0 ��c�;���| /o���l�Ǜ�_�K!�PAP�#������f��u�vI ?ƫ :Z%�� F��dGP�A����&^�(( ��I�^ƈ < >� ��* < ��iB�E ��S�� ����� �o�4A` |��d �EY��b𳏖d��P� ��Xy ��k� �_= ���t#` `�l�I�C {���] ��� =� �dL�9J��� �F�艤1lfJ�=�� �M��$C̰Сf��rw����r}�� ��#ΟQ�L� < ��- t@h���\"�2� *� �=�ů b� ��� [�~�=���d�����qz#o�� � ��S ��pDW � � JI�Ig�{ _(��� �� ��E� >�y�7ح��~�=s��#�s�:= m�1>�t ��j=]t� �7� �퐿 �١����L 3[ �~� e B�e�?`��4��i���c�: Ŋ.{ p�EC �/1$�F�nd���[�8+1 Qȴd,R�d�0Y��Q ]� < �7 ���8 ��]�]� ��6��B�:�`��� k k>j k���a �[i��-� �`��5,I )��5 �r�/X. � ~ � V��Ut�� � ҳdK� �4�� �ak���ye�~ ϯn�����tr3�/ߊ� � � �p_� 4 ��� �� % ��F� � _���*K~�#���� �hN\"�f� �IZ>IOM4�T���* %�K� � OH ���]�Y��h��tqNJ [�.�b^�\\�χh���O�� ��� < � �} W�����ew>YL�'�� M ��/����z}�)�_���|q; ���f�uL 6&��xy �~* < �Q+ �.����7�g�/W:�~i$4$��� �K@� �F� � �z��v��k��m�紞�`׳(��*�G��ڠ-�oQ.ok� Iήu��e��� % �Dy ������(�#f n T0J�D < �� MX�iY����M� �:Ey�D & $�(��>$?�݊@-����l 1_ 8r` *Doj��� !)� G��! l� �� 6� ���u < �� � 8�eb� ����VJ%�J���J���Oi�k+V�_�4�W�� KS+� )� �r�VH� ��� ���$P�.z�޸g� ǂS��B�f2��z T쇖_C ��?� ?x�\\�w �Ӛ�}� Z�Jg�2���N�=:= D^ �� N���}\\�e�6Jxt���� y�2ќZG(��$')�Ţ�� ��h�:�P �ٵ �� z�&�P\\�^٥ � �6\\��! � ���lu]ipsH� � �� #�� � +P� � a ��uw��ݗ������ c#��}�� `\\ 0� 첋i� c#�� `l ��2]$�r ŏ� 5oٰ^K�-� T��8�q� ɡ�q� h ��1���a�v�yP8D��8 �;ĆG J� �!�r� � ���"
+    },
+    {
+      "id": "check-page-2f056ae7f6",
+      "url": "https://zestgroup.vc/storage/files/5b7ff5ca-3237-4c7f-9235-2a1e20d75fa1/Zest---Procedura-internal-dealing.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.7 %���� 1 0 obj < >/OutputIntents[ < >] /Metadata 1565 0 R/ViewerPreferences 1566 0 R>> endobj 2 0 obj < > endobj 3 0 obj < >/ExtGState < >/XObject < >/ProcSet[/PDF/Text/ImageB/ImageC/ImageI] >>/MediaBox[ 0 0 595.32 841.92] /Contents 4 0 R/Group < >/StructParents 0>> endobj 4 0 obj < > stream x��X]o� < ����p.��:��#!��-ch��݊��� mV\"��(� �Z~ �Yyy�x �Y+5�}��9�''���wMu], x�4 7M��P.�*��7���2{]��m�T�6��}߸� e�,wϞ��t � J��Xk PP�\"����� v�p�� ����|8Ȟ3`�P ����YS� ��\\��5� � �;�4���Sê�������*�� �_ 3�����` h �� d ��릩7~���u �7��[ A (Ft�t���E ��}`�hۍ���FX~��� � �1�ݻ� ��R�\\�њ0 ZI� �]� �}�s��A �ԧ�bU2 � �Ӄ���:n��)��خ ���� < �4 �� _#$� \\�.V� V < 7D 0� B��HJ[ *� +&� �LG�^�#�\\�3IG < �M�\\��8 d�hr���Je �w :��\\� ����4e�� ���[� �69s 0����,U?f= } < =�JE��nG ��� }�� |�� a��dE5Q ��]�t���e �\\ +�'+��R!�l��8�� < �U�'+* c�b��|�����b1^b^ZJ )�h�x�yiqC�B�b�Ǽ�('2�:�> �0�ذ��� T� < ,��,��h�Y� �����kT�V 7�+Zc�ɖ��D)U8M� �,�0[��]� q���VkgQհ� EY;v���U���P��s|��o�-a���lG��V�]�i�,�����6Uk`n& � �{�+�S�C�C���h;&܆� �� � 0} X �sB�cy�%�}X�zY]�*V ������op ����6 1�n�M�����V\\ �X�v�L ��YP��g � &6* ��n pfg��J� n�� ��W�� �Ŝ��b{f�=`���u7.����x, ͽ`�K N#�rJT��� ӄ�GJP! 1���ӫ>wI �٠�+��Q�As\\ F ?U��~j*�i��舴ߣ�GK����N �Ŧϭ �N( ъ�U�>Z� �P�')��P�6 � tg� endstream endobj 5 0 obj < > endobj 6 0 obj < > endobj 7 0 obj < > endobj 8 0 obj < > endobj 9 0 obj < > endobj 10 0 obj < > endobj 11 0 obj < > stream ���� JFIF � � �� C �� C �� [ > \" ��"
+    },
+    {
+      "id": "check-page-030b767e89",
+      "url": "https://zestgroup.vc/storage/files/5d839de2-1c28-407e-9ff6-3f6161678295/Internal-Dealing-_-Levante_-Aumento-di-Capitale_1info-(1).pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.4 %���� 3 0 obj < >stream x��Y�vۺ ��)���9�D�?�� #1 {dI �47ǋ� l��D������ ]��^_�� ��O�Rn � b �� ��W��+�D�b\" {���pl� U �=z�� � �|����rd/ ��7�?�n�`� u�� �-��\"� �!Jçp B[�h :@�G v�xz|܅ EG ��!\"OO$MOA � ����l^ \" �7a \"��N > �3��)�*khZ ���> < �I�' �T �E�4���(�=�0&�>��ΝM���.�# J��`O `]�$�& ;G�'��Z� ���S��Lc��� �jѲÖn � L�lvQr�a/� �zH� Ր�����z �������!x&q � �� ���p �!I S,d�Z�������EMaFa] �?� �/(}!{�n�� T`��񁑊 @ �d�5�C�� z�'�..��U�^?�� �����+e8�� � �_�7~���jȜ� �A: �br��%3Q�c] �& N�L�Ά�_��[:/� �5�� �3 �o��c� u� �xkw�q{��C�W�� � A�j� WkI �ڏ4 �L��L}��� .�3�oU�[ش�ȉ�&U ���� � $ _C �NR7(Q7�-0�FL ($-Y �89*�l�a0B3� �.�v�-6' �x@� qM} 5 Û� [�� _S7��^���X7� �sɢ{3g ��[��4I �z�g�� �柠� @� �?�$���U�� � � ў�އq�� ��.�u�YU �;��� 4]ޭ�ۅk����d�6r � �w�\"o=�|��H�/�$��\" �N ]F t %W p %p��Hbj�H�[�X y ��+� � < � �5 ( ��J�[=cϥ`)ܚ�í ���[� o ��O�R ��J�� ������E���U�� < �A O������� �N/ �S�0P��J��jU�t���۹� 4s� � 򆫡=lע(U-7h嬽��F���ڝ�S� y˩���ߩ^��AK��� ���}� �A,�u�=C���A!�3&�8)���-�-�ڕ�a���̀�� ��9��.��hu� ��ڙ:36ݨi � sPc�B�5h��w�����^� ����r-�1�/=g�;�=�X����� @v� ㉘b�p��,� m�5 �����j�Dw� ���by �(\\s��V/�IAA�\\�H��n�?ݤbN�\\o�_9�p'ݨ���=�ӭa�B�9H�~@�AFp��=� ( �� �������pdCN��y�� wp�0�?5��1�O��9.t�1G]R� � )\\� < � �ml=� �* ^Z���Pؚ0�F�a�Ҍ��]��8%�� � w���@ ��/ =E)�X�P�Є�Z$ݐ�� �� m �4`���M q �nȯ a� t �(~%ϻ� �e� �, T�H|�YAm�� � �l:�'I�2B� 0�Į��ޕ��Y !1��]�.�0�S9 x� ��� �d �� F*�8����\" �f �|�Fi�F�� � �� ���g��(�Ԩ��(�T팥�U�� �K�hv ���u�"
+    },
+    {
+      "id": "check-page-5d47d071a9",
+      "url": "https://zestgroup.vc/storage/files/64d7d4c4-9c37-413a-af19-4d1d7fb386c9/Internal-dealing-Gay-07102024.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.7 %���� 1 0 obj < > endobj 2 0 obj < > endobj 3 0 obj < > endobj 4 0 obj < >/ProcSet[/PDF/Text/ImageB/ImageC/ImageI]/XObject < >>>/Type/Page>> endobj 5 0 obj < >/DR < < >>/F 132/FT/Sig/P 4 0 R /Rect[ 0 0 0 0]/Subtype/Widget/T(Signature1)/Type/Annot/V 7 0 R >> endobj 6 0 obj < >/Subtype/Form/Type/XObject>>stream x� endstream endobj 7 0 obj < /Filter/Adobe.PPKLite/M(D:20241007171608+02'00')/Name(CRISTINA CARAVELLI)/Reason()/SubFilter/adbe.pkcs7.detached/Type/Sig>> endobj 8 0 obj < >stream x�+� � | endstream endobj 9 0 obj < >stream x��Z�r�8 ��)p�\\eK RTrRlMF[���Jj2� -A2v%Q!)��� < �����l�$ ����J� ������� ���q�� : �.:. � >��^����o �t��noǟF�����n������+%�pAP��B��9^��:F ��qƖl !�[�x��B��[��5�ퟟ�l ��@Q���x� ].i��� # �)W��PDS��Y mc���� � ��\"P�� ,��6 �ei& ��\\ �m�� ,�eς%T� �|�|p ��8� lцn ]��� �>���n� /�$�y � 4�G�W��2��/ � ���q�O`-� �n�h�-���� � ��(Y�� m�m�� ��Lh���왭Y�h��a������ �B� �\"@��镜��ɲ ��Ѝt�x+ %?\\�]A ą���� H}��*���o|� ����AAc��tz � ��?�Ѕ�y�;��� z��x-\\*�HW < ̺_���up��]W�4B�1P)M%�� � �dN7��6��/ O �c�D�q� ƕ�m �à �D�x� -A� B�C ^\\s���,�D?� I�j %@��; ���+�7�� `(NV p}ä[���T ������e +���X �L ��|��|Bs@�Dk� �E4��h��. ���.8��D� V� LY �il h��% {i vB�w�=7������LD �7h��z�� �@ ����� �E�~c xb����,^ X� ����lt�����N :5Q�y t�D$�A�!1�\" �R�� < ��\"�κ�e� �z +N� � �� �����K ��@g ���6��x���� � z X � �忓U r���!� >$ � p �Y6� qo@� ��0ȵ�h.� ����+� M�E? & =~�c \\�G�F ��u�I��+�n:�Oz��\"� �[_� 5Fi� �)���Q@z"
     }
   ],
   "findings": {

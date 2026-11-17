@@ -1,13 +1,12 @@
 {
   "programId": "nus-enterprise",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://nusx.edu.sg/",
     "https://nusx.edu.sg/programmes/noc/application",
     "https://nusx.edu.sg/about",
     "https://nusx.edu.sg/about/leadership",
     "https://nusx.edu.sg/iti",
-    "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
     "https://nusx.edu.sg/partnerships",
     "https://nusx.edu.sg/programmes",
     "https://nusx.edu.sg/programmes/grip",
@@ -16,14 +15,62 @@
     "https://nusx.edu.sg/programmes/noc/curriculum",
     "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
     "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
-    "https://nusx.edu.sg/programmes/noc/locations"
+    "https://nusx.edu.sg/programmes/noc/locations",
+    "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+    "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+    "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+    "https://nusx.edu.sg/programmes/noc/locations/munich/",
+    "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+    "https://nusx.edu.sg/programmes/noc/locations/new-york/"
   ],
   "evidence": [
+    {
+      "id": "check-deal-4841c7d603",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "need to know before committing to Hanoi. Cost of living [ $ ] SGD $1,200 a month Accommodation NOC supports housing search. Stipend & awards",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-7e4a1784ee",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "need to know before committing to Munich. Cost of living [ $$$ ] SGD 2,100 Accommodation NOC supports housing search. Stipend & awards Most",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-93b5a915b9",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "need to know before committing to Jakarta. Cost of living [ $ ] SGD940 a month Accommodation NOC supports housing search. Stipend & awards",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-d9959c4be8",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "know before committing to New York. Cost of living [ $$$ ] About SGD $2,800 a month Accommodation NOC supports housing search. Stipend & awards",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-f1a14e812d",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "to know before committing to Ho Chi Minh City. Cost of living [ $ ] SGD1,200 a month Accommodation NOC supports housing search. Stipend & awards",
+      "page": "details"
+    },
     {
       "id": "check-duration-0379b36244",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum",
       "title": "NUS Enterprise — program page",
       "excerpt": "22 01 / 01 Table 22.2: NOC Japan (Nagoya 6-month) for NOC AY2025/26 Sem 2 Intake and earlier",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-03c7239a1b",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "18 01 / 01 Table 11.2: NOC Vietnam (Hanoi 6-month) for NOC AY2025/26 Sem 2 Intake onwards",
       "page": "details"
     },
     {
@@ -34,10 +81,24 @@
       "page": "details"
     },
     {
+      "id": "check-duration-08eb80f3bb",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "/ 01 Table 11.1: NOC Vietnam (Ho Chi Minh City 6-month) for NOC AY2025/26 Sem 2 Intake onwards",
+      "page": "details"
+    },
+    {
       "id": "check-duration-0ad0efbb4c",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum",
       "title": "NUS Enterprise — program page",
       "excerpt": "/ 01 Table 10.2: NOC Greater Bay Area (Shenzhen 6-month) for NOC AY2025/26 Sem 1 Intake and earlier",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-12deffb9b8",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Indonesia (Bandung / Jakarta / Yogyakarta 6-month) for NOC AY2025/26 Sem 2 Intake onwards",
       "page": "details"
     },
     {
@@ -76,6 +137,13 @@
       "page": "details"
     },
     {
+      "id": "check-duration-1c162bd930",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "(Maximum) 36 01 / 01 Table 9.1: NOC Munich (12-month) for NOC AY2026/27 Sem 1 (Aug'26) Intake onwards",
+      "page": "details"
+    },
+    {
       "id": "check-duration-1f89707e7d",
       "url": "https://nusx.edu.sg/programmes/noc/application",
       "title": "NUS Enterprise — application page",
@@ -90,10 +158,24 @@
       "page": "details"
     },
     {
+      "id": "check-duration-224aa7269c",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "settings Curriculum details NOC Japan / Nagoya 3-month programme 6-month programme Curriculum Course",
+      "page": "details"
+    },
+    {
       "id": "check-duration-23563cd01d",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum",
       "title": "NUS Enterprise — program page",
       "excerpt": "details NOC Japan / Nagoya 3-month programme 6-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2594155a3e",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "details NOC USA / New York 3-month programme 6-month programme Curriculum Course code / Title",
       "page": "details"
     },
     {
@@ -111,10 +193,31 @@
       "page": "details"
     },
     {
+      "id": "check-duration-2ac0ac470d",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "to produce graduates who could work globally. 3 months in Ho Chi Minh City [ Be part of building a true",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2d3bb00396",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "details NOC Japan / Nagoya 3-month programme 6-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
       "id": "check-duration-2d847f8eb7",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum",
       "title": "NUS Enterprise — program page",
       "excerpt": "18 01 / 01 Table 11.2: NOC Vietnam (Hanoi 6-month) for NOC AY2025/26 Sem 2 Intake onwards",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2f22ecd6f4",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "focal area of NOC curriculum structure and NOC 6-month programme students are to complete 2 essential",
       "page": "details"
     },
     {
@@ -181,6 +284,13 @@
       "page": "details"
     },
     {
+      "id": "check-duration-4921db7991",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Curriculum details NOC Indonesia / Jakarta 6-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
       "id": "check-duration-4d55c0ee41",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum",
       "title": "NUS Enterprise — program page",
@@ -188,10 +298,31 @@
       "page": "details"
     },
     {
+      "id": "check-duration-514fa70ca5",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "/ 01 Table 11.3: NOC Vietnam (Ho Chi Minh City 6-month) for NOC AY2025/26 Sem 1 Intake and earlier",
+      "page": "details"
+    },
+    {
       "id": "check-duration-51f60d1a94",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum",
       "title": "NUS Enterprise — program page",
       "excerpt": "Valley 3-month programme 6-month programme 12-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-58805539cb",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "(Maximum) 20 01 / 01 Table 9.2: NOC Munich (6-month) for NOC AY2025/26 Sem 2 (Jan'26) Intake",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-5a2aef4a4a",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "22 01 / 01 Table 11.4: NOC Vietnam (Hanoi 6-month) for NOC AY2025/26 Sem 1 Intake and earlier",
       "page": "details"
     },
     {
@@ -230,6 +361,13 @@
       "page": "details"
     },
     {
+      "id": "check-duration-6bd8991fdd",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Indonesia (Bandung / Jakarta / Yogyakarta 6-month) for NOC AY2025/26 Sem 1 Intake and earlier",
+      "page": "details"
+    },
+    {
       "id": "check-duration-6d77736378",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum",
       "title": "NUS Enterprise — program page",
@@ -258,6 +396,13 @@
       "page": "details"
     },
     {
+      "id": "check-duration-79bbb8b270",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "settings Curriculum details NOC Germany / Munich 6-month programme 12-month programme Curriculum Course",
+      "page": "details"
+    },
+    {
       "id": "check-duration-7b2d9bdf44",
       "url": "https://nusx.edu.sg/programmes",
       "title": "NUS Enterprise — program page",
@@ -279,6 +424,13 @@
       "page": "details"
     },
     {
+      "id": "check-duration-86c76d0a68",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Indonesia (Bandung / Jakarta / Yogyakarta 3-month) for NOC AY2022/23 Special Term Intake onwards",
+      "page": "details"
+    },
+    {
       "id": "check-duration-86c8c87e4f",
       "url": "https://nusx.edu.sg/programmes/noc/application",
       "title": "NUS Enterprise — application page",
@@ -297,6 +449,13 @@
       "url": "https://nusx.edu.sg/programmes/noc/curriculum",
       "title": "NUS Enterprise — program page",
       "excerpt": "There are 2 durations of the NOC programme 12 month 2 NUS semesters up to 40 units 6 month 1 NUS",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-986ae42469",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "22 01 / 01 Table 22.2: NOC Japan (Nagoya 6-month) for NOC AY2025/26 Sem 2 Intake and earlier",
       "page": "details"
     },
     {
@@ -346,6 +505,27 @@
       "url": "https://nusx.edu.sg/programmes/noc/curriculum",
       "title": "NUS Enterprise — program page",
       "excerpt": "NOC Indonesia (Bandung / Jakarta / Yogyakarta 3-month) for NOC AY2022/23 Special Term Intake onwards",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ba6db52cd2",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "20 01 / 01 Table 22.1: NOC Japan (Nagoya 6-month) for NOC AY2026/27 Sem 1 Intake onwards",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-bebd70e625",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "details NOC Vietnam / Ho Chi Minh City 6-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c05383ac5e",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "settings Curriculum details NOC Vietnam / Hanoi 6-month programme Curriculum Course code / Title",
       "page": "details"
     },
     {
@@ -405,11 +585,25 @@
       "page": "details"
     },
     {
+      "id": "check-duration-e365407eba",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "settings Curriculum details NOC USA / New York 3-month programme 6-month programme Curriculum Course",
+      "page": "details"
+    },
+    {
       "id": "check-duration-e82e4dc443",
       "url": "https://nusx.edu.sg/programmes/noc/application",
       "title": "NUS Enterprise — application page",
       "excerpt": "12 Months – Overseas 6 Months – Overseas 6 Months – Singapore [01] Locations New York Shanghai",
       "page": "application"
+    },
+    {
+      "id": "check-duration-e9d62295fa",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "details NOC Germany / Munich 6-month programme 12-month programme Curriculum Course code / Title",
+      "page": "details"
     },
     {
       "id": "check-duration-f6c582ac59",
@@ -419,9 +613,30 @@
       "page": "details"
     },
     {
+      "id": "check-duration-ff1d898c8e",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "with. Being on the other side of the world for 6 months encouraged me to take risks, built my",
+      "page": "details"
+    },
+    {
       "id": "check-email-0bb0601fca",
       "url": "https://nusx.edu.sg/",
       "title": "NUS Enterprise — homepage",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-0d58b14552",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings",
+      "page": "details"
+    },
+    {
+      "id": "check-email-115a633da8",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "title": "NUS Enterprise — program page",
       "excerpt": "CONNECT@NUSX.EDU.SG",
       "page": "details"
     },
@@ -440,6 +655,13 @@
       "page": "details"
     },
     {
+      "id": "check-email-1883c6d4a2",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings",
+      "page": "details"
+    },
+    {
       "id": "check-email-199552942a",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
       "title": "NUS Enterprise — program page",
@@ -449,6 +671,13 @@
     {
       "id": "check-email-1f727b7422",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings",
+      "page": "details"
+    },
+    {
+      "id": "check-email-259083946f",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
       "title": "NUS Enterprise — program page",
       "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings",
       "page": "details"
@@ -473,13 +702,6 @@
       "title": "NUS Enterprise — application page",
       "excerpt": "CONNECT@NUSX.EDU.SG",
       "page": "application"
-    },
-    {
-      "id": "check-email-36cc04653f",
-      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
-      "title": "NUS Enterprise — program page",
-      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings NUSX",
-      "page": "details"
     },
     {
       "id": "check-email-3d6c8e7720",
@@ -538,6 +760,20 @@
       "page": "details"
     },
     {
+      "id": "check-email-7201059a71",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings",
+      "page": "details"
+    },
+    {
+      "id": "check-email-76112276ac",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings",
+      "page": "details"
+    },
+    {
       "id": "check-email-7ebd2e3628",
       "url": "https://nusx.edu.sg/iti",
       "title": "NUS Enterprise — program page",
@@ -552,6 +788,13 @@
       "page": "details"
     },
     {
+      "id": "check-email-8541e6ab06",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings",
+      "page": "details"
+    },
+    {
       "id": "check-email-8a5c3cc6df",
       "url": "https://nusx.edu.sg/about/leadership",
       "title": "NUS Enterprise — program page",
@@ -561,6 +804,13 @@
     {
       "id": "check-email-8f9377781b",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-91ac78250d",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
       "title": "NUS Enterprise — program page",
       "excerpt": "CONNECT@NUSX.EDU.SG",
       "page": "details"
@@ -594,10 +844,38 @@
       "page": "details"
     },
     {
+      "id": "check-email-b9b40e9b64",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-cd574c5aeb",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d2fbc115fd",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
       "id": "check-email-dea07c9aa0",
       "url": "https://nusx.edu.sg/programmes/noc-awards",
       "title": "NUS Enterprise — program page",
       "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings Awards",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e1a0be5da9",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
       "page": "details"
     },
     {
@@ -622,10 +900,10 @@
       "page": "details"
     },
     {
-      "id": "check-email-ff843193e6",
-      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "id": "check-format-57b41623ba",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
       "title": "NUS Enterprise — program page",
-      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "excerpt": "a new role every few months as the company grows. You take virtual NUS entrepreneurship classes, while working in a startup",
       "page": "details"
     },
     {
@@ -643,10 +921,10 @@
       "page": "application"
     },
     {
-      "id": "check-name-0690fa109b",
+      "id": "check-name-efc46febbd",
       "url": "https://nusx.edu.sg/",
       "title": "NUS Enterprise — homepage",
-      "excerpt": "Joe Rouse, Ambassador-at-Large, Start-ups Community, NUS Enterprise In conversation with… Joe Rouse B71 B71 FAQ The most",
+      "excerpt": "and ideas find a path to use and scale. NUSX was known as NUS Enterprise until September 2026. [2] What happened to NUS Enterprise?",
       "page": "details"
     },
     {
@@ -659,6 +937,27 @@
     {
       "id": "check-phone-0d34a13fb1",
       "url": "https://nusx.edu.sg/iti",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-1bd289b892",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-1bd702665e",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-2d2e91bbb4",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
       "title": "NUS Enterprise — program page",
       "excerpt": "+65 6516 7175",
       "page": "details"
@@ -727,8 +1026,29 @@
       "page": "details"
     },
     {
+      "id": "check-phone-c31ef14527",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
       "id": "check-phone-c60fd3cec3",
       "url": "https://nusx.edu.sg/partnerships",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c8d9a037e9",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-ca35f4bdff",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
       "title": "NUS Enterprise — program page",
       "excerpt": "+65 6516 7175",
       "page": "details"
@@ -748,13 +1068,6 @@
       "page": "details"
     },
     {
-      "id": "check-phone-e28a2a7de3",
-      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
-      "title": "NUS Enterprise — program page",
-      "excerpt": "+65 6516 7175",
-      "page": "details"
-    },
-    {
       "id": "check-portfolio-001c69feae",
       "url": "https://nusx.edu.sg/programmes/noc",
       "title": "NUS Enterprise — program page",
@@ -769,10 +1082,10 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-06d0b6ee93",
-      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "id": "check-portfolio-07007d2de5",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
       "title": "NUS Enterprise — program page",
-      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
       "page": "details"
     },
     {
@@ -832,8 +1145,29 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-1b2316a5a4",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-1f95985113",
       "url": "https://nusx.edu.sg/partnerships",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2021780a2d",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-27d88886db",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
       "title": "NUS Enterprise — program page",
       "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
       "page": "details"
@@ -853,6 +1187,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-2d37bea2d0",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-2d579bb0ea",
       "url": "https://nusx.edu.sg/",
       "title": "NUS Enterprise — homepage",
@@ -867,10 +1208,17 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-38fce18ae3",
-      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "id": "check-portfolio-36ff22acd1",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
       "title": "NUS Enterprise — program page",
-      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-38133c4b81",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
       "page": "details"
     },
     {
@@ -883,6 +1231,13 @@
     {
       "id": "check-portfolio-39b0e3d444",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3a46b34720",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
       "title": "NUS Enterprise — program page",
       "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
       "page": "details"
@@ -906,6 +1261,13 @@
       "url": "https://nusx.edu.sg/programmes/noc/locations",
       "title": "NUS Enterprise — program page",
       "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-42aeab386b",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
       "page": "details"
     },
     {
@@ -937,6 +1299,20 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-4dd33ee975",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4f592cb7ed",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-4fe249f1ba",
       "url": "https://nusx.edu.sg/programmes",
       "title": "NUS Enterprise — program page",
@@ -965,6 +1341,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-632fe60c76",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-647e374d44",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum",
       "title": "NUS Enterprise — program page",
@@ -972,10 +1355,24 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-64e291e53f",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-6661d4799e",
       "url": "https://nusx.edu.sg/partnerships",
       "title": "NUS Enterprise — program page",
       "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6bccdf0257",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
       "page": "details"
     },
     {
@@ -1004,13 +1401,6 @@
       "url": "https://nusx.edu.sg/programmes/noc/locations",
       "title": "NUS Enterprise — program page",
       "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-7499f9b5a2",
-      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
-      "title": "NUS Enterprise — program page",
-      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
       "page": "details"
     },
     {
@@ -1070,6 +1460,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-8ff11726fa",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-94623b7a43",
       "url": "https://nusx.edu.sg/programmes/grip",
       "title": "NUS Enterprise — program page",
@@ -1091,15 +1488,22 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-9d667b743e",
-      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "id": "check-portfolio-9b3a89c7ec",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
       "title": "NUS Enterprise — program page",
-      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
       "page": "details"
     },
     {
       "id": "check-portfolio-9e3e51cbf1",
       "url": "https://nusx.edu.sg/iti",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-aa89887b8f",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
       "title": "NUS Enterprise — program page",
       "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
       "page": "details"
@@ -1140,6 +1544,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-be85e98cb9",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-bf0d1748e7",
       "url": "https://nusx.edu.sg/about/leadership",
       "title": "NUS Enterprise — program page",
@@ -1154,10 +1565,38 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-c00b65f468",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c22b6104a8",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-c997c6be89",
       "url": "https://nusx.edu.sg/programmes",
       "title": "NUS Enterprise — program page",
       "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c9ceec7d9d",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ca22192b3d",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
       "page": "details"
     },
     {
@@ -1182,6 +1621,20 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-e6ec1772bb",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e9f0c04038",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-ed54ecb2e0",
       "url": "https://nusx.edu.sg/programmes/noc/locations",
       "title": "NUS Enterprise — program page",
@@ -1189,17 +1642,31 @@
       "page": "details"
     },
     {
+      "id": "check-route-00746a3599",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0a191ebf5e",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0f23cb7a73",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
       "id": "check-route-14ef50fc4c",
       "url": "https://nusx.edu.sg/about/leadership",
       "title": "NUS Enterprise — program page",
       "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
-      "page": "details"
-    },
-    {
-      "id": "check-route-1c2c31807f",
-      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
-      "title": "NUS Enterprise — program page",
-      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
       "page": "details"
     },
     {
@@ -1217,6 +1684,13 @@
       "page": "details"
     },
     {
+      "id": "check-route-2786fedc7f",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
       "id": "check-route-2d66948c8d",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum",
       "title": "NUS Enterprise — program page",
@@ -1231,8 +1705,22 @@
       "page": "details"
     },
     {
+      "id": "check-route-3eb26e793d",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
       "id": "check-route-412bf43114",
       "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5141aeed29",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
       "title": "NUS Enterprise — program page",
       "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
       "page": "details"
@@ -1242,6 +1730,20 @@
       "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
       "title": "NUS Enterprise — program page",
       "excerpt": "apply to NOC (opens in a new tab) → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5dfa3542f2",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply now → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6f090b15d7",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
       "page": "details"
     },
     {
@@ -1266,6 +1768,13 @@
       "page": "details"
     },
     {
+      "id": "check-route-7e61451097",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply now → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
       "id": "check-route-818b19632c",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
       "title": "NUS Enterprise — program page",
@@ -1280,6 +1789,13 @@
       "page": "details"
     },
     {
+      "id": "check-route-8e3402e601",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply now → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
       "id": "check-route-9526ef8d2f",
       "url": "https://nusx.edu.sg/programmes/noc",
       "title": "NUS Enterprise — program page",
@@ -1289,6 +1805,13 @@
     {
       "id": "check-route-96ec462fe0",
       "url": "https://nusx.edu.sg/about",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-984539ee43",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
       "title": "NUS Enterprise — program page",
       "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
       "page": "details"
@@ -1322,10 +1845,31 @@
       "page": "details"
     },
     {
+      "id": "check-route-b367b57ef1",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b8266206ad",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply now → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
       "id": "check-route-bafa1027bb",
       "url": "https://nusx.edu.sg/about/leadership",
       "title": "NUS Enterprise — program page",
       "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c453647c66",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply now → https://nusx.edu.sg/programmes/noc/application",
       "page": "details"
     },
     {
@@ -1343,13 +1887,6 @@
       "page": "details"
     },
     {
-      "id": "check-route-c91b038cac",
-      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
-      "title": "NUS Enterprise — program page",
-      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
-      "page": "details"
-    },
-    {
       "id": "check-route-ca311fa5e5",
       "url": "https://nusx.edu.sg/programmes/noc",
       "title": "NUS Enterprise — program page",
@@ -1361,6 +1898,20 @@
       "url": "https://nusx.edu.sg/",
       "title": "NUS Enterprise — homepage",
       "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cd6186fb3f",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d3e38d9283",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
       "page": "details"
     },
     {
@@ -1406,8 +1957,22 @@
       "page": "details"
     },
     {
+      "id": "check-route-e0e62d1c76",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply now → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
       "id": "check-route-e28afae9e3",
       "url": "https://nusx.edu.sg/programmes/noc/locations",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e46a866ccb",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
       "title": "NUS Enterprise — program page",
       "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
       "page": "details"
@@ -1435,10 +2000,130 @@
       "excerpt": "NUSX — Where deep tech grows Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in motion. Learn more → ITI Overview Start with the problem [ Research Impact ] For"
     },
     {
+      "id": "check-page-1d5691b908",
+      "url": "https://nusx.edu.sg/",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-d30c21020e",
+      "url": "https://nusx.edu.sg/",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-33d1b546d8",
+      "url": "https://nusx.edu.sg/",
+      "page": "details",
+      "excerpt": "For Founders Our programmes < drag me > Flagship event Asia's deep-tech showcase."
+    },
+    {
+      "id": "check-page-b4c17e3977",
+      "url": "https://nusx.edu.sg/",
+      "page": "details",
+      "excerpt": "Three days where the founders, investors, and operators building Asia's next category-defining ventures gather in Singapore."
+    },
+    {
+      "id": "check-page-f304078c02",
+      "url": "https://nusx.edu.sg/",
+      "page": "details",
+      "excerpt": "Demo pitches from NUS-linked startups, deep-tech showcases across AI, biotech, climate, and hardware, and curated investor briefings — all under one roof."
+    },
+    {
+      "id": "check-page-3ce277494d",
+      "url": "https://nusx.edu.sg/",
+      "page": "details",
+      "excerpt": "AI / Biotech / Climate / Hardware / Deep tech A5X When 24–25 Sep Where Singapore Who Founders, investors, operators See the line-up (opens in a new tab) Learn more (opens in a new tab) Mission Research does not reach the market alone."
+    },
+    {
+      "id": "check-page-5591c5e41c",
+      "url": "https://nusx.edu.sg/",
+      "page": "details",
+      "excerpt": "NUSX unites capital, talent, and partnerships across four deep-tech focus areas, selected for their scientific strength at NUS, market momentum, and significance to Singapore's future resilience."
+    },
+    {
+      "id": "check-page-6cb9cab88c",
+      "url": "https://nusx.edu.sg/",
+      "page": "details",
+      "excerpt": "Materials Semiconductors Physical sciences Matter The hard science of what things are made of."
+    },
+    {
+      "id": "check-page-09f6d32cce",
+      "url": "https://nusx.edu.sg/",
+      "page": "details",
+      "excerpt": "New materials, advanced manufacturing, and the chips that everything relies on."
+    },
+    {
+      "id": "check-page-031a14266f",
+      "url": "https://nusx.edu.sg/",
+      "page": "details",
+      "excerpt": "AI Software Data Logic The intelligence layer of the modern economy."
+    },
+    {
+      "id": "check-page-0bb5b68c8a",
+      "url": "https://nusx.edu.sg/",
+      "page": "details",
+      "excerpt": "AI, software, and data systems that turn research and operations into products people can use."
+    },
+    {
+      "id": "check-page-9b60bf028d",
+      "url": "https://nusx.edu.sg/",
+      "page": "details",
+      "excerpt": "Healthcare Biotech Medtech Pulse The life sciences engine defining global health."
+    },
+    {
       "id": "check-page-1d99cfe50e",
       "url": "https://nusx.edu.sg/programmes/noc/application",
       "page": "application",
       "excerpt": "Apply to NOC Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in"
+    },
+    {
+      "id": "check-page-b3c05fa72f",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "page": "application",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-02dc8c0191",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "page": "application",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-7949011bbb",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "page": "application",
+      "excerpt": "You’re applying for a NOC China location and previously held Chinese nationality or hold a Chinese hukou (戶口)."
+    },
+    {
+      "id": "check-page-32963640f6",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "page": "application",
+      "excerpt": "You’re a SoC or CEG student who hasn’t completed CS2103, IS2103, BT2101, CS2113, CS2103T, CS2113T, or IS2108 by point of departure (not applicable to NOC Singapore)."
+    },
+    {
+      "id": "check-page-f71f674d7a",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "page": "application",
+      "excerpt": "Industrial Attachment, internship courses, or Final Year Project may be fulfilled via NOC — subject to NOC and faculty approval [07] Year 1 students Not eligible — but you can join the Friends of NOC network [08] China-location nationality rules If you previously held Chinese nationality or hold a hukou, you can't apply for any NOC China location."
+    },
+    {
+      "id": "check-page-eb4c7cfe8d",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "page": "application",
+      "excerpt": "Current Chinese nationals: Shenzhen is open to you [01] Locations Singapore [02] Intakes January and August [03] Who can apply NUS undergraduates only (full-time) [04] Units required At least 40 units at the start of the internship [05] Semesters completed 2 semesters at NUS [06] Counts as IA / FYP?"
+    },
+    {
+      "id": "check-page-8aa8b42685",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "page": "application",
+      "excerpt": "Read more 02 Faculty prerequisite courses SoC and CEG students must have completed one of: CS2103, IS2103, BT2101, CS2113, CS2103T, CS2113T, IS2108 by the point of departure. [Note] Not applicable for NOC Singapore."
+    },
+    {
+      "id": "check-page-005394302e",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "page": "application",
+      "excerpt": "Apply via myEduRec (opens in a new tab) Step 01 Log in to myEduRec Step 02 Go to Academics → Global Education → External Study Application Step 03 Search Ext."
     },
     {
       "id": "check-page-ba4c244213",
@@ -1447,10 +2132,154 @@
       "excerpt": "About Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in motion. Learn more → ITI Overview Start with the problem [ Research Impact ] For Researchers Test the opportunity"
     },
     {
+      "id": "check-page-13b8ad8080",
+      "url": "https://nusx.edu.sg/about",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-9b2b614784",
+      "url": "https://nusx.edu.sg/about",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-df18e926c8",
+      "url": "https://nusx.edu.sg/about",
+      "page": "details",
+      "excerpt": "It later evolved into NUS Enterprise, sparking a wave of innovation in Siingapore."
+    },
+    {
+      "id": "check-page-e529b61752",
+      "url": "https://nusx.edu.sg/about",
+      "page": "details",
+      "excerpt": "The first 14 went to work in Silicon Valley in 2002 through NUS Overseas Colleges (NOC)."
+    },
+    {
+      "id": "check-page-57dd2c48a6",
+      "url": "https://nusx.edu.sg/about",
+      "page": "details",
+      "excerpt": "2010 & 2014 From NUS Enterprise to global acquisitions: mobile security startup tenCube was acquired by McAfee for over US$10 million, live chat startup Zopim was acquired by Zendesk for about US$30 million."
+    },
+    {
+      "id": "check-page-1a773756e7",
+      "url": "https://nusx.edu.sg/about",
+      "page": "details",
+      "excerpt": "It has since incubated 1,600+ startups across Singapore, Asia, and the US."
+    },
+    {
+      "id": "check-page-0933162226",
+      "url": "https://nusx.edu.sg/about",
+      "page": "details",
+      "excerpt": "2018 A joint initiative with the Maritime Port Authority of Singapore, PIER71 launches to accelerate Singapore's maritime innovation ecosystem."
+    },
+    {
+      "id": "check-page-0b57794792",
+      "url": "https://nusx.edu.sg/about",
+      "page": "details",
+      "excerpt": "2021 Patsnap becomes the first NUS-supported unicorn, co-founded by NOC alumni Jeffrey Tiong and Guan Dian, with expansion into China through BLOCK71 Suzhou."
+    },
+    {
+      "id": "check-page-2938f6686d",
+      "url": "https://nusx.edu.sg/about",
+      "page": "details",
+      "excerpt": "2023 A joint initiative with the Cyber Security Agency of Singapore, CyberSG Talent, Innovation and Growth Collaboration Centre launches to strengthen Singapore’s position as a global cybersecurity innovation hub."
+    },
+    {
+      "id": "check-page-7caed906dd",
+      "url": "https://nusx.edu.sg/about",
+      "page": "details",
+      "excerpt": "2024 Opening of BLOCK71 Social Impact Hub, supporting innovative ventures driving social and environmental impact."
+    },
+    {
+      "id": "check-page-4c5bf22e35",
+      "url": "https://nusx.edu.sg/about",
+      "page": "details",
+      "excerpt": "Jul 2025 NUS launches Asia’s first university-led venture capital programme, committing S$150 million to accelerate high-potential technology start-ups."
+    },
+    {
+      "id": "check-page-e1d9c1480a",
+      "url": "https://nusx.edu.sg/about",
+      "page": "details",
+      "excerpt": "Sep 2025 The revitalised i³ Building opens as a nexus for Singapore’s start-up ecosystem, featuring five floors of collaboration spaces, incubation hubs, and offices."
+    },
+    {
       "id": "check-page-91eb40d4a6",
       "url": "https://nusx.edu.sg/about/leadership",
       "page": "details",
       "excerpt": "Leadership Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in motion. Learn more → ITI Overview Start with the problem [ Research Impact ] For Researchers Test the"
+    },
+    {
+      "id": "check-page-386f3a4f92",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-5b4efa367b",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-fb1c85c9a4",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "page": "details",
+      "excerpt": "Read story → Leadership Led by people who have built From Gojek, Sequoia, NUS Medicine, McKinsey, Carousell, and the labs that built Singapore's first deep-tech generation."
+    },
+    {
+      "id": "check-page-e052e2b425",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "page": "details",
+      "excerpt": "Their expertise covers strategy, policy, ecosystem building, technology transfer, research design, as well as technological and defence innovation."
+    },
+    {
+      "id": "check-page-257bd712a7",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "page": "details",
+      "excerpt": "The majority of leadership has held posts outside the university, building companies, developing commercial deep-tech products, or overseeing entire defence policies."
+    },
+    {
+      "id": "check-page-7d2e94f908",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "page": "details",
+      "excerpt": "Senior Vice President / Innovation & Enterprise Dr Tan Sian Wee Leads NUSX and the broader Innovation & Enterprise function at NUS."
+    },
+    {
+      "id": "check-page-664f12845f",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "page": "details",
+      "excerpt": "Sets the strategic direction for the venture engine, deep-tech tracks, and university-industry interface."
+    },
+    {
+      "id": "check-page-0d374f4cc8",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "page": "details",
+      "excerpt": "Her key areas of focus are to grow the value of the NUS IP portfolio and to develop entrepreneurial talent for Singapore and beyond."
+    },
+    {
+      "id": "check-page-902c5b521e",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "page": "details",
+      "excerpt": "Professor of Practice for Defence Innovation & Applications Professor Gary Ang Prof Gary Ang plays a pivotal role at NUSX, where he bridges cutting-edge research with market-driven solutions to tackle complex global defence challenges."
+    },
+    {
+      "id": "check-page-fb75731ca5",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "page": "details",
+      "excerpt": "Xora Innovation AI Advisor Ajey Gore Advises NUSX on AI strategy, technical architecture, and the AI-native digital platform."
+    },
+    {
+      "id": "check-page-79dcb38882",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "page": "details",
+      "excerpt": "Scaled Southeast Asia's largest super-app from regional startup to public company."
+    },
+    {
+      "id": "check-page-d22e3b4018",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "page": "details",
+      "excerpt": "Gojek (ex-CTO) Sequoia (Operating Partner) PeakXV (Operating Partner) Advisor Dr Patrick Ennis Renowned for his pivotal roles in building deep tech enterprises and nurturing global collaborations, he provides strategic guidance on research translation, venture investment, and international engagement."
     },
     {
       "id": "check-page-a62a7f2edf",
@@ -1459,10 +2288,22 @@
       "excerpt": "Idea To Impact Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in motion. Learn more → ITI Overview Start with the problem [ Research Impact ] For Researchers Test the"
     },
     {
-      "id": "check-page-428d7a1038",
-      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "id": "check-page-370cb5faa2",
+      "url": "https://nusx.edu.sg/iti",
       "page": "details",
-      "excerpt": "First-of-its-kind Venture Capital Programme in Asia launches as NUS commits S$150 million to boost growth of deep tech start-ups Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures"
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-4484474bb4",
+      "url": "https://nusx.edu.sg/iti",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-d906362051",
+      "url": "https://nusx.edu.sg/iti",
+      "page": "details",
+      "excerpt": "We'll help you work it out, from IP protection and translational funding to licensing, partnerships and venture building."
     },
     {
       "id": "check-page-0813accdff",
@@ -1471,10 +2312,124 @@
       "excerpt": "Partnerships Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in motion. Learn more → ITI Overview Start with the problem [ Research Impact ] For Researchers Test the"
     },
     {
+      "id": "check-page-732ebdb43c",
+      "url": "https://nusx.edu.sg/partnerships",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-77f00eba9a",
+      "url": "https://nusx.edu.sg/partnerships",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-7f011a0366",
+      "url": "https://nusx.edu.sg/partnerships",
+      "page": "details",
+      "excerpt": "01 / Innovation Partner For corporates that want to build alongside NUS startups instead of watching from outside."
+    },
+    {
+      "id": "check-page-98d6cd2fac",
+      "url": "https://nusx.edu.sg/partnerships",
+      "page": "details",
+      "excerpt": "Embed your team in the founder community, run challenges against your real problems, and see venture-stage solutions before the market does."
+    },
+    {
+      "id": "check-page-3ef8d824d2",
+      "url": "https://nusx.edu.sg/partnerships",
+      "page": "details",
+      "excerpt": "Explore more 03 / Ecosystem Partner For corporates putting down long-term roots in Singapore."
+    },
+    {
+      "id": "check-page-fa1435801e",
+      "url": "https://nusx.edu.sg/partnerships",
+      "page": "details",
+      "excerpt": "Talk to the team about gifting → What it supports Research funds, scholarships, and lab resources Naming, recognition, and donor events Annual impact reporting Case studies See the impact of our previous partnerships See our work Sponsored Accelerator Microsoft AI Accelerate 26 ventures in the 2025 cohort, 150 more routed to grant funding."
+    },
+    {
+      "id": "check-page-6d663713f7",
+      "url": "https://nusx.edu.sg/partnerships",
+      "page": "details",
+      "excerpt": "Sponsored Challenge Boeing BUILD Singapore Nearly 100 applications, three teams funded."
+    },
+    {
+      "id": "check-page-b9cf323ab0",
+      "url": "https://nusx.edu.sg/partnerships",
+      "page": "details",
+      "excerpt": "Sponsored Accelerator DeepSAGE S$1.5M to three ventures at the first Demo Day."
+    },
+    {
+      "id": "check-page-58c2127e99",
+      "url": "https://nusx.edu.sg/partnerships",
+      "page": "details",
+      "excerpt": "Walk through B71, sit in on a demo day, and meet researchers turning lab work into companies."
+    },
+    {
       "id": "check-page-26ccf7f5c2",
       "url": "https://nusx.edu.sg/programmes",
       "page": "details",
       "excerpt": "Programmes — NUSX Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in motion. Learn more → ITI Overview Start with the problem [ Research Impact ] For Researchers Test the"
+    },
+    {
+      "id": "check-page-6500fe409d",
+      "url": "https://nusx.edu.sg/programmes",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-71e02f57aa",
+      "url": "https://nusx.edu.sg/programmes",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-ea3b43c5df",
+      "url": "https://nusx.edu.sg/programmes",
+      "page": "details",
+      "excerpt": "Silicon Valley, Stockholm, Shanghai, and beyond."
+    },
+    {
+      "id": "check-page-792b950045",
+      "url": "https://nusx.edu.sg/programmes",
+      "page": "details",
+      "excerpt": "Flagship 12 months Learn more Summer Programme in Entrepreneurship A summer in Singapore, learning to bring startups to life from idea, to pitch, to market."
+    },
+    {
+      "id": "check-page-f5ad478911",
+      "url": "https://nusx.edu.sg/programmes",
+      "page": "details",
+      "excerpt": "Providing access to mentorship, and access to networks that open doors for growth and capital."
+    },
+    {
+      "id": "check-page-bbca67ebac",
+      "url": "https://nusx.edu.sg/programmes",
+      "page": "details",
+      "excerpt": "The experience ultimately empowered me to take the leap and build a biotech startup of my own."
+    },
+    {
+      "id": "check-page-08e9897063",
+      "url": "https://nusx.edu.sg/programmes",
+      "page": "details",
+      "excerpt": "Immanuella Indradjaja NOC Silicon Valley Alumna | 2024 FAQ The most common questions before applying [1] Does NOC count toward my degree?"
+    },
+    {
+      "id": "check-page-4292743e43",
+      "url": "https://nusx.edu.sg/programmes",
+      "page": "details",
+      "excerpt": "The startup internship and entrepreneurship courses earn NUS units; most students clear them as unrestricted electives, and Engineering and Computing students can apply some toward major requirements with faculty approval. [2] Can I apply if I'm in Year 4?"
+    },
+    {
+      "id": "check-page-4ab4dabd4e",
+      "url": "https://nusx.edu.sg/programmes",
+      "page": "details",
+      "excerpt": "Partner-university courses are taught in English and host startups take on international interns in English, so cities like Shanghai and Stockholm are open to you without the local language."
+    },
+    {
+      "id": "check-page-5855872db6",
+      "url": "https://nusx.edu.sg/programmes",
+      "page": "details",
+      "excerpt": "We'll help you map your goals to the right path — programme, accelerator, or something in between."
     },
     {
       "id": "check-page-bfedf29d18",
@@ -1483,10 +2438,106 @@
       "excerpt": "GRIP: Graduate Research Innovation Programme Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in motion. Learn more → ITI Overview Start with the problem [ Research Impact"
     },
     {
+      "id": "check-page-35c417ed0e",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-d128993173",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-5b6e5db03b",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "page": "details",
+      "excerpt": "GRIP pairs a structured curriculum with mentorship."
+    },
+    {
+      "id": "check-page-a8e5edf49b",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "page": "details",
+      "excerpt": "Apply to GRIP (opens in a new tab) Outcomes Track record at a glance 400+ Startups incubated 160 University spin-offs $91M Funding catalysed What GRIP is Research to venture, in twelve months GRIP takes researchers from across Singapore’s universities and research institutes and builds them into founders."
+    },
+    {
+      "id": "check-page-c6aa9d3ee4",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "page": "details",
+      "excerpt": "01 Funding The programme backs teams with early-stage funding to incorporate and start building."
+    },
+    {
+      "id": "check-page-9fe27985eb",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "page": "details",
+      "excerpt": "At Lift-Off Day, teams pitch into a network of more than 500 investors: VCs, corporates, and government partners."
+    },
+    {
+      "id": "check-page-e618399ba9",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "page": "details",
+      "excerpt": "Incubation scales the company."
+    },
+    {
+      "id": "check-page-fdc104f561",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "page": "details",
+      "excerpt": "03 Mentorship Mentors are deep-tech founders who have built and scaled their own companies."
+    },
+    {
+      "id": "check-page-135fdb2482",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "page": "details",
+      "excerpt": "NUSX Platform ScaleX Foundry (SXF) Where hardware and deep tech teams get their products ready to bring to market."
+    },
+    {
+      "id": "check-page-3f876751c5",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "page": "details",
+      "excerpt": "NUSX Programme MSc in Venture Creation A graduate degree built around bringing a deep tech venture to life, leveraging research from NUS."
+    },
+    {
       "id": "check-page-460add1edc",
       "url": "https://nusx.edu.sg/programmes/noc",
       "page": "details",
       "excerpt": "NOC Overview — NUS Overseas Colleges Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back"
+    },
+    {
+      "id": "check-page-a2e94dcdfc",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-7ad0ebb7a6",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-a2e2cd83b0",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "page": "details",
+      "excerpt": "13+ locations Stanford University Silicon Valley Full Year New York New York Full Year Fudan University Shanghai Full Year Technical University of Munich Munich Full Year How NOC began From a 2001 handshake at Stanford to 10+ colleges across four continents."
+    },
+    {
+      "id": "check-page-d413a5d8f2",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "page": "details",
+      "excerpt": "NOC Silicon Valley • 2012 Lucas Ngoo Co-founder, Cortex AI Founder AI NOC Silicon valley • 2024 Immanuella Indradjaja Co-founder, MenSC Labs Founder Biotech NOC Paris • 2023 Eugene Chia Co-founder, Ecovolt Founder Energy NOC Philadelphia • 2005 Jeffrey Tiong Co-founder, Patsnap Founder IP Check back soon · NOC AY27/28 Sem 1 — Dec 2027 Intake Applications are closed."
+    },
+    {
+      "id": "check-page-fd532deda0",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "page": "details",
+      "excerpt": "The startup internship and entrepreneurship courses earn NUS units; most students clear them as unrestricted electives, and Engineering and Computing students can apply some toward major requirements with faculty approval. [3] What does it cost?"
+    },
+    {
+      "id": "check-page-cccaed2300",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "page": "details",
+      "excerpt": "Partner-university courses are taught in English and host startups take on international interns in English, so cities like Shanghai and Stockholm are open to you without the local language."
     },
     {
       "id": "check-page-33aa0f9251",
@@ -1495,10 +2546,154 @@
       "excerpt": "NOC Awards & Scholarships Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures"
     },
     {
+      "id": "check-page-a8fc9317ac",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-7f3ef41acb",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-5977c09cc7",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "page": "details",
+      "excerpt": "Read story → AWARDS AND SCHOLARSHIPS Financial Support for Your NOC Journey NOC offers various awards to help offset the costs of participating in the programme, including overseas living expenses, travel, tuition and project funding."
+    },
+    {
+      "id": "check-page-26b051b0db",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "page": "details",
+      "excerpt": "Explore the available awards and find out which ones you're eligible for."
+    },
+    {
+      "id": "check-page-c6d47ef79e",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "page": "details",
+      "excerpt": "Awards For current NOC students Class of 1976 Engineering Overseas Learning Assistance Grant Endowed by the NUS Engineering Class of 1976 to help financially-needy Engineering students embark on overseas NOC programmes."
+    },
+    {
+      "id": "check-page-e89bfacffd",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "page": "details",
+      "excerpt": "All locations excluding NOC Singapore Singapore Citizens / PRs Financial need Engineering students only How to apply Eligible NOC students will receive application instructions via their NUS email prior to the start of their internship."
+    },
+    {
+      "id": "check-page-7d84ea7f77",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "page": "details",
+      "excerpt": "Emerging Markets — SEA, LatAm, China, Israel Singapore Citizens / PRs NUS UG only How to apply Eligible NOC students will be notified via their NUS email prior to the start of their internship, with instructions on the application process."
+    },
+    {
+      "id": "check-page-6cbfe1c915",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "page": "details",
+      "excerpt": "NOC China only All nationalities Financial need How to apply Eligible NOC students will be notified via their NUS email prior to the start of their internship, with instructions on the application process."
+    },
+    {
+      "id": "check-page-1600b67d4b",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "page": "details",
+      "excerpt": "All locations excluding NOC Singapore All nationalities Financial need How to apply Eligible NOC students will be notified via their NUS email prior to the start of their internship, with instructions on the application process."
+    },
+    {
+      "id": "check-page-8dfb34b34b",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "page": "details",
+      "excerpt": "Foo Jixun (Managing Partner, GGV Capital) — supports tech-inclined NOC China students with funding and entrepreneurial activities."
+    },
+    {
+      "id": "check-page-fb5778b087",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "page": "details",
+      "excerpt": "NOC China — 12-month only All nationalities Tech-related companies How to apply Eligible NOC students will be notified via their NUS email prior to the start of their internship, with instructions on the application process."
+    },
+    {
+      "id": "check-page-4f14844ebe",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "page": "details",
+      "excerpt": "All locations Singapore Citizens / PRs CDE only Returnees only How to apply Email invitation sent to eligible CDE NOC returnees via NUS email."
+    },
+    {
       "id": "check-page-d870a539d2",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum",
       "page": "details",
       "excerpt": "NOC Curriculum Overview Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures"
+    },
+    {
+      "id": "check-page-9b16b75f57",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-dbdc90115c",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-0dda3772d9",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "page": "details",
+      "excerpt": "The NUS Overseas Colleges (NOC) internship places selected NUS students inside startups across more than 15 locations, including Silicon Valley, New York, Toronto-Waterloo, Shanghai, Shenzhen, Stockholm, Munich, Nagoya, Singapore, and Southeast Asia (Indonesia and Vietnam)."
+    },
+    {
+      "id": "check-page-756326e453",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "page": "details",
+      "excerpt": "Students intern full-time at high-growth startups in the world's leading hubs, while taking classes at universities like Stanford and the University of Toronto."
+    },
+    {
+      "id": "check-page-b18fc5b98f",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "page": "details",
+      "excerpt": "Faculty notes College of Design and Engineering (CDE) / School of Computing (SoC) If you study at CDE or SoC, you can apply to count your NOC internship courses toward your major requirements, as long as the internship is relevant to your major."
+    },
+    {
+      "id": "check-page-e02f0844a7",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "page": "details",
+      "excerpt": "Your faculty or department gives the approval, and this applies to internships from NOC AY2014/15 Sem 2 onwards."
+    },
+    {
+      "id": "check-page-d4a8bc24c0",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "page": "details",
+      "excerpt": "What is required Year-long: TR3201N/ETP3203L (8 units), TR3202N/ETP3201L (12 units) or ETP3206L (16 units), & TR3203N/E/P / ETP3202L/E/P (8 units) — up to 32 units Short: TR3204S/T / ETP3204S (4 units), and TR3202S/T / ETP3201S (12 units) — up to 16 units Students are to check with their faculty/department for updated mapping approval."
+    },
+    {
+      "id": "check-page-4e85f7f4fe",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "page": "details",
+      "excerpt": "Check BBA NOC mapping page → (opens in a new tab) Course Mapping and Academic Planning For course mapping enquiries, please refer to the relevant faculty or department facilitator."
+    },
+    {
+      "id": "check-page-29578e68ce",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "page": "details",
+      "excerpt": "View Faculty Facilitators (opens in a new tab) Download a sample academic roadmap to help plan your studies."
+    },
+    {
+      "id": "check-page-b957362d55",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "page": "details",
+      "excerpt": "Mapping or substitution of any NUS course with another course taken under NOC must be submitted to the respective faculty for consideration and approval."
+    },
+    {
+      "id": "check-page-5fcc5c18d9",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "page": "details",
+      "excerpt": "Back to table note Specific mapping or substitution of any NUS course with another course (taken under NOC) is to be submitted to the respective faculty, school or department for consideration and approval."
+    },
+    {
+      "id": "check-page-acee0d136a",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "page": "details",
+      "excerpt": "North America Europe Asia 12 locations Curriculum by location Click a location to open its curriculum tables, programme notes, and grade requirements in a side panel."
     },
     {
       "id": "check-page-94c6e96cbe",
@@ -1507,16 +2702,556 @@
       "excerpt": "Faculty Facilitators Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures"
     },
     {
+      "id": "check-page-5e2dbc7e59",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-288ae86bb3",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-7ef5e0296e",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
+      "page": "details",
+      "excerpt": "Read story → Faculty Facilitators Course Mapping Support Connect with the relevant faculty or department facilitator for guidance on course mapping."
+    },
+    {
       "id": "check-page-6c436a0a0b",
       "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
       "page": "details",
       "excerpt": "CDE/SoC Internship Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already"
     },
     {
+      "id": "check-page-d7f1ce711c",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-2f07062352",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-7099f2410d",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "page": "details",
+      "excerpt": "Seek approval from your faculty and/or department to use the courses collectively towards your major."
+    },
+    {
+      "id": "check-page-c8440881ce",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "page": "details",
+      "excerpt": "Your department may provide an alternative mapping. [Note] Check with your faculty or department for the latest approved mapping."
+    },
+    {
+      "id": "check-page-9fe7f72d04",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "page": "details",
+      "excerpt": "If the job is largely non-technical, and a student from a different faculty could just as easily perform the role, it won’t be suitable. check soc degree requirements (opens in a new tab) Plan Your Course Mapping Early."
+    },
+    {
+      "id": "check-page-210c9c6bcb",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "page": "details",
+      "excerpt": "Check course mapping requirements with your faculty or department early, and seek approval once you have secured your internship placement. apply to NOC (opens in a new tab) Get in touch with the NOC team Research, industry, and capital working as one."
+    },
+    {
       "id": "check-page-a04ecb338d",
       "url": "https://nusx.edu.sg/programmes/noc/locations",
       "page": "details",
       "excerpt": "NOC Locations — NUS Overseas Colleges Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or"
+    },
+    {
+      "id": "check-page-2376f395e6",
+      "url": "https://nusx.edu.sg/programmes/noc/locations",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-a1f497e16a",
+      "url": "https://nusx.edu.sg/programmes/noc/locations",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-220dc2ed1b",
+      "url": "https://nusx.edu.sg/programmes/noc/locations",
+      "page": "details",
+      "excerpt": "North America Europe Asia Check back soon · NOC AY27/28 Sem 1 — Dec 2027 Intake Applications close 23 September 2026 Applications closed Pick your locations from the application form — you can rank up to three."
+    },
+    {
+      "id": "check-page-538b7de64d",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "page": "details",
+      "excerpt": "NOC Hanoi Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in"
+    },
+    {
+      "id": "check-page-362e7d80b4",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-f026d202e0",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-874696491b",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "page": "details",
+      "excerpt": "Read story → Locations / Southeast Asia Vietnam Spend three or six months inside a Hanoi startup while taking entrepreneurship classes."
+    },
+    {
+      "id": "check-page-944d87238d",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "page": "details",
+      "excerpt": "Vietnam is now the world's second largest exporter of smartphones."
+    },
+    {
+      "id": "check-page-82b6f0bb74",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "page": "details",
+      "excerpt": "Most of them are made in Bac Ninh and Thai Nguyen, forty minutes from the centre of Hanoi, and the engineering, finance and logistics that hold it together run out of the city."
+    },
+    {
+      "id": "check-page-61485aa2d1",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "page": "details",
+      "excerpt": "FPT is headquartered here and writes software for Fortune 500 companies."
+    },
+    {
+      "id": "check-page-0cb2c5d61d",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "page": "details",
+      "excerpt": "The country turns out around fifty thousand computing graduates a year and they are almost all young, because most of Vietnam is."
+    },
+    {
+      "id": "check-page-2e8391e990",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "page": "details",
+      "excerpt": "Vietnam's technology industry is roughly twenty years old and still taking shape."
+    },
+    {
+      "id": "check-page-f2190705f3",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "page": "details",
+      "excerpt": "Vietnam trains around fifty thousand computing graduates every year, and a large share of them come through this city."
+    },
+    {
+      "id": "check-page-402e874d0b",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "page": "details",
+      "excerpt": "Stipend & awards Most students receive an internship stipend from their host company."
+    },
+    {
+      "id": "check-page-5b58c5de34",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "page": "details",
+      "excerpt": "NOC awards available via Awards & Scholarships Visa Vietnamese student visa."
+    },
+    {
+      "id": "check-page-d0835bd9cc",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hanoi/",
+      "page": "details",
+      "excerpt": "NOC covers the full application cost Language English Vietnamese Climate Subtropical Dry Winters Time zone UTC +7 Getting around Motorbikes, buses, and a growing metro Mentorship Six-month students get start-up mentorship."
+    },
+    {
+      "id": "check-page-0a3fae31ad",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "page": "details",
+      "excerpt": "NOC Ho Chi Minh City Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures"
+    },
+    {
+      "id": "check-page-d908e7afbb",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-99b0245c5a",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-c043439118",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "page": "details",
+      "excerpt": "Read story → Locations / Southeast Asia Ho Chi Minh City Spend three or six months inside a Ho Chi Minh City startup while taking a course at VNU-HCM International University."
+    },
+    {
+      "id": "check-page-d0106f0fb7",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "page": "details",
+      "excerpt": "Every company Vietnam is known for started here."
+    },
+    {
+      "id": "check-page-83c5ef2bcb",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "page": "details",
+      "excerpt": "Vietnam has three technology companies worth over a billion dollars and all three were founded here."
+    },
+    {
+      "id": "check-page-073a6be3d0",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "page": "details",
+      "excerpt": "Half of Vietnam's startups are in this city, along with more than a hundred venture funds."
+    },
+    {
+      "id": "check-page-387cdd97ef",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "page": "details",
+      "excerpt": "Vietnam has 100m people and half the startups are here."
+    },
+    {
+      "id": "check-page-cb7ae232ab",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "page": "details",
+      "excerpt": "This is the only public university in Vietnam that teaches everything in English."
+    },
+    {
+      "id": "check-page-873d9950df",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "page": "details",
+      "excerpt": "3 months in Ho Chi Minh City [ Be part of building a true digital revolution ] What our students say “ Being part of the NOC Silicon Valley program was truly an enriching experience for me."
+    },
+    {
+      "id": "check-page-f56619a405",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "page": "details",
+      "excerpt": "It provided the perfect environment to immerse myself in the fast-paced world of startups, where I had the chance to work at an AI startup surrounded by some of the most innovative minds in the industry."
+    },
+    {
+      "id": "check-page-aef89c4a3a",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "page": "details",
+      "excerpt": "Lee Jun Liang NOC Silicon Valley Alumnus | Aug 2023 Intake NUS Business School | BBA Practical info The things you'll need to know before committing to Ho Chi Minh City."
+    },
+    {
+      "id": "check-page-eef54cabaf",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/hochiminhcity/",
+      "page": "details",
+      "excerpt": "Stipend & awards Most students receive an internship stipend from their host company."
+    },
+    {
+      "id": "check-page-63d93b95f7",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "page": "details",
+      "excerpt": "NOC Jakarta Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in"
+    },
+    {
+      "id": "check-page-58447a1f8e",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-b8f3120397",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-824962227b",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "page": "details",
+      "excerpt": "Read story → Locations / Southeast Asia Jakarta Spend three or six months inside a Jakarta startup while taking a course at a local partner university."
+    },
+    {
+      "id": "check-page-3b1ae00ba5",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "page": "details",
+      "excerpt": "Apply now Partner uni Universitas Indonesia Format Short 6mo Intake January August Audience Undergraduates only Ecosystem Emerging markets Cohort size ~25 students per intake About Jakarta Rearrange your view of normal."
+    },
+    {
+      "id": "check-page-46faf7b511",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "page": "details",
+      "excerpt": "Indonesia has 275 million people spread across seventeen thousand islands, which makes almost every Western business model useless on arrival."
+    },
+    {
+      "id": "check-page-2792eba595",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "page": "details",
+      "excerpt": "Six-month students also get start-up mentorship for the duration of their internship."
+    },
+    {
+      "id": "check-page-9b36d3114c",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "page": "details",
+      "excerpt": "Partner university Universitas Indonesia You take a course on entrepreneurship at Universitas Indonesia part-time while the internship runs."
+    },
+    {
+      "id": "check-page-1388b20be3",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "page": "details",
+      "excerpt": "Universitas Indonesia started in 1849 as a school for training doctors and is the oldest university in the country."
+    },
+    {
+      "id": "check-page-6f586de820",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "page": "details",
+      "excerpt": "A term in Jakarta [ Solve problems that don’t have a template ] What our students say “ \"Joining NOC Indonesia has been one of the best decisions I’ve made in my NUS journey so far."
+    },
+    {
+      "id": "check-page-4ac6660076",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "page": "details",
+      "excerpt": "From hackathons and AI bootcamps to networking sessions with founders and industry leaders, the experience pushed me to step out of my comfort zone and learn in ways that go beyond the classroom.\" Jensen Kuok Thai Hock NOC Jakarta Alumnus | 2025 | College of Design and Engineering Practical info The things you'll need to know before committing to Jakarta."
+    },
+    {
+      "id": "check-page-9d1b6fce6e",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "page": "details",
+      "excerpt": "Stipend & awards Most students receive an internship stipend from their host company."
+    },
+    {
+      "id": "check-page-308cee73e6",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/jakarta/",
+      "page": "details",
+      "excerpt": "NOC awards available via Awards & Scholarships."
+    },
+    {
+      "id": "check-page-0908c126e6",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "page": "details",
+      "excerpt": "NOC Munich Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in"
+    },
+    {
+      "id": "check-page-4d753c4e48",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-2c28f1d50e",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-6af1217533",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "page": "details",
+      "excerpt": "Read story → Locations / Europe Munich Spend a year inside a Munich startup while taking a course at the Technical University of Munich."
+    },
+    {
+      "id": "check-page-c62cd2c53d",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "page": "details",
+      "excerpt": "The companies here build aircraft, semiconductors and medical devices, not apps."
+    },
+    {
+      "id": "check-page-0851907009",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "page": "details",
+      "excerpt": "Apply now Partner uni Technical University of Munich Format Full Year Intake August Audience Undergraduates only Ecosystem Deep tech Cohort size ~25 students per intake About Munich Rearrange your view of normal."
+    },
+    {
+      "id": "check-page-5d8b7b6993",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "page": "details",
+      "excerpt": "In Munich, the association is engineering."
+    },
+    {
+      "id": "check-page-154b0f186b",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "page": "details",
+      "excerpt": "The companies here are building electric aircraft, quantum simulation tools, energy pricing systems and medical devices."
+    },
+    {
+      "id": "check-page-0ba478521e",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "page": "details",
+      "excerpt": "Sitting in the same ecosystems Siemens, BMW and the machine-tool firms that have supplied Europe centuries."
+    },
+    {
+      "id": "check-page-163fe49159",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "page": "details",
+      "excerpt": "A deep tech company needs a decade and a factory, not a weekend and a landing page."
+    },
+    {
+      "id": "check-page-a59ea76776",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "page": "details",
+      "excerpt": "Wilson Lee built revenue forecasting at nextnano, a quantum simulation company."
+    },
+    {
+      "id": "check-page-0efba24911",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "page": "details",
+      "excerpt": "Karishma Thirumaran worked on AI at Erium."
+    },
+    {
+      "id": "check-page-fe9ec443fe",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/munich/",
+      "page": "details",
+      "excerpt": "Munich sits in the middle of Europe, and everything is a train ride away."
+    },
+    {
+      "id": "check-page-5fed606daf",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "page": "details",
+      "excerpt": "NOC Nagoya Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in"
+    },
+    {
+      "id": "check-page-f5df6de4d5",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-9ca17eacd7",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-28dc709013",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "page": "details",
+      "excerpt": "Apply now Partner uni Nagoya University Format Short 6mo Intake August January Audience Undergraduates and PhD’s Ecosystem Hardware Cohort size ~25 students per intake About Nagoya Rearrange your view of normal."
+    },
+    {
+      "id": "check-page-dbbfafe33a",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "page": "details",
+      "excerpt": "The Toyota Production System, built here after the war, is where lean manufacturing came from, and lean manufacturing is where the lean startup came from."
+    },
+    {
+      "id": "check-page-7cb3e7191d",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "page": "details",
+      "excerpt": "Now they are working directly with startups on artificial intelligence, sensors and connected machinery."
+    },
+    {
+      "id": "check-page-7f70d1507b",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "page": "details",
+      "excerpt": "NOC students have worked at a green-tech company printing circuit boards with metal inkjet, and at a venture fund backing companies across the Chubu region."
+    },
+    {
+      "id": "check-page-1f9a1447eb",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "page": "details",
+      "excerpt": "Learn how things get made Automotive, aviation and robotics all run out of this region."
+    },
+    {
+      "id": "check-page-59bf3756d0",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "page": "details",
+      "excerpt": "If you want to understand manufacturing at the level that actually matters to a hardware founder, this is where it is done best."
+    },
+    {
+      "id": "check-page-0f23cd0b8e",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "page": "details",
+      "excerpt": "Six Nobel laureates have come out of this university A term in Nagoya [ Experience the ecosystem that defined global manufacturing ] What our students say “ \"I’m incredibly grateful to have had the opportunity to intern in Japan as part of the NOC Japan Programme."
+    },
+    {
+      "id": "check-page-d742f3b700",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "page": "details",
+      "excerpt": "I had the chance to meet and interact with founders and engineers from all over the world, including people from San Francisco and even Singapore, which gave me valuable exposure to the global startup and tech scene and allowed me to build meaningful connections.\" \"I worked at a Venture Capital firm called MTG Ventures."
+    },
+    {
+      "id": "check-page-692f1ad094",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "page": "details",
+      "excerpt": "It is a venture capital subsidiary of MTG Inc, which sells famous health and well-being related products such as ReFa, RED and SIXPAD."
+    },
+    {
+      "id": "check-page-d4cf04a797",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/nagoya/",
+      "page": "details",
+      "excerpt": "It was an incredibly valuable experience for me as I managed to work in a completely Japanese setting for the first time in my life, and I learnt all about the promising world of Venture Capital in Japan through my colleagues who guided me through every single day of work."
+    },
+    {
+      "id": "check-page-ba94e0afeb",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "page": "details",
+      "excerpt": "NOC New York Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in"
+    },
+    {
+      "id": "check-page-46432116ca",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "page": "details",
+      "excerpt": "Take your research forward. → Content Hub Content Hub All content Events Media Room Videos Sparks In Conversation With… Professor Alberto Sangiovanni-Vincentelli Read story → About NUSX About Us Our People Get in touch Contact Us Where deep tech grows The interface between Singapore's research, its founders, and the capital that scales them."
+    },
+    {
+      "id": "check-page-16c42d445e",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "page": "details",
+      "excerpt": "Learn more → NOC Overview Locations Curriculum Overview Awards & Scholarships N-House Our alumni Application Get Started Programmes Overview Programmes NUS Overseas Colleges (NOC) Summer Programme GRIP MSc in Venture Creation ↗ Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges."
+    },
+    {
+      "id": "check-page-13999ec6c5",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "page": "details",
+      "excerpt": "Read story → Locations / North America New York Spend a year inside a New York-based startup while taking classes on entrepreneurship."
+    },
+    {
+      "id": "check-page-ab7363e141",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "page": "details",
+      "excerpt": "Apply now Format Full Year Intake August Audience Undergraduates only Ecosystem Fintech & media Cohort size ~25 students per intake About New York Rearrange your view of normal."
+    },
+    {
+      "id": "check-page-729b0bbcce",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "page": "details",
+      "excerpt": "Startups in New York serve the most demanding customers on the planet."
+    },
+    {
+      "id": "check-page-0cc9411cb7",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "page": "details",
+      "excerpt": "The customers here are banks founded before Singapore was, hospital systems employing tens of thousands, retailers, landlords, television networks."
+    },
+    {
+      "id": "check-page-7b873ff94a",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "page": "details",
+      "excerpt": "New York sits an hour from more universities than anywhere else."
+    },
+    {
+      "id": "check-page-f97577d27f",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "page": "details",
+      "excerpt": "Lessons here apply everywhere New York is home to one of the most competitive markets on the planet across virtually every industry."
+    },
+    {
+      "id": "check-page-bffcbdf88d",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "page": "details",
+      "excerpt": "Entrepreneurship Classes You take NUS classes virtually to learn the ropes to start a new venture while the internship runs Unparalleled exposure Exposure to the highest echelons of finance, fashion, media, property, healthcare, advertising, and retail are an everyday reality for startups in New York."
+    },
+    {
+      "id": "check-page-e48c2a66e2",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "page": "details",
+      "excerpt": "A term in New York [ Life in the world's most famous economic capital ] What our students say “ \"To literally put you in my shoes, networking with industry professionals in skyscrapers overlooking Times Square and dining with bond traders who moved volumes equivalent to the GDPs of small countries daily was just another day in my life..."
+    },
+    {
+      "id": "check-page-c5627dbb58",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "page": "details",
+      "excerpt": "The bustling capital of the world offered me experiences that permanently altered my world view.\" \"My NOC experience in New York was an incredible learning journey."
+    },
+    {
+      "id": "check-page-2dd4332fc3",
+      "url": "https://nusx.edu.sg/programmes/noc/locations/new-york/",
+      "page": "details",
+      "excerpt": "Outside of work, the city is almost waiting for you to go explore.\" Sean Spencer Manik NOC New York Alumnus | 2023 | School of Computing Carlota Pinker Rego NOC New York Alumna | 2023 | College of Design and Engineering Practical info The things you'll need to know before committing to New York."
     }
   ],
   "findings": {
@@ -1589,12 +3324,98 @@
       {
         "value": "in-person",
         "evidenceId": "check-format-7b44b2292c"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-57b41623ba"
       }
     ],
     "location": [],
     "selectivity": [],
-    "dealText": [],
-    "dealComponents": [],
+    "dealText": [
+      {
+        "value": "need to know before committing to Hanoi. Cost of living [ $ ] SGD $1,200 a month Accommodation NOC supports housing search. Stipend & awards",
+        "evidenceId": "check-deal-4841c7d603"
+      },
+      {
+        "value": "to know before committing to Ho Chi Minh City. Cost of living [ $ ] SGD1,200 a month Accommodation NOC supports housing search. Stipend & awards",
+        "evidenceId": "check-deal-f1a14e812d"
+      },
+      {
+        "value": "need to know before committing to Jakarta. Cost of living [ $ ] SGD940 a month Accommodation NOC supports housing search. Stipend & awards",
+        "evidenceId": "check-deal-93b5a915b9"
+      },
+      {
+        "value": "need to know before committing to Munich. Cost of living [ $$$ ] SGD 2,100 Accommodation NOC supports housing search. Stipend & awards Most",
+        "evidenceId": "check-deal-7e4a1784ee"
+      },
+      {
+        "value": "know before committing to New York. Cost of living [ $$$ ] About SGD $2,800 a month Accommodation NOC supports housing search. Stipend & awards",
+        "evidenceId": "check-deal-d9959c4be8"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1200",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-4841c7d603"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1200",
+          "currency": "SGD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-f1a14e812d"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "940",
+          "currency": "SGD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-93b5a915b9"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "2100",
+          "currency": "SGD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-7e4a1784ee"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "2800",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-d9959c4be8"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://nusx.edu.sg/startups",
@@ -1608,7 +3429,7 @@
     "name": [
       {
         "value": "NUS Enterprise",
-        "evidenceId": "check-name-0690fa109b"
+        "evidenceId": "check-name-efc46febbd"
       }
     ],
     "examplePages": []

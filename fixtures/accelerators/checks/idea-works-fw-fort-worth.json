@@ -1,53 +1,182 @@
 {
   "programId": "idea-works-fw-fort-worth",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "http://ideaworksfw.org/",
-    "https://ideaworksfw.org/about/",
-    "https://ideaworksfw.org/"
+    "https://ideaworksfw.org/",
+    "https://ideaworksfw.org/membership/",
+    "http://ideaworksfw.org/about/",
+    "https://ideaworksfw.org/about/"
   ],
   "evidence": [
     {
+      "id": "check-duration-e10b8172aa",
+      "url": "https://ideaworksfw.org/membership/",
+      "title": "IDEA Works FW (Fort Worth) — application page",
+      "excerpt": "$.03 b&w; and $.07 color copies $250 per month (6-month minimum) apply ReadMore IDEA Works FW 600 E",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-3cf1a23d5f",
+      "url": "http://ideaworksfw.org/about/",
+      "title": "IDEA Works FW (Fort Worth) — program page",
+      "excerpt": "817-569-6869",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-7bee624ba7",
+      "url": "https://ideaworksfw.org/membership/",
+      "title": "IDEA Works FW (Fort Worth) — application page",
+      "excerpt": "817-569-6869",
+      "page": "application"
+    },
+    {
       "id": "check-phone-a61ffac59d",
       "url": "https://ideaworksfw.org/about/",
-      "title": "IDEA Works FW (Fort Worth) — details page checked by scrape.py",
+      "title": "IDEA Works FW (Fort Worth) — program page",
       "excerpt": "817-569-6869",
       "page": "details"
     },
     {
       "id": "check-phone-c9ad39bb2a",
       "url": "https://ideaworksfw.org/",
-      "title": "IDEA Works FW (Fort Worth) — application page checked by scrape.py",
+      "title": "IDEA Works FW (Fort Worth) — application page",
       "excerpt": "817-569-6869",
       "page": "application"
     },
     {
       "id": "check-phone-fa79603249",
       "url": "http://ideaworksfw.org/",
-      "title": "IDEA Works FW (Fort Worth) — homepage checked by scrape.py",
+      "title": "IDEA Works FW (Fort Worth) — homepage",
       "excerpt": "817-569-6869",
       "page": "details"
     },
     {
-      "id": "check-route-58cf1d40af",
+      "id": "check-route-50ea132c66",
       "url": "http://ideaworksfw.org/",
-      "title": "IDEA Works FW (Fort Worth) — homepage checked by scrape.py",
-      "excerpt": "apply → https://ideaworksfw.org/#",
+      "title": "IDEA Works FW (Fort Worth) — homepage",
+      "excerpt": "apply → https://ideaworksfw.org/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9b54cad98a",
+      "url": "http://ideaworksfw.org/about/",
+      "title": "IDEA Works FW (Fort Worth) — program page",
+      "excerpt": "apply → https://ideaworksfw.org/about/",
       "page": "details"
     },
     {
       "id": "check-route-ab615889de",
       "url": "https://ideaworksfw.org/",
-      "title": "IDEA Works FW (Fort Worth) — application page checked by scrape.py",
+      "title": "IDEA Works FW (Fort Worth) — application page",
       "excerpt": "Apply Now → https://ideaworksfw.org/membership/",
       "page": "application"
     },
     {
       "id": "check-route-c51980a327",
       "url": "http://ideaworksfw.org/",
-      "title": "IDEA Works FW (Fort Worth) — homepage checked by scrape.py",
+      "title": "IDEA Works FW (Fort Worth) — homepage",
       "excerpt": "Apply Now → https://ideaworksfw.org/membership/",
       "page": "details"
+    },
+    {
+      "id": "check-route-dfadf81e25",
+      "url": "https://ideaworksfw.org/membership/",
+      "title": "IDEA Works FW (Fort Worth) — application page",
+      "excerpt": "apply → https://ideaworksfw.submittable.com/submit",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-66841ab4a0",
+      "url": "http://ideaworksfw.org/",
+      "page": "details",
+      "excerpt": "IDEA Works FW is a Multi-Industry Incubator in Fort Worth Start Small. THINK BIG. About Member Profiles Support The Cause Become A Member Contact Us menu ReadMore facebook twitter linkedin instagram youtube apply membership volunteer sponsorship Welcome to IDEA Works FW Our programs assist in entrepreneurial development, job creation and support innovation-driven operations in Fort Worth. Membership Benefits Coaching Mentoring Advisory Council Operations Support Growth Resources Transition Team In addition, IDEA Works FW memberships include facility usage, utilities, meeting spaces and access to entrepreneur support organizations, along with specific services and resources for stage one (2-9 employees) businesses. Subscribe to our mailing list Incubator Membership Dedicated Office Space Coaching, Mentorship, Advisors Mentoring & Coaching Apply Now Affiliate Membership Shared facility spaces Entrepreneur Roundtables Access to People and Events Apply Now Volunteer Opportunities Business Coaching Mentoring Advisory Council Apply Now Advisory Council Members ReadMore IDEA Works FW 600 E Rosedale St. Fort Worth, TX 76104 817-569-6869 TOP 2017 Marketing Tips for Small Business Tuesday, February 28 Entrepreneurial Journey with Brad Smith Thursday, May 12 Supported by IDEA Works is a public-private partnership, and we appreciate our supporters' commitment. ReadMore Privacy Policy Site"
+    },
+    {
+      "id": "check-page-05bbfc302a",
+      "url": "http://ideaworksfw.org/",
+      "page": "details",
+      "excerpt": "We use the GrowthWheel coaching system to evaluate your business and gain focus for your energy to make decisions that lead to action for improving your operations."
+    },
+    {
+      "id": "check-page-01593f35ce",
+      "url": "http://ideaworksfw.org/",
+      "page": "details",
+      "excerpt": "Mentoring All IDEA Works FW clients gain the opportunity to meet and connect with potential mentors from our community."
+    },
+    {
+      "id": "check-page-818f1716f1",
+      "url": "http://ideaworksfw.org/",
+      "page": "details",
+      "excerpt": "Comprised of established businesses in law, banking, marketing, sales, public relations, insurance, human resources, IT, and everything in between, the Advisory Council provides advice and counsel to IDEA Works FW members."
+    },
+    {
+      "id": "check-page-df0638e708",
+      "url": "http://ideaworksfw.org/",
+      "page": "details",
+      "excerpt": "Transition Team Prior to graduating out of the program, members tap into a transition team comprised of professionals in real estate, IT, furniture, and the other big questions you face as an owner exploring the options for a space for your business."
+    },
+    {
+      "id": "check-page-2c9cfc13fb",
+      "url": "https://ideaworksfw.org/",
+      "page": "application",
+      "excerpt": "IDEA Works FW is a Multi-Industry Incubator in Fort Worth Start Small. THINK BIG. About Member Profiles Support The Cause Become A Member Contact Us menu ReadMore facebook twitter linkedin instagram youtube apply membership volunteer sponsorship Welcome to IDEA Works FW Our programs assist in entrepreneurial development, job creation and support innovation-driven operations in Fort Worth. Membership Benefits Coaching Mentoring Advisory Council Operations Support Growth Resources Transition Team In addition, IDEA Works FW memberships include facility usage, utilities, meeting spaces and access to entrepreneur support organizations, along with specific services and resources for stage one (2-9 employees) businesses. Subscribe to our mailing list Incubator Membership Dedicated Office Space Coaching, Mentorship, Advisors Mentoring & Coaching Apply Now Affiliate Membership Shared facility spaces Entrepreneur Roundtables Access to People and Events Apply Now Volunteer Opportunities Business Coaching Mentoring Advisory Council Apply Now Advisory Council Members ReadMore IDEA Works FW 600 E Rosedale St. Fort Worth, TX 76104 817-569-6869 TOP 2017 Marketing Tips for Small Business Tuesday, February 28 Entrepreneurial Journey with Brad Smith Thursday, May 12 Supported by IDEA Works is a public-private partnership, and we appreciate our supporters' commitment. ReadMore Privacy Policy Site"
+    },
+    {
+      "id": "check-page-68f0cce0a2",
+      "url": "https://ideaworksfw.org/",
+      "page": "application",
+      "excerpt": "We use the GrowthWheel coaching system to evaluate your business and gain focus for your energy to make decisions that lead to action for improving your operations."
+    },
+    {
+      "id": "check-page-8864eccdd5",
+      "url": "https://ideaworksfw.org/",
+      "page": "application",
+      "excerpt": "Mentoring All IDEA Works FW clients gain the opportunity to meet and connect with potential mentors from our community."
+    },
+    {
+      "id": "check-page-8d900c810a",
+      "url": "https://ideaworksfw.org/",
+      "page": "application",
+      "excerpt": "Comprised of established businesses in law, banking, marketing, sales, public relations, insurance, human resources, IT, and everything in between, the Advisory Council provides advice and counsel to IDEA Works FW members."
+    },
+    {
+      "id": "check-page-04dcc46ebe",
+      "url": "https://ideaworksfw.org/",
+      "page": "application",
+      "excerpt": "Transition Team Prior to graduating out of the program, members tap into a transition team comprised of professionals in real estate, IT, furniture, and the other big questions you face as an owner exploring the options for a space for your business."
+    },
+    {
+      "id": "check-page-c96902819f",
+      "url": "https://ideaworksfw.org/membership/",
+      "page": "application",
+      "excerpt": "Mixed industry incubation and coworking options Start Small. THINK BIG. About Member Profiles Support The Cause Become A Member Contact Us menu ReadMore facebook twitter linkedin instagram youtube apply membership volunteer sponsorship Mixed-industry incubation and coworking options at IDEA Works FW Access Use of Conference Room Use of Event Room Phone System High Speed Internet Secured Network Planning Mentoring & Coaching Entrepreneurs-in-Residence Review Panel Sessions Business Promotion Guest Speakers & Topic Talks Storage Other Amenities Copies (b&w;, color) FEES Program Fee* * Click the apply link to get started. Incubation Member 24/7 Private Office at Below Market $/sq.ft. Rate 12 hrs./month 4 hrs./month Dedicated DID line Ethernet/wi-fi - 60mb up and down Separate Domain (Ethernet only) ½ Day Facilitated Annual Planning Session Extended Coaching Sessions, Access to Advisory Council & Mentor Program, Monthly Roundtables Available as needed 90-minute Quarterly Review Page on IW Website, Social Media Promotion Free Admission With Registration In Leased Office Free coffee, Parking, Monthly Happy Hours FREE up to 1,000 copies/month; then $.03 b&w; and $.07 color copies $1,300 per quarter + Private Office Space Lease based on $/sq.ft. (1-year minimum, 2-year maximum) apply Affiliate Member 8am - 5pm M-F / 8am - 12pm, Saturday 3 hrs./month 1.5 hrs./month N/A wifi - 30mb up"
+    },
+    {
+      "id": "check-page-3fff9876f6",
+      "url": "http://ideaworksfw.org/about/",
+      "page": "details",
+      "excerpt": "IDEA Works FW is a mixed industry incubator in Fort Worth Start Small. THINK BIG. About Member Profiles Support The Cause Become A Member Contact Us menu ReadMore facebook twitter linkedin instagram youtube apply membership volunteer sponsorship About IDEA Works FW We are a mixed-industry incubator, and a public-private partnership with the City of Fort Worth and the BAC Education Foundation. Mission IDEA Works FW™ is a creative, dynamic program that provides emerging businesses with nurturing relationships, state of the art tools, an attractive and secure work environment, best practices and access to global resources to sustain and scale their enterprises. Purpose IDEA Works FW is designed with the following objectives: Job creation Entrepreneurial development Strengthening Fort Worth’s entrepreneurial ecosystem Innovation driven operations IDEA Works FW benefits the offerings of the Fort Worth startup community and the small businesses that have the potential for employment growth, have the capacity to innovate, potential for investment, possess a community or civic interest and have the potential of catalyzing other employment or economic growth. Subscribe to our mailing list IDEA Works FW is a public-private partnership with the City of Fort Worth and the BAC Education Foundation, a 501(c)3 tax exempt organization. The BAC Education Board of Directors is comprised of:"
+    },
+    {
+      "id": "check-page-3ec1bda2b6",
+      "url": "http://ideaworksfw.org/about/",
+      "page": "details",
+      "excerpt": "The BAC Education Board of Directors is comprised of: Lucas Sawyer Worthington Bank Ed Riefenstahl Texas Christian University Alberto Rios Chase Bank Gwen Barbee Color Me Beautiful Jeremy Dean OmniAmerican Bank Bennibi Lao BNSF Railway Ricky McBride J."
+    },
+    {
+      "id": "check-page-9ac1bee733",
+      "url": "https://ideaworksfw.org/about/",
+      "page": "details",
+      "excerpt": "IDEA Works FW is a mixed industry incubator in Fort Worth Start Small. THINK BIG. About Member Profiles Support The Cause Become A Member Contact Us menu ReadMore facebook twitter linkedin instagram youtube apply membership volunteer sponsorship About IDEA Works FW We are a mixed-industry incubator, and a public-private partnership with the City of Fort Worth and the BAC Education Foundation. Mission IDEA Works FW™ is a creative, dynamic program that provides emerging businesses with nurturing relationships, state of the art tools, an attractive and secure work environment, best practices and access to global resources to sustain and scale their enterprises. Purpose IDEA Works FW is designed with the following objectives: Job creation Entrepreneurial development Strengthening Fort Worth’s entrepreneurial ecosystem Innovation driven operations IDEA Works FW benefits the offerings of the Fort Worth startup community and the small businesses that have the potential for employment growth, have the capacity to innovate, potential for investment, possess a community or civic interest and have the potential of catalyzing other employment or economic growth. Subscribe to our mailing list IDEA Works FW is a public-private partnership with the City of Fort Worth and the BAC Education Foundation, a 501(c)3 tax exempt organization. The BAC Education Board of Directors is comprised of:"
+    },
+    {
+      "id": "check-page-16c08d946c",
+      "url": "https://ideaworksfw.org/about/",
+      "page": "details",
+      "excerpt": "The BAC Education Board of Directors is comprised of: Lucas Sawyer Worthington Bank Ed Riefenstahl Texas Christian University Alberto Rios Chase Bank Gwen Barbee Color Me Beautiful Jeremy Dean OmniAmerican Bank Bennibi Lao BNSF Railway Ricky McBride J."
     }
   ],
   "findings": {
@@ -60,20 +189,45 @@
     ],
     "routes": [
       {
-        "value": "https://ideaworksfw.org/#",
-        "evidenceId": "check-route-58cf1d40af"
+        "value": "https://ideaworksfw.org/",
+        "evidenceId": "check-route-50ea132c66"
       },
       {
         "value": "https://ideaworksfw.org/membership/",
         "evidenceId": "check-route-c51980a327"
+      },
+      {
+        "value": "https://ideaworksfw.submittable.com/submit",
+        "evidenceId": "check-route-dfadf81e25"
+      },
+      {
+        "value": "https://ideaworksfw.org/about/",
+        "evidenceId": "check-route-9b54cad98a"
       }
     ],
-    "applicationUrl": [],
+    "applicationUrl": [
+      {
+        "value": "https://ideaworksfw.org/",
+        "evidenceId": "check-route-50ea132c66"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-e10b8172aa"
+      }
+    ],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

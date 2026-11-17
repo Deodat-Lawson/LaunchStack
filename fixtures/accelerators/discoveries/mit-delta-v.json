@@ -1,6 +1,6 @@
 {
   "programId": "mit-delta-v",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://entrepreneurship.mit.edu/accelerator/",
@@ -44,6 +44,46 @@
     },
     {
       "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://entrepreneurship.mit.edu/accelerator/2021-delta-v/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://entrepreneurship.mit.edu/accelerator/2022-delta-v/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://entrepreneurship.mit.edu/accelerator/2023-delta-v/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://entrepreneurship.mit.edu/accelerator/2024-delta-v/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
       "page": "details",
       "anchor": "",
       "fetched": true,
@@ -115,31 +155,31 @@
       "origin": "official"
     },
     {
-      "url": "https://entrepreneurship.mit.edu/news/designx-selects-first-cohort/",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://entrepreneurship.mit.edu/news/twoxar-announces-series-quest-collapse-drug-discovery-timelines/",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://entrepreneurship.mit.edu/tag/investment/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://entrepreneurship.mit.edu/wp-content/uploads/2017-delta-v-Cohort-Infographic-1024x791.jpg",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://entrepreneurship.mit.edu/wp-content/uploads/2022-cohort-final.pdf",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://entrepreneurship.mit.edu/wp-content/uploads/2023-cohort-scaled.jpg",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://entrepreneurship.mit.edu/wp-content/uploads/2024-cohort-scaled.jpg",
       "page": "batches",
       "anchor": "",
       "fetched": true,

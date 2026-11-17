@@ -1,5 +1,70 @@
 {
   "programId": "link",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
-  "pages": []
+  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "pages": [
+    {
+      "url": "https://cca.sandspringschamber.org/PromoListingMainSearch.aspx",
+      "page": "terms",
+      "anchor": "Deals & Discounts",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://sandspringschamber.org/2025-investment-opportunity-guide/",
+      "page": "terms",
+      "anchor": "2026 Investment & Opportunity Guide",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sandspringschamber.org/about-the-chamber/",
+      "page": "details",
+      "anchor": "About the Chamber",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sandspringschamber.org/board-application/",
+      "page": "application",
+      "anchor": "Board Application",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sandspringschamber.org/faqs/",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sandspringschamber.org/product-category/legislative-programs/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sandspringschamber.org/tote-bag-program/",
+      "page": "details",
+      "anchor": "Tote Bag Program",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sandspringschamber.org/wp-content/uploads/2026-Investment-Guide-4.pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

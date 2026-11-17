@@ -1,22 +1,25 @@
 {
   "programId": "mhub",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://mhub.org/",
     "https://mhub.org/apply-to-be-a-member",
+    "https://mhub.org/faq",
+    "https://mhub.org/startup-accelerator-faq",
+    "https://mhub.org/terms",
+    "https://mhub.org/about",
+    "https://mhub.org/accelerator",
+    "https://mhub.org/energy-tech-accelerator",
+    "https://mhub.org/subscribe-to-our-newsletter",
+    "https://mhub.org/medtech-accelerator-for-startups",
+    "https://mhub.org/prototyping-lab/programmable-dc-electronic-load-8488",
+    "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+    "https://mhub.org/accelerator-program-interest",
+    "https://mhub.org/ecosystem",
+    "https://mhub.org/investor-interest",
     "https://mhub.org/blog/mhub-opens-applications-for-its-2023-medtech-accelerator",
     "https://mhub.org/blog/mhub-opens-applications-for-its-energytech-accelerator",
-    "https://mhub.org/blog/top-industrial-iot-applications",
-    "https://mhub.org/events/apply-to-showcase-at-the-hardtech-summit-73029",
-    "https://mhub.org/events/applying-strategy-frameworks-for-business--108336",
-    "https://mhub.org/events/from-filing-to-grant---understanding-the-patent-application-process-206769",
-    "https://mhub.org/blog/17-hardtech-terms-you-need-to-know-for-product-development",
-    "https://mhub.org/blog/initial-investment-for-mhub-medtech-accelerator-baxter-edward-elmhurst-health-vc",
-    "https://mhub.org/blog/initial-investments-announced-by-mhub-energytech-accelerator-industry-partners",
-    "https://mhub.org/blog/investments-by-avnet-and-panduit-into-iiot-cohort",
-    "https://mhub.org/blog/no-easy-money-navigating-medtech-investment",
-    "https://mhub.org/blog/supply-chain-disruption-an-ideal-industry-40-use-case-",
-    "https://mhub.org/events/capital-connections---consumer-investment-panel-139660"
+    "https://mhub.org/blog/top-industrial-iot-applications"
   ],
   "evidence": [
     {
@@ -27,18 +30,165 @@
       "page": "application"
     },
     {
-      "id": "check-deal-1aaa34cabe",
-      "url": "https://mhub.org/blog/initial-investments-announced-by-mhub-energytech-accelerator-industry-partners",
+      "id": "check-deal-1c67c1ca76",
+      "url": "https://mhub.org/startup-accelerator-faq",
       "title": "mHUB — terms page",
-      "excerpt": "has increased this initial investment, investing a total of $150k into teams. Invenergy announced that it will invest in blip energy ,",
+      "excerpt": "development services ($30K per startup), 24-month mHUB membership ($34K value per startup), as well as multiple other services Support from",
       "page": "terms"
     },
     {
-      "id": "check-duration-102f034de5",
-      "url": "https://mhub.org/blog/no-easy-money-navigating-medtech-investment",
+      "id": "check-deal-1e06469266",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "title": "mHUB — program page",
+      "excerpt": "$200,000 initial investment, which includes $142,500 cash and $60,000 in-kind services for certain fees related to product development,",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-2bd8272bcb",
+      "url": "https://mhub.org/accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "businesses. $200K Invested Initial investment of $142.5K in cash and $60K in services, programming and hardware for 6.5% equity 6-Month",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-2f53d8fb36",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "leads to opportunities for pilots and investment on the backend. $200,000 initial investment for 6.5% equity, which includes $100K in cash,",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-384bba7497",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "title": "mHUB — program page",
+      "excerpt": "mHUB Ventures invests $200,000 initial investment, which includes $142,500 cash and $60,000 in-kind services for certain fees related to product",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-393a885476",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "a check. $200,000 initial investment for 6.5% equity, which includes $100K in cash, $30K in cash reimbursement for product development, and",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-59d3d44b3a",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "And if you're selected next, you'll get way more than just a check. $200,000 initial investment for 6.5% equity, which includes $100K in cash,",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-837a15d1d7",
+      "url": "https://mhub.org/startup-accelerator-faq",
       "title": "mHUB — terms page",
-      "excerpt": "ready to raise. In his case, connections made 18 months earlier were just beginning to result in actual",
+      "excerpt": "investments in 8 to 12 companies with check sizes ranging from $100K to $750K. These investments will require an additional institutional",
       "page": "terms"
+    },
+    {
+      "id": "check-deal-93d9fe85e8",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "title": "mHUB — terms page",
+      "excerpt": "The mHUB Product Impact Fund I makes an initial investment of $100K in cash for each startup through a pre-money SAFE in exchange for",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-96994c4805",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "title": "mHUB — terms page",
+      "excerpt": "Additionally, the program’s corporate partners allocate a minimum of $100k in the form of convertible notes to be distributed across the",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-9a03477613",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "title": "mHUB — terms page",
+      "excerpt": "Cash equivalent credits towards hardtech development services ($30K per startup), 24-month mHUB membership ($34K value per startup), as",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-b1e4e8fcf7",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "title": "mHUB — terms page",
+      "excerpt": "will be the terms? Each corporate partner will deploy a minimum of $100K in additional investments per cohort via a convertible note. These",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ba0969dfc1",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "backend. $200,000 initial investment for 6.5% equity, which includes $100K in cash, $30K in cash reimbursement for product development, and",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-c5cb7eadf8",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "initial investment for 6.5% equity, which includes $100K in cash, $30K in cash reimbursement for product development, and $70K in-kind",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-c93395f089",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "initial investment for 6.5% equity, which includes $100K in cash, $30K in cash reimbursement for product development, and $70K in-kind",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-f41e35a79c",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "title": "mHUB — terms page",
+      "excerpt": "in 8 to 12 companies with check sizes ranging from $100K to $750K. These investments will require an additional institutional investor",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-fa01394be4",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "title": "mHUB — program page",
+      "excerpt": "of early stage hardtech innovation in the U.S. mHUB Ventures invests $200,000 initial investment, which includes $142,500 cash and $60,000 in-kind",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-04c2be2863",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "continue to receive support for an additional 18 months of continued mHUB membership and access post",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-04db7c04ce",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "and $70K in-kind services. After the immersive 6-month program, participants get 18 months of continued",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0676d1ebfb",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "Careers Contact mHUB Energy Tech Accelerator 6-month program fast-tracks high potential startups",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0b429ff5cd",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "title": "mHUB — terms page",
+      "excerpt": "Accelerators? mHUB Accelerated Incubation is a 6-month deep dive incubation taking place in Chicago,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-16137ff79c",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "title": "mHUB — program page",
+      "excerpt": "scalable and sustainable business. The 6-month, hands-on program connects surrounds teams with",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-18fa6ff59d",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "title": "mHUB — program page",
+      "excerpt": "Careers Contact mHUB MedTech Accelerator 6-month program fast-tracks high potential startups",
+      "page": "details"
     },
     {
       "id": "check-duration-277ed0de0b",
@@ -48,11 +198,67 @@
       "page": "application"
     },
     {
-      "id": "check-duration-3df857b9e7",
-      "url": "https://mhub.org/blog/initial-investments-announced-by-mhub-energytech-accelerator-industry-partners",
+      "id": "check-duration-31c5fa9279",
+      "url": "https://mhub.org/accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "Accelerator Hands-on accelerated incubation with 18 months of follow-on support $6M of Equipment 11 micro",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3f0140c50e",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "Partner Access Access to Investor Network 24 Month mHUB Membership Access to Prototyping Facilities",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-44418abf37",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "title": "mHUB — program page",
+      "excerpt": "portfolio have received follow on capital. The 6-month mHUB Accelerator in Chicago is a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-501d29ddf0",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "the immersive 6-month program, participants get 18 months of continued support and all mHUB member",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-5081968b70",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "title": "mHUB — program page",
+      "excerpt": "continue to receive support for an additional 18 months of continued mHUB membership and access post",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-5fd71b8e72",
+      "url": "https://mhub.org/startup-accelerator-faq",
       "title": "mHUB — terms page",
-      "excerpt": "they’ll continue to work with beyond the 6-month program. In October, the partners engaged in a",
+      "excerpt": "from mHUB (remember you get an additional 18 months of membership). If you stay, you can continue to",
       "page": "terms"
+    },
+    {
+      "id": "check-duration-79460b701e",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "title": "mHUB — program page",
+      "excerpt": "Partner Access Access to Investor Network 24 Month mHUB Membership Access to Prototyping Facilities",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-83b93c61e4",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "scalable and sustainable business. The 6-month, hands-on program connects surrounds teams with",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-86c7ff8b45",
+      "url": "https://mhub.org/accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "programming and hardware for 6.5% equity 6-Month Accelerator Hands-on accelerated incubation with",
+      "page": "details"
     },
     {
       "id": "check-duration-88dbf1a8b0",
@@ -62,6 +268,27 @@
       "page": "application"
     },
     {
+      "id": "check-duration-907b7c4db6",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "development, and $70K in-kind services. The 6-month mHUB Accelerator in Chicago is a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-98d68faff5",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "title": "mHUB — terms page",
+      "excerpt": "members of the mHUB community for the following 18 months, which includes access to workspace, shop",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a77c6eb905",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "continue to receive support for an additional 18 months of continued mHUB membership and access post",
+      "page": "details"
+    },
+    {
       "id": "check-duration-ae514998dc",
       "url": "https://mhub.org/blog/mhub-opens-applications-for-its-energytech-accelerator",
       "title": "mHUB — application page",
@@ -69,11 +296,46 @@
       "page": "application"
     },
     {
-      "id": "check-duration-f32580bf62",
-      "url": "https://mhub.org/blog/initial-investment-for-mhub-medtech-accelerator-baxter-edward-elmhurst-health-vc",
-      "title": "mHUB — terms page",
-      "excerpt": "community in May 2022 at the end of the 6-month mHUB accelerator program. mHUB congratulates all",
-      "page": "terms"
+      "id": "check-duration-b77c7aed9e",
+      "url": "https://mhub.org/accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "center for hardware and product development. 6-month startup accelerator for new product development",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c7c94b5598",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "for hardtech. Once complete, participants have 18 months of follow-on support and access to prototyping",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e362139a2c",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "scalable and sustainable business. The 6-month, hands-on program connects surrounds teams with",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e44b139986",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "Smart and Sustainable Manufacturing Accelerator 6-month program fast-tracks high potential startups",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e6eb40313f",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "title": "mHUB — program page",
+      "excerpt": "for hardtech. Once complete, participants have 18 months of follow-on support and access to prototyping",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ed976ceadc",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "Partner Access Access to Investor Network 24 Month mHUB Membership Access to Prototyping Facilities",
+      "page": "details"
     },
     {
       "id": "check-duration-f9e5809642",
@@ -83,6 +345,20 @@
       "page": "application"
     },
     {
+      "id": "check-duration-fe5c0a6590",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "title": "mHUB — terms page",
+      "excerpt": "development services ($30K per startup), 24-month mHUB membership ($34K value per startup), as",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-292d96793e",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "title": "mHUB — program page",
+      "excerpt": "as predictive tools, home-based diagnostics, noninvasive remote monitoring and wearables. Connected therapeutic devices",
+      "page": "details"
+    },
+    {
       "id": "check-format-29c20eeaf9",
       "url": "https://mhub.org/blog/top-industrial-iot-applications",
       "title": "mHUB — application page",
@@ -90,25 +366,67 @@
       "page": "application"
     },
     {
-      "id": "check-format-73a18e5134",
-      "url": "https://mhub.org/blog/initial-investment-for-mhub-medtech-accelerator-baxter-edward-elmhurst-health-vc",
+      "id": "check-format-40a05be7f1",
+      "url": "https://mhub.org/prototyping-lab/programmable-dc-electronic-load-8488",
+      "title": "mHUB — program page",
+      "excerpt": "see for yourself! Book a tour to see the prototyping lab in person. 3D Printer Lab Cold Metals Lab Electronics Lab Finishing",
+      "page": "details"
+    },
+    {
+      "id": "check-format-41e8d6219a",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "title": "mHUB — program page",
+      "excerpt": "for breakthrough solutions focused in medicine delivery, remote patient monitoring, wearables, sensing and diagnostics,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-77172e9184",
+      "url": "https://mhub.org/ecosystem",
+      "title": "mHUB — portfolio page",
+      "excerpt": "LillyBottle https://www.lilybottle.com/ Other LOLED Virtual https://www.loledvirtual.com Med Tech LOO UTI Detection",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-793140c5e5",
+      "url": "https://mhub.org/faq",
       "title": "mHUB — terms page",
-      "excerpt": "and noninvasive assessment at the clinical bedside or remote care setting to help diagnose sepsis and monitor patient",
+      "excerpt": "labs , mentorship network , classes / curriculum , in-person and hybrid events , and more. What are the membership",
       "page": "terms"
     },
     {
-      "id": "check-format-b2bbb59230",
-      "url": "https://mhub.org/blog/initial-investment-for-mhub-medtech-accelerator-baxter-edward-elmhurst-health-vc",
+      "id": "check-format-917f739d36",
+      "url": "https://mhub.org/startup-accelerator-faq",
       "title": "mHUB — terms page",
-      "excerpt": "developing NXgenPort (NGP), a device designed to maximize remote care in cancer patients by combining chemo-port efficacy",
+      "excerpt": "customers and corporate partners. Why is the program in-person at mHUB in Chicago? mHUB’s hyper-resourced hardtech",
       "page": "terms"
     },
     {
-      "id": "check-location-2e9b2715a3",
-      "url": "https://mhub.org/blog/supply-chain-disruption-an-ideal-industry-40-use-case-",
+      "id": "check-format-9bc016544a",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "including fuel cells, small modular reactors, and hybrid renewable systems that deliver firm, low-carbon power to",
+      "page": "details"
+    },
+    {
+      "id": "check-format-cdbe507dad",
+      "url": "https://mhub.org/startup-accelerator-faq",
       "title": "mHUB — terms page",
-      "excerpt": "an industrial automation company based in Connecticut that provided various customized",
+      "excerpt": "manufacturing and engineering ingenuity. mHUB believes our in-person program is unique because of our 360-degree incubation",
       "page": "terms"
+    },
+    {
+      "id": "check-format-d8fc5d4807",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "title": "mHUB — terms page",
+      "excerpt": "scoring of the above selection criteria. Finally, an in-person interview takes place where the product and business model",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-fb559614da",
+      "url": "https://mhub.org/accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "startups developing solutions in medicine delivery, remote patient monitoring, wearables, SmartHub solutions, chronic",
+      "page": "details"
     },
     {
       "id": "check-location-43f0386098",
@@ -132,32 +450,18 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-02b5d3c3e8",
-      "url": "https://mhub.org/events/applying-strategy-frameworks-for-business--108336",
-      "title": "mHUB — application page",
+      "id": "check-portfolio-0268152e4f",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "title": "mHUB — program page",
       "excerpt": "Startups → https://mhub.org/become-a-member",
-      "page": "application"
+      "page": "details"
     },
     {
-      "id": "check-portfolio-0934373cfe",
-      "url": "https://mhub.org/events/from-filing-to-grant---understanding-the-patent-application-process-206769",
-      "title": "mHUB — application page",
+      "id": "check-portfolio-0bbb5610a7",
+      "url": "https://mhub.org/investor-interest",
+      "title": "mHUB — portfolio page",
       "excerpt": "Startups → https://mhub.org/become-a-member",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-2a0cf0df1a",
-      "url": "https://mhub.org/blog/initial-investments-announced-by-mhub-energytech-accelerator-industry-partners",
-      "title": "mHUB — terms page",
-      "excerpt": "Startups → https://mhub.org/become-a-member",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-3b3af12cc6",
-      "url": "https://mhub.org/blog/supply-chain-disruption-an-ideal-industry-40-use-case-",
-      "title": "mHUB — terms page",
-      "excerpt": "Startups → https://mhub.org/become-a-member",
-      "page": "terms"
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-3bf1d4b7b3",
@@ -174,32 +478,18 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-449a628d32",
-      "url": "https://mhub.org/blog/investments-by-avnet-and-panduit-into-iiot-cohort",
+      "id": "check-portfolio-4590dc4ef1",
+      "url": "https://mhub.org/terms",
       "title": "mHUB — terms page",
       "excerpt": "Startups → https://mhub.org/become-a-member",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-47bc551314",
-      "url": "https://mhub.org/blog/no-easy-money-navigating-medtech-investment",
-      "title": "mHUB — terms page",
+      "id": "check-portfolio-6c63a9c505",
+      "url": "https://mhub.org/ecosystem",
+      "title": "mHUB — portfolio page",
       "excerpt": "Startups → https://mhub.org/become-a-member",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-562c54369f",
-      "url": "https://mhub.org/blog/17-hardtech-terms-you-need-to-know-for-product-development",
-      "title": "mHUB — terms page",
-      "excerpt": "Startups → https://mhub.org/become-a-member",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-5cd723d8f9",
-      "url": "https://mhub.org/events/apply-to-showcase-at-the-hardtech-summit-73029",
-      "title": "mHUB — application page",
-      "excerpt": "Startups → https://mhub.org/become-a-member",
-      "page": "application"
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-7a76dd66f4",
@@ -209,11 +499,32 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-7e56fb1f7a",
+      "url": "https://mhub.org/subscribe-to-our-newsletter",
+      "title": "mHUB — batches page",
+      "excerpt": "Startups → https://mhub.org/become-a-member",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-7f4a1cfd41",
       "url": "https://mhub.org/blog/top-industrial-iot-applications",
       "title": "mHUB — application page",
       "excerpt": "Startups → https://mhub.org/become-a-member",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-997ff2acc7",
+      "url": "https://mhub.org/about",
+      "title": "mHUB — program page",
+      "excerpt": "Startups → https://mhub.org/become-a-member",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9d861ac3a3",
+      "url": "https://mhub.org/prototyping-lab/programmable-dc-electronic-load-8488",
+      "title": "mHUB — program page",
+      "excerpt": "Startups → https://mhub.org/become-a-member",
+      "page": "details"
     },
     {
       "id": "check-portfolio-a78299abb9",
@@ -223,46 +534,67 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-b369cc830d",
-      "url": "https://mhub.org/blog/initial-investment-for-mhub-medtech-accelerator-baxter-edward-elmhurst-health-vc",
-      "title": "mHUB — terms page",
-      "excerpt": "startups → https://mhub.org/medtech-accelerator-for-startups",
-      "page": "terms"
+      "id": "check-portfolio-d358085e1a",
+      "url": "https://mhub.org/accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "Startups → https://mhub.org/become-a-member",
+      "page": "details"
     },
     {
-      "id": "check-portfolio-b4557d0921",
-      "url": "https://mhub.org/events/capital-connections---consumer-investment-panel-139660",
+      "id": "check-portfolio-d77f151cca",
+      "url": "https://mhub.org/accelerator-program-interest",
+      "title": "mHUB — program page",
+      "excerpt": "Startups → https://mhub.org/become-a-member",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d881294f22",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "Startups → https://mhub.org/become-a-member",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e723b23e21",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "title": "mHUB — program page",
+      "excerpt": "Startups → https://mhub.org/become-a-member",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f8351ff4bd",
+      "url": "https://mhub.org/startup-accelerator-faq",
       "title": "mHUB — terms page",
       "excerpt": "Startups → https://mhub.org/become-a-member",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-ebf2419a12",
-      "url": "https://mhub.org/blog/initial-investment-for-mhub-medtech-accelerator-baxter-edward-elmhurst-health-vc",
+      "id": "check-portfolio-fa014c7d42",
+      "url": "https://mhub.org/faq",
       "title": "mHUB — terms page",
       "excerpt": "Startups → https://mhub.org/become-a-member",
       "page": "terms"
     },
     {
-      "id": "check-route-08078b001f",
-      "url": "https://mhub.org/events/from-filing-to-grant---understanding-the-patent-application-process-206769",
-      "title": "mHUB — application page",
-      "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
-      "page": "application"
+      "id": "check-route-088fe5f622",
+      "url": "https://mhub.org/faq",
+      "title": "mHUB — terms page",
+      "excerpt": "Apply to be an mHUB member → https://mhub.org/apply-to-be-a-member",
+      "page": "terms"
     },
     {
-      "id": "check-route-1a678754dd",
-      "url": "https://mhub.org/events/apply-to-showcase-at-the-hardtech-summit-73029",
-      "title": "mHUB — application page",
-      "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
-      "page": "application"
-    },
-    {
-      "id": "check-route-3808bb6baf",
-      "url": "https://mhub.org/events/capital-connections---consumer-investment-panel-139660",
+      "id": "check-route-17f2f71438",
+      "url": "https://mhub.org/faq",
       "title": "mHUB — terms page",
       "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
       "page": "terms"
+    },
+    {
+      "id": "check-route-358be5eef5",
+      "url": "https://mhub.org/prototyping-lab/programmable-dc-electronic-load-8488",
+      "title": "mHUB — program page",
+      "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
+      "page": "details"
     },
     {
       "id": "check-route-3bb0ca3e68",
@@ -272,6 +604,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-428eecac68",
+      "url": "https://mhub.org/accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
+      "page": "details"
+    },
+    {
       "id": "check-route-471d9afb44",
       "url": "https://mhub.org/blog/mhub-opens-applications-for-its-2023-medtech-accelerator",
       "title": "mHUB — application page",
@@ -279,11 +618,11 @@
       "page": "application"
     },
     {
-      "id": "check-route-4a2b5cf2e6",
-      "url": "https://mhub.org/blog/initial-investment-for-mhub-medtech-accelerator-baxter-edward-elmhurst-health-vc",
-      "title": "mHUB — terms page",
+      "id": "check-route-52b19f23c5",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "title": "mHUB — program page",
       "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
-      "page": "terms"
+      "page": "details"
     },
     {
       "id": "check-route-6ce58a8ca4",
@@ -293,29 +632,15 @@
       "page": "application"
     },
     {
-      "id": "check-route-6f275cda19",
-      "url": "https://mhub.org/blog/investments-by-avnet-and-panduit-into-iiot-cohort",
-      "title": "mHUB — terms page",
+      "id": "check-route-a5a82db406",
+      "url": "https://mhub.org/investor-interest",
+      "title": "mHUB — portfolio page",
       "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
-      "page": "terms"
+      "page": "portfolio"
     },
     {
-      "id": "check-route-6f4abeca51",
-      "url": "https://mhub.org/events/applying-strategy-frameworks-for-business--108336",
-      "title": "mHUB — application page",
-      "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
-      "page": "application"
-    },
-    {
-      "id": "check-route-88a4afea51",
-      "url": "https://mhub.org/blog/supply-chain-disruption-an-ideal-industry-40-use-case-",
-      "title": "mHUB — terms page",
-      "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-a95056bf3d",
-      "url": "https://mhub.org/blog/initial-investments-announced-by-mhub-energytech-accelerator-industry-partners",
+      "id": "check-route-af09349b90",
+      "url": "https://mhub.org/terms",
       "title": "mHUB — terms page",
       "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
       "page": "terms"
@@ -328,31 +653,66 @@
       "page": "details"
     },
     {
-      "id": "check-route-bbb67de61d",
-      "url": "https://mhub.org/blog/no-easy-money-navigating-medtech-investment",
+      "id": "check-route-bbb10eac6b",
+      "url": "https://mhub.org/startup-accelerator-faq",
       "title": "mHUB — terms page",
       "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
       "page": "terms"
     },
     {
-      "id": "check-route-d143560149",
-      "url": "https://mhub.org/blog/17-hardtech-terms-you-need-to-know-for-product-development",
-      "title": "mHUB — terms page",
+      "id": "check-route-d0761be07b",
+      "url": "https://mhub.org/subscribe-to-our-newsletter",
+      "title": "mHUB — batches page",
       "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-e77172d3c6",
+      "url": "https://mhub.org/ecosystem",
+      "title": "mHUB — portfolio page",
+      "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-e97ade0683",
+      "url": "https://mhub.org/about",
+      "title": "mHUB — program page",
+      "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e9b534f1fd",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "title": "mHUB — program page",
+      "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ea43db9b73",
+      "url": "https://mhub.org/faq",
+      "title": "mHUB — terms page",
+      "excerpt": "Apply to mHUB. → https://mhub.org/apply-to-be-a-member",
       "page": "terms"
+    },
+    {
+      "id": "check-route-f0b3d57300",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "title": "mHUB — program page",
+      "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f59cbfd8a7",
+      "url": "https://mhub.org/accelerator-program-interest",
+      "title": "mHUB — program page",
+      "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
+      "page": "details"
     },
     {
       "id": "check-status-431db748ff",
       "url": "https://mhub.org/blog/mhub-opens-applications-for-its-energytech-accelerator",
       "title": "mHUB — application page",
       "excerpt": "Partners Invenergy and Constellation Following the launch of the program’s second MedTech cohort in March, applications are now open for the mHUB Accelerator’s second Energy Tech cohort in May 2023. (CHICAGO May 15 , 2023) - mHUB , one of",
-      "page": "application"
-    },
-    {
-      "id": "check-status-7feae29cf0",
-      "url": "https://mhub.org/events/apply-to-showcase-at-the-hardtech-summit-73029",
-      "title": "mHUB — application page",
-      "excerpt": "and partnership opportunities. Join the Newsletter Apply to Showcase at the HardTech Summit Share this event Applications are now open for mHUB members to participate in the mHUB HardTech Summit. This is an opportunity to highlight your",
       "page": "application"
     }
   ],
@@ -364,10 +724,718 @@
       "excerpt": "Innovation Hub for Physical Product Development & HardTech | mHUB Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host"
     },
     {
+      "id": "check-page-3d5f521240",
+      "url": "https://mhub.org/",
+      "page": "details",
+      "excerpt": "Through prototyping labs, industry partnerships, and a commitment to U.S. manufacturing, the mHUB ecosystem is changing the landscape of hardtech development."
+    },
+    {
+      "id": "check-page-99f88c97d8",
+      "url": "https://mhub.org/",
+      "page": "details",
+      "excerpt": "Join a Network of Likeminded Problem Solvers Startup Incubation Join the mHUB startup community that has raised over $2.B in capital and launched over 1,700 products."
+    },
+    {
+      "id": "check-page-57ee0fbb8c",
+      "url": "https://mhub.org/",
+      "page": "details",
+      "excerpt": "Grow Your Startup Corporate Innovation Connect with mHUB to advance internal innovation while growing talent and product pipelines."
+    },
+    {
+      "id": "check-page-97e4f1258f",
+      "url": "https://mhub.org/",
+      "page": "details",
+      "excerpt": "Outsource Your R&D Venture Capital Invest in seed and early-stage physical product/hardtech startups to advance disruptive technologies."
+    },
+    {
+      "id": "check-page-fcd843824f",
+      "url": "https://mhub.org/",
+      "page": "details",
+      "excerpt": "Make a Difference Accelerator for Startups Apply to mHUB's hands-on accelerator program to propel new product development and commercialization."
+    },
+    {
+      "id": "check-page-be2192cd6d",
+      "url": "https://mhub.org/",
+      "page": "details",
+      "excerpt": "Accelerate Your Startup mHUB Annual Report Each year, mHUB supports hundreds of startups as they bring new physical technologies to market across sectors including medical devices, energy, sustainability, and smart manufacturing."
+    },
+    {
+      "id": "check-page-dfd01d67a4",
+      "url": "https://mhub.org/",
+      "page": "details",
+      "excerpt": "Read the full report Impact of the mHUB Startup Community $2.33B Capital Raised 1,852 Products Launched 627 Patents Awarded $2.25B Revenue Generated 7,251 Employees Hired Supported by Industry Recognized Among the Nation's Best mHUB was named No."
+    },
+    {
+      "id": "check-page-a9208164cf",
+      "url": "https://mhub.org/",
+      "page": "details",
+      "excerpt": "14 on TIME's America's Best Incubators & Accelerators 2026 and No."
+    },
+    {
+      "id": "check-page-6ceec1f9e6",
+      "url": "https://mhub.org/",
+      "page": "details",
+      "excerpt": "TIME Award Fast Company Award What the mHUB Ecosystem Has to Say \"The facilities and access to equipment is second to none in the Midwest and probably nationally."
+    },
+    {
+      "id": "check-page-c0b474bfd6",
+      "url": "https://mhub.org/",
+      "page": "details",
+      "excerpt": "Shop personnel are tremendously helpful and friendly.\" Geoff Hutchins Dir. of Engineering IntuiTap \"mHUB has provided us access to mentors and resources that have enabled us to design and deliver products more efficiently to our customers.” Sona Shah Co-founder & CEO Neopenda “Medium and large size companies sometimes get stuck."
+    },
+    {
+      "id": "check-page-53121e94e3",
+      "url": "https://mhub.org/",
+      "page": "details",
+      "excerpt": "We have the resources but we don’t have the resourcefulness, and partnering with startups in the mHUB accelerator provided that in spades.” Brett Lane CTO Panduit Investor Report News | Energy Tech mHUB Announces Compute-Energy Nexus Accelerator Sign up and subscribe to the newsletter Stay informed of upcoming events and programs, hardtech news, and partnership opportunities."
+    },
+    {
+      "id": "check-page-0819150401",
+      "url": "https://mhub.org/",
+      "page": "details",
+      "excerpt": "Join the Newsletter Privacy Policy Terms & Conditions Join General Membership Accelerator Industry Community Investors Resources Impact Report Investor Report Blog FAQ Events & Classes mHUB Events + Classes Host an Event About Why mHUB is a Fast Company Best Workplace for Innovators About Virtual Tour Team Board Careers Contact Us"
+    },
+    {
       "id": "check-page-67775363a9",
       "url": "https://mhub.org/apply-to-be-a-member",
       "page": "application",
       "excerpt": "Apply to Be a Member Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu"
+    },
+    {
+      "id": "check-page-79ff145143",
+      "url": "https://mhub.org/apply-to-be-a-member",
+      "page": "application",
+      "excerpt": "Privacy Policy Terms & Conditions Join General Membership Accelerator Industry Community Investors Resources Impact Report Investor Report Blog FAQ Events & Classes mHUB Events + Classes Host an Event About Why mHUB is a Fast Company Best Workplace for Innovators About Virtual Tour Team Board Careers Contact Us"
+    },
+    {
+      "id": "check-page-51ee82d8c4",
+      "url": "https://mhub.org/faq",
+      "page": "terms",
+      "excerpt": "FAQ | mHUB Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About"
+    },
+    {
+      "id": "check-page-77cb5096ba",
+      "url": "https://mhub.org/faq",
+      "page": "terms",
+      "excerpt": "How does membership work? mHUB has a few different membership options which include a shared workspace membership, reserved desk membership, dedicated office space membership, and a customizable associate/group membership."
+    },
+    {
+      "id": "check-page-d47d6621a6",
+      "url": "https://mhub.org/faq",
+      "page": "terms",
+      "excerpt": "Membership is on a month-to-month basis with different options granting varied access to the suite of resources offered; including mHUB's prototyping labs , mentorship network , classes / curriculum , in-person and hybrid events , and more."
+    },
+    {
+      "id": "check-page-b471fd51ca",
+      "url": "https://mhub.org/faq",
+      "page": "terms",
+      "excerpt": "Co-working / Shared workspace $300 Reserved Desk $450 Dedicated Office $1,350 Associate/Group Membership - price varies due to customization options Learn more about each membership option."
+    },
+    {
+      "id": "check-page-137daf7fc5",
+      "url": "https://mhub.org/faq",
+      "page": "terms",
+      "excerpt": "Apply to be an mHUB member What types of labs, workshops and tools are available at mHUB? mHUB features unique fabrication centers to aid in product design and rapid prototyping, including: 3D Printing Cold Metals Electronics Finishing Hot Metals Lab Benches Laser Cutting Plastics Software Testing Textiles Water Work Wood Work We also have a microfactory for onsite low-volume production runs."
+    },
+    {
+      "id": "check-page-d30115fc3a",
+      "url": "https://mhub.org/faq",
+      "page": "terms",
+      "excerpt": "Learn more about mHUB's physical resources in our Equipment and Prototyping Labs section. *Please note that most machines at mHUB require additional training."
+    },
+    {
+      "id": "check-page-22095374ad",
+      "url": "https://mhub.org/faq",
+      "page": "terms",
+      "excerpt": "Member equipment needs to be stored in a rented garage or office space."
+    },
+    {
+      "id": "check-page-14f1519e88",
+      "url": "https://mhub.org/faq",
+      "page": "terms",
+      "excerpt": "We are building a supportive entrepreneurial ecosystem at mHUB, so whether you are working on projects ranging from hardware to consumer goods we have resources to support every type of person, company, or product that comes into our space."
+    },
+    {
+      "id": "check-page-c54b7668f2",
+      "url": "https://mhub.org/faq",
+      "page": "terms",
+      "excerpt": "The prototyping shop stocks a selection of commonly used materials available for members to purchase."
+    },
+    {
+      "id": "check-page-58e5795640",
+      "url": "https://mhub.org/faq",
+      "page": "terms",
+      "excerpt": "However, the mHUB shop does offer fabrication services for a fee and larger-scale projects can be discussed with the HardTech Development team ."
+    },
+    {
+      "id": "check-page-008becca52",
+      "url": "https://mhub.org/faq",
+      "page": "terms",
+      "excerpt": "Since our pilot in 2018, mHUB HardTech Development has worked with over 60 unique clients from startups to Fortune 500 companies, developed more than 75 new products and numerous discovery, brainstorms and workshops."
+    },
+    {
+      "id": "check-page-b16bec0fc2",
+      "url": "https://mhub.org/faq",
+      "page": "terms",
+      "excerpt": "Yes, members are welcome to have visitors in our Shared Workspace."
+    },
+    {
+      "id": "check-page-6b9201ec4e",
+      "url": "https://mhub.org/faq",
+      "page": "terms",
+      "excerpt": "We host events that are compatible with our commitment to growth in the manufacturing innovation ecosystem."
+    },
+    {
+      "id": "check-page-2f2596da28",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "page": "terms",
+      "excerpt": "Accelerator FAQ Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for"
+    },
+    {
+      "id": "check-page-1f9b9efc1a",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "page": "terms",
+      "excerpt": "Launched in 2017, mHUB is the largest and fastest growing physical product innovation center in the U.S."
+    },
+    {
+      "id": "check-page-d6488bcab2",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "page": "terms",
+      "excerpt": "Where is your facility located? mHUB is located in the West Town neighborhood in Chicago at 965 W."
+    },
+    {
+      "id": "check-page-4048e05236",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "page": "terms",
+      "excerpt": "This historic industrial corridor has deep roots in manufacturing and has been home to leaders in industry including Motorola Mobility, Milwaukee Iron and Metal Company, Werner Piano, and more."
+    },
+    {
+      "id": "check-page-e1424a1cb5",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "page": "terms",
+      "excerpt": "What capabilities does the space have? mHUB is focused on physical products. mHUB's 63,000 square-foot facility contains multiple fabrication labs, including electronics, plastic fabrication, metals, textiles and rapid prototyping, as well as a micro-factory for small production runs."
+    },
+    {
+      "id": "check-page-5ded253b18",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "page": "terms",
+      "excerpt": "Get more details on mHUB's Prototyping Labs and Member Benefits ."
+    },
+    {
+      "id": "check-page-64cce75cd8",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "page": "terms",
+      "excerpt": "What is expected of me / our team during the Accelerator program?"
+    },
+    {
+      "id": "check-page-e2a07a51ec",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "page": "terms",
+      "excerpt": "The mHUB Accelerated Incubation program will be fast-paced and designed to bring your startup from concept or prototype to the foundation of a profitable, scalable and sustainable business in six months."
+    },
+    {
+      "id": "check-page-1599418d21",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "page": "terms",
+      "excerpt": "The Team at mHUB expects that you and your team bring your ingenuity, a strong work ethic, and a collaborative spirit. mHUB expects you to come out of the program with a product and business ready to present to investors, customers and corporate partners."
+    },
+    {
+      "id": "check-page-bed5117c7d",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "page": "terms",
+      "excerpt": "Why is the program in-person at mHUB in Chicago? mHUB’s hyper-resourced hardtech innovation center is a big part of the accelerator’s secret sauce for success."
+    },
+    {
+      "id": "check-page-d3f12cb47e",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "page": "terms",
+      "excerpt": "With over $6M of prototyping equipment, a member community of over 1200 hardtech innovators, and a broader ecosystem of leaders from industry, academia, research, VC and more, being onsite at mHUB allows our cohort teams to immerse themselves in the program and the community and capitalize on opportunities at every turn."
+    },
+    {
+      "id": "check-page-465b0991e2",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "page": "terms",
+      "excerpt": "What is the focus of the Accelerator program? mHUB's program focuses on three main areas that are interwoven and revisited iteratively."
+    },
+    {
+      "id": "check-page-b34623b61b",
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "page": "terms",
+      "excerpt": "The second focus area is all about product feasibility; what is the solution to that problem and validating that solution with your customers through experimentation and prototyping."
+    },
+    {
+      "id": "check-page-eaa26be347",
+      "url": "https://mhub.org/terms",
+      "page": "terms",
+      "excerpt": "Terms & Conditions Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu"
+    },
+    {
+      "id": "check-page-fc07d5f859",
+      "url": "https://mhub.org/terms",
+      "page": "terms",
+      "excerpt": "\"Governmental Authority\" means the federal government ofthe United States, any state government, or any political subdivision of either, or any agency, court or body of the federal government of the United States, or any state, or any political subdivision of either, exercising executive, legislative, judicial, regulatory or administrative functions."
+    },
+    {
+      "id": "check-page-375c428194",
+      "url": "https://mhub.org/terms",
+      "page": "terms",
+      "excerpt": "All payments shall be paid in United States currency and may be made through credit card, check or wire transfer, in each case to the order or credit of \"mHUB\" and remitted to 965 W Chicago Ave. , Chicago, IL 60642. mHUB reserves the right to change the payment address and instructions at its discretion in the future."
+    },
+    {
+      "id": "check-page-866b549b19",
+      "url": "https://mhub.org/terms",
+      "page": "terms",
+      "excerpt": "Notwithstanding the foregoing, mHUB’ indemnification obligation shall not apply unless Customer delivers to mHUB written notice of a claim or threatened claim promptly after Customer has notice or knowledge of such claim or threat and mHUB is given the opportunity to control the defense of such action."
+    },
+    {
+      "id": "check-page-00a0685de6",
+      "url": "https://mhub.org/terms",
+      "page": "terms",
+      "excerpt": "Privacy Policy Terms & Conditions Join General Membership Accelerator Industry Community Investors Resources Impact Report Investor Report Blog FAQ Events & Classes mHUB Events + Classes Host an Event About Why mHUB is a Fast Company Best Workplace for Innovators About Virtual Tour Team Board Careers Contact Us"
+    },
+    {
+      "id": "check-page-21a9d74ac0",
+      "url": "https://mhub.org/about",
+      "page": "details",
+      "excerpt": "About Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About"
+    },
+    {
+      "id": "check-page-64b3ae5dc5",
+      "url": "https://mhub.org/about",
+      "page": "details",
+      "excerpt": "As the U.S. reindustrializes and competes to lead in AI, advanced manufacturing, energy, and other emerging technologies, success will depend on the hardware, manufacturing systems, and critical infrastructure that underpin technologies."
+    },
+    {
+      "id": "check-page-cdef8ecb02",
+      "url": "https://mhub.org/about",
+      "page": "details",
+      "excerpt": "Meet the Team Meet the Board mHUB removes barriers for hard tech founders and manufacturers Every year, over 300 startups call mHUB home as they work to commercialize new physical products in energy, advanced manufacturing, quantum, healthcare, sustainability, and more."
+    },
+    {
+      "id": "check-page-a26c2d202b",
+      "url": "https://mhub.org/about",
+      "page": "details",
+      "excerpt": "Innovators have access to state-of-the-art prototyping labs and a micro-factory. mHUB connects entrepreneurs with mentors, suppliers, and investors as well as opportunities to co-develop and pilot alongside industry."
+    },
+    {
+      "id": "check-page-eeeaccc9b0",
+      "url": "https://mhub.org/about",
+      "page": "details",
+      "excerpt": "Giving hardware and manufacturing due recognition as major drivers for prosperity and transformation, mHUB has built a community over 60,000 strong."
+    },
+    {
+      "id": "check-page-f79c9e09f8",
+      "url": "https://mhub.org/about",
+      "page": "details",
+      "excerpt": "From contractors and startups to corporates and philanthropists, mHUB has become a major force in consulting not just startups but also industry and investors on their own hard tech and manufacturing initiatives."
+    },
+    {
+      "id": "check-page-ef5a9d9ce0",
+      "url": "https://mhub.org/about",
+      "page": "details",
+      "excerpt": "Annual Report Supported by Industry Located in the heart of U.S. manufacturing Located in Chicago, mHUB is embedded within the most diversified manufacturing economy in the U.S., with over 12,000+ manufacturers that generate $103 billion annually and employ over 565,000 people."
+    },
+    {
+      "id": "check-page-e067994f1c",
+      "url": "https://mhub.org/about",
+      "page": "details",
+      "excerpt": "Chicago has led R&D breakthroughs in advanced technologies including batteries, quantum and edge computing, electronics and sensors, cybersecurity, nanotechnology, AgTech, and MedTech."
+    },
+    {
+      "id": "check-page-1695652e5c",
+      "url": "https://mhub.org/about",
+      "page": "details",
+      "excerpt": "In October 2023, mHUB completed the $50M acquisition and build-out of a new innovation center for developing critical technologies in energy, healthcare, sustainability, and more."
+    },
+    {
+      "id": "check-page-5ac33e6795",
+      "url": "https://mhub.org/about",
+      "page": "details",
+      "excerpt": "The building is located on Chicago’s near west side within a designated Opportunity Zone, HUBZone, and Planned Manufacturing District on a 2-acre site that increased mHUB’s prototyping and testing facilities to become the largest independent manufacturing innovation center in the country."
+    },
+    {
+      "id": "check-page-c4dc1288f1",
+      "url": "https://mhub.org/about",
+      "page": "details",
+      "excerpt": "Learn more why startups and companies choose to locate in Chicago."
+    },
+    {
+      "id": "check-page-ab2573a66c",
+      "url": "https://mhub.org/about",
+      "page": "details",
+      "excerpt": "Why Chicago mHUB named to Fast Company’s Best Workplaces for Innovators 2025 mHUB was named to Fast Company’s 2025 Best Workplaces for Innovators list, recognizing the impact of an ecosystem that has supported hundreds of entrepreneurs since 2017, helping startups collectively generate more than $4.5B in economic activity, launch breakthrough technologies, and connect into U.S. manufacturing."
+    },
+    {
+      "id": "check-page-38d13c3b43",
+      "url": "https://mhub.org/accelerator",
+      "page": "details",
+      "excerpt": "Start Up Accelerator Programs for HardTech Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech"
+    },
+    {
+      "id": "check-page-522a66a25a",
+      "url": "https://mhub.org/accelerator",
+      "page": "details",
+      "excerpt": "6-month startup accelerator for new product development and commercialization mHUB accelerator cohorts focus on demand-driven HardTech solutions for challenges in Sustainable Manufacturing, Industrial IoT, MedTech, Energy Tech, and EnergyTech."
+    },
+    {
+      "id": "check-page-614c22e772",
+      "url": "https://mhub.org/accelerator",
+      "page": "details",
+      "excerpt": "If you’re a high-potential, early-stage startup building a physical product or solution, this program is for you."
+    },
+    {
+      "id": "check-page-7f994eaae7",
+      "url": "https://mhub.org/accelerator",
+      "page": "details",
+      "excerpt": "Express Interest Prototyping resources and early-stage startup funding Startups in the mHUB accelerator are funded through the mHUB Product Impact Fund ."
+    },
+    {
+      "id": "check-page-aa11df208c",
+      "url": "https://mhub.org/accelerator",
+      "page": "details",
+      "excerpt": "They collaborate with corporate partners and are supported by sector-specific mentors."
+    },
+    {
+      "id": "check-page-d66306c3e3",
+      "url": "https://mhub.org/accelerator",
+      "page": "details",
+      "excerpt": "Learn More MedTech Startups mHUB invests in MedTech startups developing solutions in medicine delivery, remote patient monitoring, wearables, SmartHub solutions, chronic disease management, connected therapeutic devices, detection and diagnosis, drug delivery, and more."
+    },
+    {
+      "id": "check-page-3bb6b88708",
+      "url": "https://mhub.org/accelerator",
+      "page": "details",
+      "excerpt": "Learn More Sustainable Manufacturing mHUB fast-tracks diverse early-stage startups who have developed breakthrough solutions focused in IoT, predictive maintenance, machine-to-machine learning, edge computing, robotics, automation, quality control, equipment & warehouse monitoring, connected employees, and more."
+    },
+    {
+      "id": "check-page-95368e593d",
+      "url": "https://mhub.org/accelerator",
+      "page": "details",
+      "excerpt": "Learn More Portfolio Companies Request Full Portfolio mHUB Accelerator Industry Partners Recognized Among the Nation's Best mHUB was named No."
+    },
+    {
+      "id": "check-page-7435811994",
+      "url": "https://mhub.org/accelerator",
+      "page": "details",
+      "excerpt": "14 on TIME's America's Best Incubators & Accelerators 2026 and No."
+    },
+    {
+      "id": "check-page-e000cbac49",
+      "url": "https://mhub.org/accelerator",
+      "page": "details",
+      "excerpt": "Express Interest in Future Cohort Interested in Industry Partnership Privacy Policy Terms & Conditions Join General Membership Accelerator Industry Community Investors Resources Impact Report Investor Report Blog FAQ Events & Classes mHUB Events + Classes Host an Event About Why mHUB is a Fast Company Best Workplace for Innovators About Virtual Tour Team Board Careers Contact Us"
+    },
+    {
+      "id": "check-page-c976509593",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "page": "details",
+      "excerpt": "Energy Tech Startup Accelerator Programs | mHUB Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech"
+    },
+    {
+      "id": "check-page-bc913b426a",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "page": "details",
+      "excerpt": "U p Next: Compute-Energy Nexus Cohort Launching October 2026 (application period closed) As demand for AI, data centers, and advanced computing continues to grow, so does the need for more resilient and sustainable energy infrastructure."
+    },
+    {
+      "id": "check-page-e7046928b3",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "page": "details",
+      "excerpt": "To help address this challenge, mHUB’s next accelerator will support startups building technologies at the intersection of energy and compute."
+    },
+    {
+      "id": "check-page-b2d919de1f",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "page": "details",
+      "excerpt": "The program will be run in partnership with Equinix Foundation , Generac , Hewlett Packard Enterprise Foundation , Marmon , and Salesforce , with support from and The Rockefeller Foundation , and is designed for founders developing solutions in areas such as data center efficiency, grid resilience, energy infrastructure, and sustainable power systems."
+    },
+    {
+      "id": "check-page-9035d15af8",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "page": "details",
+      "excerpt": "Through the mHUB Accelerator, mHUB Ventures has already invested in 61 hard tech startups solving real-world problems."
+    },
+    {
+      "id": "check-page-b91628eee6",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "page": "details",
+      "excerpt": "After the immersive 6-month program, participants get 18 months of continued support and all mHUB member benefits including lab and co-working access, mentorship and workshops, and connections to industry and investors."
+    },
+    {
+      "id": "check-page-859fe3eac7",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "page": "details",
+      "excerpt": "Startups accepted into the mHUB Accelerator gain access to $6M of state-of-the-art equipment and design, engineering, and product development software packages across 11 prototyping labs."
+    },
+    {
+      "id": "check-page-932a043c27",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "page": "details",
+      "excerpt": "Having over a thousand hardtech innovators within the mHUB ecosystem means there is a bench of experts to support energy tech startups looking for product development, pilot, testing, manufacturing, and supply chain guidance."
+    },
+    {
+      "id": "check-page-58777689e5",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "page": "details",
+      "excerpt": "From detailed courses to tailored roadmaps, mHUB arms entrepreneurs with the fundamentals of developing a hardware product and turning that product into a sustainable hardware business."
+    },
+    {
+      "id": "check-page-7a7eb6cf27",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "page": "details",
+      "excerpt": "Our corporate partners aren't passive sponsors."
+    },
+    {
+      "id": "check-page-f8012a3d2e",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "page": "details",
+      "excerpt": "The firm invests in early-stage hard tech companies solving real-world problems in three thematic areas, Smart & Sustainable Manufacturing, MedTech, and Energy Tech, targeting initial investments of $200K through its Spark Funds and the mHUB Accelerator program."
+    },
+    {
+      "id": "check-page-7ae31773de",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "page": "details",
+      "excerpt": "The initial mHUB Ventures investment includes $100,000 in cash, $30,000 in cash reimbursement for product development, and $70,000 in-kind services for certain fees related to product development, resources, and programming during the six-month highly structured incubation (with two full years of support) in exchange for 6.5% equity in each startup."
+    },
+    {
+      "id": "check-page-0fa597fe6e",
+      "url": "https://mhub.org/energy-tech-accelerator",
+      "page": "details",
+      "excerpt": "Program Structure The mHUB Accelerator is a fast-paced program that’s designed to take your startup from concept or prototype to the foundation of a profitable, scalable and sustainable business."
+    },
+    {
+      "id": "check-page-98cb8a39d9",
+      "url": "https://mhub.org/subscribe-to-our-newsletter",
+      "page": "batches",
+      "excerpt": "Subscribe to Our Newsletter Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show"
+    },
+    {
+      "id": "check-page-3f63d62b5d",
+      "url": "https://mhub.org/subscribe-to-our-newsletter",
+      "page": "batches",
+      "excerpt": "Privacy Policy Terms & Conditions Join General Membership Accelerator Industry Community Investors Resources Impact Report Investor Report Blog FAQ Events & Classes mHUB Events + Classes Host an Event About Why mHUB is a Fast Company Best Workplace for Innovators About Virtual Tour Team Board Careers Contact Us"
+    },
+    {
+      "id": "check-page-33a2bd8dea",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "page": "details",
+      "excerpt": "MedTech Accelerator and Medical Device Accelerator | mHUB Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an"
+    },
+    {
+      "id": "check-page-29bbbfd328",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "page": "details",
+      "excerpt": "Boost Your Startup Get funding and prototyping resources from the nation’s leading hardtech innovation & product development center. mHUB’s unmatched resources help exceptional MedTech startups turn their product ideas into commercialized, scalable product businesses."
+    },
+    {
+      "id": "check-page-2aeea30bfb",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "page": "details",
+      "excerpt": "Are you the next medtech startup to join the mHUB Accelerator? mHUB has already made 46 high-growth hardtech startup investments in companies building disruptive solutions that align with industry needs."
+    },
+    {
+      "id": "check-page-a94d292485",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "page": "details",
+      "excerpt": "By partnering with industry leaders on each accelerator cohort, market demands are identified on the front end that leads to opportunities for pilots and investment on the backend. mHUB is offering an initial investment of $142.5K in cash and $60K in services and programming."
+    },
+    {
+      "id": "check-page-b5bd45bc1f",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "page": "details",
+      "excerpt": "86% of mHUB's accelerator portfolio have received follow on capital."
+    },
+    {
+      "id": "check-page-decbd0731f",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "page": "details",
+      "excerpt": "The 6-month mHUB Accelerator in Chicago is a hands-on experience at the largest independent innovation center for hardtech."
+    },
+    {
+      "id": "check-page-7e9211f215",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "page": "details",
+      "excerpt": "Once complete, participants have 18 months of follow-on support and access to prototyping labs, dedicated mentors, the program's director, further investment opportunities, and more."
+    },
+    {
+      "id": "check-page-ffff8c69b9",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "page": "details",
+      "excerpt": "Startups accepted into the mHUB Accelerator gain access to $6M of state-of-the-art equipment and design, engineering, and product development software packages across 11 prototyping labs."
+    },
+    {
+      "id": "check-page-3ea79ea75c",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "page": "details",
+      "excerpt": "Having 2 medical device companies and a health system comprised of 9 regional locations plus over a thousand hardtech innovators within the mHUB ecosystem means there is a bench of expertise to support medtech startups looking for regulatory, product development, manufacturing, and clinical guidance."
+    },
+    {
+      "id": "check-page-9b07dd9e12",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "page": "details",
+      "excerpt": "Read about investments into medtech startups, climate/energytech startups , and sustainable manufacturing startups."
+    },
+    {
+      "id": "check-page-5a5388884e",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "page": "details",
+      "excerpt": "Six Months of Deep Dive Incubation The mHUB Accelerator is a fast-paced program that’s designed to take your startup from concept or prototype to the foundation of a profitable, scalable and sustainable business."
+    },
+    {
+      "id": "check-page-63d0c2c218",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "page": "details",
+      "excerpt": "Medical devices Medical devices that aid in the prevention, mitigation, or cure of a disease Robotic or automated healthcare devices Robotic or automated devices that assist in a procedure, prevention, diagnosis, treatment, or cure."
+    },
+    {
+      "id": "check-page-d4c6c4295d",
+      "url": "https://mhub.org/medtech-accelerator-for-startups",
+      "page": "details",
+      "excerpt": "Ready Set Launch MedTech Mentor Jason Kunreuther mHUB Expert in Residence, Business Strategy & Finance Mentor Suzanne Lebold, Ph.D."
+    },
+    {
+      "id": "check-page-f1604a56c4",
+      "url": "https://mhub.org/prototyping-lab/programmable-dc-electronic-load-8488",
+      "page": "details",
+      "excerpt": "Programmable DC Electronic Load Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About"
+    },
+    {
+      "id": "check-page-b04da36e1f",
+      "url": "https://mhub.org/prototyping-lab/programmable-dc-electronic-load-8488",
+      "page": "details",
+      "excerpt": "Prototyping Lab with over $6M of equipment and resources The mHUB prototyping facility in Chicago can be accessed through membership or participation in an mHUB accelerator program."
+    },
+    {
+      "id": "check-page-d15dd9eb71",
+      "url": "https://mhub.org/prototyping-lab/programmable-dc-electronic-load-8488",
+      "page": "details",
+      "excerpt": "The mHUB shop allows members to rapidly prototype their HardTech, hardware, and product innovations."
+    },
+    {
+      "id": "check-page-296574cc0f",
+      "url": "https://mhub.org/prototyping-lab/programmable-dc-electronic-load-8488",
+      "page": "details",
+      "excerpt": "Book a tour to see the prototyping lab in person."
+    },
+    {
+      "id": "check-page-e6111932ed",
+      "url": "https://mhub.org/prototyping-lab/programmable-dc-electronic-load-8488",
+      "page": "details",
+      "excerpt": "3D Printer Lab Cold Metals Lab Electronics Lab Finishing Lab Hot Metals Lab Lab Benches Laser Cutting Lab Plastics Lab Software Testing Lab Textiles Lab Wet Labs Woodworking Lab Looking to Access Prototyping Equipment?"
+    },
+    {
+      "id": "check-page-53e6a511b1",
+      "url": "https://mhub.org/prototyping-lab/programmable-dc-electronic-load-8488",
+      "page": "details",
+      "excerpt": "See Equipment List Book a Tour Apply Now Privacy Policy Terms & Conditions Join General Membership Accelerator Industry Community Investors Resources Impact Report Investor Report Blog FAQ Events & Classes mHUB Events + Classes Host an Event About Why mHUB is a Fast Company Best Workplace for Innovators About Virtual Tour Team Board Careers Contact Us"
+    },
+    {
+      "id": "check-page-941b992fc9",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "page": "details",
+      "excerpt": "mHUB Accelerator for Startups focused on Sustainable Manufacturing & IIoT Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events"
+    },
+    {
+      "id": "check-page-8a5a9ce361",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "page": "details",
+      "excerpt": "Most Recent Cohort: Sustainable Water Tech mHUB and Current’s Sustainable Water Tech Accelerator program concluded April 2026 and supported startups developing technologies for industrial water use, reuse, monitoring, and infrastructure."
+    },
+    {
+      "id": "check-page-6b67603bbd",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "page": "details",
+      "excerpt": "As part of mHUB’s smart and sustainable manufacturing work, the program helped founders connect with industry partners, technical experts, and investors to refine their solutions and prepare for scale."
+    },
+    {
+      "id": "check-page-d4a05f4b13",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "page": "details",
+      "excerpt": "Meet the cohort: https://mhub.org/blog/mhub-current-announce-sustainable-water-tech-cohort Sign up below to stay up to date on the mHUB Smart and Sustainable Manufacturing Accelerator and be notified of upcoming cohorts."
+    },
+    {
+      "id": "check-page-7948d88d07",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "page": "details",
+      "excerpt": "Sign Up here Boost Your Startup Get funding and prototyping resources from the nation’s leading hardtech innovation & product development center. mHUB’s unmatched resources help exceptional startups turn their product ideas into commercialized, scalable product businesses."
+    },
+    {
+      "id": "check-page-0c11b712a1",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "page": "details",
+      "excerpt": "Are you the next medtech startup to join the mHUB Accelerator? mHUB has already made +46 high-growth hardtech startup investments in companies building disruptive solutions that align with industry needs."
+    },
+    {
+      "id": "check-page-26f44d5493",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "page": "details",
+      "excerpt": "By partnering with industry leaders on each accelerator cohort, market demands are identified on the front end that leads to opportunities for pilots and investment on the backend. $200,000 initial investment for 6.5% equity, which includes $100K in cash, $30K in cash reimbursement for product development, and $70K in-kind services."
+    },
+    {
+      "id": "check-page-b15cbe8738",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "page": "details",
+      "excerpt": "The 6-month mHUB Accelerator in Chicago is a hands-on experience at the largest independent innovation center for hardtech."
+    },
+    {
+      "id": "check-page-a042519146",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "page": "details",
+      "excerpt": "Once complete, participants have 18 months of follow-on support and access to prototyping labs, dedicated mentors, the program's director, further investment opportunities, and more."
+    },
+    {
+      "id": "check-page-9ac12dc689",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "page": "details",
+      "excerpt": "Startups accepted into the mHUB Accelerator gain access to $6M of state-of-the-art equipment and design, engineering, and product development software packages across 11 prototyping labs."
+    },
+    {
+      "id": "check-page-3376e199b5",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "page": "details",
+      "excerpt": "Access to 50+ industry-leading mentors and partnership within industry, supply chain, and contract manufacturing."
+    },
+    {
+      "id": "check-page-659a322f6c",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "page": "details",
+      "excerpt": "Six Months of Deep Dive Incubation The mHUB Accelerator is a fast-paced program that’s designed to take your startup from concept or prototype to the foundation of a profitable, scalable and sustainable business."
+    },
+    {
+      "id": "check-page-380809e158",
+      "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
+      "page": "details",
+      "excerpt": "Areas of Focus mHUB is looking for early-stage startups working on hardtech solutions focused in smart and sustainable manufacturing."
+    },
+    {
+      "id": "check-page-a44aca3422",
+      "url": "https://mhub.org/accelerator-program-interest",
+      "page": "details",
+      "excerpt": "Accelerator Program Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu"
+    },
+    {
+      "id": "check-page-79aa142a9d",
+      "url": "https://mhub.org/accelerator-program-interest",
+      "page": "details",
+      "excerpt": "Tell mHUB more about who you are and which accelerator programs you're interested in."
+    },
+    {
+      "id": "check-page-d9a968b29e",
+      "url": "https://mhub.org/accelerator-program-interest",
+      "page": "details",
+      "excerpt": "Privacy Policy Terms & Conditions Join General Membership Accelerator Industry Community Investors Resources Impact Report Investor Report Blog FAQ Events & Classes mHUB Events + Classes Host an Event About Why mHUB is a Fast Company Best Workplace for Innovators About Virtual Tour Team Board Careers Contact Us"
+    },
+    {
+      "id": "check-page-d4173de540",
+      "url": "https://mhub.org/ecosystem",
+      "page": "portfolio",
+      "excerpt": "mHUB HardTech & Manufacturing Ecosystem Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit"
+    },
+    {
+      "id": "check-page-f743b729e4",
+      "url": "https://mhub.org/investor-interest",
+      "page": "portfolio",
+      "excerpt": "Investor Interest Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for"
     },
     {
       "id": "check-page-290dab40f8",
@@ -386,66 +1454,6 @@
       "url": "https://mhub.org/blog/top-industrial-iot-applications",
       "page": "application",
       "excerpt": "Top Industrial IoT Applications for Industry 4.0 Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event"
-    },
-    {
-      "id": "check-page-6e415e3fe6",
-      "url": "https://mhub.org/events/apply-to-showcase-at-the-hardtech-summit-73029",
-      "page": "application",
-      "excerpt": "Apply to Showcase at the HardTech Summit Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit"
-    },
-    {
-      "id": "check-page-bacb8bbd71",
-      "url": "https://mhub.org/events/applying-strategy-frameworks-for-business--108336",
-      "page": "application",
-      "excerpt": "Applying Strategy Frameworks for Business Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech"
-    },
-    {
-      "id": "check-page-2b47910654",
-      "url": "https://mhub.org/events/from-filing-to-grant---understanding-the-patent-application-process-206769",
-      "page": "application",
-      "excerpt": "From Filing to Grant - Understanding the Patent Application Process Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events"
-    },
-    {
-      "id": "check-page-02def2f6b6",
-      "url": "https://mhub.org/blog/17-hardtech-terms-you-need-to-know-for-product-development",
-      "page": "terms",
-      "excerpt": "17 HardTech Terms You Need to Know for Product Development Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an"
-    },
-    {
-      "id": "check-page-8d68a2baaf",
-      "url": "https://mhub.org/blog/initial-investment-for-mhub-medtech-accelerator-baxter-edward-elmhurst-health-vc",
-      "page": "terms",
-      "excerpt": "Investment Announced by mHUB MedTech Accelerator Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event"
-    },
-    {
-      "id": "check-page-fc7e50653f",
-      "url": "https://mhub.org/blog/initial-investments-announced-by-mhub-energytech-accelerator-industry-partners",
-      "page": "terms",
-      "excerpt": "Initial Investments Announced by mHUB Accelerator Industry Partners Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events"
-    },
-    {
-      "id": "check-page-fd23133ca6",
-      "url": "https://mhub.org/blog/investments-by-avnet-and-panduit-into-iiot-cohort",
-      "page": "terms",
-      "excerpt": "Initial Investments in HardTech Startups Announced by Avnet & Panduit Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events"
-    },
-    {
-      "id": "check-page-437e61f24e",
-      "url": "https://mhub.org/blog/no-easy-money-navigating-medtech-investment",
-      "page": "terms",
-      "excerpt": "No Easy Money: Navigating MedTech Investment Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech"
-    },
-    {
-      "id": "check-page-8e81f5f7c3",
-      "url": "https://mhub.org/blog/supply-chain-disruption-an-ideal-industry-40-use-case-",
-      "page": "terms",
-      "excerpt": "Supply Chain Disruption: An Ideal Industry 4.0 Use Case Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event"
-    },
-    {
-      "id": "check-page-91d80dffea",
-      "url": "https://mhub.org/events/capital-connections---consumer-investment-panel-139660",
-      "page": "terms",
-      "excerpt": "Capital Connections - Consumer Investment Panel Skip to content Book a Tour Log In Apply Now Donate Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech Summit About Show submenu for About About mHUB Team Board Ecosystem Careers Contact Startups Show submenu for Startups Membership Accelerator Programs Show submenu for Accelerator Programs Energy Tech Accelerator MedTech Accelerator Sustainable Manufacturing Accelerator Prototyping Labs Other Programs Show submenu for Other Programs Landis Family Fellowship mPOWER Partners Show submenu for Partners Corporate Innovation Venture Capital Show submenu for Venture Capital HardTech Venture Capital Impact Show submenu for Impact Impact Report Coalitions Community Partners Resources Show submenu for Resources Blog Virtual Tour FAQ Events Show submenu for Events Events Host an Event HardTech"
     }
   ],
   "findings": {
@@ -481,59 +1489,143 @@
     "cohortStarts": [],
     "durationWeeks": [
       {
-        "value": "6 months",
-        "evidenceId": "check-duration-88dbf1a8b0"
+        "value": "18 months",
+        "evidenceId": "check-duration-98d68faff5"
       },
       {
-        "value": "18 months",
-        "evidenceId": "check-duration-102f034de5"
+        "value": "6 months",
+        "evidenceId": "check-duration-0b429ff5cd"
+      },
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-fe5c0a6590"
       }
     ],
     "format": [
       {
+        "value": "in-person",
+        "evidenceId": "check-format-793140c5e5"
+      },
+      {
         "value": "remote",
-        "evidenceId": "check-format-29c20eeaf9"
+        "evidenceId": "check-format-fb559614da"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-9bc016544a"
       }
     ],
     "location": [
       {
         "value": "Chicago",
         "evidenceId": "check-location-83cb583c4e"
-      },
-      {
-        "value": "Connecticut",
-        "evidenceId": "check-location-2e9b2715a3"
       }
     ],
     "selectivity": [],
     "dealText": [
       {
-        "value": "has increased this initial investment, investing a total of $150k into teams. Invenergy announced that it will invest in blip energy ,",
-        "evidenceId": "check-deal-1aaa34cabe"
+        "value": "investments in 8 to 12 companies with check sizes ranging from $100K to $750K. These investments will require an additional institutional",
+        "evidenceId": "check-deal-837a15d1d7"
+      },
+      {
+        "value": "in 8 to 12 companies with check sizes ranging from $100K to $750K. These investments will require an additional institutional investor",
+        "evidenceId": "check-deal-f41e35a79c"
+      },
+      {
+        "value": "will be the terms? Each corporate partner will deploy a minimum of $100K in additional investments per cohort via a convertible note. These",
+        "evidenceId": "check-deal-b1e4e8fcf7"
+      },
+      {
+        "value": "The mHUB Product Impact Fund I makes an initial investment of $100K in cash for each startup through a pre-money SAFE in exchange for",
+        "evidenceId": "check-deal-93d9fe85e8"
+      },
+      {
+        "value": "Additionally, the program’s corporate partners allocate a minimum of $100k in the form of convertible notes to be distributed across the",
+        "evidenceId": "check-deal-96994c4805"
+      },
+      {
+        "value": "Cash equivalent credits towards hardtech development services ($30K per startup), 24-month mHUB membership ($34K value per startup), as",
+        "evidenceId": "check-deal-9a03477613"
       }
     ],
     "dealComponents": [
       {
         "value": {
           "kind": "cash",
-          "amount": "150000",
+          "amount": "100000",
           "currency": "USD",
           "equity": null,
           "label": "Cash",
           "contingent": false,
           "condition": null
         },
-        "evidenceId": "check-deal-1aaa34cabe"
+        "evidenceId": "check-deal-837a15d1d7"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "750000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-f41e35a79c"
+      },
+      {
+        "value": {
+          "kind": "convertible",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Convertible note",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-b1e4e8fcf7"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "SAFE",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-93d9fe85e8"
+      },
+      {
+        "value": {
+          "kind": "convertible",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": "6.5%",
+          "label": "Convertible note",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-96994c4805"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "30000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-9a03477613"
       }
     ],
     "portfolioPages": [
       {
         "value": "https://mhub.org/become-a-member",
         "evidenceId": "check-portfolio-7a76dd66f4"
-      },
-      {
-        "value": "https://mhub.org/medtech-accelerator-for-startups",
-        "evidenceId": "check-portfolio-b369cc830d"
       }
     ],
     "name": [

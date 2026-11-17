@@ -1,6 +1,6 @@
 {
   "programId": "first-round",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.firstround.com/",
     "https://firstround.com/at-investment",
@@ -12,11 +12,10 @@
     "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
     "https://firstround.com/review/founder-exposed-opening-up-about-startup-failures-and-vulnerability/?ref=review.firstround.com",
     "https://review.firstround.com/about/",
+    "https://review.firstround.com/23-tactical-company-building-lessons-learned-from-scaling-stripe-and-notion/",
     "https://firstround.com/companies/alma",
     "https://firstround.com/companies/clay",
-    "https://firstround.com/companies/evolutioniq",
-    "https://firstround.com/companies/fal",
-    "https://firstround.com/companies/k2space"
+    "https://firstround.com/companies/evolutioniq"
   ],
   "evidence": [
     {
@@ -90,25 +89,11 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-109d97b6e8",
-      "url": "https://firstround.com/companies/k2space",
-      "title": "First Round — portfolio page",
-      "excerpt": "Companies → https://www.firstround.com/companies",
-      "page": "portfolio"
-    },
-    {
       "id": "check-portfolio-1537765979",
       "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
       "title": "First Round — program page",
       "excerpt": "Companies → https://www.firstround.com/companies",
       "page": "details"
-    },
-    {
-      "id": "check-portfolio-189540acac",
-      "url": "https://firstround.com/companies/fal",
-      "title": "First Round — portfolio page",
-      "excerpt": "Companies → https://www.firstround.com/companies",
-      "page": "portfolio"
     },
     {
       "id": "check-portfolio-3feb03bd8f",
@@ -137,13 +122,6 @@
       "title": "First Round — terms page",
       "excerpt": "Companies → https://www.firstround.com/companies",
       "page": "terms"
-    },
-    {
-      "id": "check-portfolio-7579b84f2d",
-      "url": "https://firstround.com/companies/fal",
-      "title": "First Round — portfolio page",
-      "excerpt": "Back to Companies → https://www.firstround.com/companies",
-      "page": "portfolio"
     },
     {
       "id": "check-portfolio-7f1fb4580b",
@@ -209,13 +187,6 @@
       "page": "portfolio"
     },
     {
-      "id": "check-portfolio-f7b126d57f",
-      "url": "https://firstround.com/companies/k2space",
-      "title": "First Round — portfolio page",
-      "excerpt": "Back to Companies → https://www.firstround.com/companies",
-      "page": "portfolio"
-    },
-    {
       "id": "check-route-3cde586dc1",
       "url": "https://www.firstround.com/",
       "title": "First Round — homepage",
@@ -238,10 +209,94 @@
       "excerpt": "Home | First Round Home Companies How we work Team Who we back PMF Method The Review Beginnings Matter We go to unreasonable lengths for founders, often when all they have is an \"imagine if.\" Serval Fal Clay Notion Square Verkada K2 Space Roblox Parallel Planet Labs Beginnings start with a better question. Imagine if companies could automate their IT help desks. Serval After five years helping build Verkada, Jake Stauch set out to build his own company. He began talking to IT leaders and asking the standard customer discovery questions. What are your biggest pain points? What keeps you up at night? The answers were unremarkable. Most already had tools for the problems they knew they had. Then Jake tried a different question: If you could hire someone to sit next to you and do part of your job, what would you have them do? Suddenly, the conversations changed. IT leaders didn't want a better ticketing system, workflow builder, or IT platform. They wanted someone to handle repetitive help desk requests and manual work. Jake realized the opportunity wasn't to build another tool for IT teams. It was to build an AI teammate. That insight became Serval, now a $1B company used by Notion and Vercel. Jake Stauch and Alex McLeod, the duo behind Serval. Serval’s Path to Product-Market Fit. How lessons from Verkada shaped this AI-native IT platform, Serval. Watch the full story of how Jake"
     },
     {
+      "id": "check-page-1981bebba7",
+      "url": "https://www.firstround.com/",
+      "page": "details",
+      "excerpt": "Many of the smartest people in financial services thought it would never work."
+    },
+    {
+      "id": "check-page-4ff43e9d62",
+      "url": "https://www.firstround.com/",
+      "page": "details",
+      "excerpt": "K2 Space When we led K2 Space's pre-seed, Karan and Neel Kunjur believed something almost no one else did: that cheap, abundant launch would make satellites bigger, not smaller."
+    },
+    {
+      "id": "check-page-dfa632788d",
+      "url": "https://www.firstround.com/",
+      "page": "details",
+      "excerpt": "SpaceX’s Transporter-12 mission launch, with K2 Space corporation along for the ride for their first mission flying hardware."
+    },
+    {
+      "id": "check-page-b57059c572",
+      "url": "https://www.firstround.com/",
+      "page": "details",
+      "excerpt": "Roblox We first met Dave Baszucki in 2007 — shortly after Roblox launched out of beta — and passed on the seed round."
+    },
+    {
+      "id": "check-page-599b449058",
+      "url": "https://www.firstround.com/",
+      "page": "details",
+      "excerpt": "Not long after, the company raised a small extension to its seed round, giving us the chance to correct our mistake and begin a partnership that has now lasted nearly two decades."
+    },
+    {
+      "id": "check-page-0e9441147e",
+      "url": "https://www.firstround.com/",
+      "page": "details",
+      "excerpt": "What he had was a ten-slide deck arguing for a new web, one built for AI rather than humans."
+    },
+    {
+      "id": "check-page-46e7b33056",
+      "url": "https://www.firstround.com/",
+      "page": "details",
+      "excerpt": "Parag Agrawal on lessons from leading Twitter through crisis and the future of web for AI, watch the full conversation here ."
+    },
+    {
+      "id": "check-page-7162fba204",
+      "url": "https://www.firstround.com/",
+      "page": "details",
+      "excerpt": "Usually founders have to choose between early stage focus and that kind of functional expertise, but with First Round you can have your cake and eat it too."
+    },
+    {
+      "id": "check-page-758105107f",
+      "url": "https://www.firstround.com/",
+      "page": "details",
+      "excerpt": "We don’t see divisions between angel, pre-seed and seed — we’re interested across the board and find that founders’ needs are the same early on."
+    },
+    {
+      "id": "check-page-d6a68b608f",
+      "url": "https://www.firstround.com/",
+      "page": "details",
+      "excerpt": "That said, because we invest early on the path to product-market fit, sometimes a company we funded pivots or expands in a way that might be close to another investment we’ve made."
+    },
+    {
+      "id": "check-page-3719193684",
+      "url": "https://www.firstround.com/",
+      "page": "details",
+      "excerpt": "The vast majority of the capital we invest comes from university endowments, hospitals, and a wide variety of charities."
+    },
+    {
+      "id": "check-page-5b63f98694",
+      "url": "https://www.firstround.com/",
+      "page": "details",
+      "excerpt": "You can find us in San Francisco, New York, and Philadelphia: 921 Front Street, San Francisco, CA 94111 165 Mercer Street, Floor 2, New York, NY 10012 2400 Market St, Suite 237, Philadelphia PA 19103 What does First Round look for in an idea?"
+    },
+    {
       "id": "check-page-43accdfcb0",
       "url": "https://firstround.com/at-investment",
       "page": "terms",
       "excerpt": "Airtable Your browser version is not supported. Try our desktop apps ! Alternatively, use the latest version of Chrome , Firefox , Safari, or Edge instead. Bring your Airtable data into Claude. Try it now Airtable home or view your bases Platform Platform Platform & Products Airtable Platform Unlock the power of a next-gen app-building platform AI App Building NEW Enable teams to build custom business apps—no code needed AI Agents NEW Deploy thousands of agents inside your apps Portals Collaborate seamlessly with guest users outside your organization Scale Build apps on top of massive data sets with 100M records Platform Features Learn about automations, interfaces, and more Back Features Automations Achieve more in less time via automations Databases Use relational databases to connect data from apps, workflows, and tools Interfaces Create custom interfaces from your data Reporting Measure, analyze, and share insights Views Tailor data visualizations to your teams’ needs Governance and Security Centrally manage security, permissions and data protection Airtable AI Embed AI throughout end-to-end workflows What's New See Airtable's latest product updates Tools Integrations Integrate with tools like Slack, Google Drive, and Salesforce Back Integrations Slack Add real-time messaging to your workflows Google Drive Sync information and build workflows Salesforce Leverage CRM data"
+    },
+    {
+      "id": "check-page-fa35a7ac19",
+      "url": "https://firstround.com/at-investment",
+      "page": "terms",
+      "excerpt": "See data move in real-time and securely transform your work with AI."
+    },
+    {
+      "id": "check-page-c3cc468e2c",
+      "url": "https://firstround.com/at-investment",
+      "page": "terms",
+      "excerpt": "Explore all resources Enterprise Pricing Book demo Sign in Book Demo Sign up for free Sign up Log in Sorry, your browser version is not supported Please use the latest version of Chrome , Firefox , Safari, or Edge instead."
     },
     {
       "id": "check-page-21058b4d55",
@@ -250,10 +305,52 @@
       "excerpt": "Terms of Use | First Round Home Companies How we work Team Who we back PMF Method The Review Terms and Conditions Welcome to https://www.firstround.com/ , owned and operated by FR Capital Holdings, L.P. (“First Round”) (“First Round,” “we,” or “us”). By using this website and its associated services (including any podcasts, newsletters, or other content available hereon) (collectively, the “Site”), you agree to these terms and conditions of use (the “Terms”); if you do not agree, you may not use the Site. First Round may modify the Site and/or these Terms from time to time without notice to you, except that if First Round makes material changes to these Terms, we will post the revised Terms and the revised effective date on this Site and/or provide notice by some other means. By using the Site following any modifications to the Terms, you agree to be bound by the modified Terms. Use of the Site You will comply with all applicable laws, rules and regulations in connection with your use of the Site. You will not violate or attempt to violate the security of the Site or First Round’s systems or network security, including, without limitation by (i) accessing data not intended for users of the Site or gaining unauthorized access to an account, server or any other computer system; (ii) attempting to probe, scan or test the vulnerability of a system or network or to breach security"
     },
     {
+      "id": "check-page-5379de1dec",
+      "url": "https://firstround.com/terms",
+      "page": "terms",
+      "excerpt": "First Round grants you a limited, personal, non-exclusive, non-transferable license to access the Site, and to use the Content, solely for personal, internal and non-commercial purposes."
+    },
+    {
       "id": "check-page-7b3c146344",
       "url": "https://www.firstround.com/angel-track",
       "page": "terms",
       "excerpt": "Angel Track | First Round Home Companies How we work Team Who we back PMF Method The Review Angel invest like the best Get unparalleled access to First Round’s investing expertise and a community of exceptional angels for the best early-stage deal flow in tech. Join the waitlist SPRING 2026 Applications closed In good company Stop dabbling and join over 400 top founders, builders and creators who sharpened their investing skills with Angel Track. Cristina Cordova · COO at Linear Romain Huet · Developer Experience at OpenAI Julia Schottenstein · COO at LangChain Claire Vo · Founder of ChatPRD Stevie Case · CRO at Vanta Dan Shipper · Co-Founder & CEO at Every Dane Knecht · CTO at Cloudflare Tara Seshan · Product Staff at OpenAI Learn the craft Everything you always wanted to know about angel investing but were afraid to ask. Our Approach How we make promising angel investors even better 01 Discover the secrets behind how we’ve learned to source, evaluate, and serve our companies, using real data and stories from First Round’s 20 years in the business. 02 Learn tactical frameworks that dive into the nuts and bolts of angel investing, from positioning yourself to structuring working sessions with founders. 03 No long lectures—participate in interactive sessions, small group discussions, and case studies based on real investments. What we’ll cover Assessing teams Sizing markets"
+    },
+    {
+      "id": "check-page-d127269c6b",
+      "url": "https://www.firstround.com/angel-track",
+      "page": "terms",
+      "excerpt": "Total game changer.\" Lenny Rachitsky · Author at Lenny's Newsletter \"Angel Track helped me think about angel investing in a much more structured manner and helped me truly distill what I was looking for in early-stage teams."
+    },
+    {
+      "id": "check-page-7d52b3661b",
+      "url": "https://www.firstround.com/angel-track",
+      "page": "terms",
+      "excerpt": "After Angel Track, I felt no apprehension and put myself out there.\" Cristina Cordova · CCO at Linear Better angels make a stronger early-stage ecosystem for all of us We’ve seen the incredible impact that smart, focused angel investors can have on a company’s trajectory, but steep learning curves and long feedback loops make for slow progress."
+    },
+    {
+      "id": "check-page-8b722e4a9b",
+      "url": "https://www.firstround.com/angel-track",
+      "page": "terms",
+      "excerpt": "By sharing what we’ve learned over First Round’s 20 years of working with founders, we’re helping angels better source, evaluate, and serve early-stage companies."
+    },
+    {
+      "id": "check-page-b9fff9eb0b",
+      "url": "https://www.firstround.com/angel-track",
+      "page": "terms",
+      "excerpt": "This program is focused entirely on education and community."
+    },
+    {
+      "id": "check-page-9578224ef3",
+      "url": "https://www.firstround.com/angel-track",
+      "page": "terms",
+      "excerpt": "Review Article Build Products That Solve Real Problems With This Lightweight JTBD Framework Ex-Oculus' and Facebook's New Product Experimentation group's Sunita Mohanty shares a lightweight \"jobs-to-be-done\" framework for early-stage product teams, along with templates and go-to-market tactics."
+    },
+    {
+      "id": "check-page-ca6f5b3119",
+      "url": "https://www.firstround.com/angel-track",
+      "page": "terms",
+      "excerpt": "Review Article Finding Startup Ideas and Building in Heavily-Regulated Spaces — Lessons from Cash App & Carbon Health Ayo Omojola shares his lessons for going unreasonably deep when building products in heavily-regulated industries like healthcare and financial services with Carbon Health and Cash App."
     },
     {
       "id": "check-page-5be5f75283",
@@ -262,10 +359,64 @@
       "excerpt": "Non-Obvious Signs of Early Startup Traction — And How to Spot Them Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Starting Up Non-Obvious Signs of Early Startup Traction — And How to Spot Them We gathered the most surprising anecdotes from seasoned founders about when things clicked into place. + Featuring September 12, 2024 + Featuring Outline The earliest days of company-building are typically a solitary slog, an exercise in delayed gratification. It’s just you, maybe a co-founder and a few early hires, coding and running cold outreach for hours on end. Even with a newly minted product and a handful of customers, it’s tough to zoom out from the grind and figure out whether you’re making good progress in those first few months (and even years). You might be stuck in a loop of self-doubt, asking yourself, “Is our message landing? Do people actually like — and use — what we’ve created? Is this what product-market fit is supposed to feel like?” From a quantitative lens, there are metrics to lean on as you seek to answer those questions, from ARR to CAC to sales conversions. We’re big fans of taking a more scientific approach to finding PMF here at First Round — it’s why we launched PMF Method and published detailed benchmarks B2B SaaS"
     },
     {
+      "id": "check-page-c84a98fab7",
+      "url": "https://review.firstround.com/non-obvious-signs-of-early-startup-traction-and-how-to-spot-them/",
+      "page": "details",
+      "excerpt": "We’re big fans of taking a more scientific approach to finding PMF here at First Round — it’s why we launched PMF Method and published detailed benchmarks B2B SaaS startups should be aiming for in our analysis of the four levels of PMF , alongside actual data from Looker’s trajectory through these stages."
+    },
+    {
+      "id": "check-page-c3e8091c3a",
+      "url": "https://review.firstround.com/non-obvious-signs-of-early-startup-traction-and-how-to-spot-them/",
+      "page": "details",
+      "excerpt": "In the realm of B2B selling especially, acquiring customers through your personal network can give you false positives with product-market fit."
+    },
+    {
+      "id": "check-page-561a43560a",
+      "url": "https://review.firstround.com/non-obvious-signs-of-early-startup-traction-and-how-to-spot-them/",
+      "page": "details",
+      "excerpt": "In B2B, time is more valuable than money if you're selling to someone here, because it's the company's money, but it's their individual time."
+    },
+    {
+      "id": "check-page-c0ba3119ea",
+      "url": "https://review.firstround.com/non-obvious-signs-of-early-startup-traction-and-how-to-spot-them/",
+      "page": "details",
+      "excerpt": "You see your product open on customers’ screens Securing a contract with an enterprise customer is no guarantee of actual usage of your product by its employees."
+    },
+    {
+      "id": "check-page-38b81b0872",
+      "url": "https://review.firstround.com/non-obvious-signs-of-early-startup-traction-and-how-to-spot-them/",
+      "page": "details",
+      "excerpt": "When I was on this customer tour to New York — after having mostly interacted with customers over the support channel or Zoom — I visited the WeWork office."
+    },
+    {
+      "id": "check-page-83622d078e",
+      "url": "https://review.firstround.com/non-obvious-signs-of-early-startup-traction-and-how-to-spot-them/",
+      "page": "details",
+      "excerpt": "HOW THE STARTUP COMMUNITY FEELS No one’s roasting you on Hacker News Nabbing the top spot on Hacker News may be an obvious spark of traction."
+    },
+    {
+      "id": "check-page-8486304a23",
+      "url": "https://review.firstround.com/non-obvious-signs-of-early-startup-traction-and-how-to-spot-them/",
+      "page": "details",
+      "excerpt": "So when he finally launched on Hacker News after over a year of quietly building, the product had a solid debut on the platform with a tagline that resonated: “Plaid for enterprise IT systems.” But what he was most proud of was that everyone had nice things to say."
+    },
+    {
+      "id": "check-page-f5abef54f5",
+      "url": "https://review.firstround.com/non-obvious-signs-of-early-startup-traction-and-how-to-spot-them/",
+      "page": "details",
+      "excerpt": "But this was a memorable moment for Shippo CEO and co-founder Laura Behrens Wu , a tangible sign that the startup had found a foothold in the shipping logistics market."
+    },
+    {
       "id": "check-page-2e5539de08",
       "url": "https://www.firstround.com/terms",
       "page": "terms",
       "excerpt": "Terms of Use | First Round Home Companies How we work Team Who we back PMF Method The Review Terms and Conditions Welcome to https://www.firstround.com/ , owned and operated by FR Capital Holdings, L.P. (“First Round”) (“First Round,” “we,” or “us”). By using this website and its associated services (including any podcasts, newsletters, or other content available hereon) (collectively, the “Site”), you agree to these terms and conditions of use (the “Terms”); if you do not agree, you may not use the Site. First Round may modify the Site and/or these Terms from time to time without notice to you, except that if First Round makes material changes to these Terms, we will post the revised Terms and the revised effective date on this Site and/or provide notice by some other means. By using the Site following any modifications to the Terms, you agree to be bound by the modified Terms. Use of the Site You will comply with all applicable laws, rules and regulations in connection with your use of the Site. You will not violate or attempt to violate the security of the Site or First Round’s systems or network security, including, without limitation by (i) accessing data not intended for users of the Site or gaining unauthorized access to an account, server or any other computer system; (ii) attempting to probe, scan or test the vulnerability of a system or network or to breach security"
+    },
+    {
+      "id": "check-page-e7d559e443",
+      "url": "https://www.firstround.com/terms",
+      "page": "terms",
+      "excerpt": "First Round grants you a limited, personal, non-exclusive, non-transferable license to access the Site, and to use the Content, solely for personal, internal and non-commercial purposes."
     },
     {
       "id": "check-page-d3b00b541d",
@@ -274,10 +425,154 @@
       "excerpt": "The Founder Dating Playbook – Here’s the Process I Used to Find My Co-Founder Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Starting Up The Founder Dating Playbook – Here’s the Process I Used to Find My Co-Founder Gloria Lin opens up about her pre-founder journey, from how to find a co-founder and early conversations, to the set of 50 questions she prototyped to team up on a startup idea. + Featuring September 30, 2019 + Featuring Outline Loading the Elevenlabs Text to Speech AudioNative Player... Gloria Lin went on a lot of dates in 2019. No, not that kind. We’re talking about co-founder dating. As the first head of product at Flipboard and the first PM hire at Stripe , Lin’s seen founding teams in action — and knew what she was looking for as she set out to build a company of her own. “I always wanted to team up with someone. My experiences as a product leader were strongest when I was partnering closely with an engineering leader,” says Lin. “When I left to start a company, there were a few spaces I was interested in, but I didn’t have a specific startup idea so I set my sights on finding a strong co-founder to work with.” But she quickly found that was easier said than done. “Most of the co-founder stories I’d heard fell in this bucket"
     },
     {
+      "id": "check-page-d48b216bc8",
+      "url": "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+      "page": "details",
+      "excerpt": "Step 3: Dive into exploring specific ideas with brainstorming and lightweight prototyping."
+    },
+    {
+      "id": "check-page-0ef9f674db",
+      "url": "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+      "page": "details",
+      "excerpt": "There are even some early-stage investors who help facilitate some of those interactions."
+    },
+    {
+      "id": "check-page-f8edbe0d3c",
+      "url": "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+      "page": "details",
+      "excerpt": "“With each of the six potential co-founders I dated, I explored different areas: identity, recruiting, interior design, security, crypto."
+    },
+    {
+      "id": "check-page-b2350ab769",
+      "url": "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+      "page": "details",
+      "excerpt": "It’s more like ‘I could focus on product and marketing and you could work on the tech and operations.’” STEP 3: SPEND TWO WEEKS PROTOTYPING TO SEE IF AN IDEA HAS LEGS After spot checking for initial alignment, Lin dives straight into tackling a project with a potential co-founder."
+    },
+    {
+      "id": "check-page-86b4826b76",
+      "url": "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+      "page": "details",
+      "excerpt": "“He and his co-founder refined them so successfully — and quickly — that they were able to start a company in healthcare without domain expertise."
+    },
+    {
+      "id": "check-page-96bd406217",
+      "url": "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+      "page": "details",
+      "excerpt": "I had their process in mind each time I was ideating.” Gloria Lin and her co-founder, Joel Poloney Here’s an overview of targeted tactics to use when exploring an idea with a potential co-founder, the very same ones Lin used to test six different startup ideas of her own: Explore consumer and enterprise startup ideas differently."
+    },
+    {
+      "id": "check-page-4adf0b6f38",
+      "url": "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+      "page": "details",
+      "excerpt": "Anything where you can put it out into the world and see if there’s a response.” Contrast that with enterprise, which is more about customer discovery."
+    },
+    {
+      "id": "check-page-abf72afef1",
+      "url": "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+      "page": "details",
+      "excerpt": "“With enterprise, building often isn’t the hard part."
+    },
+    {
+      "id": "check-page-67aca6984e",
+      "url": "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+      "page": "details",
+      "excerpt": "If you listen very carefully, you might be able to figure out a jumping off point to build a company around.” When you’re exploring enterprise startup ideas, you have to get out and talk to customers."
+    },
+    {
+      "id": "check-page-b7c2a023b6",
+      "url": "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+      "page": "details",
+      "excerpt": "“With enterprise, it’s about looking for patterns."
+    },
+    {
+      "id": "check-page-b4f3dbb081",
+      "url": "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+      "page": "details",
+      "excerpt": "“This ideation stage was where most of my ‘breakups’ happened,” says Lin."
+    },
+    {
+      "id": "check-page-db4f3b8273",
+      "url": "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+      "page": "details",
+      "excerpt": "STEP 4: BRING ON THE QUESTIONNAIRE Once you have a very basic sense of how prototyping is going, the next step is to tackle the finer points of what the co-founder relationship might look like."
+    },
+    {
       "id": "check-page-a77ad55c56",
       "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
       "page": "details",
       "excerpt": "Home | First Round Home Companies How we work Team Who we back PMF Method The Review Beginnings Matter We go to unreasonable lengths for founders, often when all they have is an \"imagine if.\" Serval Fal Clay Notion Square Verkada K2 Space Roblox Parallel Planet Labs Beginnings start with a better question. Imagine if companies could automate their IT help desks. Serval After five years helping build Verkada, Jake Stauch set out to build his own company. He began talking to IT leaders and asking the standard customer discovery questions. What are your biggest pain points? What keeps you up at night? The answers were unremarkable. Most already had tools for the problems they knew they had. Then Jake tried a different question: If you could hire someone to sit next to you and do part of your job, what would you have them do? Suddenly, the conversations changed. IT leaders didn't want a better ticketing system, workflow builder, or IT platform. They wanted someone to handle repetitive help desk requests and manual work. Jake realized the opportunity wasn't to build another tool for IT teams. It was to build an AI teammate. That insight became Serval, now a $1B company used by Notion and Vercel. Jake Stauch and Alex McLeod, the duo behind Serval. Serval’s Path to Product-Market Fit. How lessons from Verkada shaped this AI-native IT platform, Serval. Watch the full story of how Jake"
+    },
+    {
+      "id": "check-page-fcf2171aa6",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "page": "details",
+      "excerpt": "Many of the smartest people in financial services thought it would never work."
+    },
+    {
+      "id": "check-page-f9859b8d2b",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "page": "details",
+      "excerpt": "K2 Space When we led K2 Space's pre-seed, Karan and Neel Kunjur believed something almost no one else did: that cheap, abundant launch would make satellites bigger, not smaller."
+    },
+    {
+      "id": "check-page-1ddb7e2640",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "page": "details",
+      "excerpt": "SpaceX’s Transporter-12 mission launch, with K2 Space corporation along for the ride for their first mission flying hardware."
+    },
+    {
+      "id": "check-page-f94fc10840",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "page": "details",
+      "excerpt": "Roblox We first met Dave Baszucki in 2007 — shortly after Roblox launched out of beta — and passed on the seed round."
+    },
+    {
+      "id": "check-page-d41573f28d",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "page": "details",
+      "excerpt": "Not long after, the company raised a small extension to its seed round, giving us the chance to correct our mistake and begin a partnership that has now lasted nearly two decades."
+    },
+    {
+      "id": "check-page-ea9132524d",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "page": "details",
+      "excerpt": "What he had was a ten-slide deck arguing for a new web, one built for AI rather than humans."
+    },
+    {
+      "id": "check-page-327dacfc61",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "page": "details",
+      "excerpt": "Parag Agrawal on lessons from leading Twitter through crisis and the future of web for AI, watch the full conversation here ."
+    },
+    {
+      "id": "check-page-8e838bd8eb",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "page": "details",
+      "excerpt": "Usually founders have to choose between early stage focus and that kind of functional expertise, but with First Round you can have your cake and eat it too."
+    },
+    {
+      "id": "check-page-e35b84dc56",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "page": "details",
+      "excerpt": "We don’t see divisions between angel, pre-seed and seed — we’re interested across the board and find that founders’ needs are the same early on."
+    },
+    {
+      "id": "check-page-c54bb8ef81",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "page": "details",
+      "excerpt": "That said, because we invest early on the path to product-market fit, sometimes a company we funded pivots or expands in a way that might be close to another investment we’ve made."
+    },
+    {
+      "id": "check-page-0ebc121fee",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "page": "details",
+      "excerpt": "The vast majority of the capital we invest comes from university endowments, hospitals, and a wide variety of charities."
+    },
+    {
+      "id": "check-page-7b827aecc7",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "page": "details",
+      "excerpt": "You can find us in San Francisco, New York, and Philadelphia: 921 Front Street, San Francisco, CA 94111 165 Mercer Street, Floor 2, New York, NY 10012 2400 Market St, Suite 237, Philadelphia PA 19103 What does First Round look for in an idea?"
     },
     {
       "id": "check-page-75cfeff73e",
@@ -286,10 +581,52 @@
       "excerpt": "Founder Exposed: Opening Up About Startup Failures and Vulnerability Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Management Founder Exposed: Opening Up About Startup Failures and Vulnerability Jeff Wald knows firsthand that behind every startup success story is a stack of seldom discussed defeats. The investor and three-time founder opens up about why leaders should embrace vulnerability, and offers tools for extracting lessons from failure and getting back in the game. + Featuring April 1, 2019 + Featuring Outline When it comes to the extremes of the startup spectrum, three-time founder, investor and New York tech ecosystem advisor Jeff Wald has seen it all. “I’ve counted Fred Wilson as an investor, raised over $60 million in funding and sold my startup WorkMarket to ADP ,” says Wald. “But before all that, earlier on in my career, I had a startup implode, leaving me bankrupt, depressed, and on the verge of moving back in with my parents. And while I’m really proud of WorkMarket’s success, it wasn’t smooth sailing. At one point, the board forced me to get a leadership coach. After four years, my co-founder left the company. And when we got acquired, people openly questioned why I didn’t hold out for a bigger outcome. So behind every exit"
     },
     {
+      "id": "check-page-71c56e18ab",
+      "url": "https://firstround.com/review/founder-exposed-opening-up-about-startup-failures-and-vulnerability/?ref=review.firstround.com",
+      "page": "details",
+      "excerpt": "They’re taking everything we built from security and compliance to UX and they’re kicking it up a notch, raising it to operate on an enterprise scale,” he says."
+    },
+    {
+      "id": "check-page-eede4816df",
+      "url": "https://firstround.com/review/founder-exposed-opening-up-about-startup-failures-and-vulnerability/?ref=review.firstround.com",
+      "page": "details",
+      "excerpt": "I’ve tried to keep an open door to anybody in the startup community that I've had interactions with,” says Wald."
+    },
+    {
+      "id": "check-page-d56a472694",
+      "url": "https://firstround.com/review/founder-exposed-opening-up-about-startup-failures-and-vulnerability/?ref=review.firstround.com",
+      "page": "details",
+      "excerpt": "And that’s okay.” Seek opportunities for structured mentorship ."
+    },
+    {
+      "id": "check-page-f821fc3e5a",
+      "url": "https://firstround.com/review/founder-exposed-opening-up-about-startup-failures-and-vulnerability/?ref=review.firstround.com",
+      "page": "details",
+      "excerpt": "I’ve mentored companies through organizations like the Entrepreneur's Roundtable Accelerator and The Founder Institute ,” he says."
+    },
+    {
+      "id": "check-page-cc2134e5df",
+      "url": "https://firstround.com/review/founder-exposed-opening-up-about-startup-failures-and-vulnerability/?ref=review.firstround.com",
+      "page": "details",
+      "excerpt": "But if you gave it every ounce of energy, brought every resource and worked 18 hours a day, 7 days a week, there’s this feeling that you can hold your head high as you walk away.” Much like flexing the skill of vulnerability, a bad co-founder relationship falls in the realm of the personal rather than the business, and is consequently, much more painful to confront."
+    },
+    {
+      "id": "check-page-5118f5a416",
+      "url": "https://firstround.com/review/founder-exposed-opening-up-about-startup-failures-and-vulnerability/?ref=review.firstround.com",
+      "page": "details",
+      "excerpt": "Your investors, advisors, mentors and friends will be there to help.” These rallying words are grounded in a realization: At the time, Wald’s failure felt like something that had uniquely occurred because of him — that he alone shouldered the blame ."
+    },
+    {
       "id": "check-page-dab84a373a",
       "url": "https://review.firstround.com/about/",
       "page": "details",
       "excerpt": "About Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In About We believe that there is powerful, untapped knowledge out there that can transform the way people build technology. There's just one problem: It's trapped in other people's heads — people who are at the top of their fields, who rarely have time to share what they've learned (even when they want to). The Review is about liberating this knowledge to inspire and accelerate action. To deliver on this mission, we'll make you three promises…. We'll get out of the way and let experts speak directly to you about what they believe is most important. (That's why we choose not to use bylines.) Every article will serve up tactics that you can use today to change your company and your career. We will never be boring. The stories you find on here are crafted to teach, to engage and to stick. We launched The Review in 2013 to cut through the noise so that you can make an impact. About Articles Curated Reads Paths to PMF Newsletter Podcast Sign in Glossary Sign In For the founder's notepad: \"If you personally want to grow as fast as your company, you have to give away your job every couple months.\" – Molly Graham “Asking ‘Why can't this be done sooner?’ methodically, reliably and habitually can"
+    },
+    {
+      "id": "check-page-2250419908",
+      "url": "https://review.firstround.com/23-tactical-company-building-lessons-learned-from-scaling-stripe-and-notion/",
+      "page": "portfolio",
+      "excerpt": "23 Tactical Company Building Lessons, Learned From Scaling Stripe & Notion Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Starting Up 23 Tactical Company Building Lessons, Learned From Scaling Stripe & Notion From Stripe to Notion, Cristina Cordova has worked on some of the biggest products in tech. She shares tactical tidbits on what she’s learned about about scaling companies and shaping your career. + Featuring March 21, 2022 + Featuring Outline Some startup operators have a clear lane, an easy-to-follow career progression. SDR to Sales Manager to VP of Sales. SWE to Director of Eng to VP of Engineering. Marketing Manager to CMO. Others have a resume that’s harder to pin down. Take the more elusive “business” folks, often the first non-engineering hires at an early-stage startup. They’re the generalists who can thrive in product, ops, business development, or even dabble in data science or developer advocacy. If you’re an aspiring startup leader who falls in this category, it’s often challenging to chart a broader course for your career. And it can be just as murky on the other side of the table. From a founder’s perspective, bringing these types of hires aboard marks a new chapter in a startup’s journey. The focus shifts from building"
     },
     {
       "id": "check-page-206b36d212",
@@ -308,18 +645,6 @@
       "url": "https://firstround.com/companies/evolutioniq",
       "page": "portfolio",
       "excerpt": "EvolutionIQ | First Round Home Companies How we work Team Who we back PMF Method The Review EvolutionIQ Imagine if improving disability insurance claims processing with AI helped more people return to work. Today, EvolutionIQ's AI-powered claims guidance platform is used by the majority of U.S. disability carriers to help millions of injured workers get back on their feet. In 2019, a co-founding trio saw an opportunity that others missed: in a slow-moving industry sat mountains of underutilized data. While others saw constraints in the concentrated, risk-averse world of insurance, they recognized the opportunity to create massive value with an early vertical AI application in an obscure area. Here's what stood out to us from their journey to a $730M acquisition: Founders Tomas Vykruta, Michael Saltzman, Jonathan Lewin Initial Partnership Seed Categories AI / Enterprise / Healthcare Partner Bill Trenchard Location New York EvolutionIQ Founders Tomas Vykruta, Michael Saltzman, Jonathan Lewin Initial Partnership Seed Categories AI / Enterprise / Healthcare Partner Bill Trenchard Location New York The founder's story Inside the journey to build an enduring AI business We recently sat down with the founding team to unpack how they went from an early AI idea to a $730M acquisition in five years. From navigating long sales cycles and building trust with risk-averse customers, to"
-    },
-    {
-      "id": "check-page-e781d67aaa",
-      "url": "https://firstround.com/companies/fal",
-      "page": "portfolio",
-      "excerpt": "Fal | First Round Home Companies How we work Team Who we back PMF Method The Review Fal Imagine if generative media had an infrastructure partner capable of supporting exponential growth. fal is a generative media platform for developers. By providing the fastest inference for generative models, they're tackling the challenges of slow inference speeds and high costs that often hinder the seamless integration of these powerful models into real-world applications. Founders Burkay Gur, Gorkem Yurtseven Initial Partnership Seed Categories AI / Enterprise / DevTools & Infra Partner Todd Jackson Location SF Bay Area Fal Founders Burkay Gur, Gorkem Yurtseven Initial Partnership Seed Categories AI / Enterprise / DevTools & Infra Partner Todd Jackson Location SF Bay Area Founder highlight A seriously steep slope $1M to $40M ARR in just one year. 1M+ developers. Generating billions of assets (image, video, audio) monthly and handling over 100 million inference requests daily. $49M Series B. Founders Burkay Gur and Gorkem Yurtseven unpack the details of fal's journey (so far) in Fortune. Read the story Obsess over performance When Burkay and Gorkem first showed First Round Partner Todd Jackson a demo in our office, his mind was blown — not just by how they turned him into George Clooney, but by how they were doing stable diffusion inference at 30 frames per second, so fast it basically"
-    },
-    {
-      "id": "check-page-f85c847b33",
-      "url": "https://firstround.com/companies/k2space",
-      "page": "portfolio",
-      "excerpt": "K2 Space | First Round Home Companies How we work Team Who we back PMF Method The Review K2 Space Imagine if large spacecraft made previously impossible missions possible. K2 Space is upending satellite technology by challenging a long-held industry assumption: that to make spacecraft cheaper, you need to make them smaller. Instead, they're building massive, high-powered satellites, creating a platform that's transforming how we approach national security, commercial, and scientific missions in space. We invested in their 2022 pre-seed round and they’ve continued to impress ever since, from significant technical progress and a successful demo mission, to strong customer pull and a string of contracts. Here's what early-stage founders can learn from their story: Founders Karan Kunjur, Neel Kunjur Initial Partnership Pre-Seed Categories Enterprise / Hardware Partner Bill Trenchard Location Los Angeles K2 Space Founders Karan Kunjur, Neel Kunjur Initial Partnership Pre-Seed Categories Enterprise / Hardware Partner Bill Trenchard Location Los Angeles Founder highlight Why founders (and brothers) Karan and Neel Kunjur fit the market like a flight suit The Kunjur brothers bring complementary strengths: Neel's technical expertise from SpaceX and Kitty Hawk, and Karan's commercial chops from BCG and Text IQ. As strong storytellers and communicators — critical in such a"
     }
   ],
   "findings": {

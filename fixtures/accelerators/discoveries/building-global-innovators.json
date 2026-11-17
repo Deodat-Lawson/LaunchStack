@@ -1,6 +1,6 @@
 {
   "programId": "building-global-innovators",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://bgi.pt/about",
@@ -29,6 +29,14 @@
     {
       "url": "https://bgi.pt/bgi-accelerator",
       "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://bgi.pt/eit-food/agrifood-open-day",
+      "page": "other",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -67,6 +75,14 @@
       "origin": "official"
     },
     {
+      "url": "https://bgi.pt/eit-urban-mobility/urban-mobility-startup-creation",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://bgi.pt/eitclimatekic/accelerator",
       "page": "details",
       "anchor": "",
@@ -91,9 +107,33 @@
       "origin": "official"
     },
     {
+      "url": "https://bgi.pt/reports/urban-mobility-scale-up-report-2026",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.bgi.pt/about",
       "page": "details",
       "anchor": "About us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bgi.pt/agrifood-startup-challenge",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bgi.pt/ampliaqua",
+      "page": "other",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

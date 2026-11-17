@@ -1,17 +1,123 @@
 {
   "programId": "partnership-for-community-development",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://hamiltonpcd.org/",
-    "https://www.hamiltonpcd.org/about-pcd"
+    "https://www.hamiltonpcd.org/about-pcd",
+    "https://www.hamiltonpcd.org/about-retired"
   ],
   "evidence": [
     {
+      "id": "check-location-9f943b408f",
+      "url": "https://www.hamiltonpcd.org/about-pcd",
+      "title": "Partnership for Community Development — program page",
+      "excerpt": "that strengthen the community. While based in Hamilton, PCD recognizes that true prosperity",
+      "page": "details"
+    },
+    {
       "id": "check-name-7f64bc63ab",
       "url": "https://hamiltonpcd.org/",
-      "title": "Partnership for Community Development — homepage checked by scrape.py",
+      "title": "Partnership for Community Development — homepage",
       "excerpt": "Village and Town of Hamilton and the surrounding areas. Partnership for Community Development Help us transform Fayette St. Park! In 2025, the Village",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-809b7a557d",
+      "url": "https://hamiltonpcd.org/",
+      "page": "details",
+      "excerpt": "Hamilton PCD 0 Skip to Content Home About Projects Grants Resources Donate Events Contact Us Open Menu Close Menu Home About Projects Grants Resources Donate Events Contact Us Open Menu Close Menu Home About Projects Grants Resources Donate Events Contact Us The PCD is a 501(c)(3) nonprofit that works to enhance sustainable economic opportunity and community vitality in the Village and Town of Hamilton and the surrounding areas. Partnership for Community Development Help us transform Fayette St. Park! In 2025, the Village of Earlville received $627,847 through the Office of Parks, Recreation, and Historic Preservation for the redesign and construction of the pavilion, playground, and skate park on Fayette St. The PCD has been working with the Village and the Earlville community since 2020 to revitalize this important community space. With the planned construction of new senior housing in the adjacent former school building, Fayette St. Park will be transformed into a unique multi-generational space in southern Madison County. The PCD is excited to work with Earlville to make the community’s vision a reality. We are currently accepting donations to match the grant funding for this project. Your contributions will ensure that Fayette St. Park becomes an exceptional community space! DONATE NOW Our Partners Colgate University Village of Hamilton Town of Hamilton The PCD is a"
+    },
+    {
+      "id": "check-page-00c89913eb",
+      "url": "https://hamiltonpcd.org/",
+      "page": "details",
+      "excerpt": "It is actively moving forward projects related to housing, parks, trails, street design, community centers and small business grants."
+    },
+    {
+      "id": "check-page-4fd562904c",
+      "url": "https://hamiltonpcd.org/",
+      "page": "details",
+      "excerpt": "In addition, the PCD encompasses The Hamilton Chamber of Commerce and The Hub Small Business Incubator under its fiscal umbrella."
+    },
+    {
+      "id": "check-page-21620a16b3",
+      "url": "https://hamiltonpcd.org/",
+      "page": "details",
+      "excerpt": "They also provide support with grants and networking events."
+    },
+    {
+      "id": "check-page-6b23e59d78",
+      "url": "https://hamiltonpcd.org/",
+      "page": "details",
+      "excerpt": "The Hub is the only state certified business incubator in Madison County and provides coworking, networking, mentoring, and business development programming for the entire county."
+    },
+    {
+      "id": "check-page-189447ff36",
+      "url": "https://hamiltonpcd.org/",
+      "page": "details",
+      "excerpt": "The PCD helped the Village of Hamilton obtain a $2.25 million New York Forward Grant that will include projects that impact the Village Green, new downtown development, and facade renovations."
+    },
+    {
+      "id": "check-page-0af8b878fc",
+      "url": "https://hamiltonpcd.org/",
+      "page": "details",
+      "excerpt": "A Transportation Alternatives Program grant through NYSDOT will bring another $1.8 million to the village in streetscape improvements and trail connections."
+    },
+    {
+      "id": "check-page-b4abb6db5e",
+      "url": "https://hamiltonpcd.org/",
+      "page": "details",
+      "excerpt": "Supporting Businesses The Hub Business Incubator The Hub is managed by PCD and is CNY’s only state-certified business incubator."
+    },
+    {
+      "id": "check-page-2a14ad65ea",
+      "url": "https://hamiltonpcd.org/",
+      "page": "details",
+      "excerpt": "The Hub offers business advising and mentorship, co-working, networking, and more."
+    },
+    {
+      "id": "check-page-65997aa929",
+      "url": "https://www.hamiltonpcd.org/about-pcd",
+      "page": "details",
+      "excerpt": "About — Hamilton PCD 0 Skip to Content Home About Projects Grants Resources Donate Events Contact Us Open Menu Close Menu Home About Projects Grants Resources Donate Events Contact Us Open Menu Close Menu Home About Projects Grants Resources Donate Events Contact Us Who we are Staff Board of Directors Mission The PCD is a nonprofit partnership between the Village of Hamilton, Town of Hamilton, and Colgate University that works to enhance sustainable economic opportunity and community vitality in Hamilton and the surrounding areas. History In August 1998, representatives from the Town of Hamilton, the Village of Hamilton, and Colgate University came together to discuss shared concerns and opportunities for collaboration. Their focus was on revitalizing the local economy and enhancing the quality of life for residents. Key issues identified during these discussions included small business development, downtown façade improvements, and the restoration of the Village Green. As a result, the Partnership for Community Development (PCD) was established in 1999 as a non-profit organization. Rooted in the spirit of collaboration, PCD brings together its founding partners—along with other local governments and community organizations—to facilitate cooperative projects that strengthen the community. While based in Hamilton, PCD recognizes that true prosperity and sustainability require a"
+    },
+    {
+      "id": "check-page-5bb11faecc",
+      "url": "https://www.hamiltonpcd.org/about-pcd",
+      "page": "details",
+      "excerpt": "As the senior planner, she works on grant applications and administration and works with local government and other community groups on community development initiatives."
+    },
+    {
+      "id": "check-page-6c5820da49",
+      "url": "https://www.hamiltonpcd.org/about-pcd",
+      "page": "details",
+      "excerpt": "Melissa Davis DIRECTOR OF ECONOMIC DEVELOPMENT Melissa Davis oversees the HUB business incubator serving Madison County, operating in partnership with Colgate University’s Entrepreneurship and Innovation Program."
+    },
+    {
+      "id": "check-page-9f51182e8e",
+      "url": "https://www.hamiltonpcd.org/about-pcd",
+      "page": "details",
+      "excerpt": "I am proud to help on the board and hope to foster a welcoming business climate and a vibrant, dynamic Hamilton.” Corey Mosher - Vice President Corey Mosher is a fourth-generation farmer and a partner in Mosher Farms in Bouckville."
+    },
+    {
+      "id": "check-page-5a7d4c554c",
+      "url": "https://www.hamiltonpcd.org/about-pcd",
+      "page": "details",
+      "excerpt": "She has worked in health care finance for many years in Utica and Syracuse and she is excited to be part of the Hamilton community."
+    },
+    {
+      "id": "check-page-05be55e35c",
+      "url": "https://www.hamiltonpcd.org/about-pcd",
+      "page": "details",
+      "excerpt": "She is a current member of the Central NY United Way Women United group and a past Treasurer of Brady Social Enterprises, working to serve the near westside community in Syracuse."
+    },
+    {
+      "id": "check-page-e7c253cd26",
+      "url": "https://www.hamiltonpcd.org/about-retired",
+      "page": "details",
+      "excerpt": "About PCD — Hamilton PCD 0 Skip to Content Home About Projects Grants Resources Donate Events Contact Us Open Menu Close Menu Home About Projects Grants Resources Donate Events Contact Us Open Menu Close Menu Home About Projects Grants Resources Donate Events Contact Us Our Mission The PCD is a nonprofit partnership between the Village of Hamilton, Town of Hamilton, and Colgate University that works to enhance sustainable economic opportunity and community vitality in Hamilton and the surrounding areas. The History In August 1998, representatives from the Town, Village, and Colgate University met to discuss opportunities for a cooperative project that would revitalize the local economy and enhance quality of life for residents. This was the first time in recent memory that the town, village, and university had come together to discuss their common concerns. Major issues raised included small business development, downtown facade improvements, and restoring the Village Green. The Partnership for Community Development was incorporated as a non-profit in 1999. In keeping with the collaborative nature of our founding, we bring together our three partners as well as other local governments and community organizations to facilitate collaborative projects. Although our base of operations is in Hamilton, we understand that true prosperity and sustainability happens on a regional"
     }
   ],
   "findings": {
@@ -22,8 +128,20 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [
+      {
+        "value": "Hamilton",
+        "evidenceId": "check-location-9f943b408f"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

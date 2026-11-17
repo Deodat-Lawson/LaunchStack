@@ -1,6 +1,6 @@
 {
   "programId": "angelpad",
-  "checkedAt": "2026-11-14T20:59:02.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://angelpad.com/a/cat/faq-2/",
@@ -20,6 +20,14 @@
     },
     {
       "url": "https://angelpad.com/a/cat/portfolio/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://angelpad.com/a/cat/portfolio/page/2/",
       "page": "portfolio",
       "anchor": "",
       "fetched": true,
@@ -110,7 +118,7 @@
       "url": "https://angelpad.com/portfolio/",
       "page": "portfolio",
       "anchor": "portfolio",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

@@ -1,6 +1,6 @@
 {
   "programId": "setsquared",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.setsquared.co.uk/",
     "https://www.setsquared.co.uk/ai-applications/",
@@ -16,9 +16,21 @@
     "https://www.setsquared.co.uk/gradinvest20-application-received/",
     "https://www.setsquared.co.uk/icure-2020-application-received/",
     "https://www.setsquared.co.uk/icure-application-form-2020/",
-    "https://www.setsquared.co.uk/icure-application-form/"
+    "https://www.setsquared.co.uk/icure-application-form/",
+    "https://www.setsquared.co.uk/innovation-labs-application-received/",
+    "https://www.setsquared.co.uk/investing-in-health-innovation-panel-discussion-application-confirmation/",
+    "https://www.setsquared.co.uk/last-chance-to-get-applications-in-for-oracle-startup-cloud-accelerator/",
+    "https://www.setsquared.co.uk/medtech-invest-2020-application-received/",
+    "https://www.setsquared.co.uk/nextgen-invest-2020-application-received/"
   ],
   "evidence": [
+    {
+      "id": "check-format-a75d239e22",
+      "url": "https://www.setsquared.co.uk/last-chance-to-get-applications-in-for-oracle-startup-cloud-accelerator/",
+      "title": "SETsquared — application page",
+      "excerpt": "service business. Whilst at Interactive Scientific’s Virtual reality solution targeting the education and scientific",
+      "page": "application"
+    },
     {
       "id": "check-name-5400002866",
       "url": "https://www.setsquared.co.uk/",
@@ -42,10 +54,64 @@
       "excerpt": "SETsquared Partnership | the University Enterprise Collaboration About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy"
     },
     {
+      "id": "check-page-8c926ff682",
+      "url": "https://www.setsquared.co.uk/",
+      "page": "details",
+      "excerpt": "Discover SETsquared INVESTMENT FUTURES Get early access to 20 of the UK’s most promising deep tech start-ups 24 November 2026, 12:00 – 18:30, CodeNode, London REGISTER YOUR SPACE EXPLORE THE INVESTMENT FUTURES CONTENT SERIES Explore what’s next for UK innovation investment with insights from investors, founders, policymakers and academics."
+    },
+    {
+      "id": "check-page-021316d78b",
+      "url": "https://www.setsquared.co.uk/",
+      "page": "details",
+      "excerpt": "View the series FUEL THE FUTURE WITH HYDROGEN INNOVATION Connecting people, ideas, and technology to transform hydrogen through GW-SHIFT’s training programmes."
+    },
+    {
+      "id": "check-page-8509f948f3",
+      "url": "https://www.setsquared.co.uk/",
+      "page": "details",
+      "excerpt": "Find out more ACCESS THE FREE DEAL READINESS TOOLKIT Simplify licensing, investment, and spin-outs with expert tools and guidance."
+    },
+    {
+      "id": "check-page-8cddd322c1",
+      "url": "https://www.setsquared.co.uk/",
+      "page": "details",
+      "excerpt": "Check out our latest events and opportunities Centre locations Six specialist business incubator centres across the South of England and Wales View our programmes Take a look at our full offering of programmes which are tailor made to help your business grow /News Beyond the job title: getting..."
+    },
+    {
+      "id": "check-page-124f72b951",
+      "url": "https://www.setsquared.co.uk/",
+      "page": "details",
+      "excerpt": "For an early-stage business, bringing in senior expertise can be a balancing act."
+    },
+    {
+      "id": "check-page-6d66fe9538",
+      "url": "https://www.setsquared.co.uk/",
+      "page": "details",
+      "excerpt": "Innovation Hub Join our fast-growing online community of UK companies and sector experts, funders and investors at the forefront of digital, scientific,... /News From student start-up to £1.4m..."
+    },
+    {
+      "id": "check-page-8b733e28cb",
+      "url": "https://www.setsquared.co.uk/",
+      "page": "details",
+      "excerpt": "About SETsquared Find out more about our Partnership and the team behind our programmes A partnership of enterprise and incubation The SETsquared Partnership is a world leading business incubator and enterprise partnership comprising six research-intensive universities: Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
+    },
+    {
+      "id": "check-page-76162eaf2d",
+      "url": "https://www.setsquared.co.uk/",
+      "page": "details",
+      "excerpt": "Sign-up Close Mailing List sign-up SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
+    },
+    {
       "id": "check-page-39012e9a77",
       "url": "https://www.setsquared.co.uk/ai-applications/",
       "page": "application",
       "excerpt": "AI solutions - vote yes - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy Locations & Contact Close"
+    },
+    {
+      "id": "check-page-ccd4932885",
+      "url": "https://www.setsquared.co.uk/ai-applications/",
+      "page": "application",
+      "excerpt": "SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
     },
     {
       "id": "check-page-49ca2809e5",
@@ -54,10 +120,82 @@
       "excerpt": "Applications to IoT Boost programme are open! - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy"
     },
     {
+      "id": "check-page-6f6ac66534",
+      "url": "https://www.setsquared.co.uk/applications-to-iot-boost-programme-are-open/",
+      "page": "application",
+      "excerpt": "Bristol, UK SETsquared Business Acceleration Centre has partnered with High Tech Bristol and Bath, Engine Shed, and the University of the West of England (UWE, Bristol) to deliver the IoT Boost programme in Bristol & Bath starting from March 2017."
+    },
+    {
+      "id": "check-page-fb452be535",
+      "url": "https://www.setsquared.co.uk/applications-to-iot-boost-programme-are-open/",
+      "page": "application",
+      "excerpt": "We were selected by UK Digital Catapult as one of six IoT Boost delivery partners in the UK."
+    },
+    {
+      "id": "check-page-0c3ae5de87",
+      "url": "https://www.setsquared.co.uk/applications-to-iot-boost-programme-are-open/",
+      "page": "application",
+      "excerpt": "If you are working on Internet of Things (IoT) enabled products, services and applications, you may be eligible to apply to the programme and secure a year long membership with the award winning SETsquared incubator, to help commercialise your technology and scale the business."
+    },
+    {
+      "id": "check-page-8c91acd74e",
+      "url": "https://www.setsquared.co.uk/applications-to-iot-boost-programme-are-open/",
+      "page": "application",
+      "excerpt": "Bristol & Bath IoT community is invited to join a dedicated IoT Boost workshop, which will take place on 3 rd March 2017."
+    },
+    {
+      "id": "check-page-134bb4549f",
+      "url": "https://www.setsquared.co.uk/applications-to-iot-boost-programme-are-open/",
+      "page": "application",
+      "excerpt": "By mid-March 10 IoT businesses will be selected to join the programme and commence their membership with SETsquared."
+    },
+    {
+      "id": "check-page-634bdb7eee",
+      "url": "https://www.setsquared.co.uk/applications-to-iot-boost-programme-are-open/",
+      "page": "application",
+      "excerpt": "Apply now to take advantage of this effective and proven incubation programme."
+    },
+    {
+      "id": "check-page-e720c1f43f",
+      "url": "https://www.setsquared.co.uk/applications-to-iot-boost-programme-are-open/",
+      "page": "application",
+      "excerpt": "Sign-up Close Mailing List sign-up SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
+    },
+    {
       "id": "check-page-91507ebc36",
       "url": "https://www.setsquared.co.uk/blu-wireless-raises-16-6-million-in-growth-funding-round-for-5g-applications/",
       "page": "application",
       "excerpt": "Blu Wireless raises $16.6 million in growth funding round for 5G applications - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative"
+    },
+    {
+      "id": "check-page-3605face61",
+      "url": "https://www.setsquared.co.uk/blu-wireless-raises-16-6-million-in-growth-funding-round-for-5g-applications/",
+      "page": "application",
+      "excerpt": "Blu Wireless is already working with tier-1 telecoms infrastructure providers and leading semiconductor companies in the US, Japan, the UK and mainland Europe as they look to deploy HYDRA based devices within applications demanding 5G levels of bandwidth and low latency connectivity."
+    },
+    {
+      "id": "check-page-4a2b1893fa",
+      "url": "https://www.setsquared.co.uk/blu-wireless-raises-16-6-million-in-growth-funding-round-for-5g-applications/",
+      "page": "application",
+      "excerpt": "Ready to be integrated within 5G software defined ‘network of networks’ Blu Wireless’s carrier-grade mmWave technology has been designed for the key markets of 5G telecoms infrastructure, Industry 4.0 and high-speed transportation."
+    },
+    {
+      "id": "check-page-51540569f7",
+      "url": "https://www.setsquared.co.uk/blu-wireless-raises-16-6-million-in-growth-funding-round-for-5g-applications/",
+      "page": "application",
+      "excerpt": "Recently, Blu Wireless announced a supplier partnership with leading international railway operator FirstGroup to deliver 5G track-to-train infrastructure in the UK."
+    },
+    {
+      "id": "check-page-2cdbc4b285",
+      "url": "https://www.setsquared.co.uk/blu-wireless-raises-16-6-million-in-growth-funding-round-for-5g-applications/",
+      "page": "application",
+      "excerpt": "Working closely with our partners and their customers, we are seeing a diverse and growing range of emerging applications for our technology – whether it be for drone-to-drone communications or private enterprise networks."
+    },
+    {
+      "id": "check-page-ce47055039",
+      "url": "https://www.setsquared.co.uk/blu-wireless-raises-16-6-million-in-growth-funding-round-for-5g-applications/",
+      "page": "application",
+      "excerpt": "Sign-up Close Mailing List sign-up SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
     },
     {
       "id": "check-page-9fbd0f78a7",
@@ -66,10 +204,22 @@
       "excerpt": "Campaign Application Submitted Confirmation: Example Confirmation - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech"
     },
     {
+      "id": "check-page-c56f3c8ab6",
+      "url": "https://www.setsquared.co.uk/campaign-application-submitted-confirmation-example-confirmation/",
+      "page": "application",
+      "excerpt": "View your application as a PDF SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
+    },
+    {
       "id": "check-page-d38c4d2d44",
       "url": "https://www.setsquared.co.uk/digital-entrepreneurs-programme-application-received/",
       "page": "application",
       "excerpt": "Digital Entrepreneurs Programme - Application Received - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy"
+    },
+    {
+      "id": "check-page-274e8bca7c",
+      "url": "https://www.setsquared.co.uk/digital-entrepreneurs-programme-application-received/",
+      "page": "application",
+      "excerpt": "SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
     },
     {
       "id": "check-page-5cc8dd973d",
@@ -78,10 +228,46 @@
       "excerpt": "Entrepreneur in Residence Application Received - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy"
     },
     {
+      "id": "check-page-d753d2a8d4",
+      "url": "https://www.setsquared.co.uk/eir-application-received/",
+      "page": "application",
+      "excerpt": "If you have any questions in the meantime, please don’t hesitate to get in touch with us at [email protected] SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
+    },
+    {
       "id": "check-page-2887ced2c4",
       "url": "https://www.setsquared.co.uk/enterprising-women-4-open-for-applications/",
       "page": "application",
       "excerpt": "Enterprising Women opens for fourth year - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy"
+    },
+    {
+      "id": "check-page-4b14a66b8a",
+      "url": "https://www.setsquared.co.uk/enterprising-women-4-open-for-applications/",
+      "page": "application",
+      "excerpt": "Over the course of six months, aspiring female founders receive mentoring, coaching, workshops, online training and introductions to a network of advisers and investors."
+    },
+    {
+      "id": "check-page-74bc4e25d2",
+      "url": "https://www.setsquared.co.uk/enterprising-women-4-open-for-applications/",
+      "page": "application",
+      "excerpt": "The programme has supported a diverse range of businesses, with many innovations addressing society’s greatest challenges including climate change, social inequality and online safety."
+    },
+    {
+      "id": "check-page-2417d5e389",
+      "url": "https://www.setsquared.co.uk/enterprising-women-4-open-for-applications/",
+      "page": "application",
+      "excerpt": "Enterprising Women is open to early-stage founders in the UK who identify as women or non-binary assigned female at birth with tech, tech-enabled or non-tech startups, business ideas or side hustles."
+    },
+    {
+      "id": "check-page-f8c639a4c2",
+      "url": "https://www.setsquared.co.uk/enterprising-women-4-open-for-applications/",
+      "page": "application",
+      "excerpt": "Lily Elsner, CEO and Co-founder, said: “Of all of the accelerators and female founder support programmes that I have done in the world, the Enterprising Women programme is by far the best and is the one that all other programmes should benchmark themselves against."
+    },
+    {
+      "id": "check-page-28d7742c69",
+      "url": "https://www.setsquared.co.uk/enterprising-women-4-open-for-applications/",
+      "page": "application",
+      "excerpt": "Sign-up Close Mailing List sign-up SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
     },
     {
       "id": "check-page-45b6879243",
@@ -90,10 +276,22 @@
       "excerpt": "Entrepreneurs Workout 2026 - application confirmed - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy"
     },
     {
+      "id": "check-page-a61b59aaca",
+      "url": "https://www.setsquared.co.uk/entrepreneurs-workout-2026-application-confirmed/",
+      "page": "application",
+      "excerpt": "SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
+    },
+    {
       "id": "check-page-f4706ad43f",
       "url": "https://www.setsquared.co.uk/euroincnet-company-application-confirmation/",
       "page": "application",
       "excerpt": "EuroIncNet Investment Showcase 2024 - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy Locations &"
+    },
+    {
+      "id": "check-page-97629c6548",
+      "url": "https://www.setsquared.co.uk/euroincnet-company-application-confirmation/",
+      "page": "application",
+      "excerpt": "SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
     },
     {
       "id": "check-page-85039c8440",
@@ -102,10 +300,22 @@
       "excerpt": "Future of Mobility Technology Disruptors Application Form - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up"
     },
     {
+      "id": "check-page-253550662d",
+      "url": "https://www.setsquared.co.uk/future-of-mobility-application-form/",
+      "page": "application",
+      "excerpt": "SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
+    },
+    {
       "id": "check-page-bbb4545ea5",
       "url": "https://www.setsquared.co.uk/gradinvest20-application-received/",
       "page": "application",
       "excerpt": "GRADINVEST@20 - Application Received - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy Locations &"
+    },
+    {
+      "id": "check-page-3866743494",
+      "url": "https://www.setsquared.co.uk/gradinvest20-application-received/",
+      "page": "application",
+      "excerpt": "SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
     },
     {
       "id": "check-page-f9314160a7",
@@ -114,16 +324,136 @@
       "excerpt": "ICURe Programme 2020 - Application Received - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy"
     },
     {
+      "id": "check-page-e3f1354ea2",
+      "url": "https://www.setsquared.co.uk/icure-2020-application-received/",
+      "page": "application",
+      "excerpt": "SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
+    },
+    {
       "id": "check-page-16c8d50cb1",
       "url": "https://www.setsquared.co.uk/icure-application-form-2020/",
       "page": "application",
       "excerpt": "ICURe application form - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy Locations & Contact Close"
     },
     {
+      "id": "check-page-56e21bf5ec",
+      "url": "https://www.setsquared.co.uk/icure-application-form-2020/",
+      "page": "application",
+      "excerpt": "If you have any questions about the ICURe programme, please contact [email protected] , or phone Thea Glasspool (07557 179 144) or Don Spalinger (07557 977 990) SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
+    },
+    {
       "id": "check-page-1f834c1f7c",
       "url": "https://www.setsquared.co.uk/icure-application-form/",
       "page": "application",
       "excerpt": "ICURe application form - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy Locations & Contact Close"
+    },
+    {
+      "id": "check-page-7c3f8ffa78",
+      "url": "https://www.setsquared.co.uk/icure-application-form/",
+      "page": "application",
+      "excerpt": "Do you have a visas to allow this? * Yes No You will need to have or ability to get visas for major market areas (Europe, USA, China, Japan, India, Australia, etc.) SECTION A: TECHNOLOGY We'd like information on your sources of research funding and the area of innovation."
+    },
+    {
+      "id": "check-page-83fcab6d63",
+      "url": "https://www.setsquared.co.uk/innovation-labs-application-received/",
+      "page": "application",
+      "excerpt": "FT Future of the Car Innovation Labs Application Received - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up"
+    },
+    {
+      "id": "check-page-7999be16a6",
+      "url": "https://www.setsquared.co.uk/innovation-labs-application-received/",
+      "page": "application",
+      "excerpt": "SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
+    },
+    {
+      "id": "check-page-88daa210c1",
+      "url": "https://www.setsquared.co.uk/investing-in-health-innovation-panel-discussion-application-confirmation/",
+      "page": "application",
+      "excerpt": "Investing in Health Innovation Panel Discussion Application Confirmation - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech"
+    },
+    {
+      "id": "check-page-09f82880e3",
+      "url": "https://www.setsquared.co.uk/investing-in-health-innovation-panel-discussion-application-confirmation/",
+      "page": "application",
+      "excerpt": "SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
+    },
+    {
+      "id": "check-page-08a6414b47",
+      "url": "https://www.setsquared.co.uk/last-chance-to-get-applications-in-for-oracle-startup-cloud-accelerator/",
+      "page": "application",
+      "excerpt": "Last chance to get applications in for Oracle Startup Cloud Accelerator - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech"
+    },
+    {
+      "id": "check-page-6ba5ab1e97",
+      "url": "https://www.setsquared.co.uk/last-chance-to-get-applications-in-for-oracle-startup-cloud-accelerator/",
+      "page": "application",
+      "excerpt": "Bristol has joined the likes of Sao Paulo, Bangalore, Paris, Tel Aviv and Singapore to deliver the programme."
+    },
+    {
+      "id": "check-page-0820428f9d",
+      "url": "https://www.setsquared.co.uk/last-chance-to-get-applications-in-for-oracle-startup-cloud-accelerator/",
+      "page": "application",
+      "excerpt": "Five successful applicants will be selected to join with a six-month intense incubation with free credits on Oracle Cloud, world-class mentoring and advising, co-working space, engagement opportunities with Oracle customers and partners and connections to investors."
+    },
+    {
+      "id": "check-page-a4d90ecc4e",
+      "url": "https://www.setsquared.co.uk/last-chance-to-get-applications-in-for-oracle-startup-cloud-accelerator/",
+      "page": "application",
+      "excerpt": "Here in the UK, Oracle is working with SETsquared Bristol to deliver the programme."
+    },
+    {
+      "id": "check-page-9f269b4947",
+      "url": "https://www.setsquared.co.uk/last-chance-to-get-applications-in-for-oracle-startup-cloud-accelerator/",
+      "page": "application",
+      "excerpt": "The global number one incubator has already chalked up success with Oracle through two of its members, YellowDog and Interactive Scientific."
+    },
+    {
+      "id": "check-page-7737d8e5c6",
+      "url": "https://www.setsquared.co.uk/last-chance-to-get-applications-in-for-oracle-startup-cloud-accelerator/",
+      "page": "application",
+      "excerpt": "Whilst at Interactive Scientific’s Virtual reality solution targeting the education and scientific verticals has powerful user cases demonstrating the power of cloud computing for scientific and educational applications."
+    },
+    {
+      "id": "check-page-484418853f",
+      "url": "https://www.setsquared.co.uk/last-chance-to-get-applications-in-for-oracle-startup-cloud-accelerator/",
+      "page": "application",
+      "excerpt": "We’ve been really pleased with how the UK programme has been received and we are looking forward to getting stuck into delivery in mid-summer.” Marina Traversari, UK OSCA Programme Manager, added: “It’s not too late to get your application in, even though we have started the sift process."
+    },
+    {
+      "id": "check-page-0ebffafac8",
+      "url": "https://www.setsquared.co.uk/last-chance-to-get-applications-in-for-oracle-startup-cloud-accelerator/",
+      "page": "application",
+      "excerpt": "Those five will get the opportunity to interact with other start-ups from across the global project as well as benefit from SETsquared Bristol’s awarding-winning incubation process."
+    },
+    {
+      "id": "check-page-d90bab370e",
+      "url": "https://www.setsquared.co.uk/last-chance-to-get-applications-in-for-oracle-startup-cloud-accelerator/",
+      "page": "application",
+      "excerpt": "Sign-up Close Mailing List sign-up SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
+    },
+    {
+      "id": "check-page-6936f5d917",
+      "url": "https://www.setsquared.co.uk/medtech-invest-2020-application-received/",
+      "page": "application",
+      "excerpt": "MedTech Invest 2020 - Application Received - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy"
+    },
+    {
+      "id": "check-page-1e898ec49b",
+      "url": "https://www.setsquared.co.uk/medtech-invest-2020-application-received/",
+      "page": "application",
+      "excerpt": "SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
+    },
+    {
+      "id": "check-page-482ed0b81b",
+      "url": "https://www.setsquared.co.uk/nextgen-invest-2020-application-received/",
+      "page": "application",
+      "excerpt": "NextGen Invest 2020 - Application Received - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy"
+    },
+    {
+      "id": "check-page-c12629a9a8",
+      "url": "https://www.setsquared.co.uk/nextgen-invest-2020-application-received/",
+      "page": "application",
+      "excerpt": "SETsquared is a partnership between A world leading business incubator and enterprise partnership between the universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey."
     }
   ],
   "findings": {
@@ -143,7 +473,12 @@
     "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [],
-    "format": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-a75d239e22"
+      }
+    ],
     "location": [],
     "selectivity": [],
     "dealText": [],

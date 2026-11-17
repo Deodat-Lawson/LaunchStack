@@ -1,7 +1,71 @@
 {
   "programId": "unternehmertum",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://www.unternehmertum.de/about/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/about/daten-fakten/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/about/karriere/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/about/netzwerk/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/about/presse/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/about/presse/pressemitteilungen/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/about/pro-unternehmertum/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/about/standorte/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
       "page": "terms",
@@ -13,7 +77,7 @@
     {
       "url": "https://www.unternehmertum.de/en/about/",
       "page": "details",
-      "anchor": "About icons / arrow-right",
+      "anchor": "About",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -21,7 +85,7 @@
     {
       "url": "https://www.unternehmertum.de/en/about/careers/",
       "page": "details",
-      "anchor": "Careers icons / arrow-right",
+      "anchor": "Careers",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -29,7 +93,7 @@
     {
       "url": "https://www.unternehmertum.de/en/about/facts-figures/",
       "page": "details",
-      "anchor": "Facts & Figures icons / arrow-right",
+      "anchor": "Facts & Figures",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -37,7 +101,7 @@
     {
       "url": "https://www.unternehmertum.de/en/about/locations/",
       "page": "details",
-      "anchor": "Locations icons / arrow-right",
+      "anchor": "Locations",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -45,7 +109,7 @@
     {
       "url": "https://www.unternehmertum.de/en/about/network/",
       "page": "details",
-      "anchor": "Network icons / arrow-right",
+      "anchor": "Network",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -53,16 +117,8 @@
     {
       "url": "https://www.unternehmertum.de/en/about/press/",
       "page": "details",
-      "anchor": "Press icons / arrow-right",
+      "anchor": "Press",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -75,25 +131,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.unternehmertum.de/en/news/accelerator-launches-physical-ai-growth-lab/",
       "page": "details",
-      "anchor": "icons / arrow-right icons / arrow-right Read now",
+      "anchor": "Read now",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -101,46 +141,30 @@
     {
       "url": "https://www.unternehmertum.de/en/offering/companies/",
       "page": "portfolio",
-      "anchor": "Companies icons / arrow-right icons / arrow-right",
+      "anchor": "Companies",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/calendar.ics",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-11-batch/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/presse/das-accelerator-programm-techfounders-startet-neuen-10-batch/",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -163,8 +187,24 @@
       "origin": "official"
     },
     {
+      "url": "https://www.unternehmertum.de/presse/startschuss-fuer-techfounders-batch-13-1-1/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/presse/the-techfounders-accelerator-program-starts-with-its-12th-batch/",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,

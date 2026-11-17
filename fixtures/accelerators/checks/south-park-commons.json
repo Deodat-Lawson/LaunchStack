@@ -1,6 +1,6 @@
 {
   "programId": "south-park-commons",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.southparkcommons.com/",
     "https://www.southparkcommons.com/apply",
@@ -10,13 +10,7 @@
     "https://www.southparkcommons.com/terms-of-service",
     "https://www.southparkcommons.com/companies",
     "https://www.southparkcommons.com/companies/baseten",
-    "https://www.southparkcommons.com/companies/cognition-ai",
-    "https://www.southparkcommons.com/companies/comun",
-    "https://www.southparkcommons.com/companies/deep-cogito",
-    "https://www.southparkcommons.com/companies/density-ai",
-    "https://www.southparkcommons.com/companies/doppel",
-    "https://www.southparkcommons.com/companies/gamma",
-    "https://www.southparkcommons.com/companies/goodfire"
+    "https://www.southparkcommons.com/companies/cognition-ai"
   ],
   "evidence": [
     {
@@ -90,20 +84,6 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-01bd9171af",
-      "url": "https://www.southparkcommons.com/companies/comun",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Companies → https://www.southparkcommons.com/companies",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-0246d8d983",
-      "url": "https://www.southparkcommons.com/companies/doppel",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Return to Companies → https://www.southparkcommons.com/companies",
-      "page": "portfolio"
-    },
-    {
       "id": "check-portfolio-1120ada30e",
       "url": "https://www.southparkcommons.com/faq",
       "title": "South Park Commons — terms page",
@@ -118,25 +98,11 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-3726c241f3",
-      "url": "https://www.southparkcommons.com/companies/gamma",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Companies → https://www.southparkcommons.com/companies",
-      "page": "portfolio"
-    },
-    {
       "id": "check-portfolio-3b89f3be72",
       "url": "https://www.southparkcommons.com/terms-of-service",
       "title": "South Park Commons — terms page",
       "excerpt": "Companies → https://www.southparkcommons.com/companies",
       "page": "terms"
-    },
-    {
-      "id": "check-portfolio-5736463c17",
-      "url": "https://www.southparkcommons.com/companies/density-ai",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Return to Companies → https://www.southparkcommons.com/companies",
-      "page": "portfolio"
     },
     {
       "id": "check-portfolio-5e90283280",
@@ -146,29 +112,8 @@
       "page": "portfolio"
     },
     {
-      "id": "check-portfolio-64aaf7b52e",
-      "url": "https://www.southparkcommons.com/companies/density-ai",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Companies → https://www.southparkcommons.com/companies",
-      "page": "portfolio"
-    },
-    {
       "id": "check-portfolio-7566413099",
       "url": "https://www.southparkcommons.com/companies/baseten",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Return to Companies → https://www.southparkcommons.com/companies",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-76ce2ce984",
-      "url": "https://www.southparkcommons.com/companies/deep-cogito",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Return to Companies → https://www.southparkcommons.com/companies",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-7931ca557d",
-      "url": "https://www.southparkcommons.com/companies/comun",
       "title": "South Park Commons — portfolio page",
       "excerpt": "Return to Companies → https://www.southparkcommons.com/companies",
       "page": "portfolio"
@@ -193,41 +138,6 @@
       "title": "South Park Commons — homepage",
       "excerpt": "Companies → https://www.southparkcommons.com/companies",
       "page": "details"
-    },
-    {
-      "id": "check-portfolio-8f3ff3151b",
-      "url": "https://www.southparkcommons.com/companies/deep-cogito",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Companies → https://www.southparkcommons.com/companies",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-bec6e2975a",
-      "url": "https://www.southparkcommons.com/companies/doppel",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Companies → https://www.southparkcommons.com/companies",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-bff37c1c15",
-      "url": "https://www.southparkcommons.com/companies/goodfire",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Companies → https://www.southparkcommons.com/companies",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-d6b51a205b",
-      "url": "https://www.southparkcommons.com/companies/gamma",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Return to Companies → https://www.southparkcommons.com/companies",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-d896c2a38f",
-      "url": "https://www.southparkcommons.com/companies/goodfire",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Return to Companies → https://www.southparkcommons.com/companies",
-      "page": "portfolio"
     },
     {
       "id": "check-portfolio-e5167d9327",
@@ -265,20 +175,6 @@
       "page": "details"
     },
     {
-      "id": "check-route-1ee1d1e7ca",
-      "url": "https://www.southparkcommons.com/companies/density-ai",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Apply → https://www.southparkcommons.com/apply",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-route-21022cd836",
-      "url": "https://www.southparkcommons.com/companies/gamma",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Apply → https://www.southparkcommons.com/apply",
-      "page": "portfolio"
-    },
-    {
       "id": "check-route-285a994485",
       "url": "https://www.southparkcommons.com/",
       "title": "South Park Commons — homepage",
@@ -300,13 +196,6 @@
       "page": "terms"
     },
     {
-      "id": "check-route-6a3dc2b864",
-      "url": "https://www.southparkcommons.com/companies/goodfire",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Apply → https://www.southparkcommons.com/apply",
-      "page": "portfolio"
-    },
-    {
       "id": "check-route-842306c07b",
       "url": "https://www.southparkcommons.com/",
       "title": "South Park Commons — homepage",
@@ -321,13 +210,6 @@
       "page": "details"
     },
     {
-      "id": "check-route-a199b0f401",
-      "url": "https://www.southparkcommons.com/companies/deep-cogito",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Apply → https://www.southparkcommons.com/apply",
-      "page": "portfolio"
-    },
-    {
       "id": "check-route-a59a0e1107",
       "url": "https://www.southparkcommons.com/faq",
       "title": "South Park Commons — terms page",
@@ -340,13 +222,6 @@
       "title": "South Park Commons — homepage",
       "excerpt": "A P P L Y T O S P C → https://www.southparkcommons.com/apply",
       "page": "details"
-    },
-    {
-      "id": "check-route-c552c6a490",
-      "url": "https://www.southparkcommons.com/companies/doppel",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Apply → https://www.southparkcommons.com/apply",
-      "page": "portfolio"
     },
     {
       "id": "check-route-d0d0a8e55c",
@@ -365,13 +240,6 @@
     {
       "id": "check-route-f315d7c8f7",
       "url": "https://www.southparkcommons.com/companies/baseten",
-      "title": "South Park Commons — portfolio page",
-      "excerpt": "Apply → https://www.southparkcommons.com/apply",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-route-f94a306788",
-      "url": "https://www.southparkcommons.com/companies/comun",
       "title": "South Park Commons — portfolio page",
       "excerpt": "Apply → https://www.southparkcommons.com/apply",
       "page": "portfolio"
@@ -413,10 +281,88 @@
       "excerpt": "South Park Commons Apply Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Apply South Park Commons helps you go from -1 to 0 SPC is a home for the most talented founders and technologists exploring what's next. Our members turn the chaos of possibility into the clarity of conviction. What is -1? How to start Exploring the frontier? SPC helps at every step Exploring at the frontier? SPC helps at every step The path from -1 to 0 isn't a straight line. Our members range from pre-idea to pre-launch, but all are committed to finding their global max. For every step in the early stage, SPC works in two ways: Residency 6 months · No cost or equity · Ideation & Exploration A talent-dense community of technical founders, researchers, and domain-experts testing each other's ideas, finding collaborators, and reaching conviction on what to build and how to build it. Funding $1M to $10M · Exploration & Conviction Funding from $1M to $10M for founders who want to build a venture-scale company. Not all our members are ready for funding; for those who are, we're ready to write the first check. Get started Our Companies Baseten Goodfire"
     },
     {
+      "id": "check-page-f8b3dde18d",
+      "url": "https://www.southparkcommons.com/",
+      "page": "details",
+      "excerpt": "Get started Our Companies Baseten Goodfire Profound Gamma Luma Labs Render Density AI Cognition Socket Muon Space Replit Pilot Material Security Doppel Deep Cogito PlanetScale Nuance Labs Noble Machines See More Our Members Anurag Amit Waseem & Jeff Abiel & Andres Tom Ashton Trisha & Clarence James & Dylan Anurag Turning side-projects into a company."
+    },
+    {
+      "id": "check-page-1866b5c3e9",
+      "url": "https://www.southparkcommons.com/",
+      "page": "details",
+      "excerpt": "Employee #8 at Stripe, Anurag joined SPC and built apps around healthcare, deep learning, and real-time communication."
+    },
+    {
+      "id": "check-page-27245eef57",
+      "url": "https://www.southparkcommons.com/",
+      "page": "details",
+      "excerpt": "He saw a bigger shift coming: AI is going multi-modal."
+    },
+    {
+      "id": "check-page-a4d52bdfe0",
+      "url": "https://www.southparkcommons.com/",
+      "page": "details",
+      "excerpt": "That sparked Luma, where he's building models powering a new generation of AI-native creative work."
+    },
+    {
+      "id": "check-page-1cbf45826a",
+      "url": "https://www.southparkcommons.com/",
+      "page": "details",
+      "excerpt": "Abiel and Andres grew up just 30 minutes apart in Mexico, but only met during the Fellowship, where they bonded over the frustration of navigating U.S. banking as immigrants."
+    },
+    {
+      "id": "check-page-dc845c7e81",
+      "url": "https://www.southparkcommons.com/",
+      "page": "details",
+      "excerpt": "More About Comun Tom From consumer apps to AI research."
+    },
+    {
+      "id": "check-page-5c0faffcf9",
+      "url": "https://www.southparkcommons.com/",
+      "page": "details",
+      "excerpt": "He has since founded his own AI safety and research company, Anthropic."
+    },
+    {
+      "id": "check-page-5686390211",
+      "url": "https://www.southparkcommons.com/",
+      "page": "details",
+      "excerpt": "They met, discovered a shared interest in security and fintech, and started powerhouse anti-fraud platform Unit21."
+    },
+    {
+      "id": "check-page-454c6115ba",
+      "url": "https://www.southparkcommons.com/",
+      "page": "details",
+      "excerpt": "More About Unit21 James & Dylan Helping brands navigate the shift to AI."
+    },
+    {
+      "id": "check-page-e4b9059d8d",
+      "url": "https://www.southparkcommons.com/",
+      "page": "details",
+      "excerpt": "James and Dylan met at SPC NYC and bonded over a question: what happens when AI becomes the default interface to the internet?"
+    },
+    {
+      "id": "check-page-6514584226",
+      "url": "https://www.southparkcommons.com/",
+      "page": "details",
+      "excerpt": "They joined the Founder Fellowship to build Profound, where they're creating tools to help brands track and influence how they show up across AI systems."
+    },
+    {
+      "id": "check-page-262ea29c4e",
+      "url": "https://www.southparkcommons.com/",
+      "page": "details",
+      "excerpt": "More About Profound A P P L Y T O S P C Our Spaces San Francisco New York Bengaluru What Happens At SPC Talent Density Learning Forums Live Programming Partner Collaboration Social Scaffolding Resources Apply to SPC What Happens At SPC Talent Density Learning Forums Live Programming Partner Collaboration Social Scaffolding Resources Talent Density Our main product is talent curation."
+    },
+    {
       "id": "check-page-a3281dd46c",
       "url": "https://www.southparkcommons.com/apply",
       "page": "application",
       "excerpt": "Apply to South Park Commons Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ South Park Commons Application Building a company is challenging, especially in the initial stages. SPC supports founders, researchers, and technologists working on frontier problems. We offer community, programming, and venture funding for those who need it. We accept applications for our $1M Founder Fellowship twice per year. Our Fall 2026 applications are closed; we will open applications for our Spring 2027 Fellowship later this year. Getting started About You Background and Prior Work Staying in touch Required fields are marked * . Getting started Which best describes where you are in your journey today? * To connect you with the right resources, help us understand where you are today. Note that many founders start with us in the -1 exploration phase and then move directly into founding and funding their companies with us. Residency I'm exploring new ideas and looking to build conviction with a community Funding I've started a company and am actively fundraising About You Full Name * Email * Phone number * LinkedIn profile * linkedin.com/in/"
+    },
+    {
+      "id": "check-page-0e79e387c3",
+      "url": "https://www.southparkcommons.com/apply",
+      "page": "application",
+      "excerpt": "Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy Terms of Service Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy Terms of Service South Park Commons 380 Brannan St, San Francisco, CA © 2026 All rights reserved."
     },
     {
       "id": "check-page-d4c56dbb04",
@@ -425,10 +371,22 @@
       "excerpt": "Apply to South Park Commons Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ South Park Commons Application Building a company is challenging, especially in the initial stages. SPC supports founders, researchers, and technologists working on frontier problems. We offer community, programming, and venture funding for those who need it. We accept applications for our $1M Founder Fellowship twice per year. Our Fall 2026 applications are closed; we will open applications for our Spring 2027 Fellowship later this year. Getting started About You Background and Prior Work Staying in touch Required fields are marked * . Getting started Which best describes where you are in your journey today? * To connect you with the right resources, help us understand where you are today. Note that many founders start with us in the -1 exploration phase and then move directly into founding and funding their companies with us. Residency I'm exploring new ideas and looking to build conviction with a community Funding I've started a company and am actively fundraising About You Full Name * Email * Phone number * LinkedIn profile * linkedin.com/in/"
     },
     {
+      "id": "check-page-052cba53a3",
+      "url": "https://www.southparkcommons.com/apply?pathway=funding",
+      "page": "application",
+      "excerpt": "Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy Terms of Service Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy Terms of Service South Park Commons 380 Brannan St, San Francisco, CA © 2026 All rights reserved."
+    },
+    {
       "id": "check-page-144fd08429",
       "url": "https://www.southparkcommons.com/apply?pathway=residency",
       "page": "application",
       "excerpt": "Apply to South Park Commons Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ South Park Commons Application Building a company is challenging, especially in the initial stages. SPC supports founders, researchers, and technologists working on frontier problems. We offer community, programming, and venture funding for those who need it. We accept applications for our $1M Founder Fellowship twice per year. Our Fall 2026 applications are closed; we will open applications for our Spring 2027 Fellowship later this year. Getting started About You Background and Prior Work Staying in touch Required fields are marked * . Getting started Which best describes where you are in your journey today? * To connect you with the right resources, help us understand where you are today. Note that many founders start with us in the -1 exploration phase and then move directly into founding and funding their companies with us. Residency I'm exploring new ideas and looking to build conviction with a community Funding I've started a company and am actively fundraising About You Full Name * Email * Phone number * LinkedIn profile * linkedin.com/in/"
+    },
+    {
+      "id": "check-page-757a416ca8",
+      "url": "https://www.southparkcommons.com/apply?pathway=residency",
+      "page": "application",
+      "excerpt": "Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy Terms of Service Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy Terms of Service South Park Commons 380 Brannan St, San Francisco, CA © 2026 All rights reserved."
     },
     {
       "id": "check-page-04fa736476",
@@ -437,10 +395,94 @@
       "excerpt": "FAQ - South Park Commons Apply Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Apply Frequently Asked Questions About SPC Applying to SPC Residency Funding Who are your members? Around 70% of our members are founders who aspire to start a company and 30% are researchers and experts looking to go deeper in new fields (e.g. contribute to open-source software, write books, conduct research, etc). While most members are technical, we do make exceptions. We have roughly 175 active members and over 1300 alumni. Our active members are primarily split between hubs in San Francisco, New York City, and Bangalore. Do I need to be located in San Francisco, New York City, or Bangalore to be a member? Yes. Members are expected to come into SPC throughout the week, which usually means that folks need to be located in SF, NYC, or Bangalore. What is the difference between residency and funding? We're purposefully flexible because going from -1 to 0 looks different for everyone. Some people join us before they've committed to starting a company, others come to us already ready for funding, many move from one to the other while they're here."
     },
     {
+      "id": "check-page-910048b810",
+      "url": "https://www.southparkcommons.com/faq",
+      "page": "terms",
+      "excerpt": "Member Residency is open to technologists who may or may not know they want to start a company and aren't yet ready for funding."
+    },
+    {
+      "id": "check-page-dcdd6e3039",
+      "url": "https://www.southparkcommons.com/faq",
+      "page": "terms",
+      "excerpt": "The Founder Fellowship supports technologists that are further along in their journey, usually with an early team and a high-conviction north star (market, idea, or product), offering $1M in total funding and more structured partner support to get you from -1 to 0 and then 0 to 1."
+    },
+    {
+      "id": "check-page-2ea159d39f",
+      "url": "https://www.southparkcommons.com/faq",
+      "page": "terms",
+      "excerpt": "Many people also start as members and join the Fellowship once they have a firm idea."
+    },
+    {
+      "id": "check-page-75a0b9bca7",
+      "url": "https://www.southparkcommons.com/faq",
+      "page": "terms",
+      "excerpt": "Beyond the Fellowship, we also write seed checks of up to $10M."
+    },
+    {
+      "id": "check-page-b70e1e52b4",
+      "url": "https://www.southparkcommons.com/faq",
+      "page": "terms",
+      "excerpt": "First, apply on our website for either Member Residency or our Founder Fellowship."
+    },
+    {
+      "id": "check-page-1fcbed31b5",
+      "url": "https://www.southparkcommons.com/faq",
+      "page": "terms",
+      "excerpt": "We accept new members on a rolling basis, but the Fellowship runs as defined cohorts in the spring and fall."
+    },
+    {
+      "id": "check-page-87df312649",
+      "url": "https://www.southparkcommons.com/faq",
+      "page": "terms",
+      "excerpt": "We offer paths like our Founder Fellowship that serve technologists who want funding on their way into SPC."
+    },
+    {
+      "id": "check-page-16bdd6d249",
+      "url": "https://www.southparkcommons.com/faq",
+      "page": "terms",
+      "excerpt": "In the past, we've had academics, from undergrads to PhDs to professors, join SPC."
+    },
+    {
+      "id": "check-page-37daf41236",
+      "url": "https://www.southparkcommons.com/faq",
+      "page": "terms",
+      "excerpt": "We encourage applicants at this stage to consider our Founder Fellowship program, which offers a $1M investment ($400k upfront, $600k in your follow-on round), or pursue a seed round from our fund, with checks up to $10M."
+    },
+    {
+      "id": "check-page-59c92e8d0f",
+      "url": "https://www.southparkcommons.com/faq",
+      "page": "terms",
+      "excerpt": "If applying to SPC for the member residency, please ask your co-founder to apply as well."
+    },
+    {
+      "id": "check-page-0bf5a64aaa",
+      "url": "https://www.southparkcommons.com/faq",
+      "page": "terms",
+      "excerpt": "What is Member Residency?"
+    },
+    {
+      "id": "check-page-b8ba1ebc30",
+      "url": "https://www.southparkcommons.com/faq",
+      "page": "terms",
+      "excerpt": "SPC membership is a 6 month exploratory residency."
+    },
+    {
       "id": "check-page-76ecab0412",
       "url": "https://www.southparkcommons.com/terms-of-service",
       "page": "terms",
       "excerpt": "Terms of Service - South Park Commons Apply Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Apply Terms of Service Last Updated: March 20, 2025 1. Introduction Welcome to South Park Commons (the “Commons”). These Terms of Service (“Terms”) govern your use of our services, including our website, physical spaces, events, and any other services offered by South Park Commons (collectively, the “Services”). By accessing or using our Services, you agree to be bound by these Terms. If you do not agree to these Terms, please do not use our Services. 2. Eligibility You must be at least 18 years of age, or the legal age of majority in your jurisdiction, and have the legal capacity to enter into these Terms. By using the Services, you represent and warrant that you meet these requirements. 3. Membership and Access 3.1. Registration and Account Some areas or services provided by the Commons may require registration and the creation of an account. You agree to provide accurate, current, and complete information during registration and to update such information as necessary. You are responsible for maintaining the confidentiality of"
+    },
+    {
+      "id": "check-page-3aab2c5cf8",
+      "url": "https://www.southparkcommons.com/terms-of-service",
+      "page": "terms",
+      "excerpt": "Nothing in these Terms grants you any rights in such content."
+    },
+    {
+      "id": "check-page-b586d2a993",
+      "url": "https://www.southparkcommons.com/terms-of-service",
+      "page": "terms",
+      "excerpt": "Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy Terms of Service Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy Terms of Service South Park Commons 380 Brannan St, San Francisco, CA © 2026 All rights reserved."
     },
     {
       "id": "check-page-1900c55e78",
@@ -452,49 +494,13 @@
       "id": "check-page-27ce2f103b",
       "url": "https://www.southparkcommons.com/companies/baseten",
       "page": "portfolio",
-      "excerpt": "Baseten - Companies - South Park Commons Apply Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Apply Return to Companies Baseten High-performance inference at scale Infrastructure · 2019 · San Francisco Baseten is a platform for high-performance AI inference. It runs open-source, custom, and fine-tuned models on infrastructure built for speed and scale, combining fast model runtimes with cross-cloud reliability and developer tooling to get AI products into production. Website LinkedIn X Founders Tuhin Srivastava Co-founder & CEO Amir Haghighat Co-founder & CTO Phil Howes Co-founder & Chief Scientist Media Baseten Announcing our Series F YouTube The Most Underrated Unicorn Founder In Silicon Valley Baseten Announcing Baseten's $300M Series E Open Roles Software Engineer, Cloud Platform Legal, Partnerships Legal, Commercial View all Other Investors Greylock · IVP · Spark Capital Why SPC Backed Baseten Powering a multi-model future Ruchi Sanghvi · June 22, 2026 When Tuhin and Phil first walked into SPC in early 2019, the AI revolution was still in its infancy. A few dozen founders and researchers at SPC were reading linear"
+      "excerpt": "Baseten - Companies - South Park Commons Apply Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Apply Return to Companies Baseten High-performance inference at scale Infrastructure · 2019 · San Francisco Baseten is a platform for high-performance AI inference. It runs open-source, custom, and fine-tuned models on infrastructure built for speed and scale, combining fast model runtimes with cross-cloud reliability and developer tooling to get AI products into production. Website LinkedIn X Founders Tuhin Srivastava Co-founder & CEO Amir Haghighat Co-founder & CTO Phil Howes Co-founder & Chief Scientist Media Baseten Announcing our Series F YouTube The Most Underrated Unicorn Founder In Silicon Valley Baseten Announcing Baseten's $300M Series E Open Roles Sales Analytics Engineer Software Engineer, Cloud Platform Legal, Partnerships View all Other Investors Spark Capital · Greylock · IVP · Jay Simons · Lachy Groom · Dev Ittycheria · Adam Bain · DJ Patil · Mustafa Suleyman · Jean-Denis Greze · Greg Brockman · Dylan Field · Cristina Cordova · Charles Zedlewski · Dick Costolo Why SPC Backed Baseten Powering a multi-model future"
     },
     {
       "id": "check-page-ad3748eea9",
       "url": "https://www.southparkcommons.com/companies/cognition-ai",
       "page": "portfolio",
-      "excerpt": "Cognition - Companies - South Park Commons Apply Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Apply Return to Companies Cognition The first AI software engineer Frontier AI · 2023 · San Francisco Cognition builds autonomous software engineering agents and operates Devin, the first AI software engineer. Devin plans, writes, tests, and ships production code on its own inside a team's existing codebase and tools, letting engineers work more like architects who focus on system design and problem solving while agents handle the repetitive work. Website LinkedIn X Founders Scott Wu Co-founder & CEO Russell Kaplan Co-founder & President Steven Hao Co-founder & CTO Walden Yan Co-founder & Chief Product Officer Other Investors Founders Fund Stay in the Loop Get Updates You're on the list! We'll keep you posted. Oops! Something went wrong while submitting the form. South Park Commons 380 Brannan St, San Francisco, CA © 2026 All rights reserved. Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy Terms of Service Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube"
-    },
-    {
-      "id": "check-page-af854a4f41",
-      "url": "https://www.southparkcommons.com/companies/comun",
-      "page": "portfolio",
-      "excerpt": "Comun - Companies - South Park Commons Apply Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Apply Return to Companies Comun Banking built for immigrant families Fintech · 2021 · New York Comun reimagines banking for immigrant families in the US, crafting financial products that meet their unique needs and make the journey toward financial freedom smoother and more inclusive. Website LinkedIn X Founders Andres Santos Abiel Gutierrez Other Investors Redpoint · Costanoa Ventures Stay in the Loop Get Updates You're on the list! We'll keep you posted. Oops! Something went wrong while submitting the form. South Park Commons 380 Brannan St, San Francisco, CA © 2026 All rights reserved. Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy Terms of Service Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy Terms of Service South Park Commons 380 Brannan St, San Francisco, CA © 2026 All rights reserved."
-    },
-    {
-      "id": "check-page-bb8b3b741f",
-      "url": "https://www.southparkcommons.com/companies/deep-cogito",
-      "page": "portfolio",
-      "excerpt": "Deep Cogito - Companies - South Park Commons Apply Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Apply Return to Companies Deep Cogito Post-training research lab Frontier AI · 2024 · San Francisco Deep Cogito is developing intelligence models, focusing on large-scale reinforcement learning and recursive self-improvement. Website LinkedIn X Founders Drishan Arora Co-founder & CEO Dhruv Malrana Co-founder & Chief Product Officer Open Roles Technical Staff, Superintelligence View all Other Investors Benchmark Why We Backed Deep Cogito The future of post-training Aditya Agarwal · August 26, 2026 Everyone agreed you needed ten billion dollars to build a frontier model. Drishan Arora spent less than three and a half million. That number covers every model Deep Cogito trained through the summer of 2025, from 3B parameters to 600B+, including synthetic data generation and more than a thousand training experiments. The first batch was built by a handful of people in roughly seventy-five days. When I tell people this, I get one of two reactions. Either it can't be true, or it's just a fine-tune so it doesn't count. Drishan and"
-    },
-    {
-      "id": "check-page-b314735f8e",
-      "url": "https://www.southparkcommons.com/companies/density-ai",
-      "page": "portfolio",
-      "excerpt": "Density AI - Companies - South Park Commons Apply Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Apply Return to Companies Density AI The fastest inference for frontier models Deep Tech · 2024 · Mountain View DensityAI builds AI accelerators designed around a novel memory architecture for frontier-scale LLM inference. By pairing the near-memory compute of SRAM with the density of HBM, its full-stack hardware beats GPUs on both energy and speed for large, long-context workloads. Website Founders Ganesh Venkat Co-founder & CEO Bill Chang Co-founder & CTO Ben Floering Co-founder Open Roles Associate General Counsel, Corporate Associate General Counsel, Commercial Silicon Validation Engineer Stay in the Loop Get Updates You're on the list! We'll keep you posted. Oops! Something went wrong while submitting the form. South Park Commons 380 Brannan St, San Francisco, CA © 2026 All rights reserved. Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy Terms of Service Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy Terms of Service South"
-    },
-    {
-      "id": "check-page-88e61b17bb",
-      "url": "https://www.southparkcommons.com/companies/doppel",
-      "page": "portfolio",
-      "excerpt": "Doppel - Companies - South Park Commons Apply Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Apply Return to Companies Doppel Defense that outpaces AI-driven attacks Security · 2022 · San Francisco Doppel is an AI-native platform for defending against social engineering. It combines digital risk protection, human risk management, and email security to detect and shut down impersonation and phishing attacks before they spread, using agentic AI to scale a security team's coverage. Website LinkedIn X Founders Kevin Tian Co-founder & CEO Rahul Madduluri Co-founder & CTO Media Doppel Doppel Raises $70M Series C to Meet Rising Demand for AI Social Engineering Defense Open Roles IT Manager Software Engineer, Email Senior Product Security Engineer Other Investors Andreessen Horowitz · Bessemer Venture Partners Stay in the Loop Get Updates You're on the list! We'll keep you posted. Oops! Something went wrong while submitting the form. South Park Commons 380 Brannan St, San Francisco, CA © 2026 All rights reserved. Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy Terms of Service Our"
-    },
-    {
-      "id": "check-page-29109465e7",
-      "url": "https://www.southparkcommons.com/companies/gamma",
-      "page": "portfolio",
-      "excerpt": "Gamma - Companies - South Park Commons Apply Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Apply Return to Companies Gamma AI design partner for presenting ideas beautifully Enterprise · 2020 · San Francisco Gamma is an AI platform for creating presentations, documents, and websites. From a prompt or existing text, it generates polished, on-brand content and handles the layout and formatting automatically, so anyone can produce professional work without design tools. Website LinkedIn X Founders Grant Lee Co-founder & CEO James Fox Co-founder & CTO Jon Noronha Co-founder & Head of Product Media Blog How a $2B AI Startup Is Reinventing Presentations Techcrunch AI PowerPoint-killer Gamma hits $2.1B valuation Open Roles UI Engineer Software Engineer, Growth Software Engineer, Frontend Other Investors Accel · Andreessen Horowitz Stay in the Loop Get Updates You're on the list! We'll keep you posted. Oops! Something went wrong while submitting the form. South Park Commons 380 Brannan St, San Francisco, CA © 2026 All rights reserved. Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy"
-    },
-    {
-      "id": "check-page-4e777ed29d",
-      "url": "https://www.southparkcommons.com/companies/goodfire",
-      "page": "portfolio",
-      "excerpt": "Goodfire - Companies - South Park Commons Apply Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Apply Return to Companies Goodfire The science of understanding AI Frontier AI · 2024 · San Francisco Goodfire is a research lab focused on AI interpretability. It studies the mathematical structure and hidden representations inside neural networks to make model behavior legible, replacing the guesswork of training with a more precise, engineering-driven approach. Website LinkedIn X Founders Eric Ho Co-founder & CEO Dan Balsam Co-founder & CTO Tom McGrath Co-founder & Chief Scientist Media YouTube Why OpenAI's Model Hacked Hugging Face | Tom McGrath, Goodfire Goodfire Understanding, Learning From, and Designing AI: Our Series B - Goodfire Other Investors Lightspeed Stay in the Loop Get Updates You're on the list! We'll keep you posted. Oops! Something went wrong while submitting the form. South Park Commons 380 Brannan St, San Francisco, CA © 2026 All rights reserved. Our Story Residency Companies Team Writing FAQ Twitter LinkedIn YouTube Instagram Privacy Policy Terms of Service Our Story Residency Companies Team Writing FAQ"
+      "excerpt": "Cognition - Companies - South Park Commons Apply Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Residency Companies Writing Our Story Residency Companies Team Writing Events India FAQ Menu Our Story Residency Companies Team Writing Events India FAQ Apply Return to Companies Cognition The first AI software engineer Frontier AI · 2023 · San Francisco Cognition builds autonomous software engineering agents and operates Devin, the first AI software engineer. Devin plans, writes, tests, and ships production code on its own inside a team's existing codebase and tools, letting engineers work more like architects who focus on system design and problem solving while agents handle the repetitive work. Website LinkedIn X Founders Scott Wu Co-founder & CEO Russell Kaplan Co-founder & President Steven Hao Co-founder & CTO Walden Yan Co-founder & Chief Product Officer Other Investors Founders Fund · General Catalyst · 8VC · Lux Capital · Karim Atiyeh · Nitesh Banta · John Collison · Elad Gil · Tony Xu · Sarah Guo · Eric Glyman · Patrick Collison · Fred Ehrsam · Erik Bernhardsson · Chris Re Stay in the Loop Get Updates You're on the list! We'll keep you posted. Oops! Something went wrong while submitting the form. South Park Commons 380 Brannan St, San Francisco, CA © 2026 All rights"
     }
   ],
   "findings": {

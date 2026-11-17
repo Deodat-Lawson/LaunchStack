@@ -1,107 +1,23 @@
 {
   "programId": "antler",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.antler.co/",
     "https://www.antler.co/apply",
+    "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
+    "https://www.antler.co/cohort-start-dates",
+    "https://www.antler.co/about",
     "https://www.antler.co/blog/https-www-antler-co-blog-apply-to-antler-australia-residency-brisbane-sydney-melbourne",
     "https://www.antler.co/blog/the-who-what-and-why-of-applying-to-antler-southeast-asia",
-    "https://www.antler.co/blog/1000-investments-from-day-zero",
-    "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-    "https://www.antler.co/blog/3-key-things-investors-scrutinize-before-closing-the-deal",
-    "http://www.antler.co/apply",
-    "https://www.antler.co/blog/antler-canada-announces-new-investment-terms",
-    "https://www.antler.co/blog/antler-india-announces-record-year-with-30-investments-in-2024",
-    "https://www.antler.co/blog/antler-maintains-strong-investment-momentum-in-vietnam-launching-new-initiative-amid-market-challenges",
-    "https://www.antler.co/blog/antler-program-benefits-beyond-investment",
-    "https://www.antler.co/blog/antler-reveals-revamped-us-investment-terms",
-    "https://apply.antler.co/signup",
-    "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus"
+    "https://www.antler.co/blog/1000-investments-from-day-zero"
   ],
   "evidence": [
-    {
-      "id": "check-deal-13fd59e61a",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
-      "title": "Antler — terms page",
-      "excerpt": "without compromising on team or traction. A revised program fee of $75K reflects the cost of expanded support and operations across three",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-26185ff2a8",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "you issue to future investors before your next priced round. Up to $250,000 committed matching capital. We commit to matching capital at 50% of",
-      "page": "application"
-    },
-    {
-      "id": "check-deal-2c0b2a6ad3",
-      "url": "https://www.antler.co/blog/antler-reveals-revamped-us-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "we’ve seen teams build successfully while burning much less than $20K, making the effective runway of our check size closer to 18 months.",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-5e1e0009ca",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "weeks. Founders receive up to $400,000 from inception, starting with $150,000 net as the first ticket. We believe in transparency. Here is exactly",
-      "page": "application"
-    },
     {
       "id": "check-deal-63c989d993",
       "url": "https://www.antler.co/blog/https-www-antler-co-blog-apply-to-antler-australia-residency-brisbane-sydney-melbourne",
       "title": "Antler — application page",
       "excerpt": "valuation of AU$1,875,000. Then, if the founders secure at least $300,000 from sophisticated investors within 12 months of that investment,",
       "page": "application"
-    },
-    {
-      "id": "check-deal-6b53488bad",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "working closely with founders for 6 weeks. Founders receive up to $400,000 from inception, starting with $150,000 net as the first ticket. We",
-      "page": "application"
-    },
-    {
-      "id": "check-deal-85a51f1214",
-      "url": "https://www.antler.co/blog/antler-reveals-revamped-us-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "to our US Investment Committee to receive pre-seed funding for a $250K investment at a $2.75M post money valuation in the form of a SAFE",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-9355cc5085",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
-      "title": "Antler — terms page",
-      "excerpt": "residency that pass the investment committee will now receive AU$260,000 for 12% equity , up from the previous AU$225,000, lifting their",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-9adc4f5c1e",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
-      "title": "Antler — terms page",
-      "excerpt": "to AU$2.17 million . The change provides incoming teams with ~ $30K more upfront runway , helping to cover increased burn and extend",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-ae9e5439df",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "believe in transparency. Here is exactly how the investment works: $100,000 for 10% equity via SAFE. This is a straightforward equity investment",
-      "page": "application"
-    },
-    {
-      "id": "check-deal-c687b1034d",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "equity investment that gives Antler 10% ownership upon closing. $50,000 via an uncapped SAFE with a Most Favoured Nation (MFN) clause. Unlike",
-      "page": "application"
-    },
-    {
-      "id": "check-deal-dda3a9fc26",
-      "url": "https://www.antler.co/blog/antler-canada-announces-new-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "Committee within 10 weeks. Upon approval, Antler Canada invests $150K for a 10% equity stake on a fully diluted basis. Founders then have",
-      "page": "terms"
     },
     {
       "id": "check-deal-e9d61ae964",
@@ -111,101 +27,10 @@
       "page": "application"
     },
     {
-      "id": "check-deal-fc051bb5a9",
-      "url": "https://www.antler.co/blog/antler-canada-announces-new-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "framework for startups. With ARC, we pledge to invest up to $300K in idea-stage companies on an ongoing basis. The initial funding",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-017d764c3a",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
-      "title": "Antler — terms page",
-      "excerpt": ": If founders raise $300K+ externally within 12 months, Antler commits to one-third of the round.",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-02f9c99372",
-      "url": "https://www.antler.co/blog/antler-program-benefits-beyond-investment",
-      "title": "Antler — terms page",
-      "excerpt": "options that are available to you during this 2-month period. You are always free to break-up after",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-051870c23d",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "57 founders have been selected. They will spend 10 weeks in an intensive early-stage venture generation",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-0bd0100f49",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "after working closely with founders for 6 weeks. Founders receive up to $400,000 from inception,",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-0e74ceab5e",
-      "url": "https://www.antler.co/blog/antler-canada-announces-new-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "to Antler Canada’s Investment Committee within 10 weeks. Upon approval, Antler Canada invests $150K for",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-2572ac4c17",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
-      "title": "Antler — terms page",
-      "excerpt": "57 founders have been selected. They will spend 10 weeks in an intensive early-stage venture generation",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-31e157c359",
-      "url": "https://www.antler.co/blog/antler-program-benefits-beyond-investment",
-      "title": "Antler — terms page",
-      "excerpt": "life is so much fun until I joined Antler 10 weeks back. For the first time in life, I got a chance",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-33b5e93bcd",
-      "url": "https://www.antler.co/blog/antler-maintains-strong-investment-momentum-in-vietnam-launching-new-initiative-amid-market-challenges",
-      "title": "Antler — terms page",
-      "excerpt": "57 founders have been selected. They will spend 10 weeks in an intensive early-stage venture generation",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-3437456c66",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
-      "title": "Antler — terms page",
-      "excerpt": "improved investment terms and a revamped 6-week residency for founders building global software",
-      "page": "terms"
-    },
-    {
       "id": "check-duration-425cb52cac",
       "url": "https://www.antler.co/blog/1000-investments-from-day-zero",
       "title": "Antler — terms page",
       "excerpt": "Announces Improved Investment Terms and 6-Week Residency Antler Singapore today announced",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-45684d5090",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "improved investment terms and a revamped 6-week residency for founders building global software",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-4c66e25bf6",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "Announces Improved Investment Terms and 6-Week Residency Antler Singapore today announced",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-5208c5f954",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
-      "title": "Antler — terms page",
-      "excerpt": "at least $300,000 in external capital within 12 months of Antler’s initial investment, Antler",
       "page": "terms"
     },
     {
@@ -223,32 +48,18 @@
       "page": "application"
     },
     {
-      "id": "check-duration-8a82cf76c4",
-      "url": "https://www.antler.co/blog/antler-india-announces-record-year-with-30-investments-in-2024",
-      "title": "Antler — terms page",
-      "excerpt": "57 founders have been selected. They will spend 10 weeks in an intensive early-stage venture generation",
-      "page": "terms"
+      "id": "check-duration-916d33eca7",
+      "url": "https://www.antler.co/about",
+      "title": "Antler — program page",
+      "excerpt": "and grew the team to over 150 people in just 20 months. EXPAND BIO Fridtjof Berge LinkedIn profile",
+      "page": "details"
     },
     {
-      "id": "check-duration-8bde77202f",
-      "url": "https://www.antler.co/blog/antler-reveals-revamped-us-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "$250K investment amount, they’ll have exactly 12 months of runway to find product-market-fit.",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-8f9bb621b1",
-      "url": "https://www.antler.co/blog/antler-reveals-revamped-us-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "the effective runway of our check size closer to 18 months. The path from pre-seed to seed rounds is not",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-9c98dd6c68",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "ambition from day one Apply now. What happens in 6 weeks Most startup programs optimize for learning.",
-      "page": "application"
+      "id": "check-duration-91ef6c67e4",
+      "url": "https://www.antler.co/about",
+      "title": "Antler — program page",
+      "excerpt": "and grew the team to over 150 people in just 20 months. EXPAND BIO Rajiv Srivatsa LinkedIn profile",
+      "page": "details"
     },
     {
       "id": "check-duration-a3785fe9cc",
@@ -258,24 +69,10 @@
       "page": "details"
     },
     {
-      "id": "check-duration-a3e38fc24b",
-      "url": "https://www.antler.co/blog/antler-maintains-strong-investment-momentum-in-vietnam-launching-new-initiative-amid-market-challenges",
-      "title": "Antler — terms page",
-      "excerpt": "improved investment terms and a revamped 6-week residency for founders building global software",
-      "page": "terms"
-    },
-    {
       "id": "check-duration-a52353ada0",
       "url": "https://www.antler.co/blog/1000-investments-from-day-zero",
       "title": "Antler — terms page",
       "excerpt": "improved investment terms and a revamped 6-week residency for founders building global software",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-add0302f98",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
-      "title": "Antler — terms page",
-      "excerpt": "Announces Improved Investment Terms and 6-Week Residency Antler Singapore today announced",
       "page": "terms"
     },
     {
@@ -286,53 +83,11 @@
       "page": "terms"
     },
     {
-      "id": "check-duration-b6c4cecba6",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
-      "title": "Antler — terms page",
-      "excerpt": "with Antler’s model, the residency is a 10-week program for early-stage founders - including",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-b785c1173f",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "into weeks of experimentation. Built for speed 6 weeks. One outcome: momentum. The residency is",
-      "page": "application"
-    },
-    {
       "id": "check-duration-ba17580449",
       "url": "https://www.antler.co/blog/https-www-antler-co-blog-apply-to-antler-australia-residency-brisbane-sydney-melbourne",
       "title": "Antler — application page",
       "excerpt": "from sophisticated investors within the first 12 months. This is part of Antler’s commitment to backing",
       "page": "application"
-    },
-    {
-      "id": "check-duration-ba61b6439f",
-      "url": "https://www.antler.co/blog/antler-program-benefits-beyond-investment",
-      "title": "Antler — terms page",
-      "excerpt": "in Australia and started my roller coaster ride 10 weeks back. I met, exchanged ideas, learned from and",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-bc990ad6d8",
-      "url": "https://www.antler.co/blog/antler-canada-announces-new-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "from an idea to raising $600K or more within 9 months, offering a founder-friendly approach to",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-c662a89995",
-      "url": "https://www.antler.co/blog/antler-reveals-revamped-us-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "are best equipped for success with a runway of 12 months or more during the pre-seed stage.",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-de627237dc",
-      "url": "https://www.antler.co/blog/antler-maintains-strong-investment-momentum-in-vietnam-launching-new-initiative-amid-market-challenges",
-      "title": "Antler — terms page",
-      "excerpt": "Announces Improved Investment Terms and 6-Week Residency Antler Singapore today announced",
-      "page": "terms"
     },
     {
       "id": "check-duration-e37b7b6594",
@@ -342,25 +97,11 @@
       "page": "application"
     },
     {
-      "id": "check-duration-e8bb423f72",
-      "url": "https://www.antler.co/blog/antler-india-announces-record-year-with-30-investments-in-2024",
-      "title": "Antler — terms page",
-      "excerpt": "Announces Improved Investment Terms and 6-Week Residency Antler Singapore today announced",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-ec3510fe84",
-      "url": "https://www.antler.co/blog/antler-india-announces-record-year-with-30-investments-in-2024",
-      "title": "Antler — terms page",
-      "excerpt": "improved investment terms and a revamped 6-week residency for founders building global software",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-495b316418",
-      "url": "https://www.antler.co/blog/antler-reveals-revamped-us-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "is that we require founders to come and work with us in person for eight weeks before making a final investment decision.",
-      "page": "terms"
+      "id": "check-format-4e907bff59",
+      "url": "https://www.antler.co/about",
+      "title": "Antler — program page",
+      "excerpt": "including AI, ML, computer vision, Web3, Blockchain, Virtual Reality, Generative Video, In-Camera VFX , and visual",
+      "page": "details"
     },
     {
       "id": "check-format-547ac8c6b4",
@@ -370,25 +111,32 @@
       "page": "application"
     },
     {
-      "id": "check-format-55f1208e3e",
-      "url": "https://www.antler.co/blog/antler-reveals-revamped-us-investment-terms",
+      "id": "check-format-6b2fdd8760",
+      "url": "https://www.antler.co/about",
+      "title": "Antler — program page",
+      "excerpt": "movies. At General Motors, he developed and deployed virtual reality cave environments for automotive design and car",
+      "page": "details"
+    },
+    {
+      "id": "check-format-de79daefbd",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
       "title": "Antler — terms page",
-      "excerpt": "founders, investors, and Antler team. We re-launched our in-person residency in 2022, and re-committed to the magic of",
+      "excerpt": "AI, including:some text ReelBlend : Marketplace for virtual product placement, utilizing AI and Computer Vision to",
       "page": "terms"
     },
     {
-      "id": "check-format-81fd1b3845",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
+      "id": "check-location-9d60a7ad00",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
       "title": "Antler — terms page",
-      "excerpt": "Residency : Selected founders join a full-time, in-person program to form teams, test ideas, and validate solutions",
+      "excerpt": "early-stage venture capital firm based in Singapore, today announced its largest pre-seed",
       "page": "terms"
     },
     {
-      "id": "check-format-c4df6b0430",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "reach out for a quick 15-minute call before scheduling in virtual call with our partners, demonstrate insights and prove you",
-      "page": "application"
+      "id": "check-location-f72704f965",
+      "url": "https://www.antler.co/about",
+      "title": "Antler — program page",
+      "excerpt": "Fady is an investment partner based in Singapore. Prior to Antler, Fady was the Global",
+      "page": "details"
     },
     {
       "id": "check-name-145beaec77",
@@ -396,20 +144,6 @@
       "title": "Antler — homepage",
       "excerpt": "Antler | Where Founders Go Further, Faster Skip to main content",
       "page": "details"
-    },
-    {
-      "id": "check-portfolio-1da088aca8",
-      "url": "https://www.antler.co/blog/antler-program-benefits-beyond-investment",
-      "title": "Antler — terms page",
-      "excerpt": "Portfolio → https://www.antler.co/portfolio",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-3c33395712",
-      "url": "http://www.antler.co/apply",
-      "title": "Antler — application page",
-      "excerpt": "Portfolio → https://www.antler.co/portfolio",
-      "page": "application"
     },
     {
       "id": "check-portfolio-427b831a9d",
@@ -433,11 +167,18 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-601796b23d",
-      "url": "https://www.antler.co/blog/3-key-things-investors-scrutinize-before-closing-the-deal",
-      "title": "Antler — terms page",
+      "id": "check-portfolio-6a4855840c",
+      "url": "https://www.antler.co/cohort-start-dates",
+      "title": "Antler — batches page",
       "excerpt": "Portfolio → https://www.antler.co/portfolio",
-      "page": "terms"
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-6cd87a44cf",
+      "url": "https://www.antler.co/about",
+      "title": "Antler — program page",
+      "excerpt": "Portfolio → https://www.antler.co/portfolio",
+      "page": "details"
     },
     {
       "id": "check-portfolio-958092cfed",
@@ -447,50 +188,8 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-967c996088",
-      "url": "https://apply.antler.co/signup",
-      "title": "Antler — application page",
-      "excerpt": "Portfolio → https://www.antler.co/portfolio",
-      "page": "application"
-    },
-    {
       "id": "check-portfolio-9a3ee66252",
       "url": "https://www.antler.co/blog/1000-investments-from-day-zero",
-      "title": "Antler — terms page",
-      "excerpt": "Portfolio → https://www.antler.co/portfolio",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-a0bf9ad921",
-      "url": "https://www.antler.co/blog/antler-reveals-revamped-us-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "Portfolio → https://www.antler.co/portfolio",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-a4be9bf59c",
-      "url": "https://www.antler.co/blog/antler-canada-announces-new-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "Portfolio → https://www.antler.co/portfolio",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-a75cf31604",
-      "url": "https://www.antler.co/blog/antler-india-announces-record-year-with-30-investments-in-2024",
-      "title": "Antler — terms page",
-      "excerpt": "Portfolio → https://www.antler.co/portfolio",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-afb0877749",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "Portfolio → https://www.antler.co/portfolio",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-b2754c403d",
-      "url": "https://www.antler.co/blog/antler-maintains-strong-investment-momentum-in-vietnam-launching-new-initiative-amid-market-challenges",
       "title": "Antler — terms page",
       "excerpt": "Portfolio → https://www.antler.co/portfolio",
       "page": "terms"
@@ -503,32 +202,18 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-cb1a9136de",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
+      "id": "check-portfolio-c0dd68e853",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
       "title": "Antler — terms page",
       "excerpt": "Portfolio → https://www.antler.co/portfolio",
       "page": "terms"
     },
     {
-      "id": "check-rolling-13d7e3428f",
-      "url": "https://www.antler.co/blog/antler-canada-announces-new-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "Key Highlights of ARC: ‍ Flexible and Rolling Structure: ARC can be activated on a rolling basis for external funding raised within nine months (excluding friends and family,",
-      "page": "terms"
-    },
-    {
-      "id": "check-rolling-771cec12d6",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "focused on supporting the existing portfolio, we’re reviewing applications on a rolling basis and building the next group of standout companies to work with. Pro-tip: A",
-      "page": "application"
-    },
-    {
-      "id": "check-rolling-97ed2883c0",
-      "url": "https://www.antler.co/blog/antler-maintains-strong-investment-momentum-in-vietnam-launching-new-initiative-amid-market-challenges",
-      "title": "Antler — terms page",
-      "excerpt": "fast-tracked, tailored support and funding opportunities. The program is open on a rolling basis, offering startups up to $600,000 in early-stage funding and the tools needed",
-      "page": "terms"
+      "id": "check-rolling-b8c157d6b9",
+      "url": "https://www.antler.co/cohort-start-dates",
+      "title": "Antler — batches page",
+      "excerpt": "you to apply early to secure a seat. Country Start date Cities Canada Rolling intake* Toronto US Rolling intake* San Francisco Austin New York City Denmark Finland",
+      "page": "batches"
     },
     {
       "id": "check-route-173aad4c78",
@@ -538,81 +223,11 @@
       "page": "application"
     },
     {
-      "id": "check-route-1c3067dd1b",
-      "url": "https://www.antler.co/blog/antler-reveals-revamped-us-investment-terms",
-      "title": "Antler — terms page",
+      "id": "check-route-3b1be44183",
+      "url": "https://www.antler.co/cohort-start-dates",
+      "title": "Antler — batches page",
       "excerpt": "Apply now → https://www.antler.co/apply",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-1c4f2ef702",
-      "url": "https://www.antler.co/blog/3-key-things-investors-scrutinize-before-closing-the-deal",
-      "title": "Antler — terms page",
-      "excerpt": "Apply now → http://www.antler.co/apply",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-34bc8f62d7",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "https://www.antler.co/blog/antler-disrupt-spring-2026-applications-officially-open",
-      "page": "application"
-    },
-    {
-      "id": "check-route-491112e34f",
-      "url": "https://www.antler.co/blog/antler-maintains-strong-investment-momentum-in-vietnam-launching-new-initiative-amid-market-challenges",
-      "title": "Antler — terms page",
-      "excerpt": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-537e1e71d4",
-      "url": "https://www.antler.co/blog/antler-reveals-revamped-us-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "apply to Antler today → https://apply.antler.co/signup",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-57709a2dda",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
-      "title": "Antler — terms page",
-      "excerpt": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-57f6be3824",
-      "url": "https://www.antler.co/blog/antler-program-benefits-beyond-investment",
-      "title": "Antler — terms page",
-      "excerpt": "Apply now → https://www.antler.co/apply",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-63e53cf687",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
-      "title": "Antler — terms page",
-      "excerpt": "Apply now → https://www.antler.co/apply",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-6b4a58d958",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
-      "title": "Antler — terms page",
-      "excerpt": "now open for applications → https://www.antler.co/residency/australia?utm_source=referral&utm_medium=referral&utm_content=aus14launchweek&utm_term=antlerwebsite",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-6bfb779584",
-      "url": "https://www.antler.co/blog/3-key-things-investors-scrutinize-before-closing-the-deal",
-      "title": "Antler — terms page",
-      "excerpt": "Apply now → https://www.antler.co/apply",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-6dc70619e1",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "Apply now → https://www.antler.co/apply",
-      "page": "application"
+      "page": "batches"
     },
     {
       "id": "check-route-6fd0fe9846",
@@ -622,36 +237,8 @@
       "page": "application"
     },
     {
-      "id": "check-route-825b7cbc20",
-      "url": "https://www.antler.co/blog/antler-india-announces-record-year-with-30-investments-in-2024",
-      "title": "Antler — terms page",
-      "excerpt": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "page": "terms"
-    },
-    {
       "id": "check-route-9109c38736",
       "url": "https://www.antler.co/blog/1000-investments-from-day-zero",
-      "title": "Antler — terms page",
-      "excerpt": "Apply now → https://www.antler.co/apply",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-946f06fbd7",
-      "url": "https://www.antler.co/blog/antler-canada-announces-new-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "Apply now → https://www.antler.co/apply",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-b3ff7dec3e",
-      "url": "https://www.antler.co/blog/antler-maintains-strong-investment-momentum-in-vietnam-launching-new-initiative-amid-market-challenges",
-      "title": "Antler — terms page",
-      "excerpt": "Apply now → https://www.antler.co/apply",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-d9e06f9add",
-      "url": "https://www.antler.co/blog/antler-india-announces-record-year-with-30-investments-in-2024",
       "title": "Antler — terms page",
       "excerpt": "Apply now → https://www.antler.co/apply",
       "page": "terms"
@@ -669,48 +256,6 @@
       "title": "Antler — application page",
       "excerpt": "Residency Antler in Australia launches 13th residency, opens in Brisbane, and closes its second fund at $77M Applications are now open for Antler in Australia’s 13th residency. With our new Brisbane residency kicking off in February 2025,",
       "page": "application"
-    },
-    {
-      "id": "check-status-7a51aa675f",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "title": "Antler — application page",
-      "excerpt": "about what they need to prove next. You do not need a polished product. You do need evidence of obsession . Applications are now open. ‍ How to apply The next Antler residency in Singapore starts on 5 October 2026. Put in an application",
-      "page": "application"
-    },
-    {
-      "id": "check-status-922b1d08b4",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
-      "title": "Antler — terms page",
-      "excerpt": "active early-stage VC. ‍ ‍ Maeve Couch Manager, Marketing and Communications April 16, 2025 Share article Applications are now open for Antler’s 14th Australian residency - kicking off August 11 across Sydney, Melbourne, and Brisbane - and",
-      "page": "terms"
-    },
-    {
-      "id": "check-status-a03eac837d",
-      "url": "https://www.antler.co/blog/antler-reveals-revamped-us-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "Australia Residency April 7, 2026 Behind the Scenes: A Look Inside Antler’s Residency in Australia Applications are open for Antler Australia's residency. Here's what happens inside the program, why founders move faster than they",
-      "page": "terms"
-    },
-    {
-      "id": "check-status-c849dbc641",
-      "url": "https://www.antler.co/blog/antler-program-benefits-beyond-investment",
-      "title": "Antler — terms page",
-      "excerpt": "Australia Residency April 7, 2026 Behind the Scenes: A Look Inside Antler’s Residency in Australia Applications are open for Antler Australia's residency. Here's what happens inside the program, why founders move faster than they",
-      "page": "terms"
-    },
-    {
-      "id": "check-status-f8cb1771de",
-      "url": "https://www.antler.co/blog/antler-canada-announces-new-investment-terms",
-      "title": "Antler — terms page",
-      "excerpt": "accelerate early-stage fundraising while providing founders with robust support for scaling their ventures.Applications are now open for our next cohort that starts on March 31st, 2025 ANTLER RESIDENCY —LAUNCH YOUR STARTUP Antler backs",
-      "page": "terms"
-    },
-    {
-      "id": "check-status-fbec44e24f",
-      "url": "https://www.antler.co/blog/3-key-things-investors-scrutinize-before-closing-the-deal",
-      "title": "Antler — terms page",
-      "excerpt": "Australia Residency April 7, 2026 Behind the Scenes: A Look Inside Antler’s Residency in Australia Applications are open for Antler Australia's residency. Here's what happens inside the program, why founders move faster than they",
-      "page": "terms"
     }
   ],
   "pageQuotes": [
@@ -721,10 +266,262 @@
       "excerpt": "Antler | Where Founders Go Further, Faster Skip to main content Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories Cohort Start dates See when new cohorts begin and find the right moment to start building with Antler. View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder"
     },
     {
+      "id": "check-page-3e3f93f532",
+      "url": "https://www.antler.co/",
+      "page": "details",
+      "excerpt": "View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us Further —Faster Antler is a global early-stage VC investing in the world's best founders from first check to IPO."
+    },
+    {
+      "id": "check-page-e750c74c8e",
+      "url": "https://www.antler.co/",
+      "page": "details",
+      "excerpt": "Lovable is the world's leading platform for building software with AI."
+    },
+    {
+      "id": "check-page-faae5d9eba",
+      "url": "https://www.antler.co/",
+      "page": "details",
+      "excerpt": "Wrtn is redefining how millions of people across Asia use AI every day."
+    },
+    {
+      "id": "check-page-2113b4184a",
+      "url": "https://www.antler.co/",
+      "page": "details",
+      "excerpt": "Fluidstack powers the next generation of AI with the world's leading GPU cloud. micro1 is reinventing global hiring with an AI-native platform."
+    },
+    {
+      "id": "check-page-0630efd881",
+      "url": "https://www.antler.co/",
+      "page": "details",
+      "excerpt": "Peec AI helps thousands of brands get discovered through AI search, and is one of Europe's fastest-growing companies."
+    },
+    {
+      "id": "check-page-3f367308ff",
+      "url": "https://www.antler.co/",
+      "page": "details",
+      "excerpt": "Harper is transforming commercial insurance with AI, turning weeks of manual work into a 24 hour process."
+    },
+    {
+      "id": "check-page-61d19d28b7",
+      "url": "https://www.antler.co/",
+      "page": "details",
+      "excerpt": "PixVerse is redefining how the world creates video with AI."
+    },
+    {
+      "id": "check-page-649491f755",
+      "url": "https://www.antler.co/",
+      "page": "details",
+      "excerpt": "Back Back Back Back Further —faster Antler is active across 30 locations globally, where we specialise in early-stage investments."
+    },
+    {
+      "id": "check-page-77633fb5f7",
+      "url": "https://www.antler.co/",
+      "page": "details",
+      "excerpt": "We have the world’s fastest growing portfolio of AI companies."
+    },
+    {
+      "id": "check-page-4a5bb448cb",
+      "url": "https://www.antler.co/",
+      "page": "details",
+      "excerpt": "AI founders If you’re looking to build the next category-defining company, there’s no better place to pursue your ambition."
+    },
+    {
+      "id": "check-page-5d996b979c",
+      "url": "https://www.antler.co/",
+      "page": "details",
+      "excerpt": "PORTFOLIO Learn more about Antler's early-stage investments from around the world."
+    },
+    {
+      "id": "check-page-58d7091ec1",
+      "url": "https://www.antler.co/",
+      "page": "details",
+      "excerpt": "2,000+ portfolio companies 12,000+ founder community 26 locations worldwide FOUNDER —STORIES Founder stories Founder stories Founder stories Wrtn Backed by $73.5M in Series B funding, Wrtn is one of Asia’s most ambitious consumer AI companies."
+    },
+    {
       "id": "check-page-c99ca6f689",
       "url": "https://www.antler.co/apply",
       "page": "application",
       "excerpt": "Apply to Antler | Further, Faster GET INVESTMENT FROM ANTLER Tell us who you are and what you’re building. First name* last name* email* Linkedin (optional) What stage are you at? Idea to Pre-Seed – Founding to first traction Series A to C – I’m ready for scale-up capital select region Asia Pacific Americas Europe Middle East & Africa select city Bangalore Brisbane Ho Chi Minh Jakarta Kuala Lumpur Melbourne Seoul Singapore Sydney Tokyo select city Austin New York City San Francisco Sao Paulo Toronto select city Continental Europe (Amsterdam/Berlin) Copenhagen Helsinki London Oslo Stockholm select city Dubai Riyadh Lagos Nairobi I agree to receive updates and communications from Antler. By clicking submit, you agree to Antler's privacy policy. By clicking submit, you agree to Antler's privacy policy. APPLICATION RECEIVED! Thanks! Your application is with the Antler team. Something went wrong while submitting the form. Please refresh and try again First name* last name* email* Linkedin (optional) What stage are you at? Idea to Pre-Seed – Founding to first traction Series A to C – I’m ready for scale-up capital Tell us about your company (optional) Where are you based?* US & Canada South America Europe Asia (incl. Australia, NZ) Africa Website (optional) PITCH DECK (optional) Upload File Max file size 10MB. Uploading... fileuploaded.jpg Upload failed. Max size for files is 10 MB."
+    },
+    {
+      "id": "check-page-360791b7e8",
+      "url": "https://www.antler.co/apply",
+      "page": "application",
+      "excerpt": "LOCATIONS Australia Brazil Canada Denmark Finland France Germany India Indonesia Japan Kenya Korea MENAP Malaysia Netherlands Nigeria Norway Singapore Sweden UK US Vietnam INVESTORS Investors Investors portal Sustainability Antler Elevate ABOUT Insights Portfolio Careers Portfolio Jobs Newsroom Privacy Policy Fraud Disclaimer Report a Concern SOCIALS Instagram Facebook LinkedIn YouTube X / Twitter"
+    },
+    {
+      "id": "check-page-098a769c6c",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
+      "page": "terms",
+      "excerpt": "Antler Leads $5.1M Pre-Seed Funding for 37 Startups in SEA; Targets Investments in Verticalized AI and Industry 4.0 Skip to main content Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories Cohort Start dates See when new cohorts begin and find the right moment to start building with Antler. View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges,"
+    },
+    {
+      "id": "check-page-d0da6c0bb7",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
+      "page": "terms",
+      "excerpt": "This round also marks the highest number of pre-seed deals completed in a single round in the region, demonstrating Antler’s commitment to backing the next generation of SEA tech entrepreneurs. ‍ The diverse portfolio of startups spans 19 sectors ranging from AI and B2B SaaS to fintech and healthcare to address specific regional challenges."
+    },
+    {
+      "id": "check-page-ebbf0c1c94",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
+      "page": "terms",
+      "excerpt": "The investment also marks Antler’s initial commitment and footprint in Malaysia, as part of its strategic partnership with sovereign wealth fund Khazanah."
+    },
+    {
+      "id": "check-page-2e8a63c4b8",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
+      "page": "terms",
+      "excerpt": "Jussi Salovaara, Co-founder and Managing Partner Asia of Antler said, “As a multi-stage investor, we recognize the immense potential of early-stage startups in Southeast Asia."
+    },
+    {
+      "id": "check-page-e8b8519cf5",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
+      "page": "terms",
+      "excerpt": "In this dynamic and challenging climate, we are especially drawn to pre-seed investments, particularly in verticalized AI and industry 4.0 startups that address deep-seated pain points and revolutionize the way models and data translate into tangible products."
+    },
+    {
+      "id": "check-page-752f1bade6",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
+      "page": "terms",
+      "excerpt": "Their investments in this round underscore conviction in the following trends: ‍ Shift to verticalized AI - A second wave of AI startups is expected in 2024 as AI continues to mature and solutions are being tailored to specific industries."
+    },
+    {
+      "id": "check-page-513b3e0295",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
+      "page": "terms",
+      "excerpt": "We will see a greater shift towards building durable businesses in verticalized AI, notably in media, customer lifecycle management, and LLM integration."
+    },
+    {
+      "id": "check-page-52f46479e7",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
+      "page": "terms",
+      "excerpt": "34% of startups in this round are in verticalized AI, including:some text ReelBlend : Marketplace for virtual product placement, utilizing AI and Computer Vision to facilitate accurate ad insertions in various media."
+    },
+    {
+      "id": "check-page-9dd7273c67",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
+      "page": "terms",
+      "excerpt": "EigenAI : No-code AI/ML platform specializing in analyzing customer behavior and building comprehensive Customer Lifecycle Management (CLM) models."
+    },
+    {
+      "id": "check-page-db0c4e87d5",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
+      "page": "terms",
+      "excerpt": "RapidaAI : LLM router and prompt engineering platform for businesses to experiment, test and deploy LLM powered applications at speed."
+    },
+    {
+      "id": "check-page-9869dc9606",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
+      "page": "terms",
+      "excerpt": "Emereg : AI-first platform focused on risk management automation specifically tailored for the fintech sector."
+    },
+    {
+      "id": "check-page-3a35336bbe",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
+      "page": "terms",
+      "excerpt": "CapGo : Platform to deploy AI agents for fast and autonomous data acquisition, specifically tailored for market research."
+    },
+    {
+      "id": "check-page-b9f812d86f",
+      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
+      "page": "terms",
+      "excerpt": "Buildas : Human-assisted AI platform that aids businesses in planning, customizing, and maintaining software without requiring extensive technical expertise."
+    },
+    {
+      "id": "check-page-60199df83e",
+      "url": "https://www.antler.co/cohort-start-dates",
+      "page": "batches",
+      "excerpt": "Cohort Start Dates | Antler Residency Skip to main content Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories Cohort Start dates See when new cohorts begin and find the right moment to start building with Antler. View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories"
+    },
+    {
+      "id": "check-page-5daaa24701",
+      "url": "https://www.antler.co/cohort-start-dates",
+      "page": "batches",
+      "excerpt": "View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us ANTLER COHORT —START DATES Browse our upcoming Antler residency start dates."
+    },
+    {
+      "id": "check-page-384b4ac19d",
+      "url": "https://www.antler.co/cohort-start-dates",
+      "page": "batches",
+      "excerpt": "LOCATIONS Australia Brazil Canada Denmark Finland France Germany India Indonesia Japan Kenya Korea MENAP Malaysia Netherlands Nigeria Norway Singapore Sweden UK US Vietnam INVESTORS Investors Investors portal Sustainability Antler Elevate ABOUT Insights Portfolio Careers Portfolio Jobs Newsroom Privacy Policy Fraud Disclaimer Report a Concern SOCIALS Instagram Facebook LinkedIn YouTube X / Twitter"
+    },
+    {
+      "id": "check-page-ec5526a650",
+      "url": "https://www.antler.co/about",
+      "page": "details",
+      "excerpt": "About | Antler Skip to main content Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories Cohort Start dates See when new cohorts begin and find the right moment to start building with Antler. View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories Cohort Start dates See"
+    },
+    {
+      "id": "check-page-1a9c4383d1",
+      "url": "https://www.antler.co/about",
+      "page": "details",
+      "excerpt": "View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us WHERE FOUNDERS GO FURTHER —FASTER Antler is a global early-stage VC firm that partners with exceptional founders from day zero to build impactful, scalable companies."
+    },
+    {
+      "id": "check-page-0b55b3c72b",
+      "url": "https://www.antler.co/about",
+      "page": "details",
+      "excerpt": "With offices in 27 cities—including New York , London , Berlin , Singapore , Tokyo , and Sydney —we back founders from all backgrounds, often from the very beginning of their journey, even before they have a team or idea."
+    },
+    {
+      "id": "check-page-3ffae6bfb5",
+      "url": "https://www.antler.co/about",
+      "page": "details",
+      "excerpt": "PitchBook ranked Antler as the most active VC globally , Dealroom recognized the firm as the most active investor in AI startups ."
+    },
+    {
+      "id": "check-page-971d42e8be",
+      "url": "https://www.antler.co/about",
+      "page": "details",
+      "excerpt": "Before Antler, Magnus co-founded Zalora, took the company from zero to Asia’s leading fashion e-commerce platform, and then helped scale Global Fashion Group across 26 markets."
+    },
+    {
+      "id": "check-page-1398d82f11",
+      "url": "https://www.antler.co/about",
+      "page": "details",
+      "excerpt": "Antler is the world’s most active early-stage investor, backing exceptional people at the very start of their journey — and supporting them from inception to scale."
+    },
+    {
+      "id": "check-page-11c4d31689",
+      "url": "https://www.antler.co/about",
+      "page": "details",
+      "excerpt": "Across 27 cities worldwide—including New York, San Francisco, London, Berlin, Bangalore, Singapore, Seoul, and Sydney—the firm helps founders remove the barriers to building by connecting them with world-class peers, validating business models, and providing initial capital."
+    },
+    {
+      "id": "check-page-765c3b2dbe",
+      "url": "https://www.antler.co/about",
+      "page": "details",
+      "excerpt": "To date, Antler has backed more than 2,000 startups globally, including Airalo, Lovable, Peec.AI, Reebelo, Wrtn, and Benjamin."
+    },
+    {
+      "id": "check-page-433a6b7307",
+      "url": "https://www.antler.co/about",
+      "page": "details",
+      "excerpt": "For founders who go on to build breakout companies, Antler Elevate—the $285M emerging growth fund—invests beyond the early stages, managed through offices in London, Singapore, and New York."
+    },
+    {
+      "id": "check-page-b7bd87f5c4",
+      "url": "https://www.antler.co/about",
+      "page": "details",
+      "excerpt": "EXPAND BIO Lavanya Indralingam LinkedIn profile (opens in new tab) LinkedIn profile (opens in new tab) Partner, Head of Global Operations Spokesperson Lavanya leads Antler’s global operations, working with early-stage fund partners and local teams across markets to drive fund performance and operational efficiency."
+    },
+    {
+      "id": "check-page-fef5f0381b",
+      "url": "https://www.antler.co/about",
+      "page": "details",
+      "excerpt": "Earlier at Antler, she led scouting and selection in the Nordics, played a key role in integrating operations across the region, and served on the Nordic Investment Committee. ‍ Before Antler, Lavanya worked at Katapult VC, a global early-stage impact fund, and was an early operator at a data analytics startup."
+    },
+    {
+      "id": "check-page-3e955a89d0",
+      "url": "https://www.antler.co/about",
+      "page": "details",
+      "excerpt": "She also brings over a decade of experience in strategic communications and corporate advisory across Asia, Europe and North America, working with senior leaders across financial services and enterprise technology."
+    },
+    {
+      "id": "check-page-7a5f6b2151",
+      "url": "https://www.antler.co/about",
+      "page": "details",
+      "excerpt": "As the Executive Officer of TechSydney, he led Sydney’s premier technology industry organization."
     },
     {
       "id": "check-page-815998cf46",
@@ -743,66 +540,6 @@
       "url": "https://www.antler.co/blog/1000-investments-from-day-zero",
       "page": "terms",
       "excerpt": "1,000+ Investments From Day Zero | Antler Skip to main content Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories Cohort Start dates See when new cohorts begin and find the right moment to start building with Antler. View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder"
-    },
-    {
-      "id": "check-page-e4861cd587",
-      "url": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
-      "page": "application",
-      "excerpt": "Applications for Antler Singapore Inception SG21 are now open Skip to main content Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories Cohort Start dates See when new cohorts begin and find the right moment to start building with Antler. View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View"
-    },
-    {
-      "id": "check-page-2e9ee19de3",
-      "url": "https://www.antler.co/blog/3-key-things-investors-scrutinize-before-closing-the-deal",
-      "page": "terms",
-      "excerpt": "What Investors Look For Before Closing The Deal | Antler Skip to main content Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories Cohort Start dates See when new cohorts begin and find the right moment to start building with Antler. View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler"
-    },
-    {
-      "id": "check-page-e9352cb7c1",
-      "url": "http://www.antler.co/apply",
-      "page": "application",
-      "excerpt": "Apply to Antler | Further, Faster GET INVESTMENT FROM ANTLER Tell us who you are and what you’re building. First name* last name* email* Linkedin (optional) What stage are you at? Idea to Pre-Seed – Founding to first traction Series A to C – I’m ready for scale-up capital select region Asia Pacific Americas Europe Middle East & Africa select city Bangalore Brisbane Ho Chi Minh Jakarta Kuala Lumpur Melbourne Seoul Singapore Sydney Tokyo select city Austin New York City San Francisco Sao Paulo Toronto select city Continental Europe (Amsterdam/Berlin) Copenhagen Helsinki London Oslo Stockholm select city Dubai Riyadh Lagos Nairobi I agree to receive updates and communications from Antler. By clicking submit, you agree to Antler's privacy policy. By clicking submit, you agree to Antler's privacy policy. APPLICATION RECEIVED! Thanks! Your application is with the Antler team. Something went wrong while submitting the form. Please refresh and try again First name* last name* email* Linkedin (optional) What stage are you at? Idea to Pre-Seed – Founding to first traction Series A to C – I’m ready for scale-up capital Tell us about your company (optional) Where are you based?* US & Canada South America Europe Asia (incl. Australia, NZ) Africa Website (optional) PITCH DECK (optional) Upload File Max file size 10MB. Uploading... fileuploaded.jpg Upload failed. Max size for files is 10 MB."
-    },
-    {
-      "id": "check-page-bb8fee1847",
-      "url": "https://www.antler.co/blog/antler-canada-announces-new-investment-terms",
-      "page": "terms",
-      "excerpt": "Antler Canada announces new investment terms Skip to main content Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories Cohort Start dates See when new cohorts begin and find the right moment to start building with Antler. View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder"
-    },
-    {
-      "id": "check-page-07106cce30",
-      "url": "https://www.antler.co/blog/antler-india-announces-record-year-with-30-investments-in-2024",
-      "page": "terms",
-      "excerpt": "Antler India Announces Record Year with 30 Investments in 2024 Skip to main content Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories Cohort Start dates See when new cohorts begin and find the right moment to start building with Antler. View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View"
-    },
-    {
-      "id": "check-page-904b860f1a",
-      "url": "https://www.antler.co/blog/antler-maintains-strong-investment-momentum-in-vietnam-launching-new-initiative-amid-market-challenges",
-      "page": "terms",
-      "excerpt": "Antler maintains strong investment momentum in Vietnam, launching new initiative amid market challenges Skip to main content Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories Cohort Start dates See when new cohorts begin and find the right moment to start building with Antler. View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to"
-    },
-    {
-      "id": "check-page-bef04bdeb9",
-      "url": "https://www.antler.co/blog/antler-program-benefits-beyond-investment",
-      "page": "terms",
-      "excerpt": "A Founder Perspective: Program Benefits Beyond Funding | Antler Skip to main content Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories Cohort Start dates See when new cohorts begin and find the right moment to start building with Antler. View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View"
-    },
-    {
-      "id": "check-page-dbde9e78a0",
-      "url": "https://www.antler.co/blog/antler-reveals-revamped-us-investment-terms",
-      "page": "terms",
-      "excerpt": "Antler Reveals Revamped US Investment Terms Skip to main content Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories Cohort Start dates See when new cohorts begin and find the right moment to start building with Antler. View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder"
-    },
-    {
-      "id": "check-page-9ae19902ba",
-      "url": "https://apply.antler.co/signup",
-      "page": "application",
-      "excerpt": "Apply to Antler | Further, Faster GET INVESTMENT FROM ANTLER Tell us who you are and what you’re building. First name* last name* email* Linkedin (optional) What stage are you at? Idea to Pre-Seed – Founding to first traction Series A to C – I’m ready for scale-up capital select region Asia Pacific Americas Europe Middle East & Africa select city Bangalore Brisbane Ho Chi Minh Jakarta Kuala Lumpur Melbourne Seoul Singapore Sydney Tokyo select city Austin New York City San Francisco Sao Paulo Toronto select city Continental Europe (Amsterdam/Berlin) Copenhagen Helsinki London Oslo Stockholm select city Dubai Riyadh Lagos Nairobi I agree to receive updates and communications from Antler. By clicking submit, you agree to Antler's privacy policy. By clicking submit, you agree to Antler's privacy policy. APPLICATION RECEIVED! Thanks! Your application is with the Antler team. Something went wrong while submitting the form. Please refresh and try again First name* last name* email* Linkedin (optional) What stage are you at? Idea to Pre-Seed – Founding to first traction Series A to C – I’m ready for scale-up capital Tell us about your company (optional) Where are you based?* US & Canada South America Europe Asia (incl. Australia, NZ) Africa Website (optional) PITCH DECK (optional) Upload File Max file size 10MB. Uploading... fileuploaded.jpg Upload failed. Max size for files is 10 MB."
-    },
-    {
-      "id": "check-page-d6233ac5fd",
-      "url": "https://www.antler.co/blog/apply-to-antlers-14th-australian-residency-new-terms-global-ai-focus",
-      "page": "terms",
-      "excerpt": "Antler Launches 14th Australian Residency Amid New Terms and AI Focus Skip to main content Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories Cohort Start dates See when new cohorts begin and find the right moment to start building with Antler. View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder"
     }
   ],
   "findings": {
@@ -811,33 +548,17 @@
     "routes": [
       {
         "value": "https://www.antler.co/apply",
-        "evidenceId": "check-route-6fd0fe9846"
+        "evidenceId": "check-route-3b1be44183"
       },
       {
         "value": "https://www.antler.co/blog/applications-open-singapore-inception-sg21",
         "evidenceId": "check-route-f8d438bd74"
-      },
-      {
-        "value": "https://www.antler.co/blog/antler-disrupt-spring-2026-applications-officially-open",
-        "evidenceId": "check-route-34bc8f62d7"
-      },
-      {
-        "value": "http://www.antler.co/apply",
-        "evidenceId": "check-route-1c4f2ef702"
-      },
-      {
-        "value": "https://apply.antler.co/signup",
-        "evidenceId": "check-route-537e1e71d4"
-      },
-      {
-        "value": "https://www.antler.co/residency/australia?utm_source=referral&utm_medium=referral&utm_content=aus14launchweek&utm_term=antlerwebsite",
-        "evidenceId": "check-route-6b4a58d958"
       }
     ],
     "applicationUrl": [
       {
         "value": "https://www.antler.co/apply",
-        "evidenceId": "check-route-6fd0fe9846"
+        "evidenceId": "check-route-3b1be44183"
       }
     ],
     "applicationsOpen": [
@@ -851,7 +572,7 @@
     "rolling": [
       {
         "value": true,
-        "evidenceId": "check-rolling-771cec12d6"
+        "evidenceId": "check-rolling-b8c157d6b9"
       }
     ],
     "announcedIntake": [],
@@ -860,6 +581,10 @@
       {
         "value": "18 months",
         "evidenceId": "check-duration-a3785fe9cc"
+      },
+      {
+        "value": "20 months",
+        "evidenceId": "check-duration-916d33eca7"
       },
       {
         "value": "12 months",
@@ -872,27 +597,24 @@
       {
         "value": "6",
         "evidenceId": "check-duration-425cb52cac"
-      },
-      {
-        "value": "9 months",
-        "evidenceId": "check-duration-bc990ad6d8"
-      },
-      {
-        "value": "2 months",
-        "evidenceId": "check-duration-02f9c99372"
       }
     ],
     "format": [
       {
-        "value": "in-person",
-        "evidenceId": "check-format-547ac8c6b4"
+        "value": "remote",
+        "evidenceId": "check-format-de79daefbd"
       },
       {
-        "value": "remote",
-        "evidenceId": "check-format-c4df6b0430"
+        "value": "in-person",
+        "evidenceId": "check-format-547ac8c6b4"
       }
     ],
-    "location": [],
+    "location": [
+      {
+        "value": "Singapore",
+        "evidenceId": "check-location-9d60a7ad00"
+      }
+    ],
     "selectivity": [],
     "dealText": [
       {
@@ -902,22 +624,6 @@
       {
         "value": "valuation of AU$1,875,000. Then, if the founders secure at least $300,000 from sophisticated investors within 12 months of that investment,",
         "evidenceId": "check-deal-63c989d993"
-      },
-      {
-        "value": "working closely with founders for 6 weeks. Founders receive up to $400,000 from inception, starting with $150,000 net as the first ticket. We",
-        "evidenceId": "check-deal-6b53488bad"
-      },
-      {
-        "value": "weeks. Founders receive up to $400,000 from inception, starting with $150,000 net as the first ticket. We believe in transparency. Here is exactly",
-        "evidenceId": "check-deal-5e1e0009ca"
-      },
-      {
-        "value": "believe in transparency. Here is exactly how the investment works: $100,000 for 10% equity via SAFE. This is a straightforward equity investment",
-        "evidenceId": "check-deal-ae9e5439df"
-      },
-      {
-        "value": "equity investment that gives Antler 10% ownership upon closing. $50,000 via an uncapped SAFE with a Most Favoured Nation (MFN) clause. Unlike",
-        "evidenceId": "check-deal-c687b1034d"
       }
     ],
     "dealComponents": [
@@ -944,54 +650,6 @@
           "condition": null
         },
         "evidenceId": "check-deal-63c989d993"
-      },
-      {
-        "value": {
-          "kind": "cash",
-          "amount": "400000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Cash",
-          "contingent": true,
-          "condition": "up to"
-        },
-        "evidenceId": "check-deal-6b53488bad"
-      },
-      {
-        "value": {
-          "kind": "cash",
-          "amount": "150000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Cash",
-          "contingent": true,
-          "condition": "up to"
-        },
-        "evidenceId": "check-deal-5e1e0009ca"
-      },
-      {
-        "value": {
-          "kind": "equity",
-          "amount": "100000",
-          "currency": "USD",
-          "equity": "10%",
-          "label": "Equity",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-ae9e5439df"
-      },
-      {
-        "value": {
-          "kind": "safe",
-          "amount": "50000",
-          "currency": "USD",
-          "equity": "10%",
-          "label": "SAFE",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-c687b1034d"
       }
     ],
     "portfolioPages": [

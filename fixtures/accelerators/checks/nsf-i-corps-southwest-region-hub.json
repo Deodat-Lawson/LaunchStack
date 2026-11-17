@@ -1,20 +1,174 @@
 {
   "programId": "nsf-i-corps-southwest-region-hub",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
-    "https://www.swicorps.org/"
+    "https://www.swicorps.org/",
+    "https://swicorps.org/apply/",
+    "https://swicorps.org/faqs/",
+    "https://swicorps.org/idealaunch/",
+    "https://swicorps.org/",
+    "https://swicorps.org/nationalteams/",
+    "https://swicorps.org/wp-content/uploads/2026/03/NSF-National-Programs-Video.mp4"
   ],
-  "evidence": [],
+  "evidence": [
+    {
+      "id": "check-duration-8fdd728c53",
+      "url": "https://swicorps.org/nationalteams/",
+      "title": "NSF I-Corps Southwest Region Hub — program page",
+      "excerpt": "or university Program Length : Approximately 7-8 weeks Funding : Up to $50,000 in support funds NSF",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0ef0566320",
+      "url": "https://www.swicorps.org/",
+      "title": "NSF I-Corps Southwest Region Hub — homepage",
+      "excerpt": "https://swicorps.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8f2363f59d",
+      "url": "https://swicorps.org/",
+      "title": "NSF I-Corps Southwest Region Hub — program page",
+      "excerpt": "https://swicorps.org/apply/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-ef41356ae1",
+      "url": "https://www.swicorps.org/",
+      "page": "details",
+      "excerpt": "Home - Southwest I-Corps Southwest I-Corps About What We Do Who We Are Our Partners Programs IdeaLaunch NSF National Teams Program FAQs Get Involved Apply for IdeaLaunch Become A Mentor Events News Contact Spurring Innovation The NSF I-Corps™ Hub: Southwest fosters entrepreneurial thinking in academic research to create a thriving innovation ecosystem throughout the region. Why I-CORPS? I-Corps equips academic researchers and engineers with the entrepreneurial skills they need to transform their cutting edge research from invention to impact. The I-Corps program provides the knowledge, tools, and support needed to test commercial viability and spur innovation in the marketplace. DISCOVER » Get Started Southwest I-Corps offers programs to engage your team in the customer discovery process, establish product-market fit, validate your business model, and improve your odds for commercial success. Join a cohort to transfer your ideas from the lab to the marketplace. INITIATE » Stay Informed Gather insight on invention and innovation by connecting to the hub — you’ll learn about I-Corps teams, successes, and upcoming programs near you. CONNECT » The NSF I-Corps™ Hub: Southwest fosters entrepreneurial thinking in academic research to create a thriving innovation ecosystem throughout the region. As a part of the National Science Foundation’s National Innovation Network, the hub"
+    },
+    {
+      "id": "check-page-79e3924fc3",
+      "url": "https://swicorps.org/apply/",
+      "page": "terms",
+      "excerpt": "Apply for IdeaLaunch - Southwest I-Corps Southwest I-Corps About What We Do Who We Are Our Partners Programs IdeaLaunch NSF National Teams Program FAQs Get Involved Apply for IdeaLaunch Become A Mentor Events News Contact Apply for IdeaLaunch Ready to launch? Let’s get started. To get started with the I-Corps team application process, please complete the form below. Once we have received your submission, a member of the Southwest I-Corps team will reach out with details regarding next steps. Apply Here The NSF I-Corps™ Hub: Southwest fosters entrepreneurial thinking in academic research to create a thriving innovation ecosystem throughout the region. As a part of the National Science Foundation’s National Innovation Network, the hub fosters collaboration between leading research institutions to educate, support, and connect academic researchers to entrepreneurial opportunities. Who We Are What We Do Our Partners IdeaLaunch NSF National Teams Program FAQs Apply for IdeaLaunch Become A Mentor Events News Contact © 2026 Southwest I-Corps. All rights reserved."
+    },
+    {
+      "id": "check-page-c395517f88",
+      "url": "https://swicorps.org/faqs/",
+      "page": "terms",
+      "excerpt": "FAQs - Southwest I-Corps Southwest I-Corps About What We Do Who We Are Our Partners Programs IdeaLaunch NSF National Teams Program FAQs Get Involved Apply for IdeaLaunch Become A Mentor Events News Contact FAQs What is deep tech? How is it defined for NSF I-Corps? Deep technology (deep tech) describes technologically-based enterprises that work to overcome scientific and/or engineering challenges through fostering innovative solutions and approaches. Deep tech centers research and development focused on the successful commercialization of innovative ideas and valuable intellectual property. What is the time commitment of an IdeaLaunch and national NSF I-Corps program? Our regional and national programs require a substantial time commitment—team members are expected to spend a minimum of 15 hours per week, over the course of seven weeks, participating and preparing for events, along with conducting the customer discovery process. What is the first step to get started if I want to apply for the $50,000 NSF National I-Corps grant? The first step at applying for the National I-Corps grant is to familiarize yourself with the program’s requirements and guidelines. Once you review this information, you should assemble a team, develop a compelling proposal for your project, and then submit the full proposal per program instructions and await a decision. Feel free to reach out to"
+    },
+    {
+      "id": "check-page-4fda9c5736",
+      "url": "https://swicorps.org/faqs/",
+      "page": "terms",
+      "excerpt": "The Southwest Hub is open to faculty and student teams based out of any higher education or research institution within Louisiana, Mississippi, New Mexico, Oklahoma, and Texas."
+    },
+    {
+      "id": "check-page-beb2e94655",
+      "url": "https://swicorps.org/faqs/",
+      "page": "terms",
+      "excerpt": "Each team will have an Entrepreneurial Lead, Technical Lead, and an I-Corps Team Mentor, plus any additional co-Entrepreneurial Leads, co-Technical Leads, or co-I-Corps Team Mentors."
+    },
+    {
+      "id": "check-page-29efde3334",
+      "url": "https://swicorps.org/faqs/",
+      "page": "terms",
+      "excerpt": "The Technical Lead will typically be a faculty member, senior research scientist, or postdoctoral scholar with technical expertise in the team’s technology."
+    },
+    {
+      "id": "check-page-6efa2f2cc7",
+      "url": "https://swicorps.org/faqs/",
+      "page": "terms",
+      "excerpt": "Yes—mentors are required, however, teams do not have to identify a mentor prior to program application."
+    },
+    {
+      "id": "check-page-fea2835f16",
+      "url": "https://swicorps.org/faqs/",
+      "page": "terms",
+      "excerpt": "What if the faculty member doesn’t have time to participate in this program?"
+    },
+    {
+      "id": "check-page-947fd2fc3d",
+      "url": "https://swicorps.org/faqs/",
+      "page": "terms",
+      "excerpt": "If a faculty member does not have the time to participate in the NSF National I-Corps program, they can consider involving a co-investigator or collaborator who can take on the role of the principal investigator (PI)."
+    },
+    {
+      "id": "check-page-a29f1ffe33",
+      "url": "https://swicorps.org/faqs/",
+      "page": "terms",
+      "excerpt": "The innovation or research should be university-based intellectual property; demonstrate promise for commercialization; and/or be a “deep tech discovery” from fundamental STEM-based research."
+    },
+    {
+      "id": "check-page-1bc22fdd6c",
+      "url": "https://swicorps.org/faqs/",
+      "page": "terms",
+      "excerpt": "Mentors will commit approximately 5-10 hours/week, Technical Leads will commit approximately 10 hours/week, and Entrepreneurial Leads will commit approximately 30 hours/week to I-Corps programming and customer discovery."
+    },
+    {
+      "id": "check-page-4047528195",
+      "url": "https://swicorps.org/idealaunch/",
+      "page": "terms",
+      "excerpt": "IdeaLaunch - Southwest I-Corps Southwest I-Corps About What We Do Who We Are Our Partners Programs IdeaLaunch NSF National Teams Program FAQs Get Involved Apply for IdeaLaunch Become A Mentor Events News Contact IdeaLaunch A learn-by-doing startup bootcamp for doers and thinkers. Program Overview IdeaLaunch provides an introductory foundation for participants to explore the viability of business ideas. The idea-stage program is open to all entrepreneurial minds — researchers, engineers, scientists, artists, musicians, and business and creative minds — who are ready to solve problems and turn their ideas into potential businesses. The program is intentionally oriented to simulate the time- and cash-constrained environments in which startups operate, with instructors who will push, challenge, and question your business idea to provide direct, open, and constructive feedback. Teams will conduct customer discovery interviews to gain real-world insight into their customer bases and learn how to adjust their proposed business models based on market needs. Team Requirements 2-5 team members who can participate in all workshops and customer interview efforts Technical proficiency of research or innovation, with an idea to incorporate the research or innovation into a product or service Rights to practice intellectual property Program Expectations Teams are required to participate in"
+    },
+    {
+      "id": "check-page-267bbe3518",
+      "url": "https://swicorps.org/",
+      "page": "details",
+      "excerpt": "Home - Southwest I-Corps Southwest I-Corps About What We Do Who We Are Our Partners Programs IdeaLaunch NSF National Teams Program FAQs Get Involved Apply for IdeaLaunch Become A Mentor Events News Contact Spurring Innovation The NSF I-Corps™ Hub: Southwest fosters entrepreneurial thinking in academic research to create a thriving innovation ecosystem throughout the region. Why I-CORPS? I-Corps equips academic researchers and engineers with the entrepreneurial skills they need to transform their cutting edge research from invention to impact. The I-Corps program provides the knowledge, tools, and support needed to test commercial viability and spur innovation in the marketplace. DISCOVER » Get Started Southwest I-Corps offers programs to engage your team in the customer discovery process, establish product-market fit, validate your business model, and improve your odds for commercial success. Join a cohort to transfer your ideas from the lab to the marketplace. INITIATE » Stay Informed Gather insight on invention and innovation by connecting to the hub — you’ll learn about I-Corps teams, successes, and upcoming programs near you. CONNECT » The NSF I-Corps™ Hub: Southwest fosters entrepreneurial thinking in academic research to create a thriving innovation ecosystem throughout the region. As a part of the National Science Foundation’s National Innovation Network, the hub"
+    },
+    {
+      "id": "check-page-ff933099b8",
+      "url": "https://swicorps.org/nationalteams/",
+      "page": "details",
+      "excerpt": "NSF National Teams Program - Southwest I-Corps Southwest I-Corps About What We Do Who We Are Our Partners Programs IdeaLaunch NSF National Teams Program FAQs Get Involved Apply for IdeaLaunch Become A Mentor Events News Contact NSF National Teams Program Accelerating Research to Market NSF National Teams Program Purpose: Assess market readiness and accelerate commercialization Eligibility : Applications must be submitted through a U.S. college or university Program Length : Approximately 7-8 weeks Funding : Up to $50,000 in support funds NSF Requirement : Teams must complete a Regional Hub I-Corps program and receive a recommendation from program leadership Competitiveness : Participation is competitive and requires a proposal reviewed nationally, including an interview Primary Outcome : By the end of the program, teams are prepared to pursue SBIR/STTR funding, start a company, or attract investors This video outlines the key expectations and requirements for teams participating in the NSF I-Corps National Teams program https://swicorps.org/wp-content/uploads/2026/03/NSF-National-Programs-Video.mp4 Program Expectations The NSF I-Corps National Teams program has clear expectations for participating teams. The program is intensive and designed to push researchers to test the commercial potential of their technology. This is a seven-week program that reiterates and expands upon"
+    },
+    {
+      "id": "check-page-554d32f12b",
+      "url": "https://swicorps.org/nationalteams/",
+      "page": "details",
+      "excerpt": "The I-Corps Teams program supports researchers interested in entrepreneurial education and mentoring, with the goal of reducing the time it takes to bring technologies from the laboratory to the marketplace."
+    },
+    {
+      "id": "check-page-f029ee0d91",
+      "url": "https://swicorps.org/nationalteams/",
+      "page": "details",
+      "excerpt": "Teams conduct a minimum of 100 customer discovery interviews with potential customers and industry stakeholders while participating in weekly sessions and mentorship."
+    },
+    {
+      "id": "check-page-423acaf159",
+      "url": "https://swicorps.org/wp-content/uploads/2026/03/NSF-National-Programs-Video.mp4",
+      "page": "details",
+      "excerpt": "ftypmp42 isommp41mp42 mdat a;9! S�1��$��n57{�%sX�%J�RIQ �=W��W� Uo�6 V��g mw 8�Z���B 3 ń��� | z-j r$�0o�P���x̣��L �y >���q^��j :��׫� �zo�b�Dx�z@A;��!Qa��E� `� � � ��PZ��( �@��! S�1��$��n57{�%sX�%J�RIQ �=W��W� Uo�6 V��g mw 8�Z���B 3 ń��� | z-j r$�0o�P���x̣��L �y >���q^��j :��׫� �zo�b�Dx�z@A;��!Qa��E� `� � � ��PZ��( �@��! S�9 kqz�6�Y6��P ��mܚ]�PT < �,�~:��Q� ��֡ ��r� � Y� �� v W |�� ���Z � y� �qK��� ��� P.� ��1`�;�: �� b = t.+�~9� �� ����Q < �z�� �\"�Ʉv �ESc ih�*v2�� ! S�-�KA z�nF�uȕP R��� 7s�~Ww��=�g��ޑ��Bj�#� A�}2��i����KT'���M W���,Z$� �G �Ie -$|�\"d{ ����׋h ��� ��ہ%YB�3 �$�RHJ� � �ZN� V�F)V�� ! S�-�J@� ���9lR �K� ������?�Og}� �= N� ��� < ��!+�]=� � sZ�1܇J���-A(S�6��0 T l@Z��C ��W�O� j A����R����+^(�$��2HN�hN��* e ��5��p+3I �ae d @J �8! S�)�� �޶�ۜ��J@ Z :_A� < Ә� �m��$��b u�i��E�φ?/ �ui���` ���ч\"��b�Y� �RP�! � Kbe�H(�/M ��b� ���5�w���## /�:R��jK ) ��I � �W�Q0sUq�N�a �/K� C�( P�! S�-�� +W��V�X * (H�2�#�� �Jؾ �� ��� ��碇������%� �G �[̠s� `$�U � k��� � � < ���'4J�L�^�(:`HK6 �fwͧ�D��sA�s ��� -�5�z .�}� ; Jk'5�� ЀL P�{.���6� � ! S�)�JP� k�ne�n�E!P d :N��wս �/g�ڠ �8�ZZ hC��o �f\\ ��;��'6x ����۽� < �V���ys �2�~�@F;o�MZ�ty�� ��v=Ō�D27��l��{ �C;yq� �)��b�� �F�`�] ����rh�,���Qb�@��! S�1�L ��k��n�T�@$\"T��^�y߉�_X�� ~����*ը:#3�� x )�ݷ�:��3�G�u�Xy� �� � � a VF���P`% �V ���N���G�m ��c-+GG�:��R��F�� � �N( �� *�޴C�A( P�! S�-��!��b�f��Xo& (.P s|� ۟h:��;�摛^�u��^ߌ� ���Q��R��L � z@��� ���( �eV���"
+    }
+  ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
-    "applicationUrl": [],
+    "routes": [
+      {
+        "value": "https://swicorps.org/apply/",
+        "evidenceId": "check-route-0ef0566320"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://swicorps.org/apply/",
+        "evidenceId": "check-route-0ef0566320"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "8",
+        "evidenceId": "check-duration-8fdd728c53"
+      }
+    ],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

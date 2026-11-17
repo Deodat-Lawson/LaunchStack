@@ -1,116 +1,1128 @@
 {
   "programId": "nsf-i-corps-desert-and-pacific-region-hub",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://desertpacificicorps.org/",
+    "https://desertpacificicorps.org/apply/",
+    "https://desertpacificicorps.org/get-involved/",
+    "https://desertpacificicorps.org/latest-nsf-i-corps-cohort-bridges-the-gap-between-social-innovation-and-social-impact/",
+    "https://desertpacificicorps.org/national-science-foundations-innovation-corps-to-launch-new-cohort/",
+    "https://desertpacificicorps.org/10-years-of-i-corps-nsf-entrepreneurship-training-program-impacts-the-economy-and-shapes-careers/",
     "https://desertpacificicorps.org/about-us/",
-    "https://desertpacificicorps.org/get-involved/"
+    "https://desertpacificicorps.org/research-based-innovation-and-entrepreneurship-in-the-nsf-i-corps-program/",
+    "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+    "https://desertpacificicorps.org/fail-fast-companies-that-pivoted-after-i-corps-aspire-customer-discovery/",
+    "https://desertpacificicorps.org/triton-alumni-shine-on-2025-forbes-30-under-30-list/",
+    "https://desertpacificicorps.org/event/idealaunch-cohort-en-espanol/",
+    "https://desertpacificicorps.org/event/boise-state-university-i-corps-cohort/",
+    "https://desertpacificicorps.org/event/boise-state-university-semiconductor-cohort/"
   ],
   "evidence": [
     {
+      "id": "check-announced-080e5b208c",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "PT In-person Final Session: Friday, Apr 16 – 8:30 a.m. to 12 p.m. PT Apply by Feb 19 I-Corps Catalyze #2: Raising Capital (Mar-Apr 2027) Wednesdays,",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-323ea7bb36",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "8, 15 – 2 to 5 p.m. MST In-person in Phoenix, AZ: Mar 29 to Apr 1 Apply by Feb 4 I-Corps Aspire hosted by San Diego State University (Mar-Apr 2027)",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-3dc40b0ce2",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Fridays, Apr 2, 9, 16, 23 – 12 to 3 p.m. MST All sessions via Zoom Apply by Mar 12 I-Corps Aspire #6 (Apr 2027) Thursdays, Apr 8, 15, 22, 29 – 11",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-4d73602db0",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "22, 29 – 1 to 4 p.m. MST In-person in Philadelphia, PA: Jun 7 to 10 Apply by Apr 20 I-Corps Catalyze #3: SBIR (Jun 2027) Wednesdays, Jun 2, 9, 16,",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-8cc97fe371",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Feb 10, 17, 24, Mar 3 – 2 to 5 p.m. MST All sessions via Zoom Apply by Jan 20 I-Corps Aspire: MedTech hosted by University of California, San",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-97c98de9bc",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "13, 20, 27, May 4, 11, 18 – 1 to 4 p.m. MST All sessions via Zoom Apply by Mar 9 I-Corps Aspire #7 (May-Jun 2027) Fridays, May 14, 21, 28, Jun 4 –",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-9c5a3af36e",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "May 14, 21, 28, Jun 4 – 12 to 3 p.m. MST All sessions via Zoom Apply by Apr 23 I-Corps Immerse #4: BIO International Convention (May-Jun 2027)",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-9f31b68980",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Feb 26, Mar 5, 12, 19 – 12 to 3 p.m. MST All sessions via Zoom Apply by Feb 5 I-Corps Aspire #4 (Mar 2027) Tuesdays, Mar 9, 16, 23, 30 – 1 to 4",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-a892e6feb8",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apr 8, 15, 22, 29 – 11 a.m. to 2 p.m. MST All sessions via Zoom Apply by Mar 18 I-Corps Immerse #3 (Apr-May 2027) Tuesdays, Apr 13, 20, 27, May",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-c8e26b57b1",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Feb 2, 9, 16, 23, Mar 2 – 1 to 4 p.m. MST All sessions via Zoom Apply by Dec 4 I-Corps Aspire #1 (Jan-Feb 2027) Fridays, Jan 29, Feb 5, 12, 19 –",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-cdabb66108",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Feb 4, 11, 18, 25, Mar 4 – 4 to 7 p.m. MST All sessions via Zoom Apply by Jan 14 I-Corps Aspire #2: NSF CAREER Pathway (Feb-Mar 2027) Wednesdays,",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-d8e87d4977",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Mar 17, 24, 31, Apr 7, 14 – 2 to 5 p.m. MST All sessions via Zoom Apply by Feb 24 I-Corps Aspire #5 (Apr 2027) Fridays, Apr 2, 9, 16, 23 – 12 to 3",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-dcb82cad98",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Tuesdays, Mar 9, 16, 23, 30 – 1 to 4 p.m. MST All sessions via Zoom Apply by Feb 16 I-Corps Immerse #2: SEMICON West (Mar-Apr 2027) Virtual Sessions:",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-ef0351bcae",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Feb 24, Mar 3, 10, 31 – 5:30 to 8:30 p.m. PT All sessions via Zoom Apply by Feb 3 I-Corps Aspire #3 (Feb-Mar 2027) Fridays, Feb 26, Mar 5, 12, 19 –",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-efa6ae4641",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Jun 10, 17, 24, Jul 1 – 2 to 5 p.m. MST All sessions via Zoom Apply by May 20 NSF I-Corps™ Hub: Desert and Pacific Region The NSF I-Corps™ Hub:",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-f712c52afa",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Jun 2, 9, 16, 23, 30 – 11 a.m. to 2 p.m. MST All sessions via Zoom Apply by May 12 I-Corps Aspire #8 (Jun-Jul 2027) Thursdays, Jun 10, 17, 24, Jul 1",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-fa90d3753c",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Jan 29, Feb 5, 12, 19 – 12 to 3 p.m. MST All sessions via Zoom Apply by Jan 8 I-Corps Catalyze #1: SBIR (Feb-Mar 2027) Thursdays, Feb 4, 11, 18,",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-eda7284340",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "NSF I-Corps Work? The main offering is a 4-week course that meets once a week (online or in",
+      "page": "details"
+    },
+    {
       "id": "check-email-7506a3689e",
       "url": "https://desertpacificicorps.org/about-us/",
-      "title": "NSF I-Corps Desert and Pacific Region Hub — details page checked by scrape.py",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
       "excerpt": "Contact us! (info@desertpacificicorps.org)",
       "page": "details"
     },
     {
+      "id": "check-format-04a7f5a7d3",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Tuesdays, May 25, Jun 1, 15, 22, 29 – 1 to 4 p.m. MST In-person in Philadelphia, PA: Jun 7 to 10 Apply by Apr 20 I-Corps",
+      "page": "application"
+    },
+    {
+      "id": "check-format-0d1b175446",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "is a 4-week course that meets once a week (online or in person) for a 3-hour session, covering all the needed curriculum",
+      "page": "details"
+    },
+    {
+      "id": "check-format-242c231eeb",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Kickoff Session: Friday, Mar 12 – 8:30 a.m. to 5 p.m. PT Virtual Sessions: Fridays, Mar 19, 26, Apr 9 – 2 to 3:30 p.m. PT",
+      "page": "application"
+    },
+    {
+      "id": "check-format-26c333b53d",
+      "url": "https://desertpacificicorps.org/event/boise-state-university-semiconductor-cohort/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "4, 2024 « I-Corps Info Session Northern Arizona University In-Person Cohort » If you or your team are working on research in",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-2f8636dc9e",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "regional training options. I-Corps Aspire is a four-week virtual customer discovery course focused on problem validation",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2fb522c91d",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "fully funded customer discovery experience that combines virtual training with in-person conference attendance. Teams",
+      "page": "application"
+    },
+    {
+      "id": "check-format-32d59cf0d4",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "over four weeks. Some partner universities offer hybrid or in-person training opportunities as well. All programs focus on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3ad355f026",
+      "url": "https://desertpacificicorps.org/event/boise-state-university-semiconductor-cohort/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "« I-Corps Info Session Northern Arizona University In-Person Cohort » Submit an event NSF I-Corps™ Hub: Desert and",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-4aeee89b52",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Immerse #4: BIO International Convention (May-Jun 2027) Virtual Sessions: Tuesdays, May 25, Jun 1, 15, 22, 29 – 1 to 4",
+      "page": "application"
+    },
+    {
+      "id": "check-format-4f8e8a7639",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "sessions over four weeks. Some partner universities offer hybrid or in-person training opportunities as well. All programs",
+      "page": "details"
+    },
+    {
+      "id": "check-format-67fcfd02cd",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "discovery experience that combines virtual training with in-person conference attendance. Teams conduct 50 customer discovery",
+      "page": "details"
+    },
+    {
+      "id": "check-format-7ccfd70d95",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Sessions: Fridays, Mar 19, 26, Apr 9 – 2 to 3:30 p.m. PT In-person Final Session: Friday, Apr 16 – 8:30 a.m. to 12 p.m. PT",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7e90b11fd1",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "online via Zoom. Some partner universities offer hybrid or in-person options, which you can find noted on the apply page . What",
+      "page": "details"
+    },
+    {
+      "id": "check-format-8056cb7c54",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "by Feb 16 I-Corps Immerse #2: SEMICON West (Mar-Apr 2027) Virtual Sessions: Thursdays, Mar 11, 18, 25, Apr 8, 15 – 2 to 5",
+      "page": "application"
+    },
+    {
+      "id": "check-format-81f0de29f8",
+      "url": "https://desertpacificicorps.org/event/idealaunch-cohort-en-espanol/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — terms page",
+      "excerpt": "« I-Corps Info Session San Diego State University Hybrid Cohort » Submit an event NSF I-Corps™ Hub: Desert and",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8924e30d5a",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "I-Corps training opportunities. I-Corps Aspire A four-week virtual customer discovery course focused on problem validation",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8edc19779d",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Aspire hosted by San Diego State University (Mar-Apr 2027) In-person Kickoff Session: Friday, Mar 12 – 8:30 a.m. to 5 p.m. PT",
+      "page": "application"
+    },
+    {
+      "id": "check-format-a8db3567b4",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "online via Zoom. Some partner universities offer hybrid or in-person options, which you can find noted on the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b03e0766e5",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "fully funded customer discovery experience that combines virtual training with in-person conference attendance. Teams",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b4b00c56e3",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Thursdays, Mar 11, 18, 25, Apr 8, 15 – 2 to 5 p.m. MST In-person in Phoenix, AZ: Mar 29 to Apr 1 Apply by Feb 4 I-Corps",
+      "page": "application"
+    },
+    {
+      "id": "check-format-ba2a2494a6",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "discovery experience that combines virtual training with in-person conference attendance. Teams conduct 50 customer discovery",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c7962a2c93",
+      "url": "https://desertpacificicorps.org/event/idealaunch-cohort-en-espanol/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — terms page",
+      "excerpt": "1, 2024 « I-Corps Info Session San Diego State University Hybrid Cohort » IdeaLaunch brinda entrenamiento y conocimiento",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-daec65a4f8",
+      "url": "https://desertpacificicorps.org/event/boise-state-university-semiconductor-cohort/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "September 13 – October 4, 2024 1 – 4 PM MDT | All sessions remote via Zoom Additional Information: Boise State NSF Landing",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-e6557699a7",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "toward business-model fit. I-Corps Catalyze A five-session virtual course for startups pursuing SBIR funding or private",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f2f6cafba3",
+      "url": "https://desertpacificicorps.org/event/boise-state-university-i-corps-cohort/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "July 3 – July 24, 2024 11 AM – 2 PM PDT | All sessions remote via Zoom Additional Information: University of Idaho NSF",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-01d5b2e143",
+      "url": "https://desertpacificicorps.org/event/idealaunch-cohort-en-espanol/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — terms page",
+      "excerpt": "Apply → https://desertpacificicorps.org/get-involved/#apply",
+      "page": "terms"
+    },
+    {
       "id": "check-route-061b02a563",
       "url": "https://desertpacificicorps.org/",
-      "title": "NSF I-Corps Desert and Pacific Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — homepage",
       "excerpt": "Apply → https://desertpacificicorps.org/get-involved/#apply",
       "page": "details"
     },
     {
+      "id": "check-route-0d39b84c70",
+      "url": "https://desertpacificicorps.org/10-years-of-i-corps-nsf-entrepreneurship-training-program-impacts-the-economy-and-shapes-careers/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-16ac859a33",
+      "url": "https://desertpacificicorps.org/event/boise-state-university-semiconductor-cohort/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply/",
+      "page": "batches"
+    },
+    {
       "id": "check-route-1e46ab8e65",
       "url": "https://desertpacificicorps.org/",
-      "title": "NSF I-Corps Desert and Pacific Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — homepage",
       "excerpt": "Apply now → https://desertpacificicorps.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-26555fe90e",
+      "url": "https://desertpacificicorps.org/research-based-innovation-and-entrepreneurship-in-the-nsf-i-corps-program/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply",
       "page": "details"
     },
     {
       "id": "check-route-267c4c0747",
       "url": "https://desertpacificicorps.org/",
-      "title": "NSF I-Corps Desert and Pacific Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — homepage",
       "excerpt": "https://desertpacificicorps.org/",
       "page": "details"
     },
     {
+      "id": "check-route-298880112e",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by Jan 8 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
       "id": "check-route-2c588f444f",
       "url": "https://desertpacificicorps.org/about-us/",
-      "title": "NSF I-Corps Desert and Pacific Region Hub — details page checked by scrape.py",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
       "excerpt": "Apply now → https://desertpacificicorps.org/apply",
       "page": "details"
     },
     {
+      "id": "check-route-2e3e838e71",
+      "url": "https://desertpacificicorps.org/event/boise-state-university-i-corps-cohort/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-3136d6ca79",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by Apr 23 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-313fdada0e",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply now → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-35837a0a3e",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by Feb 16 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3c9e04fe2a",
+      "url": "https://desertpacificicorps.org/national-science-foundations-innovation-corps-to-launch-new-cohort/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "Apply → https://desertpacificicorps.org/get-involved/#apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-3f5f1f55f2",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by Jan 20 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4145973a27",
+      "url": "https://desertpacificicorps.org/latest-nsf-i-corps-cohort-bridges-the-gap-between-social-innovation-and-social-impact/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "Apply → https://desertpacificicorps.org/get-involved/#apply",
+      "page": "batches"
+    },
+    {
       "id": "check-route-4243c8d206",
       "url": "https://desertpacificicorps.org/get-involved/",
-      "title": "NSF I-Corps Desert and Pacific Region Hub — application page checked by scrape.py",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
       "excerpt": "Apply → https://desertpacificicorps.org/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4b20412dc7",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by Feb 5 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-539f3529fa",
+      "url": "https://desertpacificicorps.org/research-based-innovation-and-entrepreneurship-in-the-nsf-i-corps-program/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-55ac2e11a3",
+      "url": "https://desertpacificicorps.org/fail-fast-companies-that-pivoted-after-i-corps-aspire-customer-discovery/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — portfolio page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-57b38a4724",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by Mar 18 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
       "page": "application"
     },
     {
       "id": "check-route-59bc707ad4",
       "url": "https://desertpacificicorps.org/about-us/",
-      "title": "NSF I-Corps Desert and Pacific Region Hub — details page checked by scrape.py",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
       "excerpt": "Join us → https://desertpacificicorps.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5d06531867",
+      "url": "https://desertpacificicorps.org/triton-alumni-shine-on-2025-forbes-30-under-30-list/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — portfolio page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-5da2eaf21b",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "Apply → https://desertpacificicorps.org/get-involved/#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-66079e2eeb",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by Dec 4 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6c72b11ee1",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by Feb 24 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-700bfb9314",
+      "url": "https://desertpacificicorps.org/latest-nsf-i-corps-cohort-bridges-the-gap-between-social-innovation-and-social-impact/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-799d64081c",
+      "url": "https://desertpacificicorps.org/research-based-innovation-and-entrepreneurship-in-the-nsf-i-corps-program/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "Apply → https://desertpacificicorps.org/get-involved/#apply",
       "page": "details"
     },
     {
       "id": "check-route-7dbc63962f",
       "url": "https://desertpacificicorps.org/about-us/",
-      "title": "NSF I-Corps Desert and Pacific Region Hub — details page checked by scrape.py",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
       "excerpt": "Apply → https://desertpacificicorps.org/apply",
       "page": "details"
     },
     {
+      "id": "check-route-81173562dd",
+      "url": "https://desertpacificicorps.org/latest-nsf-i-corps-cohort-bridges-the-gap-between-social-innovation-and-social-impact/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply/",
+      "page": "batches"
+    },
+    {
       "id": "check-route-853287ccd1",
       "url": "https://desertpacificicorps.org/about-us/",
-      "title": "NSF I-Corps Desert and Pacific Region Hub — details page checked by scrape.py",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
       "excerpt": "Apply → https://desertpacificicorps.org/get-involved/#apply",
       "page": "details"
     },
     {
       "id": "check-route-8615c92c81",
       "url": "https://desertpacificicorps.org/about-us/",
-      "title": "NSF I-Corps Desert and Pacific Region Hub — details page checked by scrape.py",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
       "excerpt": "apply page → https://desertpacificicorps.org/apply/",
       "page": "details"
     },
     {
+      "id": "check-route-934bf4dd2e",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by Mar 12 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
       "id": "check-route-9822ff5372",
       "url": "https://desertpacificicorps.org/about-us/",
-      "title": "NSF I-Corps Desert and Pacific Region Hub — details page checked by scrape.py",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
       "excerpt": "Apply → https://desertpacificicorps.org/apply/",
       "page": "details"
+    },
+    {
+      "id": "check-route-9875ad9e93",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "NSF I-Corps Hub: Desert and Pacific Region website → https://desertpacificicorps.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9a64a26afa",
+      "url": "https://desertpacificicorps.org/national-science-foundations-innovation-corps-to-launch-new-cohort/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-9e0addbe3a",
+      "url": "https://desertpacificicorps.org/event/boise-state-university-i-corps-cohort/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "Apply → https://desertpacificicorps.org/get-involved/#apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-9e53543023",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by Jan 14 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-af2e2b06d8",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b3443fc1fb",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by Apr 20 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b60b7abb87",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by Mar 9 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
     },
     {
       "id": "check-route-b9790e5947",
       "url": "https://desertpacificicorps.org/",
-      "title": "NSF I-Corps Desert and Pacific Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — homepage",
       "excerpt": "Apply → https://desertpacificicorps.org/apply/",
       "page": "details"
+    },
+    {
+      "id": "check-route-b9d512545e",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by May 20 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bb44c92ad7",
+      "url": "https://desertpacificicorps.org/national-science-foundations-innovation-corps-to-launch-new-cohort/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-bd15b501ca",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by Feb 4 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bf54485f84",
+      "url": "https://desertpacificicorps.org/fail-fast-companies-that-pivoted-after-i-corps-aspire-customer-discovery/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — portfolio page",
+      "excerpt": "Apply → https://desertpacificicorps.org/get-involved/#apply",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-c2d1478b0d",
+      "url": "https://desertpacificicorps.org/triton-alumni-shine-on-2025-forbes-30-under-30-list/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — portfolio page",
+      "excerpt": "Apply → https://desertpacificicorps.org/get-involved/#apply",
+      "page": "portfolio"
     },
     {
       "id": "check-route-c4282ddc92",
       "url": "https://desertpacificicorps.org/",
-      "title": "NSF I-Corps Desert and Pacific Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — homepage",
       "excerpt": "Apply → https://desertpacificicorps.org/apply",
       "page": "details"
     },
     {
+      "id": "check-route-c5db710595",
+      "url": "https://desertpacificicorps.org/10-years-of-i-corps-nsf-entrepreneurship-training-program-impacts-the-economy-and-shapes-careers/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "Apply → https://desertpacificicorps.org/get-involved/#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c62c5e93c4",
+      "url": "https://desertpacificicorps.org/fail-fast-companies-that-pivoted-after-i-corps-aspire-customer-discovery/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — portfolio page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-c847ab0c5a",
+      "url": "https://desertpacificicorps.org/event/boise-state-university-i-corps-cohort/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-dbe55166ab",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e30d5a367e",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by Feb 19 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e460eeba71",
+      "url": "https://desertpacificicorps.org/10-years-of-i-corps-nsf-entrepreneurship-training-program-impacts-the-economy-and-shapes-careers/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — program page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e76d085f0e",
+      "url": "https://desertpacificicorps.org/event/boise-state-university-semiconductor-cohort/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "Apply → https://desertpacificicorps.org/get-involved/#apply",
+      "page": "batches"
+    },
+    {
       "id": "check-route-e8d636fc0a",
       "url": "https://desertpacificicorps.org/get-involved/",
-      "title": "NSF I-Corps Desert and Pacific Region Hub — application page checked by scrape.py",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
       "excerpt": "Apply → https://desertpacificicorps.org/apply/",
       "page": "application"
     },
     {
+      "id": "check-route-e978234038",
+      "url": "https://desertpacificicorps.org/event/idealaunch-cohort-en-espanol/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — terms page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-eba99974ce",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by Feb 3 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ed3d38b5c3",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply by May 12 → https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f676eac0f7",
+      "url": "https://desertpacificicorps.org/event/idealaunch-cohort-en-espanol/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — terms page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply",
+      "page": "terms"
+    },
+    {
       "id": "check-route-f6ce0adbf8",
       "url": "https://desertpacificicorps.org/get-involved/",
-      "title": "NSF I-Corps Desert and Pacific Region Hub — application page checked by scrape.py",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
       "excerpt": "Apply now → https://desertpacificicorps.org/apply",
       "page": "application"
+    },
+    {
+      "id": "check-route-f6eb38d1cd",
+      "url": "https://desertpacificicorps.org/triton-alumni-shine-on-2025-forbes-30-under-30-list/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — portfolio page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-f966b25197",
+      "url": "https://desertpacificicorps.org/apply/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page",
+      "excerpt": "Apply → https://desertpacificicorps.org/get-involved/#apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fb8a29eab0",
+      "url": "https://desertpacificicorps.org/event/boise-state-university-semiconductor-cohort/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — batches page",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply",
+      "page": "batches"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-f15caca4b7",
+      "url": "https://desertpacificicorps.org/",
+      "page": "details",
+      "excerpt": "I-Corps Hub: Desert and Pacific Region Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Home tanya.amos 2025-12-10T16:44:46-07:00 I-Corps Hub: Desert and Pacific Region A cutting-edge partnership across five states, from the desert to the Pacific Ocean, advancing university-developed deep technology-based ventures. We help bring research-based innovations to market, boosting economic growth and creating societal benefits at local, regional and national levels. Apply now Share your news Why I-Corps By collaborating with experts from diverse fields and regions, you'll gain the knowledge, tools, resources and networks needed to transform your research into practical solutions. Together, we foster a culture of entrepreneurship that supports both your individual and collective success. Learn more Get started Our immersive program offers hands-on training that will support your path to commercializing your research. It's fast-paced, high-impact and designed to help you take the first steps. Apply today and start your journey from research to market. Apply now Our mission"
+    },
+    {
+      "id": "check-page-0556d434c5",
+      "url": "https://desertpacificicorps.org/",
+      "page": "details",
+      "excerpt": "Supported by NSF Award 2229385."
+    },
+    {
+      "id": "check-page-b9479834f5",
+      "url": "https://desertpacificicorps.org/apply/",
+      "page": "application",
+      "excerpt": "Apply - I-Corps Hub: Desert and Pacific Region Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Apply tanya.amos 2026-11-16T11:25:39-07:00 Apply Explore these available courses and start your journey with your I-Corps team by completing the application form below. Apply now The NSF I-Corps Hub: Desert and Pacific Region offers three types of regional I-Corps training opportunities. I-Corps Aspire A four-week virtual customer discovery course focused on problem validation and early market exploration. Teams conduct at least 15 customer discovery interviews across four Zoom sessions, unless otherwise specified by the host institution. I-Corps Immerse A five-week, fully funded customer discovery experience that combines virtual training with in-person conference attendance. Teams conduct 50 customer discovery interviews to validate markets and advance toward business-model fit. I-Corps Catalyze A five-session virtual course for startups pursuing SBIR funding or private capital. Teams conduct 20 customer discovery interviews to strengthen commercialization plans and pitch"
+    },
+    {
+      "id": "check-page-5fce0b7c1e",
+      "url": "https://desertpacificicorps.org/apply/",
+      "page": "application",
+      "excerpt": "MST All sessions via Zoom Apply by Jan 20 I-Corps Aspire: MedTech hosted by University of California, San Diego (Feb-Mar 2027) Kick-off: Feb 17 – 5 to 6 p.m."
+    },
+    {
+      "id": "check-page-6674c8c2df",
+      "url": "https://desertpacificicorps.org/apply/",
+      "page": "application",
+      "excerpt": "MST In-person in Philadelphia, PA: Jun 7 to 10 Apply by Apr 20 I-Corps Catalyze #3: SBIR (Jun 2027) Wednesdays, Jun 2, 9, 16, 23, 30 – 11 a.m. to 2 p.m."
+    },
+    {
+      "id": "check-page-c38f4e83c6",
+      "url": "https://desertpacificicorps.org/apply/",
+      "page": "application",
+      "excerpt": "Supported by NSF Award 2229385."
+    },
+    {
+      "id": "check-page-831ba86f43",
+      "url": "https://desertpacificicorps.org/get-involved/",
+      "page": "application",
+      "excerpt": "Get involved - I-Corps Hub: Desert and Pacific Region Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Get involved tanya.amos 2026-10-28T16:58:57-07:00 Get Involved Ready to take the next step? There are multiple ways you can get involved: apply now for an upcoming training, join the team or sign up for our mailing list to stay informed. Apply now Meet Our Teaching Team Become An Instructor Contact Us Meet Our Teaching Team Become An Instructor Contact Us Meet our Teaching Team Our regional courses are led by a talented and diverse group of instructors from across the Desert and Pacific Region. These experts have extensive knowledge of the I-Corps methodology and employ proven strategies to guide teams through the customer discovery process, all while creating an inclusive and supportive learning atmosphere. Leith Martin Leith Martin Hub Co-Director, Hub Lead Instructor, Regional Instructor, and National Instructor Why am I an instructor? I love seeing teams change. What is exciting about participating in I-Corps? If you commit to the process you will be"
+    },
+    {
+      "id": "check-page-be7ebb6b2b",
+      "url": "https://desertpacificicorps.org/get-involved/",
+      "page": "application",
+      "excerpt": "The advantages to participating include, entrepreneurial education, networking, skill development and developing future funding opportunities."
+    },
+    {
+      "id": "check-page-f26d66c151",
+      "url": "https://desertpacificicorps.org/get-involved/",
+      "page": "application",
+      "excerpt": "It’s a wonderful way to support different teams (faculty, staff, students, community members, industry mentors) and their potential solutions, aiming to solve real-world problems with new products and services."
+    },
+    {
+      "id": "check-page-70051fea2f",
+      "url": "https://desertpacificicorps.org/get-involved/",
+      "page": "application",
+      "excerpt": "My interdisciplinary skill set helps me advise deep tech teams."
+    },
+    {
+      "id": "check-page-0c10d132cb",
+      "url": "https://desertpacificicorps.org/get-involved/",
+      "page": "application",
+      "excerpt": "I started my career at a major aerospace company where I developed mathematical models of missile navigation systems."
+    },
+    {
+      "id": "check-page-4f2a811878",
+      "url": "https://desertpacificicorps.org/get-involved/",
+      "page": "application",
+      "excerpt": "My education and experience allow me to meet teams where they are and help them explore commercial opportunities."
+    },
+    {
+      "id": "check-page-e10025ef1d",
+      "url": "https://desertpacificicorps.org/get-involved/",
+      "page": "application",
+      "excerpt": "I have spent 20 years in a role of medical device ideation and development, so I can offer some insight into the industry, the process of bringing a device to market, and contacts in the industry."
+    },
+    {
+      "id": "check-page-4e98f59c38",
+      "url": "https://desertpacificicorps.org/get-involved/",
+      "page": "application",
+      "excerpt": "Helping graduate students and faculty realize that they are already well-equipped to do as much customer discovery work as they are interested in is so satisfying."
+    },
+    {
+      "id": "check-page-4fa8f57bdf",
+      "url": "https://desertpacificicorps.org/get-involved/",
+      "page": "application",
+      "excerpt": "As a start-up founder, the National program taught me to center my company around the problems and experiences of my customers, rather than my shiny new technology toys, and helped me secure contracts with large aerospace companies."
+    },
+    {
+      "id": "check-page-aaa68be44f",
+      "url": "https://desertpacificicorps.org/get-involved/",
+      "page": "application",
+      "excerpt": "Now, as a Regional Instructor, I strive to help folks also embarking on the deep-tech path focus on what value they provide and maximize their chance of success."
+    },
+    {
+      "id": "check-page-54ce2b0b01",
+      "url": "https://desertpacificicorps.org/get-involved/",
+      "page": "application",
+      "excerpt": "MORE Become an Instructor or Mentor In addition to our instructors, seasoned entrepreneurs act as mentors, providing invaluable support and insights as teams navigate the business ecosystem throughout their I-Corps journey."
+    },
+    {
+      "id": "check-page-dee492eb8b",
+      "url": "https://desertpacificicorps.org/get-involved/",
+      "page": "application",
+      "excerpt": "Supported by NSF Award 2229385."
+    },
+    {
+      "id": "check-page-c4a0f20437",
+      "url": "https://desertpacificicorps.org/latest-nsf-i-corps-cohort-bridges-the-gap-between-social-innovation-and-social-impact/",
+      "page": "batches",
+      "excerpt": "Latest NSF I-Corps Cohort bridges the gap between social innovation and social impact - I-Corps Hub: Desert and Pacific Region Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply 19 Mar March 19, 2024 Latest NSF I-Corps Cohort bridges the gap between social innovation and social impact Jeremy Bolanos 2024-05-23T13:03:09-07:00 On February 27, the University of Arizona graduated its first Catalyzing Change I-Corps Cohort for Social Innovation. For this cohort, the program brought together 10 teams from three institutions in two states. I-Corps , an abbreviation for Innovation Corps, is a program funded by the National Science Foundation to provide inventors with the entrepreneurial skills to turn their discoveries into real-world solutions. Read full article Share this post Facebook Twitter LinkedIn Google + Email Related Posts 26 Feb February 26, 2026 From Insight to Innovation: I-Corps Catalyzes the Public Impact of Research By Hala Madanat, Vice President for Research... Read More 27 Jan January 27, 2026 NSF I-Corps™ as a path to more effective research By Visar"
+    },
+    {
+      "id": "check-page-f82ab5fa10",
+      "url": "https://desertpacificicorps.org/latest-nsf-i-corps-cohort-bridges-the-gap-between-social-innovation-and-social-impact/",
+      "page": "batches",
+      "excerpt": "Read More 22 May May 22, 2025 From Classroom to Marketplace: Uniting Academic Research with Student Entrepreneurial Aspirations By Archibald Harner, Assistant Vice President, Research..."
+    },
+    {
+      "id": "check-page-10e6e18d91",
+      "url": "https://desertpacificicorps.org/latest-nsf-i-corps-cohort-bridges-the-gap-between-social-innovation-and-social-impact/",
+      "page": "batches",
+      "excerpt": "Supported by NSF Award 2229385."
+    },
+    {
+      "id": "check-page-37bd7a78d7",
+      "url": "https://desertpacificicorps.org/national-science-foundations-innovation-corps-to-launch-new-cohort/",
+      "page": "batches",
+      "excerpt": "National Science Foundation’s Innovation Corps to launch new cohort in January 2023 - I-Corps Hub: Desert and Pacific Region Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply 10 Jan January 10, 2023 National Science Foundation’s Innovation Corps to launch new cohort in January 2023 tanya.amos 2024-05-23T12:01:32-07:00 Have an invention, innovation or idea that can make an impact outside of academia? The National Science Foundation’s Innovation Corps (I-Corps) program provides entrepreneurial training to teams of researchers, students and mentors to explore the commercial potential of their research or innovation. Read full article Share this post Facebook Twitter LinkedIn Google + Email Related Posts 26 Feb February 26, 2026 From Insight to Innovation: I-Corps Catalyzes the Public Impact of Research By Hala Madanat, Vice President for Research... Read More 27 Jan January 27, 2026 NSF I-Corps™ as a path to more effective research By Visar Berisha, Professor and Associate Dean... Read More 17 Dec December 17, 2025 How I-Corps Immerse: SEMICON West 2025 Shaped ASU"
+    },
+    {
+      "id": "check-page-9ee809b767",
+      "url": "https://desertpacificicorps.org/national-science-foundations-innovation-corps-to-launch-new-cohort/",
+      "page": "batches",
+      "excerpt": "Read More 22 May May 22, 2025 From Classroom to Marketplace: Uniting Academic Research with Student Entrepreneurial Aspirations By Archibald Harner, Assistant Vice President, Research..."
+    },
+    {
+      "id": "check-page-02da0425ef",
+      "url": "https://desertpacificicorps.org/national-science-foundations-innovation-corps-to-launch-new-cohort/",
+      "page": "batches",
+      "excerpt": "Supported by NSF Award 2229385."
+    },
+    {
+      "id": "check-page-149e2a0549",
+      "url": "https://desertpacificicorps.org/10-years-of-i-corps-nsf-entrepreneurship-training-program-impacts-the-economy-and-shapes-careers/",
+      "page": "details",
+      "excerpt": "10 years of I-Corps: NSF entrepreneurship training program impacts the economy and shapes careers - I-Corps Hub: Desert and Pacific Region Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply 15 Jan January 15, 2025 10 years of I-Corps: NSF entrepreneurship training program impacts the economy and shapes careers Rachel Erbe 2025-01-15T14:10:00-07:00 NSF Director Sethuraman Panchanathan shares his personal experience as an I-Corps participant. Read full article Share this post Facebook Twitter LinkedIn Google + Email Related Posts 26 Feb February 26, 2026 From Insight to Innovation: I-Corps Catalyzes the Public Impact of Research By Hala Madanat, Vice President for Research... Read More 27 Jan January 27, 2026 NSF I-Corps™ as a path to more effective research By Visar Berisha, Professor and Associate Dean... Read More 17 Dec December 17, 2025 How I-Corps Immerse: SEMICON West 2025 Shaped ASU Professor Xiangyu Guo’s Research Approach Dr. Xiangyu Guo, Assistant Professor in the... Read More 20 Nov November 20, 2025 Different Paths, Same Question: Who Is Your Customer? By"
+    },
+    {
+      "id": "check-page-a3acb80ba3",
+      "url": "https://desertpacificicorps.org/10-years-of-i-corps-nsf-entrepreneurship-training-program-impacts-the-economy-and-shapes-careers/",
+      "page": "details",
+      "excerpt": "Read More 22 May May 22, 2025 From Classroom to Marketplace: Uniting Academic Research with Student Entrepreneurial Aspirations By Archibald Harner, Assistant Vice President, Research..."
+    },
+    {
+      "id": "check-page-d713c3de30",
+      "url": "https://desertpacificicorps.org/10-years-of-i-corps-nsf-entrepreneurship-training-program-impacts-the-economy-and-shapes-careers/",
+      "page": "details",
+      "excerpt": "Supported by NSF Award 2229385."
+    },
+    {
+      "id": "check-page-c494193756",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "page": "details",
+      "excerpt": "About Us | NSF I-Corps Hub: Desert and Pacific Region Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply About Us tanya.amos 2026-07-01T12:26:34-07:00 About Us We are a vibrant partnership of nine universities across five states — Arizona, California, Hawai’i, Idaho and Nevada — dedicated to advancing innovative, research-driven deep technology ventures. Together, we’re transforming cutting-edge ideas into impactful products and services. What We Offer Program Information FAQs Hub Partners What We Offer Program Information FAQs Hub Partners What We Offer At the NSF I-Corps Hub: Desert and Pacific Region, we focus on five key activities to empower innovation: Recruiting We actively recruit teams from the Desert and Pacific Region to boost participation in Regional and National I-Corps, expanding opportunities for researchers and innovators. Training Attending our regional I-Corps training will boost your team’s chances for a $50,000 grant and prepare for National I-Corps. We also train instructors at the regional level to prepare for national instructional leadership"
+    },
+    {
+      "id": "check-page-363e71face",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "page": "details",
+      "excerpt": "Support We assist higher education institutions in joining I-Corps, welcoming new partner institutions to expand our network and impact."
+    },
+    {
+      "id": "check-page-63b62fb9f7",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "page": "details",
+      "excerpt": "Stories of impact We promote the positive impact that university research makes in the world through the stories we tell about the faculty from our member universities who participate in I-Corps."
+    },
+    {
+      "id": "check-page-e7fd080d9b",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "page": "details",
+      "excerpt": "High-performing teams could also earn a spot in the National I-Corps Teams program, with potential grants of $50,000 to further develop their ventures through deeper customer discovery."
+    },
+    {
+      "id": "check-page-a9af5388b1",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "page": "details",
+      "excerpt": "NSF I-Corps is an innovative entrepreneurial training program funded and supported by the National Science Foundation."
+    },
+    {
+      "id": "check-page-cbb4490ab4",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "page": "details",
+      "excerpt": "Through training, mentorship and competitive customer discovery funding, I-Corps supports teams in exploring customer needs, developing business models and commercializing their research."
+    },
+    {
+      "id": "check-page-53d849c0c5",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "page": "details",
+      "excerpt": "Regional I-Corps training is perfect for early-stage, innovative ideas when you’re still exploring the market."
+    },
+    {
+      "id": "check-page-bc8171140c",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "page": "details",
+      "excerpt": "This role is often filled by a faculty member or the inventor of the technology."
+    },
+    {
+      "id": "check-page-53014cba70",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "page": "details",
+      "excerpt": "Regional I-Corps training focuses on early-stage development and customer discovery, while the National I-Corps Teams program is aimed at scaling and commercialization, with specific eligibility requirements."
+    },
+    {
+      "id": "check-page-ac601766c2",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "page": "details",
+      "excerpt": "Your idea should be university-affiliated intellectual property that is innovative, scalable and fits within the realm of deep tech."
+    },
+    {
+      "id": "check-page-f005abefd3",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "page": "details",
+      "excerpt": "What Is “deep tech”?"
+    },
+    {
+      "id": "check-page-52d55d21a1",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "page": "details",
+      "excerpt": "“Deep tech” refers to groundbreaking scientific innovations and technologies that tackle complex challenges and have the potential to create transformative impacts."
+    },
+    {
+      "id": "check-page-bfe0c65d0a",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "page": "details",
+      "excerpt": "If you’ve received an NSF award in the last five years, you can participate in the National I-Corps Teams program without going through regional training first."
+    },
+    {
+      "id": "check-page-b379d1a3a5",
+      "url": "https://desertpacificicorps.org/research-based-innovation-and-entrepreneurship-in-the-nsf-i-corps-program/",
+      "page": "details",
+      "excerpt": "Research-Based Innovation and Entrepreneurship in the NSF I-Corps Program - I-Corps Hub: Desert and Pacific Region Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply 08 Jun June 8, 2023 Research-Based Innovation and Entrepreneurship in the NSF I-Corps Program tanya.amos 2024-05-23T13:22:05-07:00 The National Science Foundation Innovation Corps (NSF I-Corps) program has been instrumental in nurturing entrepreneurial potential in the world of research-based ventures. Ryan Manwaring, a Doctoral Prepared Psychiatric Nurse Practitioner, who specializes in pediatric and adult care, recently embarked on a transformative journey through the Desert and Pacific Region Hub of the NSF I-Corps program. Read full article Share this post Facebook Twitter LinkedIn Google + Email Related Posts 26 Feb February 26, 2026 From Insight to Innovation: I-Corps Catalyzes the Public Impact of Research By Hala Madanat, Vice President for Research... Read More 27 Jan January 27, 2026 NSF I-Corps™ as a path to more effective research By Visar Berisha, Professor and Associate Dean... Read More 17"
+    },
+    {
+      "id": "check-page-a585cea0a7",
+      "url": "https://desertpacificicorps.org/research-based-innovation-and-entrepreneurship-in-the-nsf-i-corps-program/",
+      "page": "details",
+      "excerpt": "Read More 22 May May 22, 2025 From Classroom to Marketplace: Uniting Academic Research with Student Entrepreneurial Aspirations By Archibald Harner, Assistant Vice President, Research..."
+    },
+    {
+      "id": "check-page-b66b84198a",
+      "url": "https://desertpacificicorps.org/research-based-innovation-and-entrepreneurship-in-the-nsf-i-corps-program/",
+      "page": "details",
+      "excerpt": "Supported by NSF Award 2229385."
+    },
+    {
+      "id": "check-page-7fd9c2fa27",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "page": "details",
+      "excerpt": "What is NSF I-Corps™? A New Entrepreneur’s Guide to This Game-Changing Program - I-Corps Hub: Desert and Pacific Region Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply What is NSF I-Corps™? A New Entrepreneur’s Guide to This Game-Changing Program Rachel Erbe 2025-10-22T12:13:04-07:00 October 22, 2025 By Cristy Salanga, Patent Manager, and I-Corps Project Director, Northern Arizona University Making an impact in this world begins with having a great idea. The challenge lies in turning that idea into a solution that customers or clients actually want. That’s where the NSF I-Corps program steps in, helping innovators bridge the gap between research and commercialization. If you’re an academic researcher or an innovator curious about how to bring your ideas to market, this will introduce you to the NSF I-Corps program and show why it’s a game-changer for innovators across the U.S. What is NSF I-Corps? The National Science Foundation (NSF) Innovation Corps (I-Corps TM ) is a federally funded program designed to introduce academic researchers and new entrepreneurs to the"
+    },
+    {
+      "id": "check-page-a79ce33681",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "page": "details",
+      "excerpt": "Since its start in 2011, the program provides training, mentorship, and funding to university teams working on innovative technologies."
+    },
+    {
+      "id": "check-page-c667191263",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "page": "details",
+      "excerpt": "To reduce the risks of entrepreneurial ventures and increase the chances of success for early-stage startups, particularly those stemming from academic research."
+    },
+    {
+      "id": "check-page-fd9931915f",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "page": "details",
+      "excerpt": "In the research setting, this often consists of: Technical Lead (TL): Often a faculty member or researcher leading the technical development."
+    },
+    {
+      "id": "check-page-511e9f3eda",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "page": "details",
+      "excerpt": "Entrepreneurial Lead (EL): Someone passionate about exploring the commercial potential of the idea, often a graduate student or postdoc working with the faculty member or researcher."
+    },
+    {
+      "id": "check-page-d8fd279312",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "page": "details",
+      "excerpt": "NSF I-Corps offers a combination of training, mentorship, and possible customer discovery funding (if eligible), including: Customer Discovery Training: The cornerstone of I-Corps is talking to people."
+    },
+    {
+      "id": "check-page-490cfe4e7e",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "page": "details",
+      "excerpt": "Mentorship: Participants are guided by experienced entrepreneurial instructors through the commercialization process and help them navigate the challenges of entrepreneurship."
+    },
+    {
+      "id": "check-page-1441805db2",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "page": "details",
+      "excerpt": "Builds Confidence and Connections: With mentorship from experienced instructors and a cohort of like-minded individuals, teams gain the support they need to pursue their idea with confidence."
+    },
+    {
+      "id": "check-page-b100617843",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "page": "details",
+      "excerpt": "Read More 22 May May 22, 2025 From Classroom to Marketplace: Uniting Academic Research with Student Entrepreneurial Aspirations By Archibald Harner, Assistant Vice President, Research..."
+    },
+    {
+      "id": "check-page-e9748a4939",
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "page": "details",
+      "excerpt": "Supported by NSF Award 2229385."
+    },
+    {
+      "id": "check-page-c71c7d7396",
+      "url": "https://desertpacificicorps.org/fail-fast-companies-that-pivoted-after-i-corps-aspire-customer-discovery/",
+      "page": "portfolio",
+      "excerpt": "Fail Fast: Companies That Pivoted After I-Corps Customer Discovery - I-Corps Hub: Desert and Pacific Region Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Fail Fast: Companies That Pivoted After I-Corps Customer Discovery Rachel Erbe 2025-09-05T10:52:25-07:00 April 30, 2025 By Tyler McCusker, Commercialization Network Coordinator at Tech Launch Arizona The University Of Arizona At the heart of NSF I-Corps is a powerful principle: challenge your biases and assumptions about the validity of your idea. Talk to customers, listen deeply, and be willing to let go of your original beliefs. Through your I-Corps-trained listening, you will start to identify patterns in the responses that can be not only informative; they can be transformational. Often, an entrepreneur enters I-Corps laser-focused on their “brilliant idea,” only to realize halfway through training that customers don’t share the same enthusiasm or even experience the same problem. Arriving at this point is by no means a dead end. It’s an opportunity. Some of the most successful ventures are those that had the"
+    },
+    {
+      "id": "check-page-666b487a60",
+      "url": "https://desertpacificicorps.org/triton-alumni-shine-on-2025-forbes-30-under-30-list/",
+      "page": "portfolio",
+      "excerpt": "Triton Alumni Shine on 2025 Forbes 30 Under 30 List - I-Corps Hub: Desert and Pacific Region Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply 13 Mar March 13, 2025 Triton Alumni Shine on 2025 Forbes 30 Under 30 List Rachel Erbe 2025-03-13T11:33:04-07:00 UC San Diego alumnus Sai Zhou is pushing the boundaries of med tech innovation. A former I-Corps participant and founder of CircuCare Inc., Zhou is revolutionizing patient care with a hands-free, wearable ultrasound device for continuous cardiovascular imaging. His entrepreneurial journey, shaped by UC San Diego’s Institute for the Global Entrepreneur, has earned him a spot on the 2025 Forbes 30 Under 30 Science list. Read more about how Zhou is transforming research into real-world impact. Read full article Share this post Facebook Twitter LinkedIn Google + Email Related Posts 26 Feb February 26, 2026 From Insight to Innovation: I-Corps Catalyzes the Public Impact of Research By Hala Madanat, Vice President for Research... Read More 27 Jan January 27, 2026 NSF I-Corps™ as a path to more effective research By Visar"
+    },
+    {
+      "id": "check-page-8692b793b3",
+      "url": "https://desertpacificicorps.org/event/idealaunch-cohort-en-espanol/",
+      "page": "terms",
+      "excerpt": "IdeaLaunch Cohort en Español - I-Corps Hub: Desert and Pacific Region Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Events « All Events This event has passed. IdeaLaunch Cohort en Español October 11, 2024 - November 1, 2024 « I-Corps Info Session San Diego State University Hybrid Cohort » IdeaLaunch brinda entrenamiento y conocimiento básico para que los participantes exploren la viabilidad de sus ideas de negocios. El programa está abierto a todas las mentes emprendedoras: investigadores, ingenieros, científicos, artistas, músicos, y mentes creativas que estén listos para resolver problemas y convertir sus ideas en posibles negocios. Cohorte de Otoño 2024 Taller Pre-Apertura – 11 de octubre @ 11 am – 3 pm Taller de apertura – 18 de octubre @ 11 am – 3 pm Taller de mitad de sesión – 25 de octubre @ 11 am – 3 pm Taller de Clausura – 1 de noviembre @ 11 am – 3 pm Todos los horarios son en CDT/GMT -5 y todas las sesiones son en línea. Enlace de solicitud: https://forms.monday.com/forms/5052df8c908d0079b4132f284fa340c9?r=use1 Contactanos a jerincon2@utep.edu IdeaLaunch"
+    },
+    {
+      "id": "check-page-2b3b0ff429",
+      "url": "https://desertpacificicorps.org/event/boise-state-university-i-corps-cohort/",
+      "page": "batches",
+      "excerpt": "University of Idaho I-Corps Cohort - I-Corps Hub: Desert and Pacific Region Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Events « All Events This event has passed. University of Idaho I-Corps Cohort June 26, 2024 - July 24, 2024 « I-Corps Info Session Cohort 5 – Summer 2024 | NSF I-Corps Hub: Desert and Pacific Region » This 4-session regional training program provides hands-on, high impact and fast-paced opportunity for innovators to learn to commercialize their discoveries. Open to Desert and Pacific Hub member institution teams. Kick-Off: Wednesday, June 26th 11 AM – 12 PM PDT via Zoom Training Sessions: Every Wednesday, July 3 – July 24, 2024 11 AM – 2 PM PDT | All sessions remote via Zoom Additional Information: University of Idaho NSF Event Page University of Idaho NSF Faculty Early Career Development Program Apply here: https://docs.google.com/forms/d/e/1FAIpQLSdMlkKDVoVKIGP0i7YV950cz5bZXzMYw6lJNYbTFdFG58Eu_w/viewform Please contact alinagilmore@boisestate.edu with any questions. Add to calendar Google Calendar iCalendar Outlook 365 Outlook Live Details"
+    },
+    {
+      "id": "check-page-2a5ff3ca0f",
+      "url": "https://desertpacificicorps.org/event/boise-state-university-semiconductor-cohort/",
+      "page": "batches",
+      "excerpt": "Boise State University Semiconductor Cohort - I-Corps Hub: Desert and Pacific Region Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Home About Us What We Offer Program Information FAQS Hub Partners Leadership Get Involved Apply Meet Our Teaching Team Become An Instructor Contact Us Events Stories of Impact Apply Events « All Events This event has passed. Boise State University Semiconductor Cohort September 6, 2024 - October 4, 2024 « I-Corps Info Session Northern Arizona University In-Person Cohort » If you or your team are working on research in areas of materials, processes, packaging, devices, etc., this is a great opportunity to discover the commercial potential of your work. This cohort welcomes teams with a good, service, or idea in the semiconductor or adjacent industries, including but not limited to: materials, processes, packaging, devices, etc. This 4-session regional training program provides hands-on, high impact and fast-paced opportunity for innovators to learn to commercialize their discoveries. Open to Desert and Pacific Hub member institution teams. Kick-Off: Friday, September 6 1 – 2 PM MDT via Zoom Training Sessions: Every Friday, September 13 – October 4, 2024 1 – 4 PM MDT | All sessions remote via Zoom Additional"
     }
   ],
   "findings": {
@@ -133,6 +1145,10 @@
       {
         "value": "https://desertpacificicorps.org/apply",
         "evidenceId": "check-route-1e46ab8e65"
+      },
+      {
+        "value": "https://airtable.com/appWhZUqIwkj4x0bd/pagBhFQzWOnu47k8y/form",
+        "evidenceId": "check-route-313fdada0e"
       }
     ],
     "applicationUrl": [
@@ -144,8 +1160,58 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "Dec",
+        "evidenceId": "check-announced-c8e26b57b1"
+      },
+      {
+        "value": "Jan",
+        "evidenceId": "check-announced-fa90d3753c"
+      },
+      {
+        "value": "Feb",
+        "evidenceId": "check-announced-ef0351bcae"
+      },
+      {
+        "value": "Mar",
+        "evidenceId": "check-announced-3dc40b0ce2"
+      },
+      {
+        "value": "Apr",
+        "evidenceId": "check-announced-9c5a3af36e"
+      },
+      {
+        "value": "May",
+        "evidenceId": "check-announced-f712c52afa"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "4",
+        "evidenceId": "check-duration-eda7284340"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-8924e30d5a"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-ba2a2494a6"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-4f8e8a7639"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

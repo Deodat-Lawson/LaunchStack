@@ -1,6 +1,6 @@
 {
   "programId": "insight-partners",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.insightpartners.com/",
     "https://www.insightpartners.com/ideas/apiphani-raises-25m-series-a-led-by-insight-partners-to-help-redefine-mission-critical-application-management-with-ai/",
@@ -16,7 +16,12 @@
     "https://www.insightpartners.com/ideas/slim-ai-closes-31-million-series-a-to-automate-best-practices-in-software-supply-chain-security-for-cloud-native-applications/",
     "https://www.insightpartners.com/ideas/sysdig-closes-68-5-million-in-series-d-funding-to-enable-enterprises-to-secure-and-monitor-containers-and-cloud-native-applications/",
     "https://www.insightpartners.com/ideas/the-era-of-application-defined-it-redefining-development-and-testing-for-a-digital-transformed-world/",
-    "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/"
+    "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/",
+    "https://www.insightpartners.com/ideas/tractable-is-applying-ai-to-accident-and-disaster-appraisal/",
+    "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+    "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+    "https://www.insightpartners.com/ideas/6-waves-receives-17-5-million-investment-from-insight-venture-partners/",
+    "https://www.insightpartners.com/ideas/adaptive-shield-receives-30m-series-a-investment-from-insight-partners-to-help-businesses-gain-control-of-all-their-saas-investments/"
   ],
   "evidence": [
     {
@@ -111,11 +116,25 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-05d4c7201e",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "title": "Insight Partners — terms page",
+      "excerpt": "explore our portfolio companies here → https://www.insightpartners.com/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-0e93d9c530",
       "url": "https://www.insightpartners.com/ideas/fermyon-gives-developers-instant-self-service-for-webassembly-microservice-application-deployment-with-fermyon-cloud-closes-20-million-series-a-funding-led-by-insight-partners-in-q3/",
       "title": "Insight Partners — application page",
       "excerpt": "Portfolio → https://www.insightpartners.com/portfolio/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-1af5aedd45",
+      "url": "https://www.insightpartners.com/ideas/adaptive-shield-receives-30m-series-a-investment-from-insight-partners-to-help-businesses-gain-control-of-all-their-saas-investments/",
+      "title": "Insight Partners — terms page",
+      "excerpt": "Portfolio → https://www.insightpartners.com/portfolio/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-1f40aab888",
@@ -146,6 +165,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-46e66bae55",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "title": "Insight Partners — terms page",
+      "excerpt": "Portfolio → https://www.insightpartners.com/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-4da4559b7c",
       "url": "https://www.insightpartners.com/ideas/moving-forward-into-an-application-driven-future/",
       "title": "Insight Partners — application page",
@@ -160,8 +186,36 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-6e290a1c0c",
+      "url": "https://www.insightpartners.com/ideas/6-waves-receives-17-5-million-investment-from-insight-venture-partners/",
+      "title": "Insight Partners — terms page",
+      "excerpt": "Portfolio → https://www.insightpartners.com/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-7121f08d26",
       "url": "https://www.insightpartners.com/ideas/deci-raises-25m-series-b-to-accelerate-the-productization-of-real-world-ai-applications/",
+      "title": "Insight Partners — application page",
+      "excerpt": "Portfolio → https://www.insightpartners.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9632260c0d",
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "title": "Insight Partners — application page",
+      "excerpt": "Portfolio → https://www.insightpartners.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-99199e6023",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "title": "Insight Partners — terms page",
+      "excerpt": "Explore our portfolio → https://www.insightpartners.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9ffdd6dd8e",
+      "url": "https://www.insightpartners.com/ideas/tractable-is-applying-ai-to-accident-and-disaster-appraisal/",
       "title": "Insight Partners — application page",
       "excerpt": "Portfolio → https://www.insightpartners.com/portfolio/",
       "page": "application"
@@ -179,6 +233,13 @@
       "title": "Insight Partners — application page",
       "excerpt": "Portfolio → https://www.insightpartners.com/portfolio/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-cae8f0632f",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "title": "Insight Partners — terms page",
+      "excerpt": "Explore our portfolio companies here → https://www.insightpartners.com/portfolio/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-cd09284fbf",
@@ -216,6 +277,13 @@
       "page": "details"
     },
     {
+      "id": "check-route-87dab2afcc",
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "title": "Insight Partners — application page",
+      "excerpt": "application front → https://www.insightpartners.com/ideas/generative-ai-application-layer/",
+      "page": "application"
+    },
+    {
       "id": "check-route-ba764d6296",
       "url": "https://www.insightpartners.com/ideas/focus-on-ai-applications-not-just-on-workflows-andrew-ngs-keynote-at-scaleupai-24/",
       "title": "Insight Partners — application page",
@@ -238,10 +306,106 @@
       "excerpt": "Insight Partners | We Scale Ambition at Every Stage Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Scale Up, Take Off Scaling the future of AI. Previous slide Next slide Series A The leading AI writing platform for teams May Habib is challenging a $13B incumbent Series A / ScaleUp:AI Partner SAN FRANCISCO, CA Read Full Article Series A Definitive Agreement From Series A to $32B Acquisition A Landmark Journey Series A / Series C / Acq. Agreement Palo Alto, California Read More Private Round Definitive Agreement Healthcare Digital Innovation in Science Private Round / Acq. Agreement Boston, MA Series A CrewAI is a leading AI multi-agent platform Behind the Investment: meet João Moura Series A / ScaleUp:AI Partner New York, NY Read Full Article Series B IPO Business Operations Rebranding Monday.com A New Channel Partner Program From Growth to IPO Series B / Series C / Series D / IPO Tel Aviv, Israel ScaleUp: monday.com Series B Acquired Fintech Transforming Corporate Expense Tracking Scaling Operations Acquisition by Bill.com Series B / Series C / Series D / Acquired Draper, UT Series A Series C Healthtech First Mental Health Unicorn Series A / Series B / Series C San Francisco, CA Series C Acquired Driving Digital Innovation in the Circular Economy Unifying Sales and Marketing Expanding"
     },
     {
+      "id": "check-page-4eaa73b9a0",
+      "url": "https://www.insightpartners.com/",
+      "page": "details",
+      "excerpt": "Sector Cybersecurity Market B2B Investment Team Jeff Horing Teddie Wardi Thomas Krane ScaleUp: SentinelOne Insight Onsite - Talent and Marketing Our Onsite team helped accelerate SentinelOne’s meteoric growth through several deep engagements."
+    },
+    {
+      "id": "check-page-746d8561e0",
+      "url": "https://www.insightpartners.com/",
+      "page": "details",
+      "excerpt": "Sector Cybersecurity Market B2B Investment Team Jeff Horing Teddie Wardi Thomas Krane ScaleUp: SentinelOne Scaling to IPO Since our initial investment in 2019, SentinelOne has become the defining XDR platform in the market."
+    },
+    {
+      "id": "check-page-65c885dea1",
+      "url": "https://www.insightpartners.com/",
+      "page": "details",
+      "excerpt": "The company launched strategic products in Ranger IoT and acquired Scalyr which was then rebranded as DataSet – an enterprise data platform."
+    },
+    {
+      "id": "check-page-eac220309b",
+      "url": "https://www.insightpartners.com/",
+      "page": "details",
+      "excerpt": "In 2021 we were thrilled to help SentinelOne prepare for and celebrate their IPO: NYSE: S Sector Cybersecurity Market B2B Investment Team Jeff Horing Teddie Wardi Thomas Krane ScaleUp: SentinelOne 1 / 3 1 / 3 We scale ambition at every stage For over 30 years , Insight Partners has helped leaders tu rn their vision into reality faster and more seamlessly than would be possible alone."
+    },
+    {
+      "id": "check-page-89054b410f",
+      "url": "https://www.insightpartners.com/",
+      "page": "details",
+      "excerpt": "Starting with product-market fit, we bring our operating excellence, our talent and customer networks and our capital to move companies from early to growth stage."
+    },
+    {
+      "id": "check-page-86beb9adb7",
+      "url": "https://www.insightpartners.com/",
+      "page": "details",
+      "excerpt": "Contact Us About Us Early Growth Late Stage Join our mailing list Learn how to unlock your ScaleUp potential Get our latest research and report Receive strategies, stories, analysis, invites and more straight to your inbox."
+    },
+    {
+      "id": "check-page-ba9b3f0d35",
+      "url": "https://www.insightpartners.com/",
+      "page": "details",
+      "excerpt": "About Us Contact Us Join Insight Media Newsroom LP Portal Portfolio Jobs For Enterprise Responsibility *The portfolio companies and portfolio company executives presented are examples of portfolio companies that Insight has worked with to assist the company achieve business and capital raising goals and are not intended to be a representative sample of all portfolio companies."
+    },
+    {
       "id": "check-page-1a62cfb3eb",
       "url": "https://www.insightpartners.com/ideas/apiphani-raises-25m-series-a-led-by-insight-partners-to-help-redefine-mission-critical-application-management-with-ai/",
       "page": "application",
       "excerpt": "Apiphani Raises $25M Series A Led by Insight Partners to Help Redefine Mission-Critical Application Management with AI | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Back Back Apiphani Raises $25M Series A Led by Insight Partners to Help Redefine Mission-Critical Application Management with AI October 01, 2025| 2 min. read New funding to accelerate growth as apiphani combines Deep Automation™ and expert engineering to help enterprises move beyond legacy support models — delivering resilience, security, and performance. BOSTON , Oct. 1, 2025 /PRNewswire/ — Apiphani, an AI-native platform and managed services company for mission-critical applications, today announced $25 million in Series A funding led by global software investor Insight Partners . The new capital will accelerate apiphani’s growth, expanding its footprint in regulated industries such as energy, utilities, and telecommunications, where uptime, security, and performance are paramount. Enterprises have historically relied on global systems integrators (GSIs) leveraging labor-arbitrage models to deploy large teams of low-skilled, low-cost workers to manage complex IT environments — an approach that often results in missed service-level agreements and a heightened risk of downtime. Apiphani takes a different"
+    },
+    {
+      "id": "check-page-86eb1fb790",
+      "url": "https://www.insightpartners.com/ideas/apiphani-raises-25m-series-a-led-by-insight-partners-to-help-redefine-mission-critical-application-management-with-ai/",
+      "page": "application",
+      "excerpt": "Apiphani takes a different path: small, highly skilled, senior teams empowered by apiphani’s proprietary, AI-driven automation and observability platform."
+    },
+    {
+      "id": "check-page-04c52874c9",
+      "url": "https://www.insightpartners.com/ideas/apiphani-raises-25m-series-a-led-by-insight-partners-to-help-redefine-mission-critical-application-management-with-ai/",
+      "page": "application",
+      "excerpt": "“At a time when global integrators will assign hundreds of people to support a relatively vanilla, mid-sized enterprise IT environment — and still miss service levels — we’re proving there’s a better way,” says Justin Folkers, Co-Founder and CEO of apiphani."
+    },
+    {
+      "id": "check-page-8fa7cfc4d3",
+      "url": "https://www.insightpartners.com/ideas/apiphani-raises-25m-series-a-led-by-insight-partners-to-help-redefine-mission-critical-application-management-with-ai/",
+      "page": "application",
+      "excerpt": "It’s our belief that a combination of expert engineers and AI-driven automation is the only model that scales with resilience.” Apiphani has achieved 100% uptime across all its client production environments for well over two years."
+    },
+    {
+      "id": "check-page-3116f4bf11",
+      "url": "https://www.insightpartners.com/ideas/apiphani-raises-25m-series-a-led-by-insight-partners-to-help-redefine-mission-critical-application-management-with-ai/",
+      "page": "application",
+      "excerpt": "At the core of apiphani’s approach is luumen, its proprietary observability platform powered by the company’s AI-based Deep Automation™ technology."
+    },
+    {
+      "id": "check-page-c92dd2961c",
+      "url": "https://www.insightpartners.com/ideas/apiphani-raises-25m-series-a-led-by-insight-partners-to-help-redefine-mission-critical-application-management-with-ai/",
+      "page": "application",
+      "excerpt": "Today, outages and security breaches are even more common, and enterprises are investing millions in AI without seeing ROI."
+    },
+    {
+      "id": "check-page-918bf5bfbc",
+      "url": "https://www.insightpartners.com/ideas/apiphani-raises-25m-series-a-led-by-insight-partners-to-help-redefine-mission-critical-application-management-with-ai/",
+      "page": "application",
+      "excerpt": "With new funding, the company plans to scale its engineering and go-to-market teams in Boston and Lisbon, while continuing to expand capabilities and broaden industry reach."
+    },
+    {
+      "id": "check-page-743982da4d",
+      "url": "https://www.insightpartners.com/ideas/apiphani-raises-25m-series-a-led-by-insight-partners-to-help-redefine-mission-critical-application-management-with-ai/",
+      "page": "application",
+      "excerpt": "Apiphani’s luumen product suite, enabled by their AI-based Deep Automation™ technology, automates many of the common tasks associated with managing a complex IT environment, freeing people to focus on more value-additive work."
+    },
+    {
+      "id": "check-page-8b35c645c9",
+      "url": "https://www.insightpartners.com/ideas/apiphani-raises-25m-series-a-led-by-insight-partners-to-help-redefine-mission-critical-application-management-with-ai/",
+      "page": "application",
+      "excerpt": "About Insight Partners Insight Partners is a global software investor partnering with high-growth technology, software, and Internet startup and ScaleUp companies that are driving transformative change in their industries."
+    },
+    {
+      "id": "check-page-133eb5e48b",
+      "url": "https://www.insightpartners.com/ideas/apiphani-raises-25m-series-a-led-by-insight-partners-to-help-redefine-mission-critical-application-management-with-ai/",
+      "page": "application",
+      "excerpt": "Headquartered in New York City, Insight has a global presence with leadership in London, Tel Aviv, and the Bay Area."
     },
     {
       "id": "check-page-e6603e507d",
@@ -250,16 +414,154 @@
       "excerpt": "Apply LEAN to ScaleUp | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Back Back Apply LEAN to ScaleUp Nalanie Nath , Matt May | November 26, 2019| 1 min. read Lean, meaning “the absence of waste,” is a term coined by John Krafcik to convey the essence of Toyota’s manufacturing processes. Krafcik learned about lean in the 1980's when he worked at MIT as an automotive production researcher; his studies became the basis of Womack's book, The Machine That Changed the World , a study on “lean production”. Today Krafcik is CEO of Waymo, the self-driving subsidiary of Google. You may ask, what do lean car manufacturing processes have to do with software companies? Here’s the link: your number of sales reps has increased and sales are growing well, with your customer base growing in number and complexity. A larger sales team needs to rely on efficient operations, also known as sales support, to keep pace with growth. If you're like many scale-up companies, your sales operations, order management and legal are at risk of becoming bloated with redundant processes that lead to contract churn and longer sales cycles. Quarterly revenue targets could start to slip as reps struggle to get new business quotes approved, and deals signed; your customer experience may suffer. How could"
     },
     {
+      "id": "check-page-7697b162a5",
+      "url": "https://www.insightpartners.com/ideas/apply-lean-to-scale-up/",
+      "page": "application",
+      "excerpt": "Tech companies have embraced the concept for well over a decade as a critical capability for high growth scale-ups."
+    },
+    {
+      "id": "check-page-bb53360297",
+      "url": "https://www.insightpartners.com/ideas/apply-lean-to-scale-up/",
+      "page": "application",
+      "excerpt": "Improving efficiencies is an ongoing quest as companies scale-up revenue and operations."
+    },
+    {
       "id": "check-page-50e5a0adf6",
       "url": "https://www.insightpartners.com/ideas/deci-raises-25m-series-b-to-accelerate-the-productization-of-real-world-ai-applications/",
       "page": "application",
       "excerpt": "Deci Raises $25M Series B to Accelerate the Productization of Real-World AI Applications | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Back Back Deci Raises $25M Series B to Accelerate the Productization of Real-World AI Applications July 13, 2022| 1 min. read TEL AVIV, Israel, July 13, 2022 /PRNewswire/ -- Deci , the deep learning company harnessing AI to solve the AI efficiency gap, today announced it has raised $25 million in a Series B funding round led by global software investor Insight Partners , with participation from existing investors Square Peg , Emerge , Jibe Ventures , and Fort Ross Ventures , as well as new investor ICON . The investment comes just seven months after Deci secured $21 million in Series A funding, also led by Insight Partners, bringing Deci's total funding to $55.1 million. The funds will be used to expand Deci's go-to-market activities, as well as further accelerate the company's R&D efforts. Deep learning-powered advancements in AI have led to innovations that have the potential to revolutionize services, products, and consumer applications across industries such as medicine, manufacturing, transportation, communication, and retail. However, the AI efficiency gap - a situation in which hardware is unable to meet the increasing"
     },
     {
+      "id": "check-page-5249cb1b0f",
+      "url": "https://www.insightpartners.com/ideas/deci-raises-25m-series-b-to-accelerate-the-productization-of-real-world-ai-applications/",
+      "page": "application",
+      "excerpt": "However, the AI efficiency gap - a situation in which hardware is unable to meet the increasing computing demands of models that are growing in size and complexity - has proven to be an obstacle to more widespread AI commercialization."
+    },
+    {
+      "id": "check-page-c35972ce1f",
+      "url": "https://www.insightpartners.com/ideas/deci-raises-25m-series-b-to-accelerate-the-productization-of-real-world-ai-applications/",
+      "page": "application",
+      "excerpt": "This efficiency gap means that inference is still generally bound to the cloud, where computer hardware is abundant but costs are high and concerns around data privacy and safety are prevalent."
+    },
+    {
+      "id": "check-page-b048c5c262",
+      "url": "https://www.insightpartners.com/ideas/deci-raises-25m-series-b-to-accelerate-the-productization-of-real-world-ai-applications/",
+      "page": "application",
+      "excerpt": "Deci's deep learning platform helps data scientists eliminate the AI efficiency gap by adopting a more productive development paradigm."
+    },
+    {
+      "id": "check-page-f4080f0709",
+      "url": "https://www.insightpartners.com/ideas/deci-raises-25m-series-b-to-accelerate-the-productization-of-real-world-ai-applications/",
+      "page": "application",
+      "excerpt": "With the platform, AI developers can leverage hardware-aware Neural Architecture Search (NAS) to quickly build highly optimized deep learning models that are designed to meet specific production goals."
+    },
+    {
+      "id": "check-page-e0ff6338ff",
+      "url": "https://www.insightpartners.com/ideas/deci-raises-25m-series-b-to-accelerate-the-productization-of-real-world-ai-applications/",
+      "page": "application",
+      "excerpt": "\"The growing AI efficiency gap only further highlights the importance of 'shifting left' - accounting for production considerations early in the development lifecycle, which can then significantly reduce the time and cost spent on fixing potential obstacles when deploying models in production,\" said Yonatan Geifman, CEO and co-founder of Deci."
+    },
+    {
+      "id": "check-page-6a3df2d8e5",
+      "url": "https://www.insightpartners.com/ideas/deci-raises-25m-series-b-to-accelerate-the-productization-of-real-world-ai-applications/",
+      "page": "application",
+      "excerpt": "\"Deci's deep learning development platform has a proven record of enabling companies of all sizes to do just that by providing them with the tools they need to successfully develop and deploy world-changing AI solutions - no matter the level of complexity or production environment."
+    },
+    {
+      "id": "check-page-6bda1cb431",
+      "url": "https://www.insightpartners.com/ideas/deci-raises-25m-series-b-to-accelerate-the-productization-of-real-world-ai-applications/",
+      "page": "application",
+      "excerpt": "This funding is a vote of confidence in our work to make AI more accessible and scalable for all.\" The platform empowers data scientists to deliver superior performance at a much lower operational cost (up to an 80% reduction), reduce time to market from months to weeks, and easily enables new applications on resource-constrained hardware such as mobile phones, laptops, and other edge devices."
+    },
+    {
+      "id": "check-page-4fc643e5ee",
+      "url": "https://www.insightpartners.com/ideas/deci-raises-25m-series-b-to-accelerate-the-productization-of-real-world-ai-applications/",
+      "page": "application",
+      "excerpt": "Deci's deep learning development platform is powered by Deci's proprietary AutoNAC (Automated Neural Architecture Construction) technology, an algorithmic optimization engine that empowers data scientists to build best-in-class deep learning models that are tailored for any task, data set, and target inference hardware."
+    },
+    {
+      "id": "check-page-b1afbf37b7",
+      "url": "https://www.insightpartners.com/ideas/deci-raises-25m-series-b-to-accelerate-the-productization-of-real-world-ai-applications/",
+      "page": "application",
+      "excerpt": "\"Having a more efficient infrastructure for AI systems can make AI products qualitatively different and better, not only cheaper and faster to run,\" said Lonne Jaffe, Managing Director at Insight Partners and board member at Deci."
+    },
+    {
+      "id": "check-page-1a4db8ab0c",
+      "url": "https://www.insightpartners.com/ideas/deci-raises-25m-series-b-to-accelerate-the-productization-of-real-world-ai-applications/",
+      "page": "application",
+      "excerpt": "\"Deci's powerful technology lets you input your AI models, data, and target hardware — whether that hardware is on the edge or in the cloud — and guides you in finding alternative models that will generate similar predictive accuracy with massively improved efficiency."
+    },
+    {
+      "id": "check-page-b1382cf97c",
+      "url": "https://www.insightpartners.com/ideas/deci-raises-25m-series-b-to-accelerate-the-productization-of-real-world-ai-applications/",
+      "page": "application",
+      "excerpt": "For natural language processing (NLP), Deci's models accelerated question-answering tasks' throughput performance on various Intel CPUs by 5x (depending on the hardware type and quantization level) while also improving the accuracy by +1.03%."
+    },
+    {
+      "id": "check-page-9bd78435d9",
+      "url": "https://www.insightpartners.com/ideas/deci-raises-25m-series-b-to-accelerate-the-productization-of-real-world-ai-applications/",
+      "page": "application",
+      "excerpt": "Deci collaborates with various hardware manufacturers, Computer OEMs and other ML ecosystem leaders, and is an official partner of Intel , Amazon Web Services (AWS), Hewlett Packard Enterprise (HPE), and NVIDIA among others."
+    },
+    {
       "id": "check-page-9de44ea931",
       "url": "https://www.insightpartners.com/ideas/deepfactor-secures-15m-in-series-a-funding-to-deliver-modern-appsec-for-cloud-native-applications-powered-by-continuous-appsec-observability/",
       "page": "application",
       "excerpt": "DeepFactor Secures $15M in Series A Funding to Deliver Modern AppSec for Cloud-Native Applications Powered by Continuous AppSec Observability | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Back Back DeepFactor Secures $15M in Series A Funding to Deliver Modern AppSec for Cloud-Native Applications Powered by Continuous AppSec Observability September 21, 2021| 1 min. read SAN JOSE, Calif., Sept. 21, 2021 (GLOBE NEWSWIRE) -- DeepFactor , the leader in developer-native continuous AppSec observability tools, announced today it has raised a $15 million Series A funding round led by New York-based global private equity and venture capital firm Insight Partners. Insight is joined by all existing investors, including Emergent Ventures and Security Leadership Capital, as well as participation from the leading test automation company, Tricentis. With this round, DeepFactor has raised a total of $18.4 million to date. ‘Start-Left’ with a Next-Gen AppSec Platform Designed to Secure Applications at the Source Since its launch in September 2020, DeepFactor empowers engineering teams by providing unprecedented runtime visibility and control over an application’s supply chain, security and compliance. The company will use the new funds to continue the development of its groundbreaking"
+    },
+    {
+      "id": "check-page-b7bdba9704",
+      "url": "https://www.insightpartners.com/ideas/deepfactor-secures-15m-in-series-a-funding-to-deliver-modern-appsec-for-cloud-native-applications-powered-by-continuous-appsec-observability/",
+      "page": "application",
+      "excerpt": "In addition, DeepFactor plans to introduce a SaaS offering to complement the self-hosted version which is 100% architected for Kubernetes and can be deployed on EKS, AKS, GKE, EC2 or VMware."
+    },
+    {
+      "id": "check-page-de415729d2",
+      "url": "https://www.insightpartners.com/ideas/deepfactor-secures-15m-in-series-a-funding-to-deliver-modern-appsec-for-cloud-native-applications-powered-by-continuous-appsec-observability/",
+      "page": "application",
+      "excerpt": "“Enterprises are increasingly building cloud-native applications and need a state-of-the-art AppSec platform that delivers a new level of visibility into supply chain, security and compliance risks."
+    },
+    {
+      "id": "check-page-ebc69a1244",
+      "url": "https://www.insightpartners.com/ideas/deepfactor-secures-15m-in-series-a-funding-to-deliver-modern-appsec-for-cloud-native-applications-powered-by-continuous-appsec-observability/",
+      "page": "application",
+      "excerpt": "There is an immediate necessity for a developer-native observability solution for the application layer and the need to identify supply chain, security, privacy, and compliance risks at the beginning of and during development are more important now than ever."
+    },
+    {
+      "id": "check-page-776a1d0df9",
+      "url": "https://www.insightpartners.com/ideas/deepfactor-secures-15m-in-series-a-funding-to-deliver-modern-appsec-for-cloud-native-applications-powered-by-continuous-appsec-observability/",
+      "page": "application",
+      "excerpt": "This results in a significant increase in supply chain, security and compliance risks."
+    },
+    {
+      "id": "check-page-3798d71045",
+      "url": "https://www.insightpartners.com/ideas/deepfactor-secures-15m-in-series-a-funding-to-deliver-modern-appsec-for-cloud-native-applications-powered-by-continuous-appsec-observability/",
+      "page": "application",
+      "excerpt": "With DeepFactor, find and fix supply chain, security and compliance risks—in both in-house software applications and third-party components—throughout the DevOps pipeline."
+    },
+    {
+      "id": "check-page-53cce55aac",
+      "url": "https://www.insightpartners.com/ideas/deepfactor-secures-15m-in-series-a-funding-to-deliver-modern-appsec-for-cloud-native-applications-powered-by-continuous-appsec-observability/",
+      "page": "application",
+      "excerpt": "“Our technology can be an SMB’s all-in-one application security solution, or it can bring deeper insights to an Enterprise’s existing SAST, SCA, and DAST toolset."
+    },
+    {
+      "id": "check-page-8459ecf553",
+      "url": "https://www.insightpartners.com/ideas/deepfactor-secures-15m-in-series-a-funding-to-deliver-modern-appsec-for-cloud-native-applications-powered-by-continuous-appsec-observability/",
+      "page": "application",
+      "excerpt": "Customers receive unparalleled runtime insights, extraordinary visibility into the software supply chain, prioritized vulnerabilities with reduced SCA alert volume, enhanced DAST insights, and faster scans. ‘Start left’ and create and maintain secure and compliant applications at the source with DeepFactor."
+    },
+    {
+      "id": "check-page-e986505ab1",
+      "url": "https://www.insightpartners.com/ideas/deepfactor-secures-15m-in-series-a-funding-to-deliver-modern-appsec-for-cloud-native-applications-powered-by-continuous-appsec-observability/",
+      "page": "application",
+      "excerpt": "About Insight Partners Insight Partners is a leading global venture capital and private equity firm investing in high-growth technology and software ScaleUp companies that are driving transformative change in their industries."
+    },
+    {
+      "id": "check-page-797bcad66f",
+      "url": "https://www.insightpartners.com/ideas/deepfactor-secures-15m-in-series-a-funding-to-deliver-modern-appsec-for-cloud-native-applications-powered-by-continuous-appsec-observability/",
+      "page": "application",
+      "excerpt": "Across its people and its portfolio, Insight encourages a culture around a belief that ScaleUp companies and growth create opportunity for all."
     },
     {
       "id": "check-page-03d8ee1adb",
@@ -274,10 +576,112 @@
       "excerpt": "Focus on AI applications, not just workflows: Andrew Ng’s keynote at ScaleUp:AI ‘24 | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Focus on AI applications, not just workflows: Andrew Ng’s keynote at ScaleUp:AI ‘24 Insight Partners | March 18, 2025 | 2 min. read Summary AI luminary and Founder of DeepLearning.AI , Andrew Ng, discussed the exciting trends in AI Agents and applications . In recent years, the spotlight has been placed on large language models (LLMs) in AI. Building on them, a new set of design patterns is emerging with the rise of AI Agents and agentic reasoning, in which systems can reflect, plan, use tools (function calls), and collaborate in multi-agent designs. These design patterns are proving to be both cost-effective and powerful for quickly building numerous new applications. Key takeaways AI’s real value lies in applications : Ng emphasized that AI is a general-purpose technology, but the greatest opportunity is in building applications that drive revenue and sustain the ecosystem. Agentic AI is transforming workflows : AI Agents can iterate, research, and refine outputs, leading to significantly better results in industries like law, healthcare, and government. The AI stack is evolving : The emergence of an agentic orchestration layer, with"
     },
     {
+      "id": "check-page-7b511b790e",
+      "url": "https://www.insightpartners.com/ideas/focus-on-ai-applications-not-just-on-workflows-andrew-ngs-keynote-at-scaleupai-24/",
+      "page": "application",
+      "excerpt": "The AI stack is evolving : The emergence of an agentic orchestration layer, with tools like LangGraph, is making it easier to build AI applications."
+    },
+    {
+      "id": "check-page-4ebf7063ba",
+      "url": "https://www.insightpartners.com/ideas/focus-on-ai-applications-not-just-on-workflows-andrew-ngs-keynote-at-scaleupai-24/",
+      "page": "application",
+      "excerpt": "AI trends are reshaping industries : Faster text generation, generative AI-driven rapid prototyping, and the growing role of data engineering are accelerating innovation."
+    },
+    {
+      "id": "check-page-fc06f4c646",
+      "url": "https://www.insightpartners.com/ideas/focus-on-ai-applications-not-just-on-workflows-andrew-ngs-keynote-at-scaleupai-24/",
+      "page": "application",
+      "excerpt": "Companies need a structured AI strategy : Ng shared a five-step process for corporate AI adoption, starting with executive training and systematic opportunity identification."
+    },
+    {
+      "id": "check-page-a061d68350",
+      "url": "https://www.insightpartners.com/ideas/focus-on-ai-applications-not-just-on-workflows-andrew-ngs-keynote-at-scaleupai-24/",
+      "page": "application",
+      "excerpt": "AI governance should focus on applications : Rather than regulating AI technology itself, Ng argues that governance should address specific use cases to ensure responsible AI development."
+    },
+    {
+      "id": "check-page-6a46a77473",
+      "url": "https://www.insightpartners.com/ideas/focus-on-ai-applications-not-just-on-workflows-andrew-ngs-keynote-at-scaleupai-24/",
+      "page": "application",
+      "excerpt": "These insights came from our ScaleUp:AI event in November 2024, an industry-leading global conference that features topics across technologies and industries."
+    },
+    {
+      "id": "check-page-0c21ac45ad",
+      "url": "https://www.insightpartners.com/ideas/focus-on-ai-applications-not-just-on-workflows-andrew-ngs-keynote-at-scaleupai-24/",
+      "page": "application",
+      "excerpt": "Watch the full session below: Agentic AI: The next big leap in AI capabilities Ng identified agentic AI as the most significant AI technology trend."
+    },
+    {
+      "id": "check-page-6d869d8a65",
+      "url": "https://www.insightpartners.com/ideas/focus-on-ai-applications-not-just-on-workflows-andrew-ngs-keynote-at-scaleupai-24/",
+      "page": "application",
+      "excerpt": "He contrasted the traditional non-agentic workflow with agentic workflows, explaining that the latter allows AI to engage in iterative processes similar to human thinking, research, and revision, leading to a “much better work product.” He provided data showing a substantial improvement in coding benchmark scores (HumanEval) when using agentic workflows with models like GB 3.5 and GPT-4."
+    },
+    {
+      "id": "check-page-e25ccb2ec5",
+      "url": "https://www.insightpartners.com/ideas/focus-on-ai-applications-not-just-on-workflows-andrew-ngs-keynote-at-scaleupai-24/",
+      "page": "application",
+      "excerpt": "Ng also noted that agentic workflows are proving highly effective in applications such as processing legal documents, assisting with medical diagnoses, and handling complex government compliance paperwork."
+    },
+    {
+      "id": "check-page-30b6fe86b6",
+      "url": "https://www.insightpartners.com/ideas/focus-on-ai-applications-not-just-on-workflows-andrew-ngs-keynote-at-scaleupai-24/",
+      "page": "application",
+      "excerpt": "The rise of the agentic orchestration layer This shift has led to the emergence of an agentic orchestration layer in the AI stack, with tools like LangChain (evolving to LangGraph) facilitate the building of agentic applications."
+    },
+    {
+      "id": "check-page-0d4e028ee2",
+      "url": "https://www.insightpartners.com/ideas/focus-on-ai-applications-not-just-on-workflows-andrew-ngs-keynote-at-scaleupai-24/",
+      "page": "application",
+      "excerpt": "However, Ng reaffirmed that “most of the value had better be at the application layer .” Beyond agentic AI, Ng outlined several other important AI trends: The benefit of cheaper and faster text generation is crucial for the text-intensive nature of agentic workloads."
+    },
+    {
+      "id": "check-page-89da1aa981",
+      "url": "https://www.insightpartners.com/ideas/focus-on-ai-applications-not-just-on-workflows-andrew-ngs-keynote-at-scaleupai-24/",
+      "page": "application",
+      "excerpt": "Generative AI is significantly speeding up prototyping, reducing development time from months to potentially just ten days, which accelerates corporate innovation and allows for rapid experimentation with a “move fast and be responsible” approach."
+    },
+    {
+      "id": "check-page-afb99c9e80",
+      "url": "https://www.insightpartners.com/ideas/focus-on-ai-applications-not-just-on-workflows-andrew-ngs-keynote-at-scaleupai-24/",
+      "page": "application",
+      "excerpt": "The gravity of data is decreasing due to the compute-intensive nature of generative AI, making it more feasible to transmit data across different clouds for processing."
+    },
+    {
       "id": "check-page-005a7d410e",
       "url": "https://www.insightpartners.com/ideas/frontegg-raises-25-million-to-accelerate-product-led-growth-adoption-for-saas-applications/",
       "page": "application",
       "excerpt": "Frontegg Raises $25 Million to Accelerate Product-Led Growth Adoption for SaaS Applications | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Back Back Frontegg Raises $25 Million to Accelerate Product-Led Growth Adoption for SaaS Applications December 01, 2021| 1 min. read TEL AVIV, Israel, Dec. 1, 2021 /PRNewswire/ -- Frontegg , the modern user management platform for the Product-led era, announced today a $25 million Series A funding round led by New York-based global venture capital and private equity firm Insight Partners, with participation from existing seed investors Pitango First and Global Founders Capital. This investment, which brings Frontegg's total funding to $30 million, will support the company's rapid growth as it scales its platform and accelerates global expansion. In a recent report by OpenView, four out of five SaaS companies surveyed said they had adopted product-led tactics. The benefits of embracing Product-Led Growth (PLG) are apparent, as according to OpenView, companies in its PLG Index trade at a 50% premium compared to companies in the broader SaaS index. Product-led companies have unique user management requirements, including a passwordless signup experience, advanced subscription enforcement controls and seamless self-service"
+    },
+    {
+      "id": "check-page-3b473f2ddc",
+      "url": "https://www.insightpartners.com/ideas/frontegg-raises-25-million-to-accelerate-product-led-growth-adoption-for-saas-applications/",
+      "page": "application",
+      "excerpt": "Product-led companies have unique user management requirements, including a passwordless signup experience, advanced subscription enforcement controls and seamless self-service administration, as well as enterprise-readiness capabilities such as SSO, security policies and audit logs."
+    },
+    {
+      "id": "check-page-6575599e6d",
+      "url": "https://www.insightpartners.com/ideas/frontegg-raises-25-million-to-accelerate-product-led-growth-adoption-for-saas-applications/",
+      "page": "application",
+      "excerpt": "Frontegg's user management infrastructure is already used by dozens of fast-growing companies, including Materialize, Pay.com, Medigate, Talon Cyber Security and Hunters.AI."
+    },
+    {
+      "id": "check-page-d1996c338c",
+      "url": "https://www.insightpartners.com/ideas/frontegg-raises-25-million-to-accelerate-product-led-growth-adoption-for-saas-applications/",
+      "page": "application",
+      "excerpt": "Using Frontegg, teams can get their products to market faster with a mature, enterprise-ready offering, and then continue to ship invaluable features for their end-users quarter after quarter.\" Akkiraju is joining Frontegg's board."
+    },
+    {
+      "id": "check-page-895e11f4dd",
+      "url": "https://www.insightpartners.com/ideas/frontegg-raises-25-million-to-accelerate-product-led-growth-adoption-for-saas-applications/",
+      "page": "application",
+      "excerpt": "About Insight Partners Insight Partners is a leading global venture capital and private equity firm investing in high-growth technology and software ScaleUp companies that are driving transformative change in their industries."
+    },
+    {
+      "id": "check-page-14f66f8d57",
+      "url": "https://www.insightpartners.com/ideas/frontegg-raises-25-million-to-accelerate-product-led-growth-adoption-for-saas-applications/",
+      "page": "application",
+      "excerpt": "Across its people and its portfolio, Insight encourages a culture around a belief that ScaleUp companies and growth create opportunity for all."
     },
     {
       "id": "check-page-7d6f0c4755",
@@ -286,10 +690,154 @@
       "excerpt": "Investor POV: Parsing the generative AI application layer | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Back Back Investor POV Investor POV: Parsing the generative AI application layer Lonne Jaffe , Michael Spiro , Ashley Hong | May 04, 2023| 6 min. read Summary Before the ChatGPT release, many had been underestimating the pace of progress in AI – its release was like a spark that lit the fire of innovation around generative AI technology, along with a renewed fundraising dynamic. From ChatGPT (also see ChatGPT plugins and Code Interpreter ), to Anthropic’s Claude , to the new BloombergGPT , the pace of innovation in this space has been nothing short of remarkable. Swift technological progress is evident throughout the tech stack: foundation model layer, e.g., OpenAI , Cohere , Anthropic , Stable Diffusion , Adept , AI21 , Aleph Alpha , Google , Hugging Face tooling/infrastructure layer, e.g., Weights & Biases , LangChain , Run:ai , Dust , Deci AI , Fixie , AssemblyAI application layer, e.g., Jasper , Harvey , Profluent , Hour One , and more mentioned below Goals of generative AI If you are new to generative AI, it refers to the use of AI algorithms to: “autonomously generate novel, high-quality, and coherent content, data, or solutions by understanding and mimicking"
     },
     {
+      "id": "check-page-1b8ccd001b",
+      "url": "https://www.insightpartners.com/ideas/generative-ai-application-layer/",
+      "page": "application",
+      "excerpt": "Read more: Our colleagues Ganesh, George, Nikhil, Jenna, and Sunny share some of the areas that excite Insight around the foundation model and tooling/infrastructure layer in The Next Stack: Generative AI from an Investor Perspective."
+    },
+    {
+      "id": "check-page-37e3f6149b",
+      "url": "https://www.insightpartners.com/ideas/generative-ai-application-layer/",
+      "page": "application",
+      "excerpt": "We are also seeing rapid innovation in generative AI across the application layer."
+    },
+    {
+      "id": "check-page-efcb1e30bd",
+      "url": "https://www.insightpartners.com/ideas/generative-ai-application-layer/",
+      "page": "application",
+      "excerpt": "The rest of this post will explore recent developments at the application layer (layer 4: ‘Create & Automate’ in the below graphic), highlighting areas that excite us and a few examples of how generative AI applications deliver substantial value to end users."
+    },
+    {
+      "id": "check-page-aa7c768002",
+      "url": "https://www.insightpartners.com/ideas/generative-ai-application-layer/",
+      "page": "application",
+      "excerpt": "Parsing the generative AI application layer We have seen an influx of generative-AI-native companies (meaning, new startups with generative AI at their core) arise in recent months."
+    },
+    {
+      "id": "check-page-1e980cc0e7",
+      "url": "https://www.insightpartners.com/ideas/generative-ai-application-layer/",
+      "page": "application",
+      "excerpt": "Horizontal tooling Gen-AI-native platforms that seek to own a particular use case or workflow, such as Jasper (AI copywriter and content generator), RunwayML (AI-powered video creation and editing tools), and Tome (AI-powered presentations)."
+    },
+    {
+      "id": "check-page-6c85ba610d",
+      "url": "https://www.insightpartners.com/ideas/generative-ai-application-layer/",
+      "page": "application",
+      "excerpt": "Vertical turnkey applications Gen-AI-native platforms with a focus on a particular vertical or sector, such as Harvey (‘Copilot for law’), Cradle (AI-assisted protein design tools), and Wonder Dynamics (AI-powered platform for game studios/filmmakers)."
+    },
+    {
+      "id": "check-page-70e49e4e48",
+      "url": "https://www.insightpartners.com/ideas/generative-ai-application-layer/",
+      "page": "application",
+      "excerpt": "Captive generative AI Where the capability is so core to an industry that companies will want to build their own generative AI functionalities, either by leveraging foundation models and tooling or (like Bloomberg) training their own foundation models in-house."
+    },
+    {
+      "id": "check-page-19dead6e32",
+      "url": "https://www.insightpartners.com/ideas/generative-ai-application-layer/",
+      "page": "application",
+      "excerpt": "Applications that drive productivity, creativity, and automation We’re seeing early-stage gen-AI-native companies emerge around horizontal- and vertical-specific applications."
+    },
+    {
+      "id": "check-page-a3f654def9",
+      "url": "https://www.insightpartners.com/ideas/generative-ai-application-layer/",
+      "page": "application",
+      "excerpt": "These startups can leverage generative AI to create a ‘wow’ experience that gets new users in the door, building out additional workflows around that generative technology over time to retain users and drive further stickiness."
+    },
+    {
+      "id": "check-page-570e323ed7",
+      "url": "https://www.insightpartners.com/ideas/generative-ai-application-layer/",
+      "page": "application",
+      "excerpt": "In addition to the companies mentioned above, we are also seeing startups arise with generative AI at their core in many areas, for example: Horizontal use cases Code – Companies like Bito , Adrenaline , Magic , Mintlify , and Tabnine are leveraging generative AI to drive better developer experiences."
+    },
+    {
+      "id": "check-page-84145afc94",
+      "url": "https://www.insightpartners.com/ideas/generative-ai-application-layer/",
+      "page": "application",
+      "excerpt": "Productivit y/ Knowledge Management – Companies like Mem , Supernormal , and Fermat are driving enhanced user productivity through the use of LLMs."
+    },
+    {
+      "id": "check-page-f40d53493a",
+      "url": "https://www.insightpartners.com/ideas/generative-ai-application-layer/",
+      "page": "application",
+      "excerpt": "Creator – Companies like Captions and Lightricks are bringing generative AI technology to creatives, paving the way for new creative possibilities."
+    },
+    {
       "id": "check-page-e998b9eaa7",
       "url": "https://www.insightpartners.com/ideas/head-of-enterprise-applications-an-often-untapped-orchestrator-for-growth-and-scale/",
       "page": "application",
       "excerpt": "Head of Enterprise Applications: An Often Untapped Orchestrator for Growth and Scale | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Back Back Head of Enterprise Applications: An Often Untapped Orchestrator for Growth and Scale November 17, 2022| 5 min. read Key Insights: Many scaleups are seeing the need for a new role to handle daunting internal systems complexity, back-office business systems, integrations, and data. Hiring a Head of Enterprise Apps and Architecture role in the organization can help scaleups proactively navigate key security and tech process questions while prioritizing growth and innovation. The most common time to hire this function is in the ScaleUp stage — when a company is at $50-$100M annual revenue. This role usually reports to a CIO, COO, or CFO. Boards of directors are seeking digital acceleration from their CxOs and expect enterprise architecture to be orchestrated to enable growth and scale. For ScaleUps already on their digital path, that means transformation of business processes through technology and the deliberate integration of complex digital landscapes. It also means application rationalization to keep operating expenses in check, especially if mergers and acquisitions continue to be part of the growth strategy. In early-stage"
+    },
+    {
+      "id": "check-page-a82d2e1509",
+      "url": "https://www.insightpartners.com/ideas/head-of-enterprise-applications-an-often-untapped-orchestrator-for-growth-and-scale/",
+      "page": "application",
+      "excerpt": "In early-stage companies, many CxOs must also absorb responsibilities for the company’s back-office business technology in addition to their core role."
+    },
+    {
+      "id": "check-page-54692dac5f",
+      "url": "https://www.insightpartners.com/ideas/head-of-enterprise-applications-an-often-untapped-orchestrator-for-growth-and-scale/",
+      "page": "application",
+      "excerpt": "CxOs in these cases can tend to stand up internal business systems in silos while enterprise applications remain poorly integrated with the organization’s IT infrastructure."
+    },
+    {
+      "id": "check-page-9228104d7e",
+      "url": "https://www.insightpartners.com/ideas/head-of-enterprise-applications-an-often-untapped-orchestrator-for-growth-and-scale/",
+      "page": "application",
+      "excerpt": "However, there is a solution: The main strategy for dealing with daunting internal systems complexity is to form an enterprise applications and architecture team, responsible for back-office business systems, integrations and data."
+    },
+    {
+      "id": "check-page-25b1fa06fd",
+      "url": "https://www.insightpartners.com/ideas/head-of-enterprise-applications-an-often-untapped-orchestrator-for-growth-and-scale/",
+      "page": "application",
+      "excerpt": "The head of enterprise applications and architecture thus becomes the master orchestrator of processes and applications for all business units."
+    },
+    {
+      "id": "check-page-58283a7b5a",
+      "url": "https://www.insightpartners.com/ideas/head-of-enterprise-applications-an-often-untapped-orchestrator-for-growth-and-scale/",
+      "page": "application",
+      "excerpt": "Assessing the Need for a Head of Enterprise Apps and Architecture The need for a master orchestrator was identified in a 2018 survey conducted by threat-assessment company F5."
+    },
+    {
+      "id": "check-page-201d8a9407",
+      "url": "https://www.insightpartners.com/ideas/head-of-enterprise-applications-an-often-untapped-orchestrator-for-growth-and-scale/",
+      "page": "application",
+      "excerpt": "The survey revealed that 38% of the respondents could not name all the applications used by their organization, despite considering 34% of their web applications to be “mission critical.” So how do you determine if your company needs a head of enterprise applications?"
+    },
+    {
+      "id": "check-page-b7a1ff2811",
+      "url": "https://www.insightpartners.com/ideas/head-of-enterprise-applications-an-often-untapped-orchestrator-for-growth-and-scale/",
+      "page": "application",
+      "excerpt": "This can happen as the company matures, when the customer base shifts and departments expand their tooling, both to meet demand and to deliver greater value to consumers."
+    },
+    {
+      "id": "check-page-38652a71d5",
+      "url": "https://www.insightpartners.com/ideas/head-of-enterprise-applications-an-often-untapped-orchestrator-for-growth-and-scale/",
+      "page": "application",
+      "excerpt": "Scaleups often struggle to decide whether to buy off-the-shelf software or to build it themselves."
+    },
+    {
+      "id": "check-page-5251194398",
+      "url": "https://www.insightpartners.com/ideas/head-of-enterprise-applications-an-often-untapped-orchestrator-for-growth-and-scale/",
+      "page": "application",
+      "excerpt": "With off-the-shelf enterprise software there will always be gaps in capability, and some redundancies."
+    },
+    {
+      "id": "check-page-e82d4277e9",
+      "url": "https://www.insightpartners.com/ideas/head-of-enterprise-applications-an-often-untapped-orchestrator-for-growth-and-scale/",
+      "page": "application",
+      "excerpt": "Leaders who are dedicated to managing the life cycle of enterprise applications will be able to identify these gaps and overlaps, and make effective rationalization decisions."
+    },
+    {
+      "id": "check-page-0eac4b94d5",
+      "url": "https://www.insightpartners.com/ideas/head-of-enterprise-applications-an-often-untapped-orchestrator-for-growth-and-scale/",
+      "page": "application",
+      "excerpt": "Are the company’s enterprise applications interoperable?"
+    },
+    {
+      "id": "check-page-6a4be272c3",
+      "url": "https://www.insightpartners.com/ideas/head-of-enterprise-applications-an-often-untapped-orchestrator-for-growth-and-scale/",
+      "page": "application",
+      "excerpt": "Key performance indicators (KPIs) help you understand whether the company’s enterprise systems are delivering required outcomes."
     },
     {
       "id": "check-page-38cd24b2fc",
@@ -298,10 +846,88 @@
       "excerpt": "Moving Forward Into an Application-Driven Future | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Back Back Moving Forward Into an Application-Driven Future Thomas Krane | September 04, 2018| 1 min. read The world of software-defined everything is transforming to the point that systems are separated so fully from their hardware that applications increasingly run the show. Application-driven architectures are gaining momentum quickly as more businesses work to accelerate and streamline continuous delivery pipelines. How application-driven architectures work Consider a typical software-defined data center environment. The servers are heavily virtualized, hosting multiple apps, with each app optimized for the specific virtual machine it runs on. Network and storage systems are also configured for software-defined workloads, automatically routing and managing data to optimize where it resides and how it moves through the network based on real-time resource availability and operational demands. This software-defined vision is already in stark contrast to legacy environments, but application-driven solutions take it to another level. The problem with such a deeply virtualized setup is that it dramatically increased system density, thus creating a great deal of complexity."
     },
     {
+      "id": "check-page-da3d8c3b33",
+      "url": "https://www.insightpartners.com/ideas/moving-forward-into-an-application-driven-future/",
+      "page": "application",
+      "excerpt": "In this situation, organizations can create containers capable of handling a wide range of application architectures and then optimize their container setups for virtual machines, effectively eliminating the need to manually optimize each app for the hardware and virtual environment it will reside in."
+    },
+    {
       "id": "check-page-ff41c5e898",
       "url": "https://www.insightpartners.com/ideas/slim-ai-closes-31-million-series-a-to-automate-best-practices-in-software-supply-chain-security-for-cloud-native-applications/",
       "page": "application",
       "excerpt": "Slim.AI Closes $31 Million Series A to Automate Best Practices in Software Supply Chain Security for Cloud-Native Applications | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Back Back Slim.AI Closes $31 Million Series A to Automate Best Practices in Software Supply Chain Security for Cloud-Native Applications January 26, 2022| 1 min. read BOSTON, Jan. 26, 2022 /PRNewswire/ -- Slim.AI, the Boston-based startup focused on optimizing and securing cloud-native applications, announced today that it has raised a $31 million series A round co-led by New York-based global venture capital and private equity firm Insight Partners as well as StepStone Group , with participation by boldstart Ventures, Decibel Partners, FXP, Knollwood and TechAviv Founder Partners. Slim.AI is focused on cloud-native application development, building a developer platform atop the popular DockerSlim open-source project. Co-founded by John Amaral and Kyle Quest in January 2021, Slim.AI provides developers with the necessary tools to ship secure, production-ready containers in an automated, repeatable and transparent way, and without the need for specialized expertise. Slim.AI goes beyond simple container minification—already available via DockerSlim—to deliver a holistic container-based workflow"
+    },
+    {
+      "id": "check-page-c93b47a7d7",
+      "url": "https://www.insightpartners.com/ideas/slim-ai-closes-31-million-series-a-to-automate-best-practices-in-software-supply-chain-security-for-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "Slim.AI goes beyond simple container minification—already available via DockerSlim—to deliver a holistic container-based workflow platform for developers working in organizations large or small."
+    },
+    {
+      "id": "check-page-cc3e157717",
+      "url": "https://www.insightpartners.com/ideas/slim-ai-closes-31-million-series-a-to-automate-best-practices-in-software-supply-chain-security-for-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "\"The world has woken up to the acute need for developers to know exactly what is in their containers before moving them into production and to reduce risk in their software supply chains,\" said Amaral, CEO and co-founder at Slim.AI."
+    },
+    {
+      "id": "check-page-763b25b402",
+      "url": "https://www.insightpartners.com/ideas/slim-ai-closes-31-million-series-a-to-automate-best-practices-in-software-supply-chain-security-for-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "The best vulnerability is the one you never ship.\" Read more of Amaral's comments on his blog post about the Slim.AI Series A funding round ."
+    },
+    {
+      "id": "check-page-8e164e41c4",
+      "url": "https://www.insightpartners.com/ideas/slim-ai-closes-31-million-series-a-to-automate-best-practices-in-software-supply-chain-security-for-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "Investors are excited about the possibilities for a security-focused, developer-first enterprise SaaS company built on a popular open-source project."
+    },
+    {
+      "id": "check-page-ffc724de21",
+      "url": "https://www.insightpartners.com/ideas/slim-ai-closes-31-million-series-a-to-automate-best-practices-in-software-supply-chain-security-for-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "Slim.AI has achieved strong traction through its open source, early access SaaS platform and initial engagements with organizations looking to modernize their cloud-native workflows."
+    },
+    {
+      "id": "check-page-153fd56750",
+      "url": "https://www.insightpartners.com/ideas/slim-ai-closes-31-million-series-a-to-automate-best-practices-in-software-supply-chain-security-for-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "\"Slim.AI's 'Know Your Container' workflow was born out of a problem that its founders and many developers experience: too much time is spent on fitting applications to infrastructure."
+    },
+    {
+      "id": "check-page-1789f22924",
+      "url": "https://www.insightpartners.com/ideas/slim-ai-closes-31-million-series-a-to-automate-best-practices-in-software-supply-chain-security-for-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "As developers are expected to produce clean code at a fast pace, it is critical to equip them with a software supply chain environment which simultaneously minimizes risk of producing vulnerabilities and maximizes productivity,\" said Jon Rosenbaum , managing director at Insight Partners."
+    },
+    {
+      "id": "check-page-2c69ecc660",
+      "url": "https://www.insightpartners.com/ideas/slim-ai-closes-31-million-series-a-to-automate-best-practices-in-software-supply-chain-security-for-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "They have a compelling security story to share with enterprise technology leadership, and they're already making great progress in establishing themselves as the team to beat.\" Amaral and Quest are veterans of cybersecurity and cloud infrastructure."
+    },
+    {
+      "id": "check-page-2aebebfd5c",
+      "url": "https://www.insightpartners.com/ideas/slim-ai-closes-31-million-series-a-to-automate-best-practices-in-software-supply-chain-security-for-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "Amaral, CEO, is a seasoned cybersecurity entrepreneur and the former head of product for Cisco Cloud Security."
+    },
+    {
+      "id": "check-page-668c53f467",
+      "url": "https://www.insightpartners.com/ideas/slim-ai-closes-31-million-series-a-to-automate-best-practices-in-software-supply-chain-security-for-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "Slim.AI closed a $6.6 million seed round in January of 2021, led by boldstart Ventures, Decibel Partners, FXP and TechAviv Founder Partners."
+    },
+    {
+      "id": "check-page-b5a4b609b2",
+      "url": "https://www.insightpartners.com/ideas/slim-ai-closes-31-million-series-a-to-automate-best-practices-in-software-supply-chain-security-for-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "Slim.AI is another in a growing line of developer-first, product-led growth, enterprise SaaS companies to come out of the boldstart portfolio, following on the heels of Snyk (security), Replicated (on-prem infrastructure), and BigID (identification services)."
+    },
+    {
+      "id": "check-page-7cf65948b3",
+      "url": "https://www.insightpartners.com/ideas/slim-ai-closes-31-million-series-a-to-automate-best-practices-in-software-supply-chain-security-for-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "About Slim.AI Slim.AI helps developers create, build, deploy and run their cloud-native applications more efficiently and securely."
     },
     {
       "id": "check-page-b773bd479d",
@@ -310,16 +936,388 @@
       "excerpt": "Sysdig Closes $68.5 Million in Series D Funding to Enable Enterprises to Secure and Monitor Containers and Cloud-Native Applications | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Back Back Sysdig Closes $68.5 Million in Series D Funding to Enable Enterprises to Secure and Monitor Containers and Cloud-Native Applications September 12, 2018| 1 min. read SAN FRANCISCO--(BUSINESS WIRE)-- Sysdig, Inc. , the cloud-native intelligence company, today announced it raised $68.5 million in series D funding, led by Insight Venture Partners, with participation from previous investors, Bain Capital Ventures and Accel. This round of funding brings Sysdig’s total funding to date to $121.5 million. Sysdig will use the funds to extend its leadership in enabling enterprises to operate reliable and secure containerized infrastructure and cloud-native applications. Suresh Vasudevan, CEO at Sysdig, authored a blog post with more information on Sysdig's funding . Sysdig offers enterprises the first unified approach to container security, monitoring, and forensics. Unlike traditional approaches, the Sysdig Cloud-Native Intelligence Platform was built with an understanding of the modern DevSecOps workflow across Kubernetes, Docker and both private and public clouds. Sysdig’s open source"
     },
     {
+      "id": "check-page-b66ff341fe",
+      "url": "https://www.insightpartners.com/ideas/sysdig-closes-68-5-million-in-series-d-funding-to-enable-enterprises-to-secure-and-monitor-containers-and-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "Dozens of Global 2000 enterprises are Sysdig customers today, including many of the world’s largest financial institutions, media companies, cable companies, technology companies, and government agencies."
+    },
+    {
+      "id": "check-page-8315c5f862",
+      "url": "https://www.insightpartners.com/ideas/sysdig-closes-68-5-million-in-series-d-funding-to-enable-enterprises-to-secure-and-monitor-containers-and-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "Last quarter, Sysdig expanded on the deep container visibility Sysdig provides to create Sysdig Secure 2.0, which brings vulnerability management, more than 200 compliance checks, and security analytics to cloud-native environments and microservices for enterprise customers."
+    },
+    {
+      "id": "check-page-cd01bbd6b1",
+      "url": "https://www.insightpartners.com/ideas/sysdig-closes-68-5-million-in-series-d-funding-to-enable-enterprises-to-secure-and-monitor-containers-and-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "Downloads of Sysdig Falco have roughly tripled over the last 12 months and active users of the Sysdig SaaS offerings have grown nearly six times year over year."
+    },
+    {
+      "id": "check-page-3f4f8b1183",
+      "url": "https://www.insightpartners.com/ideas/sysdig-closes-68-5-million-in-series-d-funding-to-enable-enterprises-to-secure-and-monitor-containers-and-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "Last month, Sysdig opened a second headquarters in Raleigh, North Carolina to keep up with company growth while the company also continues to scale its offices in San Francisco, Belgrade, and London."
+    },
+    {
+      "id": "check-page-63d167d2bb",
+      "url": "https://www.insightpartners.com/ideas/sysdig-closes-68-5-million-in-series-d-funding-to-enable-enterprises-to-secure-and-monitor-containers-and-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "Our cloud-native intelligence platform monitors and secures millions of containers across hundreds of enterprises, including Fortune 500 companies and web-scale properties."
+    },
+    {
+      "id": "check-page-259efc9dca",
+      "url": "https://www.insightpartners.com/ideas/sysdig-closes-68-5-million-in-series-d-funding-to-enable-enterprises-to-secure-and-monitor-containers-and-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "About Insight Venture Partners Insight Venture Partners is a leading global venture capital and private equity firm investing in high-growth technology and software companies that are driving transformative change in their industries."
+    },
+    {
+      "id": "check-page-8a98b5ca72",
+      "url": "https://www.insightpartners.com/ideas/sysdig-closes-68-5-million-in-series-d-funding-to-enable-enterprises-to-secure-and-monitor-containers-and-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "The firm invests from seed to growth in enterprise software, infrastructure software, crypto, and industries being transformed by data."
+    },
+    {
+      "id": "check-page-92ddd50c3d",
+      "url": "https://www.insightpartners.com/ideas/sysdig-closes-68-5-million-in-series-d-funding-to-enable-enterprises-to-secure-and-monitor-containers-and-cloud-native-applications/",
+      "page": "application",
+      "excerpt": "Bain Capital Ventures has approximately $3.9 billion in assets under management with offices in San Francisco, Palo Alto, New York and Boston."
+    },
+    {
       "id": "check-page-2ff5fdaea2",
       "url": "https://www.insightpartners.com/ideas/the-era-of-application-defined-it-redefining-development-and-testing-for-a-digital-transformed-world/",
       "page": "application",
       "excerpt": "Redefining Development and Testing for a Digitally Transformed World | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Back Back Redefining Development and Testing for a Digitally Transformed World Thomas Krane | August 09, 2018| 1 min. read In a world where customer demands and technical requirements are shifting at a breakneck pace, organizations are scrambling to adopt digital transformation to keep up with rapid, ever-changing development cycles. Legacy companies often talk about DevOps as a first step in promoting modernization, but it means more than simply aligning your development and operations teams. DevOps is a paradigm shift in aligning people, processes, and technology to support continuous and iterative progress. While DevOps offers a great deal of promise, it can be difficult for larger businesses to shake up their long-standing IT cultures and operational structures. Additionally, the cumulative effect of years of waterfall development often leads to monolithic applications with tremendous technical and political inertia against DevOps. High-growth companies, on the other hand, are building their IT practices from scratch, providing them with an edge in the marketplace and making them attractive acquisition targets. Digital Transformation and The Rise of"
     },
     {
+      "id": "check-page-3970b6bea7",
+      "url": "https://www.insightpartners.com/ideas/the-era-of-application-defined-it-redefining-development-and-testing-for-a-digital-transformed-world/",
+      "page": "application",
+      "excerpt": "Fortunately, Insight focuses only on later-stage, next-gen vendors with proven track records of successful deployments that can scale to meet enterprise demands."
+    },
+    {
       "id": "check-page-1aa464517b",
       "url": "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/",
       "page": "application",
       "excerpt": "Tintri Raises $75 Million to Bring Application-Aware Storage to Every Data Center and Cloud | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Back Back Tintri Raises $75 Million to Bring Application-Aware Storage to Every Data Center and Cloud February 13, 2014| 1 min. read Mountain View, Calif., — Tintri, Inc., the leading producer of storage for virtualization and cloud environments, today announced it has closed an oversubscribed $75 million Series E funding round led by Insight Venture Partners, with participation from existing investors Lightspeed Venture, Menlo Ventures and NEA. The new funding brings the company’s total capital raised to $135 million and puts the industry’s only application-aware storage pioneer on-track for a future initial public offering. The funding will accelerate continued global expansion and technology innovation as well as help the company further scale operations and support its rapidly growing customer base. Tintri also announced that Jeff Horing, co-founder and managing director of Insight Venture Partners has joined the Tintri board of directors. “We meet with thousands of companies each year, selecting a handful to invest in,” said Horing. “Tintri stands out as a company that has turned a bold thought-leading vision into an"
+    },
+    {
+      "id": "check-page-5cbf3102b6",
+      "url": "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/",
+      "page": "application",
+      "excerpt": "As the only application-aware storage platform, Tintri storage is intelligent, self-learning and adaptive to the needs of the virtualized applications it supports.” Since launch, Tintri has consistently exceeded triple digit growth year over year and has an expanding global enterprise customer base of hundreds of companies, close to half of which have revenues of $1 billion or more."
+    },
+    {
+      "id": "check-page-b7d1e729ed",
+      "url": "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/",
+      "page": "application",
+      "excerpt": "The company completed 2013 with 115 percent year over year growth while more than doubling its enterprise customer base worldwide."
+    },
+    {
+      "id": "check-page-b32df00c16",
+      "url": "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/",
+      "page": "application",
+      "excerpt": "Storing more than 7 petabytes of user data, these VMs are running large scale private cloud deployments, business critical databases, enterprise applications and VDI environments that host tens of thousands of desktops and mobile devices."
+    },
+    {
+      "id": "check-page-fe2b02261e",
+      "url": "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/",
+      "page": "application",
+      "excerpt": "About Insight Venture Partners Insight Venture Partners is a leading venture capital and private equity firm investing in eCommerce, Internet, on-premise and SaaS-based software and data-services companies."
+    },
+    {
+      "id": "check-page-36a012e71d",
+      "url": "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/",
+      "page": "application",
+      "excerpt": "About Lightspeed Venture Partners Lightspeed Venture Partners is a leading global venture capital firm with over $2 billion of committed capital under management."
+    },
+    {
+      "id": "check-page-6f0c414f8c",
+      "url": "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/",
+      "page": "application",
+      "excerpt": "Lightspeed's investment professionals and advisors are located in Silicon Valley, India, Israel and China with Lightspeed China Partners."
+    },
+    {
+      "id": "check-page-cd63582f48",
+      "url": "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/",
+      "page": "application",
+      "excerpt": "About Menlo Ventures Menlo Ventures provides capital for seed through growth technology companies in the consumer and enterprise sectors."
+    },
+    {
+      "id": "check-page-55b274799d",
+      "url": "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/",
+      "page": "application",
+      "excerpt": "Notable research areas of investment include Mobile (Siri, MobiTV, Telenav), Enterprise Storage (3Par), Communications (Acme Packet, Cavium Networks), and Consumer (Carbonite, Roku)."
+    },
+    {
+      "id": "check-page-38a01d9781",
+      "url": "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/",
+      "page": "application",
+      "excerpt": "Menlo Ventures has $4 billion under management and is currently investing Menlo Ventures XI, a $400M fund with $20M allocated to the Menlo Talend Fund for fast seed funding."
+    },
+    {
+      "id": "check-page-21b53d9e80",
+      "url": "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/",
+      "page": "application",
+      "excerpt": "About New Enterprise Associates (NEA) NEA is a leading venture capital firm focused on helping entrepreneurs build transformational businesses across multiple stages, sectors and geographies."
+    },
+    {
+      "id": "check-page-a52090542d",
+      "url": "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/",
+      "page": "application",
+      "excerpt": "With about $11 billion in committed capital, the firm invests in information technology, healthcare and energy technology companies at all stages in a company’s lifecycle, from seed stage through IPO."
+    },
+    {
+      "id": "check-page-e8808ec3b5",
+      "url": "https://www.insightpartners.com/ideas/tractable-is-applying-ai-to-accident-and-disaster-appraisal/",
+      "page": "application",
+      "excerpt": "Tractable is Applying AI to Accident and Disaster Appraisal | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Back Back Tractable is Applying AI to Accident and Disaster Appraisal July 31, 2018| 1 min. read \"Happy to spend 10 minutes on our vision and the journey we’re on, but then, really, 15 minutes on what we’ve got today, what it is we’ve achieved, what it is our AI does,” says Tractable co-founder and CEO Alexandre Dalyac when I video called him a couple of weeks ago. “You can probably speed up all of that,” I quip back. The resulting conversation, lasting well over an hour, spanned all of the above and more, including what is required to build a successful AI business and why he and his team think they can help prevent another “AI winter.” Founded in 2014 by Dalyac, Adrien Cohen and Razvan Ranca after going through company builder Entrepreneur First , London-based Tractable is applying artificial intelligence to accident and disaster recovery. Specifically, through the use of deep learning to automate visual damage appraisal, and therefore help speed up insurance payouts and access to other types of financial aid. Related Content TytoCare Names Adam Pellegrini as CEO and Closes $25M+ Growth Round to Scale AI-First Clinical Enablement Platform Keyfactor Announces"
+    },
+    {
+      "id": "check-page-1444854e93",
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "page": "application",
+      "excerpt": "AI Agents are disrupting automation: Current approaches, market solutions and recommendations | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners AI Agents are disrupting automation: Current approaches, market solutions and recommendations Praveen Akkiraju , Sophie Beshar , Hunter Korn | May 09, 2024 | 10 min. read Summary The mainstreaming of AI tools has ignited hope for dramatic productivity improvements for knowledge workers and consumers alike. Transformer-based Large Language Models (LLMs) have demonstrated AI capabilities that are transforming workflows with new automation approaches. In the article below, we trace the automation journey in the age of AI and dig into some of the current and evolving platforms. This article content is based on numerous conversations with researchers, builders, incumbents, enterprise users, and internal conversations within Insight. Let’s start with a few predictions on how we see the automation space evolving: Everyone will have an AI assistant, from consumers to knowledge workers. This will redefine traditional boundaries between vertical applications, automation platforms, and IT services, creating transformational market opportunities for entrepreneurs. AI assistants will take different forms, from copilots for incumbent platforms"
+    },
+    {
+      "id": "check-page-349ef2335d",
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "page": "application",
+      "excerpt": "AI assistants will take different forms, from copilots for incumbent platforms to applications with embedded AI and various forms of AI Agents."
+    },
+    {
+      "id": "check-page-34c5c26cd6",
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "page": "application",
+      "excerpt": "Human-in-the-loop is the operative framework for deploying generative AI solutions ."
+    },
+    {
+      "id": "check-page-aedd714106",
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "page": "application",
+      "excerpt": "LLMs can’t yet predictably plan or reason and areas like memory and context are still in research."
+    },
+    {
+      "id": "check-page-f135a61c17",
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "page": "application",
+      "excerpt": "In Automation platforms where deterministic execution is critical, LLMs are being used for specific tasks at “design time,” not at “run time.” Automation is a hard problem and is often underestimated."
+    },
+    {
+      "id": "check-page-c788285f7e",
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "page": "application",
+      "excerpt": "Incumbents are adding AI to their playbooks and deep experience to improve platform efficiency and UX."
+    },
+    {
+      "id": "check-page-0d8f6932ea",
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "page": "application",
+      "excerpt": "State-of-the-art LLM providers are adding Agent modeling, collaboration, and access to tools to enable users to rapidly build AI Agents (GPTs)."
+    },
+    {
+      "id": "check-page-3708d5088f",
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "page": "application",
+      "excerpt": "ScaleUps looking to break through need to deliver differentiated customer value with reimagined workflows grounded in unique datasets and a simple UX."
+    },
+    {
+      "id": "check-page-e4ac58af2a",
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "page": "application",
+      "excerpt": "Deployment of Automation with AI will take a “Crawl, Walk, Run” approach, starting with simple tasks to more complex workflows."
+    },
+    {
+      "id": "check-page-6bdd8a6c04",
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "page": "application",
+      "excerpt": "The key is to keep experimenting with Agents, learn where AI capabilities truly add value, and ensure the right “scaffolding” in terms of data, tools, and run-time is part of the Automation architecture."
+    },
+    {
+      "id": "check-page-e6abe22e6e",
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "page": "application",
+      "excerpt": "As AI model capability grows, the scale can gradually slide towards leveraging more AI functionality."
+    },
+    {
+      "id": "check-page-75fcb24852",
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "page": "application",
+      "excerpt": "Code has two key attributes that make it an ideal LLM function: It is a form of text, and it has well-defined performance measures."
+    },
+    {
+      "id": "check-page-8d2c882a26",
+      "url": "https://www.insightpartners.com/ideas/ai-agents-disrupting-automation/",
+      "page": "application",
+      "excerpt": "Initial versions of coding copilots are widely deployed today, and we are now seeing full-fledged AI-enabled developer platforms."
+    },
+    {
+      "id": "check-page-9c87846c4a",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "page": "terms",
+      "excerpt": "FAQ: Early-Stage Venture Capital and Insight Partners | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners FAQs Frequently asked questions about Insight Partners FAQ: Early-Stage Venture Capital and Insight Partners As a global software investor, Insight Partners frequently fields questions from founders and partners looking to understand how early-stage venture capital works, and how to find the right investor. Below, we’ve answered some of the most common questions founders ask when navigating early-stage fundraising. Who are early-stage investors? Early-stage investors are venture capital firms or angel investors who fund startups in the initial phases of growth, typically from pre-seed to Series A. These investors provide capital to help companies build products, hire early teams, and reach product-market fit. At Insight Partners , we invest across all stages and across several sectors including: AI/ML + Data Consumer Cybersecurity DevOps eCommerce EdTech Fintech Future of Work Gaming GovTech GTM Tech HealthTech Human Capital IT Infrastructure LegalTech Life Sciences Supply Chain & Logistics PropertyTech What do early-stage VCs look for in a startup? Early-stage VCs are primarily looking for: A strong founding team with domain expertise A large, growing market A"
+    },
+    {
+      "id": "check-page-38185a9422",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "page": "terms",
+      "excerpt": "Early-stage VCs are primarily looking for: A strong founding team with domain expertise A large, growing market A differentiated product or technology Early signs of traction or demand A clear go-to-market strategy To learn about Insight Partners’ investments, explore our portfolio companies here ."
+    },
+    {
+      "id": "check-page-6370c7b6fc",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "page": "terms",
+      "excerpt": "How do VCs evaluate early-stage companies?"
+    },
+    {
+      "id": "check-page-1f9ab7b430",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "page": "terms",
+      "excerpt": "Insight Partners has a strong track record of helping companies grow into category leaders, significantly increasing the value of early-stage equity."
+    },
+    {
+      "id": "check-page-d45e07d2a0",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "page": "terms",
+      "excerpt": "Who are the top early-stage VC firms?"
+    },
+    {
+      "id": "check-page-acfb88cf7d",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "page": "terms",
+      "excerpt": "Tier 1 early-stage VC firms are those with a track record of investing early in iconic startups, supporting founders with operational expertise, and helping them scale."
+    },
+    {
+      "id": "check-page-90371f0232",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "page": "terms",
+      "excerpt": "How do I find early-stage investors?"
+    },
+    {
+      "id": "check-page-1695dd6acb",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "page": "terms",
+      "excerpt": "Early stage typically includes: Seed: Founders are building product and validating the market Series A: Startups have some traction and are ready to scale Insight Partners invests as early as Seed and leads Series A rounds, sometimes writing the first institutional check."
+    },
+    {
+      "id": "check-page-2b60e3baaa",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "page": "terms",
+      "excerpt": "In return, they provide not just money, but also mentorship, go-to-market support, hiring help, and access to networks."
+    },
+    {
+      "id": "check-page-5f63bbb96d",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "page": "terms",
+      "excerpt": "Insight Partners offers hands-on support through our Insight Onsite team, helping founders scale from seed stage to IPO."
+    },
+    {
+      "id": "check-page-2b672da7bb",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "page": "terms",
+      "excerpt": "What is the 80/20 rule in venture capital?"
+    },
+    {
+      "id": "check-page-facc5986bc",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "page": "terms",
+      "excerpt": "The 80/20 rule refers to the idea that a small portion of investments (typically ~20%) deliver the majority (~80%) of returns in a VC portfolio."
+    },
+    {
+      "id": "check-page-94005fa89e",
+      "url": "https://www.insightpartners.com/faq-early-stage-venture-capital-and-insight-partners/",
+      "page": "terms",
+      "excerpt": "What are some early-stage companies Insight Partners has invested in?"
+    },
+    {
+      "id": "check-page-74bf2448b2",
+      "url": "https://www.insightpartners.com/ideas/6-waves-receives-17-5-million-investment-from-insight-venture-partners/",
+      "page": "terms",
+      "excerpt": "6 waves Receives $17.5 million investment from Insight Venture Partners | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Back Back 6 waves Receives $17.5 million investment from Insight Venture Partners January 21, 2010| 1 min. read Hong Kong-Six Waves Inc. (6 waves), Asia's largest social game publisher, today announced that Insight Venture Partners, a leading global technology and internet investment firm, invested $17.5 million in the company. The investment will be used to build infrastructure and a distribution pipeline to consolidate 6 waves' strong market share on the Facebook platform and support the Company's international expansion and platform extension. \"Social games have expanded rapidly fueled by the strong growth of social networks\", said Rex Ng, co-founder and CEO of 6 waves. \"Millions of people are connecting with each other and players globally, to meet online and play together everyday. We are excited about this new relationship with Insight given their knowledge and experience of online gaming and their dedication to helping us build geographic diversification and an unparalleled consumer experience.\" 6 waves today has over 50 million monthly active users playing its games coming from various countries all over the world. The current game portfolio"
+    },
+    {
+      "id": "check-page-24cd04bbb6",
+      "url": "https://www.insightpartners.com/ideas/6-waves-receives-17-5-million-investment-from-insight-venture-partners/",
+      "page": "terms",
+      "excerpt": "The collaboration with the best developers all around the world enables 6 waves to provide consumers a constant stream of interesting and fun games to play."
+    },
+    {
+      "id": "check-page-7df83269d7",
+      "url": "https://www.insightpartners.com/ideas/6-waves-receives-17-5-million-investment-from-insight-venture-partners/",
+      "page": "terms",
+      "excerpt": "\"We support 6 waves' vision to connect people through games and provide a fun, interesting and energizing environment for consumers.\" said Jeff Horing, managing director at Insight Venture Partners."
+    },
+    {
+      "id": "check-page-57562d5ac9",
+      "url": "https://www.insightpartners.com/ideas/6-waves-receives-17-5-million-investment-from-insight-venture-partners/",
+      "page": "terms",
+      "excerpt": "About Six Waves Inc Six Waves Inc is the leading international publisher and developer of gaming applications on the Facebook platform."
+    },
+    {
+      "id": "check-page-1ef610b80d",
+      "url": "https://www.insightpartners.com/ideas/adaptive-shield-receives-30m-series-a-investment-from-insight-partners-to-help-businesses-gain-control-of-all-their-saas-investments/",
+      "page": "terms",
+      "excerpt": "Adaptive Shield Receives $30M Series A Investment from Insight Partners to Help Businesses Gain Control of All their SaaS Investments | Insight Partners Go to home page Why Insight? Portfolio Team Ideas Events Go Login Why Insight? Portfolio Team Ideas Events Go Login ©2026 Insight Partners Back Back Adaptive Shield Receives $30M Series A Investment from Insight Partners to Help Businesses Gain Control of All their SaaS Investments October 05, 2021| 1 min. read TEL AVIV, Israel, Oct. 5, 2021 /PRNewswire/ -- Adaptive Shield, the leading SaaS Security Posture Management (SSPM) company, today announced a $30M series A round of financing led by New York-based global private equity and venture capital firm Insight Partners, with additional investors including Okta Ventures and existing investor, Vertex Ventures Israel. Adaptive Shield will use the funding to enable companies to secure their SaaS stacks, many of which are already compromised due to misconfigurations. As businesses rely on multiple SaaS applications, typically hundreds of them, ensuring that each is configured properly becomes unmanageable – a 2021 report from Adaptive Shield found that 85 percent of respondents cite SaaS misconfigurations as one of the top three risks. This issue is being exacerbated by unrealistic expectations that are being placed on app owners— most organizations today are delegating security to"
+    },
+    {
+      "id": "check-page-2f3e3c0eae",
+      "url": "https://www.insightpartners.com/ideas/adaptive-shield-receives-30m-series-a-investment-from-insight-partners-to-help-businesses-gain-control-of-all-their-saas-investments/",
+      "page": "terms",
+      "excerpt": "Adaptive Shield's SaaS Security Posture Management Suite (SSPM) removes this burden and risk by providing deep visibility and remediation for potential risks caused by misconfigurations and misappropriated privileges."
+    },
+    {
+      "id": "check-page-81170f94a9",
+      "url": "https://www.insightpartners.com/ideas/adaptive-shield-receives-30m-series-a-investment-from-insight-partners-to-help-businesses-gain-control-of-all-their-saas-investments/",
+      "page": "terms",
+      "excerpt": "Deep visibility and continuous maintenance of SaaS security hygiene is crucial to keeping the company secure\" said Maor Bin, CEO and Co-Founder of Adaptive Shield."
+    },
+    {
+      "id": "check-page-4cca28e386",
+      "url": "https://www.insightpartners.com/ideas/adaptive-shield-receives-30m-series-a-investment-from-insight-partners-to-help-businesses-gain-control-of-all-their-saas-investments/",
+      "page": "terms",
+      "excerpt": "As a SaaS that integrates with SaaS, the Adaptive Shield solution can be live within minutes."
+    },
+    {
+      "id": "check-page-3a70eed81c",
+      "url": "https://www.insightpartners.com/ideas/adaptive-shield-receives-30m-series-a-investment-from-insight-partners-to-help-businesses-gain-control-of-all-their-saas-investments/",
+      "page": "terms",
+      "excerpt": "Once in place, it delivers customers clear visibility into their whole SaaS ecosystem, sending detailed alerts at the first sign of a security misconfiguration and proactively fixing these for all global settings and user privileges."
+    },
+    {
+      "id": "check-page-c5c9cabc87",
+      "url": "https://www.insightpartners.com/ideas/adaptive-shield-receives-30m-series-a-investment-from-insight-partners-to-help-businesses-gain-control-of-all-their-saas-investments/",
+      "page": "terms",
+      "excerpt": "\"As SaaS adoption rises and these threats continue to intensify, Adaptive Shield's Fortune 100 customers have made it clear that with its application-agnostic architecture and ability to rapidly connect to any data object, only one company is capable of securing a business's evolving SaaS estate,\" said Thomas Krane, Principal at Insight Partners."
+    },
+    {
+      "id": "check-page-09c11e5f3d",
+      "url": "https://www.insightpartners.com/ideas/adaptive-shield-receives-30m-series-a-investment-from-insight-partners-to-help-businesses-gain-control-of-all-their-saas-investments/",
+      "page": "terms",
+      "excerpt": "This includes SaaS-based solutions that have become imperative to businesses as they evolve and become more decentralized,\" said Austin Arensberg, Director, Okta Ventures."
+    },
+    {
+      "id": "check-page-d6f7789970",
+      "url": "https://www.insightpartners.com/ideas/adaptive-shield-receives-30m-series-a-investment-from-insight-partners-to-help-businesses-gain-control-of-all-their-saas-investments/",
+      "page": "terms",
+      "excerpt": "Across its people and its portfolio, Insight encourages a culture around a belief that ScaleUp companies and growth create opportunity for all."
+    },
+    {
+      "id": "check-page-29bd2ebb23",
+      "url": "https://www.insightpartners.com/ideas/adaptive-shield-receives-30m-series-a-investment-from-insight-partners-to-help-businesses-gain-control-of-all-their-saas-investments/",
+      "page": "terms",
+      "excerpt": "About Adaptive Shield Adaptive Shield, the leading SaaS Security Posture Management (SSPM) company, enables security teams to locate and fix configuration weaknesses quickly in their SaaS environment, ensuring compliance with company and industry standards."
+    },
+    {
+      "id": "check-page-a169a0cb3a",
+      "url": "https://www.insightpartners.com/ideas/adaptive-shield-receives-30m-series-a-investment-from-insight-partners-to-help-businesses-gain-control-of-all-their-saas-investments/",
+      "page": "terms",
+      "excerpt": "Founded by Maor Bin and Jony Shlomoff, Adaptive Shield works with many Fortune 500 enterprises to help them gain control over their SaaS threat landscape."
+    },
+    {
+      "id": "check-page-be744f04e7",
+      "url": "https://www.insightpartners.com/ideas/adaptive-shield-receives-30m-series-a-investment-from-insight-partners-to-help-businesses-gain-control-of-all-their-saas-investments/",
+      "page": "terms",
+      "excerpt": "Our management team has vast experience in cybersecurity leadership, delivering cybersecurity solutions and cloud enterprise software."
     }
   ],
   "findings": {

@@ -1,52 +1,277 @@
 {
   "programId": "nsf-i-corps-west-region-hub",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.icorpshubwest.org/",
-    "https://www.icorpshubwest.org/program"
+    "https://www.icorpshubwest.org/program",
+    "https://www.icorpshubwest.org/schedule",
+    "https://www.icorpshubwest.org/blog/categories/programs",
+    "https://www.icorpshubwest.org/post/unleash-the-impact-of-your-research-join-the-i-corps-hub-west-zap-program",
+    "https://www.icorpshubwest.org/programs",
+    "https://www.icorpshubwest.org/post/unlock-the-power-of-innovation-with-the-i-corps-hub-west-program"
   ],
   "evidence": [
     {
+      "id": "check-deal-17f1209442",
+      "url": "https://www.icorpshubwest.org/post/unlock-the-power-of-innovation-with-the-i-corps-hub-west-program",
+      "title": "NSF I-Corps West Region Hub — program page",
+      "excerpt": "benefits of the I-Corps program is the potential to receive up to $50,000 in NSF funding . After completing ZAP and BOOM, teams that",
+      "page": "details"
+    },
+    {
       "id": "check-email-1231febaeb",
       "url": "https://www.icorpshubwest.org/",
-      "title": "NSF I-Corps West Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps West Region Hub — homepage",
       "excerpt": "hello@icorpshubwest.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-3b89dce6fc",
+      "url": "https://www.icorpshubwest.org/programs",
+      "title": "NSF I-Corps West Region Hub — program page",
+      "excerpt": "hello@icorpshubwest.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-6c4b757095",
+      "url": "https://www.icorpshubwest.org/programs",
+      "title": "NSF I-Corps West Region Hub — program page",
+      "excerpt": "Let's Work Together Join Our Mailing List Email * Join hello@icorpshubwest.org United States I-Corps Hub West Contact Newsroom",
       "page": "details"
     },
     {
       "id": "check-email-78dee837a9",
       "url": "https://www.icorpshubwest.org/",
-      "title": "NSF I-Corps West Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps West Region Hub — homepage",
       "excerpt": "Let's Work Together Join Our Mailing List Email * Join hello@icorpshubwest.org United States I-Corps Hub West Contact Newsroom",
       "page": "details"
+    },
+    {
+      "id": "check-email-7f8e767bee",
+      "url": "https://www.icorpshubwest.org/schedule",
+      "title": "NSF I-Corps West Region Hub — application page",
+      "excerpt": "hello@icorpshubwest.org",
+      "page": "application"
     },
     {
       "id": "check-email-c11fbe617d",
       "url": "https://www.icorpshubwest.org/program",
-      "title": "NSF I-Corps West Region Hub — details page checked by scrape.py",
+      "title": "NSF I-Corps West Region Hub — program page",
       "excerpt": "hello@icorpshubwest.org",
       "page": "details"
     },
     {
+      "id": "check-email-d701967589",
+      "url": "https://www.icorpshubwest.org/schedule",
+      "title": "NSF I-Corps West Region Hub — application page",
+      "excerpt": "Let's Work Together Join Our Mailing List Email * Join hello@icorpshubwest.org United States I-Corps Hub West Contact Newsroom",
+      "page": "application"
+    },
+    {
       "id": "check-email-f3f09686dd",
       "url": "https://www.icorpshubwest.org/program",
-      "title": "NSF I-Corps West Region Hub — details page checked by scrape.py",
+      "title": "NSF I-Corps West Region Hub — program page",
       "excerpt": "Let's Work Together Join Our Mailing List Email * Join hello@icorpshubwest.org United States I-Corps Hub West Contact Newsroom",
+      "page": "details"
+    },
+    {
+      "id": "check-format-11893cafb1",
+      "url": "https://www.icorpshubwest.org/schedule",
+      "title": "NSF I-Corps West Region Hub — application page",
+      "excerpt": "No results found for selected filters. Reset Training ZAP Virtual Three week program designed to gain a broad introduction",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0a924b7e74",
+      "url": "https://www.icorpshubwest.org/post/unlock-the-power-of-innovation-with-the-i-corps-hub-west-program",
+      "title": "NSF I-Corps West Region Hub — program page",
+      "excerpt": "Apply Today → https://www.icorpshubwest.org/programs",
       "page": "details"
     },
     {
       "id": "check-route-91203ea965",
       "url": "https://www.icorpshubwest.org/program",
-      "title": "NSF I-Corps West Region Hub — details page checked by scrape.py",
+      "title": "NSF I-Corps West Region Hub — program page",
       "excerpt": "Apply Now → https://www.icorpshubwest.org/schedule",
       "page": "details"
     },
     {
       "id": "check-route-98de53600a",
       "url": "https://www.icorpshubwest.org/",
-      "title": "NSF I-Corps West Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps West Region Hub — homepage",
       "excerpt": "Home → https://www.icorpshubwest.org",
       "page": "details"
+    },
+    {
+      "id": "check-route-f54081a527",
+      "url": "https://www.icorpshubwest.org/programs",
+      "title": "NSF I-Corps West Region Hub — program page",
+      "excerpt": "Apply Now → https://www.icorpshubwest.org/schedule",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-483d71ac95",
+      "url": "https://www.icorpshubwest.org/",
+      "page": "details",
+      "excerpt": "I-Corps™ Hub West top of page Menu Close Home Our Program Schedule Our Impact Newsroom Leadership Contact Home Our Program Schedule Our Impact Newsroom Leadership Contact Partner Portal I-Corps Hub West Impact 11 Partner Institutions 1612 Regional Teams Trained 170 Startups Formed 935 Jobs Created 11,600 Program Participants $303M Raised in Follow-up Funding I-Corps Hub West We explore the commercialization potential of technologies developed in academic labs across Southern California, Colorado, Utah, New Mexico, and Northwest Texas Our Program Ecosystem Network We connect deep tech innovators at academic institutions with a vibrant community of mentors and industry leaders. Innovation Pipeline We help to explore and expand the commercialization potential of cutting-edge technologies across our region. Economic Impact We support deep tech commercialization to drive regional economic growth and strengthen local industries. Our Mission & Vision To lead the exploration of commercializing deep technologies emerging from academic institutions into real-world solutions with measurable economic impact. ​ To ensure that every deep technology discovery made has the opportunity to reach a commercialized environment, so that the maximum impact available can become realized. Our Impact Transforming Deep Tech As Technologists, we thrive at the cutting edge of discovery, bridging the"
+    },
+    {
+      "id": "check-page-15633efe13",
+      "url": "https://www.icorpshubwest.org/",
+      "page": "details",
+      "excerpt": "Our Impact Transforming Deep Tech As Technologists, we thrive at the cutting edge of discovery, bridging the critical gap between the known and the yet-to-be understood."
+    },
+    {
+      "id": "check-page-cdea28439a",
+      "url": "https://www.icorpshubwest.org/",
+      "page": "details",
+      "excerpt": "And as Incubators of Innovation, we cultivate environments where exploration and experimentation are celebrated, empowering teams to push boundaries without fear of failure."
+    },
+    {
+      "id": "check-page-9b2a2f63be",
+      "url": "https://www.icorpshubwest.org/",
+      "page": "details",
+      "excerpt": "Connect for mentorship opportunities."
+    },
+    {
+      "id": "check-page-552bbe2ecf",
+      "url": "https://www.icorpshubwest.org/",
+      "page": "details",
+      "excerpt": "Learn More Let's Work Together Join Our Mailing List Email * Join hello@icorpshubwest.org United States I-Corps Hub West Contact Newsroom Accessibility © 2026 Designed by Brand LA Home Our Program Schedule Our Impact Newsroom Leadership Contact bottom of page"
+    },
+    {
+      "id": "check-page-6b9ee4f4dd",
+      "url": "https://www.icorpshubwest.org/program",
+      "page": "details",
+      "excerpt": "I-Corps™ Hub West | Programs top of page Menu Close Home Our Program Schedule Our Impact Newsroom Leadership Contact Home Our Program Schedule Our Impact Newsroom Leadership Contact Partner Portal I-Corps Hub West Impact 11 Partner Institutions 1612 Regional Teams Trained 170 Startups Formed 935 Jobs Created 11,600 Program Participants $303M Raised in Follow-up Funding The I-Corps Program Sponsored by the National Science Foundation (NSF), I-Corps Hub West is part of the National Innovation Network (NIN)—a nationwide coalition advancing U.S. innovation and economic growth. As one of 13 regional hubs, we unite 11 premier institutions across five states to help researchers bring deep-tech breakthroughs to market. ​ Our work focuses on three goals: delivering regional I-Corps training and contributing to national instructional teams; expanding our reach by recruiting diverse teams, recommending top performers to the National I-Corps program, and adding new member institutions; and strengthening the program through evaluation, assessment, and entrepreneurial research. We equip innovators with the skills, networks, and insights to transform research into ventures that create jobs, attract investment, and solve real-world challenges. What Happens in Regional Programs The regional program is designed for graduate students and research faculty developing deep tech with market"
+    },
+    {
+      "id": "check-page-8c67958402",
+      "url": "https://www.icorpshubwest.org/program",
+      "page": "details",
+      "excerpt": "What Happens in Regional Programs The regional program is designed for graduate students and research faculty developing deep tech with market potential."
+    },
+    {
+      "id": "check-page-54dd1d77d7",
+      "url": "https://www.icorpshubwest.org/program",
+      "page": "details",
+      "excerpt": "If selected and accepted by the NSF, your team will receive a $50,000 grant to support the commercialization of your deep tech innovation."
+    },
+    {
+      "id": "check-page-2af52c7468",
+      "url": "https://www.icorpshubwest.org/program",
+      "page": "details",
+      "excerpt": "All team members are required to be at all program sessions and the EL does all the reporting out—they are the point person. ​ PI/TL Principal Investigator/ Technical Lead This team member is a research professor or faculty; the technology came from their lab and was developed using grant funds."
+    },
+    {
+      "id": "check-page-b85b148fd5",
+      "url": "https://www.icorpshubwest.org/program",
+      "page": "details",
+      "excerpt": "They are the interpreter of the business world for academics on a team, but they are also a connector—leveraging their network and opening doors for the EL and PI."
+    },
+    {
+      "id": "check-page-5a5928bd4c",
+      "url": "https://www.icorpshubwest.org/program",
+      "page": "details",
+      "excerpt": "Mentor the Future of Deep Tech Innovation At I-Corps Hub West, we match cutting-edge research teams with experienced mentors who understand what it takes to bring innovation to market."
+    },
+    {
+      "id": "check-page-e18eed11ec",
+      "url": "https://www.icorpshubwest.org/program",
+      "page": "details",
+      "excerpt": "Mentorship isn’t just support, it’s catalytic."
+    },
+    {
+      "id": "check-page-1510a1c920",
+      "url": "https://www.icorpshubwest.org/program",
+      "page": "details",
+      "excerpt": "Our mentors play a critical role in helping teams validate ideas, navigate commercialization hurdles, and explore real-world use cases."
+    },
+    {
+      "id": "check-page-ef7db2239d",
+      "url": "https://www.icorpshubwest.org/program",
+      "page": "details",
+      "excerpt": "Become a Mentor Let's Work Together Join Our Mailing List Email * Join hello@icorpshubwest.org United States I-Corps Hub West Contact Newsroom Accessibility © 2026 Designed by Brand LA Home Our Program Schedule Our Impact Newsroom Leadership Contact bottom of page"
+    },
+    {
+      "id": "check-page-165f91953d",
+      "url": "https://www.icorpshubwest.org/schedule",
+      "page": "application",
+      "excerpt": "I-Corps™ Hub West | Schedule top of page Menu Close Home Our Program Schedule Our Impact Newsroom Leadership Contact Home Our Program Schedule Our Impact Newsroom Leadership Contact Partner Portal I-Corps Hub West Impact 11 Partner Institutions 1612 Regional Teams Trained 170 Startups Formed 935 Jobs Created 11,600 Program Participants $303M Raised in Follow-up Funding Upcoming Programs and Events Institution Select Institution Activity Select Activity Dates Select Month No results found for selected filters. Reset Training ZAP Virtual Three week program designed to gain a broad introduction to Lean Startup Methodology and The business model canvas. Dec 2 - Dec 9 - Dec 16 Register Let's Work Together Join Our Mailing List Email * Join hello@icorpshubwest.org United States I-Corps Hub West Contact Newsroom Accessibility © 2026 Designed by Brand LA Home Our Program Schedule Our Impact Newsroom Leadership Contact bottom of page"
+    },
+    {
+      "id": "check-page-7acb9bb26f",
+      "url": "https://www.icorpshubwest.org/blog/categories/programs",
+      "page": "details",
+      "excerpt": "Research top of page Menu Close Home Our Program Schedule Our Impact Newsroom Leadership Contact Home Our Program Schedule Our Impact Newsroom Leadership Contact Partner Portal All Posts News Research Research Unlock the Power of Innovation with the I-Corps™ Hub West Program Are you ready to take your groundbreaking technology from the lab to the marketplace? The I-Corps™ Hub West program, supported by the... I-Corps Hub West: Research Analysis Gender Differences in Peer review of innovation The article discuses gender differences in the peer review of innovation. Diversity and... I-Corps Hub West: Research Analysis Helping the Little Guy: The impact of Government Awards on Small Tech Firms The article focuses on the Small Business Innovation Research... Get in Touch Today For more information on our programs, events, or partnerships, feel free to reach out to us. We are here to support your educational journey. Contact Us Hub Media Coverage © 2025 Designed by Brand LA Join Our Mailing List Email * Join Home Our Program Schedule Our Impact Newsroom Leadership Contact bottom of page"
+    },
+    {
+      "id": "check-page-f5436bf413",
+      "url": "https://www.icorpshubwest.org/post/unleash-the-impact-of-your-research-join-the-i-corps-hub-west-zap-program",
+      "page": "details",
+      "excerpt": "Unleash the Impact of Your Research: Join the I-Corps Hub West ZAP Program! top of page Menu Close Home Our Program Schedule Our Impact Newsroom Leadership Contact Home Our Program Schedule Our Impact Newsroom Leadership Contact Partner Portal Unleash the Impact of Your Research: Join the I-Corps Hub West ZAP Program! Jul 9, 2025 2 min read University research is a breeding ground for groundbreaking ideas. But how often do those ideas translate into real-world solutions that benefit society? The I-Corps Hub West ZAP program bridges this gap, empowering research teams like yours to transform your discoveries into impactful technologies. From Lab to Market: A Guided Journey The ZAP program equips you with the essential skills and knowledge to navigate the path from research lab to commercial market. Here's what sets ZAP apart: Lean Startup Immersion: Master the Lean Startup Methodology, a customer-centric approach that helps you validate the market potential of your technology. You'll learn to \"get out of the building\" and conduct real-world customer interviews, gaining crucial insights to refine your technology for a specific market need. Expert Mentorship: Get paired with experienced entrepreneurs and industry professionals who understand the unique challenges of commercializing academic research. They'll provide personalized guidance on everything from business model"
+    },
+    {
+      "id": "check-page-ef6facc660",
+      "url": "https://www.icorpshubwest.org/programs",
+      "page": "details",
+      "excerpt": "I-Corps™ Hub West | Programs top of page Menu Close Home Our Program Schedule Our Impact Newsroom Leadership Contact Home Our Program Schedule Our Impact Newsroom Leadership Contact Partner Portal I-Corps Hub West Impact 11 Partner Institutions 1612 Regional Teams Trained 170 Startups Formed 935 Jobs Created 11,600 Program Participants $303M Raised in Follow-up Funding The I-Corps Program Sponsored by the National Science Foundation (NSF), I-Corps Hub West is part of the National Innovation Network (NIN)—a nationwide coalition advancing U.S. innovation and economic growth. As one of 13 regional hubs, we unite 11 premier institutions across five states to help researchers bring deep-tech breakthroughs to market. ​ Our work focuses on three goals: delivering regional I-Corps training and contributing to national instructional teams; expanding our reach by recruiting diverse teams, recommending top performers to the National I-Corps program, and adding new member institutions; and strengthening the program through evaluation, assessment, and entrepreneurial research. We equip innovators with the skills, networks, and insights to transform research into ventures that create jobs, attract investment, and solve real-world challenges. What Happens in Regional Programs The regional program is designed for graduate students and research faculty developing deep tech with market"
+    },
+    {
+      "id": "check-page-7341215c8c",
+      "url": "https://www.icorpshubwest.org/programs",
+      "page": "details",
+      "excerpt": "What Happens in Regional Programs The regional program is designed for graduate students and research faculty developing deep tech with market potential."
+    },
+    {
+      "id": "check-page-9d86abf7f6",
+      "url": "https://www.icorpshubwest.org/programs",
+      "page": "details",
+      "excerpt": "If selected and accepted by the NSF, your team will receive a $50,000 grant to support the commercialization of your deep tech innovation."
+    },
+    {
+      "id": "check-page-8aafcc5ce6",
+      "url": "https://www.icorpshubwest.org/programs",
+      "page": "details",
+      "excerpt": "All team members are required to be at all program sessions and the EL does all the reporting out—they are the point person. ​ PI/TL Principal Investigator/ Technical Lead This team member is a research professor or faculty; the technology came from their lab and was developed using grant funds."
+    },
+    {
+      "id": "check-page-4de68f5d7d",
+      "url": "https://www.icorpshubwest.org/programs",
+      "page": "details",
+      "excerpt": "They are the interpreter of the business world for academics on a team, but they are also a connector—leveraging their network and opening doors for the EL and PI."
+    },
+    {
+      "id": "check-page-521d4f4f3f",
+      "url": "https://www.icorpshubwest.org/programs",
+      "page": "details",
+      "excerpt": "Mentor the Future of Deep Tech Innovation At I-Corps Hub West, we match cutting-edge research teams with experienced mentors who understand what it takes to bring innovation to market."
+    },
+    {
+      "id": "check-page-01bec0032f",
+      "url": "https://www.icorpshubwest.org/programs",
+      "page": "details",
+      "excerpt": "Mentorship isn’t just support, it’s catalytic."
+    },
+    {
+      "id": "check-page-e673986ae9",
+      "url": "https://www.icorpshubwest.org/programs",
+      "page": "details",
+      "excerpt": "Our mentors play a critical role in helping teams validate ideas, navigate commercialization hurdles, and explore real-world use cases."
+    },
+    {
+      "id": "check-page-030777f044",
+      "url": "https://www.icorpshubwest.org/programs",
+      "page": "details",
+      "excerpt": "Become a Mentor Let's Work Together Join Our Mailing List Email * Join hello@icorpshubwest.org United States I-Corps Hub West Contact Newsroom Accessibility © 2026 Designed by Brand LA Home Our Program Schedule Our Impact Newsroom Leadership Contact bottom of page"
+    },
+    {
+      "id": "check-page-fe122265e1",
+      "url": "https://www.icorpshubwest.org/post/unlock-the-power-of-innovation-with-the-i-corps-hub-west-program",
+      "page": "details",
+      "excerpt": "Unlock the Power of Innovation with the I-Corps™ Hub West Program top of page Menu Close Home Our Program Schedule Our Impact Newsroom Leadership Contact Home Our Program Schedule Our Impact Newsroom Leadership Contact Partner Portal Unlock the Power of Innovation with the I-Corps™ Hub West Program Jul 9, 2025 2 min read Are you ready to take your groundbreaking technology from the lab to the marketplace? The I-Corps™ Hub West program, supported by the National Science Foundation (NSF), is designed to empower academic entrepreneurs with the tools, mentorship, and funding needed to transform research into a viable, scalable startup. Here’s why you should consider joining: 1. Hands-On, Transformative Training In the ZAP phase of the I-Corps journey, participants receive hands-on training in the Lean Startup methodology and the Business Model Canvas . These tools will help you clearly define your customer base, identify market needs, and refine your value proposition. Imagine gaining real-world insights as you test your tech’s potential through interactive exercises and customer discovery interviews. This training ensures your technology is aligned with what the market truly needs​. 2. Market Validation Through Real-World Engagement Customer discovery is the core of the I-Corps methodology. In both the ZAP and BOOM stages, you’ll have the chance to interview key industry players,"
     }
   ],
   "findings": {
@@ -61,6 +286,10 @@
       {
         "value": "https://www.icorpshubwest.org/schedule",
         "evidenceId": "check-route-91203ea965"
+      },
+      {
+        "value": "https://www.icorpshubwest.org/programs",
+        "evidenceId": "check-route-0a924b7e74"
       }
     ],
     "applicationUrl": [
@@ -72,8 +301,38 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-11893cafb1"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "benefits of the I-Corps program is the potential to receive up to $50,000 in NSF funding . After completing ZAP and BOOM, teams that",
+        "evidenceId": "check-deal-17f1209442"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "50000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-17f1209442"
+      }
+    ],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

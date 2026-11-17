@@ -1,12 +1,12 @@
 {
   "programId": "climate-launchpad",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://climatelaunchpad.org/about-climatelaunchpad/",
       "page": "details",
       "anchor": "About Us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -16,6 +16,14 @@
       "anchor": "Apply now",
       "fetched": true,
       "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/become-a-national-lead/",
+      "page": "other",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -35,56 +43,8 @@
       "origin": "official"
     },
     {
-      "url": "https://climatelaunchpad.org/blog/estonian-deals-were-sealed-in-the-sauna/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://climatelaunchpad.org/blog/how-cleantech-start-ups-are-dealing-with-the-pandemic/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://climatelaunchpad.org/blog/how-will-europes-green-deal-benefit-entrepreneurs/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://climatelaunchpad.org/blog/ligo-krasi-ligo-thalassa-and-state-your-deal/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://climatelaunchpad.org/blog/press-release-global-green-business-ideas-competition-open-for-applications/",
       "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://climatelaunchpad.org/blog/the-european-green-deal-offers-massive-opportunities-for-green-business/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://climatelaunchpad.org/blog/up-high-on-the-mountains-of-cyprus-you-make-your-deal/",
-      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -99,10 +59,26 @@
       "origin": "official"
     },
     {
+      "url": "https://climatelaunchpad.org/clp-26-final-cohort-confirmation/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/competition-terms-and-conditions/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
       "url": "https://climatelaunchpad.org/competition/",
       "page": "details",
       "anchor": "About the competition",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

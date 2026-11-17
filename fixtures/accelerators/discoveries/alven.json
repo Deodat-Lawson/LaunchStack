@@ -1,6 +1,6 @@
 {
   "programId": "alven",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://alven.co/about-us",
@@ -19,32 +19,8 @@
       "origin": "official"
     },
     {
-      "url": "https://alven.co/news/alven-announces-new-hires-in-its-investment-and-operating-teams",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://alven.co/news/alven-pleased-announce-sale-100-investment-marco-vasco-figaro-group",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://alven.co/news/antvoice-premier-editeur-francais-dapplications-facebook-leve-750ke",
       "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://alven.co/news/entreprise-ai-game-changer-dataiku-raises-101-million-series-c-round-largest-investment-enterprise-ai-date",
-      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -59,34 +35,10 @@
       "origin": "official"
     },
     {
-      "url": "https://alven.co/news/mindee-the-paperwork-automation-api-is-raising-14m-to-automate-companies-document-based-processes",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://alven.co/news/the-debrief-the-brand-as-a-growth-accelerator",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://alven.co/news/the-guarantors-secures-majority-investment-to-accelerate-us-growth",
       "page": "terms",
       "anchor": "TheGuarantors secures a majority investment by Warburg Pincus to accelerate US growth 3 avr. 2026",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://alven.co/news/tinyclues-closes-18-million-investment-round-international-growth",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -94,7 +46,7 @@
       "url": "https://alven.co/portfolio",
       "page": "portfolio",
       "anchor": "PORTFOLIO",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -102,7 +54,7 @@
       "url": "https://alven.co/portfolio/3770132",
       "page": "portfolio",
       "anchor": "1",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -110,7 +62,7 @@
       "url": "https://alven.co/portfolio/akeneo",
       "page": "portfolio",
       "anchor": "1.2",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },

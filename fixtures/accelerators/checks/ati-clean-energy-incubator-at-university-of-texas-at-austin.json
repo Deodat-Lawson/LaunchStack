@@ -1,149 +1,1303 @@
 {
   "programId": "ati-clean-energy-incubator-at-university-of-texas-at-austin",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-17T00:20:40.000Z",
   "pagesRead": [
     "http://ati.utexas.edu/current-portfolio/clean-energy/",
-    "https://ati.utexas.edu/about/",
+    "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+    "https://ati.utexas.edu/apply/",
+    "https://ati.utexas.edu/apply/thank-you/",
+    "https://ati.utexas.edu/student-application/",
     "https://ati.utexas.edu/about/faq/",
-    "https://ati.utexas.edu/apply/"
+    "https://ati.utexas.edu/faq/",
+    "https://ati.utexas.edu/deltaclimevt-climate-economy-accelerator-selects-entrepreneurs-for-energy-2024-cohort-vermont-business-magazine/",
+    "http://ati.utexas.edu/about/",
+    "https://ati.utexas.edu/about/",
+    "https://ati.utexas.edu/about/partners/",
+    "https://ati.utexas.edu/programs/",
+    "https://ati.utexas.edu/students/",
+    "https://ati.utexas.edu/yotta-energy-selected-for-gsas-gpg-program/",
+    "https://ati.utexas.edu/ati-alumni-company-yotta-energy-to-spotlight-innovative-green-energy-solutions-at-electrify-expo-2023/",
+    "https://ati.utexas.edu/ati-launches-microelectronics-portfolio/",
+    "https://ati.utexas.edu/ati-portfolio-company-alt-bionics-honored-by-texas-business-hall-of-fame/",
+    "https://ati.utexas.edu/ati-portfolio-company-gs-vortex-systems-earns-coveted-agriculture-innovation-award/",
+    "https://ati.utexas.edu/ati-portfolio-company-lumaegis-featured-in-uv-solutions/",
+    "https://ati.utexas.edu/austin-technology-incubator-at-the-university-of-texas-at-austin-proudly-welcomes-idvera-as-new-portfolio-company/"
   ],
   "evidence": [
     {
+      "id": "check-email-3dc8b6d83b",
+      "url": "https://ati.utexas.edu/apply/thank-you/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "info@ati.utexas.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-email-55e7357875",
+      "url": "https://ati.utexas.edu/apply/thank-you/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "you have any questions, please feel free to contact us at info@ati.utexas.edu . Sincerely, The ATI Team Austin Technology Incubator 2815",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1f500282e8",
+      "url": "https://ati.utexas.edu/deltaclimevt-climate-economy-accelerator-selects-entrepreneurs-for-energy-2024-cohort-vermont-business-magazine/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — batches page",
+      "excerpt": "that includes intensive work sessions, both online and in-person, focusing on topics such as electrification, load",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-5bda641aa9",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page",
+      "excerpt": "member of ATI. Do startups have to be located in Austin to work with ATI? Though the majority",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-db7d71604d",
+      "url": "https://ati.utexas.edu/ati-alumni-company-yotta-energy-to-spotlight-innovative-green-energy-solutions-at-electrify-expo-2023/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "energy solutions. Yotta Energy, based in Austin, Texas, is a renewable energy company",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-0102d850f8",
+      "url": "https://ati.utexas.edu/students/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-021a03e347",
+      "url": "https://ati.utexas.edu/yotta-energy-selected-for-gsas-gpg-program/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-040263dbe4",
+      "url": "https://ati.utexas.edu/ati-portfolio-company-gs-vortex-systems-earns-coveted-agriculture-innovation-award/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-04970386ef",
+      "url": "https://ati.utexas.edu/about/partners/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-04dfcaa0d6",
+      "url": "https://ati.utexas.edu/faq/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-050e17af2f",
+      "url": "https://ati.utexas.edu/apply/thank-you/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-061ee276f8",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-130e953ebf",
       "url": "http://ati.utexas.edu/current-portfolio/clean-energy/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — homepage checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — homepage",
       "excerpt": "Companies → https://ati.utexas.edu/companies/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-20ba2f4f77",
+      "url": "https://ati.utexas.edu/student-application/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-20cafd9813",
       "url": "https://ati.utexas.edu/apply/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
       "excerpt": "Companies → https://ati.utexas.edu/companies/",
       "page": "application"
     },
     {
       "id": "check-portfolio-20f4cd86b1",
       "url": "https://ati.utexas.edu/apply/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
       "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
       "page": "application"
     },
     {
+      "id": "check-portfolio-25b0718a7c",
+      "url": "https://ati.utexas.edu/ati-alumni-company-yotta-energy-to-spotlight-innovative-green-energy-solutions-at-electrify-expo-2023/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-278ea940da",
+      "url": "https://ati.utexas.edu/about/partners/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2c48e88db6",
+      "url": "https://ati.utexas.edu/ati-portfolio-company-alt-bionics-honored-by-texas-business-hall-of-fame/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-2c623b79b6",
+      "url": "https://ati.utexas.edu/deltaclimevt-climate-economy-accelerator-selects-entrepreneurs-for-energy-2024-cohort-vermont-business-magazine/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — batches page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-2da840da45",
+      "url": "https://ati.utexas.edu/ati-alumni-company-yotta-energy-to-spotlight-innovative-green-energy-solutions-at-electrify-expo-2023/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-2dfec64292",
       "url": "https://ati.utexas.edu/about/faq/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page",
       "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
       "page": "terms"
     },
     {
       "id": "check-portfolio-2ecc395ea3",
       "url": "https://ati.utexas.edu/about/faq/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page",
       "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
       "page": "terms"
     },
     {
+      "id": "check-portfolio-2f04ee9de8",
+      "url": "https://ati.utexas.edu/student-application/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-30dad7b4aa",
       "url": "https://ati.utexas.edu/about/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — details page checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
       "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
       "page": "details"
     },
     {
       "id": "check-portfolio-3158466946",
       "url": "https://ati.utexas.edu/apply/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
       "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
       "page": "application"
     },
     {
-      "id": "check-portfolio-4f81de6652",
-      "url": "https://ati.utexas.edu/about/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — details page checked by scrape.py",
+      "id": "check-portfolio-3199ab34ee",
+      "url": "https://ati.utexas.edu/faq/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page",
       "excerpt": "Companies → https://ati.utexas.edu/companies/",
-      "page": "details"
+      "page": "terms"
     },
     {
-      "id": "check-portfolio-7adf355101",
-      "url": "http://ati.utexas.edu/current-portfolio/clean-energy/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — homepage checked by scrape.py",
+      "id": "check-portfolio-340aa08542",
+      "url": "https://ati.utexas.edu/ati-portfolio-company-lumaegis-featured-in-uv-solutions/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-38aab75051",
+      "url": "https://ati.utexas.edu/austin-technology-incubator-at-the-university-of-texas-at-austin-proudly-welcomes-idvera-as-new-portfolio-company/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-398082694a",
+      "url": "https://ati.utexas.edu/ati-launches-microelectronics-portfolio/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-42dd3b2140",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-45253de628",
+      "url": "https://ati.utexas.edu/deltaclimevt-climate-economy-accelerator-selects-entrepreneurs-for-energy-2024-cohort-vermont-business-magazine/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — batches page",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-46fc9482aa",
+      "url": "https://ati.utexas.edu/students/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
       "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-48a6795546",
+      "url": "https://ati.utexas.edu/yotta-energy-selected-for-gsas-gpg-program/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4f81de6652",
+      "url": "https://ati.utexas.edu/about/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4fb1e593c4",
+      "url": "https://ati.utexas.edu/apply/thank-you/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5949f4c63e",
+      "url": "https://ati.utexas.edu/students/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5a9930b407",
+      "url": "https://ati.utexas.edu/apply/thank-you/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5f734f6204",
+      "url": "https://ati.utexas.edu/ati-launches-microelectronics-portfolio/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-6986f3259a",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6b4414e153",
+      "url": "https://ati.utexas.edu/ati-portfolio-company-alt-bionics-honored-by-texas-business-hall-of-fame/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-6f05af894b",
+      "url": "https://ati.utexas.edu/ati-portfolio-company-gs-vortex-systems-earns-coveted-agriculture-innovation-award/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-7914e35c57",
+      "url": "https://ati.utexas.edu/deltaclimevt-climate-economy-accelerator-selects-entrepreneurs-for-energy-2024-cohort-vermont-business-magazine/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — batches page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-798006fc01",
+      "url": "https://ati.utexas.edu/ati-launches-microelectronics-portfolio/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-7adf355101",
+      "url": "http://ati.utexas.edu/current-portfolio/clean-energy/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — homepage",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7dc0334a65",
+      "url": "https://ati.utexas.edu/yotta-energy-selected-for-gsas-gpg-program/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-81ee265165",
+      "url": "https://ati.utexas.edu/ati-portfolio-company-gs-vortex-systems-earns-coveted-agriculture-innovation-award/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-8c0d891f5e",
+      "url": "https://ati.utexas.edu/programs/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-93d176197d",
+      "url": "https://ati.utexas.edu/ati-portfolio-company-lumaegis-featured-in-uv-solutions/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-940bfc69c3",
+      "url": "https://ati.utexas.edu/programs/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-97e3ef0cd8",
+      "url": "https://ati.utexas.edu/ati-portfolio-company-lumaegis-featured-in-uv-solutions/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-9b70a560b9",
+      "url": "https://ati.utexas.edu/ati-alumni-company-yotta-energy-to-spotlight-innovative-green-energy-solutions-at-electrify-expo-2023/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a9f51fccf7",
+      "url": "https://ati.utexas.edu/ati-launches-microelectronics-portfolio/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "alumni page → http://www.ati.utexas.edu/companies/alumni",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-b3c281015d",
+      "url": "https://ati.utexas.edu/ati-portfolio-company-alt-bionics-honored-by-texas-business-hall-of-fame/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-c319970529",
+      "url": "https://ati.utexas.edu/faq/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c3c45b533d",
+      "url": "http://ati.utexas.edu/about/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c4e3d78283",
+      "url": "https://ati.utexas.edu/about/partners/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-cd27f1c542",
+      "url": "http://ati.utexas.edu/about/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d17c1443ff",
+      "url": "https://ati.utexas.edu/austin-technology-incubator-at-the-university-of-texas-at-austin-proudly-welcomes-idvera-as-new-portfolio-company/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-d6b8132e0d",
+      "url": "https://ati.utexas.edu/programs/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e3aca2c6a6",
+      "url": "http://ati.utexas.edu/about/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ea2f42f87c",
+      "url": "https://ati.utexas.edu/austin-technology-incubator-at-the-university-of-texas-at-austin-proudly-welcomes-idvera-as-new-portfolio-company/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-ecd4ff5ae3",
       "url": "https://ati.utexas.edu/about/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — details page checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
       "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
       "page": "details"
     },
     {
       "id": "check-portfolio-f779995be7",
       "url": "https://ati.utexas.edu/about/faq/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page",
       "excerpt": "Companies → https://ati.utexas.edu/companies/",
       "page": "terms"
     },
     {
       "id": "check-portfolio-faa4cf9299",
       "url": "http://ati.utexas.edu/current-portfolio/clean-energy/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — homepage checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — homepage",
       "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-fd975bc07e",
+      "url": "https://ati.utexas.edu/student-application/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-2b49f1fd80",
+      "url": "https://ati.utexas.edu/apply/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "business case, commercialize its product, and scale its venture. ATI practices rolling admissions. Our due diligence/get-to-know-you process is driven by meetings between the",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-63e9bf3442",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page",
+      "excerpt": "is the right organization to help your company reach its goals. ATI practices rolling admissions. Our due diligence/get-to-know you process is driven by meetings between the",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-0fd47b36e8",
+      "url": "https://ati.utexas.edu/apply/thank-you/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-119097fb45",
+      "url": "https://ati.utexas.edu/ati-portfolio-company-lumaegis-featured-in-uv-solutions/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-152d45fafc",
+      "url": "https://ati.utexas.edu/faq/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1fd08be099",
+      "url": "https://ati.utexas.edu/students/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "APPLY NOW → https://ati.utexas.edu/student-application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-27e1bcc667",
+      "url": "https://ati.utexas.edu/ati-alumni-company-yotta-energy-to-spotlight-innovative-green-energy-solutions-at-electrify-expo-2023/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-2e2a026af3",
       "url": "https://ati.utexas.edu/about/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — details page checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
       "excerpt": "Apply → https://ati.utexas.edu/apply/",
       "page": "details"
     },
     {
       "id": "check-route-31f978e794",
       "url": "http://ati.utexas.edu/current-portfolio/clean-energy/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — homepage checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — homepage",
       "excerpt": "Apply → https://ati.utexas.edu/apply/",
       "page": "details"
     },
     {
+      "id": "check-route-451aa33bdb",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-49bb6a49b3",
+      "url": "https://ati.utexas.edu/student-application/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4c417a3f5d",
+      "url": "https://ati.utexas.edu/students/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Student Associates and Fellows → https://ati.utexas.edu/student-application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5275c2e5d0",
+      "url": "https://ati.utexas.edu/about/partners/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5345b93cf9",
+      "url": "https://ati.utexas.edu/yotta-energy-selected-for-gsas-gpg-program/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-681c8f7a85",
+      "url": "https://ati.utexas.edu/austin-technology-incubator-at-the-university-of-texas-at-austin-proudly-welcomes-idvera-as-new-portfolio-company/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-6e770bccba",
+      "url": "https://ati.utexas.edu/students/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "https://ati.utexas.edu/student-application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-80981fc9b5",
+      "url": "https://ati.utexas.edu/ati-launches-microelectronics-portfolio/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-91282ca8d6",
       "url": "https://ati.utexas.edu/about/faq/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page",
       "excerpt": "Apply → https://ati.utexas.edu/apply/",
       "page": "terms"
     },
     {
+      "id": "check-route-95935f2f41",
+      "url": "https://ati.utexas.edu/ati-portfolio-company-gs-vortex-systems-earns-coveted-agriculture-innovation-award/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-9603a99383",
+      "url": "https://ati.utexas.edu/students/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a2bb3619ed",
+      "url": "https://ati.utexas.edu/deltaclimevt-climate-economy-accelerator-selects-entrepreneurs-for-energy-2024-cohort-vermont-business-magazine/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — batches page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "batches"
+    },
+    {
       "id": "check-route-b1f8f366e8",
       "url": "https://ati.utexas.edu/apply/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
       "excerpt": "IMPACT Lab ATI + ACC manufacturing prototype lab Apply to IMPACT Lab → https://docs.google.com/forms/d/e/1FAIpQLSdqUUAhvN6vfHl-qG36ccjKNGgqfNTkDNO9Wcuwsf9gTAobDg/viewform",
       "page": "application"
     },
     {
       "id": "check-route-bb7df37578",
       "url": "https://ati.utexas.edu/apply/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
       "excerpt": "Student Associates Educational experiences at ATI Apply for a student position → https://ati.utexas.edu/student-application/",
       "page": "application"
     },
     {
+      "id": "check-route-be869ffe9b",
+      "url": "https://ati.utexas.edu/ati-portfolio-company-alt-bionics-honored-by-texas-business-hall-of-fame/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — portfolio page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-d39fddc225",
       "url": "https://ati.utexas.edu/about/faq/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page checked by scrape.py",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page",
       "excerpt": "simple online form → https://ati.utexas.edu/apply/",
       "page": "terms"
     },
     {
-      "id": "check-selectivity-d5ab0a4934",
-      "url": "https://ati.utexas.edu/about/",
-      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — details page checked by scrape.py",
-      "excerpt": "founders, 170 companies applied to participate in ATI’s inaugural cohort, with about 20% of applicants applying from out of state. From 2005 to 2017 alone, over 1000 companies have",
+      "id": "check-route-f10ef1bfa3",
+      "url": "https://ati.utexas.edu/programs/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
       "page": "details"
+    },
+    {
+      "id": "check-route-fc2cf01331",
+      "url": "http://ati.utexas.edu/about/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — program page",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-status-f8c6038db0",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page",
+      "excerpt": "ACC Bioscience Incubator now accepting applications – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-c65cb7f39f",
+      "url": "http://ati.utexas.edu/current-portfolio/clean-energy/",
+      "page": "details",
+      "excerpt": "Energy – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Founded in 2001, the ATI Clean Energy Incubator (CEI) is one of the longest-established energy and clean-tech incubators in the United States. Our parent institution, The University of Texas, does more energy research than any other university in the world. To date we’ve worked with companies in a variety of areas including energy efficiency, renewables, grid modernization and optimization, batteries and storage, demand response, and distributed generation. We are founding members of the Incubatenergy Network and Clean Energy Alliance. We’ve worked internationally with the World Bank’s Climate Innovation Centers and participated with various international organizations including the"
+    },
+    {
+      "id": "check-page-08f0d92c34",
+      "url": "http://ati.utexas.edu/current-portfolio/clean-energy/",
+      "page": "details",
+      "excerpt": "We’ve worked internationally with the World Bank’s Climate Innovation Centers and participated with various international organizations including the International Cleantech Network and New Energy Nexus."
+    },
+    {
+      "id": "check-page-648bf6857b",
+      "url": "http://ati.utexas.edu/current-portfolio/clean-energy/",
+      "page": "details",
+      "excerpt": "Locally we’ve developed strong relationships with our utilities (Austin Energy, CPS, Pecan Street) even securing access to the grid for validation projects."
+    },
+    {
+      "id": "check-page-e981a1d72d",
+      "url": "http://ati.utexas.edu/current-portfolio/clean-energy/",
+      "page": "details",
+      "excerpt": "Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility Policy"
+    },
+    {
+      "id": "check-page-79deb89df2",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "page": "application",
+      "excerpt": "ACC Bioscience Incubator now accepting applications – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe ACC Bioscience Incubator now accepting applications The Austin Technology Incubator has partnered with the Austin Community College District to launch the ACC Bioscience Incubator (ABI). The ABI is a world-class facility offering state-of-the-art biotechnology equipment, specialized wet lab space, conferencing areas, and staff to help companies transform scientific discoveries into the breakthrough products of tomorrow. ACC is now accepting applications for the ABI wet lab facilities scheduled to open in February 2017. The ACC Bioscience Incubator is part of phase II renovations at ACC Highland. The first such facility at a Texas community college,"
+    },
+    {
+      "id": "check-page-cbff99f027",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "page": "application",
+      "excerpt": "The first such facility at a Texas community college, it will provide critically needed research space for life science companies to develop products such as pharmaceuticals and medical devices while providing educational programs, internships, and real-world training to ACC students."
+    },
+    {
+      "id": "check-page-c702421864",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "page": "application",
+      "excerpt": "It is funded by ACC and Texas grant funding."
+    },
+    {
+      "id": "check-page-c7326d701b",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "page": "application",
+      "excerpt": "“Together, we are transforming biotechnology, medicine, and education in our region,” says Dr."
+    },
+    {
+      "id": "check-page-d4d53a4b0a",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "page": "application",
+      "excerpt": "“Students experience hands-on learning and gain marketable skills that employers are seeking.” ATI will provide strategic business mentoring and building within the ABI, including infrastructure development of systems, processes, governance, and network of key individuals and funders."
+    },
+    {
+      "id": "check-page-d3287dabdf",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "page": "application",
+      "excerpt": "The facility offers: Wet lab space: Single benches to full labs with over $1 million of advanced laboratory equipment and specialized clean rooms available to meet companies’ unique needs."
+    },
+    {
+      "id": "check-page-869269fb3a",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "page": "application",
+      "excerpt": "Startup business mentoring: Member companies own their research ideas and have access to business consultants, workshops, and industry partners."
+    },
+    {
+      "id": "check-page-a3cb7aa0fe",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "page": "application",
+      "excerpt": "Core laboratory and instrumentation: Central management of state-of-the-art shared biotechnology equipment and facilities."
+    },
+    {
+      "id": "check-page-8bf8d51191",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "page": "application",
+      "excerpt": "Workforce education: Student internships and faculty collaborations."
+    },
+    {
+      "id": "check-page-aca997bf37",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "page": "application",
+      "excerpt": "If your company has a need for wet lab space, contact facility director Dr."
+    },
+    {
+      "id": "check-page-6d28c89ff1",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "page": "application",
+      "excerpt": "For more information: ACC Bioscience Incubator Online application @ACC_Wetlab on Twitter Austin Technology Incubator 2815 San Gabriel Street Austin, Texas 78705 USA Postal address: Austin Technology Incubator, A0300 306 Inner Campus Dr."
+    },
+    {
+      "id": "check-page-f891bc25b6",
+      "url": "https://ati.utexas.edu/acc-bioscience-incubator-applications/",
+      "page": "application",
+      "excerpt": "Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility Policy"
+    },
+    {
+      "id": "check-page-4c2c1981f7",
+      "url": "https://ati.utexas.edu/apply/",
+      "page": "application",
+      "excerpt": "Apply – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Apply Company Membership Incubation for deep tech startups (including the all-new Microelectronics portfolio) Apply for ATI membership IMPACT Lab ATI + ACC manufacturing prototype lab Apply to IMPACT Lab Student Associates Educational experiences at ATI Apply for a student position Becoming an ATI member company Tell us about your company and innovation so we can decide whether ATI is right for you. ATI is the “deep tech” incubator of The University of Texas at Austin. By deep tech we mean startup solutions founded on breakthrough scientific discoveries and engineering innovations , particularly with a focus on sustainability applications (circular economy, energy, food & agtech, mobility, and"
+    },
+    {
+      "id": "check-page-3b624820a9",
+      "url": "https://ati.utexas.edu/apply/",
+      "page": "application",
+      "excerpt": "By deep tech we mean startup solutions founded on breakthrough scientific discoveries and engineering innovations , particularly with a focus on sustainability applications (circular economy, energy, food & agtech, mobility, and water), healthcare and microelectronics ."
+    },
+    {
+      "id": "check-page-071ae497a7",
+      "url": "https://ati.utexas.edu/apply/",
+      "page": "application",
+      "excerpt": "Even though the Incubator is part of The University of Texas at Austin, any company can apply."
+    },
+    {
+      "id": "check-page-b747c61b03",
+      "url": "https://ati.utexas.edu/apply/",
+      "page": "application",
+      "excerpt": "Circular Economy Energy Food & AgTech Healthcare Mobility Water Other Funding sources to date Own capital Debt Equity Grants Awards Other Total funding amount to date $0 - $15K $15K - $50K $50K - $150K $150K - $500K > $500K Type of help sought from ATI UT Austin affiliations (if any - not required) Faculty Staff Student Alumnus Where did you hear about ATI?"
+    },
+    {
+      "id": "check-page-0b7264ef62",
+      "url": "https://ati.utexas.edu/apply/",
+      "page": "application",
+      "excerpt": "Internet search Other incubator or accelerator Networking event Personal referral Other Referred by Would you like to receive news from ATI?"
+    },
+    {
+      "id": "check-page-5db6c3001b",
+      "url": "https://ati.utexas.edu/apply/",
+      "page": "application",
+      "excerpt": "Contact Us Austin Technology Incubator 2815 San Gabriel Street Austin, Texas 78705 USA Postal address: Austin Technology Incubator, A0300 306 Inner Campus Dr."
+    },
+    {
+      "id": "check-page-c5383c48be",
+      "url": "https://ati.utexas.edu/apply/",
+      "page": "application",
+      "excerpt": "Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility Policy"
+    },
+    {
+      "id": "check-page-12e2ac90c6",
+      "url": "https://ati.utexas.edu/apply/thank-you/",
+      "page": "application",
+      "excerpt": "Application – Thank You – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Application – Thank You Thank you for your interest in the Austin Technology Incubator. We have received your application and will begin processing it shortly. An associate should be in contact with you within the next couple of weeks. If you have any questions, please feel free to contact us at info@ati.utexas.edu . Sincerely, The ATI Team Austin Technology Incubator 2815 San Gabriel Street Austin, Texas 78705 USA Postal address: Austin Technology Incubator, A0300 306 Inner Campus Dr. Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility"
+    },
+    {
+      "id": "check-page-804096db78",
+      "url": "https://ati.utexas.edu/apply/thank-you/",
+      "page": "application",
+      "excerpt": "Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility Policy"
+    },
+    {
+      "id": "check-page-51e1692bfc",
+      "url": "https://ati.utexas.edu/student-application/",
+      "page": "application",
+      "excerpt": "Student Application – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Student Associate / Student Fellow Application ATI is seeking highly motivated UT students, both graduate and undergraduate, for exciting professional experiences that provide the opportunity to work with early-stage, rapidly growing companies in our portfolio. Internships are available focusing on our sustainability verticals as well as those supporting ATI overall on a variety of projects. Graduate and undergraduate students from all majors may apply. ATI has numerous opportunities available for students in two categories: Student Associates Student Fellows Student Associates are paid positions while Student Fellows are unpaid and may count towards class credit, internship"
+    },
+    {
+      "id": "check-page-091bc121a3",
+      "url": "https://ati.utexas.edu/student-application/",
+      "page": "application",
+      "excerpt": "Internet search Other incubator or accelerator Networking event Personal referral Other Referred by Would you like to receive news from ATI?"
+    },
+    {
+      "id": "check-page-ca66f7c711",
+      "url": "https://ati.utexas.edu/student-application/",
+      "page": "application",
+      "excerpt": "Contact Us Austin Technology Incubator 2815 San Gabriel Street Austin, Texas 78705 USA Postal address: Austin Technology Incubator, A0300 306 Inner Campus Dr."
+    },
+    {
+      "id": "check-page-a8155f6476",
+      "url": "https://ati.utexas.edu/student-application/",
+      "page": "application",
+      "excerpt": "Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility Policy"
+    },
+    {
+      "id": "check-page-98d3aed042",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "page": "terms",
+      "excerpt": "FAQ – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe FAQ Frequently Asked Questions Who is ATI? The Austin Technology Incubator (ATI) is the deep technology incubator of the University of Texas at Austin working with university and community entrepreneurs to commercialize their breakthrough innovations. For over 30 years, ATI has used a customized approach to support entrepreneurs addressing the world’s most pressing problems by connecting startups with the expertise, relationships, and funding sources they need to succeed in the marketplace. ATI is home to a number of specialized incubators which include –Circular Economy, Energy, Food + AgTech, Healthcare/BioTech, Mobility, and Water. How do you define deep tech? We define Deep Tech as"
+    },
+    {
+      "id": "check-page-42b7633856",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "page": "terms",
+      "excerpt": "We define Deep Tech as technology that is based on tangible engineering innovation, scientific advances and discoveries."
+    },
+    {
+      "id": "check-page-eea3d04540",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "page": "terms",
+      "excerpt": "Deep Tech is often set apart by its profound enabling power, the differentiation it can create, and its potential to be a catalyst for change."
+    },
+    {
+      "id": "check-page-be8cb572ef",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "page": "terms",
+      "excerpt": "And it reflects ATI’s commitment to support our startups’ exploration and commercialization of deep tech solutions that address global challenges."
+    },
+    {
+      "id": "check-page-29c5c8d005",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "page": "terms",
+      "excerpt": "ATI uses a customized approach to support entrepreneurs connecting startups with the expertise, relationships, and funding sources they need to succeed in the marketplace."
+    },
+    {
+      "id": "check-page-1c08b7dcda",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "page": "terms",
+      "excerpt": "ATI is a selective incubator – a big part of the value we offer to our investor partners is a tightly curated portfolio."
+    },
+    {
+      "id": "check-page-fe7d75ea7b",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "page": "terms",
+      "excerpt": "Even though the Incubator is part of UT Austin, any company can apply."
+    },
+    {
+      "id": "check-page-273727cf84",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "page": "terms",
+      "excerpt": "No, we support teams with deep tech solutions regardless of the nationality of the founders."
+    },
+    {
+      "id": "check-page-dbc710e571",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "page": "terms",
+      "excerpt": "Individual entrepreneurs can apply if they have a technology and solution that fits our deep tech model."
+    },
+    {
+      "id": "check-page-c8aa7cd627",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "page": "terms",
+      "excerpt": "ATI has co-working space available to all member companies which includes access to desks, conference rooms, and presentation rooms as part of its membership benefits."
+    },
+    {
+      "id": "check-page-702b7e37d4",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "page": "terms",
+      "excerpt": "Austin Technology Incubator 2815 San Gabriel Street Austin, Texas 78705 USA Postal address: Austin Technology Incubator, A0300 306 Inner Campus Dr."
+    },
+    {
+      "id": "check-page-f88cfc55a5",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "page": "terms",
+      "excerpt": "Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility Policy"
+    },
+    {
+      "id": "check-page-c9b13c02dc",
+      "url": "https://ati.utexas.edu/faq/",
+      "page": "terms",
+      "excerpt": "FAQ – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe FAQ Suspendisse in justo eu magna luctus suscipit sed lectus? Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi lectus risus, iaculis vel, suscipit quis luctus Cras justo odio, dapibus ac facilisis in, egestas eget quam. Etiam porta sem malesuada magna mollis euismod. Aenean lacinia bibendum nulla sed consectetur. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien."
+    },
+    {
+      "id": "check-page-759902427a",
+      "url": "https://ati.utexas.edu/faq/",
+      "page": "terms",
+      "excerpt": "Integer euismod lacus luctus magna. [contact-form-7 id=\"453\" title=\"Contact Form 2\"] Austin Technology Incubator 2815 San Gabriel Street Austin, Texas 78705 USA Postal address: Austin Technology Incubator, A0300 306 Inner Campus Dr."
+    },
+    {
+      "id": "check-page-b7d73ff416",
+      "url": "https://ati.utexas.edu/faq/",
+      "page": "terms",
+      "excerpt": "Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility Policy"
+    },
+    {
+      "id": "check-page-827d99ef0b",
+      "url": "https://ati.utexas.edu/deltaclimevt-climate-economy-accelerator-selects-entrepreneurs-for-energy-2024-cohort-vermont-business-magazine/",
+      "page": "batches",
+      "excerpt": "DeltaClimeVT climate economy accelerator selects entrepreneurs for Energy 2024 cohort | Vermont Business Magazine – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe DeltaClimeVT climate economy accelerator selects entrepreneurs for Energy 2024 cohort | Vermont Business Magazine DeltaClimeVT climate economy accelerator selects entrepreneurs for Energy 2024 cohort | Vermont Business Magazine Post published: March 7, 2024 Austin Technology Incubator (ATI) at The University of Texas is excited to announce that its portfolio company, Induction Food Systems (IFS), has been selected as one of the cohort companies for The Vermont Sustainable Jobs Fund’s Energy 2024 program! IFS creates heating equipment for industrial clients, enhancing profitability and"
+    },
+    {
+      "id": "check-page-20cbc3d555",
+      "url": "https://ati.utexas.edu/deltaclimevt-climate-economy-accelerator-selects-entrepreneurs-for-energy-2024-cohort-vermont-business-magazine/",
+      "page": "batches",
+      "excerpt": "This breakthrough technology unlocks greater manufacturing productivity, particularly benefiting the food & beverage and chemical sectors."
+    },
+    {
+      "id": "check-page-8e746447e7",
+      "url": "https://ati.utexas.edu/deltaclimevt-climate-economy-accelerator-selects-entrepreneurs-for-energy-2024-cohort-vermont-business-magazine/",
+      "page": "batches",
+      "excerpt": "The Vermont Sustainable Jobs Fund (VSJF) has announced the selection of the Energy 2024 cohort for the DeltaClimeVT climate economy business accelerator."
+    },
+    {
+      "id": "check-page-db4f7d2668",
+      "url": "https://ati.utexas.edu/deltaclimevt-climate-economy-accelerator-selects-entrepreneurs-for-energy-2024-cohort-vermont-business-magazine/",
+      "page": "batches",
+      "excerpt": "This program aims to support early-stage energy companies in contributing to Vermont’s renewable energy and net-zero goals."
+    },
+    {
+      "id": "check-page-b8e7310153",
+      "url": "https://ati.utexas.edu/deltaclimevt-climate-economy-accelerator-selects-entrepreneurs-for-energy-2024-cohort-vermont-business-magazine/",
+      "page": "batches",
+      "excerpt": "Eight companies from the U.S. and Canada will participate in a three-month program that includes intensive work sessions, both online and in-person, focusing on topics such as electrification, load management, heat pumps, and climate resilience."
+    },
+    {
+      "id": "check-page-28cdfacbd0",
+      "url": "https://ati.utexas.edu/deltaclimevt-climate-economy-accelerator-selects-entrepreneurs-for-energy-2024-cohort-vermont-business-magazine/",
+      "page": "batches",
+      "excerpt": "Participants will have access to the world-class ecosVC™ curriculum and will work towards reducing greenhouse gas emissions to help Vermont meet its climate objectives."
+    },
+    {
+      "id": "check-page-4711f80596",
+      "url": "https://ati.utexas.edu/deltaclimevt-climate-economy-accelerator-selects-entrepreneurs-for-energy-2024-cohort-vermont-business-magazine/",
+      "page": "batches",
+      "excerpt": "ATI is proud of IFS and it’s continued growth in our incubator."
+    },
+    {
+      "id": "check-page-00acee7a82",
+      "url": "https://ati.utexas.edu/deltaclimevt-climate-economy-accelerator-selects-entrepreneurs-for-energy-2024-cohort-vermont-business-magazine/",
+      "page": "batches",
+      "excerpt": "Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility Policy"
+    },
+    {
+      "id": "check-page-4474b1eeb3",
+      "url": "http://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "About Us – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe About Us Established in 1989, ATI is the longest active technology incubator in the United States ATI is a deep tech incubator affiliated with The University of Texas at Austin that serves student and faculty entrepreneurs and community founding teams to explore deep technology solutions that address the world’s challenges. ATI is a unit of Discovery to Impact at UT. Through deep engagement and deep connections, we help our member companies commercialize their breakthrough innovations – contributing to The University of Texas at Austin’s promise of “what starts here changes the world.” The essence of the Austin Technology Incubator. Deep Tech. Deep Engagement. Deep Impact. For over three"
+    },
+    {
+      "id": "check-page-1009340b81",
+      "url": "http://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "For over three decades, ATI has used a customized approach to support entrepreneurs addressing the world’s most complex problems by connecting startups with the expertise, relationships, and funding sources they need to succeed in the marketplace."
+    },
+    {
+      "id": "check-page-1aeff9cd65",
+      "url": "http://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "Through partnerships with local and national investors and funding sources, a dedicated mentor community, trusted professional and strategic partners as well as universities and other community affiliations, we are dedicated to supporting deep tech solutions that will become the future for today’s global problems."
+    },
+    {
+      "id": "check-page-3263d4ff42",
+      "url": "http://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "By deep tech, we mean recently established startup solutions founded on breakthrough scientific discoveries and engineering innovations with a focus on sustainability (circular economy, energy, food and agtech, mobility, and water)."
+    },
+    {
+      "id": "check-page-4d69cf363c",
+      "url": "http://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "Developing new technologies and enabling entrepreneurs to have deep impact in the marketplace for the benefit of our society is a proven ATI heritage."
+    },
+    {
+      "id": "check-page-30aadedbc2",
+      "url": "http://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "George Kozmetsky and first led by Laura Kilcrease, the Austin Technology Incubator (ATI) has been a key catalyst in developing Austin’s entrepreneurial and innovation ecosystems."
+    },
+    {
+      "id": "check-page-4f98ab7491",
+      "url": "http://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "Kozmetsky wanted to leverage these assets to build an innovation economy, so he convened academic, business, and community leaders and launched the Austin Technology Incubator in 1989."
+    },
+    {
+      "id": "check-page-801a4b4058",
+      "url": "http://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "A National Model for Technology Business Incubation Since its inception, ATI has had a dual purpose: to serve the university as an education and research laboratory for entrepreneurship and technology venturing, and to serve as a regional catalyst for economic development."
+    },
+    {
+      "id": "check-page-0dd56a3993",
+      "url": "http://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "By mentoring innovators across campus and beyond, working with the regional business community to strengthen emerging technology sectors, and graduating high growth ventures into the local, state and national economy, ATI has maintained the reputation as one of the nation’s finest models for technology business incubation."
+    },
+    {
+      "id": "check-page-92a0688fde",
+      "url": "http://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "As regional research and education assets, and economic development activities evolved and matured, so did ATI and its verticals."
+    },
+    {
+      "id": "check-page-b647baee3e",
+      "url": "http://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "Austin Technology Incubator 2815 San Gabriel Street Austin, Texas 78705 USA Postal address: Austin Technology Incubator, A0300 306 Inner Campus Dr."
+    },
+    {
+      "id": "check-page-c32f5f5fe8",
+      "url": "http://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility Policy"
+    },
+    {
+      "id": "check-page-4f3e15080c",
+      "url": "https://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "About Us – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe About Us Established in 1989, ATI is the longest active technology incubator in the United States ATI is a deep tech incubator affiliated with The University of Texas at Austin that serves student and faculty entrepreneurs and community founding teams to explore deep technology solutions that address the world’s challenges. ATI is a unit of Discovery to Impact at UT. Through deep engagement and deep connections, we help our member companies commercialize their breakthrough innovations – contributing to The University of Texas at Austin’s promise of “what starts here changes the world.” The essence of the Austin Technology Incubator. Deep Tech. Deep Engagement. Deep Impact. For over three"
+    },
+    {
+      "id": "check-page-1f2ec376b8",
+      "url": "https://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "For over three decades, ATI has used a customized approach to support entrepreneurs addressing the world’s most complex problems by connecting startups with the expertise, relationships, and funding sources they need to succeed in the marketplace."
+    },
+    {
+      "id": "check-page-7222c778a7",
+      "url": "https://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "Through partnerships with local and national investors and funding sources, a dedicated mentor community, trusted professional and strategic partners as well as universities and other community affiliations, we are dedicated to supporting deep tech solutions that will become the future for today’s global problems."
+    },
+    {
+      "id": "check-page-6b132c4e16",
+      "url": "https://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "By deep tech, we mean recently established startup solutions founded on breakthrough scientific discoveries and engineering innovations with a focus on sustainability (circular economy, energy, food and agtech, mobility, and water)."
+    },
+    {
+      "id": "check-page-0233506779",
+      "url": "https://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "Developing new technologies and enabling entrepreneurs to have deep impact in the marketplace for the benefit of our society is a proven ATI heritage."
+    },
+    {
+      "id": "check-page-ecaf4e0971",
+      "url": "https://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "George Kozmetsky and first led by Laura Kilcrease, the Austin Technology Incubator (ATI) has been a key catalyst in developing Austin’s entrepreneurial and innovation ecosystems."
+    },
+    {
+      "id": "check-page-7b23bd1406",
+      "url": "https://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "Kozmetsky wanted to leverage these assets to build an innovation economy, so he convened academic, business, and community leaders and launched the Austin Technology Incubator in 1989."
+    },
+    {
+      "id": "check-page-f6ae3e55eb",
+      "url": "https://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "A National Model for Technology Business Incubation Since its inception, ATI has had a dual purpose: to serve the university as an education and research laboratory for entrepreneurship and technology venturing, and to serve as a regional catalyst for economic development."
+    },
+    {
+      "id": "check-page-a8be8cb950",
+      "url": "https://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "By mentoring innovators across campus and beyond, working with the regional business community to strengthen emerging technology sectors, and graduating high growth ventures into the local, state and national economy, ATI has maintained the reputation as one of the nation’s finest models for technology business incubation."
+    },
+    {
+      "id": "check-page-fb0a1567cf",
+      "url": "https://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "As regional research and education assets, and economic development activities evolved and matured, so did ATI and its verticals."
+    },
+    {
+      "id": "check-page-becd1c1ba4",
+      "url": "https://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "Austin Technology Incubator 2815 San Gabriel Street Austin, Texas 78705 USA Postal address: Austin Technology Incubator, A0300 306 Inner Campus Dr."
+    },
+    {
+      "id": "check-page-09caade23c",
+      "url": "https://ati.utexas.edu/about/",
+      "page": "details",
+      "excerpt": "Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility Policy"
+    },
+    {
+      "id": "check-page-9cb1a5777e",
+      "url": "https://ati.utexas.edu/about/partners/",
+      "page": "details",
+      "excerpt": "Partners – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Partners Meet Our Partners Through partnerships with corporate sponsors, trusted professional and strategic partners as well as universities and other community affiliations, ATI is dedicated to supporting deep tech solutions that will become the future for today’s global challenges. Our long term, trust-based relationships with investors whether local angels, foundations, local and national venture capital companies and sources of public funding are essential for getting our member companies funded. We have proven we are an engine for growth and a stimulator to meaningful and proven economic development. But it takes your continued partnership to achieve this significant level of impact."
+    },
+    {
+      "id": "check-page-da672a2158",
+      "url": "https://ati.utexas.edu/about/partners/",
+      "page": "details",
+      "excerpt": "Corporate partners get first looks and premier access to our present portfolio, pre-incubation, pipeline and alumni companies."
+    },
+    {
+      "id": "check-page-3b57086807",
+      "url": "https://ati.utexas.edu/about/partners/",
+      "page": "details",
+      "excerpt": "Community Partners ATI has a heritage of building successful, deep tech startups that enhance our local economy, contribute to job growth and economic development."
+    },
+    {
+      "id": "check-page-28f9c6d0b5",
+      "url": "https://ati.utexas.edu/about/partners/",
+      "page": "details",
+      "excerpt": "In turn, our community partners contribute significantly to further establishment and growth of our ecosystem, business mentorship, funding opportunities, in-kind services and industry connections."
+    },
+    {
+      "id": "check-page-2a76a19dab",
+      "url": "https://ati.utexas.edu/about/partners/",
+      "page": "details",
+      "excerpt": "Our Trusted Partners offer customized pricing and advisory services that contribute to our Lunch and Learn educational series for our student entrepreneurs as well as our ATI member companies, our preincubation and pipeline companies."
+    },
+    {
+      "id": "check-page-754208d468",
+      "url": "https://ati.utexas.edu/about/partners/",
+      "page": "details",
+      "excerpt": "ATI works directly with the Technology Transfer Offices at each university to connect inventors and business drivers, facilitate introductions to corporate partners, turn startups & scaleups into viable businesses, and to advance technologies to commercialization."
+    },
+    {
+      "id": "check-page-6b511910f3",
+      "url": "https://ati.utexas.edu/about/partners/",
+      "page": "details",
+      "excerpt": "Austin Technology Incubator 2815 San Gabriel Street Austin, Texas 78705 USA Postal address: Austin Technology Incubator, A0300 306 Inner Campus Dr."
+    },
+    {
+      "id": "check-page-613ebd3c4b",
+      "url": "https://ati.utexas.edu/about/partners/",
+      "page": "details",
+      "excerpt": "Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility Policy"
+    },
+    {
+      "id": "check-page-b247fd873e",
+      "url": "https://ati.utexas.edu/programs/",
+      "page": "details",
+      "excerpt": "Programs – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Programs Austin Technology Incubator 2815 San Gabriel Street Austin, Texas 78705 USA Postal address: Austin Technology Incubator, A0300 306 Inner Campus Dr. Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility Policy"
+    },
+    {
+      "id": "check-page-9e6bc59ad1",
+      "url": "https://ati.utexas.edu/students/",
+      "page": "details",
+      "excerpt": "Student Resources and Programs – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Student Resources and Programs ATI Student Resources and Programs Our close relationship with the University of Texas at Austin enables ATI to make student interns available to our member companies – bridging innovation-minded, start-up experienced students with our top deep tech startups. We are highly selective in recruiting our ATI Student Associates (interns) to ensure they align with defined needs of our member companies. Our commitment to our ATI Student Associates is to expose them to real-world issues and startup immersion; along with a business network that has career-long benefit – expanding their education beyond “grades” to actual real-world impact with"
+    },
+    {
+      "id": "check-page-63723fc071",
+      "url": "https://ati.utexas.edu/students/",
+      "page": "details",
+      "excerpt": "Our commitment to our ATI Student Associates is to expose them to real-world issues and startup immersion; along with a business network that has career-long benefit – expanding their education beyond “grades” to actual real-world impact with evidence of experience."
+    },
+    {
+      "id": "check-page-8ee61bb4a3",
+      "url": "https://ati.utexas.edu/students/",
+      "page": "details",
+      "excerpt": "Open to students and alumni of all majors, the LaunchPad enables participants to receive one-on-one mentoring, grow their network, and access resources to accelerate the success of their businesses."
+    },
+    {
+      "id": "check-page-bef50966cd",
+      "url": "https://ati.utexas.edu/students/",
+      "page": "details",
+      "excerpt": "The intensive summer program creates an environment for student entrepreneurs to discover whether or not it’s time to go all in."
+    },
+    {
+      "id": "check-page-39658133c0",
+      "url": "https://ati.utexas.edu/students/",
+      "page": "details",
+      "excerpt": "Recent examples include hands-on entrepreneurship practicums in Undergraduate Studies and the College of Natural Sciences, an annual McCombs MBA course on Global Management which includes a field trip to a developing African nation, and numerous courses on energy and energy policy."
+    },
+    {
+      "id": "check-page-06d1ce55a4",
+      "url": "https://ati.utexas.edu/students/",
+      "page": "details",
+      "excerpt": "LEARN MORE Austin Technology Incubator 2815 San Gabriel Street Austin, Texas 78705 USA Postal address: Austin Technology Incubator, A0300 306 Inner Campus Dr."
+    },
+    {
+      "id": "check-page-cfd7d09e18",
+      "url": "https://ati.utexas.edu/students/",
+      "page": "details",
+      "excerpt": "Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility Policy"
+    },
+    {
+      "id": "check-page-c7d9ae0299",
+      "url": "https://ati.utexas.edu/yotta-energy-selected-for-gsas-gpg-program/",
+      "page": "details",
+      "excerpt": "Yotta Energy Selected for GSA’s GPG Program – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Yotta Energy Selected for GSA’s GPG Program Yotta Energy Selected for GSA’s GPG Program Post published: June 29, 2023 The Austin Technology Incubator at The University of Texas at Austin congratulates our alumni company Yotta Energy on its selection for the Green Proving Ground (GPG) program. U.S. General Services Administration (GSA), announced that GSA, in collaboration with the U.S. Department of Energy (DOE), will invest $30 million from the Inflation Reduction Act to increase the sustainability of federal buildings by testing novel technologies through the GPG program. This year the GPG program has selected 20 emerging and sustainable technologies for"
+    },
+    {
+      "id": "check-page-bafb6f6dc1",
+      "url": "https://ati.utexas.edu/yotta-energy-selected-for-gsas-gpg-program/",
+      "page": "details",
+      "excerpt": "Yotta Energy is honored to be amongst the chosen and excited to have our seamlessly integrable energy storage solution, The Solar LEAF, undergo evaluation within the onsite renewables sector of the GPG program."
+    },
+    {
+      "id": "check-page-e538b30fa5",
+      "url": "https://ati.utexas.edu/yotta-energy-selected-for-gsas-gpg-program/",
+      "page": "details",
+      "excerpt": "Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility Policy"
+    },
+    {
+      "id": "check-page-c8900ad752",
+      "url": "https://ati.utexas.edu/ati-alumni-company-yotta-energy-to-spotlight-innovative-green-energy-solutions-at-electrify-expo-2023/",
+      "page": "portfolio",
+      "excerpt": "ATI Alumni Company Yotta Energy to Spotlight Innovative Green Energy Solutions at Electrify Expo 2023 – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe ATI Alumni Company Yotta Energy to Spotlight Innovative Green Energy Solutions at Electrify Expo 2023 ATI Alumni Company Yotta Energy to Spotlight Innovative Green Energy Solutions at Electrify Expo 2023 Post published: November 8, 2023 The Austin Technology Incubator at The University of Texas at Austin is proud to announce Yotta Energy’s participation in this year’s Electrify Expo , scheduled to take place at the Circuit of the Americas (COTA) Racetrack in Austin, Texas, from November 10th to 12th, 2023. The Electrify Expo is an event dedicated to unveiling the latest advancements in electric"
+    },
+    {
+      "id": "check-page-f776ed1f35",
+      "url": "https://ati.utexas.edu/ati-launches-microelectronics-portfolio/",
+      "page": "portfolio",
+      "excerpt": "ATI Launches Microelectronics Portfolio – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe ATI Launches Microelectronics Portfolio ATI Launches Microelectronics Portfolio Post published: June 1, 2024 Austin Technology Incubator has been part of Austin’s deep technology ecosystem since 1989, with a long history in the semiconductor/microelectronics area. See the alumni page for specific companies that have been incubated over the years. ATI is returning to its historical roots, this time in partnership with DoD Office of Local Defense Community Cooperation (OLDCC) organization. ATI is one of 11 sub-awardees collaborating with OLDCC to build a portfolio of advanced semiconductor, electronics and related software inventions that are supportive to US"
+    },
+    {
+      "id": "check-page-92ef768008",
+      "url": "https://ati.utexas.edu/ati-portfolio-company-alt-bionics-honored-by-texas-business-hall-of-fame/",
+      "page": "portfolio",
+      "excerpt": "ATI Portfolio Company Alt-Bionics Honored by Texas Business Hall of Fame – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe ATI Portfolio Company Alt-Bionics Honored by Texas Business Hall of Fame ATI Portfolio Company Alt-Bionics Honored by Texas Business Hall of Fame Post published: September 30, 2023 The Texas Business Hall of Fame Foundation is proud to announce that Ryan Saavedra, the visionary entrepreneur behind Alt-Bionics, has been awarded the prestigious Shaun D. Kennedy Award of Excellence in Empathy & Innovation. This award recognizes Ryan’s unwavering dedication to creating innovative solutions for individuals with physical and developmental disabilities. Alt-Bionics is a pioneering medical device firm with a mission to address the"
+    },
+    {
+      "id": "check-page-abee7ed2d3",
+      "url": "https://ati.utexas.edu/ati-portfolio-company-gs-vortex-systems-earns-coveted-agriculture-innovation-award/",
+      "page": "portfolio",
+      "excerpt": "ATI Portfolio Company, GS Vortex Systems Earns Coveted Agriculture Innovation Award – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe ATI Portfolio Company, GS Vortex Systems Earns Coveted Agriculture Innovation Award The GS Vortex display booth at the Irrigation Show ATI Portfolio Company, GS Vortex Systems Earns Coveted Agriculture Innovation Award Post published: December 14, 2023 San Antonio, December – GS Vortex Systems, an innovative agricultural technology company and a distinguished portfolio member of ATI, has earned the coveted Agriculture Innovation Award at the 2023 Irrigation Show in San Antonio, Texas. The Irrigation Association’s 2023 Agriculture Innovation Award The Irrigation Association’s 2023 Agriculture Innovation Award The"
+    },
+    {
+      "id": "check-page-291db683d4",
+      "url": "https://ati.utexas.edu/ati-portfolio-company-lumaegis-featured-in-uv-solutions/",
+      "page": "portfolio",
+      "excerpt": "ATI Portfolio Company, Lumaegis featured in UV Solutions – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe ATI Portfolio Company, Lumaegis featured in UV Solutions Lumaegis was recently featured in a UV Solutions article highlighting a faster and more efficient way to sterilize medical and dental instruments. Read the full article at UV Solutions . Learn more about Lumaegis on the ATI portfolio page . Austin Technology Incubator 2815 San Gabriel Street Austin, Texas 78705 USA Postal address: Austin Technology Incubator, A0300 306 Inner Campus Dr. Austin, TX 78712 Sign up for our newsletter About ATI | Contact Us | Donate Now © 2026 Austin Technology Incubator, The University of Texas at Austin | Web Privacy Policy | Web Accessibility Policy"
+    },
+    {
+      "id": "check-page-98ad23478a",
+      "url": "https://ati.utexas.edu/austin-technology-incubator-at-the-university-of-texas-at-austin-proudly-welcomes-idvera-as-new-portfolio-company/",
+      "page": "portfolio",
+      "excerpt": "Austin Technology Incubator at The University of Texas at Austin Proudly Welcomes iDvera as New Portfolio Company – Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Menu Close About About ATI Contact Meet the Team Partners FAQ Success Stories Companies Portfolio Circular Economy Energy Food & Agtech Healthcare Microelectronics Mobility Water Alumni Companies Programs IMPACT Lab Southwest I-Corps Student Programs TEXVMS Venture Mentoring Service Events & Opportunities News Apply Subscribe Austin Technology Incubator at The University of Texas at Austin Proudly Welcomes iDvera as New Portfolio Company Austin Technology Incubator at The University of Texas at Austin Proudly Welcomes iDvera as New Portfolio Company The Austin Technology Incubator (ATI) at The University of Texas at Austin proudly welcomes iDvera as a new portfolio company. iDvera is addressing a critical challenge in modern defense, logistics, and security operations: establishing a trusted location signal in environments where GPS and traditional networks are jammed, spoofed, or unavailable. At the core of"
     }
   ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "info@ati.utexas.edu",
+        "evidenceId": "check-email-3dc8b6d83b"
+      }
+    ],
     "phones": [],
     "routes": [
       {
@@ -159,20 +1313,44 @@
         "evidenceId": "check-route-bb7df37578"
       }
     ],
-    "applicationUrl": [],
-    "applicationsOpen": [],
-    "operatingStatus": [],
-    "deadlines": [],
-    "selectivity": [
+    "applicationUrl": [
       {
-        "value": {
-          "rate": null,
-          "bounded": true
-        },
-        "evidenceId": "check-selectivity-d5ab0a4934"
+        "value": "https://ati.utexas.edu/apply/",
+        "evidenceId": "check-route-31f978e794"
       }
     ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-f8c6038db0"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-2b49f1fd80"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-1f500282e8"
+      }
+    ],
+    "location": [
+      {
+        "value": "Austin",
+        "evidenceId": "check-location-5bda641aa9"
+      }
+    ],
+    "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://ati.utexas.edu/companies/",
@@ -181,6 +1359,10 @@
       {
         "value": "https://ati.utexas.edu/companies/alumni/",
         "evidenceId": "check-portfolio-faa4cf9299"
+      },
+      {
+        "value": "http://www.ati.utexas.edu/companies/alumni",
+        "evidenceId": "check-portfolio-a9f51fccf7"
       }
     ],
     "name": [],

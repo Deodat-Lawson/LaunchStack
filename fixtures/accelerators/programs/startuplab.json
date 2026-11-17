@@ -3,7 +3,7 @@
   "id": "startuplab",
   "name": "Startuplab",
   "logo": {
-    "path": "/accelerators/logos/startuplab.png",
+    "path": "/accelerators/logos/none.png",
     "sourceId": "official-logo"
   },
   "websiteUrl": "https://www.startuplab.no/",
@@ -27,8 +27,8 @@
       "id": "official-logo",
       "url": "https://www.startuplab.no/",
       "title": "Startuplab — no rule-validated official mark",
-      "quote": "https://framerusercontent.com/images/tje7MIVr6PHLZIZVtZbCpvAMwx0.png",
-      "checkedAt": "2026-11-14T20:59:02.000Z"
+      "quote": "no-validated-logo",
+      "checkedAt": "2026-11-16T23:23:28.000Z"
     },
     {
       "id": "homepage",

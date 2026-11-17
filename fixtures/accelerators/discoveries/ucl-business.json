@@ -1,47 +1,7 @@
 {
   "programId": "ucl-business",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
-    {
-      "url": "http://www.uclventures.com/about-us/careers",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "http://www.uclventures.com/events-programmes/2025/enacuity-ceo-reflects-commercialisation-challenges",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "http://www.uclventures.com/events-programmes/2025/i-o-inspire-entrepreneurs-shine-finale-showcase",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "http://www.uclventures.com/events-programmes/2026/autolus-founder-discusses-long-journey-research-impact",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "http://www.uclventures.com/events-programmes/2026/i-o-converse-interview-phasecraft-co-founder-toby-cubitt",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
       "page": "details",
@@ -67,7 +27,7 @@
       "origin": "official"
     },
     {
-      "url": "http://www.uclventures.com/spinout-portfolio-news/2025/ai-assisted-ms-breakthrough-paves-way-personalised-treatment",
+      "url": "http://www.uclventures.com/spinout-portfolio/3d-repo",
       "page": "portfolio",
       "anchor": "",
       "fetched": true,
@@ -75,7 +35,7 @@
       "origin": "official"
     },
     {
-      "url": "http://www.uclventures.com/spinout-portfolio-news/2025/ucl-spinouts-recognised-leaders-londons-life-sciences-boom",
+      "url": "http://www.uclventures.com/spinout-portfolio/acoubatt",
       "page": "portfolio",
       "anchor": "",
       "fetched": true,
@@ -83,7 +43,7 @@
       "origin": "official"
     },
     {
-      "url": "http://www.uclventures.com/spinout-portfolio-news/2026/acoubatt-raises-ps11m-battery-listening-technology",
+      "url": "http://www.uclventures.com/spinout-portfolio/acoustofab",
       "page": "portfolio",
       "anchor": "",
       "fetched": true,
@@ -91,7 +51,87 @@
       "origin": "official"
     },
     {
-      "url": "http://www.uclventures.com/spinout-portfolio-news/2026/early-promise-reported-severe-lupus-autolus-car-t-therapy",
+      "url": "http://www.uclventures.com/spinout-portfolio/advanced-design-technology",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/spinout-portfolio/altimmune",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/spinout-portfolio/apollo-therapeutics",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/spinout-portfolio/atocap",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/spinout-portfolio/autifony",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/spinout-portfolio/autolus-therapeutics",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/spinout-portfolio/axovia-therapeutics",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/spinout-portfolio/biotalife-healthcare",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/spinout-portfolio/cascader",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/spinout-portfolio/cogstack",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/spinout-portfolio/collaborative-community-against-coronovirus-cic-ccc-cic",
       "page": "portfolio",
       "anchor": "",
       "fetched": true,

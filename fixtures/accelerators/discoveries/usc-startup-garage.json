@@ -1,6 +1,6 @@
 {
   "programId": "usc-startup-garage",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://viterbiinnovation.usc.edu/about/",
@@ -75,14 +75,6 @@
       "origin": "official"
     },
     {
-      "url": "https://viterbiinnovation.usc.edu/about/team/",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://viterbiinnovation.usc.edu/about/tie-hub-contact/",
       "page": "details",
       "anchor": "",
@@ -100,6 +92,54 @@
     },
     {
       "url": "https://viterbiinnovation.usc.edu/about/tie-hub-impact/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://viterbiinnovation.usc.edu/about/tie-hub-offerings/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://viterbiinnovation.usc.edu/about/tie-hub-office-hours/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://viterbiinnovation.usc.edu/competitions-and-programs/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://viterbiinnovation.usc.edu/competitions-and-programs/geds/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://viterbiinnovation.usc.edu/competitions-and-programs/grand-challenges/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://viterbiinnovation.usc.edu/competitions-and-programs/mepc/",
       "page": "details",
       "anchor": "",
       "fetched": true,

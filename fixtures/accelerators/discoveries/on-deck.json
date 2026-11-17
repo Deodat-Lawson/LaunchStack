@@ -1,6 +1,6 @@
 {
   "programId": "on-deck",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://admissions.joinodf.com/",
@@ -11,48 +11,16 @@
       "origin": "official"
     },
     {
-      "url": "https://forms.joinodf.com/t/x2fuWdEqkSus?utm_source=homepage",
-      "page": "other",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "robots",
-      "origin": "official"
-    },
-    {
       "url": "https://joinodf.com/companies",
       "page": "portfolio",
       "anchor": "Top Companies",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://joinodf.com/deep-end/starting-companies",
       "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://joinodf.com/post/antifragile-companies",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://joinodf.com/post/on-decks-top-companies-2022",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://joinodf.com/post/what-founders-need-to-know-about-equity-and-early-stage-financing",
-      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -108,6 +76,78 @@
     },
     {
       "url": "https://joinodf.com/top-companies-2023/atob",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/top-companies-2023/beacon-ai",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/top-companies-2023/cal-com",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/top-companies-2023/chronicle",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/top-companies-2023/climate-club",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/top-companies-2023/composer",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/top-companies-2023/contra",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/top-companies-2023/enveda",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/top-companies-2023/equi",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/top-companies-2023/finch",
       "page": "portfolio",
       "anchor": "",
       "fetched": true,

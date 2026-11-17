@@ -1,6 +1,6 @@
 {
   "programId": "rpi-incubator",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://eship.rpi.edu/"
   ],
@@ -8,30 +8,38 @@
     {
       "id": "check-email-674eda7741",
       "url": "https://eship.rpi.edu/",
-      "title": "RPI Incubator — homepage checked by scrape.py",
+      "title": "RPI Incubator — homepage",
       "excerpt": "\"email\": \"admissions@rpi.edu\"",
       "page": "details"
     },
     {
       "id": "check-phone-8299fecafa",
       "url": "https://eship.rpi.edu/",
-      "title": "RPI Incubator — homepage checked by scrape.py",
+      "title": "RPI Incubator — homepage",
       "excerpt": "518.276.2058",
       "page": "details"
     },
     {
       "id": "check-phone-9b1af3d393",
       "url": "https://eship.rpi.edu/",
-      "title": "RPI Incubator — homepage checked by scrape.py",
+      "title": "RPI Incubator — homepage",
       "excerpt": "\"telephone\": \"(518) 276-6000\"",
       "page": "details"
     },
     {
       "id": "check-phone-d83cf84bc2",
       "url": "https://eship.rpi.edu/",
-      "title": "RPI Incubator — homepage checked by scrape.py",
+      "title": "RPI Incubator — homepage",
       "excerpt": "(518) 276-6000",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-9cb4b45fbf",
+      "url": "https://eship.rpi.edu/",
+      "page": "details",
+      "excerpt": "Severino Center | Rensselaer Polytechnic Institute Skip to main content Inventors & Innovators: Explore. Create. Launch. Severino Center Main navigation Successes For Students For Faculty About Contact Us Donate Events Empowering RPI innovators to turn bold ideas into real-world ventures. From mentorship and funding to workshops and competitions, we help the RPI community transform creativity into impact. Join Our Mailing List Upcoming Events Flying Pig Society Workshop ⏰ Novem ber 19, 2026 4:30 PM RPI Biotech Center Auditorium 1623 15th Street Troy, NY 12180 More Info Innovation Showcase & Special Opps Pitch Event ⏰ Decemb er 11, 2026 4:30 PM RPI Biotech Center Auditorium 1623 15th Street Troy, NY 12180 Startup Tech Valley Social Night ⏰ Decemb er 17, 2026 5:00 PM Location TBD View More Events Our Services Advising & Coaching Competitions & Awards Internships & Fellowships Organizations & Networks Programs, Workshops & Bootcamps Spaces & Places For 200 years, innovation and entrepreneurship have been central to RPI. From chemistry and civil engineering to gaming and nanomaterials, RPI students, faculty, and alumni have pioneered technologies that benefit society and achieved remarkable Rensselaer Firsts. That spirit continues today. Questions about entrepreneurship, inventions, or the Entrepreneur of the Year Award? Contact the Severino Center Staff or request a meeting with"
     }
   ],
   "findings": {
@@ -60,8 +68,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

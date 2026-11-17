@@ -1,12 +1,12 @@
 {
   "programId": "lightspeed-india",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://lsip.com/about/",
       "page": "details",
       "anchor": "About",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -19,8 +19,24 @@
       "origin": "official"
     },
     {
+      "url": "https://lsip.com/feeds/ai-will-enable-indian-companies-to-be-more-efficient-scale-faster-harsha-kumar/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/feeds/good-companies-always-on-the-right-side-of-regulations-lightspeed-md/",
+      "page": "portfolio",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -37,6 +53,14 @@
     {
       "url": "https://lsip.com/feeds/lightspeed-india-on-asias-tech-investment-opportunities/",
       "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/feeds/lightspeed-india-singapore-is-the-most-under-talked-about-market-in-the-region/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -86,8 +110,8 @@
       "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
       "page": "terms",
       "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
+      "fetched": true,
+      "blocked": null,
       "origin": "official"
     },
     {
@@ -116,30 +140,6 @@
     },
     {
       "url": "https://lsip.com/stories/lightspeeds-investment-in-cosmart/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://lsip.com/stories/lightspeeds-investment-in-exponent-energy/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://lsip.com/stories/lightspeeds-investment-in-globalbees/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://lsip.com/stories/lightspeeds-investment-in-marqo-ai/",
       "page": "terms",
       "anchor": "",
       "fetched": true,

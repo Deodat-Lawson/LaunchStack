@@ -1,6 +1,6 @@
 {
   "programId": "bessemer",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://jobs.bvp.com/jobs",
@@ -11,10 +11,18 @@
       "origin": "official"
     },
     {
+      "url": "https://staging.bvp.com/collections/analyst-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.bvp.com/about",
       "page": "details",
       "anchor": "About",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -43,8 +51,32 @@
       "origin": "official"
     },
     {
+      "url": "https://www.bvp.com/atlas/best-practices-from-our-portfolio-for-a-high-performing-sdr-bdr-function",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.bvp.com/atlas/driving-seven-figure-enterprise-deals-how-recall-ais-amanda-zhu-went-from-founder-led-sales-to-building-out-gtm",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/atlas/security-for-growth-companies",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/atlas/six-imperatives-for-ai-first-companies",
+      "page": "portfolio",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -54,7 +86,15 @@
       "url": "https://www.bvp.com/atlas/the-ai-100-benchmarks-for-the-third-supercycle",
       "page": "portfolio",
       "anchor": "Article The AI 100: benchmarks for the third supercycle November 12, 2026 The inaugural list of the top 100 private AI companies is worth $3.6T, with ARR growth averaging 480%. A d",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/atlas/what-every-ceo-needs-to-know-about-ai-governance",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -62,61 +102,21 @@
       "url": "https://www.bvp.com/beyond-the-capital",
       "page": "portfolio",
       "anchor": "Community & events Peer forums, matchmaking, workshops, and events built around the problems you face. 450+ active companies. 2,000+ community members.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.bvp.com/news/bessemer-series-a-investment-alloy",
-      "page": "terms",
+      "url": "https://www.bvp.com/growth",
+      "page": "other",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.bvp.com/news/bessemer-series-a-investment-cypress-io",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bvp.com/news/bessemer-series-a-investment-electric",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bvp.com/news/bessemer-series-a-investment-pana",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bvp.com/news/bessemer-series-a-investment-pinpoint",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bvp.com/news/bessemer-series-c-investment-bigid",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bvp.com/news/bessemer-series-c-investment-launchdarkly",
-      "page": "terms",
+      "url": "https://www.bvp.com/israelcompanies",
+      "page": "portfolio",
       "anchor": "",
       "fetched": true,
       "blocked": null,

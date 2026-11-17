@@ -1,11 +1,155 @@
 {
   "programId": "northeast-technology-center",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/717485",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/claremore-campus-/717705",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/claremore-campus-/cnc-machining/717706",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/717744",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/frequently-asked-questions/717745",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/mandatory-prospective-student-orientation-and-financial-aid-information---online-version/717747",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/oklahoma-board-of-nursing-rules-for-individuals-with-a-criminal-history/717780",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/documents/district/about-us/717418",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/documents/district/about-us/cares-act-grant/717425",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/documents/district/about-us/cares-act-grant/overview/717426",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/documents/district/about-us/cares-act-grant/reports/717428",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/documents/district/about-us/consumer-information/717626",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/documents/district/about-us/district-strategic-plan/717430",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/documents/district/about-us/human-resources/717432",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/documents/district/northeast-tech-foundation/foundation-scholarship-application/717528",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/documents/district/school-board/board-meeting-dates/717500",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/o/ntc/page/apply-now",
+      "page": "application",
+      "anchor": "apply now",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.netech.edu/page/about-us",
       "page": "details",
       "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/page/apply-now",
+      "page": "application",
+      "anchor": "Apply Now",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -14,14 +158,6 @@
       "url": "https://www.netech.edu/page/board-meeting-dates",
       "page": "batches",
       "anchor": "Board Meeting Dates",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.netech.edu/page/apply-now",
-      "page": "application",
-      "anchor": "Apply Now",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -38,14 +174,6 @@
       "url": "https://www.netech.edu/page/programmable-logic-controllers-plcs",
       "page": "details",
       "anchor": "Programmable Logic Controllers (PLCs)",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.netech.edu/o/ntc/page/apply-now",
-      "page": "application",
-      "anchor": "apply now",
       "fetched": false,
       "blocked": null,
       "origin": "official"

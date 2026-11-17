@@ -1,10 +1,18 @@
 {
   "programId": "hub71",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.hub71.com/ar/faqs",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hub71.com/ar/latest-news/press-release/hub71-selects-27-startups-for-cohort-18-in-first-all-international-intake-after-record-2453-applications",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -59,10 +67,34 @@
       "origin": "official"
     },
     {
+      "url": "https://www.hub71.com/ar/startups/biotwin-cohort14",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hub71.com/ar/startups/hyvegeo-cohort14",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hub71.com/ar/startups/metric-cohort14",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.hub71.com/faqs",
       "page": "terms",
       "anchor": "FAQs",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -71,6 +103,14 @@
       "page": "application",
       "anchor": "Apply",
       "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hub71.com/latest-news/press-release/hub71-partners-with-unicorn-factory-lisboa-q-branch-and-instituto-caldeira-to-launch-global-scaling-up-programme-supporting-startups-expansion-across-europe-the-us-latin-america-and-the-middle-east",
+      "page": "details",
+      "anchor": "View More",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },

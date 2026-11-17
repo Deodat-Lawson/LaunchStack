@@ -1,215 +1,1897 @@
 {
   "programId": "ideahub-hofstra-university",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+    "https://www.hofstra.edu/admission/apply/",
+    "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+    "https://www.hofstra.edu/admission/apply/?ref=globalnav",
     "https://www.hofstra.edu/apply",
-    "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs"
+    "https://www.hofstra.edu/graduate/apply.html",
+    "https://admission.hofstra.edu/apply/?sr=317d79ce-5193-47c1-8448-781d1e958c31",
+    "https://admission.hofstra.edu/apply/?sr=4679082f-63e4-4da7-b63a-1772373be373",
+    "https://admission.hofstra.edu/apply/?sr=4ce4638e-ca1c-4abd-b547-80e6ff066277",
+    "https://admission.hofstra.edu/apply/?sr=6f7e217a-fe62-48d9-aee4-e6a0833a05dd",
+    "https://admission.hofstra.edu/apply/?sr=7c208940-e414-4596-91f2-8a2461a800b2",
+    "https://admission.hofstra.edu/apply/?sr=e1e41537-eae2-4c31-acfa-d6636f76b6d1",
+    "https://admission.hofstra.edu/apply/?sr=ed41c4b5-fad8-4b8f-8517-b807d4c64f5c",
+    "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+    "https://medicine.hofstra.edu/admission/index.html",
+    "https://www.hofstra.edu/admission/international.html",
+    "https://www.hofstra.edu/admission/visiting-students/",
+    "https://www.hofstra.edu/admission/faq.html",
+    "https://www.hofstra.edu/admission/international-faq.html",
+    "https://www.hofstra.edu/graduate/faq.html"
   ],
   "evidence": [
     {
+      "id": "check-announced-0c1f6acdc2",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "for details on application options and deadlines. We recommend you apply by these dates: November 15 (for spring start) May 1 (for fall start) Apply as International",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-5694ed9618",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "for the joint program should be submitted by the preferred deadline of April 15. The Law School will then work with the MPH program to ensure",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-5cc19f855b",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "for details on application options and deadlines. We recommend you apply by these dates: November 15 (for spring start) May 1 (for fall start) Apply as International",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-70463b9d0b",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Application Checklist November 1: Spring enrollment priority deadline July 1: Fall enrollment priority deadline Application (PDF) Personal",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-72c4b6009d",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Application Checklist November 1: Spring enrollment priority deadline July 1: Fall enrollment priority deadline Apply online (no application",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-9144a079c7",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Opens September 1 JD Early Action (Non-Binding) Application Deadline: November 15 JD 1L Regular Decision Application Priority Deadline: April 15",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-bcaf1f0e57",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "for details on application options and deadlines. We recommend you apply by these dates: November 15 (for spring start) May 1 (for fall start) Apply as International",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-cd13541a2f",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "for details on application options and deadlines. We recommend you apply by these dates: November 15 (for spring start) May 1 (for fall start) Apply as International",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-e625aaaa1c",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Deadline: November 15 JD 1L Regular Decision Application Priority Deadline: April 15 Apply online on the Law School Admission Council (LSAC) website",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-00c276d7ab",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "and candidates should be notified within 6 to 8 weeks from the completion (not submission) of the",
+      "page": "application"
+    },
+    {
+      "id": "check-email-6ddd281ccb",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "help@hofstra.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-email-7425e00d0e",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "help@hofstra.edu",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-a95c47a767",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "using this website, please contact the ITS Service Desk at help@hofstra.edu or by calling 516-463-7777 . Please identify the webpage",
+      "page": "application"
+    },
+    {
+      "id": "check-email-ea0af49845",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "using this website, please contact the ITS Service Desk at help@hofstra.edu or by calling 516-463-7777 . Please identify the webpage",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-05ae04d770",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "and Perfusion Medicine Health Administration (Online and In-Person) Health Informatics Medical Physics Premedical",
+      "page": "application"
+    },
+    {
+      "id": "check-format-2e2fe69fb1",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "title": "ideaHUb / Hofstra University — homepage",
+      "excerpt": "mentors, and startup companies. The ideaHUb runs a virtual and in-person New York State Certified Business Incubator",
+      "page": "details"
+    },
+    {
+      "id": "check-format-36822ee90d",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "title": "ideaHUb / Hofstra University — homepage",
+      "excerpt": "and startup companies. The ideaHUb runs a virtual and in-person New York State Certified Business Incubator . If you are",
+      "page": "details"
+    },
+    {
+      "id": "check-format-43c83b6ba1",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "the year. To find out more about on-campus events, virtual webinars and when a representative may be visiting your",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-88ac61982a",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "from listed colleges may transfer. You can also attend a Virtual Transfer Day to receive an admission decision, review your",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-dccb760bea",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "title": "ideaHUb / Hofstra University — homepage",
+      "excerpt": "assistance with licensing information for CPAs considering remote work or relocation. Learn More Wonder Integrated Group",
+      "page": "details"
+    },
+    {
       "id": "check-phone-00d0ca5533",
       "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
-      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — homepage",
       "excerpt": "(516) 463-6600",
       "page": "details"
     },
     {
-      "id": "check-phone-6fbffa51f1",
-      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs",
-      "title": "ideaHUb / Hofstra University — details page checked by scrape.py",
+      "id": "check-phone-01fbed34c4",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "title": "ideaHUb / Hofstra University — application page",
       "excerpt": "(516) 463-6600",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-phone-131ae57b6c",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "(516) 463-6600",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-3aa19ca0b1",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "516-463-6700",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-440bc6dbbe",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "516-463-4723",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-4882d62e3a",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "516-463-7777",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-4c7e09f450",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "(516) 463-6600",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-7018269cab",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Phone: 516-463-6600",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-8619eb1ef7",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "(516) 463-6600",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-91c73ed548",
+      "url": "https://admission.hofstra.edu/apply/?sr=4679082f-63e4-4da7-b63a-1772373be373",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "(516) 463-6600",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-979f0b9ff1",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "516-463-7075",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-a00ac8a96a",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "516-463-7777",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-a70c6d5a82",
+      "url": "https://admission.hofstra.edu/apply/?sr=317d79ce-5193-47c1-8448-781d1e958c31",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "(516) 463-6600",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-ad6333be27",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "(516) 463-6600",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-bca5c5fe5e",
+      "url": "https://admission.hofstra.edu/apply/?sr=7c208940-e414-4596-91f2-8a2461a800b2",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "(516) 463-6600",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-beed497610",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Phone: 516-463-6600",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-c28c7a5cd8",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "516-463-7075",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-d152937fc4",
+      "url": "https://admission.hofstra.edu/apply/?sr=e1e41537-eae2-4c31-acfa-d6636f76b6d1",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "(516) 463-6600",
+      "page": "application"
     },
     {
       "id": "check-phone-e2b670bbb3",
       "url": "https://www.hofstra.edu/apply",
-      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "(516) 463-6600",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-eaabe7b183",
+      "url": "https://admission.hofstra.edu/apply/?sr=6f7e217a-fe62-48d9-aee4-e6a0833a05dd",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "(516) 463-6600",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-efdd05ac44",
+      "url": "https://admission.hofstra.edu/apply/?sr=4ce4638e-ca1c-4abd-b547-80e6ff066277",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "(516) 463-6600",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-f2936fab14",
+      "url": "https://admission.hofstra.edu/apply/?sr=ed41c4b5-fad8-4b8f-8517-b807d4c64f5c",
+      "title": "ideaHUb / Hofstra University — application page",
       "excerpt": "(516) 463-6600",
       "page": "application"
     },
     {
       "id": "check-portfolio-08f93c58c4",
       "url": "https://www.hofstra.edu/apply",
-      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — application page",
       "excerpt": "Alumni → https://www.hofstra.edu/alumni/?ref=globalbtm",
       "page": "application"
     },
     {
-      "id": "check-portfolio-3775a59e90",
-      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs",
-      "title": "ideaHUb / Hofstra University — details page checked by scrape.py",
+      "id": "check-portfolio-1b9b57675b",
+      "url": "https://www.hofstra.edu/admission/international-faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
       "excerpt": "Alumni → https://www.hofstra.edu/alumni/",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-325c71dae2",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/?ref=globalbtm",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4b501e63b5",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/?ref=globalbtm",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-57c0c10702",
+      "url": "https://medicine.hofstra.edu/admission/index.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Alumni → https://medicine.hofstra.edu/alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-659a2f26d2",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-68a6d0d987",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-864796c0c6",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/",
+      "page": "application"
     },
     {
       "id": "check-portfolio-8cb7be2a26",
       "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
-      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — homepage",
       "excerpt": "Alumni → https://www.hofstra.edu/alumni/",
       "page": "details"
     },
     {
       "id": "check-portfolio-905c91484d",
       "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
-      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — homepage",
       "excerpt": "Alumni → https://www.hofstra.edu/alumni/?ref=globalbtm",
       "page": "details"
     },
     {
       "id": "check-portfolio-ad2d30627b",
       "url": "https://www.hofstra.edu/apply",
-      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — application page",
       "excerpt": "Alumni → https://www.hofstra.edu/alumni/",
       "page": "application"
     },
     {
-      "id": "check-portfolio-e43108e73e",
-      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs",
-      "title": "ideaHUb / Hofstra University — details page checked by scrape.py",
-      "excerpt": "Alumni → https://www.hofstra.edu/alumni/?ref=globalbtm",
-      "page": "details"
+      "id": "check-portfolio-be75423f52",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/",
+      "page": "terms"
     },
     {
-      "id": "check-route-0d71a03a52",
-      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs",
-      "title": "ideaHUb / Hofstra University — details page checked by scrape.py",
+      "id": "check-portfolio-c3f56a1f3b",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/?ref=globalbtm",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ca7541d544",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/?ref=globalbtm",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e71236f93c",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e779835933",
+      "url": "https://www.hofstra.edu/admission/international-faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e803393827",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e968af1117",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/?ref=globalbtm",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f79f1e5106",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Alumni → https://law.hofstra.edu/about/alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-fcbc943b0b",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-0898fd22cc",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "to be made? Time to decision varies by program. Most departments review on a rolling basis, meaning applications are reviewed continually up to the onset of courses as",
+      "page": "terms"
+    },
+    {
+      "id": "check-rolling-58c5d442a3",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": ". Apply for Early Admission II Regular Decision Apply and receive a decision on a rolling basis beginning FEBRUARY 1 . Apply with Common App Apply through the Hofstra App",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-6291e03a06",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": ". Apply for Early Admission II Regular Decision Apply and receive a decision on a rolling basis beginning FEBRUARY 1 . Apply with Common App Apply through the Hofstra App",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-75b643fe05",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "about four weeks after the deadline. Hofstra continues to accept applications on a rolling basis throughout the year. Explore application options and deadlines to plan your",
+      "page": "terms"
+    },
+    {
+      "id": "check-rolling-caf9d820f8",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "decisions are generally not made before July. All files are reviewed on a rolling basis; therefore, applicants are encouraged to complete their files as quickly as",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-cd72683e9e",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": ". Apply for Early Admission II Regular Decision Apply and receive a decision on a rolling basis beginning FEBRUARY 1 . Apply with Common App Apply through the Hofstra App",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-eaaf6fd051",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": ". Apply for Early Admission II Regular Decision Apply and receive a decision on a rolling basis beginning FEBRUARY 1 . Apply with Common App Apply through the Hofstra App",
+      "page": "application"
+    },
+    {
+      "id": "check-route-009f19c6db",
+      "url": "https://admission.hofstra.edu/apply/?sr=317d79ce-5193-47c1-8448-781d1e958c31",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Create an account → https://admission.hofstra.edu/account/register?r=https%3a%2f%2fadmission.hofstra.edu%2fapply%2f%3fsr%3d317d79ce-5193-47c1-8448-781d1e958c31",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0155b179ce",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Fall 2027 Early Action II Admission → https://admission.hofstra.edu/apply/?sr=6f7e217a-fe62-48d9-aee4-e6a0833a05dd",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0dc7620eee",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
       "excerpt": "Apply → https://www.hofstra.edu/admission/apply/?ref=globalbtm",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-route-0f93384856",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "2027: Apply with Hofstra App → https://admission.hofstra.edu/apply/?sr=4679082f-63e4-4da7-b63a-1772373be373",
+      "page": "application"
+    },
+    {
+      "id": "check-route-126b9c5a7d",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Application Process → https://www.hofstra.edu/admission/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-130fca5ec8",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Fall 2027 Early Action I Admission → https://admission.hofstra.edu/apply/?sr=7c208940-e414-4596-91f2-8a2461a800b2",
+      "page": "application"
+    },
+    {
+      "id": "check-route-14635f7f6e",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Apply → https://www.hofstra.edu/admission/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-18abbfdd0c",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Applying for Graduate Studies → https://www.hofstra.edu/graduate/apply.html",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1970aebd1d",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "online application → https://www.hofstra.edu/gradapply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1b1b7b3304",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Application Process → https://www.hofstra.edu/admission/apply/",
+      "page": "application"
     },
     {
       "id": "check-route-1bb4ad9dbb",
       "url": "https://www.hofstra.edu/apply",
-      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — application page",
       "excerpt": "Apply Now → https://www.hofstra.edu/admission/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1bbb2d9d20",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply through the Hofstra App → https://admission.hofstra.edu/apply/?sr=4ce4638e-ca1c-4abd-b547-80e6ff066277",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1c734574ee",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Occupational Therapy → https://admission.hofstra.edu/apply/?sr=317d79ce-5193-47c1-8448-781d1e958c31",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1d3ee187be",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply as International → https://www.hofstra.edu/admission/international.html",
       "page": "application"
     },
     {
       "id": "check-route-20a3421af3",
       "url": "https://www.hofstra.edu/apply",
-      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply as a Visiting Student → https://www.hofstra.edu/admission/visiting-students/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2504d83197",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "2027: Apply with Hofstra App → https://admission.hofstra.edu/apply/?sr=4679082f-63e4-4da7-b63a-1772373be373",
+      "page": "application"
+    },
+    {
+      "id": "check-route-25b8a44610",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
       "excerpt": "Apply as a Visiting Student → https://www.hofstra.edu/admission/visiting-students/",
       "page": "application"
     },
     {
       "id": "check-route-2a3a655f80",
       "url": "https://www.hofstra.edu/apply",
-      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — application page",
       "excerpt": "Application Process → https://www.hofstra.edu/admission/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2bf09e9750",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for law program study. → https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2c23901278",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Application Process → https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2c8f86406b",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for nonmatriculated (non-degree) study. → https://admission.hofstra.edu/apply/?sr=e1e41537-eae2-4c31-acfa-d6636f76b6d1",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2e95798890",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply → https://www.hofstra.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2edfb5de77",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Early Admission I → https://admission.hofstra.edu/apply/?sr=7c208940-e414-4596-91f2-8a2461a800b2",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2f81914142",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for graduate program study. → https://admission.hofstra.edu/apply/?sr=317d79ce-5193-47c1-8448-781d1e958c31",
+      "page": "application"
+    },
+    {
+      "id": "check-route-33b68ab85c",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply Now → https://www.hofstra.edu/admission/apply/",
       "page": "application"
     },
     {
       "id": "check-route-3611b4cd2d",
       "url": "https://www.hofstra.edu/apply",
-      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — application page",
       "excerpt": "Skip to main content → https://www.hofstra.edu/admission/apply/#main-content",
       "page": "application"
     },
     {
       "id": "check-route-39cc5768ab",
       "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
-      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — homepage",
       "excerpt": "Application Process → https://www.hofstra.edu/admission/apply/?ref=globalnav",
       "page": "details"
     },
     {
       "id": "check-route-3df3e0b3f9",
       "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
-      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — homepage",
       "excerpt": "Apply → https://www.hofstra.edu/admission/apply/",
       "page": "details"
     },
     {
+      "id": "check-route-3e8b8d2db9",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply through the Hofstra App → https://admission.hofstra.edu/apply/?sr=4ce4638e-ca1c-4abd-b547-80e6ff066277",
+      "page": "application"
+    },
+    {
+      "id": "check-route-416576a8d2",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Early Admission II → https://admission.hofstra.edu/apply/?sr=6f7e217a-fe62-48d9-aee4-e6a0833a05dd",
+      "page": "application"
+    },
+    {
+      "id": "check-route-41838293b3",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "housing application instructions → https://www.hofstra.edu/residence-life/housing-selection-new-residents.html",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-463c7db949",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Fall 2027 Early Action I Admission → https://admission.hofstra.edu/apply/?sr=7c208940-e414-4596-91f2-8a2461a800b2",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4ab3a0af43",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply → https://law.hofstra.edu/admissions/jd-admissions/how-to-apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4d1bc545fe",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "View the MALFL Application and Admission Requirements → https://law.hofstra.edu/admissions/jd-admissions/jdmaster-linguistics-forensic-linguistics-malfl-program/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4fc7a508bd",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Application Process → https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-503a2c3963",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply as International → https://www.hofstra.edu/admission/international.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5044396bfb",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "I-20 and F-1 transfer application materials → https://www.hofstra.edu/admission/adm_international_documents.html",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-526afa0dab",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "2027: Apply with Hofstra App → https://admission.hofstra.edu/apply/?sr=4679082f-63e4-4da7-b63a-1772373be373",
+      "page": "application"
+    },
+    {
+      "id": "check-route-59ba0fcfbd",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Application (PDF) → https://law.hofstra.edu/_site_support/files/pdf/admissions/jdprogram/howtoapply/exchange_student_application.pdf",
+      "page": "application"
+    },
+    {
+      "id": "check-route-61c4cc15b9",
+      "url": "https://admission.hofstra.edu/apply/?sr=317d79ce-5193-47c1-8448-781d1e958c31",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Log in → https://admission.hofstra.edu/account/login?r=https%3a%2f%2fadmission.hofstra.edu%2fapply%2f%3fsr%3d317d79ce-5193-47c1-8448-781d1e958c31",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6772ba798e",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply through the Hofstra App → https://admission.hofstra.edu/apply/?sr=4ce4638e-ca1c-4abd-b547-80e6ff066277",
+      "page": "application"
+    },
+    {
+      "id": "check-route-67a0fc7f39",
+      "url": "https://www.hofstra.edu/admission/international-faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "located on our website → https://www.hofstra.edu/admission/apply.html#transfer",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6a5debbd22",
+      "url": "https://admission.hofstra.edu/apply/?sr=6f7e217a-fe62-48d9-aee4-e6a0833a05dd",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Log in → https://admission.hofstra.edu/account/login?r=https%3a%2f%2fadmission.hofstra.edu%2fapply%2f%3fsr%3d6f7e217a-fe62-48d9-aee4-e6a0833a05dd",
+      "page": "application"
+    },
+    {
       "id": "check-route-6add600031",
       "url": "https://www.hofstra.edu/apply",
-      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — application page",
       "excerpt": "Apply → https://www.hofstra.edu/admission/apply/?ref=globalbtm",
       "page": "application"
     },
     {
       "id": "check-route-6c1bf5111b",
       "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
-      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — homepage",
       "excerpt": "Start Your Application → https://www.hofstra.edu/graduate/apply.html",
       "page": "details"
     },
     {
-      "id": "check-route-72cfe539ad",
-      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs",
-      "title": "ideaHUb / Hofstra University — details page checked by scrape.py",
-      "excerpt": "Apply → https://www.hofstra.edu/apply",
-      "page": "details"
+      "id": "check-route-6f0c1908e8",
+      "url": "https://www.hofstra.edu/admission/international-faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "webpage → https://www.hofstra.edu/admission/international-how-apply/",
+      "page": "terms"
     },
     {
-      "id": "check-route-94016415ec",
-      "url": "https://www.hofstra.edu/apply",
-      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "id": "check-route-6f4d64a31f",
+      "url": "https://www.hofstra.edu/admission/international-faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "First-Year Undergraduate → https://www.hofstra.edu/admission/apply.html",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-72fc672ea0",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply to the Donald and Barbara Zucker School of Medicine at Hofstra/Northwell → https://medicine.hofstra.edu/admission/index.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-73f5f1b1d1",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Early Admission II → https://admission.hofstra.edu/apply/?sr=6f7e217a-fe62-48d9-aee4-e6a0833a05dd",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7b4c203151",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
       "excerpt": "Apply → https://www.hofstra.edu/admission/apply/",
       "page": "application"
     },
     {
-      "id": "check-route-a1662d9fa0",
-      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs",
-      "title": "ideaHUb / Hofstra University — details page checked by scrape.py",
-      "excerpt": "Application Process → https://www.hofstra.edu/admission/apply/?ref=globalnav",
-      "page": "details"
+      "id": "check-route-7c7224a019",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply through the Hofstra App → https://admission.hofstra.edu/apply/?sr=4ce4638e-ca1c-4abd-b547-80e6ff066277",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7f2f84fa8b",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply → https://www.hofstra.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8027d20c59",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "first-year application information → https://www.hofstra.edu/admission/first-year.html",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-82e312a605",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply Now → https://www.hofstra.edu/admission/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-849dec2c24",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Early Admission I → https://admission.hofstra.edu/apply/?sr=7c208940-e414-4596-91f2-8a2461a800b2",
+      "page": "application"
+    },
+    {
+      "id": "check-route-851ffb1c47",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Hofstra’s international student application → https://www.hofstra.edu/admission/international-how-apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-85a031b8ef",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Master of Public Health → https://admission.hofstra.edu/apply/?sr=317d79ce-5193-47c1-8448-781d1e958c31",
+      "page": "application"
+    },
+    {
+      "id": "check-route-883c4ebed4",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Hofstra application → https://www.hofstra.edu/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-8a1422c549",
+      "url": "https://www.hofstra.edu/admission/international-faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "here for more information on applying Test Optional → https://www.hofstra.edu/admission/standardized-testing-policy.html",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-8b5240e95c",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply as a Visiting Student → https://www.hofstra.edu/admission/visiting-students/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8b605a075e",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Fall 2027 Early Action II Admission → https://admission.hofstra.edu/apply/?sr=6f7e217a-fe62-48d9-aee4-e6a0833a05dd",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8bd511ebea",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply → https://www.hofstra.edu/admission/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8ea432eacc",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Early Admission II → https://admission.hofstra.edu/apply/?sr=6f7e217a-fe62-48d9-aee4-e6a0833a05dd",
+      "page": "application"
+    },
+    {
+      "id": "check-route-94016415ec",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply → https://www.hofstra.edu/admission/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9aac46417b",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Apply Now → https://www.hofstra.edu/graduate/apply.html",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-9ca90453f4",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "click here. → https://admission.hofstra.edu/apply/?sr=317d79ce-5193-47c1-8448-781d1e958c31",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9ff81a2849",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply → https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a2dacb8e46",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "How to Apply → https://www.hofstra.edu/graduate/apply.html",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-a4f97ede83",
+      "url": "https://admission.hofstra.edu/apply/?sr=ed41c4b5-fad8-4b8f-8517-b807d4c64f5c",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Log in → https://admission.hofstra.edu/account/login?r=https%3a%2f%2fadmission.hofstra.edu%2fapply%2f%3fsr%3ded41c4b5-fad8-4b8f-8517-b807d4c64f5c",
+      "page": "application"
     },
     {
       "id": "check-route-a53bb78ceb",
       "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
-      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — homepage",
       "excerpt": "Apply → https://www.hofstra.edu/admission/apply/?ref=globalbtm",
       "page": "details"
     },
     {
       "id": "check-route-a5cbd50767",
       "url": "https://www.hofstra.edu/apply",
-      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — application page",
       "excerpt": "Application Process → https://www.hofstra.edu/admission/apply/?ref=globalnav",
       "page": "application"
     },
     {
-      "id": "check-route-b59ae9ce00",
-      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs",
-      "title": "ideaHUb / Hofstra University — details page checked by scrape.py",
-      "excerpt": "Apply → https://www.hofstra.edu/admission/apply/",
-      "page": "details"
+      "id": "check-route-a6391cac36",
+      "url": "https://admission.hofstra.edu/apply/?sr=7c208940-e414-4596-91f2-8a2461a800b2",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Log in → https://admission.hofstra.edu/account/login?r=https%3a%2f%2fadmission.hofstra.edu%2fapply%2f%3fsr%3d7c208940-e414-4596-91f2-8a2461a800b2",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a63ab8a7d3",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply as International → https://www.hofstra.edu/admission/international.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a6fa63ec5f",
+      "url": "https://admission.hofstra.edu/apply/?sr=ed41c4b5-fad8-4b8f-8517-b807d4c64f5c",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Create an account → https://admission.hofstra.edu/account/register?r=https%3a%2f%2fadmission.hofstra.edu%2fapply%2f%3fsr%3ded41c4b5-fad8-4b8f-8517-b807d4c64f5c",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ab5463f3e0",
+      "url": "https://admission.hofstra.edu/apply/?sr=4679082f-63e4-4da7-b63a-1772373be373",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Create an account → https://admission.hofstra.edu/account/register?r=https%3a%2f%2fadmission.hofstra.edu%2fapply%2f%3fsr%3d4679082f-63e4-4da7-b63a-1772373be373",
+      "page": "application"
+    },
+    {
+      "id": "check-route-abde75b9da",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Early Admission I → https://admission.hofstra.edu/apply/?sr=7c208940-e414-4596-91f2-8a2461a800b2",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b276b89b5f",
+      "url": "https://admission.hofstra.edu/apply/?sr=4679082f-63e4-4da7-b63a-1772373be373",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Log in → https://admission.hofstra.edu/account/login?r=https%3a%2f%2fadmission.hofstra.edu%2fapply%2f%3fsr%3d4679082f-63e4-4da7-b63a-1772373be373",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b2a71439ce",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "JD Admissions - How to Apply → https://law.hofstra.edu/admissions/jd-admissions/how-to-apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b433d03e7e",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Fall 2027 Early Action I Admission → https://admission.hofstra.edu/apply/?sr=7c208940-e414-4596-91f2-8a2461a800b2",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b8b9626553",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Early Admission I → https://admission.hofstra.edu/apply/?sr=7c208940-e414-4596-91f2-8a2461a800b2",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b8e9b9a458",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "I-20 Application Form → https://www.hofstra.edu/pdf/admission/form-i20-financial-verification.pdf",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b970134a7f",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply → https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bc89de2e18",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Early Admission II → https://admission.hofstra.edu/apply/?sr=6f7e217a-fe62-48d9-aee4-e6a0833a05dd",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bcf6d62750",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Hofstra’s transfer application → https://admission.hofstra.edu/apply/?sr=08e2d0ab-0ab3-44f6-aba9-1cdc72f1396f",
+      "page": "terms"
     },
     {
       "id": "check-route-bf7161943c",
       "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
-      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — homepage",
       "excerpt": "Apply → https://www.hofstra.edu/apply",
       "page": "details"
     },
     {
+      "id": "check-route-c25075ecf5",
+      "url": "https://admission.hofstra.edu/apply/?sr=6f7e217a-fe62-48d9-aee4-e6a0833a05dd",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Create an account → https://admission.hofstra.edu/account/register?r=https%3a%2f%2fadmission.hofstra.edu%2fapply%2f%3fsr%3d6f7e217a-fe62-48d9-aee4-e6a0833a05dd",
+      "page": "application"
+    },
+    {
       "id": "check-route-c4fc3f9c28",
       "url": "https://www.hofstra.edu/apply",
-      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — application page",
       "excerpt": "First-Year → https://www.hofstra.edu/admission/apply/#firstyear",
       "page": "application"
     },
     {
       "id": "check-route-c6b08cedd8",
       "url": "https://www.hofstra.edu/apply",
-      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — application page",
       "excerpt": "Transfer → https://www.hofstra.edu/admission/apply/#transfer",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c92dee1747",
+      "url": "https://admission.hofstra.edu/apply/?sr=e1e41537-eae2-4c31-acfa-d6636f76b6d1",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Create an account → https://admission.hofstra.edu/account/register?r=https%3a%2f%2fadmission.hofstra.edu%2fapply%2f%3fsr%3de1e41537-eae2-4c31-acfa-d6636f76b6d1",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ca0fc43281",
+      "url": "https://admission.hofstra.edu/apply/?sr=4ce4638e-ca1c-4abd-b547-80e6ff066277",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Create an account → https://admission.hofstra.edu/account/register?r=https%3a%2f%2fadmission.hofstra.edu%2fapply%2f%3fsr%3d4ce4638e-ca1c-4abd-b547-80e6ff066277",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cb3c6a5f8b",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply as a Visiting Student → https://www.hofstra.edu/admission/visiting-students/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cbae2721bf",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Hofstra’s undergraduate application information → https://www.hofstra.edu/admission/apply.html",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-cd324fd782",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply → https://www.hofstra.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d0afd268e8",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "2027: Apply with Hofstra App → https://admission.hofstra.edu/apply/?sr=4679082f-63e4-4da7-b63a-1772373be373",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d0c0f13e3e",
+      "url": "https://admission.hofstra.edu/apply/?sr=e1e41537-eae2-4c31-acfa-d6636f76b6d1",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Log in → https://admission.hofstra.edu/account/login?r=https%3a%2f%2fadmission.hofstra.edu%2fapply%2f%3fsr%3de1e41537-eae2-4c31-acfa-d6636f76b6d1",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d1dce2ba15",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Apply → https://www.hofstra.edu/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d37a6d03e3",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Undergraduate Admission → https://www.hofstra.edu/admission/apply.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d5a757fc5c",
+      "url": "https://www.hofstra.edu/admission/international-faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "I-20 Application Form → https://www.hofstra.edu/sites/default/files/2021-07/admission-form-i20-financial-verification.pdf",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d5d8d8bd6b",
+      "url": "https://admission.hofstra.edu/apply/?sr=4ce4638e-ca1c-4abd-b547-80e6ff066277",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Log in → https://admission.hofstra.edu/account/login?r=https%3a%2f%2fadmission.hofstra.edu%2fapply%2f%3fsr%3d4ce4638e-ca1c-4abd-b547-80e6ff066277",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d787abb70d",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "APPLY FOR GRADUATE BUSINESS STUDY. → https://admission.hofstra.edu/apply/?sr=ed41c4b5-fad8-4b8f-8517-b807d4c64f5c",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d830b77d7b",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "apply using the application (PDF) → https://law.hofstra.edu/sites/law.hofstra.edu/files/2023-05/hofstra-law-jdmba-application.pdf",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d94c69990a",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply → https://www.hofstra.edu/admission/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dc8c3ba311",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Hofstra’s application information → https://www.hofstra.edu/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-dfc5824181",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Visiting Student Application → https://www.hofstra.edu/pdf/admission/adm_form_visiting.pdf",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-e035c07ff8",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "title": "ideaHUb / Hofstra University — terms page",
+      "excerpt": "Apply → https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-e93a614b0c",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Fall 2027 Early Action I Admission → https://admission.hofstra.edu/apply/?sr=7c208940-e414-4596-91f2-8a2461a800b2",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ea8738fc74",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply → https://www.hofstra.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-eabaf49ef1",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Graduate Admission → https://www.hofstra.edu/graduate/apply.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-edcf3d9eae",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Application Process → https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "page": "application"
+    },
+    {
+      "id": "check-route-eeb2376dbf",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Application Process → https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f07c88bd7a",
+      "url": "https://admission.hofstra.edu/apply/?sr=7c208940-e414-4596-91f2-8a2461a800b2",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Create an account → https://admission.hofstra.edu/account/register?r=https%3a%2f%2fadmission.hofstra.edu%2fapply%2f%3fsr%3d7c208940-e414-4596-91f2-8a2461a800b2",
       "page": "application"
     },
     {
       "id": "check-route-f38a82aa36",
       "url": "https://www.hofstra.edu/apply",
-      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "title": "ideaHUb / Hofstra University — application page",
       "excerpt": "Apply as International → https://www.hofstra.edu/admission/international.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f3a0847733",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Skip to main content → https://law.hofstra.edu/admissions/jd-admissions/how-to-apply/#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f62cdc67a1",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Fall 2027 Early Action II Admission → https://admission.hofstra.edu/apply/?sr=6f7e217a-fe62-48d9-aee4-e6a0833a05dd",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fc9ee4ca51",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "title": "ideaHUb / Hofstra University — application page",
+      "excerpt": "Apply for Fall 2027 Early Action II Admission → https://admission.hofstra.edu/apply/?sr=6f7e217a-fe62-48d9-aee4-e6a0833a05dd",
       "page": "application"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-625e7432a0",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "page": "details",
+      "excerpt": "ideaHUb - Hofstra University Skip to main content Apply Make a Gift Search Menu Admission Academics Campus Life About Research Admission Application Process First-Year Undergraduate Transfer Students Visiting Students Graduate Admissions International Admissions School of Law School of Medicine Financial Aid Academics Undergraduate Programs Graduate Programs Colleges and Schools Academic Calendar Academic Support Continuing Education Distance Learning Library Campus Life Beyond the Classroom Athletics Bookstore Cultural Center Event Calendar Student Services Public Safety Visitors Guide About At a Glance Virtual Tour History Visitors Guide Faculty Administration Accreditations Experts Strategic Plan Research Office for Research and Sponsored Programs Centers and Institutes Undergraduate Research Horizons Visit Apply News Events Athletics Alumni MyHofstra Give Academic Offerings Directories MyHofstra Apply Make a Gift Menu Admission Admission Application Process First-Year Undergraduate Transfer Students Visiting Students Graduate Admissions International Admissions School of Law School of Medicine Financial Aid Academics Academics Undergraduate Programs Graduate Programs Colleges and Schools Academic Calendar Academic Support Continuing Education Distance Learning Library Campus Life Campus Life Beyond the Classroom Athletics Bookstore Cultural Center Event Calendar Student"
+    },
+    {
+      "id": "check-page-30ca3d5599",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "page": "details",
+      "excerpt": "Guthart Hall for Innovation and Discovery, which serves as a collaborative workspace for students, mentors, and startup companies."
+    },
+    {
+      "id": "check-page-e382e07578",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "page": "details",
+      "excerpt": "The ideaHUb runs a virtual and in-person New York State Certified Business Incubator ."
+    },
+    {
+      "id": "check-page-dd0d3a2bf3",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "page": "details",
+      "excerpt": "If you are interested in our state-of-the-art facility, please email us at: ideaHUb@hofstra.edu What does ideaHUb offer? ideaHUb company services include mentorship on business milestones, connections to student interns and academic programs, reimbursement for professional services on a cost-share basis, and benefits to eligible companies through the Long Island Innovation Hot Spot."
+    },
+    {
+      "id": "check-page-6ba58a6fda",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "page": "details",
+      "excerpt": "Apply for Internship Contact Us IdeaHUb Email Kristin King-Jankiewicz Incubator Coordinator Email The ideaHUb is a New York State Certified Business Incubator, funded by Empire State Development Division of Science, Technology, and Innovation."
+    },
+    {
+      "id": "check-page-fba637496b",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "page": "details",
+      "excerpt": "Request Info Attend an Event Start Your Application OurBloom OurBloom is a women’s health company dedicated to destigmatizing menstruation and supporting women of color."
+    },
+    {
+      "id": "check-page-abd8cbaaa6",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "page": "details",
+      "excerpt": "Our app provides free articles, advanced period tracking, and health-resources to start living intuitively with your body."
+    },
+    {
+      "id": "check-page-971e566c25",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "page": "details",
+      "excerpt": "Learn More Count COUNT helps CPAs meet their state licensing requirements by offering creative continuing education courses and assistance with licensing information for CPAs considering remote work or relocation."
+    },
+    {
+      "id": "check-page-3c72b6bf67",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "page": "details",
+      "excerpt": "They combine their award-winning Brand Strategy,Media Planning , and Creative Design & Development work with efficient execution across Events , Social , Digital , Out Of Home , TV/Radio & Print to deliver one truly integrated solution for brands."
+    },
+    {
+      "id": "check-page-2966d34a80",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "page": "details",
+      "excerpt": "Legal Office Hours Office hours with trusted legal partners provide founders direct access to guidance on formation, contracts, IP, and early-stage legal needs."
+    },
+    {
+      "id": "check-page-2df51339b0",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "page": "details",
+      "excerpt": "Coaching Founders connect with experienced mentors across industries—explore mentor bios to learn who they are and how they support our startups."
+    },
+    {
+      "id": "check-page-23f5acf459",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "page": "details",
+      "excerpt": "MakerSpace Access to the MakerSpace enables rapid prototyping, testing, and product development—learn more on our MakerSpace page."
+    },
+    {
+      "id": "check-page-6c53157a2d",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "page": "details",
+      "excerpt": "Request Info Apply Visit Give Campus Map Take a Virtual Tour Admission Academics Campus Life Research About Alumni Employment Accessibility Emergency © Hofstra University."
+    },
+    {
+      "id": "check-page-608fcc1a60",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "page": "application",
+      "excerpt": "Application Process - Hofstra University Skip to main content Apply Make a Gift Search Menu Admission Academics Campus Life About Research Admission Application Process First-Year Undergraduate Transfer Students Visiting Students Graduate Admissions International Admissions School of Law School of Medicine Financial Aid Academics Undergraduate Programs Graduate Programs Colleges and Schools Academic Calendar Academic Support Continuing Education Distance Learning Library Campus Life Beyond the Classroom Athletics Bookstore Cultural Center Event Calendar Student Services Public Safety Visitors Guide About At a Glance Virtual Tour History Visitors Guide Faculty Administration Accreditations Experts Strategic Plan Research Office for Research and Sponsored Programs Centers and Institutes Undergraduate Research Horizons Visit Apply News Events Athletics Alumni MyHofstra Give Academic Offerings Directories MyHofstra Apply Make a Gift Menu Admission Admission Application Process First-Year Undergraduate Transfer Students Visiting Students Graduate Admissions International Admissions School of Law School of Medicine Financial Aid Academics Academics Undergraduate Programs Graduate Programs Colleges and Schools Academic Calendar Academic Support Continuing Education Distance Learning Library Campus Life Campus Life Beyond the Classroom Athletics Bookstore Cultural Center Event"
+    },
+    {
+      "id": "check-page-01efd7db44",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "page": "application",
+      "excerpt": "Apply as a Visiting Student International Students If you’re from outside the United States, Hofstra supports you from application to visa processing."
+    },
+    {
+      "id": "check-page-3f5376d513",
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "page": "application",
+      "excerpt": "Request Info Apply Visit Give Campus Map Take a Virtual Tour Admission Academics Campus Life Research About Alumni Employment Accessibility Emergency © Hofstra University."
+    },
+    {
+      "id": "check-page-ebd59b097f",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "page": "application",
+      "excerpt": "Application Process - Hofstra University Skip to main content Apply Make a Gift Search Menu Admission Academics Campus Life About Research Admission Application Process First-Year Undergraduate Transfer Students Visiting Students Graduate Admissions International Admissions School of Law School of Medicine Financial Aid Academics Undergraduate Programs Graduate Programs Colleges and Schools Academic Calendar Academic Support Continuing Education Distance Learning Library Campus Life Beyond the Classroom Athletics Bookstore Cultural Center Event Calendar Student Services Public Safety Visitors Guide About At a Glance Virtual Tour History Visitors Guide Faculty Administration Accreditations Experts Strategic Plan Research Office for Research and Sponsored Programs Centers and Institutes Undergraduate Research Horizons Visit Apply News Events Athletics Alumni MyHofstra Give Academic Offerings Directories MyHofstra Apply Make a Gift Menu Admission Admission Application Process First-Year Undergraduate Transfer Students Visiting Students Graduate Admissions International Admissions School of Law School of Medicine Financial Aid Academics Academics Undergraduate Programs Graduate Programs Colleges and Schools Academic Calendar Academic Support Continuing Education Distance Learning Library Campus Life Campus Life Beyond the Classroom Athletics Bookstore Cultural Center Event"
+    },
+    {
+      "id": "check-page-f7d0e83f4d",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "page": "application",
+      "excerpt": "Apply as a Visiting Student International Students If you’re from outside the United States, Hofstra supports you from application to visa processing."
+    },
+    {
+      "id": "check-page-4f2e36cded",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "page": "application",
+      "excerpt": "Request Info Apply Visit Give Campus Map Take a Virtual Tour Admission Academics Campus Life Research About Alumni Employment Accessibility Emergency © Hofstra University."
+    },
+    {
+      "id": "check-page-6836872d9e",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "page": "application",
+      "excerpt": "Application Process - Hofstra University Skip to main content Apply Make a Gift Search Menu Admission Academics Campus Life About Research Admission Application Process First-Year Undergraduate Transfer Students Visiting Students Graduate Admissions International Admissions School of Law School of Medicine Financial Aid Academics Undergraduate Programs Graduate Programs Colleges and Schools Academic Calendar Academic Support Continuing Education Distance Learning Library Campus Life Beyond the Classroom Athletics Bookstore Cultural Center Event Calendar Student Services Public Safety Visitors Guide About At a Glance Virtual Tour History Visitors Guide Faculty Administration Accreditations Experts Strategic Plan Research Office for Research and Sponsored Programs Centers and Institutes Undergraduate Research Horizons Visit Apply News Events Athletics Alumni MyHofstra Give Academic Offerings Directories MyHofstra Apply Make a Gift Menu Admission Admission Application Process First-Year Undergraduate Transfer Students Visiting Students Graduate Admissions International Admissions School of Law School of Medicine Financial Aid Academics Academics Undergraduate Programs Graduate Programs Colleges and Schools Academic Calendar Academic Support Continuing Education Distance Learning Library Campus Life Campus Life Beyond the Classroom Athletics Bookstore Cultural Center Event"
+    },
+    {
+      "id": "check-page-2f2a829bcd",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "page": "application",
+      "excerpt": "Apply as a Visiting Student International Students If you’re from outside the United States, Hofstra supports you from application to visa processing."
+    },
+    {
+      "id": "check-page-d42c483d15",
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "page": "application",
+      "excerpt": "Request Info Apply Visit Give Campus Map Take a Virtual Tour Admission Academics Campus Life Research About Alumni Employment Accessibility Emergency © Hofstra University."
+    },
+    {
+      "id": "check-page-5e6c732543",
+      "url": "https://www.hofstra.edu/apply",
+      "page": "application",
+      "excerpt": "Application Process - Hofstra University Skip to main content Apply Make a Gift Search Menu Admission Academics Campus Life About Research Admission Application Process First-Year Undergraduate Transfer Students Visiting Students Graduate Admissions International Admissions School of Law School of Medicine Financial Aid Academics Undergraduate Programs Graduate Programs Colleges and Schools Academic Calendar Academic Support Continuing Education Distance Learning Library Campus Life Beyond the Classroom Athletics Bookstore Cultural Center Event Calendar Student Services Public Safety Visitors Guide About At a Glance Virtual Tour History Visitors Guide Faculty Administration Accreditations Experts Strategic Plan Research Office for Research and Sponsored Programs Centers and Institutes Undergraduate Research Horizons Visit Apply News Events Athletics Alumni MyHofstra Give Academic Offerings Directories MyHofstra Apply Make a Gift Menu Admission Admission Application Process First-Year Undergraduate Transfer Students Visiting Students Graduate Admissions International Admissions School of Law School of Medicine Financial Aid Academics Academics Undergraduate Programs Graduate Programs Colleges and Schools Academic Calendar Academic Support Continuing Education Distance Learning Library Campus Life Campus Life Beyond the Classroom Athletics Bookstore Cultural Center Event"
+    },
+    {
+      "id": "check-page-1200beaf62",
+      "url": "https://www.hofstra.edu/apply",
+      "page": "application",
+      "excerpt": "Apply as a Visiting Student International Students If you’re from outside the United States, Hofstra supports you from application to visa processing."
+    },
+    {
+      "id": "check-page-be33cc1047",
+      "url": "https://www.hofstra.edu/apply",
+      "page": "application",
+      "excerpt": "Request Info Apply Visit Give Campus Map Take a Virtual Tour Admission Academics Campus Life Research About Alumni Employment Accessibility Emergency © Hofstra University."
+    },
+    {
+      "id": "check-page-29c8cd6437",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "page": "application",
+      "excerpt": "How to Apply | Hofstra University SKIP TO PAGE CONTENT Menu Grad Home How to Apply Programs Tuition & Aid Student Life Current Students Events Contact Us Close Admission Academics Campus Life About Research News Events Athletics Alumni MyHofstra Visit Give Grad Home How to Apply Programs Tuition & Aid Student Life Current Students Events Contact Us How to Apply HOW TO APPLY @HOFSTRA BEGIN YOUR GRADUATE STUDIES Transform your career with a graduate degree from Hofstra University. Choose from programs covering some of the fastest growing fields in healthcare, business, education, technology, engineering, and the humanities. Study part time, full time, online, or on campus. Our flexible degree options mean minimum disruption to your work and family commitments. Degree Programs From master's and doctoral degrees to advanced certificates and professional diplomas, Hofstra offers more than 175 graduate programs. Admission requirements, deadlines and plans of study vary by program. Click the links to your right to find your program and review what's required to apply. Learn more about our online application process below. Non-Degree Study As a nonmatriculated (non-degree seeking) student at Hofstra, you can take courses to expand your knowledge about a topic or prepare for future graduate studies. Learn more about non-degree study at Hofstra . Dual-Degree Admission Hofstra's dual"
+    },
+    {
+      "id": "check-page-345e20fe1f",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "page": "application",
+      "excerpt": "LEARN MORE Find in-depth information about admission requirements for graduate programs: Business Communication Education Health Liberal Arts & Sciences Psychology & Counseling INTERNATIONAL STUDENTS Hofstra welcomes graduate students from more than 30 countries."
+    },
+    {
+      "id": "check-page-3b06f3a988",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "page": "application",
+      "excerpt": "Including Graduate Arts & STEM Programs in: Accounting Advanced & Continuing Studies Biology Computer Science Cybersecurity Data Science Engineering Forensic Linguistics Premedical Postbaccalaureate Certificate Program in Natural Science Sustainability Urban Ecology *Please note that the Premedical Postbaccalaureate Certificate Program in Natural Science is reserved for matriculated students only."
+    },
+    {
+      "id": "check-page-582aafd6c9",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "page": "application",
+      "excerpt": "Including Graduate Communication Programs in: Master of Arts (MA) in Journalism Master of Arts (MA) in Public Relations Education Apply for graduate program study."
+    },
+    {
+      "id": "check-page-f18038530d",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "page": "application",
+      "excerpt": "Including Graduate Education Programs in: Early Childhood and Elementary Education Educational Leadership: K-12 and Higher Education Health and Physical Education Literacy Studies Secondary Education Special Education TESOL and Bilingual Education Health Apply by clicking on the below program that you are interested in."
+    },
+    {
+      "id": "check-page-8edec6dd12",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "page": "application",
+      "excerpt": "To apply for certificate programs in Public Health and Speech-Language Pathology, please click here."
+    },
+    {
+      "id": "check-page-00686de9c3",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "page": "application",
+      "excerpt": "Apply below for Graduate Health Programs in: Cardiovascular Sciences and Perfusion Medicine Health Administration (Online and In-Person) Health Informatics Medical Physics Premedical Postbaccalaureate Certificate Program in Natural Science Sports Science Apply for graduate program study."
+    },
+    {
+      "id": "check-page-1ee3d10806",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "page": "application",
+      "excerpt": "From being surrounded by faculty, staff, and peers who care to having access to the resources you need to succeed, you'll gain an advantage -- in your career and in life -- at Hofstra."
+    },
+    {
+      "id": "check-page-306c75bb55",
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "page": "application",
+      "excerpt": "HOFSTRA UNIVERSITY // Hempstead, New York 11549-1000 // Phone: 516-463-6600 © Hofstra University All Rights Reserved"
+    },
+    {
+      "id": "check-page-0a82648ddc",
+      "url": "https://admission.hofstra.edu/apply/?sr=317d79ce-5193-47c1-8448-781d1e958c31",
+      "page": "application",
+      "excerpt": "Application Management This website uses resources that are being blocked by your network. Contact your network administrator for more information. Skip to Content Admission First Year Transfer Graduate Studies School of Medicine School of Law Cost and Aid Academics Bulletin Colleges & Schools Continuing Education Departments & Programs Libraries Student Life Academic Support Student Affairs Life@Hofstra Need to Know PRIDE Principles Research Centers & Institutes Faculty Hofstra Horizons Research & Sponsored Programs About Administration At a Glance Mission Statement Responsibility Visitor Center My.Hofstra Give Application Management Returning users: Log in to continue an application. First-time users: Create an account to start a new application. Accessibility Contact Us Policies Consumer Information Student Financial Services Facebook Twitter YouTube Instagram Flickr 100 Hofstra University Hempstead, NY 11549-1000 (516) 463-6600"
+    },
+    {
+      "id": "check-page-01ded99301",
+      "url": "https://admission.hofstra.edu/apply/?sr=4679082f-63e4-4da7-b63a-1772373be373",
+      "page": "application",
+      "excerpt": "Application Management This website uses resources that are being blocked by your network. Contact your network administrator for more information. Skip to Content Admission First Year Transfer Graduate Studies School of Medicine School of Law Cost and Aid Academics Bulletin Colleges & Schools Continuing Education Departments & Programs Libraries Student Life Academic Support Student Affairs Life@Hofstra Need to Know PRIDE Principles Research Centers & Institutes Faculty Hofstra Horizons Research & Sponsored Programs About Administration At a Glance Mission Statement Responsibility Visitor Center My.Hofstra Give Application Management Returning users: Log in to continue an application. First-time users: Create an account to start a new application. Accessibility Contact Us Policies Consumer Information Student Financial Services Facebook Twitter YouTube Instagram Flickr 100 Hofstra University Hempstead, NY 11549-1000 (516) 463-6600"
+    },
+    {
+      "id": "check-page-9d370278ab",
+      "url": "https://admission.hofstra.edu/apply/?sr=4ce4638e-ca1c-4abd-b547-80e6ff066277",
+      "page": "application",
+      "excerpt": "Application Management This website uses resources that are being blocked by your network. Contact your network administrator for more information. Skip to Content Admission First Year Transfer Graduate Studies School of Medicine School of Law Cost and Aid Academics Bulletin Colleges & Schools Continuing Education Departments & Programs Libraries Student Life Academic Support Student Affairs Life@Hofstra Need to Know PRIDE Principles Research Centers & Institutes Faculty Hofstra Horizons Research & Sponsored Programs About Administration At a Glance Mission Statement Responsibility Visitor Center My.Hofstra Give Application Management Returning users: Log in to continue an application. First-time users: Create an account to start a new application. Accessibility Contact Us Policies Consumer Information Student Financial Services Facebook Twitter YouTube Instagram Flickr 100 Hofstra University Hempstead, NY 11549-1000 (516) 463-6600"
+    },
+    {
+      "id": "check-page-08f68f4cc4",
+      "url": "https://admission.hofstra.edu/apply/?sr=6f7e217a-fe62-48d9-aee4-e6a0833a05dd",
+      "page": "application",
+      "excerpt": "Application Management This website uses resources that are being blocked by your network. Contact your network administrator for more information. Skip to Content Admission First Year Transfer Graduate Studies School of Medicine School of Law Cost and Aid Academics Bulletin Colleges & Schools Continuing Education Departments & Programs Libraries Student Life Academic Support Student Affairs Life@Hofstra Need to Know PRIDE Principles Research Centers & Institutes Faculty Hofstra Horizons Research & Sponsored Programs About Administration At a Glance Mission Statement Responsibility Visitor Center My.Hofstra Give Application Management Returning users: Log in to continue an application. First-time users: Create an account to start a new application. Accessibility Contact Us Policies Consumer Information Student Financial Services Facebook Twitter YouTube Instagram Flickr 100 Hofstra University Hempstead, NY 11549-1000 (516) 463-6600"
+    },
+    {
+      "id": "check-page-1db6841f38",
+      "url": "https://admission.hofstra.edu/apply/?sr=7c208940-e414-4596-91f2-8a2461a800b2",
+      "page": "application",
+      "excerpt": "Application Management This website uses resources that are being blocked by your network. Contact your network administrator for more information. Skip to Content Admission First Year Transfer Graduate Studies School of Medicine School of Law Cost and Aid Academics Bulletin Colleges & Schools Continuing Education Departments & Programs Libraries Student Life Academic Support Student Affairs Life@Hofstra Need to Know PRIDE Principles Research Centers & Institutes Faculty Hofstra Horizons Research & Sponsored Programs About Administration At a Glance Mission Statement Responsibility Visitor Center My.Hofstra Give Application Management Returning users: Log in to continue an application. First-time users: Create an account to start a new application. Accessibility Contact Us Policies Consumer Information Student Financial Services Facebook Twitter YouTube Instagram Flickr 100 Hofstra University Hempstead, NY 11549-1000 (516) 463-6600"
+    },
+    {
+      "id": "check-page-1d12597b11",
+      "url": "https://admission.hofstra.edu/apply/?sr=e1e41537-eae2-4c31-acfa-d6636f76b6d1",
+      "page": "application",
+      "excerpt": "Application Management This website uses resources that are being blocked by your network. Contact your network administrator for more information. Skip to Content Admission First Year Transfer Graduate Studies School of Medicine School of Law Cost and Aid Academics Bulletin Colleges & Schools Continuing Education Departments & Programs Libraries Student Life Academic Support Student Affairs Life@Hofstra Need to Know PRIDE Principles Research Centers & Institutes Faculty Hofstra Horizons Research & Sponsored Programs About Administration At a Glance Mission Statement Responsibility Visitor Center My.Hofstra Give Application Management Returning users: Log in to continue an application. First-time users: Create an account to start a new application. Accessibility Contact Us Policies Consumer Information Student Financial Services Facebook Twitter YouTube Instagram Flickr 100 Hofstra University Hempstead, NY 11549-1000 (516) 463-6600"
+    },
+    {
+      "id": "check-page-5a7df63af9",
+      "url": "https://admission.hofstra.edu/apply/?sr=ed41c4b5-fad8-4b8f-8517-b807d4c64f5c",
+      "page": "application",
+      "excerpt": "Application Management This website uses resources that are being blocked by your network. Contact your network administrator for more information. Skip to Content Admission First Year Transfer Graduate Studies School of Medicine School of Law Cost and Aid Academics Bulletin Colleges & Schools Continuing Education Departments & Programs Libraries Student Life Academic Support Student Affairs Life@Hofstra Need to Know PRIDE Principles Research Centers & Institutes Faculty Hofstra Horizons Research & Sponsored Programs About Administration At a Glance Mission Statement Responsibility Visitor Center My.Hofstra Give Application Management Returning users: Log in to continue an application. First-time users: Create an account to start a new application. Accessibility Contact Us Policies Consumer Information Student Financial Services Facebook Twitter YouTube Instagram Flickr 100 Hofstra University Hempstead, NY 11549-1000 (516) 463-6600"
+    },
+    {
+      "id": "check-page-d209053e23",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "page": "application",
+      "excerpt": "JD Admissions: How to Apply - Hofstra Law Skip to main content Make a Gift Search Menu Admissions Academics Careers Student Life About Centers & Institutes Admissions JD Admissions Paralegal Certificate Program LLM Admissions Edge Ahead (Pre-Law Program) Cost and Financial Aid Visit Us Academics Degree Programs Areas of Study Law Library Faculty Clinics Fellowships and Scholarships Academic Success Program Experiential Learning Academic Resources Journals Careers Employer Services Career Services Programming Employment Statistics Diversity Career Resources Public Service Resources Office of Career Services Student Life Student Organizations Public Service Diversity, Equity & Inclusion Study Abroad Current Students Office of Student Affairs About Senior Administrators Administration & Staff Directory Communications Information Technology Facilities Alumni Centers and Institutes Community Engagement About Visit JD Admissions - How to Apply News Events Alumni Giving My Hofstra Make a Gift Menu Admissions Admissions JD Admissions Paralegal Certificate Program LLM Admissions Edge Ahead (Pre-Law Program) Cost and Financial Aid Visit Us Academics Academics Degree Programs Areas of Study Law Library Faculty Clinics Fellowships and Scholarships Academic Success Program Experiential Learning Academic Resources Journals Careers Careers Employer Services Career Services Programming"
+    },
+    {
+      "id": "check-page-d751587aab",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "page": "application",
+      "excerpt": "Students must also complete four semesters in residency at Hofstra Law to complete the 87 credits required for graduation."
+    },
+    {
+      "id": "check-page-0e595e66cf",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "page": "application",
+      "excerpt": "Learn More about the JD/Master of Public Health (MPH) Program JD Application Procedures The admissions process seeks to identify and select a diverse group of talented students who will succeed not only at the Law School, but who will continue its tradition of excellence in the legal and business worlds."
+    },
+    {
+      "id": "check-page-7ab8f3d761",
+      "url": "https://law.hofstra.edu/jdprogram/admissions/howtoapply/index.html",
+      "page": "application",
+      "excerpt": "Request Info Apply Visit Give Admissions Academics Careers Student Life Centers & Institutes News & Events Directory ABA Required Disclosures Accessibility Emergency © Hofstra University."
+    },
+    {
+      "id": "check-page-2a3e9b9cc9",
+      "url": "https://medicine.hofstra.edu/admission/index.html",
+      "page": "application",
+      "excerpt": "Admission at ZSOM | Medicine Skip to main content Make a Gift Search Menu Admission Education Students About Research Faculty Admission MD Admission MD/PhD Admission PhD Admission Education MD Program MD/PhD Program PhD Program Health Sciences Library Curricular Initiatives Student Affairs Academic Success Career Advising Engagement & Excellence Milestones Student Finance Student Records About The Zucker Difference History Giving Curriculum Renewal Research Clinical & Translational Research Medical Education Research Office of Medical Student Research Faculty Faculty Affairs Academy of Medical Educators News Alumni Library My Hofstra Giving Make a Gift Menu Admission Admission MD Admission MD/PhD Admission PhD Admission Education Education MD Program MD/PhD Program PhD Program Health Sciences Library Curricular Initiatives Students Student Affairs Academic Success Career Advising Engagement & Excellence Milestones Student Finance Student Records About About The Zucker Difference History Giving Curriculum Renewal Research Research Clinical & Translational Research Medical Education Research Office of Medical Student Research Faculty Faculty Faculty Affairs Academy of Medical Educators News Alumni Library My Hofstra Giving ZUCKER SCHOOL OF MEDICINE ADMISSION Apply with AMCAS Your Journey to Medicine Starts Here At the Zucker School of Medicine at Hofstra/Northwell, your path"
+    },
+    {
+      "id": "check-page-c326611c1d",
+      "url": "https://medicine.hofstra.edu/admission/index.html",
+      "page": "application",
+      "excerpt": "Backed by the academic excellence of Hofstra University and the clinical power of Northwell Health, one of the nation’s largest health systems, our students learn by doing from day one."
+    },
+    {
+      "id": "check-page-aa9b97739e",
+      "url": "https://medicine.hofstra.edu/admission/index.html",
+      "page": "application",
+      "excerpt": "From state-of-the-art simulation and standardized patient labs to a dedicated research institute, recreational facilities, private practices, and more than twenty-three Northwell Health hospital sites spanning New York City and Long Island, the tools to grow are all here."
+    },
+    {
+      "id": "check-page-b3f85ce295",
+      "url": "https://medicine.hofstra.edu/admission/index.html",
+      "page": "application",
+      "excerpt": "Whether you’re pursuing an MD, a joint MD/PhD, or an advanced PhD, you’ll train alongside pioneering peers, guided by faculty committed to your growth, and backed by one of the most powerful health systems in the country."
+    },
+    {
+      "id": "check-page-5b3dd113ce",
+      "url": "https://medicine.hofstra.edu/admission/index.html",
+      "page": "application",
+      "excerpt": "MD Admission MD/PHD Admission PHD Admissions 2026’s Incoming Class Profile 46 Undergraduate institutions represented 518 Median MCAT 3.85 Median GPA Explore What Awaits You Academic Calendar Housing Global Health Opportunities Clubs & Organizations US Military – SOFtoSOM Student Handbook WE’RE HERE TO HELP TO GUIDE TO SUPPORT Have general questions about admission?"
+    },
+    {
+      "id": "check-page-8a1ef3b174",
+      "url": "https://medicine.hofstra.edu/admission/index.html",
+      "page": "application",
+      "excerpt": "About Deans Office Offices & Programs Giving Operations Academics Academic Calendar Student Records Policies Information Technology Faculty Faculty Directory Teaching Opportunities © Hofstra University."
+    },
+    {
+      "id": "check-page-f6609c6364",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "page": "application",
+      "excerpt": "International - Hofstra University Skip to main content Apply Make a Gift Search Menu Admission Academics Campus Life About Research Admission Application Process First-Year Undergraduate Transfer Students Visiting Students Graduate Admissions International Admissions School of Law School of Medicine Financial Aid Academics Undergraduate Programs Graduate Programs Colleges and Schools Academic Calendar Academic Support Continuing Education Distance Learning Library Campus Life Beyond the Classroom Athletics Bookstore Cultural Center Event Calendar Student Services Public Safety Visitors Guide About At a Glance Virtual Tour History Visitors Guide Faculty Administration Accreditations Experts Strategic Plan Research Office for Research and Sponsored Programs Centers and Institutes Undergraduate Research Horizons Visit Apply News Events Athletics Alumni MyHofstra Give Academic Offerings Directories MyHofstra Apply Make a Gift Menu Admission Admission Application Process First-Year Undergraduate Transfer Students Visiting Students Graduate Admissions International Admissions School of Law School of Medicine Financial Aid Academics Academics Undergraduate Programs Graduate Programs Colleges and Schools Academic Calendar Academic Support Continuing Education Distance Learning Library Campus Life Campus Life Beyond the Classroom Athletics Bookstore Cultural Center Event Calendar"
+    },
+    {
+      "id": "check-page-21d881dccb",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "page": "application",
+      "excerpt": "Hofstra has a long tradition of welcoming international students ( see what countries are represented at Hofstra ) who enjoy the benefits of American higher education in a selective and private campus community that values diversity and promotes cross-cultural understanding."
+    },
+    {
+      "id": "check-page-968d022525",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "page": "application",
+      "excerpt": "Here are some highlights: Location: Located in New York, 25 miles from Manhattan Programs: 160 undergraduate and over 175 graduate program options with more than 100 dual-degree program options Scholarships: Partial merit scholarships (SAT and ACT exams are not required for undergraduate programs.) *Partial scholarships are available for graduate students."
+    },
+    {
+      "id": "check-page-517c30d7f5",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "page": "application",
+      "excerpt": "These awards are limited, competitive, based on merit and awarded at the time of admission by graduate program faculty."
+    },
+    {
+      "id": "check-page-0772b268e8",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "page": "application",
+      "excerpt": "Obtaining an I-20 An I-20 form is an official government document that certifies a person is eligible to be an F-1 nonimmigrant student at Hofstra."
+    },
+    {
+      "id": "check-page-c360049079",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "page": "application",
+      "excerpt": "International Brochure A-Level Equivalencies CAPE Equivalencies AP Equivalencies IB Equivalencies Contact Us For further information, contact International Admission: 100 Hofstra University Hempstead, NY 11549 USA Undergraduate Admission Email Phone: 516-463-6700 Graduate Admission Email Phone: 516-463-4723 A PATH FOR EVERY AMBITION BACKGROUND FUTURE Find a program that fits your goals."
+    },
+    {
+      "id": "check-page-b9aebb56d9",
+      "url": "https://www.hofstra.edu/admission/international.html",
+      "page": "application",
+      "excerpt": "Request Info Apply Visit Give Campus Map Take a Virtual Tour Admission Academics Campus Life Research About Alumni Employment Accessibility Emergency © Hofstra University."
+    },
+    {
+      "id": "check-page-31b131c6b3",
+      "url": "https://www.hofstra.edu/admission/visiting-students/",
+      "page": "application",
+      "excerpt": "Redirecting to https://www.hofstra.edu/admission/visiting-students.html Redirecting to https://www.hofstra.edu/admission/visiting-students.html ."
+    },
+    {
+      "id": "check-page-32fdb7938c",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "page": "terms",
+      "excerpt": "FAQ - Hofstra University Skip to main content Apply Make a Gift Search Menu Admission Academics Campus Life About Research Admission Application Process First-Year Undergraduate Transfer Students Visiting Students Graduate Admissions International Admissions School of Law School of Medicine Financial Aid Academics Undergraduate Programs Graduate Programs Colleges and Schools Academic Calendar Academic Support Continuing Education Distance Learning Library Campus Life Beyond the Classroom Athletics Bookstore Cultural Center Event Calendar Student Services Public Safety Visitors Guide About At a Glance Virtual Tour History Visitors Guide Faculty Administration Accreditations Experts Strategic Plan Research Office for Research and Sponsored Programs Centers and Institutes Undergraduate Research Horizons Visit Apply News Events Athletics Alumni MyHofstra Give Academic Offerings Directories MyHofstra Apply Make a Gift Menu Admission Admission Application Process First-Year Undergraduate Transfer Students Visiting Students Graduate Admissions International Admissions School of Law School of Medicine Financial Aid Academics Academics Undergraduate Programs Graduate Programs Colleges and Schools Academic Calendar Academic Support Continuing Education Distance Learning Library Campus Life Campus Life Beyond the Classroom Athletics Bookstore Cultural Center Event Calendar Student"
+    },
+    {
+      "id": "check-page-7bc3d72db0",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "page": "terms",
+      "excerpt": "Hofstra University is in Nassau County on Long Island, 25 miles east of New York City."
+    },
+    {
+      "id": "check-page-4885c1f675",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "page": "terms",
+      "excerpt": "What is the Legal Education Accelerated Program?"
+    },
+    {
+      "id": "check-page-18220c70e8",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "page": "terms",
+      "excerpt": "Hofstra’s Legal Education Accelerated Program offers a six-year path to a Bachelor of Arts and a Juris Doctor."
+    },
+    {
+      "id": "check-page-7d63db9f0a",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "page": "terms",
+      "excerpt": "New Opportunities at Hofstra is an admission program for New York state residents who are eligible for the Tuition Assistance Program, meet the U.S."
+    },
+    {
+      "id": "check-page-2f904e7bc6",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "page": "terms",
+      "excerpt": "Department of Health and Human Services poverty guidelines, and attend a high school in a state-recognized high-needs school district."
+    },
+    {
+      "id": "check-page-420786292d",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "page": "terms",
+      "excerpt": "Hofstra’s undergraduate nursing program connects the clinical and educational resources of Hofstra University and Northwell Health."
+    },
+    {
+      "id": "check-page-d18ebb6d0e",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "page": "terms",
+      "excerpt": "In the Department of Speech-Language-Hearing Sciences in Hofstra’s School of Health Sciences, you can study human communication and its disorders as you prepare for a career in healthcare."
+    },
+    {
+      "id": "check-page-1218de299f",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "page": "terms",
+      "excerpt": "Visit Student Financial Services for guidance on applying for and receiving financial aid."
+    },
+    {
+      "id": "check-page-d31518439e",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "page": "terms",
+      "excerpt": "Explore Hofstra’s merit-based scholarships and awards to learn about opportunities that recognize academic achievement."
+    },
+    {
+      "id": "check-page-cd08781507",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "page": "terms",
+      "excerpt": "Awards depend on academic criteria, including your academic profile and standardized test scores."
+    },
+    {
+      "id": "check-page-0326db3ae8",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "page": "terms",
+      "excerpt": "Explore Hofstra’s graduate outcomes to see where alumni work, continue their education, and put their Hofstra experience into practice."
+    },
+    {
+      "id": "check-page-1f90dddaba",
+      "url": "https://www.hofstra.edu/admission/faq.html",
+      "page": "terms",
+      "excerpt": "You can also attend a Virtual Transfer Day to receive an admission decision, review your credit evaluation with an admission dean, and meet with financial services and academic advising representatives."
+    },
+    {
+      "id": "check-page-20a23aff27",
+      "url": "https://www.hofstra.edu/admission/international-faq.html",
+      "page": "terms",
+      "excerpt": "Admission: International FAQ | Hofstra University Skip to main content Menu Close Admission Academics Campus Life About Research News Events Athletics Alumni MyHofstra Visit Give Search Search Search Close International Admission FAQ Home Admission FAQ YOUR APPLICATION: How can I apply to Hofstra University? Please see our \"How to Apply\" webpage . Is an English Proficiency exam required for admission? Yes, please visit this page for more details. Is the SAT or ACT exam required for admission? No, it is not necessary to submit these test scores. If you choose to, we will consider a 500 or above on the Evidence-Based Reading and Writing portion of the test as sufficient English Proficiency. Please see here for more information on applying Test Optional . Can I send my supporting documents (transcript, TOEFL score, essay) to you electronically? Yes. Please upload documents to your portal at my.hofstra.edu or email to International Admission with your Name and Student ID # in the body of the e-mail . Please note that to be considered official, transcripts or test scores should be sent by a counselor, advisor, administrator or other staff member at your school. My school uses the program Naviance for college applications. Can I submit documents in this way? Yes. However, please note that Naviance only matches up with our system if you have applied using the Common Application. If"
+    },
+    {
+      "id": "check-page-363fe692ed",
+      "url": "https://www.hofstra.edu/admission/international-faq.html",
+      "page": "terms",
+      "excerpt": "I have permanent residency in the US."
+    },
+    {
+      "id": "check-page-33a17dfd0f",
+      "url": "https://www.hofstra.edu/admission/international-faq.html",
+      "page": "terms",
+      "excerpt": "How will Hofstra award credit for the classes I have already taken at the college level?"
+    },
+    {
+      "id": "check-page-d86e011544",
+      "url": "https://www.hofstra.edu/admission/international-faq.html",
+      "page": "terms",
+      "excerpt": "Does Hofstra award credit for A-Levels, Abitur, CAPE, the IB Diploma, AP credits, etc.?"
+    },
+    {
+      "id": "check-page-d8c13d4c10",
+      "url": "https://www.hofstra.edu/admission/international-faq.html",
+      "page": "terms",
+      "excerpt": "If you are currently in the USA, we also need your: Copy of U.S. visa."
+    },
+    {
+      "id": "check-page-48f4a6f5b0",
+      "url": "https://www.hofstra.edu/admission/international-faq.html",
+      "page": "terms",
+      "excerpt": "If you are interested in applying to an academic program at the graduate (master's or doctoral) level, please visit hofstra.edu/academics/grad ."
+    },
+    {
+      "id": "check-page-bb8fd1dce9",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "page": "terms",
+      "excerpt": "Frequently Asked Questions | Hofstra University SKIP TO PAGE CONTENT Menu Grad Home How to Apply Programs Tuition & Aid Student Life Current Students Events Contact Us Close Admission Academics Campus Life About Research News Events Athletics Alumni MyHofstra Visit Give Grad Home How to Apply Programs Tuition & Aid Student Life Current Students Events Contact Us Frequently Asked Questions HAVE QUESTIONS? Frequently Asked Questions Look below for answers to frequently asked questions from applicants and accepted students. If you cannot find your answer here, please contact us at graduateadmission@hofstra.edu or 516-463-4723 . How does the application process work? Our graduate application process is completed entirely online. Depending on your program of interest, you may be asked to apply directly to Hofstra University or through a common application system. More details are available here: Applying for Graduate Studies . All documents, including letters of recommendation and transcripts (see question below), are uploaded to the online application system. Please consult the Graduate Bulletin for specific admission requirements and supplemental documents required for your program. Once you submit your application, it is reviewed by the Office of Graduate admission and then shared with the appropriate academic department for review. After a decision has been made, you will"
+    },
+    {
+      "id": "check-page-c104b184ee",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "page": "terms",
+      "excerpt": "Business (all degree programs) Education (teacher and leadership certifications only - click here for full list of affected degree programs ) Learning and Teaching, EdD Nursing, MS Occupational Therapy, MS Psychology (all degree programs) Speech-Language Pathology, MA Consult the Graduate Bulletin for your program's requirements What does “Rolling Admissions” mean?"
+    },
+    {
+      "id": "check-page-0feb27ec03",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "page": "terms",
+      "excerpt": "If you are applying to our public health program, please use code 1238."
+    },
+    {
+      "id": "check-page-e5b775aedb",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "page": "terms",
+      "excerpt": "Graduate Open Houses are held six times per year and are a wonderful option to explore programs across schools and departments, tour campus, and meet Hofstra faculty in your area of interest."
+    },
+    {
+      "id": "check-page-57a20e8ea6",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "page": "terms",
+      "excerpt": "Contact the Office of Student Financial Services by calling 516-463-8000 or visit hofstra.edu/sfs ."
+    },
+    {
+      "id": "check-page-000c37e4e6",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "page": "terms",
+      "excerpt": "Business Communication Education Health Liberal Arts & Sciences Psychology & Counseling Take the Next Step Be You @Hofstra Through your graduate studies at Hofstra, you'll have countless opportunities to be your best self."
+    },
+    {
+      "id": "check-page-92e8098156",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "page": "terms",
+      "excerpt": "From being surrounded by faculty, staff, and peers who care to having access to the resources you need to succeed, you'll gain an advantage -- in your career and in life -- at Hofstra."
+    },
+    {
+      "id": "check-page-d095edb869",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "page": "terms",
+      "excerpt": "HOFSTRA UNIVERSITY // Hempstead, New York 11549-1000 // Phone: 516-463-6600 © Hofstra University All Rights Reserved The following programs require a $200 tuition deposit: Bilingual Education, MA/Adv."
+    },
+    {
+      "id": "check-page-88f1ae6121",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "page": "terms",
+      "excerpt": "Business Education, MSEd Childhood Special Education (Grades 1-6), Adv."
+    },
+    {
+      "id": "check-page-9db5abed5b",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "page": "terms",
+      "excerpt": "Dual Certificate Program in Early Childhood Ed (Birth-Grade 2) and Child Ed (Grades 1-6), MSEd Early Childhood Education, MA/MSEd Early Childhood Special Education (B-2nd Grade), MSEd/Adv."
+    },
+    {
+      "id": "check-page-0a85b5a3c2",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "page": "terms",
+      "excerpt": "Elementary Education, MSEd Elementary Education: Science, Technology, Engineering and Mathematics (STEM), MA Elementary School STEM Specialist, Adv."
+    },
+    {
+      "id": "check-page-2167205982",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "page": "terms",
+      "excerpt": "English Education, MSEd Family and Consumer Sciences, MSEd Fine Arts and Music Education, Adv."
+    },
+    {
+      "id": "check-page-396eb4a9c9",
+      "url": "https://www.hofstra.edu/graduate/faq.html",
+      "page": "terms",
+      "excerpt": "Fine Arts Education, MSEd Foreign Language Education, MSEd Gifted Education, Adv."
+    }
+  ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "help@hofstra.edu",
+        "evidenceId": "check-email-6ddd281ccb"
+      }
+    ],
     "phones": [
       {
         "value": "+15164636600",
         "evidenceId": "check-phone-00d0ca5533"
+      },
+      {
+        "value": "1-516-463-7777",
+        "evidenceId": "check-phone-a00ac8a96a"
+      },
+      {
+        "value": "1-516-463-7075",
+        "evidenceId": "check-phone-979f0b9ff1"
+      },
+      {
+        "value": "15164636600",
+        "evidenceId": "check-phone-a70c6d5a82"
+      },
+      {
+        "value": "516-463-6700",
+        "evidenceId": "check-phone-3aa19ca0b1"
+      },
+      {
+        "value": "516-463-4723",
+        "evidenceId": "check-phone-440bc6dbbe"
       }
     ],
     "routes": [
@@ -234,16 +1916,60 @@
         "evidenceId": "check-route-3df3e0b3f9"
       },
       {
-        "value": "https://www.hofstra.edu/admission/apply/#main-content",
-        "evidenceId": "check-route-3611b4cd2d"
+        "value": "https://admission.hofstra.edu/apply/?sr=7c208940-e414-4596-91f2-8a2461a800b2",
+        "evidenceId": "check-route-e93a614b0c"
       }
     ],
-    "applicationUrl": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.hofstra.edu/apply",
+        "evidenceId": "check-route-bf7161943c"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-6291e03a06"
+      }
+    ],
+    "announcedIntake": [
+      {
+        "value": "November",
+        "evidenceId": "check-announced-5cc19f855b"
+      },
+      {
+        "value": "April",
+        "evidenceId": "check-announced-e625aaaa1c"
+      },
+      {
+        "value": "July",
+        "evidenceId": "check-announced-72c4b6009d"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "8",
+        "evidenceId": "check-duration-00c276d7ab"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-2e2fe69fb1"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-36822ee90d"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.hofstra.edu/alumni/?ref=globalbtm",
@@ -252,6 +1978,18 @@
       {
         "value": "https://www.hofstra.edu/alumni/",
         "evidenceId": "check-portfolio-8cb7be2a26"
+      },
+      {
+        "value": "https://law.hofstra.edu/about/alumni/",
+        "evidenceId": "check-portfolio-f79f1e5106"
+      },
+      {
+        "value": "https://medicine.hofstra.edu/alumni/",
+        "evidenceId": "check-portfolio-57c0c10702"
+      },
+      {
+        "value": "https://www.hofstra.edu/alumni",
+        "evidenceId": "check-portfolio-e779835933"
       }
     ],
     "name": [],

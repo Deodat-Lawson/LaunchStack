@@ -1,13 +1,21 @@
 {
   "programId": "forge",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://tedcnet.com/learning/eden-application/",
+      "page": "application",
+      "anchor": "Business Planning Programs",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
     {
       "url": "https://www.tedcnet.com/about/",
       "page": "details",
       "anchor": "About",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -15,7 +23,7 @@
       "page": "details",
       "anchor": "Board of Directors",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -23,7 +31,7 @@
       "page": "details",
       "anchor": "Staff",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -31,13 +39,61 @@
       "page": "details",
       "anchor": "Testimonials",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
-      "url": "https://www.tedcnet.com/resources/faq/",
-      "page": "terms",
-      "anchor": "FAQ",
+      "url": "https://www.tedcnet.com/about/testimonials/andolinis-pizzeria/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/about/testimonials/cabin-boys-brewery/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/about/testimonials/economasters-llc/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/about/testimonials/flash-flood-print-studios/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/about/testimonials/habit-boutique/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/about/testimonials/l-e-f-inc/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/about/testimonials/stemcell-science-shop/",
+      "page": "details",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -46,6 +102,54 @@
       "url": "https://www.tedcnet.com/apply-now/",
       "page": "application",
       "anchor": "APPLY NOW",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/final-mortar-tulsa-cohort-finishes-strong/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/forward-program-for-entrepreneurs/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/learning/eden-application/",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/palmer-secures-long-term-home-with-property-purchase-through-joint-cdfi-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/resources/faq/",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/serving-oklahoma-entrepreneurs-ray-fitzgerald-named-director-of-loan-programs/",
+      "page": "details",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

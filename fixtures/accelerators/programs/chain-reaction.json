@@ -3,7 +3,7 @@
   "id": "chain-reaction",
   "name": "Chain Reaction Innovations",
   "logo": {
-    "path": "/accelerators/logos/none.png",
+    "path": "/accelerators/logos/chain-reaction.png",
     "sourceId": "official-logo"
   },
   "websiteUrl": "https://chainreaction.anl.gov/",
@@ -27,8 +27,8 @@
       "id": "official-logo",
       "url": "https://chainreaction.anl.gov/",
       "title": "Chain Reaction Innovations — no rule-validated official mark",
-      "quote": "no-validated-logo",
-      "checkedAt": "2026-11-14T20:18:03.000Z"
+      "quote": "https://chainreaction.anl.gov/wp-content/themes/innovation/imgs/logos/anl-logo.png",
+      "checkedAt": "2026-11-16T23:23:28.000Z"
     },
     {
       "id": "homepage",

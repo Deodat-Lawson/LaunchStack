@@ -1,11 +1,8 @@
 {
   "programId": "tenity",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.tenity.com/",
-    "https://www.tenity.com/stories/applications-open-for-health-innovation-program-with-novartis-turkiye/",
-    "https://www.tenity.com/stories/from-applications-to-the-stage-looking-back-at-the-idda-incubation-program/",
-    "https://www.tenity.com/program/novartis-turkiye-health-innovation-program/",
     "https://www.tenity.com/6-startups-secure-investment-in-singapores-fall-2025-fin-tech-accelerator-program/",
     "https://www.tenity.com/services/co-investment-opportunities/",
     "https://www.tenity.com/services/dealflow-sourcing/",
@@ -13,12 +10,27 @@
     "https://www.tenity.com/tenity-announces-investments-in-7-promising-startups-from-batch-9-of-the-singapore-fin-tech-accelerator-program/",
     "http://www.tenity.com/programs",
     "https://www.tenity.com/tenity-backs-kapnative-to-enhance-confidence-in-private-market-investments-for-financial-institutions/",
-    "https://www.tenity.com/articles/8-fintechs-1-payment-journey-how-the-first-visa-innovation-program-europe-nordics-baltics-cohort-showcased-the-future-of-payments/",
     "https://www.tenity.com/digital-health-center-bulach-and-tenity-announce-the-fourth-startup-cohort/",
     "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
-    "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/"
+    "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
+    "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+    "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+    "https://www.tenity.com/programs/xrpl-accelerator-2025",
+    "https://www.tenity.com/about/",
+    "https://www.tenity.com/members/andrea-fritschi/",
+    "https://www.tenity.com/members/guillermo-forteza/",
+    "https://www.tenity.com/members/maxim-leer/",
+    "https://www.tenity.com/members/oliver-sjostedt/",
+    "https://www.tenity.com/about/hong-kong/"
   ],
   "evidence": [
+    {
+      "id": "check-deal-0538272eb4",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "title": "Tenity — batches page",
+      "excerpt": "to market. To accelerate this journey, Tenity invests up to €300K per startup and complements the capital with hands-on support,",
+      "page": "batches"
+    },
     {
       "id": "check-deal-0a6947abb5",
       "url": "https://www.tenity.com/6-startups-secure-investment-in-singapores-fall-2025-fin-tech-accelerator-program/",
@@ -32,6 +44,13 @@
       "title": "Tenity — terms page",
       "excerpt": "Asia Through the Tenity Incubation Fund II, Tenity invests up to SGD 450K per startup, providing early capital to help founders refine",
       "page": "terms"
+    },
+    {
+      "id": "check-deal-6914988eeb",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "title": "Tenity — batches page",
+      "excerpt": "& web3, investing, and quantum finance. ‍ Tenity invests up to €300K per startup and provides market access, investor connections, and",
+      "page": "batches"
     },
     {
       "id": "check-deal-ab817bf6ee",
@@ -76,6 +95,13 @@
       "page": "application"
     },
     {
+      "id": "check-duration-b8d28ca85a",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "title": "Tenity — batches page",
+      "excerpt": "to scale their projects worldwide. Over the next 12 weeks, founders will receive tailored mentorship to",
+      "page": "batches"
+    },
+    {
       "id": "check-duration-cb5729a8ec",
       "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
       "title": "Tenity — batches page",
@@ -88,13 +114,6 @@
       "title": "Tenity — terms page",
       "excerpt": "\"email\": \"info@tenity.com\"",
       "page": "terms"
-    },
-    {
-      "id": "check-email-0eca8983b5",
-      "url": "https://www.tenity.com/stories/applications-open-for-health-innovation-program-with-novartis-turkiye/",
-      "title": "Tenity — application page",
-      "excerpt": "\"email\": \"info@tenity.com\"",
-      "page": "application"
     },
     {
       "id": "check-email-15b2ab09df",
@@ -139,11 +158,18 @@
       "page": "details"
     },
     {
-      "id": "check-email-831310d736",
-      "url": "https://www.tenity.com/stories/from-applications-to-the-stage-looking-back-at-the-idda-incubation-program/",
-      "title": "Tenity — application page",
+      "id": "check-email-76fc4c60ee",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "title": "Tenity — batches page",
       "excerpt": "\"email\": \"info@tenity.com\"",
-      "page": "application"
+      "page": "batches"
+    },
+    {
+      "id": "check-email-7db2151c2e",
+      "url": "https://www.tenity.com/members/andrea-fritschi/",
+      "title": "Tenity — terms page",
+      "excerpt": "\"email\": \"info@tenity.com\"",
+      "page": "terms"
     },
     {
       "id": "check-email-84abe705c7",
@@ -153,6 +179,13 @@
       "page": "terms"
     },
     {
+      "id": "check-email-b609bf144e",
+      "url": "https://www.tenity.com/programs/xrpl-accelerator-2025",
+      "title": "Tenity — batches page",
+      "excerpt": "\"email\": \"info@tenity.com\"",
+      "page": "batches"
+    },
+    {
       "id": "check-email-b82a323efc",
       "url": "https://www.tenity.com/digital-health-center-bulach-and-tenity-announce-the-fourth-startup-cohort/",
       "title": "Tenity — batches page",
@@ -160,8 +193,8 @@
       "page": "batches"
     },
     {
-      "id": "check-email-d833f9dc51",
-      "url": "https://www.tenity.com/articles/8-fintechs-1-payment-journey-how-the-first-visa-innovation-program-europe-nordics-baltics-cohort-showcased-the-future-of-payments/",
+      "id": "check-email-c95717f937",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
       "title": "Tenity — batches page",
       "excerpt": "\"email\": \"info@tenity.com\"",
       "page": "batches"
@@ -209,11 +242,11 @@
       "page": "batches"
     },
     {
-      "id": "check-format-96c89c2040",
-      "url": "https://www.tenity.com/stories/from-applications-to-the-stage-looking-back-at-the-idda-incubation-program/",
-      "title": "Tenity — application page",
-      "excerpt": "preparation, and Demo Day. The overall format combined in-person sessions with online follow-ups to give founders both",
-      "page": "application"
+      "id": "check-format-6046229df2",
+      "url": "https://www.tenity.com/about/",
+      "title": "Tenity — program page",
+      "excerpt": "Becomes market leader in DACH, proving the strength of the hybrid model 2018 Expands to Singapore, the Nordics and Spain —",
+      "page": "details"
     },
     {
       "id": "check-format-a85d516078",
@@ -223,11 +256,11 @@
       "page": "details"
     },
     {
-      "id": "check-location-f3988dc1eb",
-      "url": "https://www.tenity.com/program/novartis-turkiye-health-innovation-program/",
-      "title": "Tenity — application page",
-      "excerpt": "20 Science Offices and Counselors based in Swiss embassies, Swissnex contributes to",
-      "page": "application"
+      "id": "check-format-dae4a5d91b",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "title": "Tenity — batches page",
+      "excerpt": "unique cross-border reach. The program also includes four in-person masterclass weeks focused on growth, product development,",
+      "page": "batches"
     },
     {
       "id": "check-name-5b14303d5b",
@@ -237,18 +270,25 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-0a582b16af",
-      "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "id": "check-portfolio-0294da7a30",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
       "title": "Tenity — batches page",
       "excerpt": "Startups → https://www.tenity.com/for-startups/",
       "page": "batches"
     },
     {
-      "id": "check-portfolio-0ddf9e4b0e",
-      "url": "https://www.tenity.com/stories/applications-open-for-health-innovation-program-with-novartis-turkiye/",
-      "title": "Tenity — application page",
+      "id": "check-portfolio-09363956d0",
+      "url": "https://www.tenity.com/members/guillermo-forteza/",
+      "title": "Tenity — terms page",
+      "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-0a582b16af",
+      "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "title": "Tenity — batches page",
       "excerpt": "Startups → https://www.tenity.com/for-startups/",
-      "page": "application"
+      "page": "batches"
     },
     {
       "id": "check-portfolio-125cccc5e7",
@@ -265,18 +305,18 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-1748867895",
-      "url": "https://www.tenity.com/program/novartis-turkiye-health-innovation-program/",
-      "title": "Tenity — application page",
-      "excerpt": "Startups → https://www.tenity.com/for-startups/",
-      "page": "application"
-    },
-    {
       "id": "check-portfolio-1a991c94bb",
       "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
       "title": "Tenity — terms page",
       "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-26d4f2835b",
+      "url": "https://www.tenity.com/programs/xrpl-accelerator-2025",
+      "title": "Tenity — batches page",
+      "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
+      "page": "batches"
     },
     {
       "id": "check-portfolio-2947317a6e",
@@ -293,18 +333,39 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-2e648eeeec",
-      "url": "https://www.tenity.com/articles/8-fintechs-1-payment-journey-how-the-first-visa-innovation-program-europe-nordics-baltics-cohort-showcased-the-future-of-payments/",
-      "title": "Tenity — batches page",
-      "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
-      "page": "batches"
-    },
-    {
       "id": "check-portfolio-349a34a679",
       "url": "https://www.tenity.com/services/dealflow-sourcing/",
       "title": "Tenity — terms page",
       "excerpt": "Startups → https://www.tenity.com/for-startups/",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-3d604ead45",
+      "url": "https://www.tenity.com/members/andrea-fritschi/",
+      "title": "Tenity — terms page",
+      "excerpt": "Startups → https://www.tenity.com/for-startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-3fb8ab811c",
+      "url": "https://www.tenity.com/members/maxim-leer/",
+      "title": "Tenity — terms page",
+      "excerpt": "Startups → https://www.tenity.com/for-startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-44b4d3c330",
+      "url": "https://www.tenity.com/members/maxim-leer/",
+      "title": "Tenity — terms page",
+      "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-466755a9eb",
+      "url": "https://www.tenity.com/about/",
+      "title": "Tenity — program page",
+      "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-4a75987396",
@@ -314,11 +375,39 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-4abecd2b3d",
+      "url": "https://www.tenity.com/members/guillermo-forteza/",
+      "title": "Tenity — terms page",
+      "excerpt": "Startups → https://www.tenity.com/for-startups/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-4b351fed52",
       "url": "https://www.tenity.com/tenity-backs-kapnative-to-enhance-confidence-in-private-market-investments-for-financial-institutions/",
       "title": "Tenity — terms page",
       "excerpt": "Startups → https://www.tenity.com/for-startups/",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-57a73752aa",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "title": "Tenity — batches page",
+      "excerpt": "Startups → https://www.tenity.com/for-startups/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-5bb371dfd1",
+      "url": "https://www.tenity.com/about/hong-kong/",
+      "title": "Tenity — program page",
+      "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5d16cfedca",
+      "url": "https://www.tenity.com/about/hong-kong/",
+      "title": "Tenity — program page",
+      "excerpt": "Startups → https://www.tenity.com/for-startups/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-66c1a2917d",
@@ -356,17 +445,24 @@
       "page": "batches"
     },
     {
-      "id": "check-portfolio-8f6d453967",
-      "url": "https://www.tenity.com/program/novartis-turkiye-health-innovation-program/",
-      "title": "Tenity — application page",
-      "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
-      "page": "application"
+      "id": "check-portfolio-8dbfb53cff",
+      "url": "https://www.tenity.com/about/",
+      "title": "Tenity — program page",
+      "excerpt": "Startups → https://www.tenity.com/for-startups/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-905817de71",
       "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
       "title": "Tenity — terms page",
       "excerpt": "Startups → https://www.tenity.com/for-startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-97a192a199",
+      "url": "https://www.tenity.com/members/andrea-fritschi/",
+      "title": "Tenity — terms page",
+      "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
       "page": "terms"
     },
     {
@@ -377,25 +473,18 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-bd90f75751",
-      "url": "https://www.tenity.com/tenity-backs-kapnative-to-enhance-confidence-in-private-market-investments-for-financial-institutions/",
+      "id": "check-portfolio-bb29653e1b",
+      "url": "https://www.tenity.com/members/oliver-sjostedt/",
       "title": "Tenity — terms page",
       "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-c5e1bbfb75",
-      "url": "https://www.tenity.com/stories/from-applications-to-the-stage-looking-back-at-the-idda-incubation-program/",
-      "title": "Tenity — application page",
-      "excerpt": "Startups → https://www.tenity.com/for-startups/",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-d2441e6461",
-      "url": "https://www.tenity.com/stories/from-applications-to-the-stage-looking-back-at-the-idda-incubation-program/",
-      "title": "Tenity — application page",
+      "id": "check-portfolio-bd90f75751",
+      "url": "https://www.tenity.com/tenity-backs-kapnative-to-enhance-confidence-in-private-market-investments-for-financial-institutions/",
+      "title": "Tenity — terms page",
       "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
-      "page": "application"
+      "page": "terms"
     },
     {
       "id": "check-portfolio-d3971c95f2",
@@ -405,15 +494,22 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-daaa2ac165",
-      "url": "https://www.tenity.com/stories/applications-open-for-health-innovation-program-with-novartis-turkiye/",
-      "title": "Tenity — application page",
+      "id": "check-portfolio-e55b1307e6",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "title": "Tenity — batches page",
       "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
-      "page": "application"
+      "page": "batches"
     },
     {
       "id": "check-portfolio-e96d77fccc",
       "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "title": "Tenity — batches page",
+      "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-ef8191cc90",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
       "title": "Tenity — batches page",
       "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
       "page": "batches"
@@ -433,11 +529,11 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-f350a12c6e",
-      "url": "https://www.tenity.com/articles/8-fintechs-1-payment-journey-how-the-first-visa-innovation-program-europe-nordics-baltics-cohort-showcased-the-future-of-payments/",
-      "title": "Tenity — batches page",
+      "id": "check-portfolio-f422259160",
+      "url": "https://www.tenity.com/members/oliver-sjostedt/",
+      "title": "Tenity — terms page",
       "excerpt": "Startups → https://www.tenity.com/for-startups/",
-      "page": "batches"
+      "page": "terms"
     },
     {
       "id": "check-portfolio-fa92e93dba",
@@ -454,10 +550,24 @@
       "page": "batches"
     },
     {
+      "id": "check-portfolio-fc03584900",
+      "url": "https://www.tenity.com/programs/xrpl-accelerator-2025",
+      "title": "Tenity — batches page",
+      "excerpt": "Startups → https://www.tenity.com/for-startups/",
+      "page": "batches"
+    },
+    {
       "id": "check-rolling-0f4a371338",
       "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
       "title": "Tenity — batches page",
       "excerpt": "RLUSD, USDC, and XSGD, and addressing a clear market demand. Tenity invests on a rolling basis. About Tenity Tenity is a leading global innovation ecosystem and early-stage",
+      "page": "batches"
+    },
+    {
+      "id": "check-rolling-72f06527e9",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "title": "Tenity — batches page",
+      "excerpt": "Guillermo Forteza, Investment Lead, Europe (INC II), Tenity Tenity invests on a rolling basis. Founders building bold fintech or adjacent solutions are encouraged to",
       "page": "batches"
     },
     {
@@ -475,18 +585,11 @@
       "page": "details"
     },
     {
-      "id": "check-route-a7119bcd61",
-      "url": "https://www.tenity.com/stories/applications-open-for-health-innovation-program-with-novartis-turkiye/",
-      "title": "Tenity — application page",
-      "excerpt": "Story From Applications to the Stage: Looking Back at the IDDA Incubation Program → https://www.tenity.com/stories/from-applications-to-the-stage-looking-back-at-the-idda-incubation-program/",
-      "page": "application"
-    },
-    {
-      "id": "check-route-bf9f3435cf",
-      "url": "https://www.tenity.com/stories/from-applications-to-the-stage-looking-back-at-the-idda-incubation-program/",
-      "title": "Tenity — application page",
-      "excerpt": "Story Applications Open for Health Innovation Program with Novartis Türkiye → https://www.tenity.com/stories/applications-open-for-health-innovation-program-with-novartis-turkiye/",
-      "page": "application"
+      "id": "check-route-c1c2e8c7a5",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "title": "Tenity — batches page",
+      "excerpt": "Apply at → http://www.tenity.com/programs",
+      "page": "batches"
     },
     {
       "id": "check-route-dd6bf7f824",
@@ -494,13 +597,6 @@
       "title": "Tenity — terms page",
       "excerpt": "Apply to our programs → http://www.tenity.com/programs",
       "page": "terms"
-    },
-    {
-      "id": "check-route-ecbf40143b",
-      "url": "https://www.tenity.com/stories/applications-open-for-health-innovation-program-with-novartis-turkiye/",
-      "title": "Tenity — application page",
-      "excerpt": "Apply now! → https://www.tenity.com/program/novartis-turkiye-health-innovation-program/",
-      "page": "application"
     }
   ],
   "pageQuotes": [
@@ -511,22 +607,76 @@
       "excerpt": "Tenity | Fintech Innovation Platform - Startups, VCs and Corporates Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Fintech makers and other impossible things Tenity is a fintech innovation platform that backs early-stage founders and partners with corporates at the convergence of fintech, AI, and digital assets. Venture Capital Innovation Services A hybrid model that works Our approach 01. Spotting what’s next Trend scouting, startup sourcing & evaluation, market insight. 02. Creating what’s next Co-designed programs, pilots, startup matching. 03. Scaling what’s next Early-stage investment, co-investment, global network. 01. Spotting what’s next Trend scouting, startup sourcing & evaluation, market insight."
     },
     {
-      "id": "check-page-a5c31e2927",
-      "url": "https://www.tenity.com/stories/applications-open-for-health-innovation-program-with-novartis-turkiye/",
-      "page": "application",
-      "excerpt": "Applications Open for Health Innovation Program with Novartis Türkiye - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact March 10, 2026 Applications Open for Health Innovation Program with Novartis Türkiye Innovation in healthcare requires bold ideas, and the entrepreneurs ready to deliver them. That’s why Novartis Türkiye and Tenity are launching the Health Innovation Program, bringing together Healthtech and Fintech startups that are reshaping the way patients access care and engage with healthcare systems. Why Health Innovation Program 2026 matters Health Innovation Program 2026 is designed to connect visionary founders with Novartis Türkiye experts to tackle some of the most pressing needs in"
+      "id": "check-page-b9ba22c534",
+      "url": "https://www.tenity.com/",
+      "page": "details",
+      "excerpt": "That’s why Tenity combines innovation services with venture capital investing in one connected model."
     },
     {
-      "id": "check-page-f11e64bba3",
-      "url": "https://www.tenity.com/stories/from-applications-to-the-stage-looking-back-at-the-idda-incubation-program/",
-      "page": "application",
-      "excerpt": "From Applications to the Stage: Looking Back at the IDDA Incubation Program - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Stories April 20, 2026 Istanbul From Applications to the Stage: Looking Back at the IDDA Incubation Program A four-month journey supporting early-stage fintech startups in Azerbaijan through mentorship, market exposure, corporate connections, and Demo Day. On 16 April, the IDDA Incubation Program came to a close with Demo Day in Baku, bringing together founders, corporates, investors, and ecosystem stakeholders for an afternoon that reflected just how much can happen when the right support, structure, and ambition come together. Implemented by Tenity in partnership with the"
+      "id": "check-page-b86b965957",
+      "url": "https://www.tenity.com/",
+      "page": "details",
+      "excerpt": "It accelerates outcomes, strengthens partnerships, and transforms early ideas into real-world impact for startups, corporates, and investors."
     },
     {
-      "id": "check-page-15633a1161",
-      "url": "https://www.tenity.com/program/novartis-turkiye-health-innovation-program/",
-      "page": "application",
-      "excerpt": "Novartis Türkiye Health Innovation Program - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Novartis Türkiye Health Innovation Program Partners The Health Innovation Program is an innovation initiative led by Novartis Türkiye, with the strategic partnership of the Swiss Embassy in Ankara, Swissnex and MEXT, and delivered in collaboration with Tenity as the program’s service provider. Meet the Pitching Startups Connecting Health Innovators The Novartis Türkiye Health Innovation Program is a challenge-based innovation initiative that brings together entrepreneurs, industry leaders, and public stakeholders to develop solutions to key challenges in the healthcare ecosystem, culminating in a live Challenge"
+      "id": "check-page-55b6c732f9",
+      "url": "https://www.tenity.com/",
+      "page": "details",
+      "excerpt": "Zurich, Singapore, Madrid, Istanbul, Tallinn, London."
+    },
+    {
+      "id": "check-page-76df474579",
+      "url": "https://www.tenity.com/",
+      "page": "details",
+      "excerpt": "With hubs across Europe and Asia, we combine deep understanding of local ecosystems with the reach of an international network."
+    },
+    {
+      "id": "check-page-20b7d5ae48",
+      "url": "https://www.tenity.com/",
+      "page": "details",
+      "excerpt": "Fintech-first focus Deep expertise where disruption meets finance."
+    },
+    {
+      "id": "check-page-17c5b03d31",
+      "url": "https://www.tenity.com/",
+      "page": "details",
+      "excerpt": "We specialize in fintech because it’s where disruption meets the core of the economy."
+    },
+    {
+      "id": "check-page-d070d0b49f",
+      "url": "https://www.tenity.com/",
+      "page": "details",
+      "excerpt": "With years of experience and hundreds of startups backed, Tenity brings deep expertise in financial innovation – from payments and insurtech to AI, web3 and digital assets."
+    },
+    {
+      "id": "check-page-a8b499b5e1",
+      "url": "https://www.tenity.com/",
+      "page": "details",
+      "excerpt": "And because fintech connects to almost everything, our work naturally extends to fields like sustainability, health and mobility."
+    },
+    {
+      "id": "check-page-1dd4c9306e",
+      "url": "https://www.tenity.com/",
+      "page": "details",
+      "excerpt": "Fintech-first focus Execution discipline From strategy to quantifiable outcomes."
+    },
+    {
+      "id": "check-page-b9ba22c534",
+      "url": "https://www.tenity.com/",
+      "page": "details",
+      "excerpt": "That’s why Tenity combines innovation services with venture capital investing in one connected model."
+    },
+    {
+      "id": "check-page-b86b965957",
+      "url": "https://www.tenity.com/",
+      "page": "details",
+      "excerpt": "It accelerates outcomes, strengthens partnerships, and transforms early ideas into real-world impact for startups, corporates, and investors."
+    },
+    {
+      "id": "check-page-55b6c732f9",
+      "url": "https://www.tenity.com/",
+      "page": "details",
+      "excerpt": "Zurich, Singapore, Madrid, Istanbul, Tallinn, London."
     },
     {
       "id": "check-page-ad3fce9f98",
@@ -535,10 +685,100 @@
       "excerpt": "6 Startups secure investment in Singapore’s Fall 2025 Fin/Tech Accelerator Program - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Funding October 21, 2025 Funding Announcement 6 Startups secure investment in Singapore’s Fall 2025 Fin/Tech Accelerator Program Six ambitious early-stage startups have been chosen for the Tenity Fin/Tech Accelerator in Singapore; each receiving initial investment to fuel growth and expand their solutions across Asia and beyond. The tenth cohort delivers innovative fintech solutions spanning lending and credit infrastructure, financial data automation, and asset tokenization—leveraging AI, blockchain, and data-driven platforms to enable faster credit decisions, smarter"
     },
     {
+      "id": "check-page-029d39ffeb",
+      "url": "https://www.tenity.com/6-startups-secure-investment-in-singapores-fall-2025-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "The tenth cohort delivers innovative fintech solutions spanning lending and credit infrastructure, financial data automation, and asset tokenization—leveraging AI, blockchain, and data-driven platforms to enable faster credit decisions, smarter financial management, and new opportunities for investment."
+    },
+    {
+      "id": "check-page-c51f45a44a",
+      "url": "https://www.tenity.com/6-startups-secure-investment-in-singapores-fall-2025-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "Through its Tenity Incubation Fund II, Tenity invests up to SGD 450K per startup, providing early capital to help founders refine products, scale operations, and attract follow-on funding from regional and global investors."
+    },
+    {
+      "id": "check-page-1f3b404c4e",
+      "url": "https://www.tenity.com/6-startups-secure-investment-in-singapores-fall-2025-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "Tenity is proud to announce the selection of six pioneering early-stage startups for the tenth edition of its Fin/Tech Accelerator Program in Singapore."
+    },
+    {
+      "id": "check-page-781b5e65a6",
+      "url": "https://www.tenity.com/6-startups-secure-investment-in-singapores-fall-2025-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "This year’s cohort delivers innovative fintech solutions spanning lending and credit infrastructure, financial data automation, and asset tokenization."
+    },
+    {
+      "id": "check-page-e6a78a7db3",
+      "url": "https://www.tenity.com/6-startups-secure-investment-in-singapores-fall-2025-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "Leveraging AI, blockchain, and data-driven platforms, they are unlocking faster credit decisions, smarter financial management, and new pathways for investment."
+    },
+    {
+      "id": "check-page-ff1e17df31",
+      "url": "https://www.tenity.com/6-startups-secure-investment-in-singapores-fall-2025-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "“This cohort showcases the next wave of fintech innovation: solutions that are both visionary and deeply grounded in real-world business needs."
+    },
+    {
+      "id": "check-page-4fa401d8a4",
+      "url": "https://www.tenity.com/6-startups-secure-investment-in-singapores-fall-2025-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "We’re excited to support their journey as they transform early traction into meaningful impact across Asia and beyond.” — Jonas Thürig, Managing Partner & Head of Tenity Asia Through the Tenity Incubation Fund II, Tenity invests up to SGD 450K per startup, providing early capital to help founders refine products, scale operations, and attract follow-on funding from regional and global investors."
+    },
+    {
+      "id": "check-page-5f7b155d7c",
+      "url": "https://www.tenity.com/6-startups-secure-investment-in-singapores-fall-2025-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "The four-month accelerator, running until November 6, is designed to help startups sharpen their products, strengthen business fundamentals, and prepare for fundraising."
+    },
+    {
+      "id": "check-page-2ad5d9fde5",
+      "url": "https://www.tenity.com/6-startups-secure-investment-in-singapores-fall-2025-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "Participants will gain hands-on mentorship from Tenity’s Singapore team, tap into its extensive alumni network, and take part in masterclasses, fireside chats, and a tailored curriculum covering product-market fit, branding, go-to-market strategies, pitch preparation, and more."
+    },
+    {
+      "id": "check-page-8e60cee529",
+      "url": "https://www.tenity.com/6-startups-secure-investment-in-singapores-fall-2025-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "The journey culminates in Demo Day, where founders will present to an invite-only audience of investors, corporate innovation leaders, and ecosystem partners — a key milestone toward becoming investor-ready."
+    },
+    {
+      "id": "check-page-aae963069f",
+      "url": "https://www.tenity.com/6-startups-secure-investment-in-singapores-fall-2025-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "APFS | Thailand APFS provides financing for insurance buyers without requiring a credit card."
+    },
+    {
+      "id": "check-page-3d7a181b10",
+      "url": "https://www.tenity.com/6-startups-secure-investment-in-singapores-fall-2025-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "Cynco | Malaysia Cynco is an AI-native accounting infrastructure that automates accounting end-to-end by leveraging advanced document understanding and AI-driven workflows to handle data collection, categorization, reconciliation, reporting, and the broader finance stack."
+    },
+    {
       "id": "check-page-9c9b6ff3e0",
       "url": "https://www.tenity.com/services/co-investment-opportunities/",
       "page": "terms",
       "excerpt": "Co-Investment Opportunities for Investors & Corporates | Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Co-Investment Opportunities Our Co-Investment opportunities give you access to vetted early-stage deals sourced from our global programs: allowing you to invest alongside Tenity and other trusted partners, with aligned terms and shared due diligence. The Tenity Approach Deal Sourcing Present you with a selection of investment opportunities emerging from our accelerator, market access, and scouting programs. Due Diligence Shering Provide access to Tenity’s diligence findings, saving you both time and resources. Co-Investment Structuring Facilitate aligned terms and ticket sizes that match your"
+    },
+    {
+      "id": "check-page-5ed9476484",
+      "url": "https://www.tenity.com/services/co-investment-opportunities/",
+      "page": "terms",
+      "excerpt": "De-Risked Investments Leverage Tenity’s selection, mentoring, and diligence process."
+    },
+    {
+      "id": "check-page-57b44dc7c3",
+      "url": "https://www.tenity.com/services/co-investment-opportunities/",
+      "page": "terms",
+      "excerpt": "Stay in our orbit Hubs Zurich London Singapore Hong Kong Madrid Istanbul Join the newsletter Subscribe Join the newsletter Get insights, stories, and opportunities from across our global ecosystem - and listen our podcast on the ideas shaping finance and tech."
+    },
+    {
+      "id": "check-page-daf5a8e04f",
+      "url": "https://www.tenity.com/services/co-investment-opportunities/",
+      "page": "terms",
+      "excerpt": "Subscribe Linkedin Twitter IG Europe IG Asia IG UK Youtube © 2026 Tenity Group AG All rights reserved Privacy Policy Cookie policy Cookie preferences"
     },
     {
       "id": "check-page-5d97040ab8",
@@ -547,10 +787,94 @@
       "excerpt": "Dealflow Sourcing | Curated Startup Scouting | Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Dealflow Sourcing Dealflow Sourcing connects you with startups that fit your investment thesis and stage focus. By curating relevant, high-quality opportunities, we help you see beyond the usual funnels and gain direct access to founders building the most promising solutions. It’s the most efficient way to discover companies worth investing in, benchmark the landscape, and strengthen your pipeline with opportunities that align with your strategy. The Tenity Approach Thesis Definition Work with you to define focus areas and frame a clear business challenge or thesis. Shortlisting Identify and vet 15–20 startups"
     },
     {
+      "id": "check-page-cff6a4a300",
+      "url": "https://www.tenity.com/services/dealflow-sourcing/",
+      "page": "terms",
+      "excerpt": "Stay in our orbit Hubs Zurich London Singapore Hong Kong Madrid Istanbul Join the newsletter Subscribe Join the newsletter Get insights, stories, and opportunities from across our global ecosystem - and listen our podcast on the ideas shaping finance and tech."
+    },
+    {
+      "id": "check-page-0b21cc9dd3",
+      "url": "https://www.tenity.com/services/dealflow-sourcing/",
+      "page": "terms",
+      "excerpt": "Subscribe Linkedin Twitter IG Europe IG Asia IG UK Youtube © 2026 Tenity Group AG All rights reserved Privacy Policy Cookie policy Cookie preferences"
+    },
+    {
       "id": "check-page-d53ef03b32",
       "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
       "page": "terms",
       "excerpt": "Tenity Advances Decentralized Finance (DeFi) Innovation with Broader Investment in the XRP Ledger (XRPL) - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Partnerships News December 2, 2024 Tenity Advances Decentralized Finance (DeFi) Innovation with Broader Investment in the XRP Ledger (XRPL) Tenity expands focus on DeFi through its early-stage Inc. Fund II, backing the most promising builders on the XRP Ledger in Asia and Europe. Tenity expands focus on DeFi through its early-stage Inc. Fund II, backing the most promising builders on the XRP Ledger in Asia and Europe. Ripple joins UBS and SIX as one of Tenity’s global strategic partners, continuing their successful collaboration on accelerator"
+    },
+    {
+      "id": "check-page-9c43842fc0",
+      "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
+      "page": "terms",
+      "excerpt": "Ripple joins UBS and SIX as one of Tenity’s global strategic partners, continuing their successful collaboration on accelerator programs for XRP Ledger startups since 2023."
+    },
+    {
+      "id": "check-page-b1aa53de2e",
+      "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
+      "page": "terms",
+      "excerpt": "Tenity, the global innovation ecosystem and early-stage investor creating the future of finance, is deepening its focus on decentralized finance (DeFi) through its Incubation Fund II, supporting new innovative projects building blockchain-based solutions on the XRP Ledger (XRPL) welcoming Ripple as its new global strategic partner and Limited Partner in the Tenity Inc."
+    },
+    {
+      "id": "check-page-e5fc64c1e8",
+      "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
+      "page": "terms",
+      "excerpt": "Backed by investments from UBS, SIX Group, Julius Baer, Generali’s House of InsurTech Switzerland, and now Ripple as a strategic partner, Tenity is empowering startups to create impactful solutions in blockchain and financial technology."
+    },
+    {
+      "id": "check-page-381a411061",
+      "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
+      "page": "terms",
+      "excerpt": "The XRP Ledger (XRPL) is a decentralized, energy-efficient blockchain with native capabilities including a decentralized exchange (DEX), tokenization support, escrow, and more."
+    },
+    {
+      "id": "check-page-2579ca55aa",
+      "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
+      "page": "terms",
+      "excerpt": "With over a decade of proven reliability, scalability, and zero security breaches, the XRPL has powered financial use cases including global payments, digital asset custody, real-world asset tokenization, and institutional DeFi."
+    },
+    {
+      "id": "check-page-3432142a55",
+      "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
+      "page": "terms",
+      "excerpt": "“We believe decentralized finance is reshaping the future of financial services by offering more accessible, efficient, and innovative solutions,” said Andreas Iten, CEO and Co-Founder at Tenity ."
+    },
+    {
+      "id": "check-page-0155ff9702",
+      "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
+      "page": "terms",
+      "excerpt": "“By empowering startups to drive this transformation, we aim to accelerate the development of technologies that can solve real-world challenges and redefine the way financial systems operate globally.” Since April 2023, Tenity has led accelerator programs alongside its partner Ripple, specifically targeting startups building scalable solutions on the XRP Ledger."
+    },
+    {
+      "id": "check-page-be39c1c35d",
+      "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
+      "page": "terms",
+      "excerpt": "These efforts have supported 29 startups globally, with over 200 applications received, helping early-stage companies develop groundbreaking use cases in DeFi, real-world asset (RWA) tokenization, and payments."
+    },
+    {
+      "id": "check-page-faf99bb471",
+      "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
+      "page": "terms",
+      "excerpt": "Ripple’s commitment to fostering financial innovation through support for early-stage startups and collaboration with emerging fintech ecosystems is closely aligned with Tenity’s dedication to innovation and growth."
+    },
+    {
+      "id": "check-page-5ec43effa6",
+      "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
+      "page": "terms",
+      "excerpt": "The Tenity Inc Fund II invests in the broader fintech & insurtech space at pre-seed and seed stage through its accelerator programs in Zurich, Singapore, and Tallinn."
+    },
+    {
+      "id": "check-page-dcf50c0360",
+      "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
+      "page": "terms",
+      "excerpt": "Tenity is building a large portfolio with broad market coverage, covering all subsegments of fintech and insurtech."
+    },
+    {
+      "id": "check-page-533eda6092",
+      "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
+      "page": "terms",
+      "excerpt": "It poses a unique opportunity for investors to participate in early-stage innovations with high potential impact for the financial industry."
     },
     {
       "id": "check-page-8d761d64d6",
@@ -559,10 +883,154 @@
       "excerpt": "Tenity announces investments in 7 promising startups from Batch 9 of the Singapore Fin/Tech Accelerator Program - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Funding August 4, 2025 Tenity announces investments in 7 promising startups from Batch 9 of the Singapore Fin/Tech Accelerator Program –> Seven ambitious early-stage startups have graduated from the Tenity Fin/Tech Accelerator in Singapore, following an intensive four-month program. Each of these startups has secured investment to accelerate their growth and is now better positioned to scale their solutions across Asia and beyond. –> The ninth cohort brings innovative fintech solutions across customer service, healthcare, sales, F&B, and more."
     },
     {
+      "id": "check-page-aa53c8b5c6",
+      "url": "https://www.tenity.com/tenity-announces-investments-in-7-promising-startups-from-batch-9-of-the-singapore-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "The startups are applying cutting-edge technologies to improve efficiency, transparency, and access. –> Tenity invests up to SGD 450K per startup through its Tenity Incubation Fund II."
+    },
+    {
+      "id": "check-page-12c768754c",
+      "url": "https://www.tenity.com/tenity-announces-investments-in-7-promising-startups-from-batch-9-of-the-singapore-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "Singapore – Aug 04, 2025 – Seven ambitious startups have officially graduated from the ninth edition of the Tenity Fin/Tech Accelerator Program in Singapore."
+    },
+    {
+      "id": "check-page-f91bef0380",
+      "url": "https://www.tenity.com/tenity-announces-investments-in-7-promising-startups-from-batch-9-of-the-singapore-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "From AI-powered financial operations to embedded finance and document security, this cohort brings forward innovative solutions that span across customer service, healthcare, sales, F&B, and impact finance."
+    },
+    {
+      "id": "check-page-000fd34b57",
+      "url": "https://www.tenity.com/tenity-announces-investments-in-7-promising-startups-from-batch-9-of-the-singapore-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "The four-month accelerator program, which concluded on June 5, was designed to help early-stage fintech startups refine their products, strengthen their business fundamentals, and prepare for fundraising."
+    },
+    {
+      "id": "check-page-2da2313358",
+      "url": "https://www.tenity.com/tenity-announces-investments-in-7-promising-startups-from-batch-9-of-the-singapore-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "Founders received hands-on mentorship from Tenity’s local team, participated in masterclasses and fireside chats with seasoned entrepreneurs and experts, and followed a tailored curriculum covering product-market fit, branding, go-to-market strategies, pitch practice, and more."
+    },
+    {
+      "id": "check-page-31d39d57fe",
+      "url": "https://www.tenity.com/tenity-announces-investments-in-7-promising-startups-from-batch-9-of-the-singapore-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "The journey culminated in a Demo Day, where founders pitched their companies to an invite-only audience of investors, corporate innovation leaders, and ecosystem partners—marking a key milestone toward becoming investor-ready."
+    },
+    {
+      "id": "check-page-30176083aa",
+      "url": "https://www.tenity.com/tenity-announces-investments-in-7-promising-startups-from-batch-9-of-the-singapore-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "Earlybird AI | Singapore Earlybird AI builds autonomous financial operations agents that work around the clock."
+    },
+    {
+      "id": "check-page-1b2aced36d",
+      "url": "https://www.tenity.com/tenity-announces-investments-in-7-promising-startups-from-batch-9-of-the-singapore-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "Their AI-native solution handles everything from payments to ledger management, reports, and tax preparation—giving modern businesses more time and savings."
+    },
+    {
+      "id": "check-page-4f52441324",
+      "url": "https://www.tenity.com/tenity-announces-investments-in-7-promising-startups-from-batch-9-of-the-singapore-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "GoBarakah | Malaysia GoBarakah is a purpose-driven fintech that transforms donation funds into secure, traceable e-vouchers."
+    },
+    {
+      "id": "check-page-546cacbcf6",
+      "url": "https://www.tenity.com/tenity-announces-investments-in-7-promising-startups-from-batch-9-of-the-singapore-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "Momofin | Indonesia Momofin uses cryptographic hashes and forensic technology to secure documents, protecting them from tampering and fraud."
+    },
+    {
+      "id": "check-page-50fdcc0fdd",
+      "url": "https://www.tenity.com/tenity-announces-investments-in-7-promising-startups-from-batch-9-of-the-singapore-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "PaperlessHospital | Indonesia PaperlessHospital is an AI-powered medical scribe that automates clinical documentation in real time."
+    },
+    {
+      "id": "check-page-95af9ba13f",
+      "url": "https://www.tenity.com/tenity-announces-investments-in-7-promising-startups-from-batch-9-of-the-singapore-fin-tech-accelerator-program/",
+      "page": "terms",
+      "excerpt": "The platform reduces administrative workload for healthcare professionals, enabling them to focus more on patient care and less on paperwork."
+    },
+    {
       "id": "check-page-b986bc62fd",
       "url": "http://www.tenity.com/programs",
       "page": "application",
       "excerpt": "Global Startup Programs, Accelerators & Hackathons | Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Programs that power founders From early-stage to global expansion, Tenity startup programs give startups the capital, coaching and corporate access to purposefully accelerate growth. As part of our innovation powerhouse, every program is designed to create real outcomes – be it pilots, funding, international scaling or a combination of all. All Baku Hong Kong Istanbul London Singapore Zurich All Open Running Closed Programs Istanbul January 13, 2027 MediaMarkt Startup Challenge Programs Istanbul September 22, 2026 Boehringer Ingelheim Horizon HealthTech Startup Challenge Programs London September 21,"
+    },
+    {
+      "id": "check-page-7b073fdb26",
+      "url": "http://www.tenity.com/programs",
+      "page": "application",
+      "excerpt": "Programs Zurich March 13, 2026 StableHacks 2026 Build the next generation of institutional-grade stablecoin solutions."
+    },
+    {
+      "id": "check-page-1792a0c674",
+      "url": "http://www.tenity.com/programs",
+      "page": "application",
+      "excerpt": "Programs Zurich June 19, 2026 SwissHacks 2026 Switzerland’s leading government-backed fintech hackathon."
+    },
+    {
+      "id": "check-page-2195893043",
+      "url": "http://www.tenity.com/programs",
+      "page": "application",
+      "excerpt": "Programs Hong Kong January 18, 2027 GoGlobal BootCamp Hong Kong 出海训练营香港 Unlocking growth for Chinese & HK scaleups expanding into EU and ME Programs Baku December 21, 2025 IDDA Incubation Program The IDDA Incubation Program is a 4-month initiative designed to help fintech startups."
+    },
+    {
+      "id": "check-page-e6642b029d",
+      "url": "http://www.tenity.com/programs",
+      "page": "application",
+      "excerpt": "Programs Funding Zurich March 01, 2027 Digital Health Accelerator Pre-seed and seed stage intensive hands-on acceleration program with masterclass weeks spread out over 4 masterclasses."
+    },
+    {
+      "id": "check-page-9f72ed720b",
+      "url": "http://www.tenity.com/programs",
+      "page": "application",
+      "excerpt": "Programs Baku December 19, 2025 IDDA Hackathon 2 The IDDA Hackathon 2 is a 48-hour fintech innovation marathon powered by Tenity and IDDA."
+    },
+    {
+      "id": "check-page-ceee5ff748",
+      "url": "http://www.tenity.com/programs",
+      "page": "application",
+      "excerpt": "Programs Baku November 14, 2025 IDDA Hackathon 1 The IDDA Hackathon 1 is a 48-hour fintech innovation marathon powered by Tenity and IDDA."
+    },
+    {
+      "id": "check-page-81965795cf",
+      "url": "http://www.tenity.com/programs",
+      "page": "application",
+      "excerpt": "Programs Singapore October 31, 2025 SingHacks Join Asia’s first agentic AI hackathon dedicated to fintech innovation."
+    },
+    {
+      "id": "check-page-cef182ad1d",
+      "url": "http://www.tenity.com/programs",
+      "page": "application",
+      "excerpt": "Programs Singapore September 01, 2025 XRPL Accelerator 2025 XRPL Accelerator is a 12-week program to support entrepreneurs building on the XRP Ledger."
+    },
+    {
+      "id": "check-page-01f1bb38d0",
+      "url": "http://www.tenity.com/programs",
+      "page": "application",
+      "excerpt": "Frequently Asked Questions How Tenity Startup Programs works Tenity runs global startup programs, including accelerator programs, innovation initiatives, and hackathons, designed to help founders scale and collaborate with leading partners worldwide."
+    },
+    {
+      "id": "check-page-e5635b7b82",
+      "url": "http://www.tenity.com/programs",
+      "page": "application",
+      "excerpt": "Tenity offers startup accelerator programs, corporate innovation programs, hackathons, and ecosystem-led initiatives designed to help founders validate, scale, and partner with leading organisations."
+    },
+    {
+      "id": "check-page-efd06c6b56",
+      "url": "http://www.tenity.com/programs",
+      "page": "application",
+      "excerpt": "Tenity programs are open to startups, scaleups, and founders depending on the program’s focus, maturity stage, and industry vertical."
+    },
+    {
+      "id": "check-page-53f8908c47",
+      "url": "http://www.tenity.com/programs",
+      "page": "application",
+      "excerpt": "Are Tenity programs equity-free?"
     },
     {
       "id": "check-page-015dc1c40f",
@@ -571,10 +1039,58 @@
       "excerpt": "Tenity backs Kapnative to enhance confidence in Private Market Investments for Financial Institutions - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact News Funding November 13, 2024 Tenity backs Kapnative to enhance confidence in Private Market Investments for Financial Institutions Tenity is excited to announce its strategic investment in Kapnative, a cutting-edge WealthTech platform revolutionizing the way that financial institutions assess, access and invest in private market funds. Leveraging LLMs to create a streamlined private market due diligence service, combined with an investment committee boasting over 200 years of collective experience and billions in capital allocated across private"
     },
     {
-      "id": "check-page-741709ea91",
-      "url": "https://www.tenity.com/articles/8-fintechs-1-payment-journey-how-the-first-visa-innovation-program-europe-nordics-baltics-cohort-showcased-the-future-of-payments/",
-      "page": "batches",
-      "excerpt": "8 Fintechs, 1 Payment Journey: How the First Visa Innovation Program Europe Nordics & Baltics Cohort Showcased the Future of Payments - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Insight London Stories June 3, 2026 8 Fintechs, 1 Payment Journey: How the First Visa Innovation Program Europe Nordics & Baltics Cohort Showcased the Future of Payments Discover how eight fintechs from the first Visa Innovation Program Europe Nordics & Baltics cohort mapped a complete payment journey at Baltic Fintech Days. The first-ever Nordics & Baltics cohort of the Visa Innovation Program Europe (VIPE) concluded in Riga during Baltic Fintech Days 2026. Rather than ending the program with a traditional startup"
+      "id": "check-page-358670798a",
+      "url": "https://www.tenity.com/tenity-backs-kapnative-to-enhance-confidence-in-private-market-investments-for-financial-institutions/",
+      "page": "terms",
+      "excerpt": "Leveraging LLMs to create a streamlined private market due diligence service, combined with an investment committee boasting over 200 years of collective experience and billions in capital allocated across private markets, Kapnative enables wealth managers, banks, family offices and professional to deliver high-quality private market products to their (clients) portfolio."
+    },
+    {
+      "id": "check-page-e21ee52abc",
+      "url": "https://www.tenity.com/tenity-backs-kapnative-to-enhance-confidence-in-private-market-investments-for-financial-institutions/",
+      "page": "terms",
+      "excerpt": "Kapnative’s platform enables financial institutions to access institutional-grade products across asset classes such as private equity, infrastructure, private debt, hedge funds and real estate with lower minimum investment amounts, with increased efficiency across the entire investment processes."
+    },
+    {
+      "id": "check-page-66641dc95e",
+      "url": "https://www.tenity.com/tenity-backs-kapnative-to-enhance-confidence-in-private-market-investments-for-financial-institutions/",
+      "page": "terms",
+      "excerpt": "For larger financial institutions,Kapnative can provide it’s AI Due Diligence as a Service platform allowing them to assess the issuers they are most interested in with an improved due diligence process that absorbs 90% of the time and effort required by traditional manual processes."
+    },
+    {
+      "id": "check-page-f705237d48",
+      "url": "https://www.tenity.com/tenity-backs-kapnative-to-enhance-confidence-in-private-market-investments-for-financial-institutions/",
+      "page": "terms",
+      "excerpt": "By utilizing LLMs to create an accelerated due diligence service and providing rigorously curated opportunities, Kapnative combines efficiency of technology with the expertise of seasoned professional, solving critical pain points in the financial industry."
+    },
+    {
+      "id": "check-page-56919fa451",
+      "url": "https://www.tenity.com/tenity-backs-kapnative-to-enhance-confidence-in-private-market-investments-for-financial-institutions/",
+      "page": "terms",
+      "excerpt": "Its dedicated investment committee rigorously curates funds, providing financial institutions with access to a carefully vetted portfolio of quality leaders, simplifying decision-making and education for advisors and building investor confidence."
+    },
+    {
+      "id": "check-page-abdb8eed92",
+      "url": "https://www.tenity.com/tenity-backs-kapnative-to-enhance-confidence-in-private-market-investments-for-financial-institutions/",
+      "page": "terms",
+      "excerpt": "With hubs across Europe and Asia, Tenity blends venture capital, open innovation and global ecosystem access to create value that compounds."
+    },
+    {
+      "id": "check-page-43d046de58",
+      "url": "https://www.tenity.com/tenity-backs-kapnative-to-enhance-confidence-in-private-market-investments-for-financial-institutions/",
+      "page": "terms",
+      "excerpt": "Fintech makers – and other impossible thin gs For more information, visit Our latest news Our latest news News Funding News November 10, 2026 How do you become the AI partner an industry trusts first?"
+    },
+    {
+      "id": "check-page-1f7f86e75d",
+      "url": "https://www.tenity.com/tenity-backs-kapnative-to-enhance-confidence-in-private-market-investments-for-financial-institutions/",
+      "page": "terms",
+      "excerpt": "The case of Sumary News Funding November 10, 2026 Tenity invests in Light Frame to bring a modern core to private banks News Partnerships November 5, 2026 Tenity Launches Pictet AI Hackathon in collaboration with the Pictet group News Funding News November 10, 2026 How do you become the AI partner an industry trusts first?"
+    },
+    {
+      "id": "check-page-3f325db169",
+      "url": "https://www.tenity.com/tenity-backs-kapnative-to-enhance-confidence-in-private-market-investments-for-financial-institutions/",
+      "page": "terms",
+      "excerpt": "Subscribe Linkedin Twitter IG Europe IG Asia IG UK Youtube © 2026 Tenity Group AG All rights reserved Privacy Policy Cookie policy Cookie preferences"
     },
     {
       "id": "check-page-dd889884d9",
@@ -583,16 +1099,628 @@
       "excerpt": "Digital Health Accelerator Batch 4: 9 Startups Selected by dhc and Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Programs May 11, 2026 Digital health center bülach and Tenity Announce Digital Health Accelerator Cohort The digital health center bülach (dhc) and Tenity are proud to launch the fourth edition of their Digital Health Accelerator, once again in partnership with the Zürcher Kantonalbank (ZKB). Zurich – May 11th – Since its inception, the program has built a strong track record. Its earlier cohorts have consistently produced innovative solutions and achieved meaningful traction across the digital health landscape. After a highly competitive selection process, dhc and Tenity are pleased to"
     },
     {
+      "id": "check-page-91eaf9296f",
+      "url": "https://www.tenity.com/digital-health-center-bulach-and-tenity-announce-the-fourth-startup-cohort/",
+      "page": "batches",
+      "excerpt": "The selected companies span a broad range of sectors, including clinical workflows, care navigation, rehabilitation, medication safety, mental health, oncology, robotics and cognitive assessment."
+    },
+    {
+      "id": "check-page-355ec2b244",
+      "url": "https://www.tenity.com/digital-health-center-bulach-and-tenity-announce-the-fourth-startup-cohort/",
+      "page": "batches",
+      "excerpt": "They collectively represent the next generation of healthcare innovation."
+    },
+    {
+      "id": "check-page-e87e7959b3",
+      "url": "https://www.tenity.com/digital-health-center-bulach-and-tenity-announce-the-fourth-startup-cohort/",
+      "page": "batches",
+      "excerpt": "“Digital health continues to be one of the most dynamic areas for early-stage innovation."
+    },
+    {
+      "id": "check-page-c840a2d0ca",
+      "url": "https://www.tenity.com/digital-health-center-bulach-and-tenity-announce-the-fourth-startup-cohort/",
+      "page": "batches",
+      "excerpt": "Batch 4 brings together 9 ambitious startups, including a strong Swiss majority, that are addressing real needs across healthcare delivery, patient support and clinical workflows."
+    },
+    {
+      "id": "check-page-8ad68115da",
+      "url": "https://www.tenity.com/digital-health-center-bulach-and-tenity-announce-the-fourth-startup-cohort/",
+      "page": "batches",
+      "excerpt": "For Zürcher Kantonalbank, the accelerator is a valuable opportunity to engage with promising founders early and support solutions with the potential to shape the future of healthcare.” – Michelle Tschumi, Zürcher Kantonalbank (ZKB) “At dhc, our mission is to connect startups, healthcare providers, industry partners and investors around the digital transformation of healthcare."
+    },
+    {
+      "id": "check-page-1e1ec2d164",
+      "url": "https://www.tenity.com/digital-health-center-bulach-and-tenity-announce-the-fourth-startup-cohort/",
+      "page": "batches",
+      "excerpt": "This fourth cohort shows how practical and provider-oriented digital health innovation has become."
+    },
+    {
+      "id": "check-page-01e5fe6e2c",
+      "url": "https://www.tenity.com/digital-health-center-bulach-and-tenity-announce-the-fourth-startup-cohort/",
+      "page": "batches",
+      "excerpt": "Through the accelerator, they will gain access to a wide network of mentors, industry leaders, and investors, including founding partner the Zürcher Kantonalbank (ZKB), one of Switzerland’s leading early-stage investors."
+    },
+    {
+      "id": "check-page-5b62a6391e",
+      "url": "https://www.tenity.com/digital-health-center-bulach-and-tenity-announce-the-fourth-startup-cohort/",
+      "page": "batches",
+      "excerpt": "The program combines focused training, personalized support, and targeted networking opportunities to accelerate growth, foster collaboration, and raise the profile of these emerging companies within the broader health ecosystem."
+    },
+    {
+      "id": "check-page-45245c6f4e",
+      "url": "https://www.tenity.com/digital-health-center-bulach-and-tenity-announce-the-fourth-startup-cohort/",
+      "page": "batches",
+      "excerpt": "From medication safety and clinical trial setup to stroke navigation, rehabilitation and robotics, the startups are building solutions that can integrate into real healthcare workflows."
+    },
+    {
+      "id": "check-page-25b6cca811",
+      "url": "https://www.tenity.com/digital-health-center-bulach-and-tenity-announce-the-fourth-startup-cohort/",
+      "page": "batches",
+      "excerpt": "That is exactly where acceleration can create tangible impact.” – Matthias Herrmann, Head of HealthTech / Digital Health Lead, Tenity Meet the outstanding startups: GoRehab (Switzerland) GoRehab brings fine motor skills rehabilitation from clinic to home through a sensor-based platform that connects gamified patient training with therapist monitoring and tailored exercise plans."
+    },
+    {
+      "id": "check-page-98cd7a4ffc",
+      "url": "https://www.tenity.com/digital-health-center-bulach-and-tenity-announce-the-fourth-startup-cohort/",
+      "page": "batches",
+      "excerpt": "(Switzerland) Look Up! is a Swiss AI-powered mental health care navigator that helps people experiencing mental health challenges find clarity, structure their care journey, and access the right support at the right time."
+    },
+    {
+      "id": "check-page-52ecc6251f",
+      "url": "https://www.tenity.com/digital-health-center-bulach-and-tenity-announce-the-fourth-startup-cohort/",
+      "page": "batches",
+      "excerpt": "Maika (Switzerland) Maika combines biometric insights and AI to create personalized music for focus and mood."
+    },
+    {
       "id": "check-page-7668173f03",
       "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
       "page": "batches",
       "excerpt": "Digital health centre bülach and Tenity Announce the Third Startup Cohort - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Programs September 8, 2025 Digital health centre bülach and Tenity Announce the Third Startup Cohort The digital health center bülach (dhc) and Tenity are launching the third edition of the accelerator in collaboration with Zürcher Kantonalbank (ZKB). Now in its third edition, the Digital Health Accelerator program builds on the strong momentum of its first two cohorts, both of which achieved remarkable success in driving innovative solutions and securing significant traction in the digital health space. Following a highly competitive selection process, dhc and Tenity are thrilled"
     },
     {
+      "id": "check-page-2f8fda7d3e",
+      "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "page": "batches",
+      "excerpt": "Following a highly competitive selection process, dhc and Tenity are thrilled to announce the 8 groundbreaking startups chosen to participate in the third batch of the Digital Health Accelerator ."
+    },
+    {
+      "id": "check-page-2882b786a3",
+      "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "page": "batches",
+      "excerpt": "The selected ventures represent the future of healthcare innovation from a variety of sectors, such as synthetic healthcare data, AI rare disease diagnosis or developing next-gen therapeutics for immobility and age-related diseases."
+    },
+    {
+      "id": "check-page-ed0ccf1cbe",
+      "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "page": "batches",
+      "excerpt": "This year’s participating ventures represent the next wave of digital health innovation, developing solutions with the potential to transform the delivery and experience of healthcare."
+    },
+    {
+      "id": "check-page-8bffd8e3f7",
+      "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "page": "batches",
+      "excerpt": "Through the program, startups gain access to an extensive network of mentors, industry leaders and investors, including the founding partner Zürcher Kantonalbank (ZKB), Switzerland’s leading early-stage investor."
+    },
+    {
+      "id": "check-page-fea0fa1af7",
+      "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "page": "batches",
+      "excerpt": "By combining targeted training, tailored support and unique networking opportunities, the Digital Health Accelerator is designed to accelerate growth, strengthen collaboration and increase the visibility of these emerging companies within the health ecosystem."
+    },
+    {
+      "id": "check-page-fa3759c4fd",
+      "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "page": "batches",
+      "excerpt": "Following a highly competitive selection process, dhc and Tenity are thrilled to announce the 8 groundbreaking startups chosen to participate in the third batch of the Digital Health Accelerator."
+    },
+    {
+      "id": "check-page-2882b786a3",
+      "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "page": "batches",
+      "excerpt": "The selected ventures represent the future of healthcare innovation from a variety of sectors, such as synthetic healthcare data, AI rare disease diagnosis or developing next-gen therapeutics for immobility and age-related diseases."
+    },
+    {
+      "id": "check-page-b053507d07",
+      "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "page": "batches",
+      "excerpt": "“We are proud to have supported the Digital Health Accelerator since its inception."
+    },
+    {
+      "id": "check-page-4b988c9c0a",
+      "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "page": "batches",
+      "excerpt": "For our team at ZKB, it is an excellent opportunity to engage with innovative founders early on and explore promising investment opportunities in the healthcare sector.” Michelle Tschumi, Zürcher Kantonalbank (ZKB)."
+    },
+    {
+      "id": "check-page-ed0ccf1cbe",
+      "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "page": "batches",
+      "excerpt": "This year’s participating ventures represent the next wave of digital health innovation, developing solutions with the potential to transform the delivery and experience of healthcare."
+    },
+    {
+      "id": "check-page-8bffd8e3f7",
+      "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "page": "batches",
+      "excerpt": "Through the program, startups gain access to an extensive network of mentors, industry leaders and investors, including the founding partner Zürcher Kantonalbank (ZKB), Switzerland’s leading early-stage investor."
+    },
+    {
+      "id": "check-page-fea0fa1af7",
+      "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "page": "batches",
+      "excerpt": "By combining targeted training, tailored support and unique networking opportunities, the Digital Health Accelerator is designed to accelerate growth, strengthen collaboration and increase the visibility of these emerging companies within the health ecosystem."
+    },
+    {
       "id": "check-page-cba24aafb2",
       "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
       "page": "batches",
       "excerpt": "Tenity announces 9 projects as part of XRPL Accelerator cohort 6, bridging Web3 with real-world impact - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Programs June 25, 2025 Tenity announces 9 projects as part of XRPL Accelerator cohort 6, bridging Web3 with real-world impact The XRPL Accelerator has officially launched its sixth cohort in partnership with Tenity, spotlighting nine ventures that are building solutions for a new financial future utilizing blockchain technology. Singapore – June 25, 2025 – The XRPL Accelerator has officially launched its sixth cohort in partnership with Tenity, spotlighting nine ventures that are building solutions for a new financial future utilizing blockchain"
+    },
+    {
+      "id": "check-page-717da70c30",
+      "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
+      "page": "batches",
+      "excerpt": "Singapore – June 25, 2025 – The XRPL Accelerator has officially launched its sixth cohort in partnership with Tenity, spotlighting nine ventures that are building solutions for a new financial future utilizing blockchain technology."
+    },
+    {
+      "id": "check-page-0b7c5b8bcf",
+      "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
+      "page": "batches",
+      "excerpt": "Each of these startups is leveraging XRP Ledger (XRPL) to create impactful solutions, including cross-border payments, trade finance, lending against tokenized assets, and AI agent infrastructure for payments."
+    },
+    {
+      "id": "check-page-cc24a11a86",
+      "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
+      "page": "batches",
+      "excerpt": "Launched in 2023, the XRPL Accelerator in Singapore run by Tenity and supported by Ripple, is part of an exciting initiative to support founders developing tech-enabled financial services and products globally."
+    },
+    {
+      "id": "check-page-35fec9abb9",
+      "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
+      "page": "batches",
+      "excerpt": "Over the next 12 weeks, founders will benefit from funding, access to mentorship, and dedicated investor exposure."
+    },
+    {
+      "id": "check-page-3e92539f04",
+      "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
+      "page": "batches",
+      "excerpt": "The XRPL Accelerator will help these startups refine their product-market fit and integrate with the XRPL, bringing these projects even deeper into a well-developed blockchain ecosystem."
+    },
+    {
+      "id": "check-page-755635cc56",
+      "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
+      "page": "batches",
+      "excerpt": "“We’re seeing a significant shift from speculative Web3 hype to real traction — and this XRPL cohort is proof."
+    },
+    {
+      "id": "check-page-d1905d7329",
+      "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
+      "page": "batches",
+      "excerpt": "Anodos | United States Anodos aims to provide a one-stop shop for on-chain finance, building an end-user-facing P2P payments platform on XRPL rails with a focus on retail holders and small businesses."
+    },
+    {
+      "id": "check-page-01b6d8e729",
+      "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
+      "page": "batches",
+      "excerpt": "Archway Finance | United Kingdom Archway Finance simplifies cross-border payroll and invoicing for freelancers and remote workers, particularly in emerging markets."
+    },
+    {
+      "id": "check-page-fac9cd2fd2",
+      "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
+      "page": "batches",
+      "excerpt": "Effect Studios (Zynara) | United States Effect Studios is building Zynara, a team lancing platform that tokenizes gig payouts and leverages XRPL escrow for milestone-based freelance payments."
+    },
+    {
+      "id": "check-page-6aa29df760",
+      "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
+      "page": "batches",
+      "excerpt": "Agrify | United Kingdom Agrify is building a global marketplace and payment disbursement platform designed to transform how fragmented supply networks in emerging markets connect to international demand."
+    },
+    {
+      "id": "check-page-83149d03d0",
+      "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
+      "page": "batches",
+      "excerpt": "T54 Labs | United States T54 Labs is building infrastructure to support the emergence of intelligent, goal-directed AI agents that interact with XRPL to perform complex, multi-step workflows."
+    },
+    {
+      "id": "check-page-dc0fb5a9b2",
+      "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
+      "page": "batches",
+      "excerpt": "Stablpay | Singapore Stablpay is building a stablecoin-powered, fiat-to-fiat cross-border payments network designed for the Global South, enabling fast, low-cost, and compliant international transactions without requiring users to interact directly with blockchain infrastructure."
+    },
+    {
+      "id": "check-page-7ff1d3759b",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "page": "batches",
+      "excerpt": "Tenity strengthens position as leading FinTech Investor with latest Cohort - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Funding August 28, 2025 Tenity strengthens position as leading FinTech Investor with latest Cohort Tenity welcomes ten new startups into its European Fin/Tech Accelerator , providing them with investment and resources to fast-track growth and cross-border expansion — selected from 433 applications . ‍ The cohort introduces breakthrough fintech innovations in regulatory tech, insurance, wealth management, Processes & infrastructure, banking, crypto & web3, investing, and quantum finance. ‍ Tenity invests up to €300K per startup and provides market access, investor connections, and"
+    },
+    {
+      "id": "check-page-e104cbc8e7",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "page": "batches",
+      "excerpt": "The new cohort represents the forefront of fintech innovation, spanning regulatory technology, insurance, wealth management, infrastructure, banking, crypto & web3, investing, and even quantum finance."
+    },
+    {
+      "id": "check-page-5bab1e98b2",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "page": "batches",
+      "excerpt": "To accelerate this journey, Tenity invests up to €300K per startup and complements the capital with hands-on support, investor introductions, and access to industry-leaders, such as global strategic partners UBS, SIX, and Ripple."
+    },
+    {
+      "id": "check-page-4851d4dd37",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "page": "batches",
+      "excerpt": "Beyond funding, startups will join an intensive four-month program (August 25 – December 5, 2025) designed to equip them with the tools, knowledge, and connections needed to succeed in Europe’s most influential hubs."
+    },
+    {
+      "id": "check-page-7d8499856c",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "page": "batches",
+      "excerpt": "With market access across Zurich, London, and Copenhagen, Tenity gives founders unique cross-border reach."
+    },
+    {
+      "id": "check-page-b9b99f94fe",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "page": "batches",
+      "excerpt": "“ This cohort reflects the depth and maturity we’re looking for in the European fintech landscape."
+    },
+    {
+      "id": "check-page-4d23985c7a",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "page": "batches",
+      "excerpt": "With this group, we see the potential to shape the future of financial services across borders and beyond silos .” — Andrea Fritschi, Managing Partner & CFO, Tenity Meet the ten startups: eIDeasy | Estonia eIDeasy simplifies digital identity and eSignature integration by offering a unified API platform that connects businesses to 80+ global providers through a single integration and contract."
+    },
+    {
+      "id": "check-page-928637a330",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "page": "batches",
+      "excerpt": "Vinlivt | Germany Vinlivt enables insurance distributors to instantly onboard and manage their portfolios through native integrations with major broker pool platforms such as Broker-Pools, CRM-Systems."
+    },
+    {
+      "id": "check-page-316f60bb43",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "page": "batches",
+      "excerpt": "WarrenCloud | Estonia Warren tackles the growing challenge faced by small and mid-sized data centers that struggle to offer modern cloud services without expensive enterprise licenses or complex DIY platforms."
+    },
+    {
+      "id": "check-page-21dff53d6f",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "page": "batches",
+      "excerpt": "Swisspaytech | Switzerland Paid247 is revolutionizing payments in Telegram with a secure, seamless mini dApp that enables instant peer-to-peer and merchant transactions in crypto and fiat."
+    },
+    {
+      "id": "check-page-fe9cdffe01",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "page": "batches",
+      "excerpt": "Equis | Italy Equis tackles the succession crisis in aging economies by acquiring profitable SMEs through a tech-enabled HoldCo structure and gradually transitioning part of the ownership to employees."
+    },
+    {
+      "id": "check-page-bfdb4635cc",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "page": "batches",
+      "excerpt": "CrypDefi | Belgium CrypDefi provides the fastest, most secure DeFi access layer for institutions, enabling seamless interaction across 40+ chains with sub-30ms latency."
+    },
+    {
+      "id": "check-page-1595534b98",
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "page": "batches",
+      "excerpt": "Designed to integrate with existing custody solutions, it accelerates DeFi adoption by delivering audit-grade infrastructure, granular policy enforcement, and compliance-ready workflows."
+    },
+    {
+      "id": "check-page-e14018a8ab",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "page": "batches",
+      "excerpt": "Tenity Welcomes 14 Visionary Projects for XRPL Accelerator Batch VII - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Programs October 16, 2025 Program Tenity Welcomes 14 Visionary Projects for XRPL Accelerator Batch VII 14 ambitious early-stage startups have been chosen for the XRPL Accelerator in Singapore, where they’ll build on the XRP Ledger to drive growth and take their solutions to a global stage. The seventh cohort delivers innovative fintech solutions across asset tokenization, trade finance, lending, and digital banking. From tokenized securities and borderless real-world asset products to stablecoin-powered trade flows, these startups are bridging Web3 and TradFi through AI, blockchain, and"
+    },
+    {
+      "id": "check-page-54f368776b",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "page": "batches",
+      "excerpt": "From tokenized securities and borderless real-world asset products to stablecoin-powered trade flows, these startups are bridging Web3 and TradFi through AI, blockchain, and data-driven innovation."
+    },
+    {
+      "id": "check-page-80fb18f33c",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "page": "batches",
+      "excerpt": "The XRPL Accelerator has officially launched its seventh cohort in partnership with Tenity, spotlighting 14 ventures that are building solutions for a new financial future utilizing blockchain technology."
+    },
+    {
+      "id": "check-page-d7a1872b29",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "page": "batches",
+      "excerpt": "Launched in 2023, the XRPL Accelerator in Singapore run by Tenity and supported by Ripple, is part of a global initiative to back founders building tech-enabled financial services and products."
+    },
+    {
+      "id": "check-page-56af9c4262",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "page": "batches",
+      "excerpt": "Over the next 12 weeks, founders will receive tailored mentorship to sharpen product–market fit, integrate with the XRP Ledger, and gain targeted investor exposure — embedding their projects deeper into a thriving blockchain ecosystem."
+    },
+    {
+      "id": "check-page-1f28858077",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "page": "batches",
+      "excerpt": "These founders are driving a new wave of blockchain innovation, where tangible use cases, regulatory readiness, and scalability take center stage."
+    },
+    {
+      "id": "check-page-f42336eddc",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "page": "batches",
+      "excerpt": "Contro | Malaysia Contro is the Amex of Web3, giving everyday people the financial superpowers once reserved for the rich."
+    },
+    {
+      "id": "check-page-ab67fb178a",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "page": "batches",
+      "excerpt": "DeFa by InvoiceMate | United Arab Emirates DeFa by InvoiceMate is an AI-native lending protocol enabling stable and secure yields by bridging crypto liquidity with real-world invoice financing."
+    },
+    {
+      "id": "check-page-c63c474a33",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "page": "batches",
+      "excerpt": "Folks Mobile | Georgia Folks Mobile is designed to onboard Web3 and TradFi users by merging the convenience of centralised exchanges and debit cards with DeFi technologies."
+    },
+    {
+      "id": "check-page-a09d164aee",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "page": "batches",
+      "excerpt": "Gloyo | Hong Kong SAR Gloyo is building the future of borderless finance, enabling users to send, spend, and grow money instantly across borders with stablecoins."
+    },
+    {
+      "id": "check-page-be66da11a5",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "page": "batches",
+      "excerpt": "Lantern Finance | United States Lantern is a US-based platform offering seamless access to crypto-backed loans."
+    },
+    {
+      "id": "check-page-151ae00fc2",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "page": "batches",
+      "excerpt": "LedgerFunding | United States LedgerFunding is a B2B platform reshaping global trade finance by making cross-border funding more accessible for small and medium enterprises, financing institutions, and capital providers."
+    },
+    {
+      "id": "check-page-b381b0d254",
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "page": "batches",
+      "excerpt": "Obligate | Switzerland Obligate is an onchain securities platform, offering clients bespoke tokenization solutions and yield-bearing investment products."
+    },
+    {
+      "id": "check-page-748cd116a1",
+      "url": "https://www.tenity.com/programs/xrpl-accelerator-2025",
+      "page": "batches",
+      "excerpt": "Global Startup Programs, Accelerators & Hackathons | Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Programs that power founders From early-stage to global expansion, Tenity startup programs give startups the capital, coaching and corporate access to purposefully accelerate growth. As part of our innovation powerhouse, every program is designed to create real outcomes – be it pilots, funding, international scaling or a combination of all. All Baku Hong Kong Istanbul London Singapore Zurich All Open Running Closed Sorry, no results found Frequently Asked Questions How Tenity Startup Programs works Tenity runs global startup programs, including accelerator programs, innovation initiatives, and"
+    },
+    {
+      "id": "check-page-c518dafc5c",
+      "url": "https://www.tenity.com/programs/xrpl-accelerator-2025",
+      "page": "batches",
+      "excerpt": "All Baku Hong Kong Istanbul London Singapore Zurich All Open Running Closed Sorry, no results found Frequently Asked Questions How Tenity Startup Programs works Tenity runs global startup programs, including accelerator programs, innovation initiatives, and hackathons, designed to help founders scale and collaborate with leading partners worldwide."
+    },
+    {
+      "id": "check-page-f53039ba39",
+      "url": "https://www.tenity.com/programs/xrpl-accelerator-2025",
+      "page": "batches",
+      "excerpt": "Tenity offers startup accelerator programs, corporate innovation programs, hackathons, and ecosystem-led initiatives designed to help founders validate, scale, and partner with leading organisations."
+    },
+    {
+      "id": "check-page-956598b791",
+      "url": "https://www.tenity.com/programs/xrpl-accelerator-2025",
+      "page": "batches",
+      "excerpt": "Tenity programs are open to startups, scaleups, and founders depending on the program’s focus, maturity stage, and industry vertical."
+    },
+    {
+      "id": "check-page-4d082410f7",
+      "url": "https://www.tenity.com/programs/xrpl-accelerator-2025",
+      "page": "batches",
+      "excerpt": "Are Tenity programs equity-free?"
+    },
+    {
+      "id": "check-page-19282c8acf",
+      "url": "https://www.tenity.com/programs/xrpl-accelerator-2025",
+      "page": "batches",
+      "excerpt": "Some Tenity programs are equity-free, while others may involve investment or venture partnerships."
+    },
+    {
+      "id": "check-page-7e194b8812",
+      "url": "https://www.tenity.com/programs/xrpl-accelerator-2025",
+      "page": "batches",
+      "excerpt": "Tenity runs programs across multiple global hubs, including Europe, Asia, and the Middle East, with both local and international participation."
+    },
+    {
+      "id": "check-page-f09f1f3588",
+      "url": "https://www.tenity.com/programs/xrpl-accelerator-2025",
+      "page": "batches",
+      "excerpt": "Stay in our orbit Hubs Zurich London Singapore Hong Kong Madrid Istanbul Join the newsletter Subscribe Join the newsletter Get insights, stories, and opportunities from across our global ecosystem - and listen our podcast on the ideas shaping finance and tech."
+    },
+    {
+      "id": "check-page-18dd7fbb24",
+      "url": "https://www.tenity.com/programs/xrpl-accelerator-2025",
+      "page": "batches",
+      "excerpt": "Subscribe Linkedin Twitter IG Europe IG Asia IG UK Youtube © 2026 Tenity Group AG All rights reserved Privacy Policy Cookie policy Cookie preferences"
+    },
+    {
+      "id": "check-page-1da07b0ad8",
+      "url": "https://www.tenity.com/about/",
+      "page": "details",
+      "excerpt": "About Tenity | Leading Fintech Innovation Platform Across 6 Hubs Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact We are Fintech makers and other impossible things Tenity The innovation powerhouse shaping the future of fintech About Tenity — we are a venture capital firm and innovation platform combining two engines: Venture Capital – investing early in startups and providing investors with access to high-quality dealflow – and Innovation services – partnering with corporates and governments to design and run high-impact innovation programs. With hubs across Europe and Asia, we connect the right people, capital and ideas to deliver innovation with tangible results. We are tenity Fintech makers and other"
+    },
+    {
+      "id": "check-page-6b64353421",
+      "url": "https://www.tenity.com/about/",
+      "page": "details",
+      "excerpt": "About Tenity A Decade of Fintech Innovation."
+    },
+    {
+      "id": "check-page-40c7449d11",
+      "url": "https://www.tenity.com/about/",
+      "page": "details",
+      "excerpt": "All Global Hong Kong Istanbul London Madrid Singapore Tallinn Zurich Andreas Iten CEO & GP Kevin Chavanne Venture Partner Pavel Jakovlev Venture Partner Tenity is built by a multidisciplinary team with deep experience across startups, venture capital, corporate innovation, and ecosystem development."
+    },
+    {
+      "id": "check-page-fac927cd35",
+      "url": "https://www.tenity.com/about/",
+      "page": "details",
+      "excerpt": "With six hubs across Europe and Asia, we’re close to the markets and ecosystems that matter most."
+    },
+    {
+      "id": "check-page-8dd9b58cdc",
+      "url": "https://www.tenity.com/about/",
+      "page": "details",
+      "excerpt": "Zurich Explore hub Singapore Explore hub London Explore hub Istanbul Explore hub Madrid Explore hub Hong Kong Explore hub Who we are Tenity started in 2015 as an open innovation initiative at SIX , the Swiss Stock Exchange."
+    },
+    {
+      "id": "check-page-23441ad37f",
+      "url": "https://www.tenity.com/about/",
+      "page": "details",
+      "excerpt": "Over a decade, it has evolved into a fully independent fintech innovation ecosystem operating across six hubs — Zurich, Singapore, London, Madrid, Istanbul, and Hong Kong."
+    },
+    {
+      "id": "check-page-49573fbe6e",
+      "url": "https://www.tenity.com/about/",
+      "page": "details",
+      "excerpt": "Today Tenity combines two engines: venture capital backing pre-seed to Series A founders across Europe and APAC, and innovation services connecting corporates and institutions with the startups they need to turn strategic goals into measurable outcomes."
+    },
+    {
+      "id": "check-page-6d75fe071f",
+      "url": "https://www.tenity.com/about/",
+      "page": "details",
+      "excerpt": "With 1,600+ startups supported, 65+ institutional partners, and 200+ portfolio companies, Tenity is one of the most active fintech innovation ecosystems in the world."
+    },
+    {
+      "id": "check-page-db007d2177",
+      "url": "https://www.tenity.com/about/",
+      "page": "details",
+      "excerpt": "About Tenity’s origins: founded out of the Swiss Stock Exchange, Tenity brings a rigor and credibility that opens doors across European and Asian financial institutions."
+    },
+    {
+      "id": "check-page-ce31ab0218",
+      "url": "https://www.tenity.com/about/",
+      "page": "details",
+      "excerpt": "Swiss heritage means regulatory awareness, institutional trust, and long-term thinking — qualities that matter when building at the frontier of fintech, AI, and digital assets."
+    },
+    {
+      "id": "check-page-22094b27f5",
+      "url": "https://www.tenity.com/about/",
+      "page": "details",
+      "excerpt": "This foundation — built over a decade, across two continents, with some of the world’s most demanding financial institutions — is what makes Tenity a different kind of partner for both founders and corporates."
+    },
+    {
+      "id": "check-page-39b31d8fdb",
+      "url": "https://www.tenity.com/about/",
+      "page": "details",
+      "excerpt": "Subscribe Linkedin Twitter IG Europe IG Asia IG UK Youtube © 2026 Tenity Group AG All rights reserved Privacy Policy Cookie policy Cookie preferences"
+    },
+    {
+      "id": "check-page-c167307953",
+      "url": "https://www.tenity.com/members/andrea-fritschi/",
+      "page": "terms",
+      "excerpt": "Andrea Fritschi – Chief Investment Officer at Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Andrea Fritschi Chief Investment Officer & Managing Partner Andrea Fritschi is an experienced investment executive with over two decades in institutional finance, venture capital and entrepreneurship. Her background spans multi-stage investing at Swiss Re and BlackRock, founding and building her own company, and holding senior leadership roles in startup and scaleup environments. This blend of corporate venture and asset-management experience, combined with hands-on entrepreneurial execution, enables her to create value at the intersection of financial institutions and early-stage innovation. As Managing"
+    },
+    {
+      "id": "check-page-5dfd801f3b",
+      "url": "https://www.tenity.com/members/andrea-fritschi/",
+      "page": "terms",
+      "excerpt": "As Managing Partner & Chief Investment Officer at Tenity, she drives global venture investment strategies across FinTech, InsurTech and Web3 in Europe and APAC."
+    },
+    {
+      "id": "check-page-5dfd801f3b",
+      "url": "https://www.tenity.com/members/andrea-fritschi/",
+      "page": "terms",
+      "excerpt": "As Managing Partner & Chief Investment Officer at Tenity, she drives global venture investment strategies across FinTech, InsurTech and Web3 in Europe and APAC."
+    },
+    {
+      "id": "check-page-7b1ad1bccb",
+      "url": "https://www.tenity.com/members/andrea-fritschi/",
+      "page": "terms",
+      "excerpt": "Stay in our orbit Hubs Zurich London Singapore Hong Kong Madrid Istanbul Join the newsletter Subscribe Join the newsletter Get insights, stories, and opportunities from across our global ecosystem - and listen our podcast on the ideas shaping finance and tech."
+    },
+    {
+      "id": "check-page-c224a79da6",
+      "url": "https://www.tenity.com/members/andrea-fritschi/",
+      "page": "terms",
+      "excerpt": "Subscribe Linkedin Twitter IG Europe IG Asia IG UK Youtube © 2026 Tenity Group AG All rights reserved Privacy Policy Cookie policy Cookie preferences"
+    },
+    {
+      "id": "check-page-b73b0eab5e",
+      "url": "https://www.tenity.com/members/guillermo-forteza/",
+      "page": "terms",
+      "excerpt": "Guillermo Forteza - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Guillermo Forteza Investment Lead Europe (INC II) Venture investor with a broad background across fintech, insurtech, mobility, and adjacent tech sectors. He combines corporate innovation experience—including building and scaling CVC and venture-building units—with hands-on operational experience managing and growing early-stage fintech and digital tech companies. Guillermo Forteza Investment Lead Europe (INC II) Venture investor with a broad background across fintech, insurtech, mobility, and adjacent tech sectors. He combines corporate innovation experience—including building and scaling CVC and venture-building units—with hands-on"
+    },
+    {
+      "id": "check-page-f87bb5e7c2",
+      "url": "https://www.tenity.com/members/guillermo-forteza/",
+      "page": "terms",
+      "excerpt": "Stay in our orbit Hubs Zurich London Singapore Hong Kong Madrid Istanbul Join the newsletter Subscribe Join the newsletter Get insights, stories, and opportunities from across our global ecosystem - and listen our podcast on the ideas shaping finance and tech."
+    },
+    {
+      "id": "check-page-64b4f817d4",
+      "url": "https://www.tenity.com/members/guillermo-forteza/",
+      "page": "terms",
+      "excerpt": "Subscribe Linkedin Twitter IG Europe IG Asia IG UK Youtube © 2026 Tenity Group AG All rights reserved Privacy Policy Cookie policy Cookie preferences"
+    },
+    {
+      "id": "check-page-0e2f68f877",
+      "url": "https://www.tenity.com/members/maxim-leer/",
+      "page": "terms",
+      "excerpt": "Maxim Leer - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Maxim Leer Principal - CVC Investment Lead Maxim is a venture capital investor backing bold founders shaping the future of finance. As an active investor and board member/observer, he leads the SIX Fintech Ventures fund (50mCHF CVC of SIX). His investment highlights include Relio, Fundcraft, Aazzur, Obligate, Keyrock, Doconomy, Anapaya, vestr, Stableton, and Aisot. Maxim’s experience spans Siemens, Daimler, strategy consulting, founding startups, and serving as Venture Building Director at Morrow Ventures (prev. venture arm of Jung von Matt). He is a panelist & startup judge (e.g. at Swiss FinTech Awards & Unicorn Pitches). Maxim Leer"
+    },
+    {
+      "id": "check-page-34d38719df",
+      "url": "https://www.tenity.com/members/maxim-leer/",
+      "page": "terms",
+      "excerpt": "Stay in our orbit Hubs Zurich London Singapore Hong Kong Madrid Istanbul Join the newsletter Subscribe Join the newsletter Get insights, stories, and opportunities from across our global ecosystem - and listen our podcast on the ideas shaping finance and tech."
+    },
+    {
+      "id": "check-page-61ab8a2f68",
+      "url": "https://www.tenity.com/members/maxim-leer/",
+      "page": "terms",
+      "excerpt": "Subscribe Linkedin Twitter IG Europe IG Asia IG UK Youtube © 2026 Tenity Group AG All rights reserved Privacy Policy Cookie policy Cookie preferences"
+    },
+    {
+      "id": "check-page-664dc3e160",
+      "url": "https://www.tenity.com/members/oliver-sjostedt/",
+      "page": "terms",
+      "excerpt": "Oliver Sjöstedt - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Oliver Sjöstedt Principal - UK & Nordics Investment Lead With a decade in fintech as both investor and operator, Oliver leads UK & Nordic investments. He co-founded a €30m fintech fund, served as Chief of Staff at a scaling health/fin tech startup, and built deep ties as a community builder connecting the region’s standout fintech operators. Oliver Sjöstedt Principal - UK & Nordics Investment Lead With a decade in fintech as both investor and operator, Oliver leads UK & Nordic investments. He co-founded a €30m fintech fund, served as Chief of Staff at a scaling health/fin tech startup, and built deep ties as a community builder connecting"
+    },
+    {
+      "id": "check-page-0d8328228f",
+      "url": "https://www.tenity.com/members/oliver-sjostedt/",
+      "page": "terms",
+      "excerpt": "Stay in our orbit Hubs Zurich London Singapore Hong Kong Madrid Istanbul Join the newsletter Subscribe Join the newsletter Get insights, stories, and opportunities from across our global ecosystem - and listen our podcast on the ideas shaping finance and tech."
+    },
+    {
+      "id": "check-page-1d5ae66cc1",
+      "url": "https://www.tenity.com/members/oliver-sjostedt/",
+      "page": "terms",
+      "excerpt": "Subscribe Linkedin Twitter IG Europe IG Asia IG UK Youtube © 2026 Tenity Group AG All rights reserved Privacy Policy Cookie policy Cookie preferences"
+    },
+    {
+      "id": "check-page-770cb66940",
+      "url": "https://www.tenity.com/about/hong-kong/",
+      "page": "details",
+      "excerpt": "Hong Kong - Tenity Venture Capital Innovation Services Startups About Tenity Orbit Contact Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Venture Capital Innovation Services Startups About Tenity Orbit Explore Innovation Services For Corporates For Governments Case Studies Explore Venture Capital Portfolio Our AI Thesis Our Digital Asset Thesis For Startups Funding Programs About Tenity Our Hubs Approach Careers Mentors Case Studies Orbit News Stories Insights & Reports Events Podcasts Login Contact Tenity Hong Kong From the East to the Middle East We build the bridge between Asia and the Gulf — helping scaleups, corporates and governments cross it, and backing what we prove with venture capital. Go Global BootCamp Partner with us Connecting Asia with the Gulf Capital is moving east, while companies are looking west. From Hong Kong, Tenity connects startups, investors and businesses across both regions — turning cross-border opportunities into real partnerships. Scaleups — GoGlobal Bootcamp Structured market entry into the Gulf, Europe and Southeast Asia: evidence-based market selection, go-to-market strategy, live introductions and"
+    },
+    {
+      "id": "check-page-cee5978349",
+      "url": "https://www.tenity.com/about/hong-kong/",
+      "page": "details",
+      "excerpt": "Scaleups — GoGlobal Bootcamp Structured market entry into the Gulf, Europe and Southeast Asia: evidence-based market selection, go-to-market strategy, live introductions and investor readiness."
+    },
+    {
+      "id": "check-page-c7b9ea7367",
+      "url": "https://www.tenity.com/about/hong-kong/",
+      "page": "details",
+      "excerpt": "Governments — ecosystem & FDI programs We attract foreign scaleups, soft-land them, and build local capability."
+    },
+    {
+      "id": "check-page-68b04fda19",
+      "url": "https://www.tenity.com/about/hong-kong/",
+      "page": "details",
+      "excerpt": "Investors & corporates — venture capital + innovation programs We invest in and de-risk exactly what the programs prove."
+    },
+    {
+      "id": "check-page-fbfb1d1fa7",
+      "url": "https://www.tenity.com/about/hong-kong/",
+      "page": "details",
+      "excerpt": "Subscribe Linkedin Twitter IG Europe IG Asia IG UK Youtube © 2026 Tenity Group AG All rights reserved Privacy Policy Cookie policy Cookie preferences"
     }
   ],
   "findings": {
@@ -604,18 +1732,6 @@
     ],
     "phones": [],
     "routes": [
-      {
-        "value": "https://www.tenity.com/program/novartis-turkiye-health-innovation-program/",
-        "evidenceId": "check-route-ecbf40143b"
-      },
-      {
-        "value": "https://www.tenity.com/stories/from-applications-to-the-stage-looking-back-at-the-idda-incubation-program/",
-        "evidenceId": "check-route-a7119bcd61"
-      },
-      {
-        "value": "https://www.tenity.com/stories/applications-open-for-health-innovation-program-with-novartis-turkiye/",
-        "evidenceId": "check-route-bf9f3435cf"
-      },
       {
         "value": "http://www.tenity.com/programs",
         "evidenceId": "check-route-dd6bf7f824"
@@ -662,20 +1778,15 @@
         "evidenceId": "check-format-a85d516078"
       },
       {
-        "value": "in-person",
-        "evidenceId": "check-format-96c89c2040"
-      },
-      {
         "value": "remote",
         "evidenceId": "check-format-118ed516bf"
-      }
-    ],
-    "location": [
+      },
       {
-        "value": "Swiss",
-        "evidenceId": "check-location-f3988dc1eb"
+        "value": "in-person",
+        "evidenceId": "check-format-dae4a5d91b"
       }
     ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
@@ -689,6 +1800,14 @@
       {
         "value": "efficiency, transparency, and access. –> Tenity invests up to SGD 450K per startup through its Tenity Incubation Fund II. The fund is",
         "evidenceId": "check-deal-ab817bf6ee"
+      },
+      {
+        "value": "& web3, investing, and quantum finance. ‍ Tenity invests up to €300K per startup and provides market access, investor connections, and",
+        "evidenceId": "check-deal-6914988eeb"
+      },
+      {
+        "value": "to market. To accelerate this journey, Tenity invests up to €300K per startup and complements the capital with hands-on support,",
+        "evidenceId": "check-deal-0538272eb4"
       }
     ],
     "dealComponents": [
@@ -703,6 +1822,18 @@
           "condition": "up to"
         },
         "evidenceId": "check-deal-0a6947abb5"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "300000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-6914988eeb"
       }
     ],
     "portfolioPages": [

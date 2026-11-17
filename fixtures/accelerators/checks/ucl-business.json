@@ -1,37 +1,56 @@
 {
   "programId": "ucl-business",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.uclventures.com/",
-    "http://www.uclventures.com/about-us/careers",
-    "http://www.uclventures.com/events-programmes/2025/enacuity-ceo-reflects-commercialisation-challenges",
-    "http://www.uclventures.com/events-programmes/2025/i-o-inspire-entrepreneurs-shine-finale-showcase",
-    "http://www.uclventures.com/events-programmes/2026/autolus-founder-discusses-long-journey-research-impact",
-    "http://www.uclventures.com/events-programmes/2026/i-o-converse-interview-phasecraft-co-founder-toby-cubitt",
     "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
     "http://www.uclventures.com/new-information-about-ucl-ventures",
     "https://www.uclventures.com/who-we-are",
     "https://www.uclventures.com/what-we-do",
     "http://www.uclventures.com/spinout-portfolio",
-    "http://www.uclventures.com/spinout-portfolio-news/2025/ai-assisted-ms-breakthrough-paves-way-personalised-treatment",
-    "http://www.uclventures.com/spinout-portfolio-news/2025/ucl-spinouts-recognised-leaders-londons-life-sciences-boom",
-    "http://www.uclventures.com/spinout-portfolio-news/2026/acoubatt-raises-ps11m-battery-listening-technology",
-    "http://www.uclventures.com/spinout-portfolio-news/2026/early-promise-reported-severe-lupus-autolus-car-t-therapy"
+    "http://www.uclventures.com/spinout-portfolio/3d-repo",
+    "http://www.uclventures.com/spinout-portfolio/acoubatt",
+    "http://www.uclventures.com/spinout-portfolio/acoustofab",
+    "http://www.uclventures.com/spinout-portfolio/advanced-design-technology",
+    "http://www.uclventures.com/spinout-portfolio/altimmune",
+    "http://www.uclventures.com/spinout-portfolio/apollo-therapeutics",
+    "http://www.uclventures.com/spinout-portfolio/atocap",
+    "http://www.uclventures.com/spinout-portfolio/autifony",
+    "http://www.uclventures.com/spinout-portfolio/autolus-therapeutics",
+    "http://www.uclventures.com/spinout-portfolio/axovia-therapeutics",
+    "http://www.uclventures.com/spinout-portfolio/biotalife-healthcare",
+    "http://www.uclventures.com/spinout-portfolio/cascader",
+    "http://www.uclventures.com/spinout-portfolio/cogstack",
+    "http://www.uclventures.com/spinout-portfolio/collaborative-community-against-coronovirus-cic-ccc-cic"
   ],
   "evidence": [
-    {
-      "id": "check-duration-6855509785",
-      "url": "http://www.uclventures.com/events-programmes/2025/i-o-inspire-entrepreneurs-shine-finale-showcase",
-      "title": "UCL Business — program page",
-      "excerpt": "of UCL Ventures’ I-O Inspire programme, an 8-week series of lectures and seminars aimed at growing",
-      "page": "details"
-    },
     {
       "id": "check-duration-86e1550429",
       "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
       "title": "UCL Business — program page",
       "excerpt": "response, with median event-free survival of 11.9 months. Autolus is now progressing additional CAR T",
       "page": "details"
+    },
+    {
+      "id": "check-format-07f63d833e",
+      "url": "http://www.uclventures.com/spinout-portfolio/3d-repo",
+      "title": "UCL Business — portfolio page",
+      "excerpt": "Founder and CEO Dr Dobos used his Engineering Doctorate in Virtual Environments, Imaging & Visualisation (Computer Science)",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-53e9311d79",
+      "url": "http://www.uclventures.com/spinout-portfolio/3d-repo",
+      "title": "UCL Business — portfolio page",
+      "excerpt": "3D Repo's software in action The company spun out of Virtual Environments, Imaging and Visualisation at UCL and has",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-eba9839295",
+      "url": "http://www.uclventures.com/spinout-portfolio/altimmune",
+      "title": "UCL Business — portfolio page",
+      "excerpt": "vaccine development company headquartered in Gaithersburg, Maryland, US. Moving to advance its",
+      "page": "portfolio"
     },
     {
       "id": "check-route-fced8e7da3",
@@ -49,34 +68,76 @@
       "excerpt": "Bringing brilliant ideas to life - and to market | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures"
     },
     {
-      "id": "check-page-47203889b6",
-      "url": "http://www.uclventures.com/about-us/careers",
+      "id": "check-page-664048de44",
+      "url": "https://www.uclventures.com/",
       "page": "details",
-      "excerpt": "Careers | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report Our annual report showcases"
+      "excerpt": "198 companies since 1993 £4.5bn capital raised since 2016 1400+ patents filed since 1993 8700+ licences since 1993 Working side by side with UCL academics As UCL’s expert commercialisation partner, we provide tailored support and specialist expertise to help researchers, clinicians and academics take ideas and technologies beyond the university."
     },
     {
-      "id": "check-page-d786e8777b",
-      "url": "http://www.uclventures.com/events-programmes/2025/enacuity-ceo-reflects-commercialisation-challenges",
+      "id": "check-page-c3866f9586",
+      "url": "https://www.uclventures.com/",
       "page": "details",
-      "excerpt": "Enacuity CEO reflects on commercialisation challenges | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL"
+      "excerpt": "Whether you’re at the earliest stage of an idea and want to understand its commercial viability, or preparing to launch a spinout, a serial academic entrepreneur or simply dipping your toe into the commercial world, we guide you carefully and collaboratively."
     },
     {
-      "id": "check-page-001240bd91",
-      "url": "http://www.uclventures.com/events-programmes/2025/i-o-inspire-entrepreneurs-shine-finale-showcase",
+      "id": "check-page-3b654132bc",
+      "url": "https://www.uclventures.com/",
       "page": "details",
-      "excerpt": "I-O Inspire entrepreneurs shine at finale showcase | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL"
+      "excerpt": "Learn more about UCL Ventures Explore our portfolio Our extensive portfolio of spinouts and technologies spans departments, disciplines and sectors."
     },
     {
-      "id": "check-page-8fe5b88257",
-      "url": "http://www.uclventures.com/events-programmes/2026/autolus-founder-discusses-long-journey-research-impact",
+      "id": "check-page-51921f093b",
+      "url": "https://www.uclventures.com/",
       "page": "details",
-      "excerpt": "Autolus founder discusses the long journey from research to impact | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes,"
+      "excerpt": "See more Gigaton Energy & cleantech Gigaton Mission to reduce global emissions at gigatonne scale."
     },
     {
-      "id": "check-page-ecb29da379",
-      "url": "http://www.uclventures.com/events-programmes/2026/i-o-converse-interview-phasecraft-co-founder-toby-cubitt",
+      "id": "check-page-ea628cbbb3",
+      "url": "https://www.uclventures.com/",
       "page": "details",
-      "excerpt": "I-O Converse: interview with Phasecraft Co-founder, Toby Cubitt | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported"
+      "excerpt": "Endomag Oncology, Medtech Endomag Medical devices for surgical guidance in breast cancer and more."
+    },
+    {
+      "id": "check-page-d413aad144",
+      "url": "https://www.uclventures.com/",
+      "page": "details",
+      "excerpt": "Autolus Therapeutics Drug discovery, Oncology Autolus Therapeutics Developing next-generation programmed T-cell therapies for cancer."
+    },
+    {
+      "id": "check-page-f7492efe0e",
+      "url": "https://www.uclventures.com/",
+      "page": "details",
+      "excerpt": "Dr Martin Pule, Founder and Chief Scientific Officer of Autolus Therapeutics Inspiring stories How UCL research is changing lives, businesses and communities."
+    },
+    {
+      "id": "check-page-90093250fc",
+      "url": "https://www.uclventures.com/",
+      "page": "details",
+      "excerpt": "Read more news Navigate to BiotaLife® Healthcare brings university innovation to women’s health Spinout & portfolio news BiotaLife® Healthcare brings university innovation to women’s health The company is launching its first consumer product, BloomCalma™, a microbiome-friendly intimate moisturiser."
+    },
+    {
+      "id": "check-page-0a79f780c3",
+      "url": "https://www.uclventures.com/",
+      "page": "details",
+      "excerpt": "9 November 2026 Octopath AI secures £1.5 million to support cancer pathology Spinout & portfolio news Octopath AI secures £1.5 million to support cancer pathology The seed funding will help develop technology to extract more information from tissue slides."
+    },
+    {
+      "id": "check-page-50c9f303d8",
+      "url": "https://www.uclventures.com/",
+      "page": "details",
+      "excerpt": "27 October 2026 UCL recognised for its leading IP commercialisation in KEF 2026 UCL news UCL recognised for its leading IP commercialisation in KEF 2026 UCL has once again been recognised as one of the UK's leading universities for 'knowledge exchange'."
+    },
+    {
+      "id": "check-page-3f83be0f20",
+      "url": "https://www.uclventures.com/",
+      "page": "details",
+      "excerpt": "7 October 2026 World AI Week: how UCL founders are putting AI to work Opinion & insights World AI Week: how UCL founders are putting AI to work From surgery to data centres, UCL Ventures’ spinouts are using AI to transform lives."
+    },
+    {
+      "id": "check-page-b49302f1ca",
+      "url": "https://www.uclventures.com/",
+      "page": "details",
+      "excerpt": "Find your Business Manager UCL Ventures footer About UCL Ventures Our people What we do Who we are Our culture Forms & Resources Publications and downloads Accreditations Cyber essentials Living wage UCL Ventures Limited (Company Registration No: 02776963) is a wholly-owned subsidiary of University College London."
     },
     {
       "id": "check-page-c25d8ac64a",
@@ -85,10 +146,70 @@
       "excerpt": "Autolus Therapeutics: reprogramming patients' cells to kill cancer | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Current page: Inspiring stories Real-world impact and"
     },
     {
+      "id": "check-page-70e8efac1c",
+      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
+      "page": "details",
+      "excerpt": "Speak to the team Choose your enquiry type to reach the right team Find your Business Manager Autolus Therapeutics: reprogramming patients' cells to kill cancer A new personalised appraoch for leuakaemia."
+    },
+    {
+      "id": "check-page-2d9230dc5e",
+      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
+      "page": "details",
+      "excerpt": "Breadcrumb trail Home Inspiring stories Autolus Therapeutics: reprogramming patients' cells to kill cancer Problem to be solved Many patients with aggressive blood cancers relapse or do not respond to standard treatments."
+    },
+    {
+      "id": "check-page-ad31454511",
+      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
+      "page": "details",
+      "excerpt": "I’m delighted about the approval of AUCATZYL in the UK which represents a huge milestone in Autolus’ success story."
+    },
+    {
+      "id": "check-page-c2c41bd9a2",
+      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
+      "page": "details",
+      "excerpt": "In June 2026, meanwhile, it was reported that CAR T-cell therapy developed by Autolus Therapeutics showed early promise as a new treatment option for people living with severe, treatment-resistant lupus."
+    },
+    {
+      "id": "check-page-9f2653ffe7",
+      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
+      "page": "details",
+      "excerpt": "The early findings, presented at the EULAR European Congress of Rheumatology, come from the ongoing Phase I CARLYSLE study led by UCL and UCLH."
+    },
+    {
+      "id": "check-page-30acaa3de4",
+      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
+      "page": "details",
+      "excerpt": "UCL Ventures footer About UCL Ventures Our people What we do Who we are Our culture Forms & Resources Publications and downloads Accreditations Cyber essentials Living wage UCL Ventures Limited (Company Registration No: 02776963) is a wholly-owned subsidiary of University College London."
+    },
+    {
+      "id": "check-page-9eab362034",
+      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
+      "page": "details",
+      "excerpt": "Registered office: University College London Gower Street London WC1E 6BT UCL social media menu Link to Linkedin Back to top Legal Cookie policy Freedom of information Privacy policy Rules of website use © 2026 UCL Ventures Limited"
+    },
+    {
       "id": "check-page-09cbb57a61",
       "url": "http://www.uclventures.com/new-information-about-ucl-ventures",
       "page": "details",
       "excerpt": "New information about UCL Ventures | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report"
+    },
+    {
+      "id": "check-page-cb36726658",
+      "url": "http://www.uclventures.com/new-information-about-ucl-ventures",
+      "page": "details",
+      "excerpt": "Autolus Therapeutics: reprogramming patients' cells to kill cancer Real-world impact Autolus Therapeutics: reprogramming patients' cells to kill cancer A new personalised appraoch for leuakaemia."
+    },
+    {
+      "id": "check-page-ff7d1c8417",
+      "url": "http://www.uclventures.com/new-information-about-ucl-ventures",
+      "page": "details",
+      "excerpt": "UCL Ventures footer About UCL Ventures Our people What we do Who we are Our culture Forms & Resources Publications and downloads Accreditations Cyber essentials Living wage UCL Ventures Limited (Company Registration No: 02776963) is a wholly-owned subsidiary of University College London."
+    },
+    {
+      "id": "check-page-ace88c0b63",
+      "url": "http://www.uclventures.com/new-information-about-ucl-ventures",
+      "page": "details",
+      "excerpt": "Registered office: University College London Gower Street London WC1E 6BT UCL social media menu Link to Linkedin Back to top Legal Cookie policy Freedom of information Privacy policy Rules of website use © 2026 UCL Ventures Limited"
     },
     {
       "id": "check-page-bc68f95314",
@@ -97,10 +218,106 @@
       "excerpt": "Who we are | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report Our annual report"
     },
     {
+      "id": "check-page-43337a0cdf",
+      "url": "https://www.uclventures.com/who-we-are",
+      "page": "details",
+      "excerpt": "Breadcrumb trail Home About us Who we are 1993 UCL Ventures was formed 198 companies since 1993 20+ commercialisation experts £4.5bn capital raised since 2016 UCL Ventures is the expert commercialisation partner of University College London."
+    },
+    {
+      "id": "check-page-631dfef51b",
+      "url": "https://www.uclventures.com/who-we-are",
+      "page": "details",
+      "excerpt": "We work alongside academics, faculties and partner hospitals to protect and commercialise innovations through creating spinout companies , licensing and Social Ventures - always in ways that respect academic values and ambition."
+    },
+    {
+      "id": "check-page-6224145650",
+      "url": "https://www.uclventures.com/who-we-are",
+      "page": "details",
+      "excerpt": "Our portfolio now spans advanced therapeutics, digital health, quantum software and climate technologies to next-generation AI."
+    },
+    {
+      "id": "check-page-4c1f65ac21",
+      "url": "https://www.uclventures.com/who-we-are",
+      "page": "details",
+      "excerpt": "Learn about what we do Our guiding values Impact-driven We prioritise meaningful benefits: patient/user outcomes, societal value, sustainability and economic growth."
+    },
+    {
+      "id": "check-page-f34e11a682",
+      "url": "https://www.uclventures.com/who-we-are",
+      "page": "details",
+      "excerpt": "Collaborative We work side-by-side with UCL researchers and professional services, building long-term partnerships with industry, investors and healthcare providers."
+    },
+    {
+      "id": "check-page-f9698ca8aa",
+      "url": "https://www.uclventures.com/who-we-are",
+      "page": "details",
+      "excerpt": "Registered office: University College London Gower Street London WC1E 6BT UCL social media menu Link to Linkedin Back to top Legal Cookie policy Freedom of information Privacy policy Rules of website use © 2026 UCL Ventures Limited"
+    },
+    {
       "id": "check-page-639dbb3178",
       "url": "https://www.uclventures.com/what-we-do",
       "page": "details",
       "excerpt": "What we do | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report Our annual report"
+    },
+    {
+      "id": "check-page-fdb42e99aa",
+      "url": "https://www.uclventures.com/what-we-do",
+      "page": "details",
+      "excerpt": "Speak to the team Choose your enquiry type to reach the right team Find your Business Manager What we do UCL Ventures is the expert commercialisation partner of University College London."
+    },
+    {
+      "id": "check-page-dbf8c99870",
+      "url": "https://www.uclventures.com/what-we-do",
+      "page": "details",
+      "excerpt": "Breadcrumb trail Home About us What we do UCL Ventures enables and empowers UCL’s forward-thinking academics and clinicians to turn new knowledge and bold concepts into commercial successes."
+    },
+    {
+      "id": "check-page-8a0fd9503f",
+      "url": "https://www.uclventures.com/what-we-do",
+      "page": "details",
+      "excerpt": "Our multidisciplinary team and board bring insight across science, engineering, health, data and impact‑led innovation."
+    },
+    {
+      "id": "check-page-dce69acf5c",
+      "url": "https://www.uclventures.com/what-we-do",
+      "page": "details",
+      "excerpt": "Our work spans sectors from gene therapies to AI, clean energy and quantum."
+    },
+    {
+      "id": "check-page-a8ba92bb32",
+      "url": "https://www.uclventures.com/what-we-do",
+      "page": "details",
+      "excerpt": "Impact Report Proven impact - locally and globally Over many years, we have supported a significant portfolio of spinouts, licences and social ventures, helping research move from insight to impact."
+    },
+    {
+      "id": "check-page-8f9bdf179d",
+      "url": "https://www.uclventures.com/what-we-do",
+      "page": "details",
+      "excerpt": "University College London was established in 1826 with a new vision: to make higher education accessible to all."
+    },
+    {
+      "id": "check-page-cb8f535d1e",
+      "url": "https://www.uclventures.com/what-we-do",
+      "page": "details",
+      "excerpt": "As London’s first university, UCL challenged convention by admitting students regardless of faith, introducing practical subjects, and later granting women access to higher education alongside men."
+    },
+    {
+      "id": "check-page-564a3f9d0a",
+      "url": "https://www.uclventures.com/what-we-do",
+      "page": "details",
+      "excerpt": "We have a separate Board, comprising experts who have built successful businesses themselves and understand the worlds of venture capital and academia."
+    },
+    {
+      "id": "check-page-35989b2dd4",
+      "url": "https://www.uclventures.com/what-we-do",
+      "page": "details",
+      "excerpt": "How we support innovation at UCL UCL Ventures footer About UCL Ventures Our people Current page: What we do Who we are Our culture Forms & Resources Publications and downloads Accreditations Cyber essentials Living wage UCL Ventures Limited (Company Registration No: 02776963) is a wholly-owned subsidiary of University College London."
+    },
+    {
+      "id": "check-page-7914ca2e73",
+      "url": "https://www.uclventures.com/what-we-do",
+      "page": "details",
+      "excerpt": "Registered office: University College London Gower Street London WC1E 6BT UCL social media menu Link to Linkedin Back to top Legal Cookie policy Freedom of information Privacy policy Rules of website use © 2026 UCL Ventures Limited"
     },
     {
       "id": "check-page-616401d7e4",
@@ -109,28 +326,88 @@
       "excerpt": "Spinout portfolio | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report Our"
     },
     {
-      "id": "check-page-5607db2f75",
-      "url": "http://www.uclventures.com/spinout-portfolio-news/2025/ai-assisted-ms-breakthrough-paves-way-personalised-treatment",
+      "id": "check-page-14117fb8f1",
+      "url": "http://www.uclventures.com/spinout-portfolio/3d-repo",
       "page": "portfolio",
-      "excerpt": "AI-assisted MS breakthrough paves way for personalised treatment | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported"
+      "excerpt": "3D Repo | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report Our annual"
     },
     {
-      "id": "check-page-f43c6295b6",
-      "url": "http://www.uclventures.com/spinout-portfolio-news/2025/ucl-spinouts-recognised-leaders-londons-life-sciences-boom",
+      "id": "check-page-a39f28233e",
+      "url": "http://www.uclventures.com/spinout-portfolio/acoubatt",
       "page": "portfolio",
-      "excerpt": "UCL spinouts recognised as leaders in London’s Life Sciences boom | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported"
+      "excerpt": "AcouBatt | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report Our annual"
     },
     {
-      "id": "check-page-6b91f4be28",
-      "url": "http://www.uclventures.com/spinout-portfolio-news/2026/acoubatt-raises-ps11m-battery-listening-technology",
+      "id": "check-page-483cf1322e",
+      "url": "http://www.uclventures.com/spinout-portfolio/acoustofab",
       "page": "portfolio",
-      "excerpt": "AcouBatt raises £1.1m for battery ‘listening’ technology | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL"
+      "excerpt": "AcoustoFab | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report Our annual"
     },
     {
-      "id": "check-page-2ed33870b2",
-      "url": "http://www.uclventures.com/spinout-portfolio-news/2026/early-promise-reported-severe-lupus-autolus-car-t-therapy",
+      "id": "check-page-e52312d9e6",
+      "url": "http://www.uclventures.com/spinout-portfolio/advanced-design-technology",
       "page": "portfolio",
-      "excerpt": "Early promise reported in severe lupus for Autolus’ CAR T therapy | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported"
+      "excerpt": "Advanced Design Technology | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact"
+    },
+    {
+      "id": "check-page-0bb5729225",
+      "url": "http://www.uclventures.com/spinout-portfolio/altimmune",
+      "page": "portfolio",
+      "excerpt": "Altimmune | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report Our annual"
+    },
+    {
+      "id": "check-page-e99315f146",
+      "url": "http://www.uclventures.com/spinout-portfolio/apollo-therapeutics",
+      "page": "portfolio",
+      "excerpt": "Apollo Therapeutics | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report"
+    },
+    {
+      "id": "check-page-6d05d6c14a",
+      "url": "http://www.uclventures.com/spinout-portfolio/atocap",
+      "page": "portfolio",
+      "excerpt": "AtoCap | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report Our annual"
+    },
+    {
+      "id": "check-page-54f8f085f7",
+      "url": "http://www.uclventures.com/spinout-portfolio/autifony",
+      "page": "portfolio",
+      "excerpt": "Autifony | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report Our annual"
+    },
+    {
+      "id": "check-page-7150403b75",
+      "url": "http://www.uclventures.com/spinout-portfolio/autolus-therapeutics",
+      "page": "portfolio",
+      "excerpt": "Autolus Therapeutics | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report"
+    },
+    {
+      "id": "check-page-300e7c80c7",
+      "url": "http://www.uclventures.com/spinout-portfolio/axovia-therapeutics",
+      "page": "portfolio",
+      "excerpt": "Axovia Therapeutics | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report"
+    },
+    {
+      "id": "check-page-ceedd9c497",
+      "url": "http://www.uclventures.com/spinout-portfolio/biotalife-healthcare",
+      "page": "portfolio",
+      "excerpt": "BiotaLife Healthcare | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report"
+    },
+    {
+      "id": "check-page-bd1413d4f0",
+      "url": "http://www.uclventures.com/spinout-portfolio/cascader",
+      "page": "portfolio",
+      "excerpt": "Cascader | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report Our annual"
+    },
+    {
+      "id": "check-page-5fde967628",
+      "url": "http://www.uclventures.com/spinout-portfolio/cogstack",
+      "page": "portfolio",
+      "excerpt": "Cogstack | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report Our annual"
+    },
+    {
+      "id": "check-page-95ee18b996",
+      "url": "http://www.uclventures.com/spinout-portfolio/collaborative-community-against-coronovirus-cic-ccc-cic",
+      "page": "portfolio",
+      "excerpt": "Collaborative Community against Coronovirus CIC (CCC CIC) | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes,"
     }
   ],
   "findings": {
@@ -151,16 +428,22 @@
     "cohortStarts": [],
     "durationWeeks": [
       {
-        "value": "8",
-        "evidenceId": "check-duration-6855509785"
-      },
-      {
         "value": "9 months",
         "evidenceId": "check-duration-86e1550429"
       }
     ],
-    "format": [],
-    "location": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-53e9311d79"
+      }
+    ],
+    "location": [
+      {
+        "value": "Gaithersburg",
+        "evidenceId": "check-location-eba9839295"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
     "dealComponents": [],

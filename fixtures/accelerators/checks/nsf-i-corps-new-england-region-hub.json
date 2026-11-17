@@ -1,47 +1,213 @@
 {
   "programId": "nsf-i-corps-new-england-region-hub",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://neicorps.org/",
-    "https://neicorps.org/about/",
     "https://neicorps.org/apply-now/",
-    "https://neicorps.org/calendar_event/hub-spark-online-10-2-3-2-3-3-2-3-2-2-3-2-3-3-2-2-2-4-2/"
+    "https://neicorps.org/calendar/",
+    "https://neicorps.org/calendar_event/hub-spark-online-10-2-3-2-3-3-2-3-2-2-3-2-3-3-2-2-2-4-2/",
+    "https://neicorps.org/about/",
+    "https://neicorps.org/programs/",
+    "https://neicorps.org/calendar_event/spark-program-info-session-2/",
+    "https://neicorps.org/programs/tufts"
   ],
   "evidence": [
     {
+      "id": "check-deal-3e269d46a1",
+      "url": "https://neicorps.org/programs/",
+      "title": "NSF I-Corps New England Region Hub — program page",
+      "excerpt": "to apply for the NSF I-Corps Teams program and a grant of up to $50,000. More information about these programs can be found at their websites",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-d3cff16d16",
+      "url": "https://neicorps.org/calendar_event/spark-program-info-session-2/",
+      "title": "NSF I-Corps New England Region Hub — program page",
+      "excerpt": "I-Corps short course What will the next steps be toward a potential $2MM in non-dilutive funding support There will be an opportunity for Q&A",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-d5a6c1decb",
+      "url": "https://neicorps.org/programs/",
+      "title": "NSF I-Corps New England Region Hub — program page",
+      "excerpt": "to apply for the NSF I-Corps Teams program and a grant of up to $50,000. All courses will be held virtually Hub Spark Online is a FREE",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-e5fa4b637c",
+      "url": "https://neicorps.org/programs/",
+      "title": "NSF I-Corps New England Region Hub — program page",
+      "excerpt": "regional and national training opportunities. Learn how to get up to $50,000 to support customer discovery. Regional Courses: Hub Spark Online",
+      "page": "details"
+    },
+    {
+      "id": "check-format-83129fe201",
+      "url": "https://neicorps.org/calendar_event/spark-program-info-session-2/",
+      "title": "NSF I-Corps New England Region Hub — program page",
+      "excerpt": "June 10, 2025 at 4:00 pm till 4:30 pm JOIN US FOR A SHORT VIRTUAL INFORMATION SESSION ON THE NEW ENGLAND REGIONAL I-CORPS",
+      "page": "details"
+    },
+    {
       "id": "check-route-0c3dfc5b3e",
       "url": "https://neicorps.org/",
-      "title": "NSF I-Corps New England Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps New England Region Hub — homepage",
+      "excerpt": "Apply Now → https://neicorps.org/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-33d40bd9e0",
+      "url": "https://neicorps.org/programs/tufts",
+      "title": "NSF I-Corps New England Region Hub — program page",
+      "excerpt": "Apply Now → https://neicorps.org/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-533b1d8ea0",
+      "url": "https://neicorps.org/calendar/",
+      "title": "NSF I-Corps New England Region Hub — batches page",
+      "excerpt": "Apply Now → https://neicorps.org/apply-now/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-7c26c7ea15",
+      "url": "https://neicorps.org/calendar_event/spark-program-info-session-2/",
+      "title": "NSF I-Corps New England Region Hub — program page",
+      "excerpt": "Apply Now → https://neicorps.org/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-80207d5948",
+      "url": "https://neicorps.org/programs/",
+      "title": "NSF I-Corps New England Region Hub — program page",
       "excerpt": "Apply Now → https://neicorps.org/apply-now/",
       "page": "details"
     },
     {
       "id": "check-route-97266db9d7",
       "url": "https://neicorps.org/calendar_event/hub-spark-online-10-2-3-2-3-3-2-3-2-2-3-2-3-3-2-2-2-4-2/",
-      "title": "NSF I-Corps New England Region Hub — batches page checked by scrape.py",
+      "title": "NSF I-Corps New England Region Hub — batches page",
       "excerpt": "Apply Now → https://neicorps.org/apply-now/",
       "page": "batches"
     },
     {
       "id": "check-route-c1ea864274",
       "url": "https://neicorps.org/calendar_event/hub-spark-online-10-2-3-2-3-3-2-3-2-2-3-2-3-3-2-2-2-4-2/",
-      "title": "NSF I-Corps New England Region Hub — batches page checked by scrape.py",
+      "title": "NSF I-Corps New England Region Hub — batches page",
       "excerpt": "Apply now → https://neicorps.org/apply-now/",
       "page": "batches"
     },
     {
       "id": "check-route-cc2745169b",
       "url": "https://neicorps.org/",
-      "title": "NSF I-Corps New England Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps New England Region Hub — homepage",
       "excerpt": "https://neicorps.org/",
       "page": "details"
     },
     {
+      "id": "check-route-d4ac2d3a21",
+      "url": "https://neicorps.org/calendar/",
+      "title": "NSF I-Corps New England Region Hub — batches page",
+      "excerpt": "apply now → https://neicorps.org/apply-now/",
+      "page": "batches"
+    },
+    {
       "id": "check-route-d58bae9b2d",
       "url": "https://neicorps.org/about/",
-      "title": "NSF I-Corps New England Region Hub — details page checked by scrape.py",
+      "title": "NSF I-Corps New England Region Hub — program page",
       "excerpt": "Apply Now → https://neicorps.org/apply-now/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-be450a3f20",
+      "url": "https://neicorps.org/",
+      "page": "details",
+      "excerpt": "New England I‑Corps Hub | Innovation and Entrepreneurial Training Founders’ Stories About Programs Course Calendar Get Involved Hub News Apply Now Accelerating New England Research to Market Founders’ Stories Researchers with New Technologies NE I-Corps + VMS: Non-dilutive Funding for Deep Tech: SBIR, STTR and TTP Explained See materials and recording Explore the potential impact of your new technology Learn how to assess the market opportunity and pathway for your invention Get entrepreneurial training, support, and up to $50,000 for customer discovery Strengthen your SBIR/STTR proposal if pursuing a startup NSF I-Corps Hub: New England Region What The National Science Foundation’s (NSF) Innovation Corps, or I-Corps , is a program that prepares scientists and engineers to extend their focus beyond the laboratory to accelerate the transfer of cutting-edge research into commercial success. Learn More Who Whether you are just curious about the innovation process or certain you want to create a startup, I-Corps provides research faculty, staff, and students and prospective technology entrepreneurs with the ideal entry point. Learn More Why Understand why your technology has value, and to whom, while gaining an appreciation for what it takes to commercialize technology and the barriers to adoption. Develop a network of like-minded peers, instructors, investors, and mentors. Learn"
+    },
+    {
+      "id": "check-page-9434e7f1db",
+      "url": "https://neicorps.org/",
+      "page": "details",
+      "excerpt": "3100+ Participants Through hands-on training, mentorship, and customer discovery, we’ve supported more than 3,000 researchers and entrepreneurs in transforming ideas into impactful startups."
+    },
+    {
+      "id": "check-page-9f3f5a1cfc",
+      "url": "https://neicorps.org/apply-now/",
+      "page": "application",
+      "excerpt": "New England I‑Corps Hub | Request an Application Skip to content Founders’ Stories About Programs Course Calendar Get Involved Hub News Apply Now Apply Now Request Application Step 1 – Fill out the request for an application below. We will send you the full application shortly. Step 2 – Complete and submit application. Home About Program Course Calendar Get Involved News and Events Apply Now Hub Headquarters MIT Innovation HQ – 6th Floor Building E38 – Room 683 ( Map ) 292 Main Street Cambridge, MA 02139 Office: (617)500-3664 Email: icorps@mit.edu https://accessibility.mit.edu/ NE I-Corps is partially funded by a National Science Foundation award (2430342). Any opinions, findings, and conclusions or recommendations expressed are those of the author(s) and do not necessarily reflect the views of the National Science Foundation."
+    },
+    {
+      "id": "check-page-03f4ae9efe",
+      "url": "https://neicorps.org/calendar/",
+      "page": "batches",
+      "excerpt": "Calendar – neicorps Skip to content Founders’ Stories About Programs Course Calendar Get Involved Hub News Apply Now Apply Now Course Calendar Oct 21 I-Corps Spark Online From October 21, 2026 5:00 pm to November 18, 2026 8:00 pm course filled Nov 03 I-Corps Spark Online – SBIR From November 3, 2026 5:00 pm to December 3, 2026 8:00 pm course filled Nov 12 I-Corps Spark Online From November 12, 2026 5:00 pm to December 10, 2026 8:00 pm course filled Jan 01 I-Corps Spark Online (Q1 2027 Dates Coming Soon) From January 1, 2027 5:00 pm to March 31, 2027 8:00 pm apply now Home About Program Course Calendar Get Involved News and Events Apply Now Hub Headquarters MIT Innovation HQ – 6th Floor Building E38 – Room 683 ( Map ) 292 Main Street Cambridge, MA 02139 Office: (617)500-3664 Email: icorps@mit.edu https://accessibility.mit.edu/ NE I-Corps is partially funded by a National Science Foundation award (2430342). Any opinions, findings, and conclusions or recommendations expressed are those of the author(s) and do not necessarily reflect the views of the National Science Foundation."
+    },
+    {
+      "id": "check-page-0cfc017dfb",
+      "url": "https://neicorps.org/calendar_event/hub-spark-online-10-2-3-2-3-3-2-3-2-2-3-2-3-3-2-2-2-4-2/",
+      "page": "batches",
+      "excerpt": "I-Corps Spark Online (Q1 2027 Dates Coming Soon) – neicorps Skip to content Founders’ Stories About Programs Course Calendar Get Involved Hub News Apply Now Apply Now I-Corps Spark Online (Q1 2027 Dates Coming Soon) From January 1, 2027 5:00 pm to March 31, 2027 8:00 pm What you’ll get: A greater understanding of why your technology has value, and to whom Guided opportunities to find a market for your technology—quite possible one that had not been previous considered! An increased appreciation for what it takes to commercialize technology and the barriers to adoption An expanded network of like-minded peers, instructors, investors, potential customers, and mentors Apply now ← Previous: I-Corps Spark Online Next: Hub Spark Online Program Info Session → Home About Program Course Calendar Get Involved News and Events Apply Now Hub Headquarters MIT Innovation HQ – 6th Floor Building E38 – Room 683 ( Map ) 292 Main Street Cambridge, MA 02139 Office: (617)500-3664 Email: icorps@mit.edu https://accessibility.mit.edu/ NE I-Corps is partially funded by a National Science Foundation award (2430342). Any opinions, findings, and conclusions or recommendations expressed are those of the author(s) and do not necessarily reflect the views of the National Science Foundation."
+    },
+    {
+      "id": "check-page-3d7281a87b",
+      "url": "https://neicorps.org/about/",
+      "page": "details",
+      "excerpt": "New England I‑Corps Hub | Members of the New England Hub Skip to content Founders’ Stories About Programs Course Calendar Get Involved Hub News Apply Now Apply Now About Learn more about I-Corps, the I-Corps regional and national programs, and the NSF I-Corps Hub: New England Region. What is I-Corps? The National Science Foundation (NSF) supports fundamental research and education in science and engineering. Ground-breaking discoveries from science and engineering research that result in technological innovations lead to increased economic prosperity and societal well-being. A strong capacity for translating fundamental scientific discoveries into powerful engines of innovation is essential for maintaining our nation’s competitive edge in the future. The NSF created I-Corps to nurture and sustain a national innovation ecosystem that builds upon fundamental research to guide the output of discoveries closer to the development of technologies, products, services, and processes that benefit society. I-Corps program participants learn, through customer discovery, how to identify valuable product opportunities that can emerge from academic research; this can accelerate research projects from the lab to impact. See the most-recent NSF I-Corps Report to Congress NSF I-Corps National Innovation Network Through NSF activities and collaboration with other government agencies, NSF helps"
+    },
+    {
+      "id": "check-page-ed72116ab1",
+      "url": "https://neicorps.org/about/",
+      "page": "details",
+      "excerpt": "See the most-recent NSF I-Corps Report to Congress NSF I-Corps National Innovation Network Through NSF activities and collaboration with other government agencies, NSF helps foster innovation among faculty and students, promotes national/regional coordination and linkages, and develops networks."
+    },
+    {
+      "id": "check-page-ef4899a8a9",
+      "url": "https://neicorps.org/about/",
+      "page": "details",
+      "excerpt": "Teams receive an NSF award of up to $50,000 to support their participation."
+    },
+    {
+      "id": "check-page-9678551027",
+      "url": "https://neicorps.org/about/",
+      "page": "details",
+      "excerpt": "NSF I-Corps Hub: New England Region MIT has received an award from the NSF to establish the a new Innovation Corps (I-Corps) Hub to support a partnership of eight New England universities committed to expanding science and technology entrepreneurship across the region, accelerating the translation of discoveries into new solutions that benefit society."
+    },
+    {
+      "id": "check-page-8ef6c13373",
+      "url": "https://neicorps.org/programs/",
+      "page": "details",
+      "excerpt": "New England I‑Corps Hub | Innovation + Translation Courses Skip to content Founders’ Stories About Programs Course Calendar Get Involved Hub News Apply Now Apply Now Programs Be a part of the NSF I-Corps Hub: New England Region. Take advantage of both regional and national training opportunities. Learn how to get up to $50,000 to support customer discovery. Regional Courses: Hub Spark Online Attend our free regional I-Corps short courses developed specifically for STEM researchers. Whether you are just curious about entrepreneurship or certain you want to create a startup, our programs provide engineers and scientists with the ideal entry point to explore the potential value of their research or innovation. Individuals and teams may apply. Program Progression – Participants begin with a three-week program called Hub Spark Online . After completing Hub Spark Online, participants that are candidates for the National Teams program may be eligible to apply for the Fusion program, during which each team can receive a microgrant of up to $1,000 to conduct further customer discovery. Completing both Hub Spark Online and Fusion may qualify participants to apply for the NSF I-Corps Teams program and a grant of up to $50,000. All courses will be held virtually Hub Spark Online is a FREE three-week course via Zoom. As a participant, you will quickly investigate if there’s a market for"
+    },
+    {
+      "id": "check-page-f704e263dc",
+      "url": "https://neicorps.org/programs/",
+      "page": "details",
+      "excerpt": "National I-Corps Teams Program The NSF I-Corps Teams program is an intensive seven-week innovation and entrepreneurship training course which includes mentoring and up to $50,000 in NSF funding."
+    },
+    {
+      "id": "check-page-f792ddc372",
+      "url": "https://neicorps.org/programs/",
+      "page": "details",
+      "excerpt": "To qualify, teams must have: 1) a relevant NSF research award OR 2) completed our regional Spark + Fusion programs OR 3) completed an equivalent I-Corps site program There are additional requirements; see the NSF website and Program Solicitation for complete information."
+    },
+    {
+      "id": "check-page-1a106d0b21",
+      "url": "https://neicorps.org/programs/",
+      "page": "details",
+      "excerpt": "Home About Program Course Calendar Get Involved News and Events Apply Now Hub Headquarters MIT Innovation HQ – 6th Floor Building E38 – Room 683 ( Map ) 292 Main Street Cambridge, MA 02139 Office: (617)500-3664 Email: icorps@mit.edu https://accessibility.mit.edu/ NE I-Corps is partially funded by a National Science Foundation award (2430342)."
+    },
+    {
+      "id": "check-page-88f1c805e7",
+      "url": "https://neicorps.org/calendar_event/spark-program-info-session-2/",
+      "page": "details",
+      "excerpt": "Hub Spark Online Program Info Session – neicorps Skip to content Founders’ Stories About Programs Course Calendar Get Involved Hub News Apply Now Apply Now Hub Spark Online Program Info Session On June 10, 2025 at 4:00 pm till 4:30 pm JOIN US FOR A SHORT VIRTUAL INFORMATION SESSION ON THE NEW ENGLAND REGIONAL I-CORPS SPARK PROGRAM For researchers interested in commercializing their new technology: Learn what I-Corps is all about and what to expect in the program Explore the benefits of participating in our I-Corps short course What will the next steps be toward a potential $2MM in non-dilutive funding support There will be an opportunity for Q&A at the end of the session. Email for more info: neicorpshub@mit.edu Click/ Scan to register: ← Previous: I-Corps Spark Online (Q1 2027 Dates Coming Soon) Next: Hub Spark Online Program Info Session → Home About Program Course Calendar Get Involved News and Events Apply Now Hub Headquarters MIT Innovation HQ – 6th Floor Building E38 – Room 683 ( Map ) 292 Main Street Cambridge, MA 02139 Office: (617)500-3664 Email: icorps@mit.edu https://accessibility.mit.edu/ NE I-Corps is partially funded by a National Science Foundation award (2430342). Any opinions, findings, and conclusions or recommendations expressed are those of the author(s) and do not necessarily reflect the views of the National Science Foundation."
+    },
+    {
+      "id": "check-page-25884c2708",
+      "url": "https://neicorps.org/programs/tufts",
+      "page": "details",
+      "excerpt": "Tufts – neicorps Skip to content Founders’ Stories About Programs Course Calendar Get Involved Hub News Apply Now Apply Now As a research university spanning engineering, medical, dental, veterinary, diplomacy, as well as the arts, sciences, and humanities, we have a rich opportunity to connect new research ideas with impact on society through the NSF I-Corps program. In addition to connecting our researchers and entrepreneurs with the Hub ecosystem, we’ll be developing cohorts of early stage explorers as they begin their journey connecting their research to the world. Visit the Tufts I-corps website! Programs Offered Hub Spark Online . Attend our free regional I-Corps short courses developed specifically for STEM researchers. Whether you are just curious about entrepreneurship or certain you want to create a startup, our programs provide engineers and scientists with the ideal entry point to explore the potential value of their research or innovation. Individuals and teams may apply. Oct 21 I-Corps Spark Online From October 21, 2026 5:00 pm to November 18, 2026 8:00 pm Nov 03 I-Corps Spark Online – SBIR From November 3, 2026 5:00 pm to December 3, 2026 8:00 pm Nov 12 I-Corps Spark Online From November 12, 2026 5:00 pm to December 10, 2026 8:00 pm Jan 01 I-Corps Spark Online (Q1 2027 Dates Coming Soon) From January 1, 2027 5:00 pm to March 31, 2027 8:00 pm Apply Now Team"
     }
   ],
   "findings": {
@@ -62,8 +228,74 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-83129fe201"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "regional and national training opportunities. Learn how to get up to $50,000 to support customer discovery. Regional Courses: Hub Spark Online",
+        "evidenceId": "check-deal-e5fa4b637c"
+      },
+      {
+        "value": "to apply for the NSF I-Corps Teams program and a grant of up to $50,000. All courses will be held virtually Hub Spark Online is a FREE",
+        "evidenceId": "check-deal-d5a6c1decb"
+      },
+      {
+        "value": "to apply for the NSF I-Corps Teams program and a grant of up to $50,000. More information about these programs can be found at their websites",
+        "evidenceId": "check-deal-3e269d46a1"
+      },
+      {
+        "value": "I-Corps short course What will the next steps be toward a potential $2MM in non-dilutive funding support There will be an opportunity for Q&A",
+        "evidenceId": "check-deal-d3cff16d16"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "50000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-e5fa4b637c"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "50000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-d5a6c1decb"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "2000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-d3cff16d16"
+      }
+    ],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

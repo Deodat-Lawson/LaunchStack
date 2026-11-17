@@ -1,67 +1,506 @@
 {
   "programId": "griffiss-institute-certified-business-incubator-gi",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.griffissinstitute.org/",
+    "https://www.griffissinstitute.org/internship-opportunities/",
+    "https://www.griffissinstitute.org/about-us/",
+    "https://www.griffissinstitute.org/passport/",
     "https://www.griffissinstitute.org/who-we-are/",
-    "https://www.griffissinstitute.org/news/quantum-innovation-rome-ny-griffiss-institute-ionq/"
+    "https://www.griffissinstitute.org/news/2022-afrl-challenge-competition-application-now-open-for-school-team-signups/",
+    "https://www.griffissinstitute.org/news/commercialization-academy-idea-ny-apply-online-tuesday-september-11/",
+    "https://www.griffissinstitute.org/news/gi-now-accepting-applications-for-2021-summer-internship-program-at-afrl-information-directorate/",
+    "https://www.griffissinstitute.org/who-we-work-with/afrl/summer-internship"
   ],
   "evidence": [
     {
-      "id": "check-portfolio-5d44cb41af",
-      "url": "https://www.griffissinstitute.org/",
-      "title": "Griffiss Institute Certified Business Incubator (GI) — homepage checked by scrape.py",
-      "excerpt": "Learn More → https://www.griffissinstitute.org/ventures/",
-      "page": "details"
+      "id": "check-duration-f570d5a988",
+      "url": "https://www.griffissinstitute.org/news/commercialization-academy-idea-ny-apply-online-tuesday-september-11/",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — application page",
+      "excerpt": "to reside in the Mohawk Valley region for a 12-month period after Demo Day. Interested? Have",
+      "page": "application"
     },
     {
-      "id": "check-portfolio-7c075cbc78",
-      "url": "https://www.griffissinstitute.org/news/quantum-innovation-rome-ny-griffiss-institute-ionq/",
-      "title": "Griffiss Institute Certified Business Incubator (GI) — application page checked by scrape.py",
+      "id": "check-format-793f4d1129",
+      "url": "https://www.griffissinstitute.org/news/2022-afrl-challenge-competition-application-now-open-for-school-team-signups/",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — application page",
+      "excerpt": "may sign up. This year’s competition will be held in-person at the Innovare Advancement Center located at 592 Hangar",
+      "page": "application"
+    },
+    {
+      "id": "check-format-acb6748e77",
+      "url": "https://www.griffissinstitute.org/news/gi-now-accepting-applications-for-2021-summer-internship-program-at-afrl-information-directorate/",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — application page",
+      "excerpt": "internships and the opportunity to be involved, through virtual means, with the most valuable, challenging, and",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-12c2eb5e0b",
+      "url": "https://www.griffissinstitute.org/news/gi-now-accepting-applications-for-2021-summer-internship-program-at-afrl-information-directorate/",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — application page",
       "excerpt": "Griffiss Ventures Studio → https://www.griffissinstitute.org/ventures/",
       "page": "application"
     },
     {
+      "id": "check-portfolio-38cebed58d",
+      "url": "https://www.griffissinstitute.org/about-us/",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — program page",
+      "excerpt": "Griffiss Ventures Studio → https://www.griffissinstitute.org/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5d44cb41af",
+      "url": "https://www.griffissinstitute.org/",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — homepage",
+      "excerpt": "Learn More → https://www.griffissinstitute.org/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7dbad2a980",
+      "url": "https://www.griffissinstitute.org/who-we-work-with/afrl/summer-internship",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — program page",
+      "excerpt": "Griffiss Ventures Studio → https://www.griffissinstitute.org/ventures/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-8fc8381488",
       "url": "https://www.griffissinstitute.org/",
-      "title": "Griffiss Institute Certified Business Incubator (GI) — homepage checked by scrape.py",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — homepage",
+      "excerpt": "Griffiss Ventures Studio → https://www.griffissinstitute.org/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9591a0d94b",
+      "url": "https://www.griffissinstitute.org/news/commercialization-academy-idea-ny-apply-online-tuesday-september-11/",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — application page",
+      "excerpt": "Griffiss Ventures Studio → https://www.griffissinstitute.org/ventures/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a64c008743",
+      "url": "https://www.griffissinstitute.org/news/2022-afrl-challenge-competition-application-now-open-for-school-team-signups/",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — application page",
+      "excerpt": "Griffiss Ventures Studio → https://www.griffissinstitute.org/ventures/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b515970f00",
+      "url": "https://www.griffissinstitute.org/passport/",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — program page",
       "excerpt": "Griffiss Ventures Studio → https://www.griffissinstitute.org/ventures/",
       "page": "details"
     },
     {
       "id": "check-portfolio-e23d7dfd58",
       "url": "https://www.griffissinstitute.org/who-we-are/",
-      "title": "Griffiss Institute Certified Business Incubator (GI) — details page checked by scrape.py",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — program page",
       "excerpt": "Griffiss Ventures Studio → https://www.griffissinstitute.org/ventures/",
       "page": "details"
     },
     {
       "id": "check-portfolio-fa541da73f",
       "url": "https://www.griffissinstitute.org/",
-      "title": "Griffiss Institute Certified Business Incubator (GI) — homepage checked by scrape.py",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — homepage",
       "excerpt": "https://www.griffissinstitute.org/ventures/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-fde4a23334",
+      "url": "https://www.griffissinstitute.org/internship-opportunities/",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — application page",
+      "excerpt": "Griffiss Ventures Studio → https://www.griffissinstitute.org/ventures/",
+      "page": "application"
+    },
+    {
       "id": "check-route-4db95a7a6b",
       "url": "https://www.griffissinstitute.org/",
-      "title": "Griffiss Institute Certified Business Incubator (GI) — homepage checked by scrape.py",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — homepage",
       "excerpt": "Learn More & Apply TOday → https://www.griffissinstitute.org/internship-opportunities/",
       "page": "details"
     },
     {
       "id": "check-route-7ccea8dbaf",
       "url": "https://www.griffissinstitute.org/",
-      "title": "Griffiss Institute Certified Business Incubator (GI) — homepage checked by scrape.py",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — homepage",
       "excerpt": "https://www.griffissinstitute.org/",
       "page": "details"
     },
     {
       "id": "check-route-8977a70de0",
       "url": "https://www.griffissinstitute.org/",
-      "title": "Griffiss Institute Certified Business Incubator (GI) — homepage checked by scrape.py",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — homepage",
       "excerpt": "Industry Advances Quantum Networking, Cloud and Application Development → https://www.griffissinstitute.org/news/quantum-innovation-rome-ny-griffiss-institute-ionq/",
       "page": "details"
+    },
+    {
+      "id": "check-status-c4bbdbcfd0",
+      "url": "https://www.griffissinstitute.org/news/gi-now-accepting-applications-for-2021-summer-internship-program-at-afrl-information-directorate/",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — application page",
+      "excerpt": "GI Now Accepting Applications for 2021 Summer Internship Program at AFRL Information Directorate - Griffiss Institute Skip to content",
+      "page": "application"
+    },
+    {
+      "id": "check-status-fd336f7fa3",
+      "url": "https://www.griffissinstitute.org/news/2022-afrl-challenge-competition-application-now-open-for-school-team-signups/",
+      "title": "Griffiss Institute Certified Business Incubator (GI) — application page",
+      "excerpt": "2022 AFRL Challenge Competition Application Now Open for School Team Signups - Griffiss Institute Skip to content About Who We Are Blueprint 2030 Our Team",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-de4afab4cf",
+      "url": "https://www.griffissinstitute.org/",
+      "page": "details",
+      "excerpt": "Home - Griffiss Institute Skip to content About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures Studio HUSTLE Tech Transfer Information Institute Events Events Calendar Coffee & Concepts Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Q4I 2026 Innovare Elevation Series Griffiss Grounds Podcast Book a Room News Featured News Blueprint 2030 Innovare Facility Rental Co-Working Space Tours Badge Access Lodging What’s Upstate Innovare Alliance IAC 5 Year Report Ways to Give Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Store Contact Join Mailing List Search for: Search Menu About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures Studio HUSTLE Tech Transfer Information Institute Events Events"
+    },
+    {
+      "id": "check-page-571a090896",
+      "url": "https://www.griffissinstitute.org/",
+      "page": "details",
+      "excerpt": "Read More Visit News Page Technology Transfer Industry Advances Quantum Networking, Cloud and Application Development May 4, 2026 Rome, NY is emerging as a national hub for quantum innovation, with Griffiss Institute, IonQ, and..."
+    },
+    {
+      "id": "check-page-8394eda182",
+      "url": "https://www.griffissinstitute.org/",
+      "page": "details",
+      "excerpt": "Read More $550,000 Awarded to Advance Air Force Command and Control Through Griffiss Institute’s HUSTLE Defense Accelerator May 1, 2026 ROME, N.Y. — May 1, 2026 — Griffiss Institute (GI) awarded $550,000 in innovation funding on April..."
+    },
+    {
+      "id": "check-page-b3fde95c61",
+      "url": "https://www.griffissinstitute.org/",
+      "page": "details",
+      "excerpt": "Read More Ahead Of World Quantum Day, Senator Gillibrand Tours The Innovare Advancement Center April 14, 2026 Ahead of World Quantum Day, Senator Gillibrand visited the Innovare Advancement Center to highlight..."
+    },
+    {
+      "id": "check-page-ca2498489f",
+      "url": "https://www.griffissinstitute.org/",
+      "page": "details",
+      "excerpt": "Read More Visit News Page STEM Talent Development M&T Bank Investment Expands STEM Education Opportunities Across the Mohawk Valley June 2, 2026 A charitable investment from M&T Bank is helping Griffiss Institute expand hands-on STEM education..."
+    },
+    {
+      "id": "check-page-12c12b8a30",
+      "url": "https://www.griffissinstitute.org/",
+      "page": "details",
+      "excerpt": "Read More Griffiss Institute Hosts 17th Annual AFRL Challenge Competition, Highlighting Mohawk Valley Student Talent April 16, 2026 The AFRL Challenge Competition in Rome, NY brought students together to build AI pilots and showcase..."
+    },
+    {
+      "id": "check-page-faa3fb2a56",
+      "url": "https://www.griffissinstitute.org/",
+      "page": "details",
+      "excerpt": "Read More Visit News Page Contact Us Phone (315) 838-1696 Fax (315) 693-3141 592 Hangar Rd STE 200 Rome, NY 13441-4522 Our Team Store DOCUMENT SUBMISSION Join Mailing List View Privacy Policy Griffiss Institute develops the next generation of American innovators, breakthrough technologies, and entrepreneurial ventures that strengthen national security and economic growth."
+    },
+    {
+      "id": "check-page-22ec59f55a",
+      "url": "https://www.griffissinstitute.org/",
+      "page": "details",
+      "excerpt": "Griffiss Institute has powered American innovation to secure the nation from its home and headquarters in the Mohawk Valley region of New York State since 2002."
+    },
+    {
+      "id": "check-page-f059e3a927",
+      "url": "https://www.griffissinstitute.org/internship-opportunities/",
+      "page": "application",
+      "excerpt": "Internship Opportunities - Griffiss Institute Skip to content About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures Studio HUSTLE Tech Transfer Information Institute Events Events Calendar Coffee & Concepts Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Q4I 2026 Innovare Elevation Series Griffiss Grounds Podcast Book a Room News Featured News Blueprint 2030 Innovare Facility Rental Co-Working Space Tours Badge Access Lodging What’s Upstate Innovare Alliance IAC 5 Year Report Ways to Give Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Store Contact Join Mailing List Search for: Search Menu About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures Studio HUSTLE Tech Transfer Information"
+    },
+    {
+      "id": "check-page-b7907c18a4",
+      "url": "https://www.griffissinstitute.org/internship-opportunities/",
+      "page": "application",
+      "excerpt": "Dive into cutting-edge projects and contribute to advancements in fields like artificial intelligence, machine learning, quantum information sciences, and more."
+    },
+    {
+      "id": "check-page-e8ed92f9d8",
+      "url": "https://www.griffissinstitute.org/internship-opportunities/",
+      "page": "application",
+      "excerpt": "RF Intern The RF Intern Summer Internship Program offers collegiate students the opportunity to work directly with scientists and engineers at the Air Force Research Laboratory Information and Spectrum Warfare Directorate, contributing to research that supports national security and emerging technologies."
+    },
+    {
+      "id": "check-page-81b08f224c",
+      "url": "https://www.griffissinstitute.org/internship-opportunities/",
+      "page": "application",
+      "excerpt": "Learn More VICEROY Scholars VICEROY is the Department of War’s mission-focused cyber-spectrum leadership development pathway, built on the Cyber Institutes’ authority established in Section 1640 of the National Defense Authorization Act (NDAA)."
+    },
+    {
+      "id": "check-page-d8b7204fdd",
+      "url": "https://www.griffissinstitute.org/internship-opportunities/",
+      "page": "application",
+      "excerpt": "Griffiss Institute has powered American innovation to secure the nation from its home and headquarters in the Mohawk Valley region of New York State since 2002."
+    },
+    {
+      "id": "check-page-597289a817",
+      "url": "https://www.griffissinstitute.org/about-us/",
+      "page": "details",
+      "excerpt": "About Us - Griffiss Institute Skip to content About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures Studio HUSTLE Tech Transfer Information Institute Events Events Calendar Coffee & Concepts Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Q4I 2026 Innovare Elevation Series Griffiss Grounds Podcast Book a Room News Featured News Blueprint 2030 Innovare Facility Rental Co-Working Space Tours Badge Access Lodging What’s Upstate Innovare Alliance IAC 5 Year Report Ways to Give Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Store Contact Join Mailing List Search for: Search Menu About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures Studio HUSTLE Tech Transfer Information Institute Events Events"
+    },
+    {
+      "id": "check-page-3872da1dce",
+      "url": "https://www.griffissinstitute.org/about-us/",
+      "page": "details",
+      "excerpt": "Griffiss Institute has powered American innovation to secure the nation from its home and headquarters in the Mohawk Valley region of New York State since 2002."
+    },
+    {
+      "id": "check-page-bf0933c134",
+      "url": "https://www.griffissinstitute.org/about-us/",
+      "page": "details",
+      "excerpt": "Page Directory Our Mission Our Story Our Values Board of Directors Vision American Innovation to Secure the Nation Mission Griffiss Institute empowers the next generation of STEM talent, disruptive technologies, and mission-driven startups to strengthen U.S. national security and expand economic opportunity for our region, state, and nation."
+    },
+    {
+      "id": "check-page-ca1d4122a5",
+      "url": "https://www.griffissinstitute.org/about-us/",
+      "page": "details",
+      "excerpt": "A PIA is an agreement, (contract or memorandum of understanding), between the government and an intermediary organization, (state or local governmental agency or nonprofit entity)."
+    },
+    {
+      "id": "check-page-5353503570",
+      "url": "https://www.griffissinstitute.org/about-us/",
+      "page": "details",
+      "excerpt": "As a Partnership Intermediary the GI performs services for the AFRL/RF that increase the likelihood of success in the conduct of cooperative or joint activities with small business firms, institutions of higher education, and industry."
+    },
+    {
+      "id": "check-page-f9fb0521ba",
+      "url": "https://www.griffissinstitute.org/about-us/",
+      "page": "details",
+      "excerpt": "Return to Page Directory Our Story As we reflect on our journey, one thing remains constant – our unwavering commitment to fostering innovation, collaboration, and excellence in the ever-evolving landscape of defense technology for our nation’s security, and economic development."
+    },
+    {
+      "id": "check-page-d6ca0327f0",
+      "url": "https://www.griffissinstitute.org/about-us/",
+      "page": "details",
+      "excerpt": "PARTNERSHIP We thrive on collaboration with government, industry, academia, and community."
+    },
+    {
+      "id": "check-page-40f72d90b5",
+      "url": "https://www.griffissinstitute.org/about-us/",
+      "page": "details",
+      "excerpt": "Return to Page Directory Strategic Rationale One Nation, Secure in Science A resilient scientific community and healthy innovation infrastructure are essential not only for national security but also for economic competitiveness and societal progress."
+    },
+    {
+      "id": "check-page-43d7604dad",
+      "url": "https://www.griffissinstitute.org/about-us/",
+      "page": "details",
+      "excerpt": "We believe that preparing more American scientists, engineeers, and entrepreneurs to work collaboratively across organizations will strengthen our nation’s ability to solve complex challenges in areas such as cybersecurity, critical infrastructure, advanced materials, and emerging technologies."
+    },
+    {
+      "id": "check-page-362e15527c",
+      "url": "https://www.griffissinstitute.org/about-us/",
+      "page": "details",
+      "excerpt": "At Griffiss Institute, we exist to strengthen America’s competitive advantage by elevating people, empowering discovery, and accelerating solutions that secure the systems critical to our national security and economy."
+    },
+    {
+      "id": "check-page-88865d54e7",
+      "url": "https://www.griffissinstitute.org/about-us/",
+      "page": "details",
+      "excerpt": "By supporting dual-use startups, we strengthen the defense industrial base and enable mission-aligned founders."
+    },
+    {
+      "id": "check-page-25089dfaf7",
+      "url": "https://www.griffissinstitute.org/about-us/",
+      "page": "details",
+      "excerpt": "Richard Joseph Chief Scientist (Ret.) United States Air Force Jeffrey Dunbar University at Buffalo (Ret.) Secretary to the Board of the Empire Discovery Institute Kevin Martin, Esq."
+    },
+    {
+      "id": "check-page-d9958de4db",
+      "url": "https://www.griffissinstitute.org/about-us/",
+      "page": "details",
+      "excerpt": "Dormer Economic Developer of the Year Award from NYSEDC (New York State Economic Development Council) Oct 19, 2021 – Business Person of the Year Award from the Greater Utica Chamber of Commerce Nov."
+    },
+    {
+      "id": "check-page-382eb19674",
+      "url": "https://www.griffissinstitute.org/passport/",
+      "page": "details",
+      "excerpt": "After-School PASSPORT Program - Griffiss Institute Skip to content About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures Studio HUSTLE Tech Transfer Information Institute Events Events Calendar Coffee & Concepts Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Q4I 2026 Innovare Elevation Series Griffiss Grounds Podcast Book a Room News Featured News Blueprint 2030 Innovare Facility Rental Co-Working Space Tours Badge Access Lodging What’s Upstate Innovare Alliance IAC 5 Year Report Ways to Give Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Store Contact Join Mailing List Search for: Search Menu About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures Studio HUSTLE Tech Transfer Information"
+    },
+    {
+      "id": "check-page-551a3490d5",
+      "url": "https://www.griffissinstitute.org/passport/",
+      "page": "details",
+      "excerpt": "Transportation is available from RCSD elementary schools to Griffiss Institute."
+    },
+    {
+      "id": "check-page-ee9e93a3b4",
+      "url": "https://www.griffissinstitute.org/passport/",
+      "page": "details",
+      "excerpt": "PASSPORT welcomes homeschool students or students from other districts, provided that a parent or caregiver can provide transportation."
+    },
+    {
+      "id": "check-page-f2dea0d908",
+      "url": "https://www.griffissinstitute.org/passport/",
+      "page": "details",
+      "excerpt": "Return to STEM Portal Contact Us Phone (315) 838-1696 Fax (315) 693-3141 592 Hangar Rd STE 200 Rome, NY 13441-4522 Our Team Store DOCUMENT SUBMISSION Join Mailing List View Privacy Policy Griffiss Institute develops the next generation of American innovators, breakthrough technologies, and entrepreneurial ventures that strengthen national security and economic growth."
+    },
+    {
+      "id": "check-page-a61f2af355",
+      "url": "https://www.griffissinstitute.org/passport/",
+      "page": "details",
+      "excerpt": "Griffiss Institute has powered American innovation to secure the nation from its home and headquarters in the Mohawk Valley region of New York State since 2002."
+    },
+    {
+      "id": "check-page-e6378ec2c2",
+      "url": "https://www.griffissinstitute.org/who-we-are/",
+      "page": "details",
+      "excerpt": "About Us - Griffiss Institute Skip to content About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures Studio HUSTLE Tech Transfer Information Institute Events Events Calendar Coffee & Concepts Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Q4I 2026 Innovare Elevation Series Griffiss Grounds Podcast Book a Room News Featured News Blueprint 2030 Innovare Facility Rental Co-Working Space Tours Badge Access Lodging What’s Upstate Innovare Alliance IAC 5 Year Report Ways to Give Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Store Contact Join Mailing List Search for: Search Menu About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures Studio HUSTLE Tech Transfer Information Institute Events Events"
+    },
+    {
+      "id": "check-page-c7bb933067",
+      "url": "https://www.griffissinstitute.org/who-we-are/",
+      "page": "details",
+      "excerpt": "Griffiss Institute has powered American innovation to secure the nation from its home and headquarters in the Mohawk Valley region of New York State since 2002."
+    },
+    {
+      "id": "check-page-f6cf282693",
+      "url": "https://www.griffissinstitute.org/who-we-are/",
+      "page": "details",
+      "excerpt": "Page Directory Our Mission Our Story Our Values Board of Directors Vision American Innovation to Secure the Nation Mission Griffiss Institute empowers the next generation of STEM talent, disruptive technologies, and mission-driven startups to strengthen U.S. national security and expand economic opportunity for our region, state, and nation."
+    },
+    {
+      "id": "check-page-3a565f4663",
+      "url": "https://www.griffissinstitute.org/who-we-are/",
+      "page": "details",
+      "excerpt": "A PIA is an agreement, (contract or memorandum of understanding), between the government and an intermediary organization, (state or local governmental agency or nonprofit entity)."
+    },
+    {
+      "id": "check-page-1f54313e5b",
+      "url": "https://www.griffissinstitute.org/who-we-are/",
+      "page": "details",
+      "excerpt": "As a Partnership Intermediary the GI performs services for the AFRL/RF that increase the likelihood of success in the conduct of cooperative or joint activities with small business firms, institutions of higher education, and industry."
+    },
+    {
+      "id": "check-page-992e4c0a68",
+      "url": "https://www.griffissinstitute.org/who-we-are/",
+      "page": "details",
+      "excerpt": "Return to Page Directory Our Story As we reflect on our journey, one thing remains constant – our unwavering commitment to fostering innovation, collaboration, and excellence in the ever-evolving landscape of defense technology for our nation’s security, and economic development."
+    },
+    {
+      "id": "check-page-c9194ff038",
+      "url": "https://www.griffissinstitute.org/who-we-are/",
+      "page": "details",
+      "excerpt": "PARTNERSHIP We thrive on collaboration with government, industry, academia, and community."
+    },
+    {
+      "id": "check-page-c94264c4ad",
+      "url": "https://www.griffissinstitute.org/who-we-are/",
+      "page": "details",
+      "excerpt": "Return to Page Directory Strategic Rationale One Nation, Secure in Science A resilient scientific community and healthy innovation infrastructure are essential not only for national security but also for economic competitiveness and societal progress."
+    },
+    {
+      "id": "check-page-2204711b73",
+      "url": "https://www.griffissinstitute.org/who-we-are/",
+      "page": "details",
+      "excerpt": "We believe that preparing more American scientists, engineeers, and entrepreneurs to work collaboratively across organizations will strengthen our nation’s ability to solve complex challenges in areas such as cybersecurity, critical infrastructure, advanced materials, and emerging technologies."
+    },
+    {
+      "id": "check-page-708edf835b",
+      "url": "https://www.griffissinstitute.org/who-we-are/",
+      "page": "details",
+      "excerpt": "At Griffiss Institute, we exist to strengthen America’s competitive advantage by elevating people, empowering discovery, and accelerating solutions that secure the systems critical to our national security and economy."
+    },
+    {
+      "id": "check-page-708fc10373",
+      "url": "https://www.griffissinstitute.org/who-we-are/",
+      "page": "details",
+      "excerpt": "By supporting dual-use startups, we strengthen the defense industrial base and enable mission-aligned founders."
+    },
+    {
+      "id": "check-page-7910e1ad38",
+      "url": "https://www.griffissinstitute.org/who-we-are/",
+      "page": "details",
+      "excerpt": "Richard Joseph Chief Scientist (Ret.) United States Air Force Jeffrey Dunbar University at Buffalo (Ret.) Secretary to the Board of the Empire Discovery Institute Kevin Martin, Esq."
+    },
+    {
+      "id": "check-page-a634857e71",
+      "url": "https://www.griffissinstitute.org/who-we-are/",
+      "page": "details",
+      "excerpt": "Dormer Economic Developer of the Year Award from NYSEDC (New York State Economic Development Council) Oct 19, 2021 – Business Person of the Year Award from the Greater Utica Chamber of Commerce Nov."
+    },
+    {
+      "id": "check-page-4346240437",
+      "url": "https://www.griffissinstitute.org/news/2022-afrl-challenge-competition-application-now-open-for-school-team-signups/",
+      "page": "application",
+      "excerpt": "2022 AFRL Challenge Competition Application Now Open for School Team Signups - Griffiss Institute Skip to content About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures Studio HUSTLE Tech Transfer Information Institute Events Events Calendar Coffee & Concepts Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Q4I 2026 Innovare Elevation Series Griffiss Grounds Podcast Book a Room News Featured News Blueprint 2030 Innovare Facility Rental Co-Working Space Tours Badge Access Lodging What’s Upstate Innovare Alliance IAC 5 Year Report Ways to Give Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Store Contact Join Mailing List Search for: Search Menu About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss"
+    },
+    {
+      "id": "check-page-89393c5ddc",
+      "url": "https://www.griffissinstitute.org/news/commercialization-academy-idea-ny-apply-online-tuesday-september-11/",
+      "page": "application",
+      "excerpt": "Commercialization Academy & IDEA NY: Apply Online Tuesday, September 11 - Griffiss Institute Skip to content About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures Studio HUSTLE Tech Transfer Information Institute Events Events Calendar Coffee & Concepts Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Q4I 2026 Innovare Elevation Series Griffiss Grounds Podcast Book a Room News Featured News Blueprint 2030 Innovare Facility Rental Co-Working Space Tours Badge Access Lodging What’s Upstate Innovare Alliance IAC 5 Year Report Ways to Give Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Store Contact Join Mailing List Search for: Search Menu About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures"
+    },
+    {
+      "id": "check-page-66f57dab67",
+      "url": "https://www.griffissinstitute.org/news/gi-now-accepting-applications-for-2021-summer-internship-program-at-afrl-information-directorate/",
+      "page": "application",
+      "excerpt": "GI Now Accepting Applications for 2021 Summer Internship Program at AFRL Information Directorate - Griffiss Institute Skip to content About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures Studio HUSTLE Tech Transfer Information Institute Events Events Calendar Coffee & Concepts Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Q4I 2026 Innovare Elevation Series Griffiss Grounds Podcast Book a Room News Featured News Blueprint 2030 Innovare Facility Rental Co-Working Space Tours Badge Access Lodging What’s Upstate Innovare Alliance IAC 5 Year Report Ways to Give Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Store Contact Join Mailing List Search for: Search Menu About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional"
+    },
+    {
+      "id": "check-page-ce18639cc5",
+      "url": "https://www.griffissinstitute.org/who-we-work-with/afrl/summer-internship",
+      "page": "details",
+      "excerpt": "News - Griffiss Institute Skip to content About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures Studio HUSTLE Tech Transfer Information Institute Events Events Calendar Coffee & Concepts Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Q4I 2026 Innovare Elevation Series Griffiss Grounds Podcast Book a Room News Featured News Blueprint 2030 Innovare Facility Rental Co-Working Space Tours Badge Access Lodging What’s Upstate Innovare Alliance IAC 5 Year Report Ways to Give Inventors Recognition Ceremony Strokes of Genius Charity Golf Tournament Store Contact Join Mailing List Search for: Search Menu About Who We Are Blueprint 2030 Our Team Executive Leadership Team ELT Biographies Our Staff Careers Job Openings RFP Documents Branding Photo Gallery Reports Annual Reports Financial Reports IAC 5 Year Report What We Do STEM After-School Program School Break Camps Saturday STEM Challenge Competition VICEROY Internships RF Intern ACE Additional Opportunities Griffiss Ventures Studio HUSTLE Tech Transfer Information Institute Events Events"
+    },
+    {
+      "id": "check-page-48e1ea4d01",
+      "url": "https://www.griffissinstitute.org/who-we-work-with/afrl/summer-internship",
+      "page": "details",
+      "excerpt": "A former HUSTLE Defense Accelerator company, BQP’s growth highlights..."
+    },
+    {
+      "id": "check-page-2d51fe2c5c",
+      "url": "https://www.griffissinstitute.org/who-we-work-with/afrl/summer-internship",
+      "page": "details",
+      "excerpt": "Read More Griffiss Institute Advances Defense and Aerospace Innovation on the West Coast September 9, 2026 Griffiss Institute is expanding its impact on defense and aerospace innovation through strategic partnerships on the West Coast, connecting emerging technologies and capabilities with opportunities to..."
+    },
+    {
+      "id": "check-page-26a2e87f5b",
+      "url": "https://www.griffissinstitute.org/who-we-work-with/afrl/summer-internship",
+      "page": "details",
+      "excerpt": "Read More Quantum Explodes on the International Stage September 1, 2026 The capabilities and networks of quantum computing are expanding around the world, advanced by university researchers, government support and corporate investments."
+    },
+    {
+      "id": "check-page-1240ffe71e",
+      "url": "https://www.griffissinstitute.org/who-we-work-with/afrl/summer-internship",
+      "page": "details",
+      "excerpt": "In Europe, companies and..."
+    },
+    {
+      "id": "check-page-bdcfb2a60b",
+      "url": "https://www.griffissinstitute.org/who-we-work-with/afrl/summer-internship",
+      "page": "details",
+      "excerpt": "Read More HILL Fellowship Puts Students’ Leadership Skills Into Practice August 31, 2026 A new summer fellowship is giving Hamilton students the chance to explore leadership not just in the classroom, but in workplaces and communities across the Mohawk Valley..."
+    },
+    {
+      "id": "check-page-f5899f3d11",
+      "url": "https://www.griffissinstitute.org/who-we-work-with/afrl/summer-internship",
+      "page": "details",
+      "excerpt": "Read More Army Reserve Soldiers Enhance Blue List Mission at ‘Game of Drones’ August 10, 2026 While the testing and head-to-head competition of new drone and counter drone platforms took center stage during Defense Contract Management Agency’s “Game of Drones” event, the aggregate data..."
+    },
+    {
+      "id": "check-page-24c5a55c8a",
+      "url": "https://www.griffissinstitute.org/who-we-work-with/afrl/summer-internship",
+      "page": "details",
+      "excerpt": "Read More International Quantum Leaders Gather in Rome to Advance National Security Innovation July 20, 2026 More than 200 researchers, government leaders, industry experts, and students gathered in Rome, NY for the seventh Quantum for International Workshop (Q4I), advancing collaboration in quantum..."
+    },
+    {
+      "id": "check-page-4e330184ce",
+      "url": "https://www.griffissinstitute.org/who-we-work-with/afrl/summer-internship",
+      "page": "details",
+      "excerpt": "Read More Griffiss Institute Achieves CMMC Level 2 Certification July 15, 2026 Griffiss Institute has achieved CMMC Level 2 certification following an independent third-party assessment, validating its cybersecurity safeguards and ability to protect Controlled Unclassified..."
+    },
+    {
+      "id": "check-page-013dbc6f12",
+      "url": "https://www.griffissinstitute.org/who-we-work-with/afrl/summer-internship",
+      "page": "details",
+      "excerpt": "It integrates four essential pillars: GI Academy, GI Tech, GI Ventures, and GI Foundation, into one nationally significant enterprise."
+    },
+    {
+      "id": "check-page-f99005e395",
+      "url": "https://www.griffissinstitute.org/who-we-work-with/afrl/summer-internship",
+      "page": "details",
+      "excerpt": "Yes No Access Contact Us Phone (315) 838-1696 Fax (315) 693-3141 592 Hangar Rd STE 200 Rome, NY 13441-4522 Our Team Store DOCUMENT SUBMISSION Join Mailing List View Privacy Policy Griffiss Institute develops the next generation of American innovators, breakthrough technologies, and entrepreneurial ventures that strengthen national security and economic growth."
+    },
+    {
+      "id": "check-page-374fbb2df0",
+      "url": "https://www.griffissinstitute.org/who-we-work-with/afrl/summer-internship",
+      "page": "details",
+      "excerpt": "Griffiss Institute has powered American innovation to secure the nation from its home and headquarters in the Mohawk Valley region of New York State since 2002."
     }
   ],
   "findings": {
@@ -83,11 +522,37 @@
         "evidenceId": "check-route-7ccea8dbaf"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-fd336f7fa3"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-f570d5a988"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-793f4d1129"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-acb6748e77"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.griffissinstitute.org/ventures/",

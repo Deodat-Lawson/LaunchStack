@@ -1,12 +1,28 @@
 {
   "programId": "activate",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://activate.org/about-us",
       "page": "details",
       "anchor": "About Us",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://activate.org/about-us/?hsLang=en",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://activate.org/activate-partner-programs",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -54,7 +70,7 @@
       "url": "https://activate.org/global-programs",
       "page": "details",
       "anchor": "Programs",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -62,7 +78,7 @@
       "url": "https://activate.org/global-programs?hsLang=en",
       "page": "details",
       "anchor": "",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -70,7 +86,7 @@
       "url": "https://activate.org/japan-bridge-program",
       "page": "details",
       "anchor": "Japan Bridge",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -91,8 +107,16 @@
       "origin": "official"
     },
     {
-      "url": "https://activate.org/news/activate-opens-2024-fellowship-applications-during-climate-week-nyc",
-      "page": "application",
+      "url": "https://activate.org/meet-the-cohort-2025-activate-berkeley-fellows",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://activate.org/meet-the-cohort2025-activate-houston-fellows",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -111,22 +135,6 @@
       "page": "batches",
       "anchor": "Read more >",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://activate.org/news/how-activate-fellows-are-applying-deep-tech-innovations-to-reimagine-mining",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://activate.org/news/where-does-climate-investment-currently-stand",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -155,19 +163,11 @@
       "origin": "official"
     },
     {
-      "url": "https://www.activate.org/apply",
+      "url": "https://www.activate.org/apply/?hsLang=en",
       "page": "application",
       "anchor": "",
       "fetched": true,
       "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.activate.org/apply/?hsLang=en",
-      "page": "application",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
       "origin": "official"
     }
   ]

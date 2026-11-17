@@ -1,12 +1,28 @@
 {
   "programId": "nextcorps",
-  "checkedAt": "2026-11-14T20:04:58.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://nextcorps.org/10-winners-selected-luminate-accelerator/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/9-tips-about-trade-shows-and-how-to-maximize-your-attendance/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://nextcorps.org/about-us/",
       "page": "details",
       "anchor": "About Us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -27,6 +43,14 @@
       "origin": "official"
     },
     {
+      "url": "https://nextcorps.org/empire-state-development-announces-10-finalists-selected-to-take-part-in-round-iii-of-luminate-ny-accelerator-competition/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
       "page": "batches",
       "anchor": "",
@@ -35,32 +59,8 @@
       "origin": "official"
     },
     {
-      "url": "https://nextcorps.org/event/application-deadline-fuzehub-commercialization-competition/",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://nextcorps.org/event/application-deadline-i-corps-regional-course-for-startups-hosted-by-rochester-institute-of-technology/",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/?ical=1",
-      "page": "application",
+      "url": "https://nextcorps.org/empire-state-development-announces-round-seven-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -75,6 +75,22 @@
       "origin": "official"
     },
     {
+      "url": "https://nextcorps.org/good-video-marketing-is-about-the-plan-not-the-production/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/governor-cuomo-announces-15-million-in-funding-for-the-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
       "page": "application",
       "anchor": "",
@@ -83,32 +99,48 @@
       "origin": "official"
     },
     {
-      "url": "https://nextcorps.org/podcast-download/4220/navigating-investment.m4a?ref=download",
-      "page": "terms",
+      "url": "https://nextcorps.org/governor-cuomo-announces-round-3-winners-of-luminate-ny-accelerator-competition-in-rochester/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://nextcorps.org/podcast-download/4220/navigating-investment.m4a?ref=new_window",
-      "page": "terms",
+      "url": "https://nextcorps.org/governor-hochul-announces-round-4-winners-of-luminate-ny-accelerator-competition/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://nextcorps.org/podcast-player/4220/navigating-investment.m4a",
-      "page": "terms",
+      "url": "https://nextcorps.org/hardware-scaleup-celebrates-accomplishments-of-cohort-i-and-ii/",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://nextcorps.org/podcast/navigating-investment/",
-      "page": "terms",
+      "url": "https://nextcorps.org/luminate-accelerator-announces-finalists/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/nextcorps-and-secondmuse-launch-programs-to-help-clean-energy-startups-accelerate-hardware-manufacturing/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/nextcorps-embark-accelerator-positions-rochester-as-a-no-code-software-development-hub/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,

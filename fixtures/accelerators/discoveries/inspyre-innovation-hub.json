@@ -1,6 +1,6 @@
 {
   "programId": "inspyre-innovation-hub",
-  "checkedAt": "2026-11-14T20:04:58.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://inspyrehub.com/10-local-entrepreneurs-graduate-from-up-start-accelerator/",
@@ -75,6 +75,14 @@
       "origin": "official"
     },
     {
+      "url": "https://inspyrehub.com/first-ever-startup-night-at-the-tech-garden-highlights-local-innovation-pitches-updates-and-genius-ny-2020-finalists-revealed/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
       "page": "application",
       "anchor": "",
@@ -115,6 +123,30 @@
       "origin": "official"
     },
     {
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://inspyrehub.com/mentorship-application/?utm_campaign=12808077-INSPYRE%20Bulletin%20-%20monthly%20newsletter&utm_source=hs_email&utm_medium=email&_hsenc=p2ANqtz-8BGtTgIOImQgT_myrFvps4jeBypxG1zaHPIbRWCVw3HxUwkMxDkBDnyQnKlUQPErwNsqn_",
       "page": "application",
       "anchor": "",
@@ -139,8 +171,16 @@
       "origin": "official"
     },
     {
-      "url": "https://inspyrehub.com/tag/investment/",
-      "page": "terms",
+      "url": "https://inspyrehub.com/start-it-business-basics-cohort-celebrates-graduation-at-inspyre-pitch-night/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,

@@ -1,64 +1,103 @@
 {
   "programId": "capital-innovators",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://capitalinnovators.com/",
-    "https://capitalinnovators.com/blog/2020/3/4/using-equity-crowdfunding-alongside-traditional-investment-vehicles",
-    "https://capitalinnovators.com/blog/tag/investments",
     "https://capitalinnovators.com/terms-policies",
     "https://capitalinnovators.com/ventureinvestments",
-    "https://capitalinnovators.com/blog/2020/2/24/capital-innovators-welcomes-spring-2020-cohort-to-st-louis",
-    "https://capitalinnovators.com/blog/2021/12/1/nga-accelerator-seeks-third-cohort",
-    "https://capitalinnovators.com/blog/2021/9/23/capital-innovators-welcomes-fall-2021-cohort-to-st-louis",
-    "https://capitalinnovators.com/blog/2021/9/28/nga-accelerator-announces-participant-startups-for-second-cohort",
     "https://capitalinnovators.com/fall2020cohort",
     "https://capitalinnovators.com/fall2021cohort",
     "https://capitalinnovators.com/spring-2022-cohort",
     "https://capitalinnovators.com/about",
     "https://capitalinnovators.com/about-ci",
-    "https://capitalinnovators.com/acceleratorprogram"
+    "https://capitalinnovators.com/acceleratorprogram",
+    "https://capitalinnovators.com/ameren-accelerator-case-study",
+    "https://capitalinnovators.com/corporate-accelerator",
+    "https://capitalinnovators.com/meren-accelerator-case-study-form",
+    "https://capitalinnovators.com/nga-accelerator-press",
+    "https://capitalinnovators.com/nga-accelerator-program",
+    "https://capitalinnovators.com/venturereadymissouri",
+    "https://capitalinnovators.com/alumni-workshop-week",
+    "https://capitalinnovators.com/blog/2020/3/4/using-equity-crowdfunding-alongside-traditional-investment-vehicles",
+    "https://capitalinnovators.com/blog/tag/investments",
+    "https://capitalinnovators.com/blog/2020/2/24/capital-innovators-welcomes-spring-2020-cohort-to-st-louis"
   ],
   "evidence": [
     {
-      "id": "check-deal-b16288c392",
-      "url": "https://capitalinnovators.com/blog/2021/12/1/nga-accelerator-seeks-third-cohort",
-      "title": "Capital Innovators — batches page",
-      "excerpt": "in the program will have access to incentives including a $100,000 non-dilutive grant, office accommodations in St. Louis during the",
-      "page": "batches"
+      "id": "check-announced-16be8a488a",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "title": "Capital Innovators — program page",
+      "excerpt": "additional opportunities in the future. The 12-week NGA Accelerator cohort three will run from early May through late July of 2022. About the Program The NGA Accelerator is",
+      "page": "details"
     },
     {
-      "id": "check-duration-22ca76b32c",
-      "url": "https://capitalinnovators.com/blog/2021/9/28/nga-accelerator-announces-participant-startups-for-second-cohort",
-      "title": "Capital Innovators — batches page",
-      "excerpt": "engineering project plans, start projects 2 months earlier and dramatically reduce project risk at",
-      "page": "batches"
+      "id": "check-announced-2485d02b22",
+      "url": "https://capitalinnovators.com/venturereadymissouri",
+      "title": "Capital Innovators — program page",
+      "excerpt": "for a total of 5 sessions. Dates: Below are the dates for the next cohort. August 4, 6, 11, 13 & 18 Part 2 Overview: By invitation only. Completing",
+      "page": "details"
     },
     {
-      "id": "check-duration-567b2b9491",
-      "url": "https://capitalinnovators.com/blog/2021/12/1/nga-accelerator-seeks-third-cohort",
-      "title": "Capital Innovators — batches page",
+      "id": "check-announced-fa67c7bb38",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "title": "Capital Innovators — program page",
+      "excerpt": "is the program and when does it start? The program is 13 weeks and Cohort 3 is targeted to start in early May. How many companies will be selected for the program? Up to eight",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-22a8012d9f",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "title": "Capital Innovators — program page",
+      "excerpt": "to participate in a 13-week accelerator program that includes $100,000 in grant funding , perks, benefits, office space, mentorship and",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-6591ca0eaa",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "title": "Capital Innovators — program page",
+      "excerpt": "Program , based in St.Louis, MO, provides tech startups with: $100,000 in Grant Funding Engagement with NGA Champion Teams Mentorship from",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-9919a37067",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "title": "Capital Innovators — program page",
+      "excerpt": "Each startup that participates in the Accelerator receives a $100K non-dilutive equity-free grant. Is the program in-person? Yes, the",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-1615960a2b",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "title": "Capital Innovators — program page",
+      "excerpt": "program and when does it start? The program is 13 weeks and Cohort 3 is targeted to start in early May.",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2003d7c3df",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "title": "Capital Innovators — program page",
       "excerpt": "in the geospatial market. This unique 13-week program will provide startups the opportunity to",
-      "page": "batches"
+      "page": "details"
     },
     {
-      "id": "check-duration-600279b2e1",
-      "url": "https://capitalinnovators.com/blog/2021/9/28/nga-accelerator-announces-participant-startups-for-second-cohort",
-      "title": "Capital Innovators — batches page",
-      "excerpt": "for in person collaboration and events. The 13-week accelerator is managed by Capital Innovators and",
-      "page": "batches"
+      "id": "check-duration-20f401ea1a",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "title": "Capital Innovators — program page",
+      "excerpt": "for additional opportunities in the future. The 12-week NGA Accelerator cohort three will run from early",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7999979bfa",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "title": "Capital Innovators — program page",
+      "excerpt": "select up to eight companies to participate in a 13-week accelerator program that includes $100,000 in",
+      "page": "details"
     },
     {
       "id": "check-duration-7d1f4089b2",
       "url": "https://capitalinnovators.com/spring-2022-cohort",
       "title": "Capital Innovators — batches page",
       "excerpt": "class, guides each company through a rigorous 12-week program and numerous other benefits including",
-      "page": "batches"
-    },
-    {
-      "id": "check-duration-9e4269df24",
-      "url": "https://capitalinnovators.com/blog/2021/9/23/capital-innovators-welcomes-fall-2021-cohort-to-st-louis",
-      "title": "Capital Innovators — batches page",
-      "excerpt": "to hands-on mentorship through its rigorous 12-week program. View each founders' video introduction",
       "page": "batches"
     },
     {
@@ -69,11 +108,11 @@
       "page": "batches"
     },
     {
-      "id": "check-duration-ddcc00bfcc",
-      "url": "https://capitalinnovators.com/blog/2021/12/1/nga-accelerator-seeks-third-cohort",
-      "title": "Capital Innovators — batches page",
-      "excerpt": "U.S. are invited to apply to participate in the 13-week program. Cohort three of the accelerator program",
-      "page": "batches"
+      "id": "check-duration-e833e50a32",
+      "url": "https://capitalinnovators.com/corporate-accelerator",
+      "title": "Capital Innovators — program page",
+      "excerpt": "their growth for future ROI Program Structure 13 weeks 6 startups 6 corporate champion teams 6 lead",
+      "page": "details"
     },
     {
       "id": "check-duration-f6d577efee",
@@ -118,11 +157,11 @@
       "page": "batches"
     },
     {
-      "id": "check-format-282445e3af",
-      "url": "https://capitalinnovators.com/blog/2021/9/28/nga-accelerator-announces-participant-startups-for-second-cohort",
-      "title": "Capital Innovators — batches page",
-      "excerpt": "professionals to autonomously analyze aerial and remote sensing data. With AirWorks’ patented algorithms and web",
-      "page": "batches"
+      "id": "check-format-1d7ca6dc86",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "title": "Capital Innovators — program page",
+      "excerpt": "the program in-person? Yes, the program is planned to be in-person in St. Louis, MO. We will be closely evaluating COVID-19",
+      "page": "details"
     },
     {
       "id": "check-format-294a6cce08",
@@ -132,6 +171,13 @@
       "page": "batches"
     },
     {
+      "id": "check-format-2b0c8077ca",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "title": "Capital Innovators — program page",
+      "excerpt": "a $100K non-dilutive equity-free grant. Is the program in-person? Yes, the program is planned to be in-person in St. Louis,",
+      "page": "details"
+    },
+    {
       "id": "check-format-2b60b5b808",
       "url": "https://capitalinnovators.com/fall2020cohort",
       "title": "Capital Innovators — batches page",
@@ -139,32 +185,18 @@
       "page": "batches"
     },
     {
-      "id": "check-format-313562f5b0",
-      "url": "https://capitalinnovators.com/blog/2021/12/1/nga-accelerator-seeks-third-cohort",
-      "title": "Capital Innovators — batches page",
-      "excerpt": "NGA’s Moonshot Labs will host the accelerator cohort for in-person collaboration and events. The accelerator collaboration,",
-      "page": "batches"
+      "id": "check-format-8f5a1acc4f",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "title": "Capital Innovators — program page",
+      "excerpt": "or restrictions are put in place, then the program will be virtual. Who owns the intellectual property developed by the",
+      "page": "details"
     },
     {
-      "id": "check-format-72c9b52ef4",
-      "url": "https://capitalinnovators.com/blog/2021/9/23/capital-innovators-welcomes-fall-2021-cohort-to-st-louis",
-      "title": "Capital Innovators — batches page",
-      "excerpt": "introduction on the Capital Innovators website. “After two virtual cohorts, we are finally able to bring these talented",
-      "page": "batches"
-    },
-    {
-      "id": "check-format-ce04a1a73e",
-      "url": "https://capitalinnovators.com/blog/2021/9/23/capital-innovators-welcomes-fall-2021-cohort-to-st-louis",
-      "title": "Capital Innovators — batches page",
-      "excerpt": "success this Fall. We will be working with them in a new hybrid model for the program. The six companies have earned their",
-      "page": "batches"
-    },
-    {
-      "id": "check-format-f205234da8",
-      "url": "https://capitalinnovators.com/blog/2021/9/28/nga-accelerator-announces-participant-startups-for-second-cohort",
-      "title": "Capital Innovators — batches page",
-      "excerpt": "NGA’s Moonshot Labs will host the accelerator cohort for in person collaboration and events. The 13-week accelerator is",
-      "page": "batches"
+      "id": "check-format-bc9ff82362",
+      "url": "https://capitalinnovators.com/venturereadymissouri",
+      "title": "Capital Innovators — program page",
+      "excerpt": "potential investors and the fundraising process. Sessions: Virtual classes will consist of two, 1-2 hour sessions per week.",
+      "page": "details"
     },
     {
       "id": "check-format-ff254cba16",
@@ -178,6 +210,13 @@
       "url": "https://capitalinnovators.com/acceleratorprogram",
       "title": "Capital Innovators — program page",
       "excerpt": "Startup Accelerator Program, based in St.Louis, MO, provides tech startups",
+      "page": "details"
+    },
+    {
+      "id": "check-location-6cd02504f1",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "title": "Capital Innovators — program page",
+      "excerpt": "the future . NGA Accelerator Program , based in St.Louis, MO, provides tech startups",
       "page": "details"
     },
     {
@@ -195,11 +234,25 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-14446af927",
-      "url": "https://capitalinnovators.com/blog/2021/12/1/nga-accelerator-seeks-third-cohort",
-      "title": "Capital Innovators — batches page",
+      "id": "check-portfolio-078d137708",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "title": "Capital Innovators — program page",
+      "excerpt": "Portfolio → https://capitalinnovators.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1233fae82c",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "title": "Capital Innovators — program page",
       "excerpt": "Startups → https://capitalinnovators.com/experience",
-      "page": "batches"
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-13ddb661ad",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "title": "Capital Innovators — program page",
+      "excerpt": "Portfolio → https://capitalinnovators.com/portfolio",
+      "page": "details"
     },
     {
       "id": "check-portfolio-2fd284b758",
@@ -209,11 +262,11 @@
       "page": "batches"
     },
     {
-      "id": "check-portfolio-374003ca73",
-      "url": "https://capitalinnovators.com/blog/2021/9/28/nga-accelerator-announces-participant-startups-for-second-cohort",
-      "title": "Capital Innovators — batches page",
-      "excerpt": "Portfolio → https://capitalinnovators.com/portfolio",
-      "page": "batches"
+      "id": "check-portfolio-37a014591b",
+      "url": "https://capitalinnovators.com/corporate-accelerator",
+      "title": "Capital Innovators — program page",
+      "excerpt": "Startups → https://capitalinnovators.com/experience",
+      "page": "details"
     },
     {
       "id": "check-portfolio-3c642b78fc",
@@ -237,13 +290,6 @@
       "page": "batches"
     },
     {
-      "id": "check-portfolio-47e17ad489",
-      "url": "https://capitalinnovators.com/blog/2021/12/1/nga-accelerator-seeks-third-cohort",
-      "title": "Capital Innovators — batches page",
-      "excerpt": "Portfolio → https://capitalinnovators.com/portfolio",
-      "page": "batches"
-    },
-    {
       "id": "check-portfolio-4839619a4a",
       "url": "https://capitalinnovators.com/blog/tag/investments",
       "title": "Capital Innovators — terms page",
@@ -258,6 +304,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-489cf60374",
+      "url": "https://capitalinnovators.com/ameren-accelerator-case-study",
+      "title": "Capital Innovators — program page",
+      "excerpt": "Startups → https://capitalinnovators.com/experience",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-4cf949dca7",
       "url": "https://capitalinnovators.com/blog/tag/investments",
       "title": "Capital Innovators — terms page",
@@ -265,18 +318,25 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-503a301989",
-      "url": "https://capitalinnovators.com/blog/2021/9/23/capital-innovators-welcomes-fall-2021-cohort-to-st-louis",
-      "title": "Capital Innovators — batches page",
-      "excerpt": "Startups → https://capitalinnovators.com/experience",
-      "page": "batches"
-    },
-    {
       "id": "check-portfolio-534e1f844c",
       "url": "https://capitalinnovators.com/blog/2020/3/4/using-equity-crowdfunding-alongside-traditional-investment-vehicles",
       "title": "Capital Innovators — terms page",
       "excerpt": "Portfolio → https://capitalinnovators.com/portfolio",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-583acd5491",
+      "url": "https://capitalinnovators.com/ameren-accelerator-case-study",
+      "title": "Capital Innovators — program page",
+      "excerpt": "Portfolio → https://capitalinnovators.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-66d205a577",
+      "url": "https://capitalinnovators.com/corporate-accelerator",
+      "title": "Capital Innovators — program page",
+      "excerpt": "Portfolio → https://capitalinnovators.com/portfolio",
+      "page": "details"
     },
     {
       "id": "check-portfolio-68a16badf6",
@@ -314,6 +374,20 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-7d9f5890a5",
+      "url": "https://capitalinnovators.com/meren-accelerator-case-study-form",
+      "title": "Capital Innovators — program page",
+      "excerpt": "Portfolio → https://capitalinnovators.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-938e529467",
+      "url": "https://capitalinnovators.com/meren-accelerator-case-study-form",
+      "title": "Capital Innovators — program page",
+      "excerpt": "Startups → https://capitalinnovators.com/experience",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-9cd26105e7",
       "url": "https://capitalinnovators.com/about-ci",
       "title": "Capital Innovators — program page",
@@ -342,17 +416,17 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-b1a870592e",
+      "url": "https://capitalinnovators.com/alumni-workshop-week",
+      "title": "Capital Innovators — portfolio page",
+      "excerpt": "Startups → https://capitalinnovators.com/experience",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-b8b2a6b269",
       "url": "https://capitalinnovators.com/spring-2022-cohort",
       "title": "Capital Innovators — batches page",
       "excerpt": "Portfolio → https://capitalinnovators.com/portfolio",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-bb37a6d97b",
-      "url": "https://capitalinnovators.com/blog/2021/9/28/nga-accelerator-announces-participant-startups-for-second-cohort",
-      "title": "Capital Innovators — batches page",
-      "excerpt": "Startups → https://capitalinnovators.com/experience",
       "page": "batches"
     },
     {
@@ -370,10 +444,24 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-d18b846dcf",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "title": "Capital Innovators — program page",
+      "excerpt": "Startups → https://capitalinnovators.com/experience",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-d28b751827",
       "url": "https://capitalinnovators.com/acceleratorprogram",
       "title": "Capital Innovators — program page",
       "excerpt": "Startups → https://capitalinnovators.com/experience",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d4d5c3e1ca",
+      "url": "https://capitalinnovators.com/venturereadymissouri",
+      "title": "Capital Innovators — program page",
+      "excerpt": "Portfolio → https://capitalinnovators.com/portfolio",
       "page": "details"
     },
     {
@@ -391,11 +479,18 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-fc18b3678c",
-      "url": "https://capitalinnovators.com/blog/2021/9/23/capital-innovators-welcomes-fall-2021-cohort-to-st-louis",
-      "title": "Capital Innovators — batches page",
+      "id": "check-portfolio-dc10bb4269",
+      "url": "https://capitalinnovators.com/alumni-workshop-week",
+      "title": "Capital Innovators — portfolio page",
       "excerpt": "Portfolio → https://capitalinnovators.com/portfolio",
-      "page": "batches"
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-f031e46a7c",
+      "url": "https://capitalinnovators.com/venturereadymissouri",
+      "title": "Capital Innovators — program page",
+      "excerpt": "Startups → https://capitalinnovators.com/experience",
+      "page": "details"
     },
     {
       "id": "check-route-cfc1aefe36",
@@ -413,16 +508,46 @@
       "excerpt": "Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Scroll INNOVATION ENGINE Capital Innovators provides top-ranked Accelerator programs, venture fund management, and corporate innovation. Learn More about Venture Ready Missouri Accelerator Program Capital Innovators provides seed funding, mentorship, resources and connections through its unique high-touch Accelerator, which has scaled over 180 startups from around the globe. Learn More Venture Investments Capital Innovators provides Seed and Series A venture investments into attractive high-growth startup companies in verticals including"
     },
     {
-      "id": "check-page-ec90f84c12",
-      "url": "https://capitalinnovators.com/blog/2020/3/4/using-equity-crowdfunding-alongside-traditional-investment-vehicles",
-      "page": "terms",
-      "excerpt": "Using Equity Crowdfunding Alongside Traditional Investment Vehicles — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Using Equity Crowdfunding Alongside Traditional Investment Vehicles Equity Crowdfunding is a new and quickly growing source of funding for a company. Different from rewards-based crowdfunding found on websites such as Kickstarter, this form allows large amounts of people to purchase equity in your startup at a much lower investment floor. Rather than a small number of investors putting in large sums of money, there are large amounts of people putting in small amounts of money."
+      "id": "check-page-d4e84cb988",
+      "url": "https://capitalinnovators.com/",
+      "page": "details",
+      "excerpt": "Learn More Venture Investments Capital Innovators provides Seed and Series A venture investments into attractive high-growth startup companies in verticals including technology and consumer products that are ready to scale through its strategic guidance and network."
     },
     {
-      "id": "check-page-14ab7f7844",
-      "url": "https://capitalinnovators.com/blog/tag/investments",
-      "page": "terms",
-      "excerpt": "investments — Blog — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Posts tagged investments Tokenizing Venture Capital The future of venture capital is tokenized securities transacted on blockchain. What are tokenized securities? They are digital tokens representing fractional equity ownership in a business often referred to as crypto assets, which is an asset class backed by real assets and cryptography. The benefits of tokens far outweigh the current way of investing in and managing assets in terms of enhanced liquidity, ease of transaction, terms and conditions built into transactions and"
+      "id": "check-page-e2c7dc7b0a",
+      "url": "https://capitalinnovators.com/",
+      "page": "details",
+      "excerpt": "Learn More Corporate Innovation Capital Innovators partners with organizations to source startups to solve problem sets and run innovation programs on their behalf providing investment opportunities, community growth, branding and PR benefits, talent attraction and more."
+    },
+    {
+      "id": "check-page-266347d6d2",
+      "url": "https://capitalinnovators.com/",
+      "page": "details",
+      "excerpt": "Venture-Ready Missouri is a two-part pilot course designed to improve Missouri-based entrepreneurs’ potential to attract venture capital and angel investment."
+    },
+    {
+      "id": "check-page-95dd6a2383",
+      "url": "https://capitalinnovators.com/",
+      "page": "details",
+      "excerpt": "In part one, participants will gain an overview of various funding opportunities and detailed instruction on pitching to venture capital firms and the fundraising process."
+    },
+    {
+      "id": "check-page-e5253a75da",
+      "url": "https://capitalinnovators.com/",
+      "page": "details",
+      "excerpt": "Learn more Connecting Data Points Others Cannot Capital Innovators consists of experienced entrepreneurs, investors, corporate innovation leaders, authors, speakers, and more."
+    },
+    {
+      "id": "check-page-9b3960d0e3",
+      "url": "https://capitalinnovators.com/",
+      "page": "details",
+      "excerpt": "It has developed relationships with leaders in technology, investment, government, strategy, entrepreneurship, corporate innovation and more."
+    },
+    {
+      "id": "check-page-0964386061",
+      "url": "https://capitalinnovators.com/",
+      "page": "details",
+      "excerpt": "Capital Innovators Accelerator, LLC."
     },
     {
       "id": "check-page-ff27e7bd80",
@@ -431,34 +556,88 @@
       "excerpt": "Terms & Policies — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Terms of Use Effective Date: December 1, 2025 Please read all of these terms of use (“Terms”) carefully before using our websites, email notifications, mobile applications, social media applications, widgets, and our other online services (the “Services”) because it affects your legal rights and obligations. About Us Capital Innovators is registered in the USA as an LLC in the State of Missouri and can be reached at info@capitalinnovators.com This Agreement and Your Acceptance Our Services are owned, operated and provided by"
     },
     {
+      "id": "check-page-875d512bf5",
+      "url": "https://capitalinnovators.com/terms-policies",
+      "page": "terms",
+      "excerpt": "About Us Capital Innovators is registered in the USA as an LLC in the State of Missouri and can be reached at info@capitalinnovators.com This Agreement and Your Acceptance Our Services are owned, operated and provided by Capital Innovators and our subsidiaries and affiliates (“Capital Innovators,” “our,” “us” or “we”)."
+    },
+    {
+      "id": "check-page-2c9f354a9c",
+      "url": "https://capitalinnovators.com/terms-policies",
+      "page": "terms",
+      "excerpt": "Our Services are hosted on servers located inside and outside the United States."
+    },
+    {
+      "id": "check-page-6930871a5e",
+      "url": "https://capitalinnovators.com/terms-policies",
+      "page": "terms",
+      "excerpt": "The commentary in this course reflects the personal opinions, viewpoints, and analyses of the Capital Innovators Accelerator, LLC employees and consultants providing such comments, and should not be regarded the views of Capital Innovators Accelerator, LLC or its affiliates."
+    },
+    {
+      "id": "check-page-ef6c8bbbc6",
+      "url": "https://capitalinnovators.com/terms-policies",
+      "page": "terms",
+      "excerpt": "Our Services Our videos are protected by United States and international copyright laws."
+    },
+    {
+      "id": "check-page-ea0a794ecd",
+      "url": "https://capitalinnovators.com/terms-policies",
+      "page": "terms",
+      "excerpt": "Nothing herein grants any license or right to use any trademark, logo, or service mark displayed without the owner’s prior written permission."
+    },
+    {
+      "id": "check-page-bdbcab63d6",
+      "url": "https://capitalinnovators.com/terms-policies",
+      "page": "terms",
+      "excerpt": "The entire content of our Services is copyrighted as a collective work under the United States Copyright Laws."
+    },
+    {
+      "id": "check-page-18704f1c8a",
+      "url": "https://capitalinnovators.com/terms-policies",
+      "page": "terms",
+      "excerpt": "We assume no responsibility and shall not be liable for any damages of any nature caused by the use of our Services, including damages caused by viruses, worms, Trojan horses or any other computer software or anomaly that may infect, affect, or damage your computer hardware, software, memory or any other property of yours or others, as a result of your access to or use of our Services."
+    },
+    {
+      "id": "check-page-be59dc4bb8",
+      "url": "https://capitalinnovators.com/terms-policies",
+      "page": "terms",
+      "excerpt": "We reserve the right to assume the exclusive defense and control of any matter subject to indemnification and defense by you, and you will not in any event settle any claim without our prior written consent."
+    },
+    {
+      "id": "check-page-8e0ba8836a",
+      "url": "https://capitalinnovators.com/terms-policies",
+      "page": "terms",
+      "excerpt": "You will cooperate as fully required by us in the defense of any claim."
+    },
+    {
+      "id": "check-page-8131a37320",
+      "url": "https://capitalinnovators.com/terms-policies",
+      "page": "terms",
+      "excerpt": "This defense and indemnification obligation will survive these Terms and your use of our Services."
+    },
+    {
+      "id": "check-page-548f826bb9",
+      "url": "https://capitalinnovators.com/terms-policies",
+      "page": "terms",
+      "excerpt": "You may not use our Services or export information and materials in violation of the export laws of the United States or any other country."
+    },
+    {
+      "id": "check-page-c24c993e02",
+      "url": "https://capitalinnovators.com/terms-policies",
+      "page": "terms",
+      "excerpt": "Capital Innovators Accelerator, LLC."
+    },
+    {
       "id": "check-page-b0abb92804",
       "url": "https://capitalinnovators.com/ventureinvestments",
       "page": "terms",
       "excerpt": "Venture Investments — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Venture Investments Capital Innovators provides investment during Series A financing rounds for high-growth companies with the following characteristics: Technology and Consumer Products Achieved Product Market Fit Ready for Rapid Scaling Experienced Management Team Disruptive Model or Product Investment Specifics: $500,000 - $1,000,000 Initial Checks Open to Leading Rounds or Participating in Existing Rounds Exit Time Horizon of 3-5 Years Board Participation Active Mentorship and Operational Guidance Contact Privacy Policy"
     },
     {
-      "id": "check-page-b723eae900",
-      "url": "https://capitalinnovators.com/blog/2020/2/24/capital-innovators-welcomes-spring-2020-cohort-to-st-louis",
-      "page": "batches",
-      "excerpt": "Capital Innovators Welcomes Spring 2020 Cohort to St. Louis — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Capital Innovators Welcomes Spring 2020 Cohort to St. Louis Seven startups from across the nation join the accelerator's portfolio. St. Louis-based startup accelerator Capital Innovators announced its Spring 2020 cohort at Venture Cafe in the Cortex District of St. Louis. This is the 21st cohort to undergo the rigorous 12-week accelerator program. Capital Innovators has been ranked as one of the top accelerators worldwide for the last five years. “We are excited about this cohort of"
-    },
-    {
-      "id": "check-page-7e88fec118",
-      "url": "https://capitalinnovators.com/blog/2021/12/1/nga-accelerator-seeks-third-cohort",
-      "page": "batches",
-      "excerpt": "NGA Accelerator Seeks Third Cohort of Geospatial Technology Companies — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth NGA Accelerator Seeks Third Cohort of Geospatial Technology Companies NGA Accelerator will accept applications until Jan. 18 for its third cohort. ST. LOUIS – December 1, 2021 - The NGA Accelerator Powered by Capital Innovators is accepting applications through Jan. 18 for the third cohort of startup companies to help the National Geospatial-Intelligence Agency develop innovations in geospatial technology. The St. Louis based corporate accelerator is managed through a"
-    },
-    {
-      "id": "check-page-bd1b4637c6",
-      "url": "https://capitalinnovators.com/blog/2021/9/23/capital-innovators-welcomes-fall-2021-cohort-to-st-louis",
-      "page": "batches",
-      "excerpt": "Capital Innovators Welcomes Fall 2021 Cohort to St. Louis — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Capital Innovators Welcomes Fall 2021 Cohort to St. Louis Six startups from around the world join the accelerator’s portfolio. Top-ranked accelerator Capital Innovators announced its Fall 2021 cohort today. This is the 25th cohort to partake in the accelerator, where each startup receives $50,000 in seed funding from Capital Innovators’ third seed venture capital fund in addition to hands-on mentorship through its rigorous 12-week program. View each founders' video introduction on the"
-    },
-    {
-      "id": "check-page-cc63eb67da",
-      "url": "https://capitalinnovators.com/blog/2021/9/28/nga-accelerator-announces-participant-startups-for-second-cohort",
-      "page": "batches",
-      "excerpt": "NGA Accelerator Announces Participant Startups for Second Cohort — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth NGA Accelerator Announces Participant Startups for Second Cohort Eight startups from across the nation were selected to participate in the second cohort of the NGA Accelerator in St. Louis. The NGA Accelerator Powered by Capital Innovators recently selected eight companies from more than 208 applicants to participate in the second cohort of its geospatial accelerator program. The St. Louis-based accelerator will launch on September 28, 2021, and is enabled through a Partnership"
+      "id": "check-page-f91afed9d9",
+      "url": "https://capitalinnovators.com/ventureinvestments",
+      "page": "terms",
+      "excerpt": "Capital Innovators Accelerator, LLC."
     },
     {
       "id": "check-page-07186fa747",
@@ -467,16 +646,130 @@
       "excerpt": "Fall 2020 Cohort — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Fall 2020 Cohort Announcement Allosense San Antonio, TX | Allosense.com | CEO: Roman Sandoval Allosense delivers an easy user experience for integrating smart sensors and analyzing data. They design and manufacture “always connected” asset trackers using cellular, satellite, and mesh technologies to reduce logistic inefficiencies. Their trackers incorporate a suite of sensors for monitoring high-value assets in real-time. Allosense is a federal contractor and is a Small Business Innovation and Research (SBIR) awardee by AFWERX,"
     },
     {
+      "id": "check-page-13d40c1d0e",
+      "url": "https://capitalinnovators.com/fall2020cohort",
+      "page": "batches",
+      "excerpt": "Allosense is a federal contractor and is a Small Business Innovation and Research (SBIR) awardee by AFWERX, the US Air Force’s Innovation Hub."
+    },
+    {
+      "id": "check-page-fefe5ea434",
+      "url": "https://capitalinnovators.com/fall2020cohort",
+      "page": "batches",
+      "excerpt": "Contact Email: roman@allosense.com Beam Toronto, Canada | Beam.gg | CEO: Arwina Mogul Create and customize your own community website through the Beam.gg platform."
+    },
+    {
+      "id": "check-page-c779a8c2b9",
+      "url": "https://capitalinnovators.com/fall2020cohort",
+      "page": "batches",
+      "excerpt": "Contact Email: wei@eggschain.com IndiFit Chicago, IL | IndiFit.co | CEO: Cheryl Kemp Fitness instructors and trainers have long been squeezed in the value chains of studios and gyms, earning only 13% of the $200 in revenue generated by an average fitness class."
+    },
+    {
+      "id": "check-page-94238999aa",
+      "url": "https://capitalinnovators.com/fall2020cohort",
+      "page": "batches",
+      "excerpt": "This SaaS based platform can be used to improve experience and conversion rates on any digital platform (websites, apps, and social media)."
+    },
+    {
+      "id": "check-page-4f7e64f0ba",
+      "url": "https://capitalinnovators.com/fall2020cohort",
+      "page": "batches",
+      "excerpt": "Contact Email: mtt@keydabra.com Optikal Atlanta, GA | Optikalcare.com | CEO: SueAnn Hollowell 1 in 2 Millennials are living check-to-check which forces them to sacrifice things like eye care, especially while paying for necessities like rent, food, and transportation."
+    },
+    {
+      "id": "check-page-fc868ad9d8",
+      "url": "https://capitalinnovators.com/fall2020cohort",
+      "page": "batches",
+      "excerpt": "Capital Innovators Accelerator, LLC."
+    },
+    {
       "id": "check-page-361520a138",
       "url": "https://capitalinnovators.com/fall2021cohort",
       "page": "batches",
       "excerpt": "Fall 2021 Cohort — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Fall 2021 Cohort Announcement Capital Innovators is excited to announce its Fall 2021 cohort featuring six startup companies from across the world: Liberet, Repod, TalentSensus, Tourlami, Verb, Visore Lab. The program, now in its 25th class, guides each company through a rigorous 12-week program and numerous other benefits including hands-on mentorship from C–suite executives, seasoned entrepreneurs, and technical experts, seed funding, and access to a global network of startups. “After two virtual cohorts, we are finally able"
     },
     {
+      "id": "check-page-e55ee66932",
+      "url": "https://capitalinnovators.com/fall2021cohort",
+      "page": "batches",
+      "excerpt": "Liberet Jalisco, Mexico | Liberet | CEO: Cuauhtli Padilla Liberet is a food logistics platform that provides the tools for food service suppliers to reach clients and manage the entire process from listing to order to final delivery."
+    },
+    {
+      "id": "check-page-f1e3736e76",
+      "url": "https://capitalinnovators.com/fall2021cohort",
+      "page": "batches",
+      "excerpt": "Contact Email: travis@repod.io TalentSensus Belfast, Ireland | TalentSensus | CEO: Stephen Rice TalentSensus is an eco-system connecting the vital component parts of talent management through intuitive technology, removing unconscious bias from the talent supply chain, helping the world work better."
+    },
+    {
+      "id": "check-page-163558958a",
+      "url": "https://capitalinnovators.com/fall2021cohort",
+      "page": "batches",
+      "excerpt": "Contact Email: stephenr@talentsensus.com Tourlami New York, NY | Tourlami | CEO: Susannah Schoolman Tourlami is a plant-based ingredients company specializing in plant-based butter for professional use that compares in taste, textured functionality to the top dairy based brands."
+    },
+    {
+      "id": "check-page-4df9ce4cc3",
+      "url": "https://capitalinnovators.com/fall2021cohort",
+      "page": "batches",
+      "excerpt": "Contact Email: susannah@tourlami.com Verb New York, NY | Verb | CEO: Vincent Miceli Verb is a B2B platform that enables coaches, gyms, and fitness brands to effectively scale and engage interactions with clients via SMS."
+    },
+    {
+      "id": "check-page-c1ed912753",
+      "url": "https://capitalinnovators.com/fall2021cohort",
+      "page": "batches",
+      "excerpt": "By leveraging proprietary artificial intelligence, machine learning, and automated messaging, Verb assists service providers by help their clients reach goals, understand habits, and find success in their fitness journey."
+    },
+    {
+      "id": "check-page-c48eefb7b1",
+      "url": "https://capitalinnovators.com/fall2021cohort",
+      "page": "batches",
+      "excerpt": "Contact Email: vin@verb.co Visore Lab Paris, France | Visore | CEO: Karim Coppola VISORE LAB is a creative-tech agency creating and producing photo, motion and CGI/3D content."
+    },
+    {
+      "id": "check-page-6e63d6a780",
+      "url": "https://capitalinnovators.com/fall2021cohort",
+      "page": "batches",
+      "excerpt": "Capital Innovators Accelerator, LLC."
+    },
+    {
       "id": "check-page-6b8ae6f4e9",
       "url": "https://capitalinnovators.com/spring-2022-cohort",
       "page": "batches",
       "excerpt": "Spring 2022 Cohort — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Spring 2022 Cohort Announcement Capital Innovators is excited to announce its Spring 2022 cohort featuring six startup companies from across the world: Campfare, Kadri Clothing, oneKIN, Retrievables, Sobi Analytics, and Wellness Wins CRM. The program, now in its 26th class, guides each company through a rigorous 12-week program and numerous other benefits including hands-on mentorship from C–suite executives, seasoned entrepreneurs, and technical experts, seed funding, and access to a global network of startups. “This Capital"
+    },
+    {
+      "id": "check-page-31eab309a2",
+      "url": "https://capitalinnovators.com/spring-2022-cohort",
+      "page": "batches",
+      "excerpt": "Louis, MO | onekin.co | CEO: Marvin Francois oneKIN is a mission-driven, retail-tech company singularly focused on providing small businesses with creative technology solutions to help them increase their visibility and grow sustainably."
+    },
+    {
+      "id": "check-page-dee97f8e78",
+      "url": "https://capitalinnovators.com/spring-2022-cohort",
+      "page": "batches",
+      "excerpt": "Contact Email: marvin@onekin.co Retrievables New York, NY | retrievables.com | CEO: Jeremy Crane Retrievables is a technology marketplace in which businesses holding delinquent accounts receivable post information on their invoices that need to be collected upon."
+    },
+    {
+      "id": "check-page-7e0d398b39",
+      "url": "https://capitalinnovators.com/spring-2022-cohort",
+      "page": "batches",
+      "excerpt": "Contact Email: jeremy@retrievables.com Sobi Analytics Ireland | sobianalytics.com | CEO: Brenda Jordan Sobi Analytics provides a financial planning and analytics solution for the CFO with multiple clients."
+    },
+    {
+      "id": "check-page-0955793863",
+      "url": "https://capitalinnovators.com/spring-2022-cohort",
+      "page": "batches",
+      "excerpt": "Their AI powered platform enables them to access and analyze their clients in one location, in real time, so that they can make critical business decisions based on the cross-business visibility now available to them."
+    },
+    {
+      "id": "check-page-ef1316a5ba",
+      "url": "https://capitalinnovators.com/spring-2022-cohort",
+      "page": "batches",
+      "excerpt": "Because we believe mental health should be as prioritized and promoted as much as physical health, WellnessWins is designed around the unique customer journey of individual clients seeking mental health support."
+    },
+    {
+      "id": "check-page-601b79d459",
+      "url": "https://capitalinnovators.com/spring-2022-cohort",
+      "page": "batches",
+      "excerpt": "Capital Innovators Accelerator, LLC."
     },
     {
       "id": "check-page-e96993ee30",
@@ -495,6 +788,276 @@
       "url": "https://capitalinnovators.com/acceleratorprogram",
       "page": "details",
       "excerpt": "Accelerator Program — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Accelerator Program Capital Innovators provides startups with the resources and connections they need to reach the next level. Through proprietary processes and techniques developed and iterated on over the program's 12-year history, the Accelerator Program has consistently been ranked as one of the top programs in the United States. The Capital Innovators Startup Accelerator Program, based in St.Louis, MO, provides tech startups with: Seed Funding Mentorship from C–suite executives, seasoned entrepreneurs, and technical"
+    },
+    {
+      "id": "check-page-e751f37882",
+      "url": "https://capitalinnovators.com/acceleratorprogram",
+      "page": "details",
+      "excerpt": "The Capital Innovators Startup Accelerator Program, based in St.Louis, MO, provides tech startups with: Seed Funding Mentorship from C–suite executives, seasoned entrepreneurs, and technical experts Access to a global network of startups Connections to customers and strategic partners for top-line growth Co-Working and first-class office space in St."
+    },
+    {
+      "id": "check-page-ac2a0ae929",
+      "url": "https://capitalinnovators.com/acceleratorprogram",
+      "page": "details",
+      "excerpt": "Capital Innovators Accelerator, LLC."
+    },
+    {
+      "id": "check-page-0ab5afcb46",
+      "url": "https://capitalinnovators.com/ameren-accelerator-case-study",
+      "page": "details",
+      "excerpt": "Ameren Accelerator Case Study — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Get Your Case Study Here Contact Privacy Policy Terms of Use © 2020. Capital Innovators Accelerator, LLC. All Rights Reserved."
+    },
+    {
+      "id": "check-page-f1715a0fe1",
+      "url": "https://capitalinnovators.com/corporate-accelerator",
+      "page": "details",
+      "excerpt": "Corporate Accelerator — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Corporate Accelerators Capital Innovators runs corporate Accelerator programs to drive innovation for organizations through structured startup engagement. Our programs are unique from every other Accelerator in the world due to our mentorship model and corporate champion team structure. In fact, we have had corporates that have hired other Accelerator partners to run their programs, and after they were unsatisfied with the results, they came to Capital Innovators because our model is so much more effective and"
+    },
+    {
+      "id": "check-page-aacfae5de3",
+      "url": "https://capitalinnovators.com/corporate-accelerator",
+      "page": "details",
+      "excerpt": "In fact, we have had corporates that have hired other Accelerator partners to run their programs, and after they were unsatisfied with the results, they came to Capital Innovators because our model is so much more effective and transformational."
+    },
+    {
+      "id": "check-page-08e7b4279c",
+      "url": "https://capitalinnovators.com/corporate-accelerator",
+      "page": "details",
+      "excerpt": "Applications Capital Innovators finds the best startups and scaleups that align with the corporate’s strategy through its proprietary recruitment processes and sourcing platform infused with machine learning."
+    },
+    {
+      "id": "check-page-22e35abbb1",
+      "url": "https://capitalinnovators.com/corporate-accelerator",
+      "page": "details",
+      "excerpt": "Selection Capital Innovators analyzes all of the diligence and feedback from Pitch Day and presents it to the corporate to select the 6 companies for the Accelerator."
+    },
+    {
+      "id": "check-page-b39f145226",
+      "url": "https://capitalinnovators.com/corporate-accelerator",
+      "page": "details",
+      "excerpt": "Accelerator Capital Innovators executes the program with its unique corporate champion engagement model to drive value for both the startups and the partner."
+    },
+    {
+      "id": "check-page-7f689a26c0",
+      "url": "https://capitalinnovators.com/corporate-accelerator",
+      "page": "details",
+      "excerpt": "Demo Day Capital Innovators hosts a public or private event for the corporate showcasing the startups that completed the program."
+    },
+    {
+      "id": "check-page-313156bb73",
+      "url": "https://capitalinnovators.com/corporate-accelerator",
+      "page": "details",
+      "excerpt": "Portfolio Management Post-program, Capital Innovators manages the corporate’s Accelerator startup portfolio helping them with strategy, connections, and growth, while opening doors for the corporate to engage for pilots, investments, and acquisitions."
+    },
+    {
+      "id": "check-page-fb5fd289b8",
+      "url": "https://capitalinnovators.com/corporate-accelerator",
+      "page": "details",
+      "excerpt": "Capital Innovators Accelerator, LLC."
+    },
+    {
+      "id": "check-page-f5a7789251",
+      "url": "https://capitalinnovators.com/meren-accelerator-case-study-form",
+      "page": "details",
+      "excerpt": "Ameren Accelerator Case Study Form — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Get the case study to learn how this program drove valuable outcomes for 11 corporate objectives! Contact Privacy Policy Terms of Use © 2020. Capital Innovators Accelerator, LLC. All Rights Reserved."
+    },
+    {
+      "id": "check-page-df487031c7",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "page": "details",
+      "excerpt": "NGA Accelerator Press — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth The National Geospatial-Intelligence Agency (NGA) Accelerator is a first-of-its-kind program that partners a leading government intelligence agency and a top-ranked accelerator to help advance cutting-edge innovations in the geospatial market. This unique 13-week program will provide startups the opportunity to engage directly with NGA and receive valuable feedback, connections, pilot opportunities, and unparalleled resources to help their businesses scale. The Accelerator is searching for best-in-breed businesses"
+    },
+    {
+      "id": "check-page-98601aaf65",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "page": "details",
+      "excerpt": "The Accelerator is searching for best-in-breed businesses developing novel dual-use technologies (products that have both commercial and military uses), which will grow the number of geospatial solutions available to NGA."
+    },
+    {
+      "id": "check-page-16a20829b2",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "page": "details",
+      "excerpt": "NGA Accelerator Press St."
+    },
+    {
+      "id": "check-page-62689b27c1",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "page": "details",
+      "excerpt": "Louis geospatial technology accelerator names eight startups of new cohort - Missouri Business Alert (5/11/22) St."
+    },
+    {
+      "id": "check-page-d91632ae3f",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "page": "details",
+      "excerpt": "Louis Inno - NGA Accelerator invests in 8 startups, including a St."
+    },
+    {
+      "id": "check-page-a5e93e56a5",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "page": "details",
+      "excerpt": "Louis Business Journal (5/9/22) NGA Accelerator Seeks Third Cohort of Geospatial Technology Companies - PRWeb (12/1/21) St."
+    },
+    {
+      "id": "check-page-12d621c8ae",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "page": "details",
+      "excerpt": "Louis Inno - NGA Accelerator backs 8 startups in new cohort - St."
+    },
+    {
+      "id": "check-page-25dcfb05df",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "page": "details",
+      "excerpt": "Louis Business Journal (4/1/21) NGA Accelerator Announces Startups for Inaugural Cohort - PRWeb (4/1/21) NGA Dishing Out Innovation Grants to Select Companies - Federal Drive (1/11/21) NGA seeks applications for geospatial accelerator program in St."
+    },
+    {
+      "id": "check-page-920dcfc0ed",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "page": "details",
+      "excerpt": "Louis - Geospatial World (12/30/20) NGA launches new tech accelerator in St."
+    },
+    {
+      "id": "check-page-03abfc3603",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "page": "details",
+      "excerpt": "Louis GEOINT tech accelerator seeks participants - Intelligence Community News (12/16/20) NGA-backed geospatial program aims to boost startups - The St."
+    },
+    {
+      "id": "check-page-dd28f9e314",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "page": "details",
+      "excerpt": "Louis Geospatial Technology Accelerator Seeks Applications for Inaugural Cohort - Yahoo Finance (12/15/20) St."
+    },
+    {
+      "id": "check-page-c89977587b",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "page": "details",
+      "excerpt": "Louis Geospatial Technology Accelerator Seeks Applications for Inaugural Cohort - NGA (12/15/20) St."
+    },
+    {
+      "id": "check-page-37a31e1503",
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "page": "details",
+      "excerpt": "Louis Geospatial Technology Accelerator Seeks Applications for Inaugural Cohort - PRWeb (12/15/20) Applications open for new NGA-sponsored St."
+    },
+    {
+      "id": "check-page-a47d404df5",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "page": "details",
+      "excerpt": "NGA Accelerator — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Applications are currently closed for Cohort 3 of the NGA Accelerator powered by Capital Innovators. Please keep an eye out for additional opportunities in the future. The 12-week NGA Accelerator cohort three will run from early May through late July of 2022. About the Program The NGA Accelerator is a first-of-its-kind innovative partnership with the National Geospatial-Intelligence Agency and Capital Innovators designed to fund, mentor, and accelerate the growth of next-generation geospatial-intelligence technologies. We will"
+    },
+    {
+      "id": "check-page-1f12c876d6",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "page": "details",
+      "excerpt": "We will select up to eight companies to participate in a 13-week accelerator program that includes $100,000 in grant funding , perks, benefits, office space, mentorship and direct engagement with a leading geospatial-intelligence agency."
+    },
+    {
+      "id": "check-page-30e5802993",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "page": "details",
+      "excerpt": "NGA Accelerator Program , based in St.Louis, MO, provides tech startups with: $100,000 in Grant Funding Engagement with NGA Champion Teams Mentorship from C–suite executives, seasoned entrepreneurs, and technical experts Access to a global network Connections to customers and strategic partners for top-line growth Co-Working and first-class office space in St."
+    },
+    {
+      "id": "check-page-b2f598d560",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "page": "details",
+      "excerpt": "Louis NGA Accelerator Portfolio FAQs Cohort 3 Problem Statements ARTIFICIAL INTELLIGENCE NGA’s needs for high confidence in AI and understanding of the generated output under varying conditions are supported by the larger Department of Defense (DoD) and intelligence communities."
+    },
+    {
+      "id": "check-page-9d9d8aa3c5",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "page": "details",
+      "excerpt": "Under the DoD’s ethical principles of AI, machine assisted processes will be responsible in their development, deployment, and use; equitable with minimal unintended bias; transparent and auditable; reliable through extensive testing; and governable throughout the lifecycle."
+    },
+    {
+      "id": "check-page-95e74fb8c5",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "page": "details",
+      "excerpt": "AUTOMATED CONDITIONING SERVICE: NGA needs the ability to automate data conditioning for easy and accurate metadata tagging so that data is discoverable and accessible by the enterprise."
+    },
+    {
+      "id": "check-page-d2b230510f",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "page": "details",
+      "excerpt": "What types of companies should apply to the NGA Accelerator?"
+    },
+    {
+      "id": "check-page-6d3efd98d5",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "page": "details",
+      "excerpt": "The program is searching for best-in-breed businesses developing novel dual-use technologies (products that have both commercial and military uses), which will grow the number of geospatial solutions available to NGA and its customers."
+    },
+    {
+      "id": "check-page-35a9a171af",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "page": "details",
+      "excerpt": "Solutions that support the identification of types of objects in an image using automated AI-assisted human-in-the-loop reinforcement learning processes."
+    },
+    {
+      "id": "check-page-14d21ad56f",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "page": "details",
+      "excerpt": "Whether you have a hardware or software company, early-stage or venture-backed enterprise, we invite you to apply."
+    },
+    {
+      "id": "check-page-a68a924b37",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "page": "details",
+      "excerpt": "Each startup that participates in the Accelerator receives a $100K non-dilutive equity-free grant."
+    },
+    {
+      "id": "check-page-8d2f47d0ff",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "page": "details",
+      "excerpt": "Who owns the intellectual property developed by the companies during the Accelerator program?"
+    },
+    {
+      "id": "check-page-93daadb631",
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "page": "details",
+      "excerpt": "Up to eight companies will be selected for the Accelerator."
+    },
+    {
+      "id": "check-page-e5b9ed19d9",
+      "url": "https://capitalinnovators.com/venturereadymissouri",
+      "page": "details",
+      "excerpt": "Venture Ready Missouri — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Venture Ready Missouri ABOUT VENTURE READY MISSOURI TWO PART PILOT COURSE The two-part course is designed to improve Missouri-based entrepreneurs’ potential to attract venture capital and angel investment while providing them foundational knowledge of the process. Part 1 Overview: Open to any Missouri- based startup company. Participants will gain an overview of various funding opportunities and detailed instruction on pitching to potential investors and the fundraising process. Sessions: Virtual classes will consist of"
+    },
+    {
+      "id": "check-page-d94f47654e",
+      "url": "https://capitalinnovators.com/venturereadymissouri",
+      "page": "details",
+      "excerpt": "Concludes with a live in-person event where participants present their pitch deck to a group of investors/mentors/connected individuals in the state ecosystem."
+    },
+    {
+      "id": "check-page-29479b31ca",
+      "url": "https://capitalinnovators.com/venturereadymissouri",
+      "page": "details",
+      "excerpt": "Capital Innovators Accelerator, LLC."
+    },
+    {
+      "id": "check-page-dd321942e3",
+      "url": "https://capitalinnovators.com/alumni-workshop-week",
+      "page": "portfolio",
+      "excerpt": "Alumni Workshop Week — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Register to Attend Join us for the first-ever Capital Innovators Accelerator Alumni Week . We are bringing together some of our renowned workshop leaders and mentors to offer all Capital Innovators Accelerator alums and portfolio companies the chance to sharpen the skills they need to take their business to the next level. Sessions will be held virtually via Zoom from Monday, June 12, to Friday, June 16. Attendance at every session is optional but encouraged, you never know what you will learn! We ask that all participants"
+    },
+    {
+      "id": "check-page-ec90f84c12",
+      "url": "https://capitalinnovators.com/blog/2020/3/4/using-equity-crowdfunding-alongside-traditional-investment-vehicles",
+      "page": "terms",
+      "excerpt": "Using Equity Crowdfunding Alongside Traditional Investment Vehicles — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Using Equity Crowdfunding Alongside Traditional Investment Vehicles Equity Crowdfunding is a new and quickly growing source of funding for a company. Different from rewards-based crowdfunding found on websites such as Kickstarter, this form allows large amounts of people to purchase equity in your startup at a much lower investment floor. Rather than a small number of investors putting in large sums of money, there are large amounts of people putting in small amounts of money."
+    },
+    {
+      "id": "check-page-14ab7f7844",
+      "url": "https://capitalinnovators.com/blog/tag/investments",
+      "page": "terms",
+      "excerpt": "investments — Blog — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Posts tagged investments Tokenizing Venture Capital The future of venture capital is tokenized securities transacted on blockchain. What are tokenized securities? They are digital tokens representing fractional equity ownership in a business often referred to as crypto assets, which is an asset class backed by real assets and cryptography. The benefits of tokens far outweigh the current way of investing in and managing assets in terms of enhanced liquidity, ease of transaction, terms and conditions built into transactions and"
+    },
+    {
+      "id": "check-page-b723eae900",
+      "url": "https://capitalinnovators.com/blog/2020/2/24/capital-innovators-welcomes-spring-2020-cohort-to-st-louis",
+      "page": "batches",
+      "excerpt": "Capital Innovators Welcomes Spring 2020 Cohort to St. Louis — Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Capital Innovators Welcomes Spring 2020 Cohort to St. Louis Seven startups from across the nation join the accelerator's portfolio. St. Louis-based startup accelerator Capital Innovators announced its Spring 2020 cohort at Venture Cafe in the Cortex District of St. Louis. This is the 21st cohort to undergo the rigorous 12-week accelerator program. Capital Innovators has been ranked as one of the top accelerators worldwide for the last five years. “We are excited about this cohort of"
     }
   ],
   "findings": {
@@ -516,34 +1079,39 @@
     "operatingStatus": [],
     "deadlines": [],
     "rolling": [],
-    "announcedIntake": [],
+    "announcedIntake": [
+      {
+        "value": "May",
+        "evidenceId": "check-announced-16be8a488a"
+      },
+      {
+        "value": "August",
+        "evidenceId": "check-announced-2485d02b22"
+      }
+    ],
     "cohortStarts": [],
     "durationWeeks": [
       {
         "value": "12",
-        "evidenceId": "check-duration-dd03e5bafe"
+        "evidenceId": "check-duration-f6d577efee"
       },
       {
         "value": "13",
-        "evidenceId": "check-duration-ddcc00bfcc"
-      },
-      {
-        "value": "2 months",
-        "evidenceId": "check-duration-22ca76b32c"
+        "evidenceId": "check-duration-e833e50a32"
       }
     ],
     "format": [
       {
         "value": "in-person",
-        "evidenceId": "check-format-313562f5b0"
+        "evidenceId": "check-format-2b60b5b808"
       },
       {
         "value": "remote",
-        "evidenceId": "check-format-72c9b52ef4"
+        "evidenceId": "check-format-1bdfe90cbb"
       },
       {
         "value": "hybrid",
-        "evidenceId": "check-format-ce04a1a73e"
+        "evidenceId": "check-format-ff254cba16"
       }
     ],
     "location": [
@@ -555,8 +1123,16 @@
     "selectivity": [],
     "dealText": [
       {
-        "value": "in the program will have access to incentives including a $100,000 non-dilutive grant, office accommodations in St. Louis during the",
-        "evidenceId": "check-deal-b16288c392"
+        "value": "to participate in a 13-week accelerator program that includes $100,000 in grant funding , perks, benefits, office space, mentorship and",
+        "evidenceId": "check-deal-22a8012d9f"
+      },
+      {
+        "value": "Program , based in St.Louis, MO, provides tech startups with: $100,000 in Grant Funding Engagement with NGA Champion Teams Mentorship from",
+        "evidenceId": "check-deal-6591ca0eaa"
+      },
+      {
+        "value": "Each startup that participates in the Accelerator receives a $100K non-dilutive equity-free grant. Is the program in-person? Yes, the",
+        "evidenceId": "check-deal-9919a37067"
       }
     ],
     "dealComponents": [
@@ -567,10 +1143,22 @@
           "currency": "USD",
           "equity": null,
           "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-22a8012d9f"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
           "contingent": false,
           "condition": null
         },
-        "evidenceId": "check-deal-b16288c392"
+        "evidenceId": "check-deal-6591ca0eaa"
       }
     ],
     "portfolioPages": [

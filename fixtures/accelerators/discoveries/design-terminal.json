@@ -1,6 +1,6 @@
 {
   "programId": "design-terminal",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://civitta.com/about-us/",
@@ -14,6 +14,46 @@
       "url": "https://civitta.com/career/partner-development-program/",
       "page": "details",
       "anchor": "Public Sector Partner Development Program All Civitta locations Read more",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/ee/laanemere-piirkonna-2014-2020-programmi-lopphindamine/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/ee/rahastusvoimalused/rakendusuuringute-programm/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/ee/rahastusvoimalused/rakendusuuringute-programmi-vaikeprojektide-taotlusvoor/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/fi/rahoitusmahdollisuudet/deep-tech-accelerator-dta/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/funding-programs/agile-programme-for-agile-and-rapid-defence-innovation/",
+      "page": "details",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

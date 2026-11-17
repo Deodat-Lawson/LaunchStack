@@ -1,28 +1,1503 @@
 {
   "programId": "chain-reaction",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
-  "pagesRead": [],
-  "evidence": [],
-  "pageQuotes": [],
+  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "pagesRead": [
+    "https://chainreaction.anl.gov/",
+    "https://chainreaction.anl.gov/apply/",
+    "https://chainreaction.anl.gov/carbon-nanotube-composite-materials-for-energy-related-applications/",
+    "https://chainreaction.anl.gov/project-opportunities-clearflame-engines-cleaner-stronger-engines-for-heavy-duty-applications/",
+    "https://chainreaction.anl.gov/project-opportunities-radioisotope-battery-development-radioisotope-batteries-and-portable-nuclear-power-supplies-for-military-space-and-remote-applications/",
+    "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+    "https://chainreaction.anl.gov/silicon-compatible-platform-for-quantum-applications/",
+    "https://chainreaction.anl.gov/about/faq/",
+    "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+    "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+    "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding-2/",
+    "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding/",
+    "https://chainreaction.anl.gov/cohort-2025-finals/",
+    "https://chainreaction.anl.gov/cohort-2025/",
+    "https://chainreaction.anl.gov/cohort-2026/",
+    "https://chainreaction.anl.gov/cohort-9-finals-agenda/",
+    "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+    "https://chainreaction.anl.gov/cri-cohort-8-video-announcement/",
+    "https://chainreaction.anl.gov/innovators/cohort-2023/",
+    "https://chainreaction.anl.gov/innovators/cohort-2024/"
+  ],
+  "evidence": [
+    {
+      "id": "check-announced-f03a37e3b7",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "title": "Chain Reaction Innovations — batches page",
+      "excerpt": "IL March 29, 2023 Finalists for Chain Reaction Innovations’ (CRI) Cohort 7 will pitch their technologies on March 29, 9-5 p.m. to be considered for a program fellowship that will",
+      "page": "batches"
+    },
+    {
+      "id": "check-deal-fe1b5fb782",
+      "url": "https://chainreaction.anl.gov/apply/",
+      "title": "Chain Reaction Innovations — application page",
+      "excerpt": "16 and October 30 . Join Via Zoom Program Highlights Stipend of $115k per year for two years plus healthcare benefits Non-dilutive funding",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-8165cb94d2",
+      "url": "https://chainreaction.anl.gov/cohort-2026/",
+      "title": "Chain Reaction Innovations — batches page",
+      "excerpt": "Laboratory of the Rockies, where she spent 10 months as a visiting student to perform collaborative",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-0616cb9256",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding-2/",
+      "title": "Chain Reaction Innovations — terms page",
+      "excerpt": "The 11 startups will pitch their technology during the virtual… Read More December 12, 2025, Announcements 2025 Startup",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0f8d43037e",
+      "url": "https://chainreaction.anl.gov/project-opportunities-radioisotope-battery-development-radioisotope-batteries-and-portable-nuclear-power-supplies-for-military-space-and-remote-applications/",
+      "title": "Chain Reaction Innovations — application page",
+      "excerpt": "Portable Nuclear Power Supplies for Military, Space, and Remote Applications - Chain Reaction Innovations Work with",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1059547737",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "title": "Chain Reaction Innovations — batches page",
+      "excerpt": "Events Argonne Open House Cohort 2026 Finals Cohort 7 Hybrid Finals 9:00 a.m. to 5 p.m. Central Argonne National",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-2d2a0f4f87",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "title": "Chain Reaction Innovations — batches page",
+      "excerpt": "Cohort 7 Hybrid Finals - Chain Reaction Innovations Work with Argonne",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-419ade9f57",
+      "url": "https://chainreaction.anl.gov/project-opportunities-clearflame-engines-cleaner-stronger-engines-for-heavy-duty-applications/",
+      "title": "Chain Reaction Innovations — application page",
+      "excerpt": "The 11 startups will pitch their technology during the virtual… Read More December 12, 2025, Announcements 2025 Startup",
+      "page": "application"
+    },
+    {
+      "id": "check-format-4f6f7781d8",
+      "url": "https://chainreaction.anl.gov/project-opportunities-radioisotope-battery-development-radioisotope-batteries-and-portable-nuclear-power-supplies-for-military-space-and-remote-applications/",
+      "title": "Chain Reaction Innovations — application page",
+      "excerpt": "Portable Nuclear Power Supplies for Military, Space, and Remote Applications Atlas Energy Systems, LLC is developing a",
+      "page": "application"
+    },
+    {
+      "id": "check-format-6965cc80ef",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "title": "Chain Reaction Innovations — batches page",
+      "excerpt": "The 11 startups will pitch their technology during the virtual… Read More December 12, 2025, Announcements 2025 Startup",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-7600f4c90a",
+      "url": "https://chainreaction.anl.gov/apply/",
+      "title": "Chain Reaction Innovations — application page",
+      "excerpt": "back for more information. After application review and virtual presentations from selected semi-finalists in January, an",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8679199619",
+      "url": "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+      "title": "Chain Reaction Innovations — terms page",
+      "excerpt": "The 11 startups will pitch their technology during the virtual… Read More December 12, 2025, Announcements 2025 Startup",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8e2fa5413c",
+      "url": "https://chainreaction.anl.gov/project-opportunities-radioisotope-battery-development-radioisotope-batteries-and-portable-nuclear-power-supplies-for-military-space-and-remote-applications/",
+      "title": "Chain Reaction Innovations — application page",
+      "excerpt": "The 11 startups will pitch their technology during the virtual… Read More December 12, 2025, Announcements 2025 Startup",
+      "page": "application"
+    },
+    {
+      "id": "check-format-911e955a44",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "title": "Chain Reaction Innovations — batches page",
+      "excerpt": "The public is invited and registration is required. In-person spots are limited and will be open until filled. Video",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-97cb8a8b4e",
+      "url": "https://chainreaction.anl.gov/cri-cohort-8-video-announcement/",
+      "title": "Chain Reaction Innovations — batches page",
+      "excerpt": "The 11 startups will pitch their technology during the virtual… Read More December 12, 2025, Announcements 2025 Startup",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-bfbae52e72",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding/",
+      "title": "Chain Reaction Innovations — terms page",
+      "excerpt": "The 11 startups will pitch their technology during the virtual… Read More December 12, 2025, Announcements 2025 Startup",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c3ca71ac4d",
+      "url": "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+      "title": "Chain Reaction Innovations — application page",
+      "excerpt": "The 11 startups will pitch their technology during the virtual… Read More December 12, 2025, Announcements 2025 Startup",
+      "page": "application"
+    },
+    {
+      "id": "check-format-dd05bae330",
+      "url": "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+      "title": "Chain Reaction Innovations — terms page",
+      "excerpt": "The 11 startups will pitch their technology during the virtual… Read More December 12, 2025, Announcements 2025 Startup",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-e1cc04f939",
+      "url": "https://chainreaction.anl.gov/about/faq/",
+      "title": "Chain Reaction Innovations — terms page",
+      "excerpt": "The 11 startups will pitch their technology during the virtual… Read More December 12, 2025, Announcements 2025 Startup",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-85580d0a12",
+      "url": "https://chainreaction.anl.gov/",
+      "title": "Chain Reaction Innovations — homepage",
+      "excerpt": "Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators",
+      "page": "details"
+    },
+    {
+      "id": "check-route-03e90b7de2",
+      "url": "https://chainreaction.anl.gov/cohort-9-finals-agenda/",
+      "title": "Chain Reaction Innovations — batches page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-2fb203771e",
+      "url": "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+      "title": "Chain Reaction Innovations — application page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-393b8ee1e2",
+      "url": "https://chainreaction.anl.gov/silicon-compatible-platform-for-quantum-applications/",
+      "title": "Chain Reaction Innovations — application page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4bbcb0bd6a",
+      "url": "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+      "title": "Chain Reaction Innovations — terms page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-4c5acab469",
+      "url": "https://chainreaction.anl.gov/carbon-nanotube-composite-materials-for-energy-related-applications/",
+      "title": "Chain Reaction Innovations — application page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-57649bcd56",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2023/",
+      "title": "Chain Reaction Innovations — batches page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-60e42d20db",
+      "url": "https://chainreaction.anl.gov/about/faq/",
+      "title": "Chain Reaction Innovations — terms page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-65f94c3c88",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding-2/",
+      "title": "Chain Reaction Innovations — terms page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-78f388c6ab",
+      "url": "https://chainreaction.anl.gov/cohort-2025/",
+      "title": "Chain Reaction Innovations — batches page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-9d103e94d8",
+      "url": "https://chainreaction.anl.gov/",
+      "title": "Chain Reaction Innovations — homepage",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-aab9a07002",
+      "url": "https://chainreaction.anl.gov/cri-cohort-8-video-announcement/",
+      "title": "Chain Reaction Innovations — batches page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-acbaa61a3f",
+      "url": "https://chainreaction.anl.gov/cohort-2025-finals/",
+      "title": "Chain Reaction Innovations — batches page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-b3977c48a2",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding/",
+      "title": "Chain Reaction Innovations — terms page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b3d300940a",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2024/",
+      "title": "Chain Reaction Innovations — batches page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-b82c441bfa",
+      "url": "https://chainreaction.anl.gov/project-opportunities-clearflame-engines-cleaner-stronger-engines-for-heavy-duty-applications/",
+      "title": "Chain Reaction Innovations — application page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c5a27c10c7",
+      "url": "https://chainreaction.anl.gov/",
+      "title": "Chain Reaction Innovations — homepage",
+      "excerpt": "Applications → https://chainreaction.anl.gov/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c63198e894",
+      "url": "https://chainreaction.anl.gov/cohort-2026/",
+      "title": "Chain Reaction Innovations — batches page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-f548bfefbf",
+      "url": "https://chainreaction.anl.gov/project-opportunities-radioisotope-battery-development-radioisotope-batteries-and-portable-nuclear-power-supplies-for-military-space-and-remote-applications/",
+      "title": "Chain Reaction Innovations — application page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f728cc3971",
+      "url": "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+      "title": "Chain Reaction Innovations — terms page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-fce34906e5",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "title": "Chain Reaction Innovations — batches page",
+      "excerpt": "Apply → https://chainreaction.anl.gov/apply/",
+      "page": "batches"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-658079afb9",
+      "url": "https://chainreaction.anl.gov/",
+      "page": "details",
+      "excerpt": "Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals Join CRI - Pre-Apply for Cohort 2028 Pre-Apply Secretary of Energy Meets with CRI and Innovators More CRI Celebrates Our 10th Anniversary Learn More Meet Our Innovator Cohorts Learn More Learn About Our Program More A More Powerful Program for Transformational Ideas in Energy and Science Chain Reaction Innovations, now in its tenth year, understands that developing a great idea into a technology that impacts the market remains challenging. Doing so with an energy- or science-based technology can seem nearly impossible. Complex technical challenges, long development cycles, expensive lab equipment, and impatient investors create high hurdles for even the most determined innovators to overcome. It leaves innovators feeling isolated. But they don’t have to be. Chain Reaction Innovations (CRI) is a two-year fellowship program at Argonne National Laboratory for innovators focused on energy and"
+    },
+    {
+      "id": "check-page-e3d635a12c",
+      "url": "https://chainreaction.anl.gov/",
+      "page": "details",
+      "excerpt": "Chain Reaction Innovations (CRI) is a two-year fellowship program at Argonne National Laboratory for innovators focused on energy and science technologies."
+    },
+    {
+      "id": "check-page-e8c31219bf",
+      "url": "https://chainreaction.anl.gov/",
+      "page": "details",
+      "excerpt": "Department of Energy’s Office of Technology Commercialization’s Lab-Embedded Entrepreneurship Program (LEEP), one of four ‘nodes’."
+    },
+    {
+      "id": "check-page-5ca2d71fcc",
+      "url": "https://chainreaction.anl.gov/",
+      "page": "details",
+      "excerpt": "Department of Energy, Argonne nor its employees take equity in CRI startups."
+    },
+    {
+      "id": "check-page-736f8dcce5",
+      "url": "https://chainreaction.anl.gov/",
+      "page": "details",
+      "excerpt": "Department of Energy Office of Science UChicago Argonne LLC Privacy & Security Notice"
+    },
+    {
+      "id": "check-page-653023a2e7",
+      "url": "https://chainreaction.anl.gov/apply/",
+      "page": "application",
+      "excerpt": "Apply - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals Apply Pre-Apply Lab to Launch: Develop Your Science and Energy Technologies Applications Applications for Cohort 2027 are now closed. We will open applications for Cohort 2028 in September 2027. Please check back for more information. After application review and virtual presentations from selected semi-finalists in January, an invitational pitch event will be held for cohort finalists on March 10-11, 2027, at Argonne National Laboratory. Successful applicants will be notified in spring 2027 and expected to start at Argonne on October 1, 2027. Are You Eligible? You must answer ‘Yes’ to these four questions to apply to CRI. Check out the FAQ Page if You Have More Questions Do you have additional questions? Review our FAQ page for more detailed information. Application Courtesy PDF Template You may use our PDF application template to preview and fill in your answers to the online Cohort"
+    },
+    {
+      "id": "check-page-dc08503883",
+      "url": "https://chainreaction.anl.gov/apply/",
+      "page": "application",
+      "excerpt": "Informational Webinar If you’d like to learn more about the fellowship, plan to attend the CRI info webinar."
+    },
+    {
+      "id": "check-page-a2a36bb349",
+      "url": "https://chainreaction.anl.gov/apply/",
+      "page": "application",
+      "excerpt": "Department of Energy, Argonne nor its employees take equity in CRI startups."
+    },
+    {
+      "id": "check-page-d654d2dbcb",
+      "url": "https://chainreaction.anl.gov/apply/",
+      "page": "application",
+      "excerpt": "(Updated September 11, 2026) Learn more about CRI Program Details Preferred applicants should be technical founders with hands-on laboratory experience aimed at developing an early-stage technological innovation."
+    },
+    {
+      "id": "check-page-b805f84137",
+      "url": "https://chainreaction.anl.gov/apply/",
+      "page": "application",
+      "excerpt": "Department of Energy’s Office of Technology Commercialization’s Lab-Embedded Entrepreneurship Program (LEEP) and provides this support system for the best and brightest innovators."
+    },
+    {
+      "id": "check-page-9336f99949",
+      "url": "https://chainreaction.anl.gov/apply/",
+      "page": "application",
+      "excerpt": "Department of Energy Office of Science UChicago Argonne LLC Privacy & Security Notice"
+    },
+    {
+      "id": "check-page-df180af237",
+      "url": "https://chainreaction.anl.gov/carbon-nanotube-composite-materials-for-energy-related-applications/",
+      "page": "application",
+      "excerpt": "High-performance Carbon Nanotube-based Composites - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals High-performance Carbon Nanotube-based Composites Adaxius Corp. is developing a technology to manufacture carbon nanotube (CNT)-based composites that maintain the exceptional mechanical, thermal and electrical properties of carbon nanotubes. The technology also features compatibility with smart manufacturing, including additive manufacturing that would dramatically improve the flexibility of designing and manufacturing structural components with complex geometries. Critical Need for the Technology Manufacturing tries to find an optimal point among many specifications for structural materials. On the one hand, more robust additives reduce the use of materials while achieving the same mechanical strength, leading to a reduction in overall cost. On the other hand, handling and storing commodities made of bulky materials consumes a lot of energy."
+    },
+    {
+      "id": "check-page-e77728a5d1",
+      "url": "https://chainreaction.anl.gov/carbon-nanotube-composite-materials-for-energy-related-applications/",
+      "page": "application",
+      "excerpt": "Examples include sporting equipment, high-speed vehicles and aircraft, vessels for hydrogen storage and aerospace applications."
+    },
+    {
+      "id": "check-page-4887aca31b",
+      "url": "https://chainreaction.anl.gov/carbon-nanotube-composite-materials-for-energy-related-applications/",
+      "page": "application",
+      "excerpt": "With a modest market adoption rate of 6.7 percent of structural metal used in automotive and aerospace sectors, Adaxius would deliver 10 MtCO2e emissions reduction from the production of these metals."
+    },
+    {
+      "id": "check-page-fbd353b71c",
+      "url": "https://chainreaction.anl.gov/carbon-nanotube-composite-materials-for-energy-related-applications/",
+      "page": "application",
+      "excerpt": "Current manufacturing technologies for structural materials face challenges in delivering extremely high mechanical strength while staying lightweight."
+    },
+    {
+      "id": "check-page-4077bd669b",
+      "url": "https://chainreaction.anl.gov/carbon-nanotube-composite-materials-for-energy-related-applications/",
+      "page": "application",
+      "excerpt": "A majority of the structural components are manufactured via conventional processes such as injection molding instead of the emerging additive manufacturing; therefore, many devices with complex geometries are not available on the market."
+    },
+    {
+      "id": "check-page-a616b1b297",
+      "url": "https://chainreaction.anl.gov/carbon-nanotube-composite-materials-for-energy-related-applications/",
+      "page": "application",
+      "excerpt": "Potential Markets Battery enclosures for electric vehicles Vessels for hydrogen storage High strength materials for applications like wind turbine blades High performance sporting equipment Potentially many defense applications Key Innovation Adaxius is developing a family of CNT-based composite materials that maintains the original properties of carbon nanotubes."
+    },
+    {
+      "id": "check-page-3fd6a04f8f",
+      "url": "https://chainreaction.anl.gov/carbon-nanotube-composite-materials-for-energy-related-applications/",
+      "page": "application",
+      "excerpt": "The company will soon be testing its composite materials at an independent laboratory following aerospace-standard ASTM test protocols."
+    },
+    {
+      "id": "check-page-4c2b62de12",
+      "url": "https://chainreaction.anl.gov/carbon-nanotube-composite-materials-for-energy-related-applications/",
+      "page": "application",
+      "excerpt": "R&D director in advanced manufacturing and nanotechnology."
+    },
+    {
+      "id": "check-page-867d37f407",
+      "url": "https://chainreaction.anl.gov/carbon-nanotube-composite-materials-for-energy-related-applications/",
+      "page": "application",
+      "excerpt": "Winner of R&D 100 Award."
+    },
+    {
+      "id": "check-page-7a24c5d04a",
+      "url": "https://chainreaction.anl.gov/carbon-nanotube-composite-materials-for-energy-related-applications/",
+      "page": "application",
+      "excerpt": "Entrepreneur in Residence at the University of Illinois."
+    },
+    {
+      "id": "check-page-69c0eb3afd",
+      "url": "https://chainreaction.anl.gov/carbon-nanotube-composite-materials-for-energy-related-applications/",
+      "page": "application",
+      "excerpt": "Faculty member at the University of Notre Dame."
+    },
+    {
+      "id": "check-page-d061e5305d",
+      "url": "https://chainreaction.anl.gov/carbon-nanotube-composite-materials-for-energy-related-applications/",
+      "page": "application",
+      "excerpt": "Department of Energy Office of Science UChicago Argonne LLC Privacy & Security Notice"
+    },
+    {
+      "id": "check-page-035193563f",
+      "url": "https://chainreaction.anl.gov/project-opportunities-clearflame-engines-cleaner-stronger-engines-for-heavy-duty-applications/",
+      "page": "application",
+      "excerpt": "Project Opportunities: ClearFlame Engines – Cleaner, Stronger Engines for Heavy-Duty Applications - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals Project Opportunities: ClearFlame Engines – Cleaner, Stronger Engines for Heavy-Duty Applications ClearFlame Engines is a startup company developing a drop-in ready replacement for the $400 billion-plus heavy-duty diesel engine market that affords markedly better performance as well as cleaner emissions and cost savings to the consumer. The critical role that diesel engines play – transporting 70 percent of the world’s goods and providing a large fraction of the globe’s off-grid and backup power capacity, is currently tied to petroleum usage and emissions of soot and smog. The ClearFlame team is working to break that paradigm by enabling the critical work Diesel engines do to be accomplished in an affordable, clean, and petroleum-free manner, using domestically abundant fuel stocks, and easily"
+    },
+    {
+      "id": "check-page-3168ee5ced",
+      "url": "https://chainreaction.anl.gov/project-opportunities-clearflame-engines-cleaner-stronger-engines-for-heavy-duty-applications/",
+      "page": "application",
+      "excerpt": "Department of Energy’s (DOE’s) Argonne National Laboratory is welcoming five startup founders to its 2026 cohort."
+    },
+    {
+      "id": "check-page-c4dae43bce",
+      "url": "https://chainreaction.anl.gov/project-opportunities-clearflame-engines-cleaner-stronger-engines-for-heavy-duty-applications/",
+      "page": "application",
+      "excerpt": "They bring new technologies, perspectives and… Read More August 13, 2026, Announcements CRI to Open Recruitment for Cohort 2027 Scientists and engineers ready to take their technology from the laboratory to the marketplace will soon have a new opportunity to make that leap."
+    },
+    {
+      "id": "check-page-4331465580",
+      "url": "https://chainreaction.anl.gov/project-opportunities-clearflame-engines-cleaner-stronger-engines-for-heavy-duty-applications/",
+      "page": "application",
+      "excerpt": "15, 2026, offering technical founders a fellowship… Read More March 5, 2026, Announcements Finalists Chosen for CRI’s Cohort 2026 Eleven individuals advanced to the Finals pitch competition to join Chain Reaction Innovations’ Cohort 2026."
+    },
+    {
+      "id": "check-page-b17c5132e4",
+      "url": "https://chainreaction.anl.gov/project-opportunities-clearflame-engines-cleaner-stronger-engines-for-heavy-duty-applications/",
+      "page": "application",
+      "excerpt": "A broad range of energy innovations are represented in this year’s applicants, including battery technologies, industrial processes, performance materials and biotechnology."
+    },
+    {
+      "id": "check-page-3c5715e0b6",
+      "url": "https://chainreaction.anl.gov/project-opportunities-clearflame-engines-cleaner-stronger-engines-for-heavy-duty-applications/",
+      "page": "application",
+      "excerpt": "The 11 startups will pitch their technology during the virtual… Read More December 12, 2025, Announcements 2025 Startup Milestones About CRI Startup founders and the CRI team work together to ensure America’s security and prosperity by addressing energy and environmental challenges through transformative science and technology."
+    },
+    {
+      "id": "check-page-6f8af2848e",
+      "url": "https://chainreaction.anl.gov/project-opportunities-clearflame-engines-cleaner-stronger-engines-for-heavy-duty-applications/",
+      "page": "application",
+      "excerpt": "CRI support allows science startups to bring their deep tech to market more quickly."
+    },
+    {
+      "id": "check-page-e5eb89b64e",
+      "url": "https://chainreaction.anl.gov/project-opportunities-clearflame-engines-cleaner-stronger-engines-for-heavy-duty-applications/",
+      "page": "application",
+      "excerpt": "Department of Energy Office of Science UChicago Argonne LLC Privacy & Security Notice"
+    },
+    {
+      "id": "check-page-e7bf8e14de",
+      "url": "https://chainreaction.anl.gov/project-opportunities-radioisotope-battery-development-radioisotope-batteries-and-portable-nuclear-power-supplies-for-military-space-and-remote-applications/",
+      "page": "application",
+      "excerpt": "Project Opportunities: Radioisotope Battery Development – Radioisotope Batteries and Portable Nuclear Power Supplies for Military, Space, and Remote Applications - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals Project Opportunities: Radioisotope Battery Development – Radioisotope Batteries and Portable Nuclear Power Supplies for Military, Space, and Remote Applications Atlas Energy Systems, LLC is developing a direct energy conversion mechanism to turn ionizing radiation into electricity at Argonne National Lab through the Chain Reaction Innovations program. The energy conversion technology will be applied to radioisotope batteries and portable nuclear power supplies for various applications. The project revitalizes old technologies developed by NASA in the 1970s to increase the efficiency of nuclear batteries. The technology is being developed at Argonne National Lab using an electron beam to simulate radioisotopes. As an ARE Program"
+    },
+    {
+      "id": "check-page-5f652da353",
+      "url": "https://chainreaction.anl.gov/project-opportunities-radioisotope-battery-development-radioisotope-batteries-and-portable-nuclear-power-supplies-for-military-space-and-remote-applications/",
+      "page": "application",
+      "excerpt": "Department of Energy’s (DOE’s) Argonne National Laboratory is welcoming five startup founders to its 2026 cohort."
+    },
+    {
+      "id": "check-page-b2636b84d6",
+      "url": "https://chainreaction.anl.gov/project-opportunities-radioisotope-battery-development-radioisotope-batteries-and-portable-nuclear-power-supplies-for-military-space-and-remote-applications/",
+      "page": "application",
+      "excerpt": "They bring new technologies, perspectives and… Read More August 13, 2026, Announcements CRI to Open Recruitment for Cohort 2027 Scientists and engineers ready to take their technology from the laboratory to the marketplace will soon have a new opportunity to make that leap."
+    },
+    {
+      "id": "check-page-396f431f01",
+      "url": "https://chainreaction.anl.gov/project-opportunities-radioisotope-battery-development-radioisotope-batteries-and-portable-nuclear-power-supplies-for-military-space-and-remote-applications/",
+      "page": "application",
+      "excerpt": "15, 2026, offering technical founders a fellowship… Read More March 5, 2026, Announcements Finalists Chosen for CRI’s Cohort 2026 Eleven individuals advanced to the Finals pitch competition to join Chain Reaction Innovations’ Cohort 2026."
+    },
+    {
+      "id": "check-page-50cf9dbbb8",
+      "url": "https://chainreaction.anl.gov/project-opportunities-radioisotope-battery-development-radioisotope-batteries-and-portable-nuclear-power-supplies-for-military-space-and-remote-applications/",
+      "page": "application",
+      "excerpt": "A broad range of energy innovations are represented in this year’s applicants, including battery technologies, industrial processes, performance materials and biotechnology."
+    },
+    {
+      "id": "check-page-715cf6cf15",
+      "url": "https://chainreaction.anl.gov/project-opportunities-radioisotope-battery-development-radioisotope-batteries-and-portable-nuclear-power-supplies-for-military-space-and-remote-applications/",
+      "page": "application",
+      "excerpt": "The 11 startups will pitch their technology during the virtual… Read More December 12, 2025, Announcements 2025 Startup Milestones About CRI Startup founders and the CRI team work together to ensure America’s security and prosperity by addressing energy and environmental challenges through transformative science and technology."
+    },
+    {
+      "id": "check-page-9152a37375",
+      "url": "https://chainreaction.anl.gov/project-opportunities-radioisotope-battery-development-radioisotope-batteries-and-portable-nuclear-power-supplies-for-military-space-and-remote-applications/",
+      "page": "application",
+      "excerpt": "CRI support allows science startups to bring their deep tech to market more quickly."
+    },
+    {
+      "id": "check-page-e8ef962447",
+      "url": "https://chainreaction.anl.gov/project-opportunities-radioisotope-battery-development-radioisotope-batteries-and-portable-nuclear-power-supplies-for-military-space-and-remote-applications/",
+      "page": "application",
+      "excerpt": "Department of Energy Office of Science UChicago Argonne LLC Privacy & Security Notice"
+    },
+    {
+      "id": "check-page-f98a62afc8",
+      "url": "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+      "page": "application",
+      "excerpt": "Full-Stack Cross-Layer Quantum Optimization - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals Full-Stack Cross-Layer Quantum Optimization Quantum algorithms provide large speedups over conventional algorithms in resource-critical fields such as optimization, chemistry, and machine learning. Super.tech’s research develops and tailors quantum algorithms for execution on the small, noisy quantum devices available today. Super.tech’s uniquely near-term and full-stack focus will enable the company to attain quantum speedups for practical applications such as smart grid optimization. WATCH SUPER.TECH PITCH VIDEO Critical Need for the Technology Quantum computing is at the cusp of a revolution, especially after the demonstration of quantum supremacy with 53 qubits last year. Advances due to quantum computing are expected to generate billions of dollars of value and thousands of new jobs. At the same time, other countries are catching up and"
+    },
+    {
+      "id": "check-page-78cea7f968",
+      "url": "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+      "page": "application",
+      "excerpt": "At the same time, other countries are catching up and sometimes surpassing the US’s quantum lead."
+    },
+    {
+      "id": "check-page-64042838ce",
+      "url": "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+      "page": "application",
+      "excerpt": "It is critical that we maintain and build our technical advantage in quantum computing."
+    },
+    {
+      "id": "check-page-95ea36311a",
+      "url": "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+      "page": "application",
+      "excerpt": "The demand for cloud computing and data services is growing rapidly, and the efficiency of data centers must continue to improve in order to prevent a rapid increase in energy usage and associated emissions."
+    },
+    {
+      "id": "check-page-651d88ead2",
+      "url": "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+      "page": "application",
+      "excerpt": "Quantum computing has the potential to drastically reduce energy consumption for some types of computing tasks, and Super.tech’s technology could reduce emissions by several MtCO2e annually."
+    },
+    {
+      "id": "check-page-2fd2e97ead",
+      "url": "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+      "page": "application",
+      "excerpt": "Software startups like Q-CTRL and Quantum Benchmark, who are also aware of the device physics underlying quantum computing."
+    },
+    {
+      "id": "check-page-477f20bd92",
+      "url": "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+      "page": "application",
+      "excerpt": "Potential Markets Super.tech is targeting initial applications in energy and finance."
+    },
+    {
+      "id": "check-page-96b6ed83a9",
+      "url": "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+      "page": "application",
+      "excerpt": "Within energy, optimization problems involving smart grids are of interest."
+    },
+    {
+      "id": "check-page-407a11a8e5",
+      "url": "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+      "page": "application",
+      "excerpt": "Within finance, applications that rely on sampling and Monte Carlo simulation could be natural fits to quantum computers."
+    },
+    {
+      "id": "check-page-ab34bdd75c",
+      "url": "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+      "page": "application",
+      "excerpt": "Key Innovation Super.tech’s platform is uniquely interdisciplinary, combining the efficiency of physics approaches with the scalability of computer science approaches, to achieve record-breaking quantum computing."
+    },
+    {
+      "id": "check-page-56fa6d57d7",
+      "url": "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+      "page": "application",
+      "excerpt": "Team Overview Pranav Gokhale (Founder, CEO) earned his PhD in quantum computing at UChicago, graduating in 2020."
+    },
+    {
+      "id": "check-page-72f1ae9f6e",
+      "url": "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+      "page": "application",
+      "excerpt": "Pranav has been performing quantum research since 2008 and his work has led to several publications and awards."
+    },
+    {
+      "id": "check-page-5407b3c291",
+      "url": "https://chainreaction.anl.gov/projects/quantum-algorithms-provide-speed-ups-to-practical-applications/",
+      "page": "application",
+      "excerpt": "Fred has been pioneering research in quantum computing since 2001."
+    },
+    {
+      "id": "check-page-23ca1bc9e1",
+      "url": "https://chainreaction.anl.gov/silicon-compatible-platform-for-quantum-applications/",
+      "page": "application",
+      "excerpt": "Building the Quantum Internet - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals Building the Quantum Internet memQ is building hardware to connect quantum computers together over long distances and enable ultra secure communication protected by the laws of physics. The company has developed a silicon-based platform that integrates solid-state qubits with native operation in the telecom C-band. In combination with integrated photonics, this platform would offer entanglement creation, distribution and management, enabling capabilities like the quantum internet, distributed sensing and computing networks. Critical Need for this Technology High performance computing (HPC) and cloud-based data centers are critical infrastructure for the modern economy. As quantum computing — a new form of high performance information processing based on the laws of quantum physics — becomes more mature, it offers new and faster ways of solving tough computational"
+    },
+    {
+      "id": "check-page-89c1751ee3",
+      "url": "https://chainreaction.anl.gov/silicon-compatible-platform-for-quantum-applications/",
+      "page": "application",
+      "excerpt": "As quantum computing — a new form of high performance information processing based on the laws of quantum physics — becomes more mature, it offers new and faster ways of solving tough computational problems and securing data communication in arenas where classical computing systems cannot compete."
+    },
+    {
+      "id": "check-page-f838d88ca0",
+      "url": "https://chainreaction.anl.gov/silicon-compatible-platform-for-quantum-applications/",
+      "page": "application",
+      "excerpt": "While classical HPC systems utilize MWhs of energy and require considerable volumes of water for cooling while they perform calculations, quantum computers could potentially enable a drastic speedup of these calculations, leading to more efficient computing."
+    },
+    {
+      "id": "check-page-68e3c3e953",
+      "url": "https://chainreaction.anl.gov/silicon-compatible-platform-for-quantum-applications/",
+      "page": "application",
+      "excerpt": "Crucially, however, there is currently no internet equivalent over which quantum computers can exchange information."
+    },
+    {
+      "id": "check-page-cd4defd291",
+      "url": "https://chainreaction.anl.gov/silicon-compatible-platform-for-quantum-applications/",
+      "page": "application",
+      "excerpt": "Our technology focuses on developing quantum repeaters to network quantum devices, which is needed for distributed quantum computing that can outperform classical computers at certain tasks while using less energy."
+    },
+    {
+      "id": "check-page-32a8497f10",
+      "url": "https://chainreaction.anl.gov/silicon-compatible-platform-for-quantum-applications/",
+      "page": "application",
+      "excerpt": "Supplemental Need for this Technology The advent of quantum computing also brings risk to the current standard of encrypted communication."
+    },
+    {
+      "id": "check-page-327bf7cc37",
+      "url": "https://chainreaction.anl.gov/silicon-compatible-platform-for-quantum-applications/",
+      "page": "application",
+      "excerpt": "Another benefit of developing a fully quantum network is that the communication link provided, based on entanglement, is unhackable and enables ultra secure data transmission."
+    },
+    {
+      "id": "check-page-9cd3fe8f97",
+      "url": "https://chainreaction.anl.gov/silicon-compatible-platform-for-quantum-applications/",
+      "page": "application",
+      "excerpt": "Competition Quantum key distribution (QKD) is a method for distributing cryptographic keys that are robust against eavesdropping; however, it does not natively link together quantum computers and has a limited range of without quantum repeaters There are a couple of technologies focused on quantum repeaters."
+    },
+    {
+      "id": "check-page-fccfde150c",
+      "url": "https://chainreaction.anl.gov/silicon-compatible-platform-for-quantum-applications/",
+      "page": "application",
+      "excerpt": "At the core of a repeater enabled network is a means for generating quantum entanglement using photons and a quantum memory that can temporarily store these photons."
+    },
+    {
+      "id": "check-page-53f6452460",
+      "url": "https://chainreaction.anl.gov/silicon-compatible-platform-for-quantum-applications/",
+      "page": "application",
+      "excerpt": "Other repeater architectures either utilize photons with wavelengths that are not compatible with telecom fiber networks or have quantum memories that are very short-lived or lossy."
+    },
+    {
+      "id": "check-page-22383ab09a",
+      "url": "https://chainreaction.anl.gov/silicon-compatible-platform-for-quantum-applications/",
+      "page": "application",
+      "excerpt": "Potential Markets Government/defense secure communications The financial industry Telecommunications companies Academic, government, or corporate research in photonic quantum information Key Innovation Silicon foundry-compatible solid-state qubits that have a photonic interface in the telecom C-band."
+    },
+    {
+      "id": "check-page-f8272bbe88",
+      "url": "https://chainreaction.anl.gov/silicon-compatible-platform-for-quantum-applications/",
+      "page": "application",
+      "excerpt": "R & D Status of Project memq has demonstrated a lab-scale proof of concept quantum resource generator, and the company has shown the ability to tailor the properties of these qubits through materials engineering and integration with silicon nanophotonics."
+    },
+    {
+      "id": "check-page-d215383d59",
+      "url": "https://chainreaction.anl.gov/silicon-compatible-platform-for-quantum-applications/",
+      "page": "application",
+      "excerpt": "A role that led him to pursuing his PhD from the Pritzker School for Molecular Engineering at the University of Chicago where he worked with Supratik Guha on developing scalable CMOS compatible platforms for rare-earth qubits and graduated in 2022 with a PhD in Quantum Science and Engineering."
+    },
+    {
+      "id": "check-page-cbda298e72",
+      "url": "https://chainreaction.anl.gov/about/faq/",
+      "page": "terms",
+      "excerpt": "FAQs - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals FAQs On this page CRI Program Overview and Operations When is the application period? How does CRI operate? If selected for the cohort, how will I be supported? How is CRI different from other embedded entrepreneurship programs? How is CRI different from the DOE Small Business Vouchers Program? Program Eligibility Requirements and Selection Criteria What types of entrepreneurs are eligible? What are your selection criteria? Do I have to move to Chicago? Legal and Contract Information If selected, do I need any agreements to work on research with Argonne? Does my CRADA contain a non-disclosure agreement? Is it negotiable? How will Intellectual Property (IP) be handled? Will my application materials be kept confidential? What happens if I am an innovator who is affiliated with Argonne National Laboratory? Security and Site Access How does DOE P 485.1 define “foreign” companies? Does DOE"
+    },
+    {
+      "id": "check-page-2aa3b2a4e5",
+      "url": "https://chainreaction.anl.gov/about/faq/",
+      "page": "terms",
+      "excerpt": "Department of Energy (DOE)."
+    },
+    {
+      "id": "check-page-239f0e4ac9",
+      "url": "https://chainreaction.anl.gov/about/faq/",
+      "page": "terms",
+      "excerpt": "This funding will pay for fellowships that cover a stipend, provisions, use of laboratory equipment and office space, and guidance from Argonne researchers."
+    },
+    {
+      "id": "check-page-1ed4a1eeaf",
+      "url": "https://chainreaction.anl.gov/about/faq/",
+      "page": "terms",
+      "excerpt": "The Department of Energy will provide an Oak Ridge Institute for Science and Education (ORISE) fellowship to the selected technology innovators for the first year, with the potential for a one-year renewal, providing innovators personal stipend on an 80 percent time appointment."
+    },
+    {
+      "id": "check-page-38e3b805a5",
+      "url": "https://chainreaction.anl.gov/about/faq/",
+      "page": "terms",
+      "excerpt": "Innovator benefits: Selected innovators will receive a Manufacturing Entrepreneurship Partnership (MEP) Fellowship funded through ORISE."
+    },
+    {
+      "id": "check-page-1f34e1941e",
+      "url": "https://chainreaction.anl.gov/about/faq/",
+      "page": "terms",
+      "excerpt": "This fellowship includes a stipend and provisions such as health insurance and a travel allowance, use of laboratory equipment, and office space."
+    },
+    {
+      "id": "check-page-5fbb156257",
+      "url": "https://chainreaction.anl.gov/about/faq/",
+      "page": "terms",
+      "excerpt": "What sets CRI apart from other area programs is its unique ability to embed startups in a national laboratory with access to cutting-edge research tools and hands-on mentorship with a Principal Investigator (PI)."
+    },
+    {
+      "id": "check-page-20a00af007",
+      "url": "https://chainreaction.anl.gov/about/faq/",
+      "page": "terms",
+      "excerpt": "The ability to use office space at the laboratory also will put innovators in constant contact with leaders in hard science research to spur collaboration and cross-pollination of ideas from multiple science and engineering disciplines."
+    },
+    {
+      "id": "check-page-d47cbdbd36",
+      "url": "https://chainreaction.anl.gov/about/faq/",
+      "page": "terms",
+      "excerpt": "CRI is a mentored program aimed at encouraging and supporting the technical founders in forming new ventures around breakthrough energy technologies and embedding innovators at Argonne National Laboratory."
+    },
+    {
+      "id": "check-page-2668c280d0",
+      "url": "https://chainreaction.anl.gov/about/faq/",
+      "page": "terms",
+      "excerpt": "The Small Business Vouchers Program is aimed at helping existing small businesses do collaborative work with researchers across the national lab system to solve targeted technology problems."
+    },
+    {
+      "id": "check-page-b4571ffb57",
+      "url": "https://chainreaction.anl.gov/about/faq/",
+      "page": "terms",
+      "excerpt": "Department of Energy by overcoming complex scientific challenges that require a lengthy development cycle of about two years to reach the pre-commercial prototype stage."
+    },
+    {
+      "id": "check-page-4089335641",
+      "url": "https://chainreaction.anl.gov/about/faq/",
+      "page": "terms",
+      "excerpt": "DOE requires all innovators who are offered a two-year LEEP fellowship to embed in their respective labs so they must live or relocate to live in the geographic area."
+    },
+    {
+      "id": "check-page-1cf713018a",
+      "url": "https://chainreaction.anl.gov/about/faq/",
+      "page": "terms",
+      "excerpt": "As a result, participation in the CRI program requires you to be in-residence at Argonne and to relocate to the Chicago area if you don’t already reside in the metro area."
+    },
+    {
+      "id": "check-page-f9c0751cc0",
+      "url": "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+      "page": "terms",
+      "excerpt": "CLOSING A $4.8M INVESTMENT ROUND FOR SUSTAINABLE PROTEIN - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals CLOSING A $4.8M INVESTMENT ROUND FOR SUSTAINABLE PROTEIN Emergy Foods has raised $4.8 million series seed from major investors – Congruent, Prelude, New Crop Capital, Better, 50 Years, March Fund, Trust, and Bluestein Associates, among others – that will help the company advance plans for producing sustainable protein. This includes moving its headquarters from Chicago to Boulder, Colorado in June; adding staff; and advancing its research and development capabilities and as well as its production space. Emergy’s Tyler Huggins and Justin Whiteley in the lab with Argonne scientist Meltem Urgun-Demirtas This is the first major round of funding for the start-up, formerly known as Emergy, which was part of Cohort 1 in the Department of Energy’s (DOE) Chain Reaction Innovations (CRI) program. Emergy said the capital infusion validates its"
+    },
+    {
+      "id": "check-page-1d5eb0d51a",
+      "url": "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+      "page": "terms",
+      "excerpt": "The $4.8 million is in addition to $350,000 received from DOE and National Science Foundation (NSF) Small Business Innovation Research (SBIR) grants, which helped to fund research and add two employees."
+    },
+    {
+      "id": "check-page-1917353aa2",
+      "url": "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+      "page": "terms",
+      "excerpt": "Brewing Innovation Though it started as a mere idea four years ago “over a couple of beers” according to Huggins, Emergy is now a venture-backed industrial biotechnology company."
+    },
+    {
+      "id": "check-page-175a75371f",
+      "url": "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+      "page": "terms",
+      "excerpt": "Huggins and Whiteley met during their Ph.D. studies at University of Colorado Boulder in 2015 and connected on the idea of using the efficiencies of biological systems and advanced in with material science to help improve manufacturing and the performance of various products."
+    },
+    {
+      "id": "check-page-facc01f27d",
+      "url": "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+      "page": "terms",
+      "excerpt": "To improve the resource requirements of this process, they also developed a way to use leftovers from the beer brewing process as the only raw material input, making it almost completely energy, water and emissions neutral."
+    },
+    {
+      "id": "check-page-e11168d4d7",
+      "url": "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+      "page": "terms",
+      "excerpt": "“Who thought drinking beer could help with energy independence?” said Huggins."
+    },
+    {
+      "id": "check-page-9edce4daa0",
+      "url": "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+      "page": "terms",
+      "excerpt": "“CRI has given us the flexibility to make these pivots and rapidly iterate the manufacturing process and product.” Justin Whiteley, Chief Technology Officer, Emergy Foods Urgun-Demirtas praised Huggins and Whiteley as a high-energy team that worked hard to scale their process."
+    },
+    {
+      "id": "check-page-7597e25e0e",
+      "url": "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+      "page": "terms",
+      "excerpt": "Emergy was able to demonstrate numerous applications for its technology, both in energy storage and water filtration, and worked with a multitude of companies in validating the performance of the materials it has produced, said Whiteley."
+    },
+    {
+      "id": "check-page-32a324a7cd",
+      "url": "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+      "page": "terms",
+      "excerpt": "“CRI has given us the flexibility to make these pivots and rapidly iterate the manufacturing process and product.” Also, while working with mentors and other professionals at the Polsky Center for Entrepreneurship and Innovation at the University of Chicago, Whiteley and Huggins refined their entrepreneurial skills by testing several business hypotheses."
+    },
+    {
+      "id": "check-page-aacedd9b95",
+      "url": "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+      "page": "terms",
+      "excerpt": "“I will probably never get this opportunity again to work so intimately at a national laboratory.” Now with a revised business plan and several prototypes in hand, Emergy could begin to sell a sustainable and edible protein product to consumers in coming years, aiming to make it a mainstream protein source, such as a protein powder or meat alternative."
+    },
+    {
+      "id": "check-page-a00550ebd0",
+      "url": "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+      "page": "terms",
+      "excerpt": "Department of Energy’s (DOE’s) Argonne National Laboratory is welcoming five startup founders to its 2026 cohort."
+    },
+    {
+      "id": "check-page-1fd138e0cd",
+      "url": "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+      "page": "terms",
+      "excerpt": "They bring new technologies, perspectives and… Read More August 13, 2026, Announcements CRI to Open Recruitment for Cohort 2027 Scientists and engineers ready to take their technology from the laboratory to the marketplace will soon have a new opportunity to make that leap."
+    },
+    {
+      "id": "check-page-7b149482b3",
+      "url": "https://chainreaction.anl.gov/closing-a-4-8m-investment-round-for-sustainable-protein/",
+      "page": "terms",
+      "excerpt": "15, 2026, offering technical founders a fellowship… Read More March 5, 2026, Announcements Finalists Chosen for CRI’s Cohort 2026 Eleven individuals advanced to the Finals pitch competition to join Chain Reaction Innovations’ Cohort 2026."
+    },
+    {
+      "id": "check-page-4fa3fce0bd",
+      "url": "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+      "page": "terms",
+      "excerpt": "Innovators in Argonne’s entrepreneurship program amass millions in investments to aid their energy startups - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals September 1, 2019, Press Coverage Innovators in Argonne’s entrepreneurship program amass millions in investments to aid their energy startups Argonne BY JOAN KOKA AUGUST 29, 2019 The Chain Reaction Innovations ( CRI ) program has an impact in moving energy tech to market. As its first cohort of innovators graduates, CRI startups have raised more than $ 12 . 5 million in funding. ClearFlame Engines Chief Executive Officer BJ Johnson and Chief Technology Officer Julie Blumreiter are shown at Demo Day 2018, where they demonstrated how their technology can convert diesel engines to run on cleaner fuels to increase performance and lower emissions. (Image by Argonne National Laboratory.) Energy demand is growing, and along with it, the need for innovation. But bringing new innovations to the"
+    },
+    {
+      "id": "check-page-eb6483557b",
+      "url": "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+      "page": "terms",
+      "excerpt": "But bringing new innovations to the energy industry can be a long and arduous endeavor, especially for those just starting out."
+    },
+    {
+      "id": "check-page-368dc0d297",
+      "url": "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+      "page": "terms",
+      "excerpt": "Department of Energy’s ( DOE ’s) Argonne National Laboratory that is supported by the Advanced Manufacturing Office within DOE ’s Office of Energy Efficiency and Renewable Energy, has found a more efficient way to accelerate the path to commercialization — and it has the numbers to prove it."
+    },
+    {
+      "id": "check-page-6f02adc069",
+      "url": "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+      "page": "terms",
+      "excerpt": "The success of the first cohort is early validation that CRI is doing just what it is designed to do – accelerate the development of energy innovations and drive economic outcomes that improve sustainability for the U.S. and the world."
+    },
+    {
+      "id": "check-page-3eb4f4f916",
+      "url": "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+      "page": "terms",
+      "excerpt": "CRI was intentionally created to do what most stakeholders in the private sector don’t: give initial support to early-stage, high-risk technologies to attract follow-on funding."
+    },
+    {
+      "id": "check-page-ef8853cedf",
+      "url": "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+      "page": "terms",
+      "excerpt": "Funded by DOE ’s Advanced Manufacturing Office and Argonne National Laboratory, support is offered in three ways."
+    },
+    {
+      "id": "check-page-d081042d26",
+      "url": "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+      "page": "terms",
+      "excerpt": "At Argonne, this includes access to world-class equipment and laboratory space, as well as more than 1 , 600 Ph.D. scientists, including manufacturing and energy experts."
+    },
+    {
+      "id": "check-page-33108c7e64",
+      "url": "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+      "page": "terms",
+      "excerpt": "As such, reducing the amount of animal products we eat (particularly beef) and increasing the efficiency of agricultural practices are important goals, both in reducing the demand on U.S. energy resources and also in reducing our carbon footprint."
+    },
+    {
+      "id": "check-page-b41fa23d16",
+      "url": "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+      "page": "terms",
+      "excerpt": "Emergy’s journey through CRI demonstrates the obstacles energy innovators face when they try to mature their technologies to solve real-world problems."
+    },
+    {
+      "id": "check-page-b96a698c44",
+      "url": "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+      "page": "terms",
+      "excerpt": "“ To build that much business value in such a short period of time around a hard tech with high impact that also creates jobs is truly impressive,” Carlisle said. ​ “ I don’t know any other lab-based program that’s done that.” Another successful member of the first cohort is ClearFlame Engines, a company founded by Stanford University graduates Julie Blumreiter and BJ Johnson."
+    },
+    {
+      "id": "check-page-3bbe17b3c5",
+      "url": "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+      "page": "terms",
+      "excerpt": "Since participating in CRI , Blumreiter and Johnson have received multiple Small Business Innovation Research grants, valued at over $ 1 million in total."
+    },
+    {
+      "id": "check-page-55c4995c6f",
+      "url": "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+      "page": "terms",
+      "excerpt": "The founders were also named 2019 Climate Fellows by Echoing Green."
+    },
+    {
+      "id": "check-page-493d1e0972",
+      "url": "https://chainreaction.anl.gov/press-coverage/innovators-in-argonnes-entrepreneurship-program-amass-millions-in-investments-to-aid-their-energy-startups/",
+      "page": "terms",
+      "excerpt": "In two years, Gomez del Campo has garnered multiple awards for his innovation and sources of funding to develop it further."
+    },
+    {
+      "id": "check-page-bb9e44e8a2",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding-2/",
+      "page": "terms",
+      "excerpt": "Midwest startups compete for clean-tech investment funding - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals January 10, 2017, Press Coverage Midwest startups compete for clean-tech investment funding Midwest Energy News Last month, DOE launched a similar, Illinois-based initiative aimed at boosting prospects for young entrepreneurs in clean energy. Chain Reaction Innovations awards up to $550,000 to five early-stage innovators and embeds them at Argonne National Laboratory near Lemont, Illinois. Read More at Midwest Energy News Latest News See All September 23, 2026, Announcements Five New Startups Join Argonne's Entrepreneurship Program As Chain Reaction Innovations (CRI) celebrates its 10th anniversary, the entrepreneurship program at the U.S. Department of Energy’s (DOE’s) Argonne National Laboratory is welcoming five startup founders to its 2026 cohort. Over the next two years, the entrepreneurs will embed full time at Argonne,"
+    },
+    {
+      "id": "check-page-8965ece750",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding-2/",
+      "page": "terms",
+      "excerpt": "They bring new technologies, perspectives and… Read More August 13, 2026, Announcements CRI to Open Recruitment for Cohort 2027 Scientists and engineers ready to take their technology from the laboratory to the marketplace will soon have a new opportunity to make that leap."
+    },
+    {
+      "id": "check-page-b8af13240c",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding-2/",
+      "page": "terms",
+      "excerpt": "15, 2026, offering technical founders a fellowship… Read More March 5, 2026, Announcements Finalists Chosen for CRI’s Cohort 2026 Eleven individuals advanced to the Finals pitch competition to join Chain Reaction Innovations’ Cohort 2026."
+    },
+    {
+      "id": "check-page-cf853c2cfe",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding-2/",
+      "page": "terms",
+      "excerpt": "A broad range of energy innovations are represented in this year’s applicants, including battery technologies, industrial processes, performance materials and biotechnology."
+    },
+    {
+      "id": "check-page-6d6450b1e6",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding-2/",
+      "page": "terms",
+      "excerpt": "The 11 startups will pitch their technology during the virtual… Read More December 12, 2025, Announcements 2025 Startup Milestones About CRI Startup founders and the CRI team work together to ensure America’s security and prosperity by addressing energy and environmental challenges through transformative science and technology."
+    },
+    {
+      "id": "check-page-ecdf7b3233",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding-2/",
+      "page": "terms",
+      "excerpt": "CRI support allows science startups to bring their deep tech to market more quickly."
+    },
+    {
+      "id": "check-page-f36f945af5",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding-2/",
+      "page": "terms",
+      "excerpt": "Department of Energy Office of Science UChicago Argonne LLC Privacy & Security Notice"
+    },
+    {
+      "id": "check-page-8fe3ecff2d",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding/",
+      "page": "terms",
+      "excerpt": "Midwest startups compete for clean-tech investment funding - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals January 10, 2017, Press Coverage Midwest startups compete for clean-tech investment funding Midwest Energy News Clean Energy Trust is also currently accepting applications for its 2017 CET Challenge, which will award up to $1 million of this kind of “patient capital” to early-stage, Midwest-based, clean-tech companies. Last month, DOE launched a similar, Illinois-based initiative aimed at boosting prospects for young entrepreneurs in clean energy. Chain Reaction Innovations awards up to $550,000 to five early-stage innovators and embeds them at Argonne National Laboratory near Lemont, Illinois. Read More at Midwest Energy News Latest News See All September 23, 2026, Announcements Five New Startups Join Argonne's Entrepreneurship Program As Chain Reaction Innovations (CRI) celebrates its 10th anniversary, the entrepreneurship program"
+    },
+    {
+      "id": "check-page-91802cccfa",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding/",
+      "page": "terms",
+      "excerpt": "Read More at Midwest Energy News Latest News See All September 23, 2026, Announcements Five New Startups Join Argonne's Entrepreneurship Program As Chain Reaction Innovations (CRI) celebrates its 10th anniversary, the entrepreneurship program at the U.S."
+    },
+    {
+      "id": "check-page-ffa79a0e1c",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding/",
+      "page": "terms",
+      "excerpt": "Department of Energy’s (DOE’s) Argonne National Laboratory is welcoming five startup founders to its 2026 cohort."
+    },
+    {
+      "id": "check-page-c90fd85c66",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding/",
+      "page": "terms",
+      "excerpt": "They bring new technologies, perspectives and… Read More August 13, 2026, Announcements CRI to Open Recruitment for Cohort 2027 Scientists and engineers ready to take their technology from the laboratory to the marketplace will soon have a new opportunity to make that leap."
+    },
+    {
+      "id": "check-page-35d14f9582",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding/",
+      "page": "terms",
+      "excerpt": "15, 2026, offering technical founders a fellowship… Read More March 5, 2026, Announcements Finalists Chosen for CRI’s Cohort 2026 Eleven individuals advanced to the Finals pitch competition to join Chain Reaction Innovations’ Cohort 2026."
+    },
+    {
+      "id": "check-page-c6f197bd0f",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding/",
+      "page": "terms",
+      "excerpt": "A broad range of energy innovations are represented in this year’s applicants, including battery technologies, industrial processes, performance materials and biotechnology."
+    },
+    {
+      "id": "check-page-715107751a",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding/",
+      "page": "terms",
+      "excerpt": "The 11 startups will pitch their technology during the virtual… Read More December 12, 2025, Announcements 2025 Startup Milestones About CRI Startup founders and the CRI team work together to ensure America’s security and prosperity by addressing energy and environmental challenges through transformative science and technology."
+    },
+    {
+      "id": "check-page-5e8cc21a62",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding/",
+      "page": "terms",
+      "excerpt": "CRI support allows science startups to bring their deep tech to market more quickly."
+    },
+    {
+      "id": "check-page-4aef2d821f",
+      "url": "https://chainreaction.anl.gov/press-coverage/midwest-startups-compete-for-clean-tech-investment-funding/",
+      "page": "terms",
+      "excerpt": "Department of Energy Office of Science UChicago Argonne LLC Privacy & Security Notice"
+    },
+    {
+      "id": "check-page-7d3a1ebbde",
+      "url": "https://chainreaction.anl.gov/cohort-2025-finals/",
+      "page": "batches",
+      "excerpt": "Cohort 2025 Finals - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals Cohort 2025 Finals Cohort 2025 Finals March 6 Tune in to Chain Reaction Innovations (CRI) Finals Pitch Competition for Cohort 2025 from 9 a.m. to 4 p.m. Central on Thursday, March 6th. Learn about cutting-edge technologies that may potentially embed at Argonne National Laboratory as part of the U.S. Department of Energy’s Lab-Embedded Entrepreneurship Program . After a nationwide call for applications and a rigorous review process, 11 individuals advanced to the Finals pitch competition to join CRI’s next cohort. A broad range of innovations are represented in this year’s applicants, including energy storage, quantum, manufacturing, and advanced materials. Finals Agenda The 11 startup founders will pitch their technologies at Argonne National Laboratory before a panel of internal and external reviewers. The public is invited to watch this event virtually. Use this link to"
+    },
+    {
+      "id": "check-page-cf93676674",
+      "url": "https://chainreaction.anl.gov/cohort-2025-finals/",
+      "page": "batches",
+      "excerpt": "Department of Energy Office of Science UChicago Argonne LLC Privacy & Security Notice"
+    },
+    {
+      "id": "check-page-dd792066e8",
+      "url": "https://chainreaction.anl.gov/cohort-2025/",
+      "page": "batches",
+      "excerpt": "Cohort 2025 - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals Cohort 2025 Nathan Arnold Nathan Arnold is the co-founder and CEO of Photon Queue, an Illinois-based quantum hardware company specializing in free-space quantum memory technologies. Arnold, who holds a Ph.D. the University of Illinois Urbana-Champaign, has experimental expertise in quantum optical systems. He honed diverse skills through more than 5 years of work at Sandia National Laboratories. Having spent his graduate studies developing Photon Queue’s core technology, Arnold is the foremost expert on this technology and leads the company’s efforts in design, applications, and commercialization. Beyond his technical contributions, he is committed to advancing quantum technologies for societal benefit while balancing a fulfilling family life. PHOTON QUEUE Ryan Cardiff Ryan Cardiff holds a Ph.D. in Molecular Engineering Ph.D. from the University of Washington. Before UW, he"
+    },
+    {
+      "id": "check-page-fa91bbafac",
+      "url": "https://chainreaction.anl.gov/cohort-2025/",
+      "page": "batches",
+      "excerpt": "Before UW, he studied at Stanford and worked at a climate-biotech startup."
+    },
+    {
+      "id": "check-page-ca811d5b88",
+      "url": "https://chainreaction.anl.gov/cohort-2025/",
+      "page": "batches",
+      "excerpt": "His company, C1 Bio, has participated in several startup programs including Nucleate Activator, NSF I-Corps, UW Gap Fund, and the Alaska Airlines Environmental Innovation Challenge, where they won the Climate Impact Award."
+    },
+    {
+      "id": "check-page-ad9de4fda7",
+      "url": "https://chainreaction.anl.gov/cohort-2025/",
+      "page": "batches",
+      "excerpt": "C1 BIO Brandon Grinkemeyer Brandon Grinkemeyer earned his Ph.D. from Harvard University, where his research with the Lukin group focused on developing photonic interfaces for neutral atom quantum systems."
+    },
+    {
+      "id": "check-page-090123a1f7",
+      "url": "https://chainreaction.anl.gov/cohort-2025/",
+      "page": "batches",
+      "excerpt": "Grinkemeyer’s work has led to significant contributions in atomic physics, quantum optics, and quantum information, including a recently submitted paper demonstrating a photonic interface for neutral atoms and collaborations on state-of-the-art methods for fabricating high-finesse optical cavities with the Loncar and Yang labs."
+    },
+    {
+      "id": "check-page-33bdc28dac",
+      "url": "https://chainreaction.anl.gov/cohort-2025/",
+      "page": "batches",
+      "excerpt": "He has also co-authored a proposal for modular quantum computing with the Vuletic group."
+    },
+    {
+      "id": "check-page-4f9f508bf7",
+      "url": "https://chainreaction.anl.gov/cohort-2025/",
+      "page": "batches",
+      "excerpt": "Grinkemeyer is passionate about advancing quantum technologies and fostering collaborations that bridge fundamental science with practical innovations."
+    },
+    {
+      "id": "check-page-b043d45eba",
+      "url": "https://chainreaction.anl.gov/cohort-2025/",
+      "page": "batches",
+      "excerpt": "His work has already secured major defense sector partnerships and commercial/exclusive IP rights, positioning MXene Inc. as a leader in advanced materials innovation."
+    },
+    {
+      "id": "check-page-a752499b5f",
+      "url": "https://chainreaction.anl.gov/cohort-2025/",
+      "page": "batches",
+      "excerpt": "Moha Shahjamali Moha Shahjamali is Co-founder and CEO of HidrogeniCs, where he is working to develop a revolutionary technology to produce clean hydrogen and value-added carbon materials (graphene, carbon nanotubes and synthetic graphite)."
+    },
+    {
+      "id": "check-page-d011d30e39",
+      "url": "https://chainreaction.anl.gov/cohort-2025/",
+      "page": "batches",
+      "excerpt": "Shahjamali has spent the last 20 years tackling challenges in energy-related topics including catalytic hydrogen generation as well as energy storage topics like advanced graphitic nanocomposites for Li-ion battery anodes."
+    },
+    {
+      "id": "check-page-3c18238095",
+      "url": "https://chainreaction.anl.gov/cohort-2025/",
+      "page": "batches",
+      "excerpt": "Shahjamali worked on nanomaterials for energy applications at Harvard University and Northwestern university as a senior postdoctoral fellow (2013-2020) and holds a Ph.D. degree with honors in Materials Science and Chemical Engineering from Nanyang Technological University, Singapore."
+    },
+    {
+      "id": "check-page-c94ea0b761",
+      "url": "https://chainreaction.anl.gov/cohort-2025/",
+      "page": "batches",
+      "excerpt": "Department of Energy Office of Science UChicago Argonne LLC Privacy & Security Notice"
+    },
+    {
+      "id": "check-page-c3778608b7",
+      "url": "https://chainreaction.anl.gov/cohort-2026/",
+      "page": "batches",
+      "excerpt": "Cohort 2026 - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals Cohort 2026 Emily Barber Emily Barber earned a PhD from Purdue University in mechanical engineering. Her research on radiative cooling paints has received a SxSW Sustainability Award and resulted in an international patent application. Her work has been supported by prestigious funding, including the NSF GRFP, the Purdue Ingersoll-Rand Fellowship, and the TRACER Grant. As a key part of her passion for new technology, Barber has taken many leadership and mentorship roles while at Purdue University as well as at the National Laboratory of the Rockies, where she spent 10 months as a visiting student to perform collaborative work. NanoChill Technologies Jacob Bhoi Jacob Bhoi is the co-founder and Chief Scientific Officer of Aura Life Science. He has nearly a decade of experience studying and manipulating molecular circadian clocks. Bhoi is currently completing his PhD at Northwestern"
+    },
+    {
+      "id": "check-page-6a779044b7",
+      "url": "https://chainreaction.anl.gov/cohort-2026/",
+      "page": "batches",
+      "excerpt": "He was a member of the Energy and Sustainability Cohort of the mPOWER program at mHub, a Chicago hardtech incubator, as well as the inaugural Alchemist Chicago cohort where he has been developing his business and entrepreneurship skills."
+    },
+    {
+      "id": "check-page-83ef2f5cb7",
+      "url": "https://chainreaction.anl.gov/cohort-2026/",
+      "page": "batches",
+      "excerpt": "Holding a PhD in materials chemistry from the University of Minnesota Twin Cities, he has a decade of experience in industrial R&D and formulation/product design at both large corporations and startups."
+    },
+    {
+      "id": "check-page-556035ca4b",
+      "url": "https://chainreaction.anl.gov/cohort-2026/",
+      "page": "batches",
+      "excerpt": "He is an inventor on over 35 patents in inks, colloids, print technology, composites, optical materials, and energy storage."
+    },
+    {
+      "id": "check-page-b82fa26b23",
+      "url": "https://chainreaction.anl.gov/cohort-2026/",
+      "page": "batches",
+      "excerpt": "He co-founded PowerNaP Energy to enable low-cost, domestically produced batteries suitable for a wide range of applications."
+    },
+    {
+      "id": "check-page-fa14c6bf75",
+      "url": "https://chainreaction.anl.gov/cohort-2026/",
+      "page": "batches",
+      "excerpt": "PowerNaP Energy Links Projects Program Capabilities News About Apply Contact [email protected] Sign up for CRI’s Newsletter Follow Us on LinkedIn Argonne National Laboratory 9700 S."
+    },
+    {
+      "id": "check-page-c26c7bd66d",
+      "url": "https://chainreaction.anl.gov/cohort-2026/",
+      "page": "batches",
+      "excerpt": "Department of Energy Office of Science UChicago Argonne LLC Privacy & Security Notice"
+    },
+    {
+      "id": "check-page-b1af193bb4",
+      "url": "https://chainreaction.anl.gov/cohort-9-finals-agenda/",
+      "page": "batches",
+      "excerpt": "Cohort 9 Finals Agenda - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals COHORT 9 FINALS AGENDA MARCH 6, 2025 9:00 a.m. – 9:15 a.m. Welcome Remarks Megan Clifford, Associate Laboratory Director, Science and Technology Partnerships and Outreach Colleen Wright , VP, Corporate Strategy, Constellation Dick Co , Director, Chain Reaction Innovations SESSION 1: 9:15 a.m. – 10:45 a.m. INDUSTRIAL PROCESSES 15-minute pitch, followed by 10-minute Q/A, and 5 minutes for panelists to record notes 9:15 a.m. Jordan DeVries, Value-Added Products from Mineralized Carbon 9:45 a.m. John Misiaszek, Flue Gas Capture and Utilization via Iron-Tungsten Redox 10:15 a.m. Moha Shahjamali, US-Based Production of Value-Added Critical Carbon Materials and Hydrogen ————– 10:45 a.m. – 11:00 a.m. Break ————– SESSION 2: 11:00 a.m. – 12:30 p.m. QUANTUM 15-minute pitch, followed by 10-minute Q/A, and 5 minutes for panelists to record notes 11:00 a.m. Nathan Arnold,"
+    },
+    {
+      "id": "check-page-e1e23934c4",
+      "url": "https://chainreaction.anl.gov/cohort-9-finals-agenda/",
+      "page": "batches",
+      "excerpt": "Nathan Arnold, Room-Temperature, Free-Space Photonic Quantum Memory 11:30 a.m."
+    },
+    {
+      "id": "check-page-06acffe1c4",
+      "url": "https://chainreaction.anl.gov/cohort-9-finals-agenda/",
+      "page": "batches",
+      "excerpt": "Clayton DeVault, Manufacturing Diamond Solutions for Quantum and Microelectronics 12:00 p.m."
+    },
+    {
+      "id": "check-page-305b980bad",
+      "url": "https://chainreaction.anl.gov/cohort-9-finals-agenda/",
+      "page": "batches",
+      "excerpt": "Brandon Grinkemeyer, Photonic Interconnects for Scalable Quantum Computing ————– 12:30 p.m. – 1:15 p.m."
+    },
+    {
+      "id": "check-page-d465e80231",
+      "url": "https://chainreaction.anl.gov/cohort-9-finals-agenda/",
+      "page": "batches",
+      "excerpt": "ADVANCED MATERIALS/ENERGY RESILIENCE 15-minute pitch, followed by 10-minute Q/A, and 5 minutes for panelists to record notes 2:30 p.m."
+    },
+    {
+      "id": "check-page-6ef6eb19dc",
+      "url": "https://chainreaction.anl.gov/cohort-9-finals-agenda/",
+      "page": "batches",
+      "excerpt": "Kyle Matthews, Quality MXenes at Scale for Energy and Defense 3:00 p.m."
+    },
+    {
+      "id": "check-page-c85fbf7617",
+      "url": "https://chainreaction.anl.gov/cohort-9-finals-agenda/",
+      "page": "batches",
+      "excerpt": "Department of Energy Office of Science UChicago Argonne LLC Privacy & Security Notice"
+    },
+    {
+      "id": "check-page-7d2838ed36",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "page": "batches",
+      "excerpt": "Cohort 7 Hybrid Finals - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals Cohort 7 Hybrid Finals 9:00 a.m. to 5 p.m. Central Argonne National Laboratory, TCS Conference Center, 9700 S. Cass Avenue, Lemont, IL March 29, 2023 Finalists for Chain Reaction Innovations’ (CRI) Cohort 7 will pitch their technologies on March 29, 9-5 p.m. to be considered for a program fellowship that will begin in June 2023. The group will be reviewed by CRI’s Advisory Council . A broad range of energy innovations are represented in this year’s applicants, including energy storage and generation, water, decarbonization, circular economy, quantum, manufacturing, vehicle technologies and materials. The public is invited and registration is required. In-person spots are limited and will be open until filled. Video Recordings Session 1: Technical difficulties prevented recording View SESSION 2 VIEW SESSION 3 VIEW SESSION 4 CRI Cohort 7 Finals Schedule 9:00 a.m. – 9:14"
+    },
+    {
+      "id": "check-page-f1ae56dfb0",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "page": "batches",
+      "excerpt": "Session 1: Quantum | Energy Storage | Building Technology 12-minute pitch, followed by 10-minute Q/A, and 2 minutes for panelists to record notes 9:14 a.m."
+    },
+    {
+      "id": "check-page-bf5364fa6b",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "page": "batches",
+      "excerpt": "Berk Diler Kovos – SynthBits: Illuminating Designer Quantum Bits for Sensing 9:38 a.m."
+    },
+    {
+      "id": "check-page-03be67d7d1",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "page": "batches",
+      "excerpt": "Rawand Rasheed – Retrofit Dehumidifier for Substantial Air Conditioner Energy Reduction 10:50 a.m. – 11:00 a.m."
+    },
+    {
+      "id": "check-page-bf7d12411d",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "page": "batches",
+      "excerpt": "Session 2: Energy Generation | Electric Utilities 12-minute pitch, followed by 10-minute Q/A, and 2 minutes for panelists to record notes 11:00 a.m."
+    },
+    {
+      "id": "check-page-3f3bd89943",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "page": "batches",
+      "excerpt": "David Brost – Human-Centered Machine Learning Algorithm for Utilities and Households 11:48 a.m."
+    },
+    {
+      "id": "check-page-7329ec15b8",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "page": "batches",
+      "excerpt": "Brittany Kendrick – Solar Powered Atmospheric Water Generator 1:34 p.m."
+    },
+    {
+      "id": "check-page-a3d4010bd5",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "page": "batches",
+      "excerpt": "Tim Fairley Wax – Biomembrane Filtration: Unlocking Energy Recovery from Waste Streams 1:58 p.m."
+    },
+    {
+      "id": "check-page-eb5e0fe26d",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "page": "batches",
+      "excerpt": "SESSION 4: Advanced Manufacturing & Materials 12-minute pitch, followed by 10-minute Q/A, and 2 minutes for panelists to record notes 2:55 p.m."
+    },
+    {
+      "id": "check-page-4fc7a45a9b",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "page": "batches",
+      "excerpt": "Revanth Damerla – Grasp Robotics – Robotic Hand with Human Hand Capabilities 3:43 p.m."
+    },
+    {
+      "id": "check-page-f70d622cfb",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "page": "batches",
+      "excerpt": "Cory Perkins – Low-Cost Materials and Processes for Coating Glass Used in Solar Markets 4:07 p.m."
+    },
+    {
+      "id": "check-page-a5a19977e1",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "page": "batches",
+      "excerpt": "Department of Energy’s (DOE’s) Argonne National Laboratory is welcoming five startup founders to its 2026 cohort."
+    },
+    {
+      "id": "check-page-b0f2539e29",
+      "url": "https://chainreaction.anl.gov/cri-cohort-7-finals/",
+      "page": "batches",
+      "excerpt": "They bring new technologies, perspectives and… Read More August 13, 2026, Announcements CRI to Open Recruitment for Cohort 2027 Scientists and engineers ready to take their technology from the laboratory to the marketplace will soon have a new opportunity to make that leap."
+    },
+    {
+      "id": "check-page-d759c6ae04",
+      "url": "https://chainreaction.anl.gov/cri-cohort-8-video-announcement/",
+      "page": "batches",
+      "excerpt": "CRI Cohort 8 Video Announcement - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals CRI Cohort 8 Video Announcement Meet the newest cohort and watch their reactions to joining CRI in real time. http://blogs.anl.gov/chainreaction/wp-content/uploads/sites/68/2024/07/CRI_CH8v3_4K_MEDIUM_FR30-1.mp4 For more information on Cohort 8 and their technologies. Visit the Cohort 8 webpage . Latest News See All September 23, 2026, Announcements Five New Startups Join Argonne's Entrepreneurship Program As Chain Reaction Innovations (CRI) celebrates its 10th anniversary, the entrepreneurship program at the U.S. Department of Energy’s (DOE’s) Argonne National Laboratory is welcoming five startup founders to its 2026 cohort. Over the next two years, the entrepreneurs will embed full time at Argonne, partnering… Read More August 17, 2026, Announcements Director's Letter August 2026 Dear Friends of CRI, It’s been a busy summer at Chain Reaction Innovations (CRI)"
+    },
+    {
+      "id": "check-page-e8bb691b85",
+      "url": "https://chainreaction.anl.gov/cri-cohort-8-video-announcement/",
+      "page": "batches",
+      "excerpt": "They bring new technologies, perspectives and… Read More August 13, 2026, Announcements CRI to Open Recruitment for Cohort 2027 Scientists and engineers ready to take their technology from the laboratory to the marketplace will soon have a new opportunity to make that leap."
+    },
+    {
+      "id": "check-page-c36af07ccf",
+      "url": "https://chainreaction.anl.gov/cri-cohort-8-video-announcement/",
+      "page": "batches",
+      "excerpt": "15, 2026, offering technical founders a fellowship… Read More March 5, 2026, Announcements Finalists Chosen for CRI’s Cohort 2026 Eleven individuals advanced to the Finals pitch competition to join Chain Reaction Innovations’ Cohort 2026."
+    },
+    {
+      "id": "check-page-cfa6524341",
+      "url": "https://chainreaction.anl.gov/cri-cohort-8-video-announcement/",
+      "page": "batches",
+      "excerpt": "A broad range of energy innovations are represented in this year’s applicants, including battery technologies, industrial processes, performance materials and biotechnology."
+    },
+    {
+      "id": "check-page-bd76ab8b92",
+      "url": "https://chainreaction.anl.gov/cri-cohort-8-video-announcement/",
+      "page": "batches",
+      "excerpt": "The 11 startups will pitch their technology during the virtual… Read More December 12, 2025, Announcements 2025 Startup Milestones About CRI Startup founders and the CRI team work together to ensure America’s security and prosperity by addressing energy and environmental challenges through transformative science and technology."
+    },
+    {
+      "id": "check-page-07c57890ff",
+      "url": "https://chainreaction.anl.gov/cri-cohort-8-video-announcement/",
+      "page": "batches",
+      "excerpt": "CRI support allows science startups to bring their deep tech to market more quickly."
+    },
+    {
+      "id": "check-page-5f9b1d0e09",
+      "url": "https://chainreaction.anl.gov/cri-cohort-8-video-announcement/",
+      "page": "batches",
+      "excerpt": "Department of Energy Office of Science UChicago Argonne LLC Privacy & Security Notice"
+    },
+    {
+      "id": "check-page-5f7f870443",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2023/",
+      "page": "batches",
+      "excerpt": "Cohort 2023 - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals Cohort 2023 TIM FAIRLEY-WAX Tim Fairley-Wax is the CEO of Aquora Biosystems, a spinout from the University of Michigan focused on revolutionizing biofilm filtration to drastically reduce cost and improve efficiency of waste treatment. While earning a B.S. in Civil and Environmental Engineering from UCLA, he worked with the R&D group at L.A. County Sanitation District’s largest wastewater treatment facility to evaluate feasibility of emerging technologies. He then earned an M.S.E. in Environmental Engineering from the University of Michigan and continued as a research area specialist where he is responsible for co-managing two DOE-funded projects with $4.5 million dedicated to developing patented dynamic membrane filtration technology for improved treatment of municipal wastewater, food waste, and sewage sludge and scaling the technology to two pilot installations in partnership"
+    },
+    {
+      "id": "check-page-86c1cf3e75",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2023/",
+      "page": "batches",
+      "excerpt": "In summer 2022, he led Aquora to be one of six national finalists in the CleanTech Open pitch competition."
+    },
+    {
+      "id": "check-page-7947ab98ba",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2023/",
+      "page": "batches",
+      "excerpt": "She led the Phase 2 clinical testing for an off-the-shelf, ECM-based biomaterial for soft tissue reconstruction by managing the manufacturing of the tissue biologic product, conducting the laboratory analysis of clinical samples, and supporting the biomaterial technology’s regulatory and grant documentation (IRB, HRPO, FDA, DoD)."
+    },
+    {
+      "id": "check-page-c6ebf109ba",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2023/",
+      "page": "batches",
+      "excerpt": "She helped secure government funding for her translational research, an NSF-GRFP, and a DoD CTA to advance the clinical evaluation of biomaterial technology."
+    },
+    {
+      "id": "check-page-8d1b2dd5c2",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2023/",
+      "page": "batches",
+      "excerpt": "Peña will apply her expertise in manufacturing and tissue engineering strategies to innovate materials for the textile industry."
+    },
+    {
+      "id": "check-page-7eb7dde466",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2023/",
+      "page": "batches",
+      "excerpt": "GOOD FIBES > RAWAND RASHEED Rawand Rasheed holds a Ph.D. from Rice University and while there was a research fellow for the Department of Energy."
+    },
+    {
+      "id": "check-page-d5238a65f9",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2023/",
+      "page": "batches",
+      "excerpt": "He recently won first place at the Napier Rice Launch Challenge for his company, among other awards."
+    },
+    {
+      "id": "check-page-972a667f36",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2023/",
+      "page": "batches",
+      "excerpt": "She founded Rivalia Chemical Co. to commercialize that technology and completed Energy Techstars in Birmingham, Alabama, in the fall of 2022."
+    },
+    {
+      "id": "check-page-155943f636",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2023/",
+      "page": "batches",
+      "excerpt": "Department of Energy Office of Science UChicago Argonne LLC Privacy & Security Notice"
+    },
+    {
+      "id": "check-page-72b28afa49",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2024/",
+      "page": "batches",
+      "excerpt": "Cohort 2024 - Chain Reaction Innovations Work with Argonne About Argonne Menu Innovators Innovators Cohort 2026 Cohort 2025 Cohort 2024 Cohort 2023 Alumni: Cohort 2022 Alumni: Cohort 2021 Alumni: Cohort 2020 Alumni: Cohort 2019 Alumni: Cohort 2018 Alumni: Cohort 2017 Program Program Our Impact SEED Internship Quantum Companies Capabilities News News Announcements Press Coverage Informational Resources About About Leadership Team Advisory Council FAQs Apply Events Argonne Open House Cohort 2026 Finals Cohort 2024 ANGELA FELDHAUS, GRADUATED Angela Feldhaus is COO and co-founder of Rarefied Technologies, a national security and aerospace startup developing near-space platforms for persistent sensing in the upper atmosphere. Rarefied’s technology builds on Feldhaus’ graduate research at Harvard in photophoretic levitation, which led to the company’s core patent-pending approach. She helps lead the company’s strategy, product development, partnerships, and commercialization, with a focus on translating early-stage physics into deployable missions for atmospheric sensing, space domain awareness, and defense-relevant applications. Her background includes experience at Sandia National Laboratories. She is a co-inventor on Rarefied’s technology and has been recognized as a former NSF Graduate Research Fellow, Clarendon Fellow, NASA NIAC fellow, and Harvard Business School innovation"
+    },
+    {
+      "id": "check-page-8f3f94e4a6",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2024/",
+      "page": "batches",
+      "excerpt": "She is a recipient of the MIT Kavanaugh Translational Innovation Fellowship (2022) and the MIT Graduate School of Engineering Evergreen Innovation Fellowship (2021)."
+    },
+    {
+      "id": "check-page-f4afdff9db",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2024/",
+      "page": "batches",
+      "excerpt": "HALOGEN TECHNOLOGY BERK DILER KOVOS, GRADUATED Berk Diler Kovos received his Ph.D. in Quantum Science and Engineering—one of the first in the nation—from the University of Chicago’s Pritzker School for Molecular Engineering."
+    },
+    {
+      "id": "check-page-fddd037e9c",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2024/",
+      "page": "batches",
+      "excerpt": "To that end, Kovos formed SynthBits, recruited team members, and led them through I-Corps and Compass accelerator programs."
+    },
+    {
+      "id": "check-page-3749fb6bd8",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2024/",
+      "page": "batches",
+      "excerpt": "Currently, Kovos was previously employed by Quantum Machines, one of the fastest-growing quantum startups as a solutions engineer, to lead technical sales operations all across the quantum ecosystem."
+    },
+    {
+      "id": "check-page-325bc10899",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2024/",
+      "page": "batches",
+      "excerpt": "Porter has more than 20 years in the biotech industry with a focus on building processes and systems and matching technology with business needs."
+    },
+    {
+      "id": "check-page-6ebd0f2c6d",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2024/",
+      "page": "batches",
+      "excerpt": "Svadlenak also participated as team leader in two accelerator programs, the OSU Advantage Accelerator and VentureWell E-team programs."
+    },
+    {
+      "id": "check-page-1d69fea8e7",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2024/",
+      "page": "batches",
+      "excerpt": "During these programs he led student teams focused on identifying the challenges to scaleup for their PVC recycling technology as well as business model development for a PVC recycling startup."
+    },
+    {
+      "id": "check-page-9cd5fed1e2",
+      "url": "https://chainreaction.anl.gov/innovators/cohort-2024/",
+      "page": "batches",
+      "excerpt": "Department of Energy Office of Science UChicago Argonne LLC Privacy & Security Notice"
+    }
+  ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
-    "applicationUrl": [],
+    "routes": [
+      {
+        "value": "https://chainreaction.anl.gov/apply/",
+        "evidenceId": "check-route-9d103e94d8"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://chainreaction.anl.gov/apply/",
+        "evidenceId": "check-route-9d103e94d8"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
     "rolling": [],
-    "announcedIntake": [],
+    "announcedIntake": [
+      {
+        "value": "March",
+        "evidenceId": "check-announced-f03a37e3b7"
+      }
+    ],
     "cohortStarts": [],
-    "durationWeeks": [],
-    "format": [],
+    "durationWeeks": [
+      {
+        "value": "10 months",
+        "evidenceId": "check-duration-8165cb94d2"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-7600f4c90a"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-2d2a0f4f87"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-911e955a44"
+      }
+    ],
     "location": [],
     "selectivity": [],
-    "dealText": [],
-    "dealComponents": [],
+    "dealText": [
+      {
+        "value": "16 and October 30 . Join Via Zoom Program Highlights Stipend of $115k per year for two years plus healthcare benefits Non-dilutive funding",
+        "evidenceId": "check-deal-fe1b5fb782"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "115000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-fe1b5fb782"
+      }
+    ],
     "portfolioPages": [],
-    "name": [],
+    "name": [
+      {
+        "value": "Chain Reaction Innovations",
+        "evidenceId": "check-name-85580d0a12"
+      }
+    ],
     "examplePages": []
   }
 }

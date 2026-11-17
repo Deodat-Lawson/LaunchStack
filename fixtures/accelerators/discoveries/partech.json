@@ -1,6 +1,6 @@
 {
   "programId": "partech",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://partechpartners.com/companies",
@@ -15,22 +15,6 @@
       "page": "portfolio",
       "anchor": "€131.7M FOR METYCLE, TWO AWARDS, AND THREE RANKINGS It’s fair to say our portfolio companies pulled their weight this month, and a great deal of it came in copper and aluminum. Met",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://partechpartners.com/news/200m-investment-secured-by-ecovadis",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://partechpartners.com/news/almentor-secures-10mn-investment-round-led-e-capital-bridge-education-gap-10-million-arabic-speakers",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -51,70 +35,6 @@
       "origin": "official"
     },
     {
-      "url": "https://partechpartners.com/news/billogram-set-enter-6-new-markets-45m-investment-partech",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://partechpartners.com/news/dating-group-acquires-once-app-18-million-deal",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://partechpartners.com/news/digital-real-estate-investments-are-highly-attractive-exporo-successfully-concludes-financing-round-487-miliion",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://partechpartners.com/news/ecovadis-secures-c-200m-investment-from-cvc-growth-partners-to-accelerate-adoption-of-sustainability-ratings-throughout-the-globalized-economy",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://partechpartners.com/news/exporo-launches-new-investment-platform-propvest",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://partechpartners.com/news/gebeya-inc-closes-2-million-dollars-seed-round-investment",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://partechpartners.com/news/gebeya-inc-raises-2-million-in-seed-round-investment",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://partechpartners.com/news/imp-software-secures-investment",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://partechpartners.com/news/odaseva-closes-117-million-in-funding-to-accelerate-delivery-of-data-protection-data-compliance-and-data-operations-for-enterprises-running-business-applications-in-the-cloud",
       "page": "application",
       "anchor": "",
@@ -127,14 +47,6 @@
       "page": "portfolio",
       "anchor": "TWO NEW UNICORNS, A $450M LIFT-OFF AND 3 NEW COMPANIES Autumn is here, and while the leaves may be falling, our portfolio is doing quite the opposite! The Exploration Company close",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://partechpartners.com/news/ubble-submits-its-application-pvid-certification-anssi",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

@@ -1,6 +1,6 @@
 {
   "programId": "sku-fka-incubation-station",
-  "checkedAt": "2026-11-14T20:04:58.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "http://sku.is/faq/",
@@ -19,10 +19,18 @@
       "origin": "official"
     },
     {
+      "url": "https://sku.is/a-pup-above-founder-interview-sku-alumni/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://sku.is/about/",
       "page": "details",
       "anchor": "About",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -126,7 +134,23 @@
       "url": "https://sku.is/mentors/",
       "page": "details",
       "anchor": "About",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sku.is/programs/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sku.is/seth-werner-talks-about-the-power-of-pricing/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

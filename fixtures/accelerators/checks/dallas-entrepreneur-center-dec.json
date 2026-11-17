@@ -1,52 +1,593 @@
 {
   "programId": "dallas-entrepreneur-center-dec",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "http://thedec.co/",
-    "https://thedec.co/programs-page-8-13-2026/"
+    "https://thedec.co/",
+    "https://thedec.co/about/",
+    "https://thedec.co/about/contact/",
+    "https://thedec.co/about/our-team/",
+    "https://thedec.co/programs-page-8-13-2026/",
+    "https://thedec.co/programs/",
+    "https://thedec.co/about/blog/",
+    "https://thedec.co/about/news/",
+    "https://thedec.co/2023/01/30/the-dec-networks-womenxtech-summit-sponsored-by-smart-business-concepts-kicks-off-year-long-programming-for-women/"
   ],
   "evidence": [
     {
+      "id": "check-announced-5c5395ba80",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "Smarter. Build Stronger. Position Your Business for What’s Next. Applications close August 17th! Location: The DEC Network at Fort Worth 600 Bryan Ave, Suite",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-790fa38da0",
+      "url": "https://thedec.co/programs/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "Smarter. Build Stronger. Position Your Business for What’s Next. Applications close August 17th! Location: The DEC Network at Fort Worth 600 Bryan Ave, Suite",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-af0c44cddf",
+      "url": "https://thedec.co/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "for our community. TIMELINE: Begins January 2027 APPLICATION DEADLINE: November 1st LOCATION: The DEC Network at Redbird Developed in collaboration",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-d2e25892f2",
+      "url": "http://thedec.co/",
+      "title": "The Dallas Entrepreneur Center (DEC) — homepage",
+      "excerpt": "for our community. TIMELINE: Begins January 2027 APPLICATION DEADLINE: November 1st LOCATION: The DEC Network at Redbird Developed in collaboration",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3f11a88ae0",
+      "url": "https://thedec.co/programs/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "their idea. Program details: Length of Program: 4 weeks Location: 3560 W. Camp Wisdom Rd, STE 200,",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7d2f8ec790",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "their idea. Program details: Length of Program: 4 weeks Location: 3560 W. Camp Wisdom Rd, STE 200,",
+      "page": "details"
+    },
+    {
+      "id": "check-email-06a647dd68",
+      "url": "https://thedec.co/about/our-team/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "info@TheDEC.co",
+      "page": "details"
+    },
+    {
+      "id": "check-email-181c0c7222",
+      "url": "https://thedec.co/about/news/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "News – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
+      "page": "details"
+    },
+    {
       "id": "check-email-1a4ff582b3",
       "url": "http://thedec.co/",
-      "title": "The Dallas Entrepreneur Center (DEC) — homepage checked by scrape.py",
+      "title": "The Dallas Entrepreneur Center (DEC) — homepage",
+      "excerpt": "info@TheDEC.co",
+      "page": "details"
+    },
+    {
+      "id": "check-email-286a3e540e",
+      "url": "https://thedec.co/about/blog/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "info@TheDEC.co",
+      "page": "details"
+    },
+    {
+      "id": "check-email-43fb81a6bd",
+      "url": "https://thedec.co/about/contact/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "info@TheDec.co",
+      "page": "details"
+    },
+    {
+      "id": "check-email-44f23f1e37",
+      "url": "https://thedec.co/2023/01/30/the-dec-networks-womenxtech-summit-sponsored-by-smart-business-concepts-kicks-off-year-long-programming-for-women/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "info@TheDEC.co",
+      "page": "details"
+    },
+    {
+      "id": "check-email-453418b2da",
+      "url": "https://thedec.co/about/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "About – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
+      "page": "details"
+    },
+    {
+      "id": "check-email-45d1e261fd",
+      "url": "https://thedec.co/about/our-team/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "Our Team – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
+      "page": "details"
+    },
+    {
+      "id": "check-email-45e03dd2b7",
+      "url": "https://thedec.co/programs/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
       "excerpt": "info@TheDEC.co",
       "page": "details"
     },
     {
       "id": "check-email-513dc9b7c0",
       "url": "https://thedec.co/programs-page-8-13-2026/",
-      "title": "The Dallas Entrepreneur Center (DEC) — details page checked by scrape.py",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
       "excerpt": "PROGRAMS – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5ec71f9c9c",
+      "url": "https://thedec.co/2023/01/30/the-dec-networks-womenxtech-summit-sponsored-by-smart-business-concepts-kicks-off-year-long-programming-for-women/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "investment in the community. Chris Donnell The DEC Network media@thedec.co Women in Tech Upcoming Events Nov 16 All day FunkyTown",
+      "page": "details"
+    },
+    {
+      "id": "check-email-6d11bb3772",
+      "url": "https://thedec.co/about/blog/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "BLOG – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
+      "page": "details"
+    },
+    {
+      "id": "check-email-882b02f959",
+      "url": "https://thedec.co/about/contact/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "CONTACT 3560 W. Camp Wisdom Road, #200 Dallas, Texas 75237 info@TheDec.co Name Email Message Send Upcoming Events Nov 16 All day",
+      "page": "details"
+    },
+    {
+      "id": "check-email-912e9bca29",
+      "url": "https://thedec.co/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "start, build and grow their businesses. Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
+      "page": "details"
+    },
+    {
+      "id": "check-email-939cc6ea6a",
+      "url": "https://thedec.co/2023/01/30/the-dec-networks-womenxtech-summit-sponsored-by-smart-business-concepts-kicks-off-year-long-programming-for-women/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "media@thedec.co",
+      "page": "details"
+    },
+    {
+      "id": "check-email-97a2c5bd35",
+      "url": "https://thedec.co/about/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "info@TheDEC.co",
       "page": "details"
     },
     {
       "id": "check-email-9c624b2b10",
       "url": "https://thedec.co/programs-page-8-13-2026/",
-      "title": "The Dallas Entrepreneur Center (DEC) — details page checked by scrape.py",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
       "excerpt": "info@TheDEC.co",
+      "page": "details"
+    },
+    {
+      "id": "check-email-9f4b1d8990",
+      "url": "https://thedec.co/programs/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "PROGRAMS – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a02ffc2cde",
+      "url": "https://thedec.co/about/news/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "info@TheDEC.co",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a1640cab6b",
+      "url": "https://thedec.co/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "info@TheDEC.co",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a2c2fcb8e8",
+      "url": "https://thedec.co/about/contact/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "info@TheDEC.co",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a6053184af",
+      "url": "https://thedec.co/2023/01/30/the-dec-networks-womenxtech-summit-sponsored-by-smart-business-concepts-kicks-off-year-long-programming-for-women/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "Programming for Women – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d0468287b1",
+      "url": "https://thedec.co/about/contact/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "CONTACT – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
       "page": "details"
     },
     {
       "id": "check-email-f9e1fe9910",
       "url": "http://thedec.co/",
-      "title": "The Dallas Entrepreneur Center (DEC) — homepage checked by scrape.py",
+      "title": "The Dallas Entrepreneur Center (DEC) — homepage",
       "excerpt": "start, build and grow their businesses. Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
+      "page": "details"
+    },
+    {
+      "id": "check-format-086c99176c",
+      "url": "https://thedec.co/about/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "Access: Options ranging from single Day Passes and Virtual Mail Memberships to open-plan hot desking packages.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2377220379",
+      "url": "https://thedec.co/2023/01/30/the-dec-networks-womenxtech-summit-sponsored-by-smart-business-concepts-kicks-off-year-long-programming-for-women/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "they are confirmed. Join The DEC Network for our inaugural in-person WomenXTech Summit sponsored by Smart Business Concepts!",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6af1f37865",
+      "url": "https://thedec.co/2023/01/30/the-dec-networks-womenxtech-summit-sponsored-by-smart-business-concepts-kicks-off-year-long-programming-for-women/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "Concepts , The DEC Network will host this one-day, in-person summit for women at Smart Business Concepts’ headquarters",
+      "page": "details"
+    },
+    {
+      "id": "check-format-aed60881b9",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "the growth stage of business. Program details: Location: Hybrid at The DEC Network at Redbird Date: September 1 st –",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d61e0d768b",
+      "url": "https://thedec.co/programs/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "the growth stage of business. Program details: Location: Hybrid at The DEC Network at Redbird Date: September 1 st –",
       "page": "details"
     },
     {
       "id": "check-route-36b5f72a26",
       "url": "http://thedec.co/",
-      "title": "The Dallas Entrepreneur Center (DEC) — homepage checked by scrape.py",
+      "title": "The Dallas Entrepreneur Center (DEC) — homepage",
+      "excerpt": "APPLY TODAY → https://thedecnetwork.typeform.com/to/blyCGTBv?typeform-source=bit.ly",
+      "page": "details"
+    },
+    {
+      "id": "check-route-58f9ae3a46",
+      "url": "https://thedec.co/programs/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
+      "excerpt": "apply here → https://thedecnetwork.typeform.com/programapp?typeform-source=qr.io",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5f8f1b08c3",
+      "url": "https://thedec.co/",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
       "excerpt": "APPLY TODAY → https://thedecnetwork.typeform.com/to/blyCGTBv?typeform-source=bit.ly",
       "page": "details"
     },
     {
       "id": "check-route-8fef3ed878",
       "url": "https://thedec.co/programs-page-8-13-2026/",
-      "title": "The Dallas Entrepreneur Center (DEC) — details page checked by scrape.py",
+      "title": "The Dallas Entrepreneur Center (DEC) — program page",
       "excerpt": "apply here → https://thedecnetwork.typeform.com/programapp?typeform-source=qr.io",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-323d613fcf",
+      "url": "http://thedec.co/",
+      "page": "details",
+      "excerpt": "The DEC Network – The DEC Network is a 501c3 nonprofit organization driving parity and economic impact by helping entrepreneurs start, build and grow their businesses. Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A tour Today Give Today EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT NEW PROGRAM! Bet on Yourself. Build Your Future. We'll Invest In You. Introducing the Community Entrepreneurship Collaborative Program APPLY TODAY The Community Entrepreneurship Collaborative (CEC) is a unified pathway from ideation to capital. We equip aspiring entrepreneurs across Dallas and Fort Worth with the skills, documentation, mentorship, and lender connections needed to launch, sustain,"
+    },
+    {
+      "id": "check-page-fc8193336b",
+      "url": "http://thedec.co/",
+      "page": "details",
+      "excerpt": "We equip aspiring entrepreneurs across Dallas and Fort Worth with the skills, documentation, mentorship, and lender connections needed to launch, sustain, and scale businesses that build wealth and opportunity for our community."
+    },
+    {
+      "id": "check-page-db4d6c7f9a",
+      "url": "http://thedec.co/",
+      "page": "details",
+      "excerpt": "TIMELINE: Begins January 2027 APPLICATION DEADLINE: November 1st LOCATION: The DEC Network at Redbird Developed in collaboration with the SMU Cox School of Business and delivered by experienced entrepreneurs, mentors, and business leaders."
+    },
+    {
+      "id": "check-page-7bdad11077",
+      "url": "http://thedec.co/",
+      "page": "details",
+      "excerpt": "Emails are serviced by Constant Contact Home Events Programs Rentals Co-working Options Sponsors About Us Our Team Blog News Contact Home Events Programs Rentals Co-working Options Sponsors About Us Our Team Blog News Contact © 2026 The DEC Network"
+    },
+    {
+      "id": "check-page-1100d0c557",
+      "url": "https://thedec.co/",
+      "page": "details",
+      "excerpt": "The DEC Network – The DEC Network is a 501c3 nonprofit organization driving parity and economic impact by helping entrepreneurs start, build and grow their businesses. Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A tour Today Give Today EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT NEW PROGRAM! Bet on Yourself. Build Your Future. We'll Invest In You. Introducing the Community Entrepreneurship Collaborative Program APPLY TODAY The Community Entrepreneurship Collaborative (CEC) is a unified pathway from ideation to capital. We equip aspiring entrepreneurs across Dallas and Fort Worth with the skills, documentation, mentorship, and lender connections needed to launch, sustain,"
+    },
+    {
+      "id": "check-page-5ee1d46c04",
+      "url": "https://thedec.co/",
+      "page": "details",
+      "excerpt": "We equip aspiring entrepreneurs across Dallas and Fort Worth with the skills, documentation, mentorship, and lender connections needed to launch, sustain, and scale businesses that build wealth and opportunity for our community."
+    },
+    {
+      "id": "check-page-fb82f4041e",
+      "url": "https://thedec.co/",
+      "page": "details",
+      "excerpt": "TIMELINE: Begins January 2027 APPLICATION DEADLINE: November 1st LOCATION: The DEC Network at Redbird Developed in collaboration with the SMU Cox School of Business and delivered by experienced entrepreneurs, mentors, and business leaders."
+    },
+    {
+      "id": "check-page-90ac5dcfa0",
+      "url": "https://thedec.co/",
+      "page": "details",
+      "excerpt": "Emails are serviced by Constant Contact Home Events Programs Rentals Co-working Options Sponsors About Us Our Team Blog News Contact Home Events Programs Rentals Co-working Options Sponsors About Us Our Team Blog News Contact © 2026 The DEC Network"
+    },
+    {
+      "id": "check-page-7cb7319a82",
+      "url": "https://thedec.co/about/",
+      "page": "details",
+      "excerpt": "About – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A tour Today Give Today EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT THE DEC NETWORK Our Mission The DEC Network is a 501(c)(3) non-profit organization dedicated to fuel innovation and foster economic growth while building a more diverse and equitable ecosystem for entrepreneurs. Where we are Located FORT WORTH Location: 600 Bryan Ave #220, Fort Worth, TX 76104 Hours: Monday – Friday | 9:00 AM – 5:00 PM (24/7 access available for dedicated space members) What We Provide: Flexible Access: Options ranging from single Day Passes and Virtual Mail Memberships to open-plan hot desking packages. Dedicated"
+    },
+    {
+      "id": "check-page-5684b336ce",
+      "url": "https://thedec.co/about/",
+      "page": "details",
+      "excerpt": "The Network: Seamless integration with the Fort Worth community, localized mentorship matching, exclusive Near Southside neighborhood merchant discounts, and weekly educational workshops."
+    },
+    {
+      "id": "check-page-a7d89e123b",
+      "url": "https://thedec.co/about/",
+      "page": "details",
+      "excerpt": "Funding & Growth: Access to a dedicated Capital Access Resource Area connecting founders to funding opportunities, alongside business accelerator programs with pitching competitions."
+    },
+    {
+      "id": "check-page-8912f7675d",
+      "url": "https://thedec.co/about/",
+      "page": "details",
+      "excerpt": "Click Here Accelerator Programs Grow your business through accelerator cohorts and expert mentorship."
+    },
+    {
+      "id": "check-page-47c10ea55e",
+      "url": "https://thedec.co/about/",
+      "page": "details",
+      "excerpt": "Click Here Coworking Options Work productively in flexible shared spaces with premium amenities."
+    },
+    {
+      "id": "check-page-37a560f388",
+      "url": "https://thedec.co/about/",
+      "page": "details",
+      "excerpt": "Click Here Our Impact at a Glance The DEC Network is a nonprofit organization dedicated to driving economic impact by equipping entrepreneurs with the resources, mentorship, and community they need to start, build, and grow their businesses."
+    },
+    {
+      "id": "check-page-18448769ed",
+      "url": "https://thedec.co/about/",
+      "page": "details",
+      "excerpt": "Upcoming Events Nov 16 All day FunkyTown Founder Awards Nov 19 All day Social Innovation Project Nov 19 All day Hunington Lunch n Learn/ Member Huddle (FW) View Calendar Vimeo Instagram Linkedin Tiktok Facebook-square X-twitter Sign Up to Stay in Touch!"
+    },
+    {
+      "id": "check-page-a182d87e52",
+      "url": "https://thedec.co/about/",
+      "page": "details",
+      "excerpt": "Emails are serviced by Constant Contact Home Events Programs Rentals Co-working Options Sponsors About Us Our Team Blog News Contact Home Events Programs Rentals Co-working Options Sponsors About Us Our Team Blog News Contact © 2026 The DEC Network"
+    },
+    {
+      "id": "check-page-327403d519",
+      "url": "https://thedec.co/about/contact/",
+      "page": "details",
+      "excerpt": "CONTACT – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A tour Today Give Today EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT 3560 W. Camp Wisdom Road, #200 Dallas, Texas 75237 info@TheDec.co Name Email Message Send Upcoming Events Nov 16 All day FunkyTown Founder Awards Nov 19 All day Social Innovation Project Nov 19 All day Hunington Lunch n Learn/ Member Huddle (FW) View Calendar Vimeo Instagram Linkedin Tiktok Facebook-square X-twitter Sign Up to Stay in Touch! Sign up for our mailing list to receive our weekly newsletter. * Select list(s) to subscribe to Example: Yes, I would like to receive emails from The DEC Network. (You can unsubscribe anytime)"
+    },
+    {
+      "id": "check-page-f458690c95",
+      "url": "https://thedec.co/about/contact/",
+      "page": "details",
+      "excerpt": "Emails are serviced by Constant Contact Home Events Programs Rentals Co-working Options Sponsors About Us Our Team Blog News Contact Home Events Programs Rentals Co-working Options Sponsors About Us Our Team Blog News Contact © 2026 The DEC Network"
+    },
+    {
+      "id": "check-page-0a7842d899",
+      "url": "https://thedec.co/about/our-team/",
+      "page": "details",
+      "excerpt": "Our Team – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A tour Today Give Today EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT Our Team The DEC Network Bill Chinn CEO of the DEC Network Doug Pearce Manager of Business Development Gabriela Morales Senior Manager of Programs Kara Lehnert Senior Manager of Events Ashley Diaz Operations Manager Camryn Byrd Partnership Coordinator Robyne Ciza Business Development Coordinator Kathy Nguyen Business Development Coordinator Amanda Garrett Programs Coordinator Keeya Allen Programs Coordinator Shayla Muñoz Marketing Coordinator Lili Heflin Events Coordinator Sebastian Velez Finance Coordinator Bria Taylor Community"
+    },
+    {
+      "id": "check-page-5cef82ff01",
+      "url": "https://thedec.co/about/our-team/",
+      "page": "details",
+      "excerpt": "Upcoming Events Nov 16 All day FunkyTown Founder Awards Nov 19 All day Social Innovation Project Nov 19 All day Hunington Lunch n Learn/ Member Huddle (FW) View Calendar Vimeo Instagram Linkedin Tiktok Facebook-square X-twitter Sign Up to Stay in Touch!"
+    },
+    {
+      "id": "check-page-a092af5f0b",
+      "url": "https://thedec.co/about/our-team/",
+      "page": "details",
+      "excerpt": "Emails are serviced by Constant Contact Home Events Programs Rentals Co-working Options Sponsors About Us Our Team Blog News Contact Home Events Programs Rentals Co-working Options Sponsors About Us Our Team Blog News Contact © 2026 The DEC Network"
+    },
+    {
+      "id": "check-page-f7a5588506",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "page": "details",
+      "excerpt": "PROGRAMS – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A tour Today Give Today EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT Accelerator Programs & Mentorship Programs Overview Community Entrepreneurship Collaborative Your Level Up Thrive Big iDEA Grow Together, Scale Faster Be a part of our Cohorts at The DEC Network Cohorts at The DEC Network are structured, multi-week programs that guide a selected group of founders through a rigorous business curriculum covering financial management, marketing, and scaling strategies. Participants gain hands-on mentorship, peer accountability, and pitch training, providing the strategic roadmap and confidence needed to"
+    },
+    {
+      "id": "check-page-1081896944",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "page": "details",
+      "excerpt": "Participants gain hands-on mentorship, peer accountability, and pitch training, providing the strategic roadmap and confidence needed to sustainably grow their businesses."
+    },
+    {
+      "id": "check-page-7549736f47",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "page": "details",
+      "excerpt": "The Your Level Up Program is designed for entrepreneurs in the growth stage of business."
+    },
+    {
+      "id": "check-page-67faffa759",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "page": "details",
+      "excerpt": "Program details: Location: Hybrid at The DEC Network at Redbird Date: September 1 st – November 10 th Time: Tuesdays from 4:30 PM – 6:30 PM Requirements: For-profit 2–3 years in business Generating $50k or more annually apply here The Thrive Accelerator Program is designed for entrepreneurs who are ready to scale with intention – not just grow faster."
+    },
+    {
+      "id": "check-page-2a896ea6d6",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "page": "details",
+      "excerpt": "Benefits: 1-1 mentorship with experienced business professionals Strengthen your operations Expand Your Network Get access to capital opportunities And more!"
+    },
+    {
+      "id": "check-page-d747f1f81b",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "page": "details",
+      "excerpt": "Location: The DEC Network at Fort Worth 600 Bryan Ave, Suite 220, Fort Worth, TX 76104 The Big iDEA accelerator program is for founders in the ideation pre revenue phase of business."
+    },
+    {
+      "id": "check-page-c39c23a226",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "page": "details",
+      "excerpt": "This bootcamp style program is four sessions dedicated to guiding the founder as they prepare to pitch their idea."
+    },
+    {
+      "id": "check-page-ebb5bd13da",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "page": "details",
+      "excerpt": "Camp Wisdom Rd, STE 200, Dallas, TX 75237 Benefits: Mentorship from a successful business owner or high-level executive through The DEC Network Access to exclusive membership events and workshops Opportunity to pitch for cash prizes And more!"
+    },
+    {
+      "id": "check-page-55dacd1ba9",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "page": "details",
+      "excerpt": "The program concludes with the Big iDEA Pitch Competition ."
+    },
+    {
+      "id": "check-page-08243c9839",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "page": "details",
+      "excerpt": "The top eight entrepreneurs present their business concept to a live audience and a panel of judges, competing for cash awards to help accelerate their venture’s growth."
+    },
+    {
+      "id": "check-page-ab6a9b0c08",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "page": "details",
+      "excerpt": "Mentorship Opportunities Your Business, Backed by Experience At The DEC Network, our Mentorship Program connects entrepreneurs directly with seasoned business leaders and industry experts who volunteer their time to help you navigate the hurdles of scaling a business."
+    },
+    {
+      "id": "check-page-2ae954e1c5",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "page": "details",
+      "excerpt": "Through structured accelerator programs and one-on-one advisory connections, mentees receive tactical guidance, strategic feedback, and crucial insights to help avoid costly mistakes and fast-track their growth."
+    },
+    {
+      "id": "check-page-0cb56d401e",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "page": "details",
+      "excerpt": "Whether you are validating an early-stage idea or preparing to secure capital, our mentoring network provides the trusted human capital needed to turn obstacles into major business milestones."
+    },
+    {
+      "id": "check-page-d1e2ca37d3",
+      "url": "https://thedec.co/programs/",
+      "page": "details",
+      "excerpt": "PROGRAMS – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A tour Today Give Today EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT Accelerator Programs & Mentorship Programs Overview Community Entrepreneurship Collaborative Your Level Up Thrive Big iDEA Grow Together, Scale Faster Be a part of our Cohorts at The DEC Network Cohorts at The DEC Network are structured, multi-week programs that guide a selected group of founders through a rigorous business curriculum covering financial management, marketing, and scaling strategies. Participants gain hands-on mentorship, peer accountability, and pitch training, providing the strategic roadmap and confidence needed to"
+    },
+    {
+      "id": "check-page-17b2109bcf",
+      "url": "https://thedec.co/programs/",
+      "page": "details",
+      "excerpt": "Participants gain hands-on mentorship, peer accountability, and pitch training, providing the strategic roadmap and confidence needed to sustainably grow their businesses."
+    },
+    {
+      "id": "check-page-b01c8d97c5",
+      "url": "https://thedec.co/programs/",
+      "page": "details",
+      "excerpt": "The Your Level Up Program is designed for entrepreneurs in the growth stage of business."
+    },
+    {
+      "id": "check-page-e3002dfbc5",
+      "url": "https://thedec.co/programs/",
+      "page": "details",
+      "excerpt": "Program details: Location: Hybrid at The DEC Network at Redbird Date: September 1 st – November 10 th Time: Tuesdays from 4:30 PM – 6:30 PM Requirements: For-profit 2–3 years in business Generating $50k or more annually apply here The Thrive Accelerator Program is designed for entrepreneurs who are ready to scale with intention – not just grow faster."
+    },
+    {
+      "id": "check-page-45e0c6096a",
+      "url": "https://thedec.co/programs/",
+      "page": "details",
+      "excerpt": "Benefits: 1-1 mentorship with experienced business professionals Strengthen your operations Expand Your Network Get access to capital opportunities And more!"
+    },
+    {
+      "id": "check-page-18bb198e63",
+      "url": "https://thedec.co/programs/",
+      "page": "details",
+      "excerpt": "Location: The DEC Network at Fort Worth 600 Bryan Ave, Suite 220, Fort Worth, TX 76104 The Big iDEA accelerator program is for founders in the ideation pre revenue phase of business."
+    },
+    {
+      "id": "check-page-272a9f3d54",
+      "url": "https://thedec.co/programs/",
+      "page": "details",
+      "excerpt": "This bootcamp style program is four sessions dedicated to guiding the founder as they prepare to pitch their idea."
+    },
+    {
+      "id": "check-page-14b3c47ebe",
+      "url": "https://thedec.co/programs/",
+      "page": "details",
+      "excerpt": "Camp Wisdom Rd, STE 200, Dallas, TX 75237 Benefits: Mentorship from a successful business owner or high-level executive through The DEC Network Access to exclusive membership events and workshops Opportunity to pitch for cash prizes And more!"
+    },
+    {
+      "id": "check-page-ccf9543b41",
+      "url": "https://thedec.co/programs/",
+      "page": "details",
+      "excerpt": "The program concludes with the Big iDEA Pitch Competition ."
+    },
+    {
+      "id": "check-page-2f1aead6fd",
+      "url": "https://thedec.co/programs/",
+      "page": "details",
+      "excerpt": "The top eight entrepreneurs present their business concept to a live audience and a panel of judges, competing for cash awards to help accelerate their venture’s growth."
+    },
+    {
+      "id": "check-page-5c151b66c6",
+      "url": "https://thedec.co/programs/",
+      "page": "details",
+      "excerpt": "Mentorship Opportunities Your Business, Backed by Experience At The DEC Network, our Mentorship Program connects entrepreneurs directly with seasoned business leaders and industry experts who volunteer their time to help you navigate the hurdles of scaling a business."
+    },
+    {
+      "id": "check-page-38c544185e",
+      "url": "https://thedec.co/programs/",
+      "page": "details",
+      "excerpt": "Through structured accelerator programs and one-on-one advisory connections, mentees receive tactical guidance, strategic feedback, and crucial insights to help avoid costly mistakes and fast-track their growth."
+    },
+    {
+      "id": "check-page-d591c12b61",
+      "url": "https://thedec.co/programs/",
+      "page": "details",
+      "excerpt": "Whether you are validating an early-stage idea or preparing to secure capital, our mentoring network provides the trusted human capital needed to turn obstacles into major business milestones."
+    },
+    {
+      "id": "check-page-5af609e30a",
+      "url": "https://thedec.co/about/blog/",
+      "page": "details",
+      "excerpt": "BLOG – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A tour Today Give Today EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT Latest News + Updates Blog Empowering Entrepreneurs through Community and Connections at The DEC Network Read more → Empowering Logistics: The Story of Resilient Freight Solutions Read more → Empowering Mompreneurs and Female Corporate Side Hustlers: The Story of Brands ByBrie Read more → Myngly: Navigating the Networking Landscape for Success Read more → Empowering Minds: The Success Story of Nikki James and Building Intellect Tutorial Services (BITS) Read more → Empowering Entrepreneurs and Driving Growth: The DEC Network’s 2023 Impact"
+    },
+    {
+      "id": "check-page-ef7f256e46",
+      "url": "https://thedec.co/about/news/",
+      "page": "details",
+      "excerpt": "News – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A tour Today Give Today EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT In the Media PODCASTS News Capturing the Entrepreneurial Spirit of Tim Hill: Leading Entrepreneurs at The DEC Network Read more → Celebrating National Small Business Week at the DEC Network Read more → The DEC Network Ventures West for Fort Worth Entrepreneurship Center Read more → A New Center in Fort Worth Wants to Help You Start a Business fort worth report Read more → A new center in Fort Worth wants to help you start a business Read more → The DEC Network Helps Entrepreneurs Start, Build And Grow Their Businesses Read more →"
+    },
+    {
+      "id": "check-page-3b27de9f92",
+      "url": "https://thedec.co/2023/01/30/the-dec-networks-womenxtech-summit-sponsored-by-smart-business-concepts-kicks-off-year-long-programming-for-women/",
+      "page": "details",
+      "excerpt": "The DEC Network’s WomenXTech Summit sponsored by Smart Business Concepts Kicks off Year-Long Programming for Women – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A tour Today Give Today EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Sponsors Rentals Co-working Options EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT EVENTS PROGRAMS Rentals Sponsors DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About Us Co-working Options BLOG Our Team News CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT DFW Startup Week 2026 SPEAKERS Schedule Community Events ENGAGE WITH US SPONSORS About About Us Our Team BLOG News Media Inquires CONTACT The DEC Network’s WomenXTech Summit sponsored by Smart Business Concepts Kicks off Year-Long Programming for Women NEWS PROVIDED BY EIN Presswire Jan 30, 2023, 11:51 AM ET DALLAS, TEXAS, USA, January 30, 2023 / EINPresswire.com / — The DEC Network is proud to announce the 2023 WomenXTech Summit. In partnership with Smart Business Concepts , The DEC Network will host this one-day, in-person summit for women at Smart Business"
     }
   ],
   "findings": {
@@ -54,6 +595,10 @@
       {
         "value": "info@thedec.co",
         "evidenceId": "check-email-1a4ff582b3"
+      },
+      {
+        "value": "media@thedec.co",
+        "evidenceId": "check-email-939cc6ea6a"
       }
     ],
     "phones": [],
@@ -71,8 +616,42 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "November",
+        "evidenceId": "check-announced-d2e25892f2"
+      },
+      {
+        "value": "August",
+        "evidenceId": "check-announced-5c5395ba80"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "4",
+        "evidenceId": "check-duration-7d2f8ec790"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-086c99176c"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-aed60881b9"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-6af1f37865"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

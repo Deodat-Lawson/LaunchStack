@@ -1,28 +1,690 @@
 {
   "programId": "occam-design",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
-    "https://www.occamdesign.com"
+    "https://www.occamdesign.com",
+    "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+    "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+    "https://occamdesign.com/about-2/",
+    "https://occamdesign.com/about-occam-design/",
+    "https://occamdesign.com/about/",
+    "https://occamdesign.com/about/ourcapabilities/",
+    "https://occamdesign.com/about-2/?cache=0",
+    "https://occamdesign.com/about-occam-design/?cache=0",
+    "https://occamdesign.com/about/?cache=0",
+    "https://occamdesign.com/about/ourcapabilities/?cache=0",
+    "https://occamdesign.com/engineering-innovation-a-look-at-occam-designs-medical-device-portfolio/",
+    "https://occamdesign.com/engineering-innovation-a-look-at-occam-designs-medical-device-portfolio/?cache=0"
   ],
   "evidence": [
     {
+      "id": "check-email-2192b36aaa",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "title": "Occam Design — terms page",
+      "excerpt": "in Louisville, Kentucky. You can contact our team at info@occamdesign.com or via phone at 502.714.7200 for moreinformation on",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-2ca97d0842",
+      "url": "https://occamdesign.com/about-occam-design/?cache=0",
+      "title": "Occam Design — program page",
+      "excerpt": "1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials",
+      "page": "details"
+    },
+    {
+      "id": "check-email-327c025c09",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "title": "Occam Design — terms page",
+      "excerpt": "1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-5af748efd9",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "title": "Occam Design — terms page",
+      "excerpt": "1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-5c78d8a044",
+      "url": "https://occamdesign.com/engineering-innovation-a-look-at-occam-designs-medical-device-portfolio/?cache=0",
+      "title": "Occam Design — portfolio page",
+      "excerpt": "in Louisville, Kentucky. You can contact our team at info@occamdesign.com or via phone at 502.714.7200 for moreinformation on",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-65a20b4534",
+      "url": "https://occamdesign.com/about-2/",
+      "title": "Occam Design — program page",
+      "excerpt": "1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials",
+      "page": "details"
+    },
+    {
+      "id": "check-email-6b0f6d4f60",
+      "url": "https://occamdesign.com/about-2/",
+      "title": "Occam Design — program page",
+      "excerpt": "1201 East Oak Street Louisville, KY 40204 contact us info@occamdesign.com • (502) 714 – 7200 1201 East Oak Street, Louisville, KY",
+      "page": "details"
+    },
+    {
+      "id": "check-email-705c8fd101",
+      "url": "https://occamdesign.com/engineering-innovation-a-look-at-occam-designs-medical-device-portfolio/",
+      "title": "Occam Design — portfolio page",
+      "excerpt": "in Louisville, Kentucky. You can contact our team at info@occamdesign.com or via phone at 502.714.7200 for moreinformation on",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-786664652e",
+      "url": "https://occamdesign.com/about/ourcapabilities/",
+      "title": "Occam Design — program page",
+      "excerpt": "1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8977a2a937",
+      "url": "https://occamdesign.com/about-2/?cache=0",
+      "title": "Occam Design — program page",
+      "excerpt": "1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials",
+      "page": "details"
+    },
+    {
+      "id": "check-email-9ad40761b7",
+      "url": "https://occamdesign.com/about/?cache=0",
+      "title": "Occam Design — program page",
+      "excerpt": "1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ac5821c134",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "title": "Occam Design — terms page",
+      "excerpt": "in Louisville, Kentucky. You can contact our team at info@occamdesign.com or via phone at 502.714.7200 for moreinformation on",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-b17d965eab",
+      "url": "https://occamdesign.com/about-occam-design/",
+      "title": "Occam Design — program page",
+      "excerpt": "1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b4d94d01a4",
+      "url": "https://occamdesign.com/about-2/?cache=0",
+      "title": "Occam Design — program page",
+      "excerpt": "1201 East Oak Street Louisville, KY 40204 contact us info@occamdesign.com • (502) 714 – 7200 1201 East Oak Street, Louisville, KY",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c2f5f2bd1d",
+      "url": "https://occamdesign.com/engineering-innovation-a-look-at-occam-designs-medical-device-portfolio/?cache=0",
+      "title": "Occam Design — portfolio page",
+      "excerpt": "1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-e3bf93d7b5",
+      "url": "https://occamdesign.com/about/ourcapabilities/?cache=0",
+      "title": "Occam Design — program page",
+      "excerpt": "1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e4fd2a61fc",
+      "url": "https://occamdesign.com/about/",
+      "title": "Occam Design — program page",
+      "excerpt": "1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f8bd53d823",
+      "url": "https://occamdesign.com/engineering-innovation-a-look-at-occam-designs-medical-device-portfolio/",
+      "title": "Occam Design — portfolio page",
+      "excerpt": "1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-590487c873",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "title": "Occam Design — terms page",
+      "excerpt": "disease or intensive care needs, like cardiac patients. Remote patient monitoring (RPM) devices also allow healthcare",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-60252d29af",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "title": "Occam Design — terms page",
+      "excerpt": "allowing device designers to meet needs more efficiently. Remote Patient Monitoring (RPM) When patients’ healthcare data",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6243b28e42",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "title": "Occam Design — terms page",
+      "excerpt": "disease or intensive care needs, like cardiac patients. Remote patient monitoring (RPM) devices also allow healthcare",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-705e4e3cd0",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "title": "Occam Design — terms page",
+      "excerpt": "like AI and expanding sectors like 3D printing, remote device monitoring, and device connectivity are all",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-9e9b9195db",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "title": "Occam Design — terms page",
+      "excerpt": "like AI and expanding sectors like 3D printing, remote device monitoring, and device connectivity are all",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a0c8619542",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "title": "Occam Design — terms page",
+      "excerpt": "healthcare systems to leverage and expand telehealth and virtual care efforts, helping medical care reach more people in",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ae47b99cb1",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "title": "Occam Design — terms page",
+      "excerpt": "allowing device designers to meet needs more efficiently. Remote Patient Monitoring (RPM) When patients’ healthcare data",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-f47e078b12",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "title": "Occam Design — terms page",
+      "excerpt": "healthcare systems to leverage and expand telehealth and virtual care efforts, helping medical care reach more people in",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-2cbece8294",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "title": "Occam Design — terms page",
+      "excerpt": "quality medical devices. We are located in Louisville, Kentucky. You can contact our team at",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-60afff5fae",
+      "url": "https://occamdesign.com/engineering-innovation-a-look-at-occam-designs-medical-device-portfolio/?cache=0",
+      "title": "Occam Design — portfolio page",
+      "excerpt": "quality medical devices. We are located in Louisville, Kentucky. You can contact our team at",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-758c5d0437",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "title": "Occam Design — terms page",
+      "excerpt": "quality medical devices. We are located in Louisville, Kentucky. You can contact our team at",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-8b92338345",
+      "url": "https://occamdesign.com/about-2/?cache=0",
+      "title": "Occam Design — program page",
+      "excerpt": "medical device development company based in Louisville, Kentucky. We approach every project",
+      "page": "details"
+    },
+    {
+      "id": "check-location-c63a091279",
+      "url": "https://occamdesign.com/about-2/",
+      "title": "Occam Design — program page",
+      "excerpt": "medical device development company based in Louisville, Kentucky. We approach every project",
+      "page": "details"
+    },
+    {
+      "id": "check-location-dba3167b9e",
+      "url": "https://occamdesign.com/engineering-innovation-a-look-at-occam-designs-medical-device-portfolio/",
+      "title": "Occam Design — portfolio page",
+      "excerpt": "quality medical devices. We are located in Louisville, Kentucky. You can contact our team at",
+      "page": "portfolio"
+    },
+    {
       "id": "check-name-6dbe52f265",
       "url": "https://www.occamdesign.com",
-      "title": "Occam Design — homepage checked by scrape.py",
+      "title": "Occam Design — homepage",
       "excerpt": "Home • Occam Design Cookies Settings This website stores cookies on your",
       "page": "details"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-85ad014a66",
+      "url": "https://www.occamdesign.com",
+      "page": "details",
+      "excerpt": "Home • Occam Design Cookies Settings This website stores cookies on your computer. These cookies are used to improve your website experience and provide more personalized services to you, both on this website and through other media. To find out more about the cookies we use, see our Privacy Policy. We won't track your information when you visit our site. But in order to comply with your preferences, we'll have to use just one tiny cookie so that you're not asked to make this choice again. Accept Decline Skip to content Welcome to Occam Design. Meeting your specs, exceeding your expectations. 1201 East Oak Street, Louisville, KY 40204 (502) 714 - 7200 About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers © 2020 A division of CreoSalus, Inc. About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers © 2020 CONTACT US From Prototype to FDA Clearance your Medical Device development and manufacturing team Schedule Introduction Meeting ISO"
+    },
+    {
+      "id": "check-page-9a468159c2",
+      "url": "https://www.occamdesign.com",
+      "page": "details",
+      "excerpt": "With over 20 years of experience, our team is a leader in designing, engineering, and manufacturing medical devices for our clients who approach us at different stages varying from a napkin sketch to manufacturing transfer."
+    },
+    {
+      "id": "check-page-a4224150c1",
+      "url": "https://www.occamdesign.com",
+      "page": "details",
+      "excerpt": "Our clients get custom project plans and a dedicated project manager who conducts our full suite of engineers, manufacturing division, and any vendor communication your team prefers we handle."
+    },
+    {
+      "id": "check-page-fffd3f7d8b",
+      "url": "https://www.occamdesign.com",
+      "page": "details",
+      "excerpt": "Project Management 3D Animations Design for Manufacturing Test Development and Test Strategy Production Prototyping Wellness + Wearables Device Development Regulatory Compliance Our Full Capabilities Testimonials “Both of your designers were professional and informtive and quickly understood the metrics needed to flesh out this potential."
+    },
+    {
+      "id": "check-page-e48b6d8fce",
+      "url": "https://www.occamdesign.com",
+      "page": "details",
+      "excerpt": "We had a lot of success last week, won the pitch competition, and made some very important connections."
+    },
+    {
+      "id": "check-page-d2329dcd99",
+      "url": "https://www.occamdesign.com",
+      "page": "details",
+      "excerpt": "We’re building emotional infrastructure for the next era of mental health and Occam’s the kind of partner I’d want in that foxhole.” Ryan Hansen Founder, NOVi “Occam’s engineers have consistently known our projects as well as we do."
+    },
+    {
+      "id": "check-page-7cc6324298",
+      "url": "https://www.occamdesign.com",
+      "page": "details",
+      "excerpt": "From ideation, to prototyping, to manufacturing at volumes required for product evaluations, Occam’s design and production engineers have served as an effective and cost-effective extension of Cerovations’ capabilities.” Joe Hofmeister President, Cerovations “Occam was our first choice."
+    },
+    {
+      "id": "check-page-361cbde759",
+      "url": "https://www.occamdesign.com",
+      "page": "details",
+      "excerpt": "They have expertise in design, engineering, manufacturing, as well as regulatory."
+    },
+    {
+      "id": "check-page-e14cb12ebc",
+      "url": "https://www.occamdesign.com",
+      "page": "details",
+      "excerpt": "Main Office 1201 East Oak Street Louisville, KY 40204 Ph: (502) 714-7200 Manufacturing Facility 1044 East Chestnut Street Louisville, KY 40204 contact us © Copyright 2026 by Occam Design ."
+    },
+    {
+      "id": "check-page-4a75145304",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "page": "terms",
+      "excerpt": "Future Outlook of the Medical Device Market: Trends, Investments, and Innovations • Occam Design Cookies Settings This website stores cookies on your computer. These cookies are used to improve your website experience and provide more personalized services to you, both on this website and through other media. To find out more about the cookies we use, see our Privacy Policy. We won't track your information when you visit our site. But in order to comply with your preferences, we'll have to use just one tiny cookie so that you're not asked to make this choice again. Accept Decline Skip to content Welcome to Occam Design. Meeting your specs, exceeding your expectations. 1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers The medical device sector is a rapidly-evolving landscape with clear trends emerging that will dominate the industry for 2025. Innovations like AI and expanding sectors like 3D printing, remote device monitoring, and device connectivity are all emerging as integral considerations for medical device manufacturers and users alike."
+    },
+    {
+      "id": "check-page-d7197d7411",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "page": "terms",
+      "excerpt": "Forward thinking is the only way to effectively compete in the medical device market, and Occam Design combines a driving interest in innovation with ISO 13485:2016 certification, FDA registration, and 30+ years of industry experience to remain a key player in medical device development and manufacturing."
+    },
+    {
+      "id": "check-page-184fa8a7ca",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "page": "terms",
+      "excerpt": "Market Growth and Sector Expansion The medical device market is growing steadily, owing to a driving desire for healthcare options that are more cost effective, have a greater health impact, and serve growing needs for medical device support."
+    },
+    {
+      "id": "check-page-525121227a",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "page": "terms",
+      "excerpt": "The global market for smart medical devices, both therapeutic and diagnostic, was 90.55 billion in 2024, and is expected to grow 12.84% in 2025."
+    },
+    {
+      "id": "check-page-00c09b927b",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "page": "terms",
+      "excerpt": "Reasons behind this growth include: An aging population with an increasing demand for supportive medical devices."
+    },
+    {
+      "id": "check-page-4b23fcd5c2",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "page": "terms",
+      "excerpt": "Key Innovations Shaping the Market Cybersecurity As medical devices increasingly become part of the “internet of things” their connectivity transmits important and confidential medical data across devices."
+    },
+    {
+      "id": "check-page-4130c9b1aa",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "page": "terms",
+      "excerpt": "Protecting the safety of patients through preemptive cybersecurity measures built in to device design and development is not only important, but a regulatory requirement to ensure a device can go to market."
+    },
+    {
+      "id": "check-page-a2bc15ac46",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "page": "terms",
+      "excerpt": "Artificial Intelligence (AI) AI expedites processing large amounts of information, helping medical professionals find trends and outliers in patient data with a previously unknown rapidity."
+    },
+    {
+      "id": "check-page-c77c6434af",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "page": "terms",
+      "excerpt": "Alongside helping patients and care professionals, AI also speeds up automation and process workflows, allowing device developers to create more efficient and proactive devices and equipment."
+    },
+    {
+      "id": "check-page-bb9e2ac6ef",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "page": "terms",
+      "excerpt": "Devices can be fit and then custom printed to an individual, and the rapidity of both prototyping and manufacturing has fast-tracked medical device development, allowing device designers to meet needs more efficiently."
+    },
+    {
+      "id": "check-page-598e77e9fe",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "page": "terms",
+      "excerpt": "Remote Patient Monitoring (RPM) When patients’ healthcare data can be monitored both continuously and remotely more rapid healthcare support can be offered when metrics change, particularly for patients with chronic disease or intensive care needs, like cardiac patients."
+    },
+    {
+      "id": "check-page-0ef6a19b69",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "page": "terms",
+      "excerpt": "Remote patient monitoring (RPM) devices also allow healthcare systems to leverage and expand telehealth and virtual care efforts, helping medical care reach more people in effective and affordable ways."
+    },
+    {
+      "id": "check-page-a8b2177800",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/",
+      "page": "terms",
+      "excerpt": "Medical Trends to Watch Medical device trends through 2025 embrace technology as a tremendous source of opportunity for reshaping patient care through improvement of patient comfort and outcomes, as well as making healthcare delivery both more straightforward, and more effective."
+    },
+    {
+      "id": "check-page-b9a1118e2f",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "page": "terms",
+      "excerpt": "Future Outlook of the Medical Device Market: Trends, Investments, and Innovations • Occam Design Cookies Settings This website stores cookies on your computer. These cookies are used to improve your website experience and provide more personalized services to you, both on this website and through other media. To find out more about the cookies we use, see our Privacy Policy. We won't track your information when you visit our site. But in order to comply with your preferences, we'll have to use just one tiny cookie so that you're not asked to make this choice again. Accept Decline Skip to content Welcome to Occam Design. Meeting your specs, exceeding your expectations. 1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers The medical device sector is a rapidly-evolving landscape with clear trends emerging that will dominate the industry for 2025. Innovations like AI and expanding sectors like 3D printing, remote device monitoring, and device connectivity are all emerging as integral considerations for medical device manufacturers and users alike."
+    },
+    {
+      "id": "check-page-e5d1594667",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "page": "terms",
+      "excerpt": "Forward thinking is the only way to effectively compete in the medical device market, and Occam Design combines a driving interest in innovation with ISO 13485:2016 certification, FDA registration, and 30+ years of industry experience to remain a key player in medical device development and manufacturing."
+    },
+    {
+      "id": "check-page-da09f898e1",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "page": "terms",
+      "excerpt": "Market Growth and Sector Expansion The medical device market is growing steadily, owing to a driving desire for healthcare options that are more cost effective, have a greater health impact, and serve growing needs for medical device support."
+    },
+    {
+      "id": "check-page-0480857dfc",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "page": "terms",
+      "excerpt": "The global market for smart medical devices, both therapeutic and diagnostic, was 90.55 billion in 2024, and is expected to grow 12.84% in 2025."
+    },
+    {
+      "id": "check-page-f0bea85a1d",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "page": "terms",
+      "excerpt": "Reasons behind this growth include: An aging population with an increasing demand for supportive medical devices."
+    },
+    {
+      "id": "check-page-6301afd870",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "page": "terms",
+      "excerpt": "Key Innovations Shaping the Market Cybersecurity As medical devices increasingly become part of the “internet of things” their connectivity transmits important and confidential medical data across devices."
+    },
+    {
+      "id": "check-page-88fedbf5d7",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "page": "terms",
+      "excerpt": "Protecting the safety of patients through preemptive cybersecurity measures built in to device design and development is not only important, but a regulatory requirement to ensure a device can go to market."
+    },
+    {
+      "id": "check-page-ec5ebfceaa",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "page": "terms",
+      "excerpt": "Artificial Intelligence (AI) AI expedites processing large amounts of information, helping medical professionals find trends and outliers in patient data with a previously unknown rapidity."
+    },
+    {
+      "id": "check-page-ddd304c4e5",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "page": "terms",
+      "excerpt": "Alongside helping patients and care professionals, AI also speeds up automation and process workflows, allowing device developers to create more efficient and proactive devices and equipment."
+    },
+    {
+      "id": "check-page-22985c4fb1",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "page": "terms",
+      "excerpt": "Devices can be fit and then custom printed to an individual, and the rapidity of both prototyping and manufacturing has fast-tracked medical device development, allowing device designers to meet needs more efficiently."
+    },
+    {
+      "id": "check-page-54268f3d0d",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "page": "terms",
+      "excerpt": "Remote Patient Monitoring (RPM) When patients’ healthcare data can be monitored both continuously and remotely more rapid healthcare support can be offered when metrics change, particularly for patients with chronic disease or intensive care needs, like cardiac patients."
+    },
+    {
+      "id": "check-page-5b997edbf9",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "page": "terms",
+      "excerpt": "Remote patient monitoring (RPM) devices also allow healthcare systems to leverage and expand telehealth and virtual care efforts, helping medical care reach more people in effective and affordable ways."
+    },
+    {
+      "id": "check-page-9c200bdba5",
+      "url": "https://occamdesign.com/post-future-outlook-medical-device-market-trends-investments-innovations/?cache=0",
+      "page": "terms",
+      "excerpt": "Medical Trends to Watch Medical device trends through 2025 embrace technology as a tremendous source of opportunity for reshaping patient care through improvement of patient comfort and outcomes, as well as making healthcare delivery both more straightforward, and more effective."
+    },
+    {
+      "id": "check-page-aa2e3f1924",
+      "url": "https://occamdesign.com/about-2/",
+      "page": "details",
+      "excerpt": "About Draft • Occam Design Cookies Settings This website stores cookies on your computer. These cookies are used to improve your website experience and provide more personalized services to you, both on this website and through other media. To find out more about the cookies we use, see our Privacy Policy. We won't track your information when you visit our site. But in order to comply with your preferences, we'll have to use just one tiny cookie so that you're not asked to make this choice again. Accept Decline Skip to content Welcome to Occam Design. Meeting your specs, exceeding your expectations. 1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers The principle of Occam’s Razor states that often times the simplest solution to a problem is the best one. We’ve built our company around this philosophy. About Us Established in 2009, Occam Design is a “one-stop-shop” medical device development company based in Louisville, Kentucky. We approach every project with the simple approach of keeping it on objective, on time, and on budget, while also keeping"
+    },
+    {
+      "id": "check-page-de1b1dcc28",
+      "url": "https://occamdesign.com/about-2/",
+      "page": "details",
+      "excerpt": "With over 20 years of experience, our full suite of engineers, technicians, and machinists handle your product’s design, prototyping, documentation, regulatory, and manufacturing needs as you scale up."
+    },
+    {
+      "id": "check-page-cef8242367",
+      "url": "https://occamdesign.com/about-2/",
+      "page": "details",
+      "excerpt": "Why Work With Us Our project managers support lean operations as they pull engineering/manufacturing/quality/etc. resources as needed–allowing you to focus on a successful device launch."
+    },
+    {
+      "id": "check-page-2790686074",
+      "url": "https://occamdesign.com/about-2/",
+      "page": "details",
+      "excerpt": "What medical devices do you work on?"
+    },
+    {
+      "id": "check-page-bd9c23cd74",
+      "url": "https://occamdesign.com/about-2/",
+      "page": "details",
+      "excerpt": "What medical devices are out of your specialty?"
+    },
+    {
+      "id": "check-page-957b1dfec5",
+      "url": "https://occamdesign.com/about-occam-design/",
+      "page": "details",
+      "excerpt": "About Occam Design • Occam Design Cookies Settings This website stores cookies on your computer. These cookies are used to improve your website experience and provide more personalized services to you, both on this website and through other media. To find out more about the cookies we use, see our Privacy Policy. We won't track your information when you visit our site. But in order to comply with your preferences, we'll have to use just one tiny cookie so that you're not asked to make this choice again. Accept Decline Skip to content Welcome to Occam Design. Meeting your specs, exceeding your expectations. 1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers × ➤ Login to your website ➤ Troubleshoot ➤ Test Cache ➤ Reload CSS © 2026 Occam Design (Occam Design's website was designed by Jarod Thornton & maintained by Adopt the Web )"
+    },
+    {
+      "id": "check-page-590230b570",
+      "url": "https://occamdesign.com/about/",
+      "page": "details",
+      "excerpt": "About • Occam Design Cookies Settings This website stores cookies on your computer. These cookies are used to improve your website experience and provide more personalized services to you, both on this website and through other media. To find out more about the cookies we use, see our Privacy Policy. We won't track your information when you visit our site. But in order to comply with your preferences, we'll have to use just one tiny cookie so that you're not asked to make this choice again. Accept Decline Skip to content Welcome to Occam Design. Meeting your specs, exceeding your expectations. 1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Us We’ve built our company and problem-solving approach around the Occam’s Razor principle: “entities should not be multiplied unnecessarily”. Established in 2009, Occam Design is an ISO13485:2016 certified leader in designing, engineering, and cGMP manufacturing medical devices, health-tech, and wearables that meet customer and regulatory standards. Located in Louisville, KY, we operate within the"
+    },
+    {
+      "id": "check-page-a568f394bb",
+      "url": "https://occamdesign.com/about/",
+      "page": "details",
+      "excerpt": "Located in Louisville, KY, we operate within the intersection of health/medical technologies, equine devices, and government funded projects."
+    },
+    {
+      "id": "check-page-2189e554aa",
+      "url": "https://occamdesign.com/about/",
+      "page": "details",
+      "excerpt": "Our team understands the timeline, engineering constraints, and regulatory challenges that come with every project, because we have taken devices from a napkin sketch to manufacturing and have received over $5 million in NIH grants for our own I.P.-related projects."
+    },
+    {
+      "id": "check-page-315582efca",
+      "url": "https://occamdesign.com/about/",
+      "page": "details",
+      "excerpt": "From pre-seed to DOD funded projects, our clients come to us at any stage and are scattered across the U.S. and in Europe."
+    },
+    {
+      "id": "check-page-eae0407351",
+      "url": "https://occamdesign.com/about/",
+      "page": "details",
+      "excerpt": "Contact Us Engineering, Quality, and Regulatory Our in-house engineering, quality, and manufacturing team is a turnkey solution for your team."
+    },
+    {
+      "id": "check-page-47f453891d",
+      "url": "https://occamdesign.com/about/",
+      "page": "details",
+      "excerpt": "From simple silicone devices to catheters, electromechanical devices, and even blood manipulation devices, our dynamic team keeps up with innovation demands. see our capabilities Pilot/Prototype Builds and Manufacturing Our second facility, down the street, includes 14,000 sq ft of warehouse space available for inventory storage."
+    },
+    {
+      "id": "check-page-e1fd4c2ce9",
+      "url": "https://occamdesign.com/about/",
+      "page": "details",
+      "excerpt": "Leverage our team’s diverse Development experience From EEG/ERP to intra-osteo devices and fluid-management systems, our team works on Class 1, 2, and 3 medical devices and Direct to Consumer health/lifestyle products."
+    },
+    {
+      "id": "check-page-f6698b8266",
+      "url": "https://occamdesign.com/about/ourcapabilities/",
+      "page": "details",
+      "excerpt": "Capabilities • Occam Design Cookies Settings This website stores cookies on your computer. These cookies are used to improve your website experience and provide more personalized services to you, both on this website and through other media. To find out more about the cookies we use, see our Privacy Policy. We won't track your information when you visit our site. But in order to comply with your preferences, we'll have to use just one tiny cookie so that you're not asked to make this choice again. Accept Decline Skip to content Welcome to Occam Design. Meeting your specs, exceeding your expectations. 1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers Our Capabilities Design and Engineering We provide feasibility evaluations and a custom project plan that includes milestones, engineering tasks, potential testing, and timeline. Our in-house machine shop allows us to fabricate your prototypes. Competitor/Hardware Research Industrial Design Early Design Evaluation CAD Models Electrical Schematics Firmware Development Custom System Integration BOM/TCOGS"
+    },
+    {
+      "id": "check-page-9303dcb24f",
+      "url": "https://occamdesign.com/about/ourcapabilities/",
+      "page": "details",
+      "excerpt": "Incoming QC Managing Clinical Trials FDA Document Generation Quality Inspections QMS Support ISO and FDA Standards Review Design Controls DHF Maintenance DMR & CoC Documentation 510k Submissions Pre-market Submissions De Novo EU MDR cGMP Manufacturing We provide contract manufacturing, short-run production, and Class 7 and 8 cleanrooms ."
+    },
+    {
+      "id": "check-page-21fa3be1d1",
+      "url": "https://occamdesign.com/about-2/?cache=0",
+      "page": "details",
+      "excerpt": "About Draft • Occam Design Cookies Settings This website stores cookies on your computer. These cookies are used to improve your website experience and provide more personalized services to you, both on this website and through other media. To find out more about the cookies we use, see our Privacy Policy. We won't track your information when you visit our site. But in order to comply with your preferences, we'll have to use just one tiny cookie so that you're not asked to make this choice again. Accept Decline Skip to content Welcome to Occam Design. Meeting your specs, exceeding your expectations. 1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers The principle of Occam’s Razor states that often times the simplest solution to a problem is the best one. We’ve built our company around this philosophy. About Us Established in 2009, Occam Design is a “one-stop-shop” medical device development company based in Louisville, Kentucky. We approach every project with the simple approach of keeping it on objective, on time, and on budget, while also keeping"
+    },
+    {
+      "id": "check-page-5614ae1c87",
+      "url": "https://occamdesign.com/about-2/?cache=0",
+      "page": "details",
+      "excerpt": "With over 20 years of experience, our full suite of engineers, technicians, and machinists handle your product’s design, prototyping, documentation, regulatory, and manufacturing needs as you scale up."
+    },
+    {
+      "id": "check-page-0c3bc02b67",
+      "url": "https://occamdesign.com/about-2/?cache=0",
+      "page": "details",
+      "excerpt": "Why Work With Us Our project managers support lean operations as they pull engineering/manufacturing/quality/etc. resources as needed–allowing you to focus on a successful device launch."
+    },
+    {
+      "id": "check-page-4a4acb3158",
+      "url": "https://occamdesign.com/about-2/?cache=0",
+      "page": "details",
+      "excerpt": "What medical devices do you work on?"
+    },
+    {
+      "id": "check-page-4dd80eb04c",
+      "url": "https://occamdesign.com/about-2/?cache=0",
+      "page": "details",
+      "excerpt": "What medical devices are out of your specialty?"
+    },
+    {
+      "id": "check-page-67c2641b39",
+      "url": "https://occamdesign.com/about-occam-design/?cache=0",
+      "page": "details",
+      "excerpt": "About Occam Design • Occam Design Cookies Settings This website stores cookies on your computer. These cookies are used to improve your website experience and provide more personalized services to you, both on this website and through other media. To find out more about the cookies we use, see our Privacy Policy. We won't track your information when you visit our site. But in order to comply with your preferences, we'll have to use just one tiny cookie so that you're not asked to make this choice again. Accept Decline Skip to content Welcome to Occam Design. Meeting your specs, exceeding your expectations. 1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers × ➤ Login to your website ➤ Troubleshoot ➤ Test Cache ➤ Reload CSS © 2026 Occam Design (Occam Design's website was designed by Jarod Thornton & maintained by Adopt the Web )"
+    },
+    {
+      "id": "check-page-8fc305fabb",
+      "url": "https://occamdesign.com/about/?cache=0",
+      "page": "details",
+      "excerpt": "About • Occam Design Cookies Settings This website stores cookies on your computer. These cookies are used to improve your website experience and provide more personalized services to you, both on this website and through other media. To find out more about the cookies we use, see our Privacy Policy. We won't track your information when you visit our site. But in order to comply with your preferences, we'll have to use just one tiny cookie so that you're not asked to make this choice again. Accept Decline Skip to content Welcome to Occam Design. Meeting your specs, exceeding your expectations. 1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Us We’ve built our company and problem-solving approach around the Occam’s Razor principle: “entities should not be multiplied unnecessarily”. Established in 2009, Occam Design is an ISO13485:2016 certified leader in designing, engineering, and cGMP manufacturing medical devices, health-tech, and wearables that meet customer and regulatory standards. Located in Louisville, KY, we operate within the"
+    },
+    {
+      "id": "check-page-9f9f9a8ad2",
+      "url": "https://occamdesign.com/about/?cache=0",
+      "page": "details",
+      "excerpt": "Located in Louisville, KY, we operate within the intersection of health/medical technologies, equine devices, and government funded projects."
+    },
+    {
+      "id": "check-page-90bf511562",
+      "url": "https://occamdesign.com/about/?cache=0",
+      "page": "details",
+      "excerpt": "Our team understands the timeline, engineering constraints, and regulatory challenges that come with every project, because we have taken devices from a napkin sketch to manufacturing and have received over $5 million in NIH grants for our own I.P.-related projects."
+    },
+    {
+      "id": "check-page-7c31b42da4",
+      "url": "https://occamdesign.com/about/?cache=0",
+      "page": "details",
+      "excerpt": "From pre-seed to DOD funded projects, our clients come to us at any stage and are scattered across the U.S. and in Europe."
+    },
+    {
+      "id": "check-page-c026432434",
+      "url": "https://occamdesign.com/about/?cache=0",
+      "page": "details",
+      "excerpt": "Contact Us Engineering, Quality, and Regulatory Our in-house engineering, quality, and manufacturing team is a turnkey solution for your team."
+    },
+    {
+      "id": "check-page-5e8f14700a",
+      "url": "https://occamdesign.com/about/?cache=0",
+      "page": "details",
+      "excerpt": "From simple silicone devices to catheters, electromechanical devices, and even blood manipulation devices, our dynamic team keeps up with innovation demands. see our capabilities Pilot/Prototype Builds and Manufacturing Our second facility, down the street, includes 14,000 sq ft of warehouse space available for inventory storage."
+    },
+    {
+      "id": "check-page-913bc45abd",
+      "url": "https://occamdesign.com/about/?cache=0",
+      "page": "details",
+      "excerpt": "Leverage our team’s diverse Development experience From EEG/ERP to intra-osteo devices and fluid-management systems, our team works on Class 1, 2, and 3 medical devices and Direct to Consumer health/lifestyle products."
+    },
+    {
+      "id": "check-page-b69a1a795f",
+      "url": "https://occamdesign.com/about/ourcapabilities/?cache=0",
+      "page": "details",
+      "excerpt": "Capabilities • Occam Design Cookies Settings This website stores cookies on your computer. These cookies are used to improve your website experience and provide more personalized services to you, both on this website and through other media. To find out more about the cookies we use, see our Privacy Policy. We won't track your information when you visit our site. But in order to comply with your preferences, we'll have to use just one tiny cookie so that you're not asked to make this choice again. Accept Decline Skip to content Welcome to Occam Design. Meeting your specs, exceeding your expectations. 1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers Our Capabilities Design and Engineering We provide feasibility evaluations and a custom project plan that includes milestones, engineering tasks, potential testing, and timeline. Our in-house machine shop allows us to fabricate your prototypes. Competitor/Hardware Research Industrial Design Early Design Evaluation CAD Models Electrical Schematics Firmware Development Custom System Integration BOM/TCOGS"
+    },
+    {
+      "id": "check-page-73829a58bc",
+      "url": "https://occamdesign.com/about/ourcapabilities/?cache=0",
+      "page": "details",
+      "excerpt": "Incoming QC Managing Clinical Trials FDA Document Generation Quality Inspections QMS Support ISO and FDA Standards Review Design Controls DHF Maintenance DMR & CoC Documentation 510k Submissions Pre-market Submissions De Novo EU MDR cGMP Manufacturing We provide contract manufacturing, short-run production, and Class 7 and 8 cleanrooms ."
+    },
+    {
+      "id": "check-page-1833239331",
+      "url": "https://occamdesign.com/engineering-innovation-a-look-at-occam-designs-medical-device-portfolio/",
+      "page": "portfolio",
+      "excerpt": "Engineering Innovation: A Look at Occam Design's Medical Device Portfolio • Occam Design Cookies Settings This website stores cookies on your computer. These cookies are used to improve your website experience and provide more personalized services to you, both on this website and through other media. To find out more about the cookies we use, see our Privacy Policy. We won't track your information when you visit our site. But in order to comply with your preferences, we'll have to use just one tiny cookie so that you're not asked to make this choice again. Accept Decline Skip to content Welcome to Occam Design. Meeting your specs, exceeding your expectations. 1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers At Occam Design, we transform innovative medical concepts into life-changing reality. Our engineering team specializes in taking visionary ideas from medical device innovators and bringing them to market through precision design, testing, and manufacturing. Here’s a glimpse into the diverse range of medical devices we’ve helped develop across"
+    },
+    {
+      "id": "check-page-77255fd337",
+      "url": "https://occamdesign.com/engineering-innovation-a-look-at-occam-designs-medical-device-portfolio/?cache=0",
+      "page": "portfolio",
+      "excerpt": "Engineering Innovation: A Look at Occam Design's Medical Device Portfolio • Occam Design Cookies Settings This website stores cookies on your computer. These cookies are used to improve your website experience and provide more personalized services to you, both on this website and through other media. To find out more about the cookies we use, see our Privacy Policy. We won't track your information when you visit our site. But in order to comply with your preferences, we'll have to use just one tiny cookie so that you're not asked to make this choice again. Accept Decline Skip to content Welcome to Occam Design. Meeting your specs, exceeding your expectations. 1201 East Oak St, Louisville, KY 40204 (502) 714 - 7200 info@occamdesign.com A division of CreoSalus, Inc About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers About Our Team Testimonials Capabilities Capabilities Our Experience Contact Us Resources White Papers Blog Funding Resources Media Careers At Occam Design, we transform innovative medical concepts into life-changing reality. Our engineering team specializes in taking visionary ideas from medical device innovators and bringing them to market through precision design, testing, and manufacturing. Here’s a glimpse into the diverse range of medical devices we’ve helped develop across"
+    }
+  ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "info@occamdesign.com",
+        "evidenceId": "check-email-327c025c09"
+      }
+    ],
     "phones": [],
     "routes": [],
     "applicationUrl": [],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-705e4e3cd0"
+      }
+    ],
+    "location": [
+      {
+        "value": "Louisville",
+        "evidenceId": "check-location-758c5d0437"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

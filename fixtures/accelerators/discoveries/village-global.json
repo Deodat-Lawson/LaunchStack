@@ -1,26 +1,10 @@
 {
   "programId": "village-global",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.villageglobal.com/insights/announcing-our-investment-in-verisim-life",
       "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.villageglobal.com/insights/most-saas-companies-wont-survive-this---jake-saper-emergence-recall-sessions",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.villageglobal.com/insights/nick-mehta-on-whether-ai-startups-should-worry-about-the-platforms",
-      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -54,15 +38,7 @@
       "url": "https://www.villageglobal.com/portfolio",
       "page": "portfolio",
       "anchor": "Portfolio",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.villageglobal.com/portfolio/blossom-health",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },

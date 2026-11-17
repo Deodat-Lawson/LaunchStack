@@ -1,6 +1,6 @@
 {
   "programId": "hax",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://hax.co/",
     "https://hax.co/apply-for-the-hax-venture-fellowship/",
@@ -16,7 +16,12 @@
     "https://hax.co/company_news/best-black-friday-robot-kit-deals-for-kids-and-adults-toms-hardware/",
     "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
     "https://hax.co/company_news/canadian-robotics-council-creates-committee-to-boost-investment-in-domestic-robots/",
-    "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/"
+    "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
+    "https://hax.co/company_news/deals-in-brief-cube-and-pvx-partners-raise-series-a-funding-singapores-mpa-backs-six-firms/",
+    "https://hax.co/company_news/deals-in-brief-oladance-bintango-and-allozymes-secure-new-funding-and-more-krasia/",
+    "https://hax.co/company_news/dubai-based-safety-and-tracking-device-secures-300000-of-investment/",
+    "https://hax.co/company_news/in-its-first-year-hax-newark-drives-deep-tech-growth-vc-investment-njbiz/",
+    "https://hax.co/company_news/leadoptik-receives-investment-from-applied-ventures-finsmes/"
   ],
   "evidence": [
     {
@@ -24,6 +29,13 @@
       "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
       "title": "HAX — terms page",
       "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-016a44d2b9",
+      "url": "https://hax.co/company_news/in-its-first-year-hax-newark-drives-deep-tech-growth-vc-investment-njbiz/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
       "page": "terms"
     },
     {
@@ -39,6 +51,13 @@
       "title": "HAX — application page",
       "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
       "page": "application"
+    },
+    {
+      "id": "check-duration-0a327fff4d",
+      "url": "https://hax.co/company_news/deals-in-brief-oladance-bintango-and-allozymes-secure-new-funding-and-more-krasia/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
     },
     {
       "id": "check-duration-0a5bdd7712",
@@ -90,6 +109,13 @@
       "page": "application"
     },
     {
+      "id": "check-duration-18a41b16ea",
+      "url": "https://hax.co/company_news/leadoptik-receives-investment-from-applied-ventures-finsmes/",
+      "title": "HAX — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-1b9e37dd0d",
       "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
       "title": "HAX — terms page",
@@ -116,6 +142,13 @@
       "title": "HAX — application page",
       "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
       "page": "application"
+    },
+    {
+      "id": "check-duration-27d815ac66",
+      "url": "https://hax.co/company_news/in-its-first-year-hax-newark-drives-deep-tech-growth-vc-investment-njbiz/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
     },
     {
       "id": "check-duration-2907915414",
@@ -146,6 +179,27 @@
       "page": "application"
     },
     {
+      "id": "check-duration-382e39e229",
+      "url": "https://hax.co/company_news/dubai-based-safety-and-tracking-device-secures-300000-of-investment/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3a490400e0",
+      "url": "https://hax.co/company_news/dubai-based-safety-and-tracking-device-secures-300000-of-investment/",
+      "title": "HAX — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3a8f9c2f67",
+      "url": "https://hax.co/company_news/deals-in-brief-cube-and-pvx-partners-raise-series-a-funding-singapores-mpa-backs-six-firms/",
+      "title": "HAX — terms page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-3b6f1111ac",
       "url": "https://sosv.com/apply",
       "title": "HAX — application page",
@@ -153,10 +207,24 @@
       "page": "application"
     },
     {
+      "id": "check-duration-3ca15032ed",
+      "url": "https://hax.co/company_news/dubai-based-safety-and-tracking-device-secures-300000-of-investment/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-3eaf4d4633",
       "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
       "title": "HAX — terms page",
       "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-4076e9ba14",
+      "url": "https://hax.co/company_news/in-its-first-year-hax-newark-drives-deep-tech-growth-vc-investment-njbiz/",
+      "title": "HAX — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
       "page": "terms"
     },
     {
@@ -216,6 +284,13 @@
       "page": "application"
     },
     {
+      "id": "check-duration-5d6b03d9ed",
+      "url": "https://hax.co/company_news/deals-in-brief-cube-and-pvx-partners-raise-series-a-funding-singapores-mpa-backs-six-firms/",
+      "title": "HAX — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-5dd7f7d1d5",
       "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
       "title": "HAX — application page",
@@ -251,6 +326,13 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-6379648066",
+      "url": "https://hax.co/company_news/deals-in-brief-oladance-bintango-and-allozymes-secure-new-funding-and-more-krasia/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-67a67d11cc",
       "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
       "title": "HAX — terms page",
@@ -279,11 +361,32 @@
       "page": "application"
     },
     {
+      "id": "check-duration-6d8fa5a2eb",
+      "url": "https://hax.co/company_news/leadoptik-receives-investment-from-applied-ventures-finsmes/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-6ea5fde493",
       "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
       "title": "HAX — application page",
       "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
       "page": "application"
+    },
+    {
+      "id": "check-duration-6eb35b25ef",
+      "url": "https://hax.co/company_news/leadoptik-receives-investment-from-applied-ventures-finsmes/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-710b9b2f1d",
+      "url": "https://hax.co/company_news/deals-in-brief-oladance-bintango-and-allozymes-secure-new-funding-and-more-krasia/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
     },
     {
       "id": "check-duration-7208b23934",
@@ -300,6 +403,13 @@
       "page": "details"
     },
     {
+      "id": "check-duration-75b97fae8b",
+      "url": "https://hax.co/company_news/deals-in-brief-oladance-bintango-and-allozymes-secure-new-funding-and-more-krasia/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-78b2ca0bc6",
       "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
       "title": "HAX — terms page",
@@ -312,6 +422,13 @@
       "title": "HAX — application page",
       "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
       "page": "application"
+    },
+    {
+      "id": "check-duration-7a13a06ac9",
+      "url": "https://hax.co/company_news/deals-in-brief-cube-and-pvx-partners-raise-series-a-funding-singapores-mpa-backs-six-firms/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
     },
     {
       "id": "check-duration-7c5a3f8904",
@@ -328,6 +445,20 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-7dd1a63e8d",
+      "url": "https://hax.co/company_news/deals-in-brief-oladance-bintango-and-allozymes-secure-new-funding-and-more-krasia/",
+      "title": "HAX — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7e2a4381cf",
+      "url": "https://hax.co/company_news/dubai-based-safety-and-tracking-device-secures-300000-of-investment/",
+      "title": "HAX — terms page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-7e8221b84d",
       "url": "https://hax.co/",
       "title": "HAX — homepage",
@@ -339,6 +470,13 @@
       "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
       "title": "HAX — terms page",
       "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8275560b20",
+      "url": "https://hax.co/company_news/leadoptik-receives-investment-from-applied-ventures-finsmes/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
       "page": "terms"
     },
     {
@@ -391,6 +529,13 @@
       "page": "application"
     },
     {
+      "id": "check-duration-93a672efeb",
+      "url": "https://hax.co/company_news/deals-in-brief-cube-and-pvx-partners-raise-series-a-funding-singapores-mpa-backs-six-firms/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-9831825fb9",
       "url": "https://hax.co/company_news/10-retail-technology-investments-that-should-be-on-your-radar/",
       "title": "HAX — terms page",
@@ -403,6 +548,20 @@
       "title": "HAX — application page",
       "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
       "page": "application"
+    },
+    {
+      "id": "check-duration-98fe6b281b",
+      "url": "https://hax.co/company_news/in-its-first-year-hax-newark-drives-deep-tech-growth-vc-investment-njbiz/",
+      "title": "HAX — terms page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a537dc69fa",
+      "url": "https://hax.co/company_news/dubai-based-safety-and-tracking-device-secures-300000-of-investment/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
     },
     {
       "id": "check-duration-a7030f41b1",
@@ -447,6 +606,13 @@
       "page": "application"
     },
     {
+      "id": "check-duration-af3e93f293",
+      "url": "https://hax.co/company_news/dubai-based-safety-and-tracking-device-secures-300000-of-investment/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-af45c9c903",
       "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
       "title": "HAX — terms page",
@@ -470,6 +636,13 @@
     {
       "id": "check-duration-b6cb869ae9",
       "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b6e48bad58",
+      "url": "https://hax.co/company_news/deals-in-brief-cube-and-pvx-partners-raise-series-a-funding-singapores-mpa-backs-six-firms/",
       "title": "HAX — terms page",
       "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
       "page": "terms"
@@ -566,6 +739,13 @@
       "page": "application"
     },
     {
+      "id": "check-duration-d098038044",
+      "url": "https://hax.co/company_news/in-its-first-year-hax-newark-drives-deep-tech-growth-vc-investment-njbiz/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-d0edc8c989",
       "url": "https://hax.co/",
       "title": "HAX — homepage",
@@ -594,10 +774,24 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-dd8d65c1d7",
+      "url": "https://hax.co/company_news/leadoptik-receives-investment-from-applied-ventures-finsmes/",
+      "title": "HAX — terms page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
       "id": "check-duration-ddce3ef5a0",
       "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
       "title": "HAX — terms page",
       "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ded85cdf58",
+      "url": "https://hax.co/company_news/deals-in-brief-cube-and-pvx-partners-raise-series-a-funding-singapores-mpa-backs-six-firms/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
       "page": "terms"
     },
     {
@@ -662,6 +856,27 @@
       "title": "HAX — application page",
       "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
       "page": "application"
+    },
+    {
+      "id": "check-duration-fa5a10b14f",
+      "url": "https://hax.co/company_news/in-its-first-year-hax-newark-drives-deep-tech-growth-vc-investment-njbiz/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-fb698558bd",
+      "url": "https://hax.co/company_news/deals-in-brief-oladance-bintango-and-allozymes-secure-new-funding-and-more-krasia/",
+      "title": "HAX — terms page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-fcfbac5177",
+      "url": "https://hax.co/company_news/leadoptik-receives-investment-from-applied-ventures-finsmes/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
     },
     {
       "id": "check-format-8e156512e5",
@@ -755,6 +970,20 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-231229bc3f",
+      "url": "https://hax.co/company_news/in-its-first-year-hax-newark-drives-deep-tech-growth-vc-investment-njbiz/",
+      "title": "HAX — terms page",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2cc4255adf",
+      "url": "https://hax.co/company_news/leadoptik-receives-investment-from-applied-ventures-finsmes/",
+      "title": "HAX — terms page",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-33d23a4eb8",
       "url": "https://sosv.com/apply/hax/",
       "title": "HAX — application page",
@@ -818,6 +1047,20 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-6677858c65",
+      "url": "https://hax.co/company_news/leadoptik-receives-investment-from-applied-ventures-finsmes/",
+      "title": "HAX — terms page",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6786ec3f8e",
+      "url": "https://hax.co/company_news/in-its-first-year-hax-newark-drives-deep-tech-growth-vc-investment-njbiz/",
+      "title": "HAX — terms page",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-771d899b47",
       "url": "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
       "title": "HAX — application page",
@@ -846,6 +1089,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-8be2d5ac2c",
+      "url": "https://hax.co/company_news/deals-in-brief-oladance-bintango-and-allozymes-secure-new-funding-and-more-krasia/",
+      "title": "HAX — terms page",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-9e3d2d0a4e",
       "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
       "title": "HAX — terms page",
@@ -865,6 +1115,20 @@
       "title": "HAX — application page",
       "excerpt": "Companies → https://hax.co/startups/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-b0668d04fe",
+      "url": "https://hax.co/company_news/deals-in-brief-oladance-bintango-and-allozymes-secure-new-funding-and-more-krasia/",
+      "title": "HAX — terms page",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b597463525",
+      "url": "https://hax.co/company_news/deals-in-brief-cube-and-pvx-partners-raise-series-a-funding-singapores-mpa-backs-six-firms/",
+      "title": "HAX — terms page",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-b7a2c7055d",
@@ -895,6 +1159,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-d6482135ae",
+      "url": "https://hax.co/company_news/dubai-based-safety-and-tracking-device-secures-300000-of-investment/",
+      "title": "HAX — terms page",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-d69af146b2",
       "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
       "title": "HAX — application page",
@@ -906,6 +1177,20 @@
       "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
       "title": "HAX — terms page",
       "excerpt": "Startups → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fa4df69dd2",
+      "url": "https://hax.co/company_news/deals-in-brief-cube-and-pvx-partners-raise-series-a-funding-singapores-mpa-backs-six-firms/",
+      "title": "HAX — terms page",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fb28b0395e",
+      "url": "https://hax.co/company_news/dubai-based-safety-and-tracking-device-secures-300000-of-investment/",
+      "title": "HAX — terms page",
+      "excerpt": "Companies → https://hax.co/startups/",
       "page": "terms"
     },
     {
@@ -944,6 +1229,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-12f85b71ef",
+      "url": "https://hax.co/company_news/dubai-based-safety-and-tracking-device-secures-300000-of-investment/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-2333803af0",
       "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
       "title": "HAX — terms page",
@@ -962,6 +1254,13 @@
       "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
       "title": "HAX — terms page",
       "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-30acc2eb1c",
+      "url": "https://hax.co/company_news/leadoptik-receives-investment-from-applied-ventures-finsmes/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
       "page": "terms"
     },
     {
@@ -993,6 +1292,13 @@
       "page": "terms"
     },
     {
+      "id": "check-route-3d226fed3c",
+      "url": "https://hax.co/company_news/in-its-first-year-hax-newark-drives-deep-tech-growth-vc-investment-njbiz/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-453554b1c7",
       "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
       "title": "HAX — terms page",
@@ -1014,6 +1320,27 @@
       "page": "application"
     },
     {
+      "id": "check-route-6b9d5f6569",
+      "url": "https://hax.co/company_news/deals-in-brief-cube-and-pvx-partners-raise-series-a-funding-singapores-mpa-backs-six-firms/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6db698d45c",
+      "url": "https://hax.co/company_news/deals-in-brief-oladance-bintango-and-allozymes-secure-new-funding-and-more-krasia/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-79dbcdb11c",
+      "url": "https://hax.co/company_news/leadoptik-receives-investment-from-applied-ventures-finsmes/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-7daf5b090f",
       "url": "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
       "title": "HAX — application page",
@@ -1033,6 +1360,20 @@
       "title": "HAX — application page",
       "excerpt": "Apply → https://sosv.com/apply/hax/",
       "page": "application"
+    },
+    {
+      "id": "check-route-867a520626",
+      "url": "https://hax.co/company_news/deals-in-brief-cube-and-pvx-partners-raise-series-a-funding-singapores-mpa-backs-six-firms/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-987b8e5e95",
+      "url": "https://hax.co/company_news/deals-in-brief-oladance-bintango-and-allozymes-secure-new-funding-and-more-krasia/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "terms"
     },
     {
       "id": "check-route-9e2666f717",
@@ -1077,6 +1418,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-ce68ea441c",
+      "url": "https://hax.co/company_news/dubai-based-safety-and-tracking-device-secures-300000-of-investment/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-cf8cbf04df",
       "url": "https://hax.co/",
       "title": "HAX — homepage",
@@ -1105,6 +1453,13 @@
       "page": "terms"
     },
     {
+      "id": "check-route-d744cf8c7f",
+      "url": "https://hax.co/company_news/in-its-first-year-hax-newark-drives-deep-tech-growth-vc-investment-njbiz/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-f025e73fae",
       "url": "https://sosv.com/apply/hax/",
       "title": "HAX — application page",
@@ -1127,10 +1482,118 @@
       "excerpt": "HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply hands-on support for hard-tech founders HAX is a part of SOSV , the world’s most active pre-seed deep-tech venture capital firm. Post Announcing HAX Plasma Forge’s New Home at Princeton’s SRI Post Nov 11, 2026 NJ Means Business, So Does SOSV Forbes Nov 06, 2026 Can 3D Weaving Change The Economics Of Fashion? unspun & Arvind Test On-Demand Manufacturing TechCrunch Oct 27, 2026 SOSV at TechCrunch Disrupt: What is Physical AI, Anyway? All news for pre-seed startups solving hard problems with hard tech HAX is the world’s first and most active program built for pre-seed startups working at the intersection of science and engineering. We back founders tackling the hardest industrial-scale challenges, in fields like energy, advanced compute, transportation, health tech, and manufacturing, employing the most innovative new technologies, including everything from plasma and physical AI to advanced chemistry. CASE STUDY unspun CASE STUDY R-Zero CASE STUDY Neptune Robotics CASE STUDY Smartex More Case Studies more than capital — a global engineering organization Most investors wire money and wish you luck. We embed an elite, global engineering organization directly into your startup. Anchored in our 35,000 sq. ft Newark HQ headquarters and our upcoming"
     },
     {
+      "id": "check-page-3b148742dc",
+      "url": "https://hax.co/",
+      "page": "details",
+      "excerpt": "Our team knows what it takes to validate technology in industrial environments, navigate manufacturing constraints, and shape complex technology into investor-ready narratives."
+    },
+    {
+      "id": "check-page-7b8fc0891c",
+      "url": "https://hax.co/",
+      "page": "details",
+      "excerpt": "We work alongside you to pressure-test ideas, refine the science, and accelerate toward market traction in a deeply hands-on, technical partnership. we are SOSV HAX is built on the foundation of SOSV , the world’s most active deep-tech venture capital firm."
+    },
+    {
+      "id": "check-page-af914df12a",
+      "url": "https://hax.co/",
+      "page": "details",
+      "excerpt": "We invest at company inception, with pre-seed rounds and bring founders into one of three fully resourced locations in San Francisco, New York, and Newark."
+    },
+    {
+      "id": "check-page-6f828faf44",
+      "url": "https://hax.co/",
+      "page": "details",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other SUBSCRIBE Hidden Origin We don’t spam."
+    },
+    {
+      "id": "check-page-c399981058",
+      "url": "https://hax.co/",
+      "page": "details",
+      "excerpt": "Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups."
+    },
+    {
+      "id": "check-page-7d7fdc79f2",
+      "url": "https://hax.co/",
+      "page": "details",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
+    },
+    {
       "id": "check-page-bc9d6671bf",
       "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
       "page": "application",
       "excerpt": "Apply for the HAX Venture Fellowship - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Apply for the HAX Venture Fellowship HAX Team July 27, 2022 Announcing the HAX Venture Fellowship, a 1-year program for the next generation of hard tech founders and investors. ‍The HAX Venture Fellowship is a hands-on program for the next generation of Hard Tech founders and investors. The Fellowship The 1-year, part-time program gives Fellows the opportunity to work alongside HAX leadership to bring deep technology from the workshop into the real world. Fellows receive direct exposure to the world of early stage venture investing, and are given responsibilities as a technology scout, investment analyst, and early stage employee at a hard tech startup. The program is best suited for deeply technical individuals – most of whom are currently enrolled in an MBA or PhD program – who are ready to make an impact outside of the lab or workshop. Each cohort of HAX Venture Fellows will bring together individuals from diverse genders, races, orientations, abilities and circumstances. What’s Needed to Apply Please send a resume to hax-interns@sosv.com with the subject line “HAX Venture Fellowship Application”. Please include in the body of the email more information about why you are interested"
+    },
+    {
+      "id": "check-page-237ffb28ce",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "page": "application",
+      "excerpt": "Please include in the body of the email more information about why you are interested in the HAX Venture Fellowship."
+    },
+    {
+      "id": "check-page-69760f9fa9",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "page": "application",
+      "excerpt": "About HAX & SOSV HAX is the most active early stage investor in Hard Tech: robotics, internet of things, materials and electronics that have massive impact in industrial, health and consumer markets."
+    },
+    {
+      "id": "check-page-d46a325616",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "page": "application",
+      "excerpt": "We invest at the pre-seed stage, when tech is risky and hard to commercialize, and work hands on with founders – our team of engineers come from mechanical, industrial, electrical, chemical, and materials backgrounds, and actually build and prototype our founder’s technologies to get them over commercial hurdles that unlock seed fundraising."
+    },
+    {
+      "id": "check-page-1df914311d",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "page": "application",
+      "excerpt": "We’ll invest over $25M over the course of a year into over 30 new startups and follow-on into our portfolio of over 300 hard tech startups."
+    },
+    {
+      "id": "check-page-6c86d35668",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "page": "application",
+      "excerpt": "HAX is a part of SOSV , a >$1B VC fund focused on hard tech and life sciences that make an impact on human and planetary health."
+    },
+    {
+      "id": "check-page-08553fda25",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "page": "application",
+      "excerpt": "Meet Your Mentors Duncan Turner General Partner Susan Schofer Partner & CSO Ji Ke Partner & CTO Andrew Gollach Associate Sophie Helfend Business Development Manager ‍ Hard Tech Scouting Responsibility for finding emerging technology research and early stage startups in search of potential investment."
+    },
+    {
+      "id": "check-page-415433c891",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "page": "application",
+      "excerpt": "Early Stage Diligence You’ll learn best practices and tools for analysis of early stage Hard Tech startups and opportunities for venture investment."
+    },
+    {
+      "id": "check-page-a5903e29f1",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "page": "application",
+      "excerpt": "You will work directly with HAX analysts and leadership teams on evaluation criteria and data to support early stage investments."
+    },
+    {
+      "id": "check-page-c61e0580e2",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "page": "application",
+      "excerpt": "Hands-On Venture Building Directly support early stage engineers and entrepreneurs formalizing their go-to-market strategies towards their next rounds of investment."
+    },
+    {
+      "id": "check-page-d7da751ef9",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "page": "application",
+      "excerpt": "Making the Fellowship Better Every HAX Venture Fellow will be tasked with making the Fellowship better for the next cohort with new tools, resources or connections."
+    },
+    {
+      "id": "check-page-f035b7c780",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "page": "application",
+      "excerpt": "Fellowship Requirements‍ You are currently enrolled in an education program with a business or entrepreneurial emphasis (MBA, PhD, etc…) You have a background or work experience in non-software engineering, which could include: mechanical, electrical, chemical, civil, environmental, mechatronics, materials, industrial, aerospace, biological, etc."
+    },
+    {
+      "id": "check-page-ca8aef6325",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "page": "application",
+      "excerpt": "No prior experience as an entrepreneur or venture investor is required."
     },
     {
       "id": "check-page-4bf71416cb",
@@ -1139,10 +1602,22 @@
       "excerpt": "China Water Jet Cutter Market 2017 – Recent Study Including Growth Factors, Applications ... - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles China Water Jet Cutter Market 2017 – Recent Study Including Growth Factors, Applications … API Access December 12, 2017 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina"
     },
     {
+      "id": "check-page-0207fabfc5",
+      "url": "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
+      "page": "application",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
+    },
+    {
       "id": "check-page-f56390ef7f",
       "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
       "page": "application",
       "excerpt": "Know about the future of Robotics Education with Application, Technology, Growth Factors, Trends ... - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Know about the future of Robotics Education with Application, Technology, Growth Factors, Trends … API Access January 23, 2018 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia"
+    },
+    {
+      "id": "check-page-f73ba724d5",
+      "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
+      "page": "application",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
     },
     {
       "id": "check-page-5216c8d429",
@@ -1151,10 +1626,40 @@
       "excerpt": "IQ Motion Control launches new line of servo motors with wide range of applications - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles IQ Motion Control launches new line of servo motors with wide range of applications HAX Team May 21, 2021 IQ Motion Control offers Vertiq offers a range of servomotor propulsion solutions. Source: IQ Motion Control IQ Motion Control , a 2018 graduate of the HAX program , announced today the launch of their newest line of servo motors, the Fortiq BLS42. The ultra compact high performance servo motors offer the performance benefits of high-end industrial servos at a greatly reduced cost, and have wide ranging applications across 3D printing, CNC machining, robotics, and conveyor systems. The new line of servos boasts impressive qualifications: Rated to 4,000 RPM, with ±2 encoder tick accuracy, meaning a 90% reduction in cogging torque ripple with IQ’s calibration software. Straight stack, straight magnet BLDC motor with an integrated motor controller and magnetic rotary encoder for position sensing. 50% less volume and are 70% of the cost when compared to traditional industrial servo motors. Four size options available for customers, each with a different torque rating dependent on stack length. The new line of motors are built to maximize"
     },
     {
+      "id": "check-page-2850e19324",
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "page": "application",
+      "excerpt": "The IQ Fortiq BLS42 is optimized for applications in 3D printing, robotics, CNC machining, and conveyor systems."
+    },
+    {
+      "id": "check-page-9675a6a073",
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "page": "application",
+      "excerpt": "Robotics Robotic systems demand high performance in extremely small packages."
+    },
+    {
+      "id": "check-page-b8c5b8f000",
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "page": "application",
+      "excerpt": "Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups."
+    },
+    {
+      "id": "check-page-b3a44f39aa",
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "page": "application",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
+    },
+    {
       "id": "check-page-a268a9bcd6",
       "url": "https://sosv.com/apply/hax/",
       "page": "application",
       "excerpt": "Apply to HAX - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC * indicates required fields HAX Locations Which HAX location are you applying to? * HAX (Newark, NJ) HAX Plasma Forge (Princeton, NJ) Company Give us a quick peek at your company. Prior to applying * I confirm that my company is building a Hard Tech product. Company Name * Website Contact Email * Enter Email Confirm Email We'll use this email address to confirm that we have received your application, and to subscribe you to our newsletters if you decide to opt in. It will also be our primary point of contact if we're interested in your application, so please make sure that it is valid, up-to-date and checked regularly. Description, in 140 characters or less * Location * City State / Province / Region Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso"
+    },
+    {
+      "id": "check-page-746f5fa50f",
+      "url": "https://sosv.com/apply/hax/",
+      "page": "application",
+      "excerpt": "Please list your prior fundraises (dilutive and non-dilutive) as a single USD amount * Are all the founders working full time?"
     },
     {
       "id": "check-page-0b52c2367b",
@@ -1169,10 +1674,22 @@
       "excerpt": "10 retail technology investments that should be on your radar - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles 10 retail technology investments that should be on your radar API Access April 22, 2021 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory"
     },
     {
+      "id": "check-page-2d82efae1b",
+      "url": "https://hax.co/company_news/10-retail-technology-investments-that-should-be-on-your-radar/",
+      "page": "terms",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
+    },
+    {
       "id": "check-page-21b79746e9",
       "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
       "page": "terms",
       "excerpt": "20+ best Prime Day pet deals for dogs, cats and more - NBC News - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles 20+ best Prime Day pet deals for dogs, cats and more – NBC News API Access October 8, 2024 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean"
+    },
+    {
+      "id": "check-page-4230ab0375",
+      "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
+      "page": "terms",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
     },
     {
       "id": "check-page-929f0bc64f",
@@ -1181,10 +1698,22 @@
       "excerpt": "All the best pet deals as of Sept. 9: Cameras, toys, and more - Mashable - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles All the best pet deals as of Sept. 9: Cameras, toys, and more – Mashable API Access September 9, 2021 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British"
     },
     {
+      "id": "check-page-db474d5ed3",
+      "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
+      "page": "terms",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
+    },
+    {
       "id": "check-page-b1fec0197d",
       "url": "https://hax.co/company_news/arcis-opentrons-sign-sample-prep-product-distribution-deal/",
       "page": "terms",
       "excerpt": "Arcis, Opentrons Sign Sample Prep Product Distribution Deal - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Arcis, Opentrons Sign Sample Prep Product Distribution Deal API Access July 9, 2019 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei"
+    },
+    {
+      "id": "check-page-15793b0ac2",
+      "url": "https://hax.co/company_news/arcis-opentrons-sign-sample-prep-product-distribution-deal/",
+      "page": "terms",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
     },
     {
       "id": "check-page-48e9bffa65",
@@ -1193,10 +1722,22 @@
       "excerpt": "Best Black Friday Robot Kit Deals for Kids and Adults | Tom's Hardware - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Best Black Friday Robot Kit Deals for Kids and Adults | Tom’s Hardware API Access November 26, 2021 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British"
     },
     {
+      "id": "check-page-71a7cbe244",
+      "url": "https://hax.co/company_news/best-black-friday-robot-kit-deals-for-kids-and-adults-toms-hardware/",
+      "page": "terms",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
+    },
+    {
       "id": "check-page-138779719a",
       "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
       "page": "terms",
       "excerpt": "Bet early and exit often: How IIMA Ventures creates a healthy investment cycle - Mint - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Bet early and exit often: How IIMA Ventures creates a healthy investment cycle – Mint API Access April 30, 2026 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet"
+    },
+    {
+      "id": "check-page-8fc6519eaf",
+      "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
+      "page": "terms",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
     },
     {
       "id": "check-page-dac30958b1",
@@ -1205,10 +1746,82 @@
       "excerpt": "Canadian Robotics Council creates committee to boost investment in domestic robots - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Canadian Robotics Council creates committee to boost investment in domestic robots API Access April 29, 2026 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island"
     },
     {
+      "id": "check-page-90abfaf49a",
+      "url": "https://hax.co/company_news/canadian-robotics-council-creates-committee-to-boost-investment-in-domestic-robots/",
+      "page": "terms",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
+    },
+    {
       "id": "check-page-87b5c8a775",
       "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
       "page": "terms",
       "excerpt": "Cult Food Sciences makes strategic investment in Unicorn Biotechnologies - YouTube - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Cult Food Sciences makes strategic investment in Unicorn Biotechnologies – YouTube API Access May 5, 2022 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island"
+    },
+    {
+      "id": "check-page-6c81414f56",
+      "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
+      "page": "terms",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
+    },
+    {
+      "id": "check-page-ad005fbb85",
+      "url": "https://hax.co/company_news/deals-in-brief-cube-and-pvx-partners-raise-series-a-funding-singapores-mpa-backs-six-firms/",
+      "page": "terms",
+      "excerpt": "Deals in brief: Cube and PvX Partners raise Series A funding; Singapore's MPA backs six firms - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Deals in brief: Cube and PvX Partners raise Series A funding; Singapore’s MPA backs six firms API Access April 28, 2026 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina"
+    },
+    {
+      "id": "check-page-87482bb32a",
+      "url": "https://hax.co/company_news/deals-in-brief-cube-and-pvx-partners-raise-series-a-funding-singapores-mpa-backs-six-firms/",
+      "page": "terms",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
+    },
+    {
+      "id": "check-page-f86a94f1e1",
+      "url": "https://hax.co/company_news/deals-in-brief-oladance-bintango-and-allozymes-secure-new-funding-and-more-krasia/",
+      "page": "terms",
+      "excerpt": "Deals in brief: Oladance, BintanGo, and Allozymes secure new funding, and more | KrASIA - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Deals in brief: Oladance, BintanGo, and Allozymes secure new funding, and more | KrASIA API Access August 7, 2023 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana"
+    },
+    {
+      "id": "check-page-2e20b068e0",
+      "url": "https://hax.co/company_news/deals-in-brief-oladance-bintango-and-allozymes-secure-new-funding-and-more-krasia/",
+      "page": "terms",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
+    },
+    {
+      "id": "check-page-214a0db8e9",
+      "url": "https://hax.co/company_news/dubai-based-safety-and-tracking-device-secures-300000-of-investment/",
+      "page": "terms",
+      "excerpt": "Dubai Based Safety and Tracking Device Secures $300000 of Investment - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Dubai Based Safety and Tracking Device Secures $300000 of Investment API Access May 31, 2018 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean"
+    },
+    {
+      "id": "check-page-9b9762c558",
+      "url": "https://hax.co/company_news/dubai-based-safety-and-tracking-device-secures-300000-of-investment/",
+      "page": "terms",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
+    },
+    {
+      "id": "check-page-a51c22cebd",
+      "url": "https://hax.co/company_news/in-its-first-year-hax-newark-drives-deep-tech-growth-vc-investment-njbiz/",
+      "page": "terms",
+      "excerpt": "In its first year, HAX Newark drives deep tech growth, VC investment - NJBIZ - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles In its first year, HAX Newark drives deep tech growth, VC investment – NJBIZ API Access July 28, 2025 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil"
+    },
+    {
+      "id": "check-page-81ee0585cf",
+      "url": "https://hax.co/company_news/in-its-first-year-hax-newark-drives-deep-tech-growth-vc-investment-njbiz/",
+      "page": "terms",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
+    },
+    {
+      "id": "check-page-e11dead159",
+      "url": "https://hax.co/company_news/leadoptik-receives-investment-from-applied-ventures-finsmes/",
+      "page": "terms",
+      "excerpt": "Leadoptik Receives Investment from Applied Ventures - FinSMEs - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Leadoptik Receives Investment from Applied Ventures – FinSMEs API Access June 20, 2023 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory"
+    },
+    {
+      "id": "check-page-14f544f234",
+      "url": "https://hax.co/company_news/leadoptik-receives-investment-from-applied-ventures-finsmes/",
+      "page": "terms",
+      "excerpt": "(Required) How would you describe yourself? * Investor Founder Engineer Scientist/Researcher Corporate Student Academic Media / Press Non-Profit Government Service Provider Other Hidden Origin We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits."
     }
   ],
   "findings": {

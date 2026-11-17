@@ -1,12 +1,28 @@
 {
   "programId": "yes-delft",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://yesdelft.com/about/",
       "page": "details",
       "anchor": "About YES!Delft",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://yesdelft.com/about/mentors/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://yesdelft.com/about/online-info-session/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -14,7 +30,7 @@
       "url": "https://yesdelft.com/about/work-at-yesdelft/",
       "page": "details",
       "anchor": "Work at YES!Delft",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -30,7 +46,7 @@
       "url": "https://yesdelft.com/incubator-programs/",
       "page": "details",
       "anchor": "Incubator & accelerator",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -38,7 +54,23 @@
       "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
       "page": "details",
       "anchor": "Accelerate Grow your startup into a successful business. The accelerator strengthens your startup’s foundation and connects you to a large network, without taking equity.",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://yesdelft.com/incubator-programs/meet-your-co-founder/upcoming-co-lab/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -46,7 +78,7 @@
       "url": "https://yesdelft.com/incubator-programs/validation-program/",
       "page": "details",
       "anchor": "Validate Validate your business idea, find your market. Test your assumptions, meet your first customers, and acquire the right skills and connections to run your company.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -54,93 +86,45 @@
       "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/",
       "page": "details",
       "anchor": "Deep-dive Validate and accelerate with focus on your sector. Targeted programs to validate or accelerate your path to market with more precision and greater confidence.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://yesdelft.com/news/agridata-innovations-adi-closes-investment-round/",
-      "page": "terms",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/circular-technology/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://yesdelft.com/news/arceon-receives-an-investment/",
-      "page": "terms",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/cybersecurity/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://yesdelft.com/news/decipher-received-pre-seed-investment-from-graduate-ventures/",
-      "page": "terms",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/dual-use-technology/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://yesdelft.com/news/deep-breath-received-an-pre-seed-investment-from-graduate-entrepreneur-fund/",
-      "page": "terms",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/energy/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://yesdelft.com/news/fiducial-secures-e2m-seed-investment-to-advance-autonomous-drone-technology/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://yesdelft.com/news/liion-power-selected-for-european-investment-platform-invesdor/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://yesdelft.com/news/lyla-receives-pre-seed-investment-from-graduate-entrepreneur/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://yesdelft.com/news/merqato-has-secured-an-investment-from-smarter-ventures/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://yesdelft.com/news/nextdriver-receives-logistics-investment-to-scale-data-driven-driver-coaching-platform/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://yesdelft.com/news/nurtio-technologies-investment-round-is-open/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://yesdelft.com/news/perciv-ai-secures-e2-5m-seed-investment/",
-      "page": "terms",
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/hortiscience/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -159,6 +143,14 @@
       "page": "details",
       "anchor": "We are looking for a Program Coordinator",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://yesdelft.com/startups/faqtory/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

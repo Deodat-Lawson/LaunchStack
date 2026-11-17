@@ -1,6 +1,6 @@
 {
   "programId": "greylock",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://greylock.com/blog/experts-on-day-one-our-investment-in-cresta/",
@@ -27,88 +27,16 @@
       "origin": "official"
     },
     {
-      "url": "https://greylock.com/blog/our-investment-in-abnormal-security/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://greylock.com/blog/our-investment-in-blend/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://greylock.com/blog/our-investment-in-cato-networks/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://greylock.com/blog/our-investment-in-chronosphere/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://greylock.com/blog/our-investment-in-clubhouse/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://greylock.com/blog/our-investment-in-coda/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://greylock.com/blog/our-investment-in-coinbase/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://greylock.com/blog/our-investment-in-discord/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://greylock.com/blog/our-investment-in-innovium-next-generation-cloud-data-center-networks/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://greylock.com/blog/our-investment-in-lyra-health/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://greylock.com/change-agents/pioneering-agentic-application/",
       "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://greylock.com/change-agents/why-the-fastest-ai-companies-post-train-their-own-models/",
+      "page": "portfolio",
       "anchor": "",
       "fetched": true,
       "blocked": null,

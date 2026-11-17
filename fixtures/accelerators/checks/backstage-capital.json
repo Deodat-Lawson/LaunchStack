@@ -1,6 +1,6 @@
 {
   "programId": "backstage-capital",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://backstagecapital.com/",
     "https://backstagecapital.com/apply-2/",
@@ -16,7 +16,12 @@
     "https://backstagecapital.com/accelerator/cities/",
     "https://backstagecapital.com/accelerator/cities/detroit/",
     "https://backstagecapital.com/accelerator/cities/london/",
-    "https://backstagecapital.com/accelerator/cities/los-angeles/"
+    "https://backstagecapital.com/accelerator/cities/los-angeles/",
+    "https://backstagecapital.com/accelerator/cities/philadelphia/",
+    "https://backstagecapital.com/accelerator/code-of-conduct/",
+    "https://backstagecapital.com/headliners/a-kids-company-about/",
+    "https://backstagecapital.com/crew/alumni/",
+    "https://backstagecapital.com/headliners/"
   ],
   "evidence": [
     {
@@ -25,6 +30,13 @@
       "title": "Backstage Capital — program page",
       "excerpt": "their investors, and their local communities. Benefits Get Funding $100k USD capital in exchange for 5% equity. Learn Fast Invaluable content",
       "page": "details"
+    },
+    {
+      "id": "check-duration-39db9d0756",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "The team worked evenings and weekends for 7 months before being accepted into the Sprint Mobile",
+      "page": "portfolio"
     },
     {
       "id": "check-duration-9b343aafd0",
@@ -41,6 +53,20 @@
       "page": "details"
     },
     {
+      "id": "check-duration-d8d50900f8",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Code of Conduct Backstage Accelerator is a 3-month program designed to give founders the support",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ebf7530883",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "for personalized nail art. Nail wraps last up to 2 weeks and can can be self-applied in minutes with no",
+      "page": "portfolio"
+    },
+    {
       "id": "check-duration-f1d447e7c9",
       "url": "https://backstagecapital.com/accelerator/c1/",
       "title": "Backstage Capital — program page",
@@ -55,11 +81,158 @@
       "page": "terms"
     },
     {
+      "id": "check-email-94b6be8a14",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "a violation of our Code of Conduct, please contact us at accelerator@backstagecapital.com. The Backstage Accelerator Code of Conduct is a living",
+      "page": "details"
+    },
+    {
+      "id": "check-email-9d1f8627fb",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "document. For suggested changes, please contact us at accelerator@backstagecapital.com. About Home Portfolio Team Mentors Investors Contact",
+      "page": "details"
+    },
+    {
       "id": "check-email-b48050525f",
       "url": "https://backstagecapital.com/terms/",
       "title": "Backstage Capital — terms page",
       "excerpt": "particular Site is governed by these terms, please contact contact@backstagecapital.com. If you do not agree with these terms you may not use the",
       "page": "terms"
+    },
+    {
+      "id": "check-format-12967e026c",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "Users download/launch the native or web app, complete a virtual name tag and survey customized by the event organizer. At",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-176343805b",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "of networking. “Think of the event venue whether live or virtual as your outfit and Mixtroz as the Spanx to give it",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-3248b8a53a",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "automated retailing system is cashless, wireless, and remote-inventory-monitored. An early partner is Flat Out of Heels",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-334c9e5040",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "their sports position through fun and cognitive gaming via remote learning solutions while offering added virtual practice",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-383e3f69f2",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "and a unique digital savings experience that leverages virtual sub-accounts to help Latino customers take steps toward",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-3c122e8209",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "in beautiful Miami Beach, Florida our mission is to make virtual reality experiences universally accessible and enjoyable.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-41d485c22b",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "and deliver high-quality, individualized care online and in person. Maternal health involves a variety specialists including",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-53bf3895e7",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "https://topknot.app Kiira Health Kiira Health Modern virtual healthcare for young, multicultural women. Kiira Health is",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-5ae7d97328",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "BookClub BookClub Connecting authors and readers through a virtual community and content platform for books. Our mission is",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-5b82849faa",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "and global brand built to address the unique needs of remote workers and independent professionals. Their flagship",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-64eba45560",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "messaging for eliminating meetings. The tool provides remote teams with a voice communication platform to connect",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-65619c63f6",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "CEEK is an award winning developer of premium social virtual and augmented reality experiences. Headquartered in",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-79645eab19",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "gaming via remote learning solutions while offering added virtual practice repetitions and coaching to improve their",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-af0a02abf0",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "Workfrom Workfrom The Work/Life Platform for Remote Workers Workfrom is a community and global brand built to",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-ccb52d1978",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "be smarter, faster, and safer on the field because of the virtual reps they took before they stepped on the field. This",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-d048d1b588",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "Pickett-Blakely http://www.tressenoire.com CEEK VR CEEK VR Virtual Reality Developer CEEK is an award winning developer of",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-da92a791e9",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "computing environments. Drop is the “Google Chrome for Virtual Reality and Augmented Reality”. Experience the future of",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-f031172965",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "improves player IQ through interactive simulations with remote video conferencing. Equalizer Games is an e-learning",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-180be90caf",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "data management and analytics company based in Atlanta, GA that empowers end users with",
+      "page": "portfolio"
     },
     {
       "id": "check-name-08141cc593",
@@ -71,6 +244,13 @@
     {
       "id": "check-portfolio-0a9d319c24",
       "url": "https://backstagecapital.com/accelerator/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-13bf0a1f5d",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
       "title": "Backstage Capital — program page",
       "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
       "page": "details"
@@ -118,6 +298,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-6a342750cc",
+      "url": "https://backstagecapital.com/headliners/a-kids-company-about/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-6a3479a9c7",
       "url": "https://backstagecapital.com/apply",
       "title": "Backstage Capital — application page",
@@ -125,11 +312,32 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-98b0fd2c34",
+      "url": "https://backstagecapital.com/crew/alumni/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a0e4a82e63",
+      "url": "https://backstagecapital.com/accelerator/cities/philadelphia/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-a46335fd67",
       "url": "https://backstagecapital.com/accelerator/cities/london/",
       "title": "Backstage Capital — program page",
       "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-b090b768b9",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "Explore by Tags → → https://backstagecapital.com/portfolio/",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-b32c73317e",
@@ -174,11 +382,25 @@
       "page": "application"
     },
     {
+      "id": "check-route-04efe4f34d",
+      "url": "https://backstagecapital.com/crew/alumni/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-11e61f15d1",
       "url": "https://backstagecapital.com/accelerator/cities/detroit/",
       "title": "Backstage Capital — program page",
       "excerpt": "Apply → https://backstagecapital.com/apply-2/",
       "page": "details"
+    },
+    {
+      "id": "check-route-19071908c1",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "portfolio"
     },
     {
       "id": "check-route-24c9f85f81",
@@ -230,6 +452,13 @@
       "page": "details"
     },
     {
+      "id": "check-route-6219cf32dd",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "details"
+    },
+    {
       "id": "check-route-6a45d39c6b",
       "url": "https://backstagecapital.com/apply",
       "title": "Backstage Capital — application page",
@@ -258,6 +487,13 @@
       "page": "details"
     },
     {
+      "id": "check-route-954b3d4b19",
+      "url": "https://backstagecapital.com/headliners/a-kids-company-about/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "details"
+    },
+    {
       "id": "check-route-9b3d18f960",
       "url": "https://backstagecapital.com/accelerator/about/",
       "title": "Backstage Capital — program page",
@@ -269,6 +505,13 @@
       "url": "https://backstagecapital.com/accelerator/cities/",
       "title": "Backstage Capital — program page",
       "excerpt": "Apply → https://backstagecapital.com/accelerator/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9e54b26eb7",
+      "url": "https://backstagecapital.com/accelerator/cities/philadelphia/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
       "page": "details"
     },
     {
@@ -312,6 +555,13 @@
       "title": "Backstage Capital — application page",
       "excerpt": "Apply → https://backstagecapital.com/apply-2/",
       "page": "application"
+    },
+    {
+      "id": "check-status-b71130f94b",
+      "url": "https://backstagecapital.com/headliners/",
+      "title": "Backstage Capital — portfolio page",
+      "excerpt": "to their own music, conveniently log workouts, and see real-time results in an activity tracker. Proday is no longer active. Founders: Sarah Kunst Uncharted Uncharted Bridging the Last Mile of Infrastructure Uncharted is building",
+      "page": "portfolio"
     }
   ],
   "pageQuotes": [
@@ -340,6 +590,66 @@
       "excerpt": "Terms of Service | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Terms of Service These are the terms governing your use of this website (“Site”). If in doubt as to whether a particular Site is governed by these terms, please contact contact@backstagecapital.com. If you do not agree with these terms you may not use the Site. This Terms of Service (this “Agreement”) sets forth the terms and conditions governing your use of the Site and your access to and use of the information, content and services offered on the Site (collectively with the Site, the “Services”). By accessing or using the Services, you agree to be legally bound by this Agreement, as it may be amended from time to time. Backstage Capital (Backstage Capital, Backstage Studio, and their affiliates together referred to as “Backstage Capital”) provides investment services only to privately offered Backstage Capital funds. Note all content provided on this Site is provided for general informational or educational purposes only. Backstage Capital makes no representations as to the accuracy or information contained on any page on this Site. 1. USE OF SITE Backstage Capital has established the Site to provide information about its operations and investment activities. As a condition to your use of the Services, you will not, directly or indirectly:"
     },
     {
+      "id": "check-page-c6279b5531",
+      "url": "https://backstagecapital.com/terms/",
+      "page": "terms",
+      "excerpt": "Note the intended audience for certain content on this Site is prospective portfolio company founders considering applying to the relevant Backstage Capital investment fund for funding, to participate in the Backstage Capital Accelerator Programs or potential strategic partners sponsors looking to engage Backstage Capital’s strategic partnership services."
+    },
+    {
+      "id": "check-page-be5d411d5f",
+      "url": "https://backstagecapital.com/terms/",
+      "page": "terms",
+      "excerpt": "Backstage Capital is an investment advisor, reporting to the Securities and Exchange Commission of the United States of America under the Investment Advisers Act of 1940 (as amended) as an exempt reporting adviser, solely providing investment advice to venture capital funds."
+    },
+    {
+      "id": "check-page-6c1dd270e5",
+      "url": "https://backstagecapital.com/terms/",
+      "page": "terms",
+      "excerpt": "Other Backstage Capital entities operating outside of the United States may or may not be conducting similar activities to Backstage Capital and accordingly, may or may not necessarily have an equivalent regulatory registration or license."
+    },
+    {
+      "id": "check-page-d11f450f76",
+      "url": "https://backstagecapital.com/terms/",
+      "page": "terms",
+      "excerpt": "The pages on this Site are issued in the United States, and comply with appropriate U.S. legislation and regulation."
+    },
+    {
+      "id": "check-page-f009060dc4",
+      "url": "https://backstagecapital.com/terms/",
+      "page": "terms",
+      "excerpt": "Not every portfolio investment made by a Backstage Capital investment fund will participate in the Backstage Accelerator Program."
+    },
+    {
+      "id": "check-page-11ad9a9771",
+      "url": "https://backstagecapital.com/terms/",
+      "page": "terms",
+      "excerpt": "The title “Partner” is used in accordance with customary business practice in the venture capital industry and does not indicate a legal status in a partnership."
+    },
+    {
+      "id": "check-page-d1fa8e94fe",
+      "url": "https://backstagecapital.com/terms/",
+      "page": "terms",
+      "excerpt": "This Site may also provide a snapshot of members of the Backstage Capital mentor and limited partner networks who provide guidance and funding to our portfolio companies as of the date indicated and may not include all mentors and limited partners."
+    },
+    {
+      "id": "check-page-a181e4a7cc",
+      "url": "https://backstagecapital.com/terms/",
+      "page": "terms",
+      "excerpt": "Note mentors and limited partners are not employees or independent contractors of Backstage Capital and any views or opinions represented by such mentors and limited partners are personal and do not represent those of Backstage Capital or any of its personnel or affiliates."
+    },
+    {
+      "id": "check-page-020a0c5a63",
+      "url": "https://backstagecapital.com/terms/",
+      "page": "terms",
+      "excerpt": "If you have any questions about this Agreement, the Site or the Services, please contact Backstage Capital in the United States at contact@backstagecapital.com Effective September 5, 2018."
+    },
+    {
+      "id": "check-page-b8415f7fe2",
+      "url": "https://backstagecapital.com/terms/",
+      "page": "terms",
+      "excerpt": "About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital."
+    },
+    {
       "id": "check-page-35bb68fd2e",
       "url": "https://backstagecapital.com/headliners/where-top-creators-teach-cohort-based-courses/",
       "page": "batches",
@@ -350,6 +660,12 @@
       "url": "https://backstagecapital.com/accelerator/",
       "page": "details",
       "excerpt": "Accelerator | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Backstage Accelerator supports underrepresented founders in local programs around the world. Cohort 1 Report Discover key insights we learned working with 24 companies led by outstanding underrepresented founders. Read the Report Los Angeles Philadelphia London Detroit The Program Backstage Accelerator is a 3-month program designed to give founders the support they need to reach their next critical milestone. Founders will work with a team of experienced, passionate facilitators and will grow through mentorship, investment capital, and access to resources + networks. Values Diversity is strength Underestimated founders exemplify grit. They do more with less. Diverse teams have stronger business outcomes and more innovative ideas. It takes a village Startups don't succeed in isolation. Companies need strong local ecosystems to start, and strong global networks to grow. Success for all Representation matters because everyone deserves the chance to succeed. We're working to create a future where success is shared by founders, their teams, their investors, and their local communities. Partners Applications are currently closed for Accelerator. See all funding opportunities. About Home Portfolio Team Mentors Investors Contact Opportunities Apply"
+    },
+    {
+      "id": "check-page-7c5e05c230",
+      "url": "https://backstagecapital.com/accelerator/",
+      "page": "details",
+      "excerpt": "About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital."
     },
     {
       "id": "check-page-56ab9a4f25",
@@ -370,6 +686,18 @@
       "excerpt": "About Backstage Accelerator | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Backstage Accelerator / About Backstage invests in startup founders who identify as a Woman, Person of Color, and/or LGBTQ. We believe these founders are underestimated, and have the most potential for unlocking innovation and creating valuable businesses. To support more founders, we're growing a global community of local accelerator programs. Introducing Backstage Accelerator Read More on Medium Values Diversity is strength Underestimated founders exemplify grit. They do more with less. Diverse teams have stronger business outcomes and more innovative ideas. It takes a village Startups don't succeed in isolation. Companies need strong local ecosystems to start, and strong global networks to grow. Success for all Representation matters because everyone deserves the chance to succeed. We're working to create a future where success is shared by founders, their teams, their investors, and their local communities. Benefits Get Funding $100k USD capital in exchange for 5% equity. Learn Fast Invaluable content from experienced entrepreneurs, investors, operators, global executives, and leaders from prestigious educational institutions. Build Community Support from cohort founders, city teams, and access to the Backstage network. Come"
     },
     {
+      "id": "check-page-d231c3eb79",
+      "url": "https://backstagecapital.com/accelerator/about/",
+      "page": "details",
+      "excerpt": "We're a world-class team building Backstage Accelerator."
+    },
+    {
+      "id": "check-page-8d3443b719",
+      "url": "https://backstagecapital.com/accelerator/about/",
+      "page": "details",
+      "excerpt": "Meet the Crew ← Accelerator Get Involved Founders Apply Contact Get in touch About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital."
+    },
+    {
       "id": "check-page-e023b08717",
       "url": "https://backstagecapital.com/accelerator/apply/",
       "page": "application",
@@ -380,6 +708,12 @@
       "url": "https://backstagecapital.com/accelerator/c1/",
       "page": "details",
       "excerpt": "Backstage Accelerator – Cohort 1 Report 2019 | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room What happens when you invest in the future? What's Inside? Key learnings + program overview 24 global company features Meet our investors, speakers, team Cohort 1 Report Complete this form to download the 50-page report for free. Subscribe me to the Backstage newsletter The pipeline is not the issue. It's access. There are untapped investment opportunities across many verticals. From Our Founders \"I truly accelerated my business. What would have taken me a year or more took me 3 months.\" Gwen Jimmere, Naturalicious \"A year ago I didn’t even know what Detroit Demo Day was. With the help of Backstage Accelerator, a year later I pitched on stage as a top finalist.\" Curtis Mckinnon, Crowd Freak \"I got support like no other from the Directors of Backstage London. I’ll never forget the love they showed us.\" Darren, CEO of Trim-it FAQs What's next? We're taking August to work behind the scenes to see what a Cohort 2 could look like, and to confirm that we have the resources to do the next cohort as early as 2020. We'll make announcements around application and programming dates after Labor Day. What's Backstage? Learn more. What's Backstage Accelerator? Learn more. How do I get involved? Corporations, investors,"
+    },
+    {
+      "id": "check-page-d8ae0f959c",
+      "url": "https://backstagecapital.com/accelerator/c1/",
+      "page": "details",
+      "excerpt": "About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital."
     },
     {
       "id": "check-page-c1bec3c47e",
@@ -394,16 +728,208 @@
       "excerpt": "Backstage Detroit | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Accelerator / Locations Detroit Cohort 1 Naturalicious Naturalicious Timesaving beauty solutions for busy women A clever collection of patented, multi-tasking, non-toxic hair care that helps busy women rock fabulous hair in a fraction of the usual time by combining 12 processes for boss-babe-worthy hair into just 3 simple steps. Founders: Gwen Jimmere Tags: B2C, Beauty Foodstand Foodstand Healthy eating behavior change Healthy eating and wellness information at your fingertips, Foodstand helps individuals and organizations joyfully turn wellness goals into lifelong habits through team challenges and behavior change. The company was acquired by DietID during the Cohort 1 Backstage Accelerator. Founders: Rachna Govani + Udi Falkson Tags: B2B, B2C, Health, Mobile Gildform Gildform Jewelry manufacturing + design High-quality, on-demand jewelry design and manufacturing that takes your ideas through concept, CAD, 3D printing and casting, and assembly, redefining the relationship between brands and manufacturers. Founders: Karissma Yve + Robert Webb Tags: B2C, Fashion Bippy Bippy Eco-friendly personal wellness brand Bippy is a modern personal care line exclusively for the butt that’s on a mission to preserve forests from the bottom up. Toilet"
     },
     {
+      "id": "check-page-b4bd2cdcab",
+      "url": "https://backstagecapital.com/accelerator/cities/detroit/",
+      "page": "details",
+      "excerpt": "Founders: Lisa Frame + Isidro Hurtado Tags: B2C, Ecommerce Alerje Alerje Proactive allergy management platform Alerje sits at the intersection of traditional MedTech and Consumer products, using proactive patient design to reduce the cost of healthcare and improve patient outcomes through its food allergy management platform."
+    },
+    {
+      "id": "check-page-79534cfe9a",
+      "url": "https://backstagecapital.com/accelerator/cities/detroit/",
+      "page": "details",
+      "excerpt": "Founders: Javier Evelyn Tags: B2C, Health, Mobile Healthy Roots Healthy Roots Toys that Empower Girls of Color Healthy Roots is a toy company combating societal beauty standards on girls of color during the early stages of identity development."
+    },
+    {
+      "id": "check-page-2817347ce4",
+      "url": "https://backstagecapital.com/accelerator/cities/detroit/",
+      "page": "details",
+      "excerpt": "Healthy Roots grew from an art project into a startup raising $50k on Kickstarter, and continued to grow through participation in the Brown Social Innovation Fellowship, RISD EShip and Brown Breakthrough Lab, and was selected as a 2015 MassChallenge Finalist."
+    },
+    {
+      "id": "check-page-7d8841b33d",
+      "url": "https://backstagecapital.com/accelerator/cities/detroit/",
+      "page": "details",
+      "excerpt": "Founders: Yelitsa Jean-Charles Tags: B2C Partners Partner with Us Diversity is the future, and the future is here."
+    },
+    {
+      "id": "check-page-53d6e3e5a6",
+      "url": "https://backstagecapital.com/accelerator/cities/detroit/",
+      "page": "details",
+      "excerpt": "Get in Touch About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital."
+    },
+    {
       "id": "check-page-d3d62d2a81",
       "url": "https://backstagecapital.com/accelerator/cities/london/",
       "page": "details",
       "excerpt": "Backstage London | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Accelerator / Locations London Cohort 1 Vitae London Vitae London A watch brand with a mission to change lives A stunning watch brand that uses part of their profits to support education for children in Sub-Saharan Africa. Vitae has an influential following and is worn by the likes of Sir Richard Branson, Ava DuVernay, and Wretch 32. Founders: William Adoasi Tags: B2C, Fashion, Hardware Trim-it Trim-it The modern mobile barbershop The first app-powered mobile barbershop, delivering the highest quality haircuts straight to your doorstep in a high-tech barbershop in a van. Founders: Darren Tenkoorang Tags: B2C, Beauty Tambua Health Tambua Health Using smartphones to improve health A medical technology software and service company using AI, Machine Learning, and Spectral Analysis to turn any smartphone into a powerful, non-invasive screening tool for respiratory diseases. Founders: Lewis Wanjohi Wanyeki + Daniel Gathigai Warui Tags: B2C, Health, Mobile Gal-dem Gal-dem A new media publication A media company committed to spotlighting the creative talents of women and non-binary people of colour. You can find online and print versions of their highly-read magazine. Founders: Liv Little Tags: B2C Afrocenchix Afrocenchix Healthy products for Afro +"
     },
     {
+      "id": "check-page-01686368d3",
+      "url": "https://backstagecapital.com/accelerator/cities/london/",
+      "page": "details",
+      "excerpt": "Founders: Liv Little Tags: B2C Afrocenchix Afrocenchix Healthy products for Afro + curly hair Natural, organic, and vegan products for Afro and curly hair sold direct-to-consumers as well as being featured in shops like Whole Foods Market."
+    },
+    {
+      "id": "check-page-eed9e6b816",
+      "url": "https://backstagecapital.com/accelerator/cities/london/",
+      "page": "details",
+      "excerpt": "Founders: Joycelyn Mate + Rachael Corson Tags: B2C, Beauty, Ecommerce Partners Partner with Us Diversity is the future, and the future is here."
+    },
+    {
+      "id": "check-page-832543203b",
+      "url": "https://backstagecapital.com/accelerator/cities/london/",
+      "page": "details",
+      "excerpt": "Get in Touch About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital."
+    },
+    {
       "id": "check-page-c1ee62c831",
       "url": "https://backstagecapital.com/accelerator/cities/los-angeles/",
       "page": "details",
       "excerpt": "Backstage Los Angeles | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Accelerator / Locations Los Angeles Cohort 1 Unomi Unomi SaaS for animators + video game developers Unomi’s mission is to automate the most complex tasks in the digital content creation industry. Founders: Obi Onyejekwe Tags: B2C, AI, Media SnapStays SnapStays Furnished homes for business travelers A marketplace of thousands of furnished homes for business travelers — professionally managed with great value and available coast-to-coast. Founders: Ed Hsieh + Eric Dominguez Tags: B2B, B2C, Travel, Marketplace Optimal Solar Optimal Solar The most efficient solar power ever The most efficient solar module available, providing optimal clean, affordable, and reliable electric solutions. Founders: Dr. Reginald Parker Tags: B2B, Hardware Lorals Lorals Consumer tech to close the pleasure gap A feminine care brand that helps women across the world have more frequent — and more pleasurable — intimate experiences. Founders: Melanie Cristol Tags: B2C, Health Lacquerbar Lacquerbar Offline salon experiences + online technician education A feminist-focused salon experience that’s powered by their elite nail technician education platform, Lacquerbar U, overhauling the $20B antiquated nail salon industry. Founders: Heli Prilliman Tags: B2C, Beauty,"
+    },
+    {
+      "id": "check-page-4e7ec57752",
+      "url": "https://backstagecapital.com/accelerator/cities/los-angeles/",
+      "page": "details",
+      "excerpt": "Founders: Heli Prilliman Tags: B2C, Beauty, Education Adventurely Adventurely Travel club and meetup app for digital nomads, solo travelers, and adventure seekers Founders: Mita Carriman Tags: B2C, Travel Partners Partner with Us Diversity is the future, and the future is here."
+    },
+    {
+      "id": "check-page-c5751f5100",
+      "url": "https://backstagecapital.com/accelerator/cities/los-angeles/",
+      "page": "details",
+      "excerpt": "Get in Touch About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital."
+    },
+    {
+      "id": "check-page-51ac976f1a",
+      "url": "https://backstagecapital.com/accelerator/cities/philadelphia/",
+      "page": "details",
+      "excerpt": "Backstage Philadelphia | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Accelerator / Locations Philadelphia Cohort 1 Dressmate Dressmate Peer-to-peer clothing rental marketplace A peer-to-peer clothing rental marketplace for college students connecting people to each other, not clothing and landfills. Founders: Jennifer Simons + David Arsenault Tags: B2C, Fashion, Marketplace Hale Hale A device that helps curb nicotine addiction A connected vaporizer pen that helps you quit nicotine. Their patent-pending design delivers a steadily decreasing amount of nicotine and clean oil, lowering nicotine intake automatically over time to help you stop your addiction. Founders: Josh Israel + Devin Serago + Sabrina Ko + Jeff Domenighini Tags: B2C, Hardware, Health Locus Mobility Locus Mobility A car wash where you park An app-based mobile car care service providing location- and subscription-based amenities that real estate owners provide to their customers. Founders: Harry Michel + Kelly Ireland + Shonn Shearlds Tags: B2B, B2C, Mobile, Automotive WhoseYourLandlord WhoseYourLandlord Landlord + property review community WYL features millennial-focused apartment listings, landlord reviews, community insights, and neighborhood engagement. Founders: Ofo Ezeugwu + Kelley Green + Izzy Jackson Tags: B2C Please Assist Me"
+    },
+    {
+      "id": "check-page-a8003d3e37",
+      "url": "https://backstagecapital.com/accelerator/cities/philadelphia/",
+      "page": "details",
+      "excerpt": "Founders: Ofo Ezeugwu + Kelley Green + Izzy Jackson Tags: B2C Please Assist Me Please Assist Me Mobile Platform for Personal Home Assistant With over 55% of working Americans citing household management as a constant source of stress, many are looking for solutions to help achieve work-life balance."
+    },
+    {
+      "id": "check-page-fae076828f",
+      "url": "https://backstagecapital.com/accelerator/cities/philadelphia/",
+      "page": "details",
+      "excerpt": "After graduating with her Master of Business Administration, Stephanie worked in Healthcare IT and managed a product that generated $1M in revenue during its first year on the market."
+    },
+    {
+      "id": "check-page-67d522fd75",
+      "url": "https://backstagecapital.com/accelerator/cities/philadelphia/",
+      "page": "details",
+      "excerpt": "Founders: Stephanie Cummings + Seany Denson Tags: B2B, B2C, Marketplace TresseNoire TresseNoire On-demand, At-home Beauty Booking TresseNoire is an on-demand, at-home beauty booking app designed for women of color."
+    },
+    {
+      "id": "check-page-5dba0a4579",
+      "url": "https://backstagecapital.com/accelerator/cities/philadelphia/",
+      "page": "details",
+      "excerpt": "Founders: Regina Gwynn + Octavia Pickett-Blakely Tags: B2B, B2C, Beauty, Marketplace Partners Partner with Us Diversity is the future, and the future is here."
+    },
+    {
+      "id": "check-page-45670018f1",
+      "url": "https://backstagecapital.com/accelerator/cities/philadelphia/",
+      "page": "details",
+      "excerpt": "Get in Touch About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital."
+    },
+    {
+      "id": "check-page-81f897bb97",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "page": "details",
+      "excerpt": "Accelerator Code of Conduct | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Accelerator Code of Conduct Backstage Accelerator is a 3-month program designed to give founders the support they need to reach their next critical milestone. Founders will work with a team of experienced, passionate facilitators and will grow through mentorship, investment capital, and access to resources + networks. We expect all employees, partners, mentors, and community members to adhere to this code of conduct while at Backstage events, workspaces, or while representing Backstage. Values Diversity is strength Underestimated founders exemplify grit. They do more with less. Diverse teams have stronger business outcomes and more innovative ideas. It takes a village Startups don't succeed in isolation. Companies need strong local ecosystems to start, and strong global networks to grow. Success for all Representation matters because everyone deserves the chance to succeed. We're working to create a future where success is shared by founders, their teams, their investors, and their local communities. Anti-Harassment and Anti-Discrimination Backstage Accelerator is dedicated to providing a harassment-free experience for everyone, regardless of race, ethnicity, nationality, religion, color, sex (with or without sexual conduct and"
+    },
+    {
+      "id": "check-page-555a82bc0f",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "page": "details",
+      "excerpt": "Accelerator participants violating these rules may be expelled from all Accelerator program activities."
+    },
+    {
+      "id": "check-page-04cc905d3d",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "page": "details",
+      "excerpt": "Any participants violating these rules may put their investment at risk, as documented in the Accelerator Founder Agreement."
+    },
+    {
+      "id": "check-page-02ca8b8c4d",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "page": "details",
+      "excerpt": "Sponsors, mentors, partners, customers, speakers and workshop facilitators are also subject to this Code of Conduct."
+    },
+    {
+      "id": "check-page-fb674d0763",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "page": "details",
+      "excerpt": "If an individual engages in harassing behavior, Backstage Studio may take any action they deem appropriate, including warning the offender or removing the individual from all future Accelerator activities."
+    },
+    {
+      "id": "check-page-5ef33aed8f",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "page": "details",
+      "excerpt": "Distributing, using or being under the influence of recreational drugs is not permitted during Backstage Accelerator program hours or at Accelerator events."
+    },
+    {
+      "id": "check-page-5898d83565",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "page": "details",
+      "excerpt": "We expect all participants to disclose all conflicts of interests and any legal agreements that could impact their experience during Accelerator."
+    },
+    {
+      "id": "check-page-85391d437d",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "page": "details",
+      "excerpt": "Participation and Attendance Policies Participants are expected to attend all Accelerator activities and events as stated in the Founder agreement."
+    },
+    {
+      "id": "check-page-2d228e17ec",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "page": "details",
+      "excerpt": "Our Commitment We expect all participants to follow these rules at all Backstage Studio and Accelerator programming, venues and social events online and offline, and we commit to following them as well."
+    },
+    {
+      "id": "check-page-a0fe02422b",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "page": "details",
+      "excerpt": "It is our goal at Backstage Studio team to create an environment where all Accelerator participants will feel safe, welcome, and able to participate as their full selves."
+    },
+    {
+      "id": "check-page-316c2f76a7",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "page": "details",
+      "excerpt": "If you have witnessed a violation of our Code of Conduct, please contact us at accelerator@backstagecapital.com."
+    },
+    {
+      "id": "check-page-318a0493b7",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "page": "details",
+      "excerpt": "The Backstage Accelerator Code of Conduct is a living document."
+    },
+    {
+      "id": "check-page-eb4af9653a",
+      "url": "https://backstagecapital.com/accelerator/code-of-conduct/",
+      "page": "details",
+      "excerpt": "For suggested changes, please contact us at accelerator@backstagecapital.com."
+    },
+    {
+      "id": "check-page-7f0051e57c",
+      "url": "https://backstagecapital.com/headliners/a-kids-company-about/",
+      "page": "details",
+      "excerpt": "A Kids Company About | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room A Kids Company About A Kids Co. is a new kind of media and commerce company, empowering a new generation of kids through diverse storytelling.telling. Launched in 2019, we create kids media and original IP across verticals including publishing, podcasting, mobile apps and video, focusing on the most important topics kids will encounter. Founders: Jelani Memory Tags: Media, Education About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital. Get Backstage news in your inbox. Subscribe Subscribe to our Newsletter Get on The List The Mixtape – our weekly email newsletter — brings you news, opportunities, and stories to help underrepresented founders succeed. 👊🏾 Email * What best describes your focus at work?"
+    },
+    {
+      "id": "check-page-abf3e47bab",
+      "url": "https://backstagecapital.com/crew/alumni/",
+      "page": "portfolio",
+      "excerpt": "Crew Alumni | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Crew Alumni We’ve worked with some incredible teammates over the years. These folks are talented, mission-driven, and crew for lyfe. Chacho Valadez Chacho Valadez Kelly Lei Kelly Lei Clair Samuel Clair Samuel Cathy Dinas Cathy Dinas Megan Rose Dickey Megan Rose Dickey Katie Andresen Katie Andresen Alyssa Gill Alyssa Gill Jaimie B Jaimie B Tiffanie Maddox Tiffanie Maddox Noel Viramontes Noel Viramontes Roneal Demerson Roneal Demerson Bryan Landers Bryan Landers Monica Wheat Monica Wheat Dianne Cherrez Dianne Cherrez Sarah Smith Sarah Smith Rachel Nelson Rachel Nelson Jessica Porec Jessica Porec Melinda Briana Epler Melinda Briana Epler Tapan Kataria Tapan Kataria Olivia Guterson Olivia Guterson Amanda Lewan Amanda Lewan Andy Ayim Andy Ayim Anisah Osman Britton Anisah Osman Britton Andy Davis Andy Davis Anastasia Tarpeh-Ellis Anastasia Tarpeh-Ellis Amiah Sheppard Amiah Sheppard Greer Engonga Greer Engonga Liz Brown Liz Brown Allen King Allen King Thom Webster Thom Webster Amrit Richmond Amrit Richmond Faye Hayes Faye Hayes Lolita Taub Lolita Taub Del Johnson Del Johnson Lisa Atia Lisa Atia Wayne Sutton Wayne Sutton Alex Marshall Alex Marshall Opeola Bukola Opeola Bukola Keziyah Lewis Keziyah Lewis Gabriele Bowers Gabriele Bowers Mark Levy Mark Levy"
+    },
+    {
+      "id": "check-page-ea57c9b9c1",
+      "url": "https://backstagecapital.com/headliners/",
+      "page": "portfolio",
+      "excerpt": "Headliners | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Headliners Portfolio Explore by Tags → Hello Alice Hello Alice “Hello Alice (helloalice.com) is a free, multichannel platform that helps businesses launch and grow. With a community of nearly 500,000 business owners in all 50 states and across the globe, Hello Alice is building the largest network of owners in the country while tracking data and trends to increase the success rate for entrepreneurs. Our partners include enterprise business services, government agencies, and institutions looking to serve small and medium business owners to ensure increased revenues and promote scale. A Latina-owned company founded by Carolyn Rodz and Elizabeth Gore, we believe in business for all by providing access to all owners, including women, people of color, military-connected individuals, the LGBTQ+ community, persons with disabilities, and every American with an entrepreneurial spirit.” Founders: Carolyn Rodz & Elizabeth Gore https://helloalice.com/ Fairly AI Fairly AI For organizations that have prioritized AI projects to create business value, Fairly is an AI compliance management software solution that runs independent enterprise-scale, governance, risk, and control protocols. Designed and approved by data scientists, model validators and internal"
     }
   ],
   "findings": {
@@ -411,6 +937,10 @@
       {
         "value": "contact@backstagecapital.com",
         "evidenceId": "check-email-b48050525f"
+      },
+      {
+        "value": "accelerator@backstagecapital.com",
+        "evidenceId": "check-email-94b6be8a14"
       }
     ],
     "phones": [],
@@ -439,7 +969,12 @@
       }
     ],
     "applicationsOpen": [],
-    "operatingStatus": [],
+    "operatingStatus": [
+      {
+        "value": "closed",
+        "evidenceId": "check-status-b71130f94b"
+      }
+    ],
     "deadlines": [],
     "rolling": [],
     "announcedIntake": [],
@@ -448,10 +983,32 @@
       {
         "value": "3 months",
         "evidenceId": "check-duration-9b343aafd0"
+      },
+      {
+        "value": "7 months",
+        "evidenceId": "check-duration-39db9d0756"
+      },
+      {
+        "value": "2",
+        "evidenceId": "check-duration-ebf7530883"
       }
     ],
-    "format": [],
-    "location": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-53bf3895e7"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-41d485c22b"
+      }
+    ],
+    "location": [
+      {
+        "value": "Atlanta",
+        "evidenceId": "check-location-180be90caf"
+      }
+    ],
     "selectivity": [],
     "dealText": [
       {
@@ -477,6 +1034,10 @@
       {
         "value": "https://backstagecapital.com/headliners/",
         "evidenceId": "check-portfolio-b32c73317e"
+      },
+      {
+        "value": "https://backstagecapital.com/portfolio/",
+        "evidenceId": "check-portfolio-b090b768b9"
       }
     ],
     "name": [

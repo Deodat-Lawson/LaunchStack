@@ -1,6 +1,6 @@
 {
   "programId": "how-to-web",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.howtoweb.co/",
     "https://www.howtoweb.co/3-reasons-why-you-should-apply-for-speaking-at-how-to-web-conference/",
@@ -16,7 +16,12 @@
     "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
     "https://www.howtoweb.co/dealflow/",
     "https://www.howtoweb.co/e465000-the-record-investment-prize-for-the-winner-of-how-to-web-2022s-spotlight-competition/",
-    "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/"
+    "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
+    "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+    "https://www.howtoweb.co/over-half-a-million-euros-is-the-investment-prize-for-the-winning-startup-of-the-spotlight-competition/",
+    "https://www.howtoweb.co/partner/fortech-investment/",
+    "https://www.howtoweb.co/speaker/alina-georgescu",
+    "https://www.howtoweb.co/speaker/andrii-degeler"
   ],
   "evidence": [
     {
@@ -32,6 +37,20 @@
       "title": "How to Web — homepage",
       "excerpt": "How to Web Conference | October 5-7, 2027 - How to Web Conference Hey",
       "page": "details"
+    },
+    {
+      "id": "check-route-1511567c67",
+      "url": "https://www.howtoweb.co/over-half-a-million-euros-is-the-investment-prize-for-the-winning-startup-of-the-spotlight-competition/",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-174f4148e2",
+      "url": "https://www.howtoweb.co/speaker/alina-georgescu",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "terms"
     },
     {
       "id": "check-route-1dd15e90bc",
@@ -104,6 +123,20 @@
       "page": "terms"
     },
     {
+      "id": "check-route-69af2aef6a",
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6b51a438d2",
+      "url": "https://www.howtoweb.co/speaker/andrii-degeler",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-6cbde9ba84",
       "url": "https://www.howtoweb.co/apply-for-lp-tickets/",
       "title": "How to Web — application page",
@@ -116,6 +149,13 @@
       "title": "How to Web — homepage",
       "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
       "page": "details"
+    },
+    {
+      "id": "check-route-7aa00862d3",
+      "url": "https://www.howtoweb.co/speaker/alina-georgescu",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "terms"
     },
     {
       "id": "check-route-83a192fb2f",
@@ -136,6 +176,13 @@
       "url": "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
       "title": "How to Web — terms page",
       "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-893394e78e",
+      "url": "https://www.howtoweb.co/partner/fortech-investment/",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
       "page": "terms"
     },
     {
@@ -167,6 +214,13 @@
       "page": "terms"
     },
     {
+      "id": "check-route-aaacac1173",
+      "url": "https://www.howtoweb.co/over-half-a-million-euros-is-the-investment-prize-for-the-winning-startup-of-the-spotlight-competition/",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "terms"
+    },
+    {
       "id": "check-route-ab37fe8656",
       "url": "https://www.howtoweb.co/apply-for-lp-tickets/",
       "title": "How to Web — application page",
@@ -179,6 +233,13 @@
       "title": "How to Web — application page",
       "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
       "page": "application"
+    },
+    {
+      "id": "check-route-bc99278f23",
+      "url": "https://www.howtoweb.co/partner/fortech-investment/",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "terms"
     },
     {
       "id": "check-route-c7264df110",
@@ -223,6 +284,20 @@
       "page": "application"
     },
     {
+      "id": "check-route-efd0a4f674",
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f02dcfa2ed",
+      "url": "https://www.howtoweb.co/speaker/andrii-degeler",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "terms"
+    },
+    {
       "id": "check-route-f2ba903fae",
       "url": "https://www.howtoweb.co/apply-for-speaking/",
       "title": "How to Web — application page",
@@ -257,6 +332,78 @@
       "url": "https://www.howtoweb.co/",
       "page": "details",
       "excerpt": "How to Web Conference | October 5-7, 2027 - How to Web Conference Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Bucharest · Oct 5–7, 2027 Where builders & visionaries gather Eastern Europe's leading startup & technology conference. Three days in Bucharest for tech professionals and leaders, founders, investors, and anyone who wants a sharper read on the year ahead. Buy 2027 Tickets Partner with us 3,000+ Attendees 9,000+ Meetings 500+ Founders 250+ Investors 100+ Speakers 50+ Side events 2026 In Review What will you build when you can build anything? To every speaker, founder, investor and attendee who brought their clarity and drive to Bucharest for the 2026 edition – thank you for making How to Web Conference unforgettable. As we begin building the 2027 experience, we let it be guided"
+    },
+    {
+      "id": "check-page-bf245f737f",
+      "url": "https://www.howtoweb.co/",
+      "page": "details",
+      "excerpt": "As we begin building the 2027 experience, we let it be guided by a reflection shared on stage by Nicoleta-Ramona Dinu (State Adviser for Economic and Social Policies, Presidential Administration of Romania): “Romania must become a place where startups scale into global companies, drive innovation and build cutting-edge technology."
+    },
+    {
+      "id": "check-page-d3c51a4175",
+      "url": "https://www.howtoweb.co/",
+      "page": "details",
+      "excerpt": "A resilient ecosystem requires time, trust and true collaboration across industries, generations and the public sector."
+    },
+    {
+      "id": "check-page-5796d92565",
+      "url": "https://www.howtoweb.co/",
+      "page": "details",
+      "excerpt": "Workshops, roundtables, and deep-dives Deep-dives across product, AI & growth Three rooms running in parallel with focused tracks."
+    },
+    {
+      "id": "check-page-0366bde6b0",
+      "url": "https://www.howtoweb.co/",
+      "page": "details",
+      "excerpt": "Pitches Spotlight Pitch Watch the next generation of Eastern European founders pitch live to investors."
+    },
+    {
+      "id": "check-page-4e5499997c",
+      "url": "https://www.howtoweb.co/",
+      "page": "details",
+      "excerpt": "Startups & investments Fundraising, scaling, and venture in Eastern Europe."
+    },
+    {
+      "id": "check-page-dfe7b8eed0",
+      "url": "https://www.howtoweb.co/",
+      "page": "details",
+      "excerpt": "AI & Future Tech What changes when intelligence is on tap."
+    },
+    {
+      "id": "check-page-772d4fd969",
+      "url": "https://www.howtoweb.co/",
+      "page": "details",
+      "excerpt": "Who comes Builders from every corner of Europe."
+    },
+    {
+      "id": "check-page-8e33203959",
+      "url": "https://www.howtoweb.co/",
+      "page": "details",
+      "excerpt": "Romania Bulgaria United Kingdom Moldova Poland Serbia Czech Republic Germany Croatia Hungary Plus guests from United States, United Arab Emirates, Japan, Canada, South Africa, Mexico."
+    },
+    {
+      "id": "check-page-4505b18aa0",
+      "url": "https://www.howtoweb.co/",
+      "page": "details",
+      "excerpt": "The event highlighted that innovation and AI are no longer trends but rather essential tools for companies aiming to stay competitive and build scalable, efficient solutions. · Two incredible days at How to Web 2025, and we could not be more excited to be part of it!"
+    },
+    {
+      "id": "check-page-c8680cf4ae",
+      "url": "https://www.howtoweb.co/",
+      "page": "details",
+      "excerpt": "From insightful keynotes to powerful conversations, this edition brought together the energy and ideas that are shaping the future of tech and innovation."
+    },
+    {
+      "id": "check-page-7dd741135d",
+      "url": "https://www.howtoweb.co/",
+      "page": "details",
+      "excerpt": "We left inspired, energised, and more connected! · Yesterday, at How to Web, I realized how many opportunities we were missing because we weren't exploring embedded AI. · How to Web Conference was not like any other event."
+    },
+    {
+      "id": "check-page-7232589db2",
+      "url": "https://www.howtoweb.co/",
+      "page": "details",
+      "excerpt": "You'd take a coffee, sit on a beanbag, and brainstorm and debate with investors on the market trends, your plans, their visions, and how to best meet each other's needs. · Drawing top-tier investors from Europe, How to Web Conference again showed that they're one of the year's events you cannot miss. · Tickets Choose how you build Four paths through three days in Bucharest."
     },
     {
       "id": "check-page-fd01b28dc3",
@@ -295,6 +442,18 @@
       "excerpt": "Apply for Startup Tickets - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Startups Apply for Startup Tickets. Access the full How to Web Conference 2027 — plus founder-specific programs, investor introductions, and the Demo Area. Apply below to get your startup ticket. The process How it works. Step 01 Apply Fill in the form below. Select Dealflow, Spotlight, or both. Step 02 Review Our team reviews your application within 24 hours. Step 03 Decision You'll receive an email with your result and next steps. Step 04 Get your ticket Use the link in your email to confirm your spot. Step 05 Conference How to Web Conference — October 5–7, 2027 · Bucharest. Tracks Two paths in. Dealflow For early-stage startups ready to connect with investors and the conference ecosystem. Approved"
     },
     {
+      "id": "check-page-55ad929aaa",
+      "url": "https://www.howtoweb.co/apply-for-startup-tickets",
+      "page": "application",
+      "excerpt": "Selected founders get mentorship, pitch on stage, and can even demo across three days."
+    },
+    {
+      "id": "check-page-0c879f110e",
+      "url": "https://www.howtoweb.co/apply-for-startup-tickets",
+      "page": "application",
+      "excerpt": "Access to the Startup Demo Area (additional cost) After you acquire your Startup Ticket, you can explore options for a dedicated booth on the conference expo floor to showcase your product to attendees, investors, and corporates."
+    },
+    {
       "id": "check-page-1e15572463",
       "url": "https://www.howtoweb.co/how-to-web-2023/apply-for-speaking/",
       "page": "application",
@@ -307,10 +466,52 @@
       "excerpt": "40+ Startups at Spotlight | How to Web Conference 2023 - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets press releases 20 September, 2023 40+ of the most promising startups from Eastern Europe compete for the €880,000 investment prize on the How to Web Conference’ stage 40+ technology startups from across Eastern Europe have been selected to participate in this year’s edition of Spotlight, the program and competition dedicated to early-stage startups, part of the How to Web Conference. [Bucharest, 23.08.2023] On October 4th and 5th, Spotlight will bring together in front of the 2,500 participants of How to Web conference, 40 promising tech startups. The founders of these companies will have access to the expertise of global industry specialists, gain visibility by presenting"
     },
     {
+      "id": "check-page-61834d7e94",
+      "url": "https://www.howtoweb.co/40-of-the-most-promising-startups-from-eastern-europe-compete-for-the-e880000-investment-prize-on-the-how-to-web-stage/",
+      "page": "terms",
+      "excerpt": "The competition prize is syndicated by renowned investment funds in Europe: Credo Ventures, SMOK Ventures, Fiedler Capital, Startup Wise Guys, Underline Ventures, Fortech Investments, Seedblink, and angel investors like Iulian Cîrciumaru."
+    },
+    {
+      "id": "check-page-f991f1c42a",
+      "url": "https://www.howtoweb.co/40-of-the-most-promising-startups-from-eastern-europe-compete-for-the-e880000-investment-prize-on-the-how-to-web-stage/",
+      "page": "terms",
+      "excerpt": "They will compete for the grand prize and benefit from multiple opportunities, including exposure in the dedicated startup pavilion, mentoring sessions with global experts, and meetings with some of the most renowned investors."
+    },
+    {
+      "id": "check-page-73790daaf4",
+      "url": "https://www.howtoweb.co/40-of-the-most-promising-startups-from-eastern-europe-compete-for-the-e880000-investment-prize-on-the-how-to-web-stage/",
+      "page": "terms",
+      "excerpt": "Thus, they will enter the deal flow process with investors such as Staffan Helgesson, General Partner at Creandum and investor in some of the most renowned companies such as Bolt or Spotify; Allen Taylor, Managing Partner at Endeavor Catalyst; Ondrej Bartos, General Partner at Credo Ventures; Dan Lupu, Partner at Earlybird Venture Capital; Irina Haivas, Partner at Atomico and many others."
+    },
+    {
+      "id": "check-page-3310892d36",
+      "url": "https://www.howtoweb.co/40-of-the-most-promising-startups-from-eastern-europe-compete-for-the-e880000-investment-prize-on-the-how-to-web-stage/",
+      "page": "terms",
+      "excerpt": "During the two days of the event, on October 4th and 5th, participating startups will engage in one-on-one meetings with mentors and investors, present their products to the audience on the startup stage, and on the final day of the event, six finalists will compete for the grand investment prize on the main stage of the conference in front of over 2,500 participants."
+    },
+    {
+      "id": "check-page-629cc00bad",
+      "url": "https://www.howtoweb.co/40-of-the-most-promising-startups-from-eastern-europe-compete-for-the-e880000-investment-prize-on-the-how-to-web-stage/",
+      "page": "terms",
+      "excerpt": "The How to Web 2023 Conference, which hosts Spotlight, is built in partnership with Orange Romania, BRD – Groupe Société Générale, Underline Ventures, and Google for Startups, with the support of Bitdefender, HubSpot for Startups, European Innovation Council, Endeavor Romania, Vienna Business Agency, WIT Angels Club, LAUNCHub Ventures, Growceanu, Inovo VC and Infobip."
+    },
+    {
       "id": "check-page-789e6d0173",
       "url": "https://www.howtoweb.co/apply-for-startup-ticket/",
       "page": "application",
       "excerpt": "Apply for Startup Tickets - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Startups Apply for Startup Tickets. Access the full How to Web Conference 2027 — plus founder-specific programs, investor introductions, and the Demo Area. Apply below to get your startup ticket. The process How it works. Step 01 Apply Fill in the form below. Select Dealflow, Spotlight, or both. Step 02 Review Our team reviews your application within 24 hours. Step 03 Decision You'll receive an email with your result and next steps. Step 04 Get your ticket Use the link in your email to confirm your spot. Step 05 Conference How to Web Conference — October 5–7, 2027 · Bucharest. Tracks Two paths in. Dealflow For early-stage startups ready to connect with investors and the conference ecosystem. Approved"
+    },
+    {
+      "id": "check-page-092003e1c5",
+      "url": "https://www.howtoweb.co/apply-for-startup-ticket/",
+      "page": "application",
+      "excerpt": "Selected founders get mentorship, pitch on stage, and can even demo across three days."
+    },
+    {
+      "id": "check-page-431fe26338",
+      "url": "https://www.howtoweb.co/apply-for-startup-ticket/",
+      "page": "application",
+      "excerpt": "Access to the Startup Demo Area (additional cost) After you acquire your Startup Ticket, you can explore options for a dedicated booth on the conference expo floor to showcase your product to attendees, investors, and corporates."
     },
     {
       "id": "check-page-42b6ef6fd2",
@@ -319,16 +520,148 @@
       "excerpt": "5 Questions With Dan Mihaescu (GapMinder Venture Partners): “We fill in a critical investment gap” - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets interviews 1 April, 2018 5 Questions With Dan Mihaescu (GapMinder Venture Partners): “We fill in a critical investment gap” In early January 2018, GapMinder Venture Partners announced it was open for business, targeting to invest EUR 26m in early stage technology companies in Central Eastern Europe, with an emphasis on Romania’s developing tech scene. The fund is led by Dan Mihaescu as Founding Partner, a well-known investor in a number of high tech start-ups with a deep knowledge of the regional start-up scene. Dan has a solid investment track record, being an angel investor in companies such as Axosuits , TypingDNA or"
     },
     {
+      "id": "check-page-d37dfbf185",
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "page": "terms",
+      "excerpt": "We caught up with Dan to tell us more about how GapMinder, which also funds the Techcelerator acceleration program, “plans to invest and support the most disruptive and bold innovations.” Q1: Why is now a good time to launch GapMinder VC in Romania?"
+    },
+    {
+      "id": "check-page-cadb22c7af",
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "page": "terms",
+      "excerpt": "How does Romania’s start-up scene differ to other regional tech scenes?"
+    },
+    {
+      "id": "check-page-89382e8bd9",
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "page": "terms",
+      "excerpt": "What tech sectors do you think Romania excels in?"
+    },
+    {
+      "id": "check-page-4a48024c7a",
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "page": "terms",
+      "excerpt": "I think it is a good time to launch GapMinder because the technology ecosystem in Romania has evolved and matured – but it’s still essentially overlooked."
+    },
+    {
+      "id": "check-page-972d6ed3a3",
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "page": "terms",
+      "excerpt": "Until now, angel investors were generally investing less than 200,000 euros, and the regional funds in Romania were investing at least 1 million euros."
+    },
+    {
+      "id": "check-page-6c5baaa269",
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "page": "terms",
+      "excerpt": "Romania has a bigger start-up scene than the other CEE countries except for Poland."
+    },
+    {
+      "id": "check-page-5d4ff2e6f7",
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "page": "terms",
+      "excerpt": "I estimate that the number of start-ups in Romania is around 500, while the number of dormant start-ups that have high-tech components can be estimated in a few thousand."
+    },
+    {
+      "id": "check-page-e5605cb42d",
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "page": "terms",
+      "excerpt": "At our accelerator, Techcelerator , we’re now seeing between 10-12 new start-ups per week, and we’re just one fund."
+    },
+    {
+      "id": "check-page-424fed3eab",
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "page": "terms",
+      "excerpt": "There’s a lot of highly valuable technology that is developed in Romania and a side effect is that a lot of highly educated engineers go into AI, machine learning, advanced analytics or predictive marketing."
+    },
+    {
+      "id": "check-page-3445aa668c",
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "page": "terms",
+      "excerpt": "The experience of the founders, their general vision, ambitions, goals, energy, and how they all work together."
+    },
+    {
+      "id": "check-page-c5e9061ca1",
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "page": "terms",
+      "excerpt": "Which ‘innovative’ start-ups in Romania stand out to you?"
+    },
+    {
+      "id": "check-page-e1f88eae30",
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "page": "terms",
+      "excerpt": "When we invest, one of the most important things we do is compress time, we will ask: “ok, so you want 500,000, tell us what you would do with 1 million?”."
+    },
+    {
       "id": "check-page-71835b86a4",
       "url": "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
       "page": "terms",
       "excerpt": "Alpha AR, an AI-based deep tech startup from Estonia, is the winning startup of Spotlight 2021 competition and takes home the €350,000 investment prize - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets events 24 November, 2021 Alpha AR, an AI-based deep tech startup from Estonia, is the winning startup of Spotlight 2021 competition and takes home the €350,000 investment prize Alpha AR from Estonia , an AI-based deep tech solution that makes 3D easy and scalable for AR/VR, NFTs, games and marketing, is the winner of the €350,000 investment prize from How to Web’s 2021 Spotlight competition. „We want to thank the How to Web team for all the support during the two months of the program. We didn’t expect to be the winners, but we are glad to see that investors trust our solution”,"
     },
     {
+      "id": "check-page-f53720bd7e",
+      "url": "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
+      "page": "terms",
+      "excerpt": "CodeWell (Macedonia) and RepsMate (Romania) ranked 2nd and 3rd, respectively."
+    },
+    {
+      "id": "check-page-3a7ba46bb4",
+      "url": "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
+      "page": "terms",
+      "excerpt": "The 10 finalist startups were Nu-Credits, iSpeak, RepsMate, Brio, Konvi, Coursy, Vatis Tech, Alpha AR, Streams Live, CodeWell AI."
+    },
+    {
+      "id": "check-page-0f1187dec5",
+      "url": "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
+      "page": "terms",
+      "excerpt": "“Since 2011, Spotlight has been helping Eastern European early-stage startups to connect with experts, operators and investors."
+    },
+    {
+      "id": "check-page-4b31c404da",
+      "url": "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
+      "page": "terms",
+      "excerpt": "The amount is a future investment in the form of a convertible note."
+    },
+    {
+      "id": "check-page-aa6897b7ce",
+      "url": "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
+      "page": "terms",
+      "excerpt": "Spotlight is developed in partnership with Google for Startups, KPMG Romania, Mastercard Romania and BRD – Groupe Société Générale, with the support of eMag, 2Checkout (now Verifone), Fitbit, Microsoft Romania, BearingPoint Romania, Orange Romania, NN Romania and Credo Ventures."
+    },
+    {
+      "id": "check-page-774a345a23",
+      "url": "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
+      "page": "terms",
+      "excerpt": "Launched in 2011 and organized as part of the How to Web conference, Spotlight is the best-known competition in Eastern Europe for technology startups to expand globally."
+    },
+    {
+      "id": "check-page-aab6893e42",
+      "url": "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
+      "page": "terms",
+      "excerpt": "About How to Web How to Web is one of the most important annual technology and innovation conferences in Europe, bringing together technology entrepreneurs, product developers, developers, online marketers, innovators, and investors looking for inspiration and know-how to develop digital products and businesses."
+    },
+    {
+      "id": "check-page-e35a94dad8",
+      "url": "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
+      "page": "terms",
+      "excerpt": "Launched in 2010, it was among the first technology events in Central and Eastern Europe."
+    },
+    {
+      "id": "check-page-d0f44e5c94",
+      "url": "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
+      "page": "terms",
+      "excerpt": "It contributed to the adoption of the startup mentality in Romania and this region of Europe."
+    },
+    {
       "id": "check-page-a0b4eb53c5",
       "url": "https://www.howtoweb.co/dealflow/",
       "page": "terms",
-      "excerpt": "Dealflow | How to Web Conference 2026 - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Dealflow A few months of meetings in just a day — welcome to Dealflow, How to Web's platform for connecting Eastern European startups with global and regional investors. BUY TICKETS Seize the Best Dealflow For Investors If you want to connect with some of the most promising Eastern European startups joining How to Web, grab an investor ticket and access Dealflow. This will grant you access in advance to the full list of attending startups that want to meet investors, with their contact details and decks. Access our networking app to set meetings in the Networking Area, schedule private meetings in the VIP Areas, or watch their pitches, and start doing deals! For Founders If you are a founder"
+      "excerpt": "Dealflow | How to Web Conference 2027 - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Dealflow A few months of meetings in just a day — welcome to Dealflow, How to Web's platform for connecting Eastern European startups with global and regional investors. BUY TICKETS Seize the Best Dealflow For Investors If you want to connect with some of the most promising Eastern European startups joining How to Web, grab an investor ticket and access Dealflow. This will grant you access in advance to the full list of attending startups that want to meet investors, with their contact details and decks. Access our networking app to set meetings in the Networking Area, schedule private meetings in the VIP Areas, or watch their pitches, and start doing deals! For Founders If you are a founder"
+    },
+    {
+      "id": "check-page-7cbae35c9b",
+      "url": "https://www.howtoweb.co/dealflow/",
+      "page": "terms",
+      "excerpt": "You’ll have access to an amazing list of venture fund managers and angel investors, and you’ll be able to connect with them and start your journey to the next fundraising round."
     },
     {
       "id": "check-page-2f67a917d1",
@@ -337,10 +670,250 @@
       "excerpt": "€465,000 — the record investment prize of Spotlight - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets events 23 August, 2022 €465,000 — the record investment prize for the winner of How to Web 2022’s Spotlight competition Spotlight, the leading startup competition in Eastern Europe, announces the investment prize up for grabs this year, reaching a record 465,000 euros. The award is syndicated by a group of the most active investors from the region: Tech Angels, Seedblink, Hellen’s Rock, GapMinder VC, Fortech Investments, Growceanu, V7 Capital, RocaX, Startup Wise Guys, and Transylvania Angels Network. In addition to the big investment prize, participants can benefit from unique opportunities for collaboration, business, and scaling. On top of these, the conference’s main"
     },
     {
+      "id": "check-page-64b4d0f0f6",
+      "url": "https://www.howtoweb.co/e465000-the-record-investment-prize-for-the-winner-of-how-to-web-2022s-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "This competition invites all Eastern European technology startups with high scalability potential, a product with proper stability and traction, a business life of up to 5 years, and up to a maximum of 1 million euros in investment so far."
+    },
+    {
+      "id": "check-page-201771b51f",
+      "url": "https://www.howtoweb.co/e465000-the-record-investment-prize-for-the-winner-of-how-to-web-2022s-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "Moreover, most of How to Web’s speakers for this conference edition are also eager to take part in the mentoring program from Spotlight, enabling founders with access to numerous areas of expertise."
+    },
+    {
+      "id": "check-page-6a11998017",
+      "url": "https://www.howtoweb.co/e465000-the-record-investment-prize-for-the-winner-of-how-to-web-2022s-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "We support innovation and entrepreneurship, and in the Spotlight competition, we contribute with mentorship, networking facilitation, and matchmaking for startups with potential."
+    },
+    {
+      "id": "check-page-2a7dab7bb4",
+      "url": "https://www.howtoweb.co/e465000-the-record-investment-prize-for-the-winner-of-how-to-web-2022s-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "Launched in 2011 and organized as part of the How to Web conference, Spotlight is the best-known competition in the Eastern European region for technology startups that want to develop globally."
+    },
+    {
+      "id": "check-page-5b79ab041a",
+      "url": "https://www.howtoweb.co/e465000-the-record-investment-prize-for-the-winner-of-how-to-web-2022s-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "You may also like events 23 August, 2022 How to grow your product by being the odd one out: Dave Harland’s interrupt, intrigue, convert framework Spotlight, the leading startup competition in Eastern Europe, announces the investment prize up for grabs this year, reaching a record 465,000 euros."
+    },
+    {
       "id": "check-page-7d99ae2fa0",
       "url": "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
       "page": "terms",
       "excerpt": "Record Investment Prize Spotlight 2023 - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets press releases For Startups 23 August, 2023 Game-Changing Investment Prize Alert: The Largest Investment Proposal for Startups in Eastern Europe — €780K from Leading Investors Pioneering Entrepreneurs: Secure the Region’s Largest Investment Prize at Spotlight, part of How to Web Conference 2023! Press Release | Bucharest, 23.08.2023 – In a groundbreaking move that is set to redefine the startup ecosystem in Eastern Europe, How to Web Conference 2023 is unveiling an investment prize of unprecedented scale — €780.000. This investment prize, which stands as the largest in Eastern Europe and ranks second across the European startup landscape, marks a significant milestone in the region’s"
+    },
+    {
+      "id": "check-page-3c9490e218",
+      "url": "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
+      "page": "terms",
+      "excerpt": "This investment prize, which stands as the largest in Eastern Europe and ranks second across the European startup landscape, marks a significant milestone in the region’s startup community progress."
+    },
+    {
+      "id": "check-page-79e11920f4",
+      "url": "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
+      "page": "terms",
+      "excerpt": "“ Spotlight is an incredible opportunity for startup founders to connect with some of the best funds and the brightest operators from Europe."
+    },
+    {
+      "id": "check-page-46db0010a2",
+      "url": "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
+      "page": "terms",
+      "excerpt": "We are excited to give them even more reasons and to join Spotlight’s award as an investment partner, along with an amazing line-up of regional funds, ” says Bogdan Iordache, General Partner at Underline Ventures."
+    },
+    {
+      "id": "check-page-970cfaa906",
+      "url": "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
+      "page": "terms",
+      "excerpt": "Matchmaking and 1:1 Mentoring with Investors and Experts One of the central parts of the Spotlight program is to connect with experienced mentors, accomplished business leaders, and savvy investors who hold a deep understanding of the startup and innovation scene."
+    },
+    {
+      "id": "check-page-6124e3f86a",
+      "url": "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
+      "page": "terms",
+      "excerpt": "Discovery Cristian Pațachia-Sultănoiu , Development & Innovation Manager at Orange Romania Horia Velicu , Head of Innovation Lab at BRD – Groupe Société Générale Mihnea Crăciun , Managing Director at Endeavor Romania Nicoleta Proștean , Representative for Romania at Vienna Business Agency Eoin McGuinness, Head of Startups at HubSpot Ruxandra Muys-Stoian, Co-Founder WIT Angels Club, and many more."
+    },
+    {
+      "id": "check-page-086d06c270",
+      "url": "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
+      "page": "terms",
+      "excerpt": "The main benefit for the top 40 startups selected in the Spotlight program and competition is the matchmaking and 1:1 mentoring with investors and experts, while the top 20 will master the on-stage pitching and get a booth in the expo area."
+    },
+    {
+      "id": "check-page-6c07559103",
+      "url": "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
+      "page": "terms",
+      "excerpt": "The application criteria include having an early-stage startup, less than 5 years old, and with less than €700k fundraised."
+    },
+    {
+      "id": "check-page-2f3d90d7f6",
+      "url": "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
+      "page": "terms",
+      "excerpt": "For more details and application, visit the website’s dedicated page: https://www.howtoweb.co/spotlight-2023/ ____________________ How to Web Conference 2023, which hosts Spotlight, is built in partnership with Orange Romania, BRD – Groupe Société Générale, Underline Ventures, and Google for Startups, with the support of Endeavor, Vienna Business Agency, HubSpot for Startups and WIT Angels Club."
+    },
+    {
+      "id": "check-page-8968fbb5a9",
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "page": "terms",
+      "excerpt": "About How to Web Conference 2023 - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets press releases 9 October, 2023 How to Web 2023 brought together over 2,500 international participants, 60 global speakers, and an investment prize of €880,000 for the best Eastern European startup Bucharest, October 5, 2023 – The How to Web 2023 conference was the meeting place for technology and innovation enthusiasts from Eastern Europe. Over 2,500 participants from 26 countries gathered in Bucharest on 4 and 5 October to discover industry best practices, connect with experts and investors and take part in the region’s largest startup competition. With over 60 global experts on stage from companies such as Warner Bros. Discovery, Google DeepMind, Atomico, Paddle, Seedcamp, and many others,"
+    },
+    {
+      "id": "check-page-8fda0b5080",
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "page": "terms",
+      "excerpt": "Discovery, Google DeepMind, Atomico, Paddle, Seedcamp, and many others, along with more than 350 startups, 150 European investors, and numerous other specialists and innovation enthusiasts among the participants, How to Web has once again marked a significant moment for the regional technology industry, providing a unique and comprehensive experience for attendees."
+    },
+    {
+      "id": "check-page-9b8ab6af5a",
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "page": "terms",
+      "excerpt": "Out of the 2,500 participants, organizers estimate that over 20% are from outside Romania, which is steadily increasing compared to previous years."
+    },
+    {
+      "id": "check-page-9974dd5563",
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "page": "terms",
+      "excerpt": "Software pioneers such as American author Ryan Singer, investors from Europe’s largest investment funds – Atomico, Creandum, Seecamp, or unicorn startup founders such as Hristo Borisov, founder of Payhawk and Mada Seghete, co-founder of Branch, took to the How to Web stage to reveal to attendees the entrepreneurial vision that has brought them success."
+    },
+    {
+      "id": "check-page-2a803bf1a9",
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "page": "terms",
+      "excerpt": "“We always seem to fall into an apparent opposition between corporations and startups: some have stability, some don’t, some are slow, some are fast-forward, and the list goes on."
+    },
+    {
+      "id": "check-page-f2a6c3b2c7",
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "page": "terms",
+      "excerpt": "And the first thing that comes to mind is that both corporations and startups apply the advice that the famous tech entrepreneur Paul Graham gave to startup founders: simply learn."
+    },
+    {
+      "id": "check-page-2074e3780b",
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "page": "terms",
+      "excerpt": "And experience has shown us that the evolution of startups is a very good teacher,” said Anca Nuțiu, Chief Retail Officer at BRD – Groupe Société Générale."
+    },
+    {
+      "id": "check-page-a412016d35",
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "page": "terms",
+      "excerpt": "Who is the Spotlight 2023 winner Spotlight, the biggest competition for early-stage startups in the region, took place on the second day of the conference."
+    },
+    {
+      "id": "check-page-0ff00861dc",
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "page": "terms",
+      "excerpt": "Out of more than 300 Eastern European startups registered, 40 participated in the Spotlight program and 6 of them made it to the grand final of the competition for the €880,000 investment prize."
+    },
+    {
+      "id": "check-page-a224e87b1e",
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "page": "terms",
+      "excerpt": "The finalist startups, which took the main stage of the event, are: ClientZen (Romania), Vaqat (Polonia), RepsMate (Romania), Collabwriting (Serbia), Salesforge (Lithuania) și Bluedot (Ukraine)."
+    },
+    {
+      "id": "check-page-112d1d344b",
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "page": "terms",
+      "excerpt": "The investment prize is syndicated by renowned investment funds in Europe: Credo Ventures, SMOK Ventures, Fiedler Capital, Startup Wise Guys, Underline Ventures, Fortech Investments, Seedblink and angel investors such as Iulian Cîrciumaru."
+    },
+    {
+      "id": "check-page-25c8439b5f",
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "page": "terms",
+      "excerpt": "We are happy to contribute to the growth of the local entrepreneurial ecosystem and thank the How to Web team for their efforts in making this event a success”, said Silvia Carasel, Marketing Project Manager Google Romania."
+    },
+    {
+      "id": "check-page-f04001c0a1",
+      "url": "https://www.howtoweb.co/how-to-web-2023-brought-together-over-2500-international-participants-60-global-speakers-and-an-investment-prize-of-e880000-for-the-best-eastern-european-startup/",
+      "page": "terms",
+      "excerpt": "You may also like press releases 9 October, 2023 How to grow your product by being the odd one out: Dave Harland’s interrupt, intrigue, convert framework Bucharest, October 5, 2023 – The How to Web 2023 conference was the meeting place for technology and innovation enthusiasts from Eastern Europe."
+    },
+    {
+      "id": "check-page-792bc3a1d0",
+      "url": "https://www.howtoweb.co/over-half-a-million-euros-is-the-investment-prize-for-the-winning-startup-of-the-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "Spotlight 2023 Investment-Prize Announcement - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets For Startups 24 May, 2023 Over half a million euros is the investment prize for the winning startup of the Spotlight competition Spotlight, the competition dedicated to startups from Eastern Europe and organized as part of the How to Web conference, announces this year a prize of over half a million euros, an investment that will go to the most promising startup. Spotlight is the most anticipated competition for startups in the region, which brings year after year a record investment prize that can change the entire trajectory of an early-stage startup. The How to Web Conference is a reference event at a European level, so more and more established investors are attracted to the"
+    },
+    {
+      "id": "check-page-463abba244",
+      "url": "https://www.howtoweb.co/over-half-a-million-euros-is-the-investment-prize-for-the-winning-startup-of-the-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "The How to Web Conference is a reference event at a European level, so more and more established investors are attracted to the startups in the Spotlight competition."
+    },
+    {
+      "id": "check-page-99f7ccf918",
+      "url": "https://www.howtoweb.co/over-half-a-million-euros-is-the-investment-prize-for-the-winning-startup-of-the-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "Therefore, this year, the investment is syndicated by some of the most important European investors, such as Credo Ventures, SMOK Ventures, Fiedler Capital, Underline Ventures, Fortech Investments, and SeedBlink."
+    },
+    {
+      "id": "check-page-dff1661f9e",
+      "url": "https://www.howtoweb.co/over-half-a-million-euros-is-the-investment-prize-for-the-winning-startup-of-the-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "Meetings with investors, and representatives of European funds."
+    },
+    {
+      "id": "check-page-6bc36c11fe",
+      "url": "https://www.howtoweb.co/over-half-a-million-euros-is-the-investment-prize-for-the-winning-startup-of-the-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "Spotlight editions have brought together renowned funds such as Earlybird Venture Capital, Seedcamp, 500 Emerging Europe, LAUNCHUB, Inovo Venture Partners, 3VC, Eleven Ventures, Stride VC, Startup Wise Guys, and many more."
+    },
+    {
+      "id": "check-page-fd54b310a7",
+      "url": "https://www.howtoweb.co/over-half-a-million-euros-is-the-investment-prize-for-the-winning-startup-of-the-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "In addition to mentoring sessions, the participating startups have our support in accessing Orange’s portfolio of customers and partners."
+    },
+    {
+      "id": "check-page-79d27b728d",
+      "url": "https://www.howtoweb.co/over-half-a-million-euros-is-the-investment-prize-for-the-winning-startup-of-the-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "We wish them all success and encourage them to take advantage of the opportunity to get relevant feedback from the most important players in the market”, said Cristian Pațachia-Sultanoiu, Development & Innovation Manager, Orange Romania."
+    },
+    {
+      "id": "check-page-4e9c306a13",
+      "url": "https://www.howtoweb.co/over-half-a-million-euros-is-the-investment-prize-for-the-winning-startup-of-the-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "The competition is dedicated to technology startups from Eastern Europe, with high potential for scalability, a product with sufficient stability and traction, an activity period of up to 5 years, and a maximum of 500,000 euros in investment so far."
+    },
+    {
+      "id": "check-page-ffeef42e35",
+      "url": "https://www.howtoweb.co/over-half-a-million-euros-is-the-investment-prize-for-the-winning-startup-of-the-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "The How to Web 2023 Conference, which hosts Spotlight, is built in partnership with Orange Romania, BRD – Groupe Société Générale, Underline Ventures, and Google for Startups, with the support of Endeavor and the Vienna Business Agency."
+    },
+    {
+      "id": "check-page-1a949ea48d",
+      "url": "https://www.howtoweb.co/over-half-a-million-euros-is-the-investment-prize-for-the-winning-startup-of-the-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "You may also like For Startups 24 May, 2023 How to grow your product by being the odd one out: Dave Harland’s interrupt, intrigue, convert framework Spotlight, the competition dedicated to startups from Eastern Europe and organized as part of the How to Web conference, announces this year a prize of over half a million euros, an investment that will go to the most promising startup."
+    },
+    {
+      "id": "check-page-729dacf378",
+      "url": "https://www.howtoweb.co/partner/fortech-investment/",
+      "page": "terms",
+      "excerpt": "Fortech Investment - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets All partners Visit website Sign-up to our newsletter to receive the latest updates and a custom discount code as part of our community Job Category Tech Professional Startup Founder Startup Program Representative Corporate Investor LP Angel Investor BizDev Executive Media Representative Other Job Category Tech Professional Startup Founder Startup Program Representative Corporate Investor LP Angel Investor BizDev Executive Media Representative Other SIGN UP Thank you for subscribing, let's keep building! Location Face Convention Center, Piata Presei Libere, 3-5 Stay tuned Follow us on: facebook twitter linkedin youtube-square Or drop us an e-mail at: [email protected] Contact us Partnership Become a volunteer"
+    },
+    {
+      "id": "check-page-0db39a2d84",
+      "url": "https://www.howtoweb.co/speaker/alina-georgescu",
+      "page": "terms",
+      "excerpt": "Alina Georgescu - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets All speakers Featured Speakers Alina Georgescu Investment Director @ Catalyst Romania Investment Investment director at Catalyst Romania, Alina brings over fifteen years of venture capital, corporate finance and commercial management experience. She sources, structures and leads growth-equity investments in technology scaleups across Romania and CEE, working closely with founding teams to drive regional and international expansion. Other featured speakers See all speakers → Adam Csuhai Partner Lead Capital Nikola Yanev Co-founder Fundraise Ready Eva Arh Partner 3VC Will Orde Partner Passion Capital Sign-up to our newsletter to receive the latest updates and a custom discount code as part of our community Job"
+    },
+    {
+      "id": "check-page-893d9b2dee",
+      "url": "https://www.howtoweb.co/speaker/andrii-degeler",
+      "page": "terms",
+      "excerpt": "Andrii Degeler - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets All speakers Featured Speakers Andrii Degeler Head of News @ Dealroom Moderator / press Head of news at Dealroom.co and tech journalist with over 15 years in the trenches for outlets like TNW, Tech.eu and Ars Technica. Equal parts reporter and newsroom tinkerer, he has spent his career dissecting deeptech trends while quietly automating the workflows that keep modern tech journalism running. Andrii draws the line where ecosystem hype ends and genuine deeptech shifts begin. His specialty is catching early market movements in the data and calling out industry trends long before they reach mainstream headlines. On the operational side, he treats the newsroom like a software stack. He details how media teams can"
+    },
+    {
+      "id": "check-page-c8aca6d617",
+      "url": "https://www.howtoweb.co/speaker/andrii-degeler",
+      "page": "terms",
+      "excerpt": "Catch up with Andrii at How to Web Conference for an unfiltered look at what actually catches a tech journalist's attention when everyone is pitching AI."
     }
   ],
   "findings": {

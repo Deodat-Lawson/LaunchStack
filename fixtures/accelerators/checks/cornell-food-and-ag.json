@@ -1,6 +1,6 @@
 {
   "programId": "cornell-food-and-ag",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.thetechnologyfarm.com/"
   ],
@@ -8,23 +8,43 @@
     {
       "id": "check-email-7e36b4d116",
       "url": "https://www.thetechnologyfarm.com/",
-      "title": "Cornell Food and Ag — homepage checked by scrape.py",
+      "title": "Cornell Food and Ag — homepage",
       "excerpt": "\"email\": \"info@thetechnologyfarm.com\"",
       "page": "details"
     },
     {
       "id": "check-phone-1aeb35018d",
       "url": "https://www.thetechnologyfarm.com/",
-      "title": "Cornell Food and Ag — homepage checked by scrape.py",
+      "title": "Cornell Food and Ag — homepage",
       "excerpt": "\"telephone\": \"(315) 781-7341\"",
       "page": "details"
     },
     {
       "id": "check-route-134e321bad",
       "url": "https://www.thetechnologyfarm.com/",
-      "title": "Cornell Food and Ag — homepage checked by scrape.py",
+      "title": "Cornell Food and Ag — homepage",
       "excerpt": "Cornell Agriculture and Food Technology Park → https://www.thetechnologyfarm.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-31e4248d72",
+      "url": "https://www.thetechnologyfarm.com/",
+      "page": "details",
+      "excerpt": "Cornell Agriculture and Food Technology Park 0 Skip to Content Cornell Agriculture and Food Technology Park Open Menu Close Menu Cornell Agriculture and Food Technology Park Open Menu Close Menu About the Cornell Agriculture and Food Technology Park The Cornell Agriculture and Food Technology Park is the Finger Lakes Region’s premier destination for food, beverage, and ag tech innovation, acceleration, and incubation. Our state-of-the-art facilities offer access to the world-renowned research and resources of Cornell AgriTech and the New York State Center of Excellence for Food and Agriculture, as well as ample space for private expansion. Whether you are an established company looking to surround yourself with innovative research and product breakthroughs, or a startup seeking the infrastructure and operational support to move to the next level, the Technology Park is the perfect place to launch your first product or bring the next revolutionary idea in food or agriculture technology to life. partner organizations Buildings and land The Technology Farm The Technology Farm is a dynamic incubator with a flex space model that allows businesses to move seamlessly from research and product development to small-scale manufacturing. Manufacturing Center The Tech Park’s 20,000 square-foot Manufacturing Center will offer customizable space for companies looking to scale-up their"
+    },
+    {
+      "id": "check-page-8c5ea6731d",
+      "url": "https://www.thetechnologyfarm.com/",
+      "page": "details",
+      "excerpt": "Manufacturing Center The Tech Park’s 20,000 square-foot Manufacturing Center will offer customizable space for companies looking to scale-up their commercial operations."
+    },
+    {
+      "id": "check-page-bf319b12c8",
+      "url": "https://www.thetechnologyfarm.com/",
+      "page": "details",
+      "excerpt": "Finger Lakes Community College Viticulture and Wine Center FLCC’s Viticulture and Wine Center prepares the next generation of winemakers and industry professionals by offering hands-on study and access to Cornell AgriTech’s groundbreaking agricultural research."
     }
   ],
   "findings": {
@@ -50,8 +70,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

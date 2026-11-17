@@ -1,25 +1,52 @@
 {
   "programId": "shoppes-guthrie-ok",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.guthrieok.com/theshoppes",
+    "https://www.guthrieok.com/_files/ugd/a2b3c8_20fd33691e6948bcae069e2c972d76fa.pdf",
     "https://www.guthrieok.com/about",
-    "https://www.guthrieok.com/_files/ugd/a2b3c8_20fd33691e6948bcae069e2c972d76fa.pdf"
+    "https://www.guthrieok.com/post/sba-program-update-including-restaurant-recovery-program"
   ],
   "evidence": [
     {
       "id": "check-route-47b53cfe93",
       "url": "https://www.guthrieok.com/theshoppes",
-      "title": "The Shoppes – Guthrie OK — homepage checked by scrape.py",
+      "title": "The Shoppes – Guthrie OK — homepage",
       "excerpt": "The Shoppes → https://www.guthrieok.com/theshoppes",
       "page": "details"
     },
     {
       "id": "check-route-5363d60286",
       "url": "https://www.guthrieok.com/theshoppes",
-      "title": "The Shoppes – Guthrie OK — homepage checked by scrape.py",
+      "title": "The Shoppes – Guthrie OK — homepage",
       "excerpt": "Vendor Application → https://www.guthrieok.com/_files/ugd/a2b3c8_20fd33691e6948bcae069e2c972d76fa.pdf",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-d66aaa5b54",
+      "url": "https://www.guthrieok.com/theshoppes",
+      "page": "details",
+      "excerpt": "The Shoppes | GuthrieOK.com top of page HOME CALENDAR SHOP Antiques, Boutiques & Galleries The Shoppes PLAY Hit The Bricks Podcast Frights In The First Capital The Christmas Capital of Oklahoma Festivals Live Music & Theatre Highland Park Disc Golf Tours Living the Lake Life EAT Dining Breakfast Drinks STAY Hotels, Inns, & B&Bs RV Sites & Camping ABOUT Antiquing Black History Filming in Guthrie GALLERY Find out more! BLOG More Use tab to navigate through the menu items. HOME CALENDAR SHOP Antiques, Boutiques & Galleries The Shoppes PLAY Hit The Bricks Podcast Frights In The First Capital The Christmas Capital of Oklahoma Festivals Live Music & Theatre Highland Park Disc Golf Tours Living the Lake Life EAT Dining Breakfast Drinks STAY Hotels, Inns, & B&Bs RV Sites & Camping ABOUT Antiquing Black History Filming in Guthrie GALLERY Find out more! BLOG More Use tab to navigate through the menu items. The Shoppes - Guthrie, OK Nestled in the heart of Downtown Guthrie, The Shoppes is a lively retail hub that celebrates local creativity and community spirit. Designed to showcase local talent and entrepreneurial spirit, The Shoppes serves as a retail incubator that provides small businesses and start-ups with an affordable, low-risk space to grow and thrive. Blending commerce with community, this lively destination invites visitors to shop for unique local goods, enjoy delicious food,"
+    },
+    {
+      "id": "check-page-dcc37ae1cd",
+      "url": "https://www.guthrieok.com/_files/ugd/a2b3c8_20fd33691e6948bcae069e2c972d76fa.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.6 %���� 68 0 obj < > endobj 102 0 obj < >/Filter/FlateDecode/ID[ < 23FE1A6CFC648543B3215EFA9025308B> ]/Index[68 64]/Info 67 0 R/Length 132/Prev 92661/Root 69 0 R/Size 132/Type/XRef/W[1 3 1]>>stream h�bbd` ``b`` � �@$� ɸ ,� � � � �P�U Y�� `� $ 0�� l�U0y Ln ���6ʃɝ`�Z0� ̞ \"c߁M� ��`v:�d�� Vi \"Mo ���o20 }� l/ �&�30=x ` |� � endstream endobj startxref 0 %%EOF 131 0 obj < >stream h�b``P```������;� ��1� � � + � /0p � � C # �@ �h6鲘q� Z� 8)�:�l|�����8���\\��( ve�y� � �`���:��c`y{ze{��\"���� �dI �, '�20�?� 3� P� � endstream endobj 69 0 obj < >/Metadata 3 0 R/PageLayout/OneColumn/Pages 66 0 R/StructTreeRoot 10 0 R/Type/Catalog>> endobj 70 0 obj < >/ExtGState < >/Font < >/ProcSet[/PDF/Text/ImageC/ImageI]/XObject < >>>/Rotate 0/StructParents 0/Tabs/S/Type/Page>> endobj 71 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 72 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 73 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 74 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 75 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 76 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 77 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 78 0 obj < >/Subtype/Form/Type/XObject>>stream /Tx BMC EMC endstream endobj 79 0 obj <"
+    },
+    {
+      "id": "check-page-8101f50c82",
+      "url": "https://www.guthrieok.com/about",
+      "page": "details",
+      "excerpt": "About Guthrie top of page HOME CALENDAR SHOP Antiques, Boutiques & Galleries The Shoppes PLAY Hit The Bricks Podcast Frights In The First Capital The Christmas Capital of Oklahoma Festivals Live Music & Theatre Highland Park Disc Golf Tours Living the Lake Life EAT Dining Breakfast Drinks STAY Hotels, Inns, & B&Bs RV Sites & Camping ABOUT Antiquing Black History Filming in Guthrie GALLERY Find out more! BLOG More Use tab to navigate through the menu items. HOME CALENDAR SHOP Antiques, Boutiques & Galleries The Shoppes PLAY Hit The Bricks Podcast Frights In The First Capital The Christmas Capital of Oklahoma Festivals Live Music & Theatre Highland Park Disc Golf Tours Living the Lake Life EAT Dining Breakfast Drinks STAY Hotels, Inns, & B&Bs RV Sites & Camping ABOUT Antiquing Black History Filming in Guthrie GALLERY Find out more! BLOG More Use tab to navigate through the menu items. Our Story Established following the Land Run of 1889, Guthrie was no more than a prairie stop on the AT&SF railroad. Thanks to the Land Run, it became a city of over 10,000 overnight. Steeped in history, Guthrie has many stories to tell and much to offer. Though its rich beginnings distinguish it as home to many of Oklahoma's most important milestones, Guthrie blends old and new and has something for everyone. See for yourself! bottom of page"
+    },
+    {
+      "id": "check-page-63aa717380",
+      "url": "https://www.guthrieok.com/post/sba-program-update-including-restaurant-recovery-program",
+      "page": "details",
+      "excerpt": "SBA Program Update (Including Restaurant Recovery Program) top of page HOME CALENDAR SHOP Antiques, Boutiques & Galleries The Shoppes PLAY Hit The Bricks Podcast Frights In The First Capital The Christmas Capital of Oklahoma Festivals Live Music & Theatre Highland Park Disc Golf Tours Living the Lake Life EAT Dining Breakfast Drinks STAY Hotels, Inns, & B&Bs RV Sites & Camping ABOUT Antiquing Black History Filming in Guthrie GALLERY Find out more! BLOG More Use tab to navigate through the menu items. HOME CALENDAR SHOP Antiques, Boutiques & Galleries The Shoppes PLAY Hit The Bricks Podcast Frights In The First Capital The Christmas Capital of Oklahoma Festivals Live Music & Theatre Highland Park Disc Golf Tours Living the Lake Life EAT Dining Breakfast Drinks STAY Hotels, Inns, & B&Bs RV Sites & Camping ABOUT Antiquing Black History Filming in Guthrie GALLERY Find out more! BLOG More Use tab to navigate through the menu items. All Posts Getting Started Your Community live music bluegrass vince gill events theatre music food/beverage downtown Arts Entrepreneurs weekend getaways food lodging Christmas Valentine's Day walking History architecture lakes fishing camping boating Hit The Bricks podcast arts crafts galleries classes Red Brick Nights Search SBA Program Update (Including Restaurant Recovery Program) Justin Fortney May 6, 2021 2 min read The US Small Business"
     }
   ],
   "findings": {
@@ -40,8 +67,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

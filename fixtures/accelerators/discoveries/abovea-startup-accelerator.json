@@ -1,6 +1,6 @@
 {
   "programId": "abovea-startup-accelerator",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://abovea.tech/about-us/",
@@ -14,6 +14,14 @@
       "url": "https://abovea.tech/academy/accelerator-application-form/",
       "page": "application",
       "anchor": "Submit application",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://abovea.tech/b2b-lead-generation-boston-2025/",
+      "page": "other",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -44,6 +52,14 @@
     },
     {
       "url": "https://abovea.tech/growth-hacking-myths-2025/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://abovea.tech/hong-kong-international-expansion-guide-2025/",
       "page": "other",
       "anchor": "",
       "fetched": true,
@@ -91,6 +107,14 @@
       "origin": "official"
     },
     {
+      "url": "https://abovea.tech/orlando-tourism-marketing-strategies-2025/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://abovea.tech/portfolio-startup-growth-operations/",
       "page": "portfolio",
       "anchor": "Startup Portfolio Growth & Operations",
@@ -115,11 +139,27 @@
       "origin": "official"
     },
     {
+      "url": "https://abovea.tech/south-korean-companies-trust-global/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://abovea.tech/taiwanese-companies-expanding-abroad-challenges-2025/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://abovea.tech/team/about-abovea-team/",
       "page": "details",
       "anchor": "Our Team",
       "fetched": false,
-      "blocked": "fetch_failed",
+      "blocked": null,
       "origin": "official"
     }
   ]

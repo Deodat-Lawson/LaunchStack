@@ -1,67 +1,1152 @@
 {
   "programId": "new-paltz-venture-hub-hot-spot",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+    "https://www.newpaltz.edu/admissions/apply.html",
+    "https://admissions.newpaltz.edu/portal/gr_app_landing_page",
+    "https://admissions.newpaltz.edu/register/?id=e941e5b8-55fb-4be3-a783-efc363ea59c9",
+    "https://www.newpaltz.edu/about/directions.html",
+    "https://www.newpaltz.edu/international",
+    "https://www.newpaltz.edu/esl/programs/apply/",
     "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
-    "https://www.newpaltz.edu/admissions/apply.html"
+    "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+    "https://catalog.newpaltz.edu/undergraduate/academic-programs-majors-minors/",
+    "https://international.newpaltz.edu/index.cfm?FuseAction=Programs.SimpleSearch",
+    "https://www.newpaltz.edu/about/",
+    "https://www.newpaltz.edu/about/attractions/",
+    "https://www.newpaltz.edu/about/buildings/",
+    "https://www.newpaltz.edu/about/directions_text.html",
+    "https://www.newpaltz.edu/about/glance.html",
+    "https://www.newpaltz.edu/about/history.html",
+    "https://www.newpaltz.edu/about/identity.html",
+    "https://www.newpaltz.edu/about/mission.html",
+    "https://www.newpaltz.edu/about/visiting-new-paltz/"
   ],
   "evidence": [
     {
+      "id": "check-announced-cd683eba81",
+      "url": "https://admissions.newpaltz.edu/register/?id=e941e5b8-55fb-4be3-a783-efc363ea59c9",
+      "title": "New Paltz Venture Hub – Hot Spot — application page",
+      "excerpt": "submit the application below and pay the $50.00 application fee. Application Due Dates Fall: April 1 Spring: November 1 Application Fee $50.00 (non-refundable,",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-a4ba366396",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Ossining Innovates What they do: Bi-yearly, 3-week “bootcamps”, to guide those who want to start",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c43889bf73",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "evaluating potential new business ideas. How : Online and in-person classes and cohorts. Applications submitted now will be",
+      "page": "details"
+    },
+    {
+      "id": "check-format-dacdbe4e83",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "What they do: Accelerator program offers a full multi-week virtual curriculum, pitch and networking events for founders,",
+      "page": "details"
+    },
+    {
+      "id": "check-location-88a70ca079",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "- wet lab space and work space, based in Westchester County. How: Space rental per month Best For:",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-06dcaa5d1b",
+      "url": "https://www.newpaltz.edu/about/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0e8e67c828",
+      "url": "https://www.newpaltz.edu/about/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0fe82286eb",
+      "url": "https://www.newpaltz.edu/about/glance.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1130f3d90c",
+      "url": "https://www.newpaltz.edu/about/directions_text.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1fb32a6e5e",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Home → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-2062c00b97",
       "url": "https://www.newpaltz.edu/admissions/apply.html",
-      "title": "New Paltz Venture Hub – Hot Spot — application page checked by scrape.py",
+      "title": "New Paltz Venture Hub – Hot Spot — application page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-22a719cf52",
+      "url": "https://www.newpaltz.edu/about/mission.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Home → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-24086f915a",
+      "url": "https://www.newpaltz.edu/about/visiting-new-paltz/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Home → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-39d18122e6",
+      "url": "https://www.newpaltz.edu/about/mission.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3c0b4c154d",
+      "url": "https://www.newpaltz.edu/about/directions.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-441a8926ba",
+      "url": "https://www.newpaltz.edu/about/glance.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Home → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-47509c7542",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Home → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-57177355e8",
+      "url": "https://www.newpaltz.edu/about/glance.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6132dcf786",
+      "url": "https://www.newpaltz.edu/about/visiting-new-paltz/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6524c610d0",
+      "url": "https://www.newpaltz.edu/about/directions.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Home → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-66277f4a01",
+      "url": "https://admissions.newpaltz.edu/portal/gr_app_landing_page",
+      "title": "New Paltz Venture Hub – Hot Spot — application page",
+      "excerpt": "Alumni Relations → http://www.newpaltz.edu/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6cd377408c",
+      "url": "https://www.newpaltz.edu/esl/programs/apply/",
+      "title": "New Paltz Venture Hub – Hot Spot — application page",
       "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
       "page": "application"
     },
     {
       "id": "check-portfolio-6ef68e43e0",
       "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
-      "title": "New Paltz Venture Hub – Hot Spot — details page checked by scrape.py",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
       "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7684a8f56c",
+      "url": "https://www.newpaltz.edu/about/visiting-new-paltz/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-91f4b481ea",
+      "url": "https://www.newpaltz.edu/international",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-94fb9d3285",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9b14dabb18",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a0eebc28df",
+      "url": "https://www.newpaltz.edu/about/attractions/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a158bdcc96",
+      "url": "https://www.newpaltz.edu/about/directions.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a4a85e39fb",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Home → https://www.newpaltz.edu/alumni/",
       "page": "details"
     },
     {
       "id": "check-portfolio-a9588f29bc",
       "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
-      "title": "New Paltz Venture Hub – Hot Spot — homepage checked by scrape.py",
+      "title": "New Paltz Venture Hub – Hot Spot — homepage",
       "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
       "page": "details"
     },
     {
+      "id": "check-portfolio-ab37e23e15",
+      "url": "https://www.newpaltz.edu/about/mission.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b0f346b5c0",
+      "url": "https://www.newpaltz.edu/about/attractions/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b378821253",
+      "url": "https://www.newpaltz.edu/about/directions_text.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Home → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b9a976a19a",
+      "url": "https://www.newpaltz.edu/about/attractions/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Home → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bd1a88975d",
+      "url": "https://www.newpaltz.edu/about/directions_text.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-be906e90c7",
+      "url": "https://www.newpaltz.edu/about/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Home → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c746ed3980",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d2eefa3edd",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d897bf9b53",
+      "url": "https://admissions.newpaltz.edu/register/?id=e941e5b8-55fb-4be3-a783-efc363ea59c9",
+      "title": "New Paltz Venture Hub – Hot Spot — application page",
+      "excerpt": "Alumni Relations → http://www.newpaltz.edu/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-df836925ff",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-efeb3ddca8",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f34800f09a",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-rolling-18556aaf5d",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "interns, micro-grants, and connections to resources that support growth. Applications are accepted on a rolling basis. HV Venture Hub Accelerator Application Entrepreneur-in-Residence Program",
+      "page": "details"
+    },
+    {
+      "id": "check-rolling-f8b13f22f4",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "title": "New Paltz Venture Hub – Hot Spot — homepage",
+      "excerpt": "interns, micro-grants, and connections to resources that support growth. Applications are accepted on a rolling basis. HV Venture Hub Accelerator Application Entrepreneur-in-Residence Program",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0dc2b16f8a",
+      "url": "https://www.newpaltz.edu/international",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-17eb310f30",
+      "url": "https://www.newpaltz.edu/admissions/apply.html",
+      "title": "New Paltz Venture Hub – Hot Spot — application page",
+      "excerpt": "Graduate Application → https://admissions.newpaltz.edu/portal/gr_app_landing_page",
+      "page": "application"
+    },
+    {
       "id": "check-route-1a54987210",
       "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
-      "title": "New Paltz Venture Hub – Hot Spot — homepage checked by scrape.py",
+      "title": "New Paltz Venture Hub – Hot Spot — homepage",
+      "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-35d5cee49b",
+      "url": "https://www.newpaltz.edu/about/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
       "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
       "page": "details"
     },
     {
       "id": "check-route-361f0f6593",
       "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
-      "title": "New Paltz Venture Hub – Hot Spot — homepage checked by scrape.py",
+      "title": "New Paltz Venture Hub – Hot Spot — homepage",
       "excerpt": "HV Venture Hub EIR Program Application → https://airtable.com/app8DwO8hNVIwtPkp/shrCACaXoPZ90dNXj",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3adcdeb586",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
       "page": "details"
     },
     {
       "id": "check-route-3b87505fb3",
       "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
-      "title": "New Paltz Venture Hub – Hot Spot — details page checked by scrape.py",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-426b35e35b",
+      "url": "https://admissions.newpaltz.edu/portal/gr_app_landing_page",
+      "title": "New Paltz Venture Hub – Hot Spot — application page",
+      "excerpt": "Apply → http://www.newpaltz.edu/admissions/apply.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4370b9a8e1",
+      "url": "https://www.newpaltz.edu/about/attractions/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
       "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
       "page": "details"
     },
     {
       "id": "check-route-4bda6bb06f",
       "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
-      "title": "New Paltz Venture Hub – Hot Spot — homepage checked by scrape.py",
+      "title": "New Paltz Venture Hub – Hot Spot — homepage",
       "excerpt": "HV Venture Hub Accelerator Application → https://airtable.com/app8DwO8hNVIwtPkp/shrCACaXoPZ90dNXj",
       "page": "details"
     },
     {
       "id": "check-route-4f0dfc1cce",
       "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
-      "title": "New Paltz Venture Hub – Hot Spot — homepage checked by scrape.py",
+      "title": "New Paltz Venture Hub – Hot Spot — homepage",
       "excerpt": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
       "page": "details"
+    },
+    {
+      "id": "check-route-5f24a3daab",
+      "url": "https://www.newpaltz.edu/esl/programs/apply/",
+      "title": "New Paltz Venture Hub – Hot Spot — application page",
+      "excerpt": "https://www3.newpaltz.edu/esl/apply.php",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5f2c7cda5e",
+      "url": "https://www.newpaltz.edu/esl/programs/apply/",
+      "title": "New Paltz Venture Hub – Hot Spot — application page",
+      "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-654b6bbf88",
+      "url": "https://www.newpaltz.edu/about/directions_text.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6adad3dd24",
+      "url": "https://www.newpaltz.edu/about/glance.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8e90f6d88c",
+      "url": "https://www.newpaltz.edu/about/directions.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8fa85af64c",
+      "url": "https://www.newpaltz.edu/admissions/apply.html",
+      "title": "New Paltz Venture Hub – Hot Spot — application page",
+      "excerpt": "special application form → https://admissions.newpaltz.edu/register/?id=e941e5b8-55fb-4be3-a783-efc363ea59c9",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9ddfa91f5f",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "HV Venture Hub EIR Program Application → https://airtable.com/app8DwO8hNVIwtPkp/shrCACaXoPZ90dNXj",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a3171665c5",
+      "url": "https://www.newpaltz.edu/about/mission.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a95cdbe467",
+      "url": "https://www.newpaltz.edu/about/visiting-new-paltz/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b6b1cedd4b",
+      "url": "https://www.newpaltz.edu/international",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "https://www.newpaltz.edu/esl/programs/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d27db463b4",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d31d71a858",
+      "url": "https://www.newpaltz.edu/esl/programs/apply/",
+      "title": "New Paltz Venture Hub – Hot Spot — application page",
+      "excerpt": "this link → https://www3.newpaltz.edu/esl/apply.php",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e17a861874",
+      "url": "https://admissions.newpaltz.edu/register/?id=e941e5b8-55fb-4be3-a783-efc363ea59c9",
+      "title": "New Paltz Venture Hub – Hot Spot — application page",
+      "excerpt": "Apply → http://www.newpaltz.edu/admissions/apply.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ef365d6815",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ef7c0c42d1",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ff8c46bd30",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "title": "New Paltz Venture Hub – Hot Spot — program page",
+      "excerpt": "HV Venture Hub Accelerator Application → https://airtable.com/app8DwO8hNVIwtPkp/shrCACaXoPZ90dNXj",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-ee2feeda9b",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "page": "details",
+      "excerpt": "SUNY New Paltz | The State University of New York at New Paltz Toggle navigation Resources Tax Credit Instructions & Forms Accessing Students & Faculty Funding Resources HV Ecosystem Programs & Resources Submit Your Founder Need Or Opportunity Accelerator Ecosystem News The Hudson Valley Innovation Hot Spot For The Ecosystem For Start Ups Building the Next Generation of Hudson Valley Companies The Hudson Valley Venture Hub is the region’s Innovation Hot Spot, connecting entrepreneurs, startups, investors, business leaders, educators, and economic development organizations to help build a stronger entrepreneurial ecosystem and create the next generation of high-growth companies and quality jobs. Based at SUNY New Paltz, the Venture Hub serves entrepreneurs and businesses across the seven-county Mid-Hudson region: Dutchess, Orange, Putnam, Rockland, Sullivan, Ulster, and Westchester counties. We help entrepreneurs find the right resources, relationships, expertise, and opportunities to move their businesses forward—from early growth and customer development to commercialization, fundraising, and scale. WHAT THE HV VENTURE HUB DOES The Venture Hub has two interconnected roles: strengthening the regional entrepreneurial ecosystem and directly supporting promising companies. Convene The Regional Entrepreneurship Ecosystem Promoting connection and collaboration We convene the"
+    },
+    {
+      "id": "check-page-f873c64f9e",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "page": "details",
+      "excerpt": "Find Upcoming Events On Our Blog > Accelerate Scalable Startups In The Hudson Valley Region Our highly individualized accelerator supports 20 technology-forward startups yearly and guides companies towards increased investment and revenue generation."
+    },
+    {
+      "id": "check-page-7cce8e95ee",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "page": "details",
+      "excerpt": "HV Venture Hub Accelerator > Support Founders Building Businesses Entrepreneurs-in-Residence Program Our Entrepreneurs-in-Residence (EIR) Program connects Hudson Valley founders with experienced entrepreneurs and business leaders who provide practical, hands-on guidance as they build and grow their companies."
+    },
+    {
+      "id": "check-page-c13c422107",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "page": "details",
+      "excerpt": "Learn More > HV Venture Hub Accelerator Industries HV Venture Hub is industry agnostic and works with any startup that meets our eligibility."
+    },
+    {
+      "id": "check-page-b950397bf6",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "page": "details",
+      "excerpt": "Clean Technology & Sharing Economy Food & Beverage Software as a Service (SaaS) Financial Products (Fintech) In 2025, HV Venture Hub Accelerator has helped facilitate: 63 full time jobs created or retained from the HV Venture Hub startups $2 million + combined amount accelerated companies raised in private capital or grant funding, increased revenue or realized in cost savings."
+    },
+    {
+      "id": "check-page-d2c94765c2",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "page": "details",
+      "excerpt": "As a regional connector, the Hub brings together innovators, investors, educators, support organizations, and entrepreneurs across multiple counties, building a more connected and collaborative innovation ecosystem."
+    },
+    {
+      "id": "check-page-6bfcb16fd3",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "page": "details",
+      "excerpt": "They also exhibited at the 2026 Specialty Food Association Fancy Food Show in New York City, with support from a Hudson Valley Venture Hub grant."
+    },
+    {
+      "id": "check-page-fd4ae46943",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "page": "details",
+      "excerpt": "Read the whole story Building A Better Home Starts With EcoHome EcoHome, an Ulster County-based startup, uses AI to provide homeowners with streamlined home management information and energy improvement suggestions."
+    },
+    {
+      "id": "check-page-b4cce55589",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "page": "details",
+      "excerpt": "EcoHome makes it possible to do home energy audits, without a person, making this crucial step to decarbonizing homes more equitable, farreacing, and taking less manpower."
+    },
+    {
+      "id": "check-page-7b7c214fa1",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "page": "details",
+      "excerpt": "Read the whole story Get assistance growing your company Startup Accelerator Apply for the HVVH Accelerator program."
+    },
+    {
+      "id": "check-page-8f870bcb79",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "page": "details",
+      "excerpt": "We're looking for startups that have: A Differentiated Product - What you're building has IP, and is a unique solution to a large problem in the marketplace."
+    },
+    {
+      "id": "check-page-6df92b1956",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "page": "details",
+      "excerpt": "The Accelerator provides early-stage companies with individualized advising, access to NYS Innovation Hot Spot tax incentives, student interns, micro-grants, and connections to resources that support growth."
+    },
+    {
+      "id": "check-page-13efb92c20",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "page": "details",
+      "excerpt": "HV Venture Hub Accelerator Application Entrepreneur-in-Residence Program Apply for the HVVH Entrepreneur-in-Residence (EIR) program: The Entrepreneurs-in-Residence Program supports the growth of entrepreneurs and companies by expanding access to experienced entrepreneurs, business leaders, and subject-matter experts."
+    },
+    {
+      "id": "check-page-209669889b",
+      "url": "https://www.newpaltz.edu/admissions/apply.html",
+      "page": "application",
+      "excerpt": "SUNY New Paltz - Undergraduate Admissions Skip To Main Content Visit Apply Accepted Students Orientation Directory Resources A-Z Index Blackboard Hawkmail Library Information Technology Services my.newpaltz.edu People Finder Office 365 Office of Admission Undergraduate First-Year Transfer Readmission Graduate International Financial Aid Tuition & Fees Majors & Minors Contact Us Apply to New Paltz! Are you ready to take the next step toward becoming a Hawk? Undergraduate first-year , transfer and international applicants can use either the SUNY App or the Common App . The process and application fee are the same. Please only use one of these options. Start SUNY Application Start Common Application If you are applying for Readmission to SUNY New Paltz (meaning you are seeking to reenroll after being away for more than two semesters), we have a special application form for you. Interested in a Graduate Program ? The SUNY New Paltz Graduate Application is available here. If you have more questions about applying to SUNY New Paltz, please see the FAQs below, or you can always get in touch at (845) 257-3200 or [email protected] . Admission Information for Freshmen Transfers International Graduate Veterans & Military Readmission Important Information for all Applicants SUNY New Paltz reserves the right to change application due dates without prior notice to applicants. SUNY New Paltz"
+    },
+    {
+      "id": "check-page-d9d7732759",
+      "url": "https://admissions.newpaltz.edu/portal/gr_app_landing_page",
+      "page": "application",
+      "excerpt": "Graduate Application - Landing Page This website uses resources that are being blocked by your network. Contact your network administrator for more information. Edit UG Admission Financial Aid Tuition & Fees Majors & Minors Visit Us Virtual Tour Viewbook Contact Us Welcome to the SUNY New Paltz Graduate Application Sign in New user? Start here . | Returning user? Sign in . SUNY New Paltz 1 Hawk Drive New Paltz, NY 12561 845-257-SUNY (7869) 877-MY-NP-411 (toll free) College of Liberal Arts & Sciences School of Business School of Education School of Fine & Performing Arts School of Science & Engineering Graduate & Extended Learning International Programs A-Z Listing Academic Calendar Alumni Relations Apply Construction Update Diversity, Equity and Inclusion Directory Events Emergency Response Plan Employment Financial Aid Foundation & Support Emergency Cancellations and Delays Policy Information Technology Services Maps, Directions & Parking Office Closings Site Map University Police Visit Us"
+    },
+    {
+      "id": "check-page-39ada2da76",
+      "url": "https://admissions.newpaltz.edu/register/?id=e941e5b8-55fb-4be3-a783-efc363ea59c9",
+      "page": "application",
+      "excerpt": "Readmission Application 2027 This website uses resources that are being blocked by your network. Contact your network administrator for more information. Edit UG Admission Financial Aid Tuition & Fees Majors & Minors Visit Us Virtual Tour Viewbook Contact Us Readmission Application 2027 Important Information If you are seeking to return to SUNY New Paltz after being away for two or more semesters, please fill out the application below. If you have already earned a bachelor's degree and you're returning for a second bachelor's degree then please complete the SUNY application, which is available at www.suny.edu . You must submit the application below and pay the $50.00 application fee. Application Due Dates Fall: April 1 Spring: November 1 Application Fee $50.00 (non-refundable, non-transferable) Loading... Eligibility for Consideration for Readmission You must have fulfilled all previous financial/judicial/health obligations to the college. All college holds on your records must be resolved prior to applying for readmission. Contact the Registrar's Office to determine if you have any holds. If you were “Academically Dismissed,\" then you are not eligible for consideration for readmission until one full year has elapsed since your last date of attendance at New Paltz. You must also have completed at least 12-15 credits of academic course work with at least a 2.75 GPA at another"
+    },
+    {
+      "id": "check-page-3d4fc55aa9",
+      "url": "https://admissions.newpaltz.edu/register/?id=e941e5b8-55fb-4be3-a783-efc363ea59c9",
+      "page": "application",
+      "excerpt": "Yes No 7.) Are you currently a New York State resident?"
+    },
+    {
+      "id": "check-page-8d29fdf64d",
+      "url": "https://www.newpaltz.edu/about/directions.html",
+      "page": "details",
+      "excerpt": "Directions | SUNY New Paltz Skip To Main Content Students Home Apply Undergraduate Admission Transfer Student Essentials Graduate Admission International Admission Majors & Minors Scholarships Tuition & Fees Financial Aid Virtual Tour Parents Home Parent & Family Weekend Commencement Map & Directions Campus Safety Diversity, Equity, and Inclusion Alumni Home Alumni Relations Give Today New Paltz Magazine Connect- Monthly E-Newsletter Donors The Campaign for SUNY New Paltz Ways to Give Planned Giving Foundation Contact Us Directory Resources A-Z Index Brightspace Library Information Technology Services my.newpaltz.edu People Finder Microsoft 365 (Email) Academics Academic Calendar Schedule of Classes Undergraduate Catalog Majors & Minors Graduate Catalog Graduate Studies Professional Licensure Disclosures Advising Hub Library The Honors Program International Programs Admission Apply Undergraduate Admission Graduate Admission International Admission What Can I Do With This Major? About Us Our Mission Accreditation Diversity, Equity, and Inclusion Free Speech: Your Rights and Responsibilities Our Latest Rankings Visitor's Guide Employment Campus Life Hawks Athletics Wellness & Recreation The Dorsky Museum Career Resource Center Box Office Residence Life On-Campus Dining Campus Bookstore Visit Apply Give New Paltz » About New Paltz » Directions About New Paltz Resources Why New"
+    },
+    {
+      "id": "check-page-36f0fb112b",
+      "url": "https://www.newpaltz.edu/about/directions.html",
+      "page": "details",
+      "excerpt": "From Adirondack Trailways bus station , New Paltz, New York."
+    },
+    {
+      "id": "check-page-395bcf0759",
+      "url": "https://www.newpaltz.edu/about/directions.html",
+      "page": "details",
+      "excerpt": "From Stewart International Airport , Newburgh, New York, Turn left out of Stewart onto Rt."
+    },
+    {
+      "id": "check-page-a5d8566fde",
+      "url": "https://www.newpaltz.edu/about/directions.html",
+      "page": "details",
+      "excerpt": "Public Transportation from Stewart: Take the Newburgh-Beacon Link from Stewart to the Shortline Bus Station in Newburgh and from there take the bus to New Paltz."
+    },
+    {
+      "id": "check-page-38704ea622",
+      "url": "https://www.newpaltz.edu/about/directions.html",
+      "page": "details",
+      "excerpt": "From train station , Poughkeepsie, New York - Hudson Line: Taxi cabs are available most hours from the train station."
+    },
+    {
+      "id": "check-page-7d16986ca6",
+      "url": "https://www.newpaltz.edu/about/directions.html",
+      "page": "details",
+      "excerpt": "Albany - 1 1/2 hours Bergen County, NJ - 1 1/4 hours Boston - 4 hours Philadelphia - 3 1/2 hours Nassau County - 2 1/4 hours New York City - 1 1/2 hours Suffolk County - 3 hours Syracuse - 3 1/2 hours And just a flight from . . ."
+    },
+    {
+      "id": "check-page-20a8a32429",
+      "url": "https://www.newpaltz.edu/international",
+      "page": "details",
+      "excerpt": "SUNY New Paltz - Center for International Programs Skip To Main Content Visit Virtual Tour Apply New Student Info Give Inclusive Excellence Directory Resources A-Z Index Brightspace Library Information Technology Services my.newpaltz.edu People Finder Microsoft 365 (Email) Home Study Abroad Inbound Exchange English Language Program International Student Services Internships and Engagement SUNY Global Engagement Program in New York City Exchange and Visiting International Students Practical Training Dual Diploma International Admissions Immigration Resources for International Students Previous Next Experience a world of cultures at SUNY New Paltz View the events for International Education Week! AWARDS & RECOGNITION INTERNATIONAL PROGRAMS INSIGHTS STUDY ABROAD TESTIMONIALS International Education is the Future! The Future is YOU! International educational exchange increases mutual understanding among people to promote and actualize peaceful relations. This type of Global Learning works to embed diversity, equity, inclusion, sustainability, and accessibility in all aspects of its work. Global learning cultivates an understanding of ourselves and our society. Exploring historical and cultural influences of the world beyond our own borders leads to a sense of responsibility for the challenges humanity faces. Global learning imparts skills needed to work across differences to forge"
+    },
+    {
+      "id": "check-page-b8084c4502",
+      "url": "https://www.newpaltz.edu/esl/programs/apply/",
+      "page": "application",
+      "excerpt": "SUNY New Paltz - Center for International Programs Skip To Main Content Visit Virtual Tour Apply New Student Info Give Inclusive Excellence Directory Resources A-Z Index Brightspace Library Information Technology Services my.newpaltz.edu People Finder Microsoft 365 (Email) International Programs Home About Message from the Coordinator Mission Statement Faculty and Staff Brochure Location Housing Frequently Asked Questions Student Testimonials Programs Pathway Program Intensive English The Culinary Institute of America Customized Group Programs Levels and Duration Apply Online Resources Facilities Support and Advising Immersion Self Study Materials International Student Services Dates and Costs Apply Contact Us Apply Online How to apply to the Haggerty English Language Program STEP 1: Submit the Online Application Go to this link or click \"Apply Online Now\" to complete the application in English. STEP 2: Pay the Application Fee You must pay the $100 application fee by credit card. You will pay this fee when you submit the application. STEP 3: Send or Submit Documents We will send an e-mail requesting the following documents: Copy of Passport Financial documents (bank statements) Proof of high school completion (high school transcripts) Scans of all of these documents are OK! (We do not need paper copies mailed). STEP 4: Wait to Receive Your I-20 After your documents are"
+    },
+    {
+      "id": "check-page-90d4295145",
+      "url": "https://www.newpaltz.edu/esl/programs/apply/",
+      "page": "application",
+      "excerpt": "Airport Pick-up Health Form Attendance Commitment Housing License (Residence Hall/Dormitory) After that, keep checking your email."
+    },
+    {
+      "id": "check-page-4fdff9f83e",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "page": "details",
+      "excerpt": "SUNY New Paltz | The State University of New York at New Paltz Toggle navigation Resources Tax Credit Instructions & Forms Accessing Students & Faculty Funding Resources HV Ecosystem Programs & Resources Submit Your Founder Need Or Opportunity Accelerator Ecosystem News HV Ecosystem Programs & Resources Partner Programs There are many great resources for entrepreneurs in the Hudson Valley Region and yet it's hard to find the people and programs you most need. We've done our best to categorize what is out there so that you can join mailing lists, programs if they are running, and get better tapped into the ecosystem. For a complete list of Hudson Valley entrepreneurship assets and resources, see our shared Google Sheet , created in partnership with Westchester County Economic Development. Entrepreneurship Ideation Support These resources and programs are great to hone in on an entrepreneurship idea. Ossining Innovates What they do: Bi-yearly, 3-week “bootcamps”, to guide those who want to start their business with a process for identifying and evaluating potential new business ideas. How : Online and in-person classes and cohorts. Applications submitted now will be placed on the waitlist for the next cohort (check website). Best For : Idea-stage, first-time entrepreneur I-Corps (Offered through NYC's Innovation Hot Spot) What they do: Customer discovery program, highly"
+    },
+    {
+      "id": "check-page-ce5303252e",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "page": "details",
+      "excerpt": "Best For : Idea-stage, first-time entrepreneur I-Corps (Offered through NYC's Innovation Hot Spot) What they do: Customer discovery program, highly recommended for anyone with an idea to test it's feasibility."
+    },
+    {
+      "id": "check-page-fcdcf16a6a",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "page": "details",
+      "excerpt": "Best For : Idea-stage, first-time entrepreneur Industry-Specific Resources These resources and programs are great for sectors, industries, and other niches in the Hudson Valley."
+    },
+    {
+      "id": "check-page-8ccb9536cd",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "page": "details",
+      "excerpt": "ClimateTech Expertise Network (NYS Incubator for CleanTech) What they do: Offer an array of acceleration services for climate-related startups and innovations including paid mentorship (EIRs), a service to be matched with talent, and the ability to be matched with a vendor for your company."
+    },
+    {
+      "id": "check-page-2838859048",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "page": "details",
+      "excerpt": "Best For: High-growth potential climate-related startups."
+    },
+    {
+      "id": "check-page-502642cd08",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "page": "details",
+      "excerpt": "Best For: Caterers, food truck operators or wholesalers, cooking or nutrition instructors, and food concept developers TouroCOM Incubator (Bio-Tech Coworking & Facility) What they do: Housed out of Touro Medical College in Middletown, tenants can access faculty research lab equipment, an Iso7 Clean room, a dedicated conference room, and 3D printers through our student 3D Printing in Medicine club."
+    },
+    {
+      "id": "check-page-9d6ffffb65",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "page": "details",
+      "excerpt": "BioInc (Wet Lab) What they do: Developing product from initial conception to final execution - wet lab space and work space, based in Westchester County."
+    },
+    {
+      "id": "check-page-2db9ad1be2",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "page": "details",
+      "excerpt": "Mid-Hudson Works (Warehousing & Fulfillment / Copacking / Roasting / Assembly) What they do: Active food handling licenses, secure and climate controlled storage, shipping services."
+    },
+    {
+      "id": "check-page-085b99dd21",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "page": "details",
+      "excerpt": "How: Space rental per month / space-use time by hour Best For: Consumer packaged good (food), Welding, Soldering, Electronics, Coffee Roasting."
+    },
+    {
+      "id": "check-page-09a24026b0",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "page": "details",
+      "excerpt": "FuzeHub (Manufacturing Startups) What they do: Provide training events on trending technologies and connect founders to service providers (like CAD engineers and funding opportunities)."
+    },
+    {
+      "id": "check-page-f6f4dafc3e",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "page": "details",
+      "excerpt": "Best For: Manufacturing help and guidance in NYS."
+    },
+    {
+      "id": "check-page-5f1da3bdd4",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "page": "details",
+      "excerpt": "Manufacturing & Technology Enterprise Center (MTEC) (Manufacturing) What they do: The Hudson Valley's MEP National Network location, MTEC offers business advisors have decades of experience in business operations, including: production management, new product development, engineering, marketing, training, and more."
+    },
+    {
+      "id": "check-page-d712666d66",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "page": "details",
+      "excerpt": "How: MTEC has the ability to work on an array of manufacturing needs, give them a call to discuss."
+    },
+    {
+      "id": "check-page-68b628cf35",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "page": "details",
+      "excerpt": "SUNY New Paltz | The State University of New York at New Paltz Toggle navigation Resources Tax Credit Instructions & Forms Accessing Students & Faculty Funding Resources HV Ecosystem Programs & Resources Submit Your Founder Need Or Opportunity Accelerator Ecosystem News The Hudson Valley Venture Hub Accelerator Program Accelerate Scalable Startups In The Hudson Valley Region Our accelerator is highly individualized. All of our services are meant to directly guide companies to increased investment and revenue generation. Some NYS Tax Incentives Portfolio companies are eligible for up to 5 years of personal and business income exception. Paid Advisement Green light hours with our vetted advisors to work through targeted issues. Student Labor We match students with companies to complete things like administrative tasks to conducting customer discovery research. HV Venture Hub accelerator eligibility HV Venture Hub Accelerator Industries HV Venture Hub is industry agnostic and works with any startup that meets our eligibility. Here are some industries we're currently working with. Clean Technology & Sharing Economy Food & Beverage Software as a Service (SaaS) Financial Products (Fintech) The HV Venture Hub Accelerator Advisors The HV Venture Hub Accelerator pulls in A-list regional startup advisors that have experience as founders, subject-matter experts, and more. Taylor Davis"
+    },
+    {
+      "id": "check-page-5d4b967f83",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "page": "details",
+      "excerpt": "As a regional connector, the Hub brings together innovators, investors, educators, support organizations, and entrepreneurs across multiple counties, building a more connected and collaborative innovation ecosystem."
+    },
+    {
+      "id": "check-page-5ebc88cee1",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "page": "details",
+      "excerpt": "They also exhibited at the 2026 Specialty Food Association Fancy Food Show in New York City, with support from a Hudson Valley Venture Hub grant."
+    },
+    {
+      "id": "check-page-2f01db7a0a",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "page": "details",
+      "excerpt": "Read the whole story Building A Better Home Starts With EcoHome EcoHome, an Ulster County-based startup, uses AI to provide homeowners with streamlined home management information and energy improvement suggestions."
+    },
+    {
+      "id": "check-page-305388a71a",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "page": "details",
+      "excerpt": "EcoHome makes it possible to do home energy audits, without a person, making this crucial step to decarbonizing homes more equitable, farreacing, and taking less manpower."
+    },
+    {
+      "id": "check-page-82c3c70b54",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "page": "details",
+      "excerpt": "Read the whole story Get assistance growing your company Startup Accelerator Apply for the HVVH Accelerator program."
+    },
+    {
+      "id": "check-page-7d5e09007f",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "page": "details",
+      "excerpt": "We're looking for startups that have: A Differentiated Product - What you're building has IP, and is a unique solution to a large problem in the marketplace."
+    },
+    {
+      "id": "check-page-2cbe7467b7",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "page": "details",
+      "excerpt": "The Accelerator provides early-stage companies with individualized advising, access to NYS Innovation Hot Spot tax incentives, student interns, micro-grants, and connections to resources that support growth."
+    },
+    {
+      "id": "check-page-fe181e76ef",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "page": "details",
+      "excerpt": "HV Venture Hub Accelerator Application Entrepreneur-in-Residence Program Apply for the HVVH Entrepreneur-in-Residence (EIR) program: The Entrepreneurs-in-Residence Program supports the growth of entrepreneurs and companies by expanding access to experienced entrepreneurs, business leaders, and subject-matter experts."
+    },
+    {
+      "id": "check-page-169ae93f99",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/the-hudson-valley-accelerator-program",
+      "page": "details",
+      "excerpt": "Our EIRs work directly with founders as they navigate the challenges and opportunities of building a company, offering practical advice, resources, strategic guidance, and one-on-one mentoring tailored to each founder’s needs."
+    },
+    {
+      "id": "check-page-33dd986b5c",
+      "url": "https://catalog.newpaltz.edu/undergraduate/academic-programs-majors-minors/",
+      "page": "details",
+      "excerpt": "Academic Programs: Majors, Minors & More | SUNY New Paltz Catalog Skip to Content AZ Index Catalog Home Institution Home Undergraduate Catalog Home Programs Course Descriptions Academic Policies Home » Undergraduate » Academic Programs: Majors, Minors & More Academic Programs: Majors, Minors & More 2026-2027 Catalog Search Catalog Graduate Undergraduate About New Paltz Accreditation &​ Memberships Professional Licensure Disclosures Degree Requirements General Education Program Academic Programs: Majors, Minors &​ More College of Liberal Arts &​ Sciences School of Business School of Education School of Fine &​ Performing Arts School of Science &​ Engineering General Studies Academic Policies Course Descriptions Archives Print Options Majors Accounting (BS) Adolescence Education (BA, BS: Biology, Chemistry, Earth Science, English, Mathematics, Physics, and Social Studies for grades 7-12) Anthropology (BA, BS) Art History (BA) Asian Studies (BA, BS) Astronomy (BA) Biochemistry (BS) Biology (BA, BS) Black Studies (BA, BS) Business Analytics (BS) Ceramics (BFA) Chemistry (BA, BS) Communication Disorders (BA) Communication Studies (BA, BS) Computer Engineering (BS) Computer Science (BA, BS) Deaf Studies (BA) Digital Media Production (BA, BS) Early Childhood & Childhood Education (BS: Art History, Biology, Black Studies, Earth Science, English, French, Geography, History,"
+    },
+    {
+      "id": "check-page-cc35d2b94b",
+      "url": "https://international.newpaltz.edu/index.cfm?FuseAction=Programs.SimpleSearch",
+      "page": "details",
+      "excerpt": "Programs > Search (simple) > Center for International Programs Skip to content Loading... Center for International Programs State University of New York at New Paltz Toggle navigation Site home Programs Staff Deadlines LOGIN Site links List All Simple Search Advanced Search Map Search Program Discovery Options List All Simple Search Advanced Search Map Search Program Discovery Programs : Search (simple) × Use this form to find programs quickly based on limited criteria. For more options and search criteria, choose Advanced Search. Simple Search Simple Search form fields can be used in combination to find programs that match all selected criteria. Show: Incoming Outgoing Scholarship Program Name Type any search words above, or to search for an exact match, use double quotes (\"\") around your search string. Term Any Academic Year Calendar Year Fall Intersession Spring Summer Summer 7 City Any Besancon Besançon Brussels Buenos Aires Cairo Cardiff, Wales Dundee Helsinki Kanazawa Limerick London Madrid Melbourne Milan Munster Nagasaki New Paltz New York City Oviedo Perth Prague Rio de Janeiro Seoul Stockholm Tokyo Various Cities Wellington Winterthur Yongin Country Any Argentina Australia Belgium Brazil Czech Republic Egypt Finland France Germany Ireland Italy Japan New Zealand South Korea Spain Sweden Switzerland United Kingdom United States Various Countries Region Any Africa Asia"
+    },
+    {
+      "id": "check-page-d3be0d527e",
+      "url": "https://www.newpaltz.edu/about/",
+      "page": "details",
+      "excerpt": "About New Paltz | SUNY New Paltz Skip To Main Content Students Home Apply Undergraduate Admission Transfer Student Essentials Graduate Admission International Admission Majors & Minors Scholarships Tuition & Fees Financial Aid Virtual Tour Parents Home Parent & Family Weekend Commencement Map & Directions Campus Safety Diversity, Equity, and Inclusion Alumni Home Alumni Relations Give Today New Paltz Magazine Connect- Monthly E-Newsletter Donors The Campaign for SUNY New Paltz Ways to Give Planned Giving Foundation Contact Us Directory Resources A-Z Index Brightspace Library Information Technology Services my.newpaltz.edu People Finder Microsoft 365 (Email) Academics Academic Calendar Schedule of Classes Undergraduate Catalog Majors & Minors Graduate Catalog Graduate Studies Professional Licensure Disclosures Advising Hub Library The Honors Program International Programs Admission Apply Undergraduate Admission Graduate Admission International Admission What Can I Do With This Major? About Us Our Mission Accreditation Diversity, Equity, and Inclusion Free Speech: Your Rights and Responsibilities Our Latest Rankings Visitor's Guide Employment Campus Life Hawks Athletics Wellness & Recreation The Dorsky Museum Career Resource Center Box Office Residence Life On-Campus Dining Campus Bookstore Visit Apply Give New Paltz » About New Paltz About New Paltz Resources Why New Paltz? At"
+    },
+    {
+      "id": "check-page-a75d82e36e",
+      "url": "https://www.newpaltz.edu/about/",
+      "page": "details",
+      "excerpt": "About New Paltz Welcome to the State University of New York at New Paltz, a great place to experience the world of possibilities in an exceptional academic environment."
+    },
+    {
+      "id": "check-page-f9cf099967",
+      "url": "https://www.newpaltz.edu/about/attractions/",
+      "page": "details",
+      "excerpt": "Attractions | SUNY New Paltz Skip To Main Content Students Home Apply Undergraduate Admission Transfer Student Essentials Graduate Admission International Admission Majors & Minors Scholarships Tuition & Fees Financial Aid Virtual Tour Parents Home Parent & Family Weekend Commencement Map & Directions Campus Safety Diversity, Equity, and Inclusion Alumni Home Alumni Relations Give Today New Paltz Magazine Connect- Monthly E-Newsletter Donors The Campaign for SUNY New Paltz Ways to Give Planned Giving Foundation Contact Us Directory Resources A-Z Index Brightspace Library Information Technology Services my.newpaltz.edu People Finder Microsoft 365 (Email) Academics Academic Calendar Schedule of Classes Undergraduate Catalog Majors & Minors Graduate Catalog Graduate Studies Professional Licensure Disclosures Advising Hub Library The Honors Program International Programs Admission Apply Undergraduate Admission Graduate Admission International Admission What Can I Do With This Major? About Us Our Mission Accreditation Diversity, Equity, and Inclusion Free Speech: Your Rights and Responsibilities Our Latest Rankings Visitor's Guide Employment Campus Life Hawks Athletics Wellness & Recreation The Dorsky Museum Career Resource Center Box Office Residence Life On-Campus Dining Campus Bookstore Visit Apply Give New Paltz » About New Paltz » Attractions About New Paltz Resources Why New"
+    },
+    {
+      "id": "check-page-12a1faef67",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "page": "details",
+      "excerpt": "What's in a Building Name? | SUNY New Paltz Skip To Main Content Students Home Apply Undergraduate Admission Transfer Student Essentials Graduate Admission International Admission Majors & Minors Scholarships Tuition & Fees Financial Aid Virtual Tour Parents Home Parent & Family Weekend Commencement Map & Directions Campus Safety Diversity, Equity, and Inclusion Alumni Home Alumni Relations Give Today New Paltz Magazine Connect- Monthly E-Newsletter Donors The Campaign for SUNY New Paltz Ways to Give Planned Giving Foundation Contact Us Directory Resources A-Z Index Brightspace Library Information Technology Services my.newpaltz.edu People Finder Microsoft 365 (Email) Academics Academic Calendar Schedule of Classes Undergraduate Catalog Majors & Minors Graduate Catalog Graduate Studies Professional Licensure Disclosures Advising Hub Library The Honors Program International Programs Admission Apply Undergraduate Admission Graduate Admission International Admission What Can I Do With This Major? About Us Our Mission Accreditation Diversity, Equity, and Inclusion Free Speech: Your Rights and Responsibilities Our Latest Rankings Visitor's Guide Employment Campus Life Hawks Athletics Wellness & Recreation The Dorsky Museum Career Resource Center Box Office Residence Life On-Campus Dining Campus Bookstore Visit Apply Give New Paltz » About New Paltz » What's in a Building Name?"
+    },
+    {
+      "id": "check-page-9e3a1a10ae",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "page": "details",
+      "excerpt": "Academic & Administrative Buildings + Coykendall Science Building Constructed in 1964 and renovated in 1997, the CSB is home to the classrooms and laboratory spaces used by biology and chemistry students and faculty."
+    },
+    {
+      "id": "check-page-9850ac39c1",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "page": "details",
+      "excerpt": "The State University of New York purchased the building in 1984, and it was renovated for modern use thanks in large part to a generous gift from alumna Dorothea Hopfer, a member of the New Paltz Normal School Class of 1919."
+    },
+    {
+      "id": "check-page-20ee04f27d",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "page": "details",
+      "excerpt": "JFT was built in 1968 to serve as the home of departments and faculty offices for the College of Liberal Arts & Sciences, the largest single academic unit at SUNY New Paltz."
+    },
+    {
+      "id": "check-page-b395e6ede3",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "page": "details",
+      "excerpt": "Kirk was a faculty member in the Philosophy Department who dedicated countless hours to offering planetarium education to students of all ages from throughout the Mid-Hudson Valley. + Julien J."
+    },
+    {
+      "id": "check-page-e748a7acbf",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "page": "details",
+      "excerpt": "Studley was a New York-based real estate broker who emigrated from his family’s home in Brussels to escape the beginning of World War II."
+    },
+    {
+      "id": "check-page-444eb53e52",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "page": "details",
+      "excerpt": "He supported numerous philanthropic causes in higher education prior to his death in 2015."
+    },
+    {
+      "id": "check-page-1cf6b7d73c",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "page": "details",
+      "excerpt": "Jack Smolen was an amateur telescope creator who ground the mirror for his device on his kitchen table during his days in New York City, and opened his Eagle’s Nest Observatory to the public in 1963."
+    },
+    {
+      "id": "check-page-93b0cdbaae",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "page": "details",
+      "excerpt": "The Dorsky family continues to be a major supporter of The Dorsky Museum and SUNY New Paltz, with members serving on the Advisory Board of The Dorsky Museum and as directors of the SUNY New Paltz Foundation. + Smiley Art Building Smiley has been a home for art studios, faculty offices, and programs in art history and art education since 1963."
+    },
+    {
+      "id": "check-page-9bc94b48da",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "page": "details",
+      "excerpt": "It is currently also the site of the Hudson Valley Advanced Manufacturing Center, which is equipped with state of the art 3D printers and other digital design & fabrication tools."
+    },
+    {
+      "id": "check-page-e98ad10dc8",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "page": "details",
+      "excerpt": "Among Truth’s many revolutionary accomplishments, in 1828 she became the first black woman to win a legal case against a white male slaveholder, successfully suing to free her son, who had been illegally sold into slavery in the South after emancipation became law in New York State."
+    },
+    {
+      "id": "check-page-9c0a6d3f3f",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "page": "details",
+      "excerpt": "It is named for the late Charles Cook, who served in the New York State Senate for nearly three decades."
+    },
+    {
+      "id": "check-page-866f515f0c",
+      "url": "https://www.newpaltz.edu/about/buildings/",
+      "page": "details",
+      "excerpt": "Ashokan is also the name of the nearby reservoir, a major water supply for New York City and the Village of New Paltz."
+    },
+    {
+      "id": "check-page-59880e44e6",
+      "url": "https://www.newpaltz.edu/about/directions_text.html",
+      "page": "details",
+      "excerpt": "Directions | SUNY New Paltz Skip To Main Content Students Home Apply Undergraduate Admission Transfer Student Essentials Graduate Admission International Admission Majors & Minors Scholarships Tuition & Fees Financial Aid Virtual Tour Parents Home Parent & Family Weekend Commencement Map & Directions Campus Safety Diversity, Equity, and Inclusion Alumni Home Alumni Relations Give Today New Paltz Magazine Connect- Monthly E-Newsletter Donors The Campaign for SUNY New Paltz Ways to Give Planned Giving Foundation Contact Us Directory Resources A-Z Index Brightspace Library Information Technology Services my.newpaltz.edu People Finder Microsoft 365 (Email) Academics Academic Calendar Schedule of Classes Undergraduate Catalog Majors & Minors Graduate Catalog Graduate Studies Professional Licensure Disclosures Advising Hub Library The Honors Program International Programs Admission Apply Undergraduate Admission Graduate Admission International Admission What Can I Do With This Major? About Us Our Mission Accreditation Diversity, Equity, and Inclusion Free Speech: Your Rights and Responsibilities Our Latest Rankings Visitor's Guide Employment Campus Life Hawks Athletics Wellness & Recreation The Dorsky Museum Career Resource Center Box Office Residence Life On-Campus Dining Campus Bookstore Visit Apply Give New Paltz » About New Paltz » Directions About New Paltz Resources Why New"
+    },
+    {
+      "id": "check-page-737eadc99a",
+      "url": "https://www.newpaltz.edu/about/directions_text.html",
+      "page": "details",
+      "excerpt": "From Adirondack Trailways bus station , New Paltz, New York."
+    },
+    {
+      "id": "check-page-390c9831e9",
+      "url": "https://www.newpaltz.edu/about/directions_text.html",
+      "page": "details",
+      "excerpt": "From Stewart International Airport , Newburgh, New York, Turn left out of Stewart onto Rt."
+    },
+    {
+      "id": "check-page-ced9f21182",
+      "url": "https://www.newpaltz.edu/about/directions_text.html",
+      "page": "details",
+      "excerpt": "Public Transportation from Stewart: Take the Newburgh-Beacon Link from Stewart to the Shortline Bus Station in Newburgh and from there take the bus to New Paltz."
+    },
+    {
+      "id": "check-page-c6590a4ed0",
+      "url": "https://www.newpaltz.edu/about/directions_text.html",
+      "page": "details",
+      "excerpt": "From train station , Poughkeepsie, New York - Hudson Line: Taxi cabs are available most hours from the train station."
+    },
+    {
+      "id": "check-page-aa98a39eea",
+      "url": "https://www.newpaltz.edu/about/directions_text.html",
+      "page": "details",
+      "excerpt": "Albany - 1 1/2 hours Bergen County, NJ - 1 1/4 hours Boston - 4 hours Philadelphia - 3 1/2 hours Nassau County - 2 1/4 hours New York City - 1 1/2 hours Suffolk County - 3 hours Syracuse - 3 1/2 hours And just a flight from . . ."
+    },
+    {
+      "id": "check-page-865f192b34",
+      "url": "https://www.newpaltz.edu/about/glance.html",
+      "page": "details",
+      "excerpt": "At a Glance | SUNY New Paltz Skip To Main Content Students Home Apply Undergraduate Admission Transfer Student Essentials Graduate Admission International Admission Majors & Minors Scholarships Tuition & Fees Financial Aid Virtual Tour Parents Home Parent & Family Weekend Commencement Map & Directions Campus Safety Diversity, Equity, and Inclusion Alumni Home Alumni Relations Give Today New Paltz Magazine Connect- Monthly E-Newsletter Donors The Campaign for SUNY New Paltz Ways to Give Planned Giving Foundation Contact Us Directory Resources A-Z Index Brightspace Library Information Technology Services my.newpaltz.edu People Finder Microsoft 365 (Email) Academics Academic Calendar Schedule of Classes Undergraduate Catalog Majors & Minors Graduate Catalog Graduate Studies Professional Licensure Disclosures Advising Hub Library The Honors Program International Programs Admission Apply Undergraduate Admission Graduate Admission International Admission What Can I Do With This Major? About Us Our Mission Accreditation Diversity, Equity, and Inclusion Free Speech: Your Rights and Responsibilities Our Latest Rankings Visitor's Guide Employment Campus Life Hawks Athletics Wellness & Recreation The Dorsky Museum Career Resource Center Box Office Residence Life On-Campus Dining Campus Bookstore Visit Apply Give New Paltz » About New Paltz » At a Glance About New Paltz Resources Why New"
+    },
+    {
+      "id": "check-page-4f04aa4f6e",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "page": "details",
+      "excerpt": "History of the Campus | SUNY New Paltz Skip To Main Content Students Home Apply Undergraduate Admission Transfer Student Essentials Graduate Admission International Admission Majors & Minors Scholarships Tuition & Fees Financial Aid Virtual Tour Parents Home Parent & Family Weekend Commencement Map & Directions Campus Safety Diversity, Equity, and Inclusion Alumni Home Alumni Relations Give Today New Paltz Magazine Connect- Monthly E-Newsletter Donors The Campaign for SUNY New Paltz Ways to Give Planned Giving Foundation Contact Us Directory Resources A-Z Index Brightspace Library Information Technology Services my.newpaltz.edu People Finder Microsoft 365 (Email) Academics Academic Calendar Schedule of Classes Undergraduate Catalog Majors & Minors Graduate Catalog Graduate Studies Professional Licensure Disclosures Advising Hub Library The Honors Program International Programs Admission Apply Undergraduate Admission Graduate Admission International Admission What Can I Do With This Major? About Us Our Mission Accreditation Diversity, Equity, and Inclusion Free Speech: Your Rights and Responsibilities Our Latest Rankings Visitor's Guide Employment Campus Life Hawks Athletics Wellness & Recreation The Dorsky Museum Career Resource Center Box Office Residence Life On-Campus Dining Campus Bookstore Visit Apply Give New Paltz » About New Paltz » History of the Campus About New"
+    },
+    {
+      "id": "check-page-aa35c21bfe",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "page": "details",
+      "excerpt": "In 1828, the New Paltz Classical School opened its doors on North Front Street, the direct ancestor of the State University of New York at New Paltz."
+    },
+    {
+      "id": "check-page-6bdd21ee17",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "page": "details",
+      "excerpt": "Rather than simply rebuilding, the school shifted its mission, becoming a state normal school that trained teachers for New York State public schools."
+    },
+    {
+      "id": "check-page-a29aa35c02",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "page": "details",
+      "excerpt": "For 50 years, it served as a locus for teacher training and the education of local school children."
+    },
+    {
+      "id": "check-page-9e4fab2c87",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "page": "details",
+      "excerpt": "The first bachelor’s degrees were awarded to the 112 members of the Class of 1942, and in 1947 the school began offering graduate studies in education."
+    },
+    {
+      "id": "check-page-4ebc7b0a26",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "page": "details",
+      "excerpt": "In 1948, New Paltz became one of the original campuses to join the newly established State University of New York System."
+    },
+    {
+      "id": "check-page-5b0a0d66e5",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "page": "details",
+      "excerpt": "Survey courses in African and Asian cultures were introduced."
+    },
+    {
+      "id": "check-page-5ba7d8244c",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "page": "details",
+      "excerpt": "In 1994, the school was renamed once again, as the State University of New York at New Paltz."
+    },
+    {
+      "id": "check-page-c91c01ee75",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "page": "details",
+      "excerpt": "The school wasted no time in summoning county and state health departments for guidance on a massive clean-up."
+    },
+    {
+      "id": "check-page-6ae4ed01d8",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "page": "details",
+      "excerpt": "New Paltz has always embraced international education."
+    },
+    {
+      "id": "check-page-d1a7aa0db3",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "page": "details",
+      "excerpt": "Today, the school has a robust and award-winning study-abroad program that offers students the opportunity to study in 120 countries."
+    },
+    {
+      "id": "check-page-17fd58f808",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "page": "details",
+      "excerpt": "In 2015, the college received the Heiskell Award from the Institute for International Education, recognizing its success programming to create study-abroad opportunities for economically disadvantaged and historically underrepresented students."
+    },
+    {
+      "id": "check-page-5503d3be1f",
+      "url": "https://www.newpaltz.edu/about/history.html",
+      "page": "details",
+      "excerpt": "Today, the State University of New York at New Paltz includes the College of Liberal Arts & Sciences, the School of Business, the School of Science & Engineering, the School of Fine & Performing Arts, the School of Education, Graduate, Professional and Interdisciplinary Studies, and Continuing and Online Education."
+    },
+    {
+      "id": "check-page-964d95ea19",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "page": "details",
+      "excerpt": "About the New Paltz Identity | SUNY New Paltz Skip To Main Content Students Home Apply Undergraduate Admission Transfer Student Essentials Graduate Admission International Admission Majors & Minors Scholarships Tuition & Fees Financial Aid Virtual Tour Parents Home Parent & Family Weekend Commencement Map & Directions Campus Safety Diversity, Equity, and Inclusion Alumni Home Alumni Relations Give Today New Paltz Magazine Connect- Monthly E-Newsletter Donors The Campaign for SUNY New Paltz Ways to Give Planned Giving Foundation Contact Us Directory Resources A-Z Index Brightspace Library Information Technology Services my.newpaltz.edu People Finder Microsoft 365 (Email) Academics Academic Calendar Schedule of Classes Undergraduate Catalog Majors & Minors Graduate Catalog Graduate Studies Professional Licensure Disclosures Advising Hub Library The Honors Program International Programs Admission Apply Undergraduate Admission Graduate Admission International Admission What Can I Do With This Major? About Us Our Mission Accreditation Diversity, Equity, and Inclusion Free Speech: Your Rights and Responsibilities Our Latest Rankings Visitor's Guide Employment Campus Life Hawks Athletics Wellness & Recreation The Dorsky Museum Career Resource Center Box Office Residence Life On-Campus Dining Campus Bookstore Visit Apply Give New Paltz » About New Paltz » About the New Paltz Identity"
+    },
+    {
+      "id": "check-page-c5544304b3",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "page": "details",
+      "excerpt": "And an Education Creative Environment of Discovery Engagement Through Impassioned Teaching A Location for Life Come As You Are Take a comprehensive look at our brand identity on our style guide website ."
+    },
+    {
+      "id": "check-page-7b46a16959",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "page": "details",
+      "excerpt": "Our tradition of intellectual discovery is enhanced by a location of stunning natural beauty, in a dynamic college town, with easy access to New York City."
+    },
+    {
+      "id": "check-page-f3e38af059",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "page": "details",
+      "excerpt": "ABOUT OUR IDENTITY On a daily basis the State University of New York at New Paltz competes for attention with other academic institutions in a world filled with marketing messages from a wide variety and large number of businesses and organizations, both for-profit and non—profit."
+    },
+    {
+      "id": "check-page-1bf8f33bff",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "page": "details",
+      "excerpt": "OUR PROMISES TO YOU New Paltz has crafted a collection of commitments that its administration, faculty, and staff strive toward in serving our enrolled students."
+    },
+    {
+      "id": "check-page-b26fd7cf7b",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "page": "details",
+      "excerpt": "These include: We deliver an extraordinary number of majors in Business, Liberal Arts, Sciences, and Engineering and are particularly well known for our programs in Fine and Performing Arts and Education."
+    },
+    {
+      "id": "check-page-8b0e920179",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "page": "details",
+      "excerpt": "We provide rigorous academics in a highly selective admission environment where students receive and create close personal links with real scholars and artists who love to teach."
+    },
+    {
+      "id": "check-page-2e2ec0e7fa",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "page": "details",
+      "excerpt": "Our geographic location is stunning in its natural beauty, located in the heart of a dynamic college town, 90 minutes from metropolitan New York City."
+    },
+    {
+      "id": "check-page-cdd5ff849e",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "page": "details",
+      "excerpt": "In keeping with the tradition of the nation's great public universities, New Paltz is linked to the health and vitality of the region, state, and nation through the education of its citizens."
+    },
+    {
+      "id": "check-page-6dbc0e772c",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "page": "details",
+      "excerpt": "We developed the characteristics based on findings from an internal assessment survey we conducted with current New Paltz students, faculty, staff, and administrators in July 2008."
+    },
+    {
+      "id": "check-page-8cdd60fbb7",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "page": "details",
+      "excerpt": "A DEGREE…AND AN EDUCATION New Paltz students earn a degree which opens doors to lifelong career opportunities."
+    },
+    {
+      "id": "check-page-11dc686642",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "page": "details",
+      "excerpt": "With that degree comes an education – a true preparation that goes beyond the piece of paper."
+    },
+    {
+      "id": "check-page-14ae527e5f",
+      "url": "https://www.newpaltz.edu/about/identity.html",
+      "page": "details",
+      "excerpt": "It is a New Paltz education, one that retains lifelong relevance through what is required to achieve it: broad and specific knowledge, exposure to differing perspectives, open-minded inquiry, and a spirit of inventiveness."
+    },
+    {
+      "id": "check-page-d7c01de293",
+      "url": "https://www.newpaltz.edu/about/mission.html",
+      "page": "details",
+      "excerpt": "Mission Statement | SUNY New Paltz Skip To Main Content Students Home Apply Undergraduate Admission Transfer Student Essentials Graduate Admission International Admission Majors & Minors Scholarships Tuition & Fees Financial Aid Virtual Tour Parents Home Parent & Family Weekend Commencement Map & Directions Campus Safety Diversity, Equity, and Inclusion Alumni Home Alumni Relations Give Today New Paltz Magazine Connect- Monthly E-Newsletter Donors The Campaign for SUNY New Paltz Ways to Give Planned Giving Foundation Contact Us Directory Resources A-Z Index Brightspace Library Information Technology Services my.newpaltz.edu People Finder Microsoft 365 (Email) Academics Academic Calendar Schedule of Classes Undergraduate Catalog Majors & Minors Graduate Catalog Graduate Studies Professional Licensure Disclosures Advising Hub Library The Honors Program International Programs Admission Apply Undergraduate Admission Graduate Admission International Admission What Can I Do With This Major? About Us Our Mission Accreditation Diversity, Equity, and Inclusion Free Speech: Your Rights and Responsibilities Our Latest Rankings Visitor's Guide Employment Campus Life Hawks Athletics Wellness & Recreation The Dorsky Museum Career Resource Center Box Office Residence Life On-Campus Dining Campus Bookstore Visit Apply Give New Paltz » About New Paltz » Mission Statement About New Paltz"
+    },
+    {
+      "id": "check-page-afa148dc2e",
+      "url": "https://www.newpaltz.edu/about/mission.html",
+      "page": "details",
+      "excerpt": "Mission Statement SUNY New Paltz provides a transformative education that advances personal growth, lifelong achievement and civic engagement. - Endorsed by SUNY New Paltz Council in September 2025 Our mission statement was developed through a collaborative process that culminated in the 2025-2028 Strategic Plan: Living Our Future Together ."
+    },
+    {
+      "id": "check-page-ceb199f7ce",
+      "url": "https://www.newpaltz.edu/about/visiting-new-paltz/",
+      "page": "details",
+      "excerpt": "Visiting New Paltz | SUNY New Paltz Skip To Main Content Students Home Apply Undergraduate Admission Transfer Student Essentials Graduate Admission International Admission Majors & Minors Scholarships Tuition & Fees Financial Aid Virtual Tour Parents Home Parent & Family Weekend Commencement Map & Directions Campus Safety Diversity, Equity, and Inclusion Alumni Home Alumni Relations Give Today New Paltz Magazine Connect- Monthly E-Newsletter Donors The Campaign for SUNY New Paltz Ways to Give Planned Giving Foundation Contact Us Directory Resources A-Z Index Brightspace Library Information Technology Services my.newpaltz.edu People Finder Microsoft 365 (Email) Academics Academic Calendar Schedule of Classes Undergraduate Catalog Majors & Minors Graduate Catalog Graduate Studies Professional Licensure Disclosures Advising Hub Library The Honors Program International Programs Admission Apply Undergraduate Admission Graduate Admission International Admission What Can I Do With This Major? About Us Our Mission Accreditation Diversity, Equity, and Inclusion Free Speech: Your Rights and Responsibilities Our Latest Rankings Visitor's Guide Employment Campus Life Hawks Athletics Wellness & Recreation The Dorsky Museum Career Resource Center Box Office Residence Life On-Campus Dining Campus Bookstore Visit Apply Give New Paltz » About New Paltz » Visiting New Paltz About New Paltz"
     }
   ],
   "findings": {
@@ -75,6 +1160,22 @@
       {
         "value": "https://www.newpaltz.edu/admissions/apply.html",
         "evidenceId": "check-route-1a54987210"
+      },
+      {
+        "value": "https://admissions.newpaltz.edu/register/?id=e941e5b8-55fb-4be3-a783-efc363ea59c9",
+        "evidenceId": "check-route-8fa85af64c"
+      },
+      {
+        "value": "https://admissions.newpaltz.edu/portal/gr_app_landing_page",
+        "evidenceId": "check-route-17eb310f30"
+      },
+      {
+        "value": "http://www.newpaltz.edu/admissions/apply.html",
+        "evidenceId": "check-route-426b35e35b"
+      },
+      {
+        "value": "https://www.newpaltz.edu/esl/programs/apply/",
+        "evidenceId": "check-route-b6b1cedd4b"
       }
     ],
     "applicationUrl": [
@@ -86,12 +1187,56 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-f8b13f22f4"
+      }
+    ],
+    "announcedIntake": [
+      {
+        "value": "Fall",
+        "evidenceId": "check-announced-cd683eba81"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "3",
+        "evidenceId": "check-duration-a4ba366396"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-c43889bf73"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-dacdbe4e83"
+      }
+    ],
+    "location": [
+      {
+        "value": "Westchester County",
+        "evidenceId": "check-location-88a70ca079"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.newpaltz.edu/alumni",
         "evidenceId": "check-portfolio-a9588f29bc"
+      },
+      {
+        "value": "http://www.newpaltz.edu/alumni",
+        "evidenceId": "check-portfolio-66277f4a01"
+      },
+      {
+        "value": "https://www.newpaltz.edu/alumni/",
+        "evidenceId": "check-portfolio-6524c610d0"
       }
     ],
     "name": [],

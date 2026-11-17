@@ -1,47 +1,1349 @@
 {
   "programId": "xleratehealth",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "http://www.xleratehealth.com",
-    "https://www.xleratehealth.com/about/"
+    "https://www.xleratehealth.com/apply-now-1-copy/",
+    "https://www.xleratehealth.com/apply-to-be-a-mentor/",
+    "https://www.xleratehealth.com/mentors-form/",
+    "https://www.xleratehealth.com/xlerate-healths-batch-pitch-demo-day/",
+    "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+    "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+    "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+    "https://www.xleratehealth.com/xleratehealths-2016-cohort-news/",
+    "http://xleratehealth.com/about",
+    "http://xleratehealth.com/accelerator/louisville/",
+    "https://www.xleratehealth.com/about-temp/advisors_2/",
+    "https://www.xleratehealth.com/about-temp/coaches/",
+    "https://www.xleratehealth.com/about-temp/contact/",
+    "https://www.xleratehealth.com/about-temp/partners/",
+    "https://www.xleratehealth.com/about-temp/sponsors/",
+    "https://www.xleratehealth.com/about/",
+    "https://www.xleratehealth.com/about/founders/",
+    "https://www.xleratehealth.com/accelerator-locations/",
+    "https://www.xleratehealth.com/accelerator/"
   ],
   "evidence": [
     {
+      "id": "check-duration-060016d1ee",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "in the accelerator cohort will complete a 12-week bootcamp. This is the 8th cohort to be selected",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-21cd11fac9",
+      "url": "http://xleratehealth.com/about",
+      "title": "XLerateHealth — program page",
+      "excerpt": "across the Southeast for the 2nd cohort for the 16-week NIH-funded I-RED Program. Participants include 2",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2ac2af072a",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "strategies. Through its flagship 12-week bootcamp, XLH connects selected startups with",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-5c410e2971",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "launch of 11 new products in less than 18 months in a highly-matrixed organization.[hr] Salathiel",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-6723a12eb6",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "as part of its second class. The accelerator’s 13-week intensive immersion program will begin August 4,",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-6cd3741d27",
+      "url": "https://www.xleratehealth.com/about/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "across the Southeast for the 2nd cohort for the 16-week NIH-funded I-RED Program. Participants include 2",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-76fee5298f",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "launch of 11 new products in less than 18 months in a highly-matrixed organization. Bob Saunders",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-784adc643b",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "in 2-14 days (vs. the industry standard of 3-9 months). Kare Mobile (Louisville, KY) is an innovative",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-86e55aa1cd",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "of its incoming third cohort. The accelerator’s 13-week intensive program will begin August 3, 2015 and",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-e69627ab9f",
+      "url": "https://www.xleratehealth.com/accelerator/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "startup companies to participate in an intensive 12-week Accelerator, working with a team of coaches and",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4d6bc74ba9",
+      "url": "https://www.xleratehealth.com/accelerator/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "business Headquartered in Louisville, KY Location: Virtual About XLH Mentors Accelerator National Initiatives",
+      "page": "details"
+    },
+    {
+      "id": "check-format-8464af200c",
+      "url": "https://www.xleratehealth.com/accelerator-locations/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "2022 – Sep 30, 2022 Demo Day: September 29, 2022 Location: Virtual via Zoom Applications are open! Apply to Flint About XLH",
+      "page": "details"
+    },
+    {
+      "id": "check-format-86ba5398d5",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "and research universities. Applications are Open Location: Virtual via Zoom Apply Now Coaches Greg Langdon Greg’s background",
+      "page": "details"
+    },
+    {
+      "id": "check-format-8da20270f9",
+      "url": "http://xleratehealth.com/about",
+      "title": "XLerateHealth — program page",
+      "excerpt": "to XLH Flint. June - XLH 2020 cohorts prepared to go virtual for Flint and Louisville bootcamps. August - XLH and its",
+      "page": "details"
+    },
+    {
+      "id": "check-format-acbb2c81d7",
+      "url": "https://www.xleratehealth.com/about/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "to XLH Flint. June - XLH 2020 cohorts prepared to go virtual for Flint and Louisville bootcamps. August - XLH and its",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c6012a2622",
+      "url": "http://www.xleratehealth.com",
+      "title": "XLerateHealth — homepage",
+      "excerpt": "20 Digital Health Accelerators to Know for 2022 (US and Remote) A list of the top digital healthcare accelerator programs",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d41d258797",
+      "url": "https://www.xleratehealth.com/accelerator-locations/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "2022 – Oct 28, 2022 Demo Day: October 27, 2022 Location: Virtual via Zoom Applications are open! Apply to Louisville Flint,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d763fb37e4",
+      "url": "https://www.xleratehealth.com/accelerator/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "to commit to and attend all sessions – virtually or in person. The XLerateHealth Method XLerateHealth was one of the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f27e8cb1ed",
+      "url": "http://www.xleratehealth.com",
+      "title": "XLerateHealth — homepage",
+      "excerpt": "healthcare accelerator programs in the US or with a virtual option Read More View All News Funders Building a great",
+      "page": "details"
+    },
+    {
+      "id": "check-location-29caf9144c",
+      "url": "http://xleratehealth.com/about",
+      "title": "XLerateHealth — program page",
+      "excerpt": "an XLH 2016 portfolio company headquartered in Louisville, KY, was acquired by Frazier",
+      "page": "details"
+    },
+    {
+      "id": "check-location-3e5285ea8a",
+      "url": "https://www.xleratehealth.com/about/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "an XLH 2016 portfolio company headquartered in Louisville, KY, was acquired by Frazier",
+      "page": "details"
+    },
+    {
+      "id": "check-location-5743b0437e",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "(“SIPI”), a for-profit organization based in Flint, MI, as a Summer Hustle Manager where",
+      "page": "details"
+    },
+    {
+      "id": "check-location-896a53a178",
+      "url": "https://www.xleratehealth.com/about-temp/advisors_2/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "for Black Stone IP, an investment bank headquartered in San Francisco focused on IP-rich M&A, IP deals, and",
+      "page": "details"
+    },
+    {
+      "id": "check-location-cd395a8262",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "award-winning healthcare accelerator based in Louisville, KY, today announced the selection of",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-f38aa4ccf5",
+      "url": "http://www.xleratehealth.com",
+      "title": "XLerateHealth — homepage",
+      "excerpt": "operates nationally and is headquartered in Louisville, KY, a strategically positioned hub of",
+      "page": "details"
+    },
+    {
       "id": "check-name-e2ea5be41c",
       "url": "http://www.xleratehealth.com",
-      "title": "XLerateHealth — homepage checked by scrape.py",
+      "title": "XLerateHealth — homepage",
       "excerpt": "XLerateHealth – Making the companies that are remaking healthcare Skip",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-11d067fea2",
+      "url": "http://xleratehealth.com/about",
+      "title": "XLerateHealth — program page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-47847d78e0",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-49ea45de9a",
+      "url": "https://www.xleratehealth.com/accelerator-locations/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4de2aaab0f",
+      "url": "https://www.xleratehealth.com/about/founders/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-528f8d6ac2",
+      "url": "https://www.xleratehealth.com/apply-now-1-copy/",
+      "title": "XLerateHealth — application page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5a8267be8b",
+      "url": "https://www.xleratehealth.com/about-temp/partners/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5c0885366a",
+      "url": "https://www.xleratehealth.com/accelerator/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
       "page": "details"
     },
     {
       "id": "check-portfolio-757e41c973",
       "url": "http://www.xleratehealth.com",
-      "title": "XLerateHealth — homepage checked by scrape.py",
+      "title": "XLerateHealth — homepage",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a7c2636c76",
+      "url": "https://www.xleratehealth.com/xlerate-healths-batch-pitch-demo-day/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-b14a4d6afe",
+      "url": "https://www.xleratehealth.com/about-temp/advisors_2/",
+      "title": "XLerateHealth — program page",
       "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
       "page": "details"
     },
     {
       "id": "check-portfolio-b48080fad4",
       "url": "https://www.xleratehealth.com/about/",
-      "title": "XLerateHealth — details page checked by scrape.py",
+      "title": "XLerateHealth — program page",
       "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-b8715e8319",
+      "url": "https://www.xleratehealth.com/mentors-form/",
+      "title": "XLerateHealth — application page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-c14f323fb6",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-c3ae518c68",
+      "url": "http://www.xleratehealth.com",
+      "title": "XLerateHealth — homepage",
+      "excerpt": "View Our Portfolio → http://xleratehealth.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-cb6524cf91",
+      "url": "https://www.xleratehealth.com/apply-to-be-a-mentor/",
+      "title": "XLerateHealth — application page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d018028712",
+      "url": "http://www.xleratehealth.com",
+      "title": "XLerateHealth — homepage",
+      "excerpt": "Portfolio → http://xleratehealth.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d95d76d8b1",
+      "url": "https://www.xleratehealth.com/xleratehealths-2016-cohort-news/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-e1a35b9e0b",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e86d682e17",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-f8d7bf2b91",
+      "url": "https://www.xleratehealth.com/about-temp/sponsors/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fc0dd9c8ab",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fcb2049cd0",
+      "url": "https://www.xleratehealth.com/about-temp/contact/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4a71d5854d",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "Apply Here → http://gust.com/programs/xleratehealth-2019-bootcamp-program-will-also-consider-applicants-for-intersession-program",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-69b53f857d",
+      "url": "https://www.xleratehealth.com/apply-now-1-copy/",
+      "title": "XLerateHealth — application page",
+      "excerpt": "Apply Here → http://gust.com/programs/xleratehealth-2019-bootcamp-program-will-also-consider-applicants-for-intersession-program",
+      "page": "application"
+    },
+    {
+      "id": "check-route-862b01f57d",
+      "url": "https://www.xleratehealth.com/accelerator-locations/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "Apply to Louisville → https://www.f6s.com/xleratehealth-bootcamp-louisville-2022/about",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ae3c3231e9",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "Apply Now → https://gust.com/programs/xleratehealth-2024",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b27d4182ac",
+      "url": "https://www.xleratehealth.com/apply-to-be-a-mentor/",
+      "title": "XLerateHealth — application page",
+      "excerpt": "Apply Now → https://www.xleratehealth.com/mentors-form/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bb11be2300",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "Apply Here → http://gust.com/programs/xleratehealth-2019-bootcamp-program-will-also-consider-applicants-for-intersession-program",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-cb0edf5815",
+      "url": "https://www.xleratehealth.com/accelerator-locations/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "Apply to Flint → https://www.f6s.com/xleratehealth-bootcamp-flint-2022/about",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ce3da50173",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "Apply Here → http://gust.com/programs/xleratehealth-2019-bootcamp-program-will-also-consider-applicants-for-intersession-program",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-e428cec5b0",
+      "url": "https://www.xleratehealth.com/xlerate-healths-batch-pitch-demo-day/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "Apply Here → http://gust.com/programs/xleratehealth-2019-bootcamp-program-will-also-consider-applicants-for-intersession-program",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-ebfc98ed54",
+      "url": "https://www.xleratehealth.com/xleratehealths-2016-cohort-news/",
+      "title": "XLerateHealth — batches page",
+      "excerpt": "Apply Here → http://gust.com/programs/xleratehealth-2019-bootcamp-program-will-also-consider-applicants-for-intersession-program",
+      "page": "batches"
+    },
+    {
+      "id": "check-status-23a3383e13",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "such as Apellis, and is home to a multitude of top-tier aging care organizations and research universities. Applications are Open Location: Virtual via Zoom Apply Now Coaches Greg Langdon Greg’s background is in corporate and product",
+      "page": "details"
+    },
+    {
+      "id": "check-status-da9f0fb507",
+      "url": "https://www.xleratehealth.com/accelerator-locations/",
+      "title": "XLerateHealth — program page",
+      "excerpt": "KY Bootcamp Dates: Aug 10, 2022 – Oct 28, 2022 Demo Day: October 27, 2022 Location: Virtual via Zoom Applications are open! Apply to Louisville Flint, MI Bootcamp Dates: Jul 12, 2022 – Sep 30, 2022 Demo Day: September 29, 2022",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-672b953df2",
+      "url": "http://www.xleratehealth.com",
+      "page": "details",
+      "excerpt": "XLerateHealth – Making the companies that are remaking healthcare Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine NEW → I-RED → XLERATEHEALTH COMMERCIALIZATION ENGINE → CLICK HERE NEW → I-RED → XLERATEHEALTH COMMERCIALIZATION ENGINE → CLICK HERE NEW → I-RED → XLERATEHEALTH COMMERCIALIZATION ENGINE → CLICK HERE Bringing Innovation to Life ® We strive to create a better, healthier future by progressing healthcare and life science innovations About Us Nationally Recognized Healthcare Accelerator XLerateHealth was one of the first half dozen healthcare accelerators in the United States and the first in the Southeastern United States Why XLerateHealth Healthcare Depth Risk is inherent in biomedical technology and life sciences. While other healthcare accelerators steer clear of these markets, XLerateHealth embraces this sector with a bench of experts. About Ecosystem XLerateHealth operates nationally and is headquartered in Louisville, KY, a strategically positioned hub of healthcare heritage, knowledge and innovation. Louisville Track"
+    },
+    {
+      "id": "check-page-4fac8a25bf",
+      "url": "http://www.xleratehealth.com",
+      "page": "details",
+      "excerpt": "Louisville Track Record of Success XLerateHealth has evolved to become Louisville’s first and longest standing healthcare accelerator and one of the longest operating accelerators in the nation."
+    },
+    {
+      "id": "check-page-58ed753401",
+      "url": "http://www.xleratehealth.com",
+      "page": "details",
+      "excerpt": "Portfolio Our mentorship sets us apart."
+    },
+    {
+      "id": "check-page-f2f714f7bd",
+      "url": "http://www.xleratehealth.com",
+      "page": "details",
+      "excerpt": "View Our Mentors View Our Mentors \" We explored several top national healthcare accelerators and it became clear that we needed a partnership with professionals who understand the industry we want to serve."
+    },
+    {
+      "id": "check-page-15673db7b9",
+      "url": "http://www.xleratehealth.com",
+      "page": "details",
+      "excerpt": "We were not able to have the same conversations with other accelerators."
+    },
+    {
+      "id": "check-page-1e43fbd59c",
+      "url": "http://www.xleratehealth.com",
+      "page": "details",
+      "excerpt": "Opinion Portfolio Companies Companies 0 Capital Raised $ 0 B Exits 0 View Our Portfolio Featured News 20 Digital Health Accelerators to Know for 2022 (US and Remote) A list of the top digital healthcare accelerator programs in the US or with a virtual option Read More View All News Funders Building a great company takes time."
+    },
+    {
+      "id": "check-page-71a71dae53",
+      "url": "http://www.xleratehealth.com",
+      "page": "details",
+      "excerpt": "We're here to support the journey.​ Work With Us About XLH Mentors Accelerator National Initiatives Newsroom Contact Us About XLH Mentors Accelerator National Initiatives Newsroom Contact Us Facebook-f Twitter Linkedin-in Subscribe to our newsletter Subscribe © 2026 XLerateHealth."
+    },
+    {
+      "id": "check-page-14db3f7682",
+      "url": "https://www.xleratehealth.com/apply-now-1-copy/",
+      "page": "application",
+      "excerpt": "Apply Now 1 copy – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine Apply Now Apply Here About XLH Mentors Accelerator National Initiatives Newsroom Contact Us About XLH Mentors Accelerator National Initiatives Newsroom Contact Us Facebook-f Twitter Linkedin-in Subscribe to our newsletter Subscribe © 2026 XLerateHealth. All rights reserved. No part of this site may be reproduced without our written permission."
+    },
+    {
+      "id": "check-page-edc84d8f7c",
+      "url": "https://www.xleratehealth.com/apply-to-be-a-mentor/",
+      "page": "application",
+      "excerpt": "Apply to be a Mentor – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine Be at the Forefront of Healthcare Innovation - Become an XLerateHealth Mentor XLerateHealth is always seeking to add healthcare domain experts to our mentor community. Our mentors are a vital part of XLerateHealth because they help our founders better understand the marketplace, which will ultimately help them successfully commercialize their technologies and positively impact lives. XLerateHealth looks to engage mentors across the nation who represent a broad range of healthcare domain expertise across several healthcare areas, from life science and med tech to digital health, healthcare operations, reimbursement and more. Learn more below, and if you feel you meet the criteria please use the form beneath the description to submit your interest in joining our national mentor network! What we look for in a mentor As a mentor, you should be able to add significant value through your relevant industry experience, your understanding of the healthcare"
+    },
+    {
+      "id": "check-page-4db71d0cbb",
+      "url": "https://www.xleratehealth.com/apply-to-be-a-mentor/",
+      "page": "application",
+      "excerpt": "What we look for in a mentor As a mentor, you should be able to add significant value through your relevant industry experience, your understanding of the healthcare marketplace, and your network connections."
+    },
+    {
+      "id": "check-page-3e3d786cac",
+      "url": "https://www.xleratehealth.com/apply-to-be-a-mentor/",
+      "page": "application",
+      "excerpt": "We may also ask you to be featured in our newsletter and/or social media as we frequently highlight mentors involved in the program."
+    },
+    {
+      "id": "check-page-f4ab9df9fe",
+      "url": "https://www.xleratehealth.com/apply-to-be-a-mentor/",
+      "page": "application",
+      "excerpt": "Our mentors volunteer their time and we ask that you don’t engage in a financial relationship with the entrepreneur unless they bring up the subject and you agree to it."
+    },
+    {
+      "id": "check-page-a66e54e77e",
+      "url": "https://www.xleratehealth.com/apply-to-be-a-mentor/",
+      "page": "application",
+      "excerpt": "What you get in return As a mentor you will have first-hand access to top emerging innovations and entrepreneurs who are helping tackle some of the hardest challenges in healthcare."
+    },
+    {
+      "id": "check-page-2cd2393965",
+      "url": "https://www.xleratehealth.com/apply-to-be-a-mentor/",
+      "page": "application",
+      "excerpt": "You will have an opportunity to get involved and support the learnings of startup founders who are working on technologies that can both impact patient’s lives and improve the operations and /or workflow of health systems (both hospitals and payers)."
+    },
+    {
+      "id": "check-page-c75da0a282",
+      "url": "https://www.xleratehealth.com/apply-to-be-a-mentor/",
+      "page": "application",
+      "excerpt": "You will have the ability to connect directly with a large network of top healthcare entrepreneurs across the nation."
+    },
+    {
+      "id": "check-page-e82eb40515",
+      "url": "https://www.xleratehealth.com/apply-to-be-a-mentor/",
+      "page": "application",
+      "excerpt": "XLerateHealth takes in 6-10 startups annually and also supports a network of over 90 alumni companies who have raised over $200M in private equity and non-dilutive capital."
+    },
+    {
+      "id": "check-page-ac92ab8d50",
+      "url": "https://www.xleratehealth.com/apply-to-be-a-mentor/",
+      "page": "application",
+      "excerpt": "You will be a part of a mentor network with over 300 active participants who are recognized thought leaders across the healthcare ecosystem."
+    },
+    {
+      "id": "check-page-ded8697b5f",
+      "url": "https://www.xleratehealth.com/apply-to-be-a-mentor/",
+      "page": "application",
+      "excerpt": "Apply Now About XLH Mentors Accelerator National Initiatives Newsroom Contact Us About XLH Mentors Accelerator National Initiatives Newsroom Contact Us Facebook-f Twitter Linkedin-in Subscribe to our newsletter Subscribe © 2026 XLerateHealth."
+    },
+    {
+      "id": "check-page-3af7f830e1",
+      "url": "https://www.xleratehealth.com/mentors-form/",
+      "page": "application",
+      "excerpt": "Mentors Form – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine Apply to be an XLerateHealth Mentor! Full Name Credentials Email Company Title Select your state or territory Alabama (AL) Alaska (AK) Arizona (AZ) Arkansas (AR) California (CA) Colorado (CO) Connecticut (CT) Delaware (DE) District of Columbia (DC) Florida (FL) Georgia (GA) Hawaii (HI) Idaho (ID) Illinois (IL) Indiana (IN) Iowa (IA) Kansas (KS) Kentucky (KY) Louisiana (LA) Maine (ME) Maryland (MD) Massachusetts (MA) Michigan (MI) Minnesota (MN) Mississippi (MS) Missouri (MO) Montana (MT) Nebraska (NE) Nevada (NV) New Hampshire (NH) New Jersey (NJ) New Mexico (NM) New York (NY) North Carolina (NC) North Dakota (ND) Ohio (OH) Oklahoma (OK) Oregon (OR) Pennsylvania (PA) Rhode Island (RI) South Carolina (SC) South Dakota (SD) Tennessee (TN) Texas (TX) Utah (UT) Vermont (VT) Virginia (VA) Washington (WA) West Virginia (WV) Wisconsin (WI) Wyoming (WY) Upload your high resolution headshot (JPG, PNG, GIF) LinkedIn Profile URL Please select your areas of expertise"
+    },
+    {
+      "id": "check-page-9549460a7c",
+      "url": "https://www.xleratehealth.com/mentors-form/",
+      "page": "application",
+      "excerpt": "Submit About XLH Mentors Accelerator National Initiatives Newsroom Contact Us About XLH Mentors Accelerator National Initiatives Newsroom Contact Us Facebook-f Twitter Linkedin-in Subscribe to our newsletter Subscribe © 2026 XLerateHealth."
+    },
+    {
+      "id": "check-page-d08b6652a1",
+      "url": "https://www.xleratehealth.com/xlerate-healths-batch-pitch-demo-day/",
+      "page": "batches",
+      "excerpt": "XLerateHealth's inaugural class pitch to a full house on Demo Day – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine XLerateHealth's inaugural class pitch to a full house on Demo Day December 1, 2013 Jackie Willmot Share: XLerateHealth held its very first Demo Day in the new Nucleus building with over 200 people in attendance. The 6 startups that participated in the accelerator gave their pitches to a host of healthcare professionals, investors, and academia. Mayer Fischer also spoke to applaud the entrepreneurial spirit that XLerateHealth’s first batch embodied. After the presentations, individuals had the chance to meet the entrepreneurs at their booths to get deeper insights into each of their companies. The enthusiasm and the interest of potential investors reinforced that XLerateHealth’s mission to mold successful, marketable business models in the healthcare arena. We look forward to seeing the legacy continue the next batch of startups. Next Why build a healthcare startup in Louisville? Because it’s been done"
+    },
+    {
+      "id": "check-page-e671f6d330",
+      "url": "https://www.xleratehealth.com/xlerate-healths-batch-pitch-demo-day/",
+      "page": "batches",
+      "excerpt": "Because it’s been done (well) before Next Apply Now Apply Here About XLH Mentors Accelerator National Initiatives Newsroom Contact Us About XLH Mentors Accelerator National Initiatives Newsroom Contact Us Facebook-f Twitter Linkedin-in Subscribe to our newsletter Subscribe © 2026 XLerateHealth."
+    },
+    {
+      "id": "check-page-5d72652241",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "page": "batches",
+      "excerpt": "XLerateHealth Selects Nine Healthcare Startups For 2019 Accelerator Cohort in Louisville, KY – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine XLerateHealth Selects Nine Healthcare Startups For 2019 Accelerator Cohort in Louisville, KY July 30, 2019 Vera Anderson Share: Selected Startups are Developing Innovations in Gene Therapy, Chronic Condition Management, and Social Isolation of the Elderly Louisville, Kentucky – XLerateHealth (XLH), an award-winning healthcare accelerator based in Louisville, KY, today announced the selection of nine startup companies to join its 2019 Louisville accelerator cohort. XLH was founded to help startup healthcare companies successfully commercialize their businesses. The 75 companies in XLH’s portfolio cover a broad range of healthcare domains including biomedical devices, diagnostics, drug therapies, digital health, telemedicine, healthcare services, and aging care, among others. Each company selected in the accelerator cohort will complete a 12-week bootcamp. This is the 8th cohort"
+    },
+    {
+      "id": "check-page-3df465e044",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "page": "batches",
+      "excerpt": "This is the 8th cohort to be selected into the bootcamp program since XLH’s launch in 2013."
+    },
+    {
+      "id": "check-page-d1a269ffa8",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "page": "batches",
+      "excerpt": "“We are always excited to see new companies addressing important problems in the healthcare ecosystem” said Jackie Willmot, CEO and co-founder of XLH."
+    },
+    {
+      "id": "check-page-34e74541e7",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "page": "batches",
+      "excerpt": "We look forward to working hand-in-hand with the startups and our LEAP and RISE partners to develop these innovations.” XLerateHealth’s 2019 Louisville Cohort Assay Me (New York, NY) has developed an at-home test kit for monitoring diabetes."
+    },
+    {
+      "id": "check-page-7b9eba44c5",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "page": "batches",
+      "excerpt": "Briocare (Frisco, TX) has developed an AI-driven Senior Care platformthat uses voice technology to eliminate caregiver anxiety while improving the quality of life for seniors."
+    },
+    {
+      "id": "check-page-43f4c14ede",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "page": "batches",
+      "excerpt": "The platform gives caregivers full control and access to schedule care events, receive daily reports on the senior’s activities and wellbeing alongside personalized health tips and content, and increases social interactions for the senior."
+    },
+    {
+      "id": "check-page-5057112e37",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "page": "batches",
+      "excerpt": "Briocare was selected by AARP Innovation Labs as one of the top four companies reducing social isolation and loneliness in seniors Cellgorithmics (Chicago, IL) is developing a proprietary CRISPR/Cas9 based, genetic programming platform technology that converts cells into biological computers using DNA based instructions that read like lines of code."
+    },
+    {
+      "id": "check-page-6f52addb96",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "page": "batches",
+      "excerpt": "Its groundbreaking technology reduces the time for measuring cumulative doses from 60 days to 60 seconds, and includes cloud storage, over-the-air firmware updates, machine learning, and blockchain integration."
+    },
+    {
+      "id": "check-page-23a6d22dbb",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "page": "batches",
+      "excerpt": "Hardin Scientific (Los Angeles, CA) designs and manufactures smart, modular laboratory equipment to aid Research and Diagnostic companies in the discovery of life-saving treatments and pharmaceuticals."
+    },
+    {
+      "id": "check-page-5ae0c10fdb",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "page": "batches",
+      "excerpt": "Hardin utilizes a Hardware as a Service (HaaS) business model that provides an easy entry point for customers to adopt its products in 2-14 days (vs. the industry standard of 3-9 months)."
+    },
+    {
+      "id": "check-page-1e30acb0dc",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "page": "batches",
+      "excerpt": "Focused on increasing access to oral healthcare regardless of socioeconomic status, Kare provides comprehensive dental care on its mobile dental unit by connecting a patient to a dentist based on location, availability, insurance, and procedure."
+    },
+    {
+      "id": "check-page-54c37fe9dc",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "page": "batches",
+      "excerpt": "NohoMed (New York, NY) has developed an intelligent monitoring system that detects COPD exacerbations early."
+    },
+    {
+      "id": "check-page-51ac79b67b",
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "page": "batches",
+      "excerpt": "About XLerateHealth: XLerateHealth is an enterprise-focused early-stage healthcare accelerator that helps companies build out their commercialization strategies."
+    },
+    {
+      "id": "check-page-c412d388a4",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "page": "batches",
+      "excerpt": "XLerateHealth accelerator announces incoming third cohort – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine XLerateHealth accelerator announces incoming third cohort December 29, 2015 Jackie Willmot Share: XLerateHealth, ( www.xleratehealth.com ), a Louisville-based accelerator for early-stage healthcare companies, announced it has selected seven companies to participate as part of its incoming third cohort. The accelerator’s 13-week intensive program will begin August 3, 2015 and run until “Demo Day” on October 29, 2015. Selected companies include: iClinical (San Francisco, CA) is a real-time data aggregation and analytics platform for clinical trials. The real-time trial insights and built-in collaboration tools allow faster issue resolution and decision-making, so that life-saving drugs get to the market sooner and at a lower cost. iPillBox (Louisville, KY) is a mobile pill organizer that streamlines complicated medication schedules for patients and allows caregivers and physicians to monitor compliance securely."
+    },
+    {
+      "id": "check-page-7c41315d95",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "page": "batches",
+      "excerpt": "MedUX (Toronto, Canada) revolutionizes surgical workflow by bringing the surgeon, direct, tactile control over digital case data while in the operating room’s sterile field."
+    },
+    {
+      "id": "check-page-20a6d26a8d",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "page": "batches",
+      "excerpt": "The proprietary formula is based on the World Health Organization’s recommended formula, which has undergone extensive evaluation and testing by the scientific community."
+    },
+    {
+      "id": "check-page-6ad5adf97f",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "page": "batches",
+      "excerpt": "Trajectory Healthcare (Loveland, OH) is a population health analytics solutions company that helps evaluate, improve and design population health management programs."
+    },
+    {
+      "id": "check-page-c30d4d9f65",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "page": "batches",
+      "excerpt": "Using its patented analytics engine and easy to use software, Trajectory transforms how customers see and manage their population health data, helping them make better clinical and financial decisions."
+    },
+    {
+      "id": "check-page-73910c4b44",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "page": "batches",
+      "excerpt": "Department of Health and Human Services in Washington D.C., and who now serves as the Chief of Civic Innovation for Louisville Metro Government, and Jackie Willmot , who has over three decades in the healthcare innovation and startup space, and spent more than 15 years as an executive with Humana."
+    },
+    {
+      "id": "check-page-3864da1c4f",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "page": "batches",
+      "excerpt": "Supporting XLerateHealth is a world-class group of mentors ."
+    },
+    {
+      "id": "check-page-fe55dd3c42",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "page": "batches",
+      "excerpt": "The mentors provide guidance and counsel to XLerateHealth’s portfolio companies, drawing from their depth of experience in healthcare and business creation."
+    },
+    {
+      "id": "check-page-d72a47513b",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "page": "batches",
+      "excerpt": "Mentorship can range from providing a single phone call for advice to a much more intensive interaction depending on the needs of the company and the time commitment of the individual mentor."
+    },
+    {
+      "id": "check-page-7f2eeeaf1c",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "page": "batches",
+      "excerpt": "Startup companies will typically have two to five mentors with whom they engage on various aspects of their business."
+    },
+    {
+      "id": "check-page-67f82c51f8",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "page": "batches",
+      "excerpt": "Mentors in the accelerator have extensive experience in various aspects of the healthcare ecosystem and/or various aspects of early-stage new venture creation."
+    },
+    {
+      "id": "check-page-9ae0a9a8ef",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "page": "batches",
+      "excerpt": "XLerateHealth has received sponsorship support from the Kentucky Cabinet for Economic Development – Office of Commercialization & Innovation, Louisville Metro Government, The U.S."
+    },
+    {
+      "id": "check-page-73e81f8d87",
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "page": "batches",
+      "excerpt": "Supporting venture capital sponsors include Kentucky Enterprise Fund/KSTC (Lexington), OCA Ventures (Chicago), TriStar Ventures (Nashville), River Cities Capital (Cincinnati), and Chrysalis Ventures (Louisville)."
+    },
+    {
+      "id": "check-page-a5158455f0",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "page": "batches",
+      "excerpt": "XLerateHealth welcomes 2014 startup cohort – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine XLerateHealth welcomes 2014 startup cohort December 4, 2014 Jackie Willmot Share: XLerateHealth, a Louisville-based accelerator for early-stage, health-related companies, announced it has selected 8 companies to participate as part of its second class. The accelerator’s 13-week intensive immersion program will begin August 4, 2014 and run until “Demo Day” on October 30, 2014. Selected companies include: Blue Sky Case Management (Louisville, KY) is a conflict-free social service agency for Medicaid waiver participants living with Intellectual and Developmental Disabilities (IDD). Blue Sky’s mobile, SaaS-based tools help case managers produce plans of care that deliver better home and community-based services for consumers with IDD. Count It (New York, NY) pioneers highly social, inter-company challenges, and automates the connection between corporate charitable giving and employee wellness. Powered by a push-button reward"
+    },
+    {
+      "id": "check-page-073c25f576",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "page": "batches",
+      "excerpt": "Gyroskope Family Network (Louisville, KY) is an online content, gaming, and social platform built for the aging population."
+    },
+    {
+      "id": "check-page-9d6dc669cf",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "page": "batches",
+      "excerpt": "Medbiomarkers (London, England) is a web platform seeking to accelerate the discovery, validation and utility of biomarkers for health monitoring, diagnostic and therapeutic applications."
+    },
+    {
+      "id": "check-page-bef3243576",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "page": "batches",
+      "excerpt": "Personal Medicine Plus (Paducah, KY) is a mobile health platform addressing underserved Medicaid and rural populations."
+    },
+    {
+      "id": "check-page-ecf5650c9f",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "page": "batches",
+      "excerpt": "The software app is designed to help people with chronic conditions such as pre-diabetes and pre-hypertension engage and better manage their health."
+    },
+    {
+      "id": "check-page-6d567ecb13",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "page": "batches",
+      "excerpt": "The technology uses connected health device data and gamified behavior tracking presented in an easy to use and visually appealing screen."
+    },
+    {
+      "id": "check-page-e10d2a2bbb",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "page": "batches",
+      "excerpt": "“Out of a large pool of highly-qualified applicants, we have identified an outstanding second group of early-stage companies with technologies that are solving real problems within the healthcare delivery and wellness continuum,” said Bob Saunders, XLerateHealth’s chairman and co-founder."
+    },
+    {
+      "id": "check-page-25b60e4f78",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "page": "batches",
+      "excerpt": "Department of Health and Human Services in Washington D.C., and who now serves as the Chief of Civic Innovation for Louisville Metro Government, and Jackie Willmot, who has over three decades in the healthcare innovation and startup space, and spent more than 15 years as an executive with Humana."
+    },
+    {
+      "id": "check-page-152af1b5c4",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "page": "batches",
+      "excerpt": "Supporting XLerateHealth is a world-class group of mentors."
+    },
+    {
+      "id": "check-page-3024257feb",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "page": "batches",
+      "excerpt": "The mentors will provide guidance and counsel to XLerateHealth’s portfolio companies, drawing from their depth of experience in healthcare and business creation."
+    },
+    {
+      "id": "check-page-7497b564e3",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "page": "batches",
+      "excerpt": "Mentorship can range from providing a single phone call for advice to a much more intensive interaction depending on the needs of the company and the time commitment of the individual mentor."
+    },
+    {
+      "id": "check-page-da11ab1868",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "page": "batches",
+      "excerpt": "Startup companies will typically have two to five mentors with whom they engage on various aspects of their business."
+    },
+    {
+      "id": "check-page-2a1c1ad5df",
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "page": "batches",
+      "excerpt": "Mentors in the accelerator have extensive experience in various aspects of the healthcare ecosystem and/or various aspects of early stage new venture creation."
+    },
+    {
+      "id": "check-page-1a78aa8ace",
+      "url": "https://www.xleratehealth.com/xleratehealths-2016-cohort-news/",
+      "page": "batches",
+      "excerpt": "XLerateHealth's 2016 cohort in the news – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine XLerateHealth's 2016 cohort in the news December 18, 2016 Jackie Willmot Share: Our fourth startup cohort is well underway, and we’re thrilled to see the progress that our companies have already been making. Check out some of the press that the accelerator has received so far this season, and stay tuned for updates about our startup Demo Day, which will take place on Oct. 27. Yahoo Finance Louisville Distilled The Lane Report Business Wire Insider Louisville Bio Portfolio Medical News HIT Consultant Today USA Louisville Business First News Channel 10 Prev Previous XLerateHealth named three-time winner of $50,000 US Small Business Administration Award Next XLerateHealth selects six companies for fourth startup cohort Next Apply Now Apply Here About XLH Mentors Accelerator National Initiatives Newsroom Contact Us About XLH Mentors Accelerator National Initiatives Newsroom Contact Us Facebook-f Twitter Linkedin-in Subscribe to our"
+    },
+    {
+      "id": "check-page-86931a1f35",
+      "url": "http://xleratehealth.com/about",
+      "page": "details",
+      "excerpt": "About XLH – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine Bringing Innovation to Life ® We strive to create a better, healthier future by progressing healthcare and life science innovations Life-long relationships We thrive on personal trust and connections with entrepreneurs and stay connected with our founders, working with them as they need our help, investing time and resources across all development stages. Life Science expertise Risk is inherent in biomedical technology and lifescience investments and it can take over eight years to get a product to market. While other healthcare accelerators tend to steer clear of this area, XLerateHealth embraces this sector with a bench of experts in each area. Growing digital health & technology We support startups across the full spectrum of digital health, telemedicine, and mhealth technologies. Digital technology is a key growth engine for the future of healthcare and we offer a broad range of expertise to support these innovations. From the lab to life XLerateHealth has"
+    },
+    {
+      "id": "check-page-20fdfe7dfe",
+      "url": "http://xleratehealth.com/about",
+      "page": "details",
+      "excerpt": "From the lab to life XLerateHealth has expertise in taking what academics and clinicians put together and moving concepts from lab to market through a targeted customer discovery process that helps entrepreneurs understand the potential for their idea, research, or technology."
+    },
+    {
+      "id": "check-page-f82880f63b",
+      "url": "http://xleratehealth.com/about",
+      "page": "details",
+      "excerpt": "Our History 2025 February – XLH presented at the 2025 Annual Meeting of the Association of University Technology Managers (AUTM) in Washington, DC, sharing commercialization readiness frameworks and national outcome data from the NIH-funded I-RED program with university technology transfer leaders and research commercialization professionals."
+    },
+    {
+      "id": "check-page-e4ceeb2000",
+      "url": "http://xleratehealth.com/about",
+      "page": "details",
+      "excerpt": "Nearly 100% bootstrapped, Clover grew into a national leader in online diagnostic imaging education, serving 24,000 monthly users with 600+ training videos and a 96% learner pass rate, and its acquisition marks a significant expansion of its impact across the allied health workforce."
+    },
+    {
+      "id": "check-page-01e1443fd7",
+      "url": "http://xleratehealth.com/about",
+      "page": "details",
+      "excerpt": "May – XLH released an I-RED participant impact video highlighting the startup teams' transformation from academic investigators to commercialization-ready entrepreneurs, reinforcing the program’s applied education model and measurable translational outcomes."
+    },
+    {
+      "id": "check-page-d5feeaf0e3",
+      "url": "http://xleratehealth.com/about",
+      "page": "details",
+      "excerpt": "August – XLH presented aggregated I-RED outcomes across two cohorts, 10 universities, and 17 participants, reporting $20.46M in total capital raised, a 32% average knowledge gain across core commercialization domains, and measurable increases in patent filings, licensing progress, entity formation, and SBIR/STTR awards."
+    },
+    {
+      "id": "check-page-448b61ea06",
+      "url": "http://xleratehealth.com/about",
+      "page": "details",
+      "excerpt": "January – XLH presented the Southeast NIH-funded I-RED program at the 2024 Annual NIH Research Evaluation and Commercialization Hub (REACH) meeting in Washington DC."
+    },
+    {
+      "id": "check-page-26e9c5eefc",
+      "url": "http://xleratehealth.com/about",
+      "page": "details",
+      "excerpt": "April - XLH partnered with Presbyterian College in Clinton, SC, to create a semester-long Healthcare Design Thinking Certificate course for undergraduate and graduate pharmacy, occupational therapy, and business students."
+    },
+    {
+      "id": "check-page-bcc220cb77",
+      "url": "http://xleratehealth.com/about",
+      "page": "details",
+      "excerpt": "This effort was funded by the Small Business Administration (SBA), supporting rural ecosystems interested in healthcare innovation."
+    },
+    {
+      "id": "check-page-74bf1eb9ab",
+      "url": "http://xleratehealth.com/about",
+      "page": "details",
+      "excerpt": "May - XLH partnered with the National Institutes of Health and hosted a 2-hour webinar titled \"Funding Biomedical Innovations for Entrepreneurs\" webinar."
+    },
+    {
+      "id": "check-page-d5329bb91a",
+      "url": "http://xleratehealth.com/about",
+      "page": "details",
+      "excerpt": "July - XLH was featured in KY Inno / Louisville Business First article, \"How Kentucky is becoming a favorite in the biotech industry\"."
+    },
+    {
+      "id": "check-page-aff99f0c53",
+      "url": "http://xleratehealth.com/about",
+      "page": "details",
+      "excerpt": "August - XLH's Healthcare Design Thinking Certificate course debuted at Presbyterian College School of Pharmacy."
+    },
+    {
+      "id": "check-page-6ba9c84761",
+      "url": "http://xleratehealth.com/about",
+      "page": "details",
+      "excerpt": "Targeted Solicitations: Finding the Best Funding Opportunities\" in collaboration with the NIH Seed Office, the National Cancer Institute (NCI), the National Heart, Lung, and Blood Institute, the National Institute on Aging (NIA), and the National Institute of Neurological Disorders and Stroke (NINDS)."
+    },
+    {
+      "id": "check-page-bf63031ef0",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "page": "details",
+      "excerpt": "Louisville – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine Louisville, Kentucky Headquartered in Louisville, KY a national hub of healthcare heritage, knowledge, and innovation. It is the birthplace and growing ground of healthcare behemoths such as Humana, to successful startups such as Apellis, and is home to a multitude of top-tier aging care organizations and research universities. Applications are Open Location: Virtual via Zoom Apply Now Coaches Greg Langdon Greg’s background is in corporate and product strategy for technology businesses. He has experience in executive management, business development, marketing and public relations, acquisitions, product management, software architecture and development, project management and digital electronics design. Jacqueline L. Wood Jacqueline is a visionary and strategic forward healthcare executive. She has a strong background in business development, strategic planning and increasing efficiencies throughout the healthcare continuum. Her ability to challenge the"
+    },
+    {
+      "id": "check-page-40ceb74ee1",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "page": "details",
+      "excerpt": "Her ability to challenge the status quo gives her a unique approach to today’s healthcare issues."
+    },
+    {
+      "id": "check-page-bfe1366341",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "page": "details",
+      "excerpt": "Recent professional highlights include introducing a first-of-its-kind retail-health clinical trial model and leading the cross-functional launch of 11 new products in less than 18 months in a highly-matrixed organization."
+    },
+    {
+      "id": "check-page-906be3368d",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "page": "details",
+      "excerpt": "Bob Saunders Bob is a General Partner of OCA Ventures (Chicago), a Founding Partner of Saunders Murdoch and Associates (Louisville/Boston), and is an active investor in many healthcare startups."
+    },
+    {
+      "id": "check-page-709a3a7385",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "page": "details",
+      "excerpt": "Bob was a founding board member of MetaCyte Business Lab, the University of Louisville’s life science incubator."
+    },
+    {
+      "id": "check-page-f4e6c3fee4",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "page": "details",
+      "excerpt": "Bob received a B.A. from Stanford University, an M.Sc. from the London School of Economics, and an M.A. from Harvard University."
+    },
+    {
+      "id": "check-page-0cc14ffc5f",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "page": "details",
+      "excerpt": "He was both a Fulbright Scholar and a Marshall Scholar Jackie Willmot Jackie has 30+ years of experience in the healthcare industry including 13 years as a clinician and 15 years as an executive at Humana in the Innovation Center including 3 years working for a Humana Startup in the United Kingdom."
+    },
+    {
+      "id": "check-page-9060fbf2c3",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "page": "details",
+      "excerpt": "She was a founding member and on the Board of Directors of the Network for Entrepreneurial Women and has worked with healthcare startups via the LaunchIt program where she works closely with Coulter, ExCITE, and I-Corps funded companies."
+    },
+    {
+      "id": "check-page-287387777e",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "page": "details",
+      "excerpt": "Prior to being recruited to UofL in 2013, he served as Assistant Vice President for Entrepreneurship and Innovation Partnerships at Binghamton University in New York, where he helped develop and protect faculty intellectual property, paired researchers’ expertise with pressing market needs, and offered guidance to faculty and students interested in starting their own business."
+    },
+    {
+      "id": "check-page-2dca00e93a",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "page": "details",
+      "excerpt": "He has advised 50+ healthcare startup companies successfully applying Lean Startup Methodology to help them develop, grow, and scale up their businesses."
+    },
+    {
+      "id": "check-page-f1612fa7c1",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "page": "details",
+      "excerpt": "Sebastian also serves as a startup judge for the Michigan startup competition Invest360."
+    },
+    {
+      "id": "check-page-ebd588d489",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "page": "details",
+      "excerpt": "Prior to XLH, he was a Co-founder of MyNurse, a home healthcare marketplace for caregivers and patients."
+    },
+    {
+      "id": "check-page-b1daccf9c9",
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "page": "details",
+      "excerpt": "About XLH Mentors Accelerator National Initiatives Newsroom Contact Us About XLH Mentors Accelerator National Initiatives Newsroom Contact Us Facebook-f Twitter Linkedin-in Subscribe to our newsletter Subscribe © 2026 XLerateHealth."
+    },
+    {
+      "id": "check-page-0ec38cd7c6",
+      "url": "https://www.xleratehealth.com/about-temp/advisors_2/",
+      "page": "details",
+      "excerpt": "Advisors – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine Advisors Technology Transfer Advisors: Ian D. McClure Ian joined the Office of Technology Commercialization (OTC) as its director in 2016. Ian began his career as a Mergers & Acquisitions (M&A) and Intellectual Property (IP) transactions attorney with Wyatt, Tarrant & Combs, LLP in Louisville. Following private practice, he helped raise over $20M and built a startup company in Chicago focused on technology and IP licensing. Ian led that company through product development, capital raise, proof of concept and growth to 30+ full-time employees. He was responsible for identifying, originating, and developing high-value IP and technology licensing programs with leading global corporations, universities, and research laboratories. Most recently, Ian was vice president of IP Strategy for Black Stone IP, an investment bank headquartered in San Francisco focused on IP-rich M&A, IP deals, and technology-driven transactions. In parallel, he has taught Global IP"
+    },
+    {
+      "id": "check-page-cf98caba51",
+      "url": "https://www.xleratehealth.com/about-temp/advisors_2/",
+      "page": "details",
+      "excerpt": "In parallel, he has taught Global IP Management and Maximizing IP Value as an adjunct professor at Chicago-Kent College of Law."
+    },
+    {
+      "id": "check-page-43f00a2927",
+      "url": "https://www.xleratehealth.com/about-temp/advisors_2/",
+      "page": "details",
+      "excerpt": "Richard Giersch Rich Giersch is the Director of Health Sciences Innovation, Entrepreneurship and Commercialization for West Virginia University (WVU) and Chairman of the Board for the Bioscience Association of West Virginia."
+    },
+    {
+      "id": "check-page-ae21aceb66",
+      "url": "https://www.xleratehealth.com/about-temp/advisors_2/",
+      "page": "details",
+      "excerpt": "He has held Director level positions at two venture capital firms, was the chief operating officer of a biotech company in Research Triangle Park, North Carolina and the Chief Science Officer for the New Jersey Center for Biomaterials at Rutgers University."
+    },
+    {
+      "id": "check-page-2e654b7697",
+      "url": "https://www.xleratehealth.com/about-temp/advisors_2/",
+      "page": "details",
+      "excerpt": "About XLH Mentors Accelerator National Initiatives Newsroom Contact Us About XLH Mentors Accelerator National Initiatives Newsroom Contact Us Facebook-f Twitter Linkedin-in Subscribe to our newsletter Subscribe © 2026 XLerateHealth."
+    },
+    {
+      "id": "check-page-c713ad1e7d",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "page": "details",
+      "excerpt": "Coaches – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine Coaches Mary Auge A business development leader with 15 years of life science technology commercialization experience and a passion for identifying and advancing innovative new product opportunities to improve patient care. Mary has extensive experience with the evaluation of life science technology, intellectual property, commercial viability, identifying target companies, marketing, and building relationships with external and internal stakeholders. This extensive experience come from being a Sr. Business Development Manager at Partners HealthCare Systems (Brigham and Women’s Hospital/Massachusetts General Hospital – teaching hospitals for Harvard Medical School) in Boston, MA. Recently, she was the Director of Research and Planning at Genesys Health System in Grand Blanc, MI in charge of vetting and planning the development of a regionally based Health Technology Innovation Institute and Science Park. Mary enjoys leading cross-functional teams to ensure a"
+    },
+    {
+      "id": "check-page-917ac3b0d6",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "page": "details",
+      "excerpt": "Mary enjoys leading cross-functional teams to ensure a successful commercialization. [hr] Sebastian Alvim Sebastian is the COO of MyNurse, a European digital marketplace that enables patients and families to easily find and select in-home health care professionals in real time."
+    },
+    {
+      "id": "check-page-09e2e97397",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "page": "details",
+      "excerpt": "Responsible for the brand recognition and effectiveness for better home healthcare services, in 2018, MyNurse was named the most innovative caregiving solution by Accelerate Michigan."
+    },
+    {
+      "id": "check-page-1e23791ecf",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "page": "details",
+      "excerpt": "In is own words: MyNurse is a digital tool to empower families and healthcare providers."
+    },
+    {
+      "id": "check-page-0124cf8585",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "page": "details",
+      "excerpt": "Beginning his career at a British consultancy multinational, he became knowledgeable about all areas of human resources operations and strategic corporate advisory, including change management, restructuring, and organizational assessment. [hr] Rebecca Brown Rice Rebecca Rice is the Director of Operations at the Louisville Healthcare CEO Council (LHCC)."
+    },
+    {
+      "id": "check-page-7466336b7d",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "page": "details",
+      "excerpt": "Previously, Rebecca managed the NIH-REACH Hub and its associated healthcare technology development grant at the University of Louisville (called ExCITE) where she oversaw the investment of $3million into a portfolio of 19 promising early-stage healthcare technologies, including small molecule therapeutics, diagnostics, mHealth technologies, and direct-to-consumer products."
+    },
+    {
+      "id": "check-page-4652f1dfd8",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "page": "details",
+      "excerpt": "Karen received a BA in American Studies at Trinity College in Hartford, CT (Phi Beta Kappa) and her Master in Public Policy from Harvard University. [hr] Stephen Hanson Stephen has over thirty years of C-suite experience in five health systems and four standalone hospitals serving seven states, including four years as CEO of Baptist Health KY/IN."
+    },
+    {
+      "id": "check-page-3225dc657e",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "page": "details",
+      "excerpt": "Stephen is currently an executive in Residence at the University of Louisville School of Public Health and Information Sciences and a Fellow of the American College of Healthcare Executives."
+    },
+    {
+      "id": "check-page-0b5e9eff1e",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "page": "details",
+      "excerpt": "Mr Hanson was a former Chair of the American Hospital Association Council on Health Systems."
+    },
+    {
+      "id": "check-page-9da4984f5a",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "page": "details",
+      "excerpt": "Stephen’s recent local volunteer involvement include Chair (with his wife) of the Metro United Way campaign, Chair and Vice Chair of Greater Louisville Inc., and Chair of the Health Enterprise Network."
+    },
+    {
+      "id": "check-page-0e91831adc",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "page": "details",
+      "excerpt": "Hanson holds a Master of Public Health degree in health administration from the University of Oklahoma and earned his Bachelor of Science degree from Iowa State University. [hr] Niki Kennedy Dr."
+    },
+    {
+      "id": "check-page-8506232779",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "page": "details",
+      "excerpt": "From there, she went on to complete her general surgery residency at St."
+    },
+    {
+      "id": "check-page-ea80c499d7",
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "page": "details",
+      "excerpt": "John Hospital & Medical Center in Detroit as well as her vascular surgery fellowship at Henry Ford Hospital."
+    },
+    {
+      "id": "check-page-e6f76a5969",
+      "url": "https://www.xleratehealth.com/about-temp/contact/",
+      "page": "details",
+      "excerpt": "Contact XLH – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine Contact XLH Contact us: [email protected] Connect with us: About XLH Mentors Accelerator National Initiatives Newsroom Contact Us About XLH Mentors Accelerator National Initiatives Newsroom Contact Us Facebook-f Twitter Linkedin-in Subscribe to our newsletter Subscribe © 2026 XLerateHealth. All rights reserved. No part of this site may be reproduced without our written permission. Loading Comments... Write a Comment... Email Name Website"
+    },
+    {
+      "id": "check-page-ed58faa90a",
+      "url": "https://www.xleratehealth.com/about-temp/partners/",
+      "page": "details",
+      "excerpt": "Healthcare Partners – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine Healthcare Partners The Cardiovascular Innovation Institute is a partnership between the University of Louisville and Jewish Hospital that brings together the finest minds in the field of cardiology with the goal of improving the quality of life for patients with cardiovascular disease through the development of ventricular assist devices, artificial hearts and much more. [hr] The International Center for Long Term Care Innovation – InnovateLTC, for short – is a life-sciences and innovation center focused on delivering cutting-edge products and services to the exploding aging population. [hr] The Nucleus Innovation Center at the University of Louisville provides business management and consulting services to support entrepreneurs engaged in innovation and research. Nucleus provides not just the physical facilities for XLerateHealth, but enhances our access to key members of the entire healthcare innovation ecosystem. About XLH Mentors Accelerator"
+    },
+    {
+      "id": "check-page-9809a117a7",
+      "url": "https://www.xleratehealth.com/about-temp/partners/",
+      "page": "details",
+      "excerpt": "About XLH Mentors Accelerator National Initiatives Newsroom Contact Us About XLH Mentors Accelerator National Initiatives Newsroom Contact Us Facebook-f Twitter Linkedin-in Subscribe to our newsletter Subscribe © 2026 XLerateHealth."
+    },
+    {
+      "id": "check-page-4d0539cd69",
+      "url": "https://www.xleratehealth.com/about-temp/sponsors/",
+      "page": "details",
+      "excerpt": "Sponsors – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine Sponsors XLerateHealth is fortunate to have an extensive network of sponsors who support our efforts. If you’re interested in being a sponsor, email us at [email protected] . [hr] About XLH Mentors Accelerator National Initiatives Newsroom Contact Us About XLH Mentors Accelerator National Initiatives Newsroom Contact Us Facebook-f Twitter Linkedin-in Subscribe to our newsletter Subscribe © 2026 XLerateHealth. All rights reserved. No part of this site may be reproduced without our written permission. Loading Comments... Write a Comment... Email Name Website"
+    },
+    {
+      "id": "check-page-04c292add8",
+      "url": "https://www.xleratehealth.com/about/",
+      "page": "details",
+      "excerpt": "About XLH – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine Bringing Innovation to Life ® We strive to create a better, healthier future by progressing healthcare and life science innovations Life-long relationships We thrive on personal trust and connections with entrepreneurs and stay connected with our founders, working with them as they need our help, investing time and resources across all development stages. Life Science expertise Risk is inherent in biomedical technology and lifescience investments and it can take over eight years to get a product to market. While other healthcare accelerators tend to steer clear of this area, XLerateHealth embraces this sector with a bench of experts in each area. Growing digital health & technology We support startups across the full spectrum of digital health, telemedicine, and mhealth technologies. Digital technology is a key growth engine for the future of healthcare and we offer a broad range of expertise to support these innovations. From the lab to life XLerateHealth has"
+    },
+    {
+      "id": "check-page-c766b12926",
+      "url": "https://www.xleratehealth.com/about/",
+      "page": "details",
+      "excerpt": "From the lab to life XLerateHealth has expertise in taking what academics and clinicians put together and moving concepts from lab to market through a targeted customer discovery process that helps entrepreneurs understand the potential for their idea, research, or technology."
+    },
+    {
+      "id": "check-page-13d14ef399",
+      "url": "https://www.xleratehealth.com/about/",
+      "page": "details",
+      "excerpt": "Our History 2025 February – XLH presented at the 2025 Annual Meeting of the Association of University Technology Managers (AUTM) in Washington, DC, sharing commercialization readiness frameworks and national outcome data from the NIH-funded I-RED program with university technology transfer leaders and research commercialization professionals."
+    },
+    {
+      "id": "check-page-e98ef225c8",
+      "url": "https://www.xleratehealth.com/about/",
+      "page": "details",
+      "excerpt": "Nearly 100% bootstrapped, Clover grew into a national leader in online diagnostic imaging education, serving 24,000 monthly users with 600+ training videos and a 96% learner pass rate, and its acquisition marks a significant expansion of its impact across the allied health workforce."
+    },
+    {
+      "id": "check-page-1800c2d7e0",
+      "url": "https://www.xleratehealth.com/about/",
+      "page": "details",
+      "excerpt": "May – XLH released an I-RED participant impact video highlighting the startup teams' transformation from academic investigators to commercialization-ready entrepreneurs, reinforcing the program’s applied education model and measurable translational outcomes."
+    },
+    {
+      "id": "check-page-3f15e06b10",
+      "url": "https://www.xleratehealth.com/about/",
+      "page": "details",
+      "excerpt": "August – XLH presented aggregated I-RED outcomes across two cohorts, 10 universities, and 17 participants, reporting $20.46M in total capital raised, a 32% average knowledge gain across core commercialization domains, and measurable increases in patent filings, licensing progress, entity formation, and SBIR/STTR awards."
+    },
+    {
+      "id": "check-page-14ee5e11b7",
+      "url": "https://www.xleratehealth.com/about/",
+      "page": "details",
+      "excerpt": "January – XLH presented the Southeast NIH-funded I-RED program at the 2024 Annual NIH Research Evaluation and Commercialization Hub (REACH) meeting in Washington DC."
+    },
+    {
+      "id": "check-page-6b1b8c4cd8",
+      "url": "https://www.xleratehealth.com/about/",
+      "page": "details",
+      "excerpt": "April - XLH partnered with Presbyterian College in Clinton, SC, to create a semester-long Healthcare Design Thinking Certificate course for undergraduate and graduate pharmacy, occupational therapy, and business students."
+    },
+    {
+      "id": "check-page-7d3be78f21",
+      "url": "https://www.xleratehealth.com/about/",
+      "page": "details",
+      "excerpt": "This effort was funded by the Small Business Administration (SBA), supporting rural ecosystems interested in healthcare innovation."
+    },
+    {
+      "id": "check-page-ac2b8df13e",
+      "url": "https://www.xleratehealth.com/about/",
+      "page": "details",
+      "excerpt": "May - XLH partnered with the National Institutes of Health and hosted a 2-hour webinar titled \"Funding Biomedical Innovations for Entrepreneurs\" webinar."
+    },
+    {
+      "id": "check-page-9e8b25dbc5",
+      "url": "https://www.xleratehealth.com/about/",
+      "page": "details",
+      "excerpt": "July - XLH was featured in KY Inno / Louisville Business First article, \"How Kentucky is becoming a favorite in the biotech industry\"."
+    },
+    {
+      "id": "check-page-2358e8d4d5",
+      "url": "https://www.xleratehealth.com/about/",
+      "page": "details",
+      "excerpt": "August - XLH's Healthcare Design Thinking Certificate course debuted at Presbyterian College School of Pharmacy."
+    },
+    {
+      "id": "check-page-3a9704623a",
+      "url": "https://www.xleratehealth.com/about/",
+      "page": "details",
+      "excerpt": "Targeted Solicitations: Finding the Best Funding Opportunities\" in collaboration with the NIH Seed Office, the National Cancer Institute (NCI), the National Heart, Lung, and Blood Institute, the National Institute on Aging (NIA), and the National Institute of Neurological Disorders and Stroke (NINDS)."
+    },
+    {
+      "id": "check-page-084cc9f7c4",
+      "url": "https://www.xleratehealth.com/about/founders/",
+      "page": "details",
+      "excerpt": "Founders – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine Founders XLerateHealth’s founders have decades of experience relative to innovation, the startup ecosystem, healthcare and civic undertakings. All are from the Midwest and are passionate supporters of both the regional and national “innovation economy.” Bob Saunders Chairman & Co-founder Bob is a General Partner of OCA Ventures (Chicago), a Founding Partner of Saunders Murdoch and Associates (Louisville/Boston), and is an active investor in many healthcare startups. Bob was a Managing Director and General Partner at Chrysalis Ventures from 1997 to 2009. Bob was a founding board member of MetaCyte Business Lab, the University of Louisville’s life science incubator. Over the last 30 years, he has invested in several dozen startup companies and has mentored 100+ startups. Bob received a B.A. from Stanford University, an M.Sc. from the London School of Economics, and an M.A. from Harvard University. He was both a Fulbright Scholar and a Marshall Scholar Ted Smith"
+    },
+    {
+      "id": "check-page-de432a9dbc",
+      "url": "https://www.xleratehealth.com/about/founders/",
+      "page": "details",
+      "excerpt": "Prior to UofL, Ted was the CEO of Revon Systems a digital health start-up."
+    },
+    {
+      "id": "check-page-5b633b20d2",
+      "url": "https://www.xleratehealth.com/about/founders/",
+      "page": "details",
+      "excerpt": "Ted was also an early member of the Office of the National Coordinator (ONC) of Health IT as the US Department of Health and Human Services where he focused on the DC-to-VC and Health Datapalooza programs with Aneesh Chopra (US CTO) and Todd Park HHS CTO)."
+    },
+    {
+      "id": "check-page-2ba15520f7",
+      "url": "https://www.xleratehealth.com/about/founders/",
+      "page": "details",
+      "excerpt": "Ted co-founded MedTrackAlert in 2007 which was acquired by Remedy Health in 2009."
+    },
+    {
+      "id": "check-page-1efca8ac60",
+      "url": "https://www.xleratehealth.com/about/founders/",
+      "page": "details",
+      "excerpt": "Ted was the general manager of CNET’s B2B brands and was a founding board member of NASA’s National Space Biomedical Research Institute Industry Board."
+    },
+    {
+      "id": "check-page-9c37e82996",
+      "url": "https://www.xleratehealth.com/about/founders/",
+      "page": "details",
+      "excerpt": "Jackie Willmot CEO & Co-founder Jackie has 30+ years of experience in the healthcare industry including 13 years as a clinician and 15 years as an executive at Humana in the Innovation Center including 3 years working for a Humana Startup in the United Kingdom."
+    },
+    {
+      "id": "check-page-994a1f9319",
+      "url": "https://www.xleratehealth.com/about/founders/",
+      "page": "details",
+      "excerpt": "She was a founding member and on the Board of Directors of the Network for Entrepreneurial Women and has worked with healthcare startups via the LaunchIt program where she works closely with Coulter, ExCITE, and I-Corps funded companies."
+    },
+    {
+      "id": "check-page-5725f33562",
+      "url": "https://www.xleratehealth.com/about/founders/",
+      "page": "details",
+      "excerpt": "About XLH Mentors Accelerator National Initiatives Newsroom Contact Us About XLH Mentors Accelerator National Initiatives Newsroom Contact Us Facebook-f Twitter Linkedin-in Subscribe to our newsletter Subscribe © 2026 XLerateHealth."
+    },
+    {
+      "id": "check-page-b71042b502",
+      "url": "https://www.xleratehealth.com/accelerator-locations/",
+      "page": "details",
+      "excerpt": "XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine Locations XLerateHealth operates in Louisville, KY and Flint, MI. We accept 5-8 companies in each cohort annually. Louisville, KY Bootcamp Dates: Aug 10, 2022 – Oct 28, 2022 Demo Day: October 27, 2022 Location: Virtual via Zoom Applications are open! Apply to Louisville Flint, MI Bootcamp Dates: Jul 12, 2022 – Sep 30, 2022 Demo Day: September 29, 2022 Location: Virtual via Zoom Applications are open! Apply to Flint About XLH Mentors Accelerator National Initiatives Newsroom Contact Us About XLH Mentors Accelerator National Initiatives Newsroom Contact Us Facebook-f Twitter Linkedin-in Subscribe to our newsletter Subscribe © 2026 XLerateHealth. All rights reserved. No part of this site may be reproduced without our written permission."
+    },
+    {
+      "id": "check-page-0bf146c2c0",
+      "url": "https://www.xleratehealth.com/accelerator/",
+      "page": "details",
+      "excerpt": "Accelerator – XLerateHealth Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners National Initiatives National Initiatives Corporate Innovation Newsroom Contact Us I-RED Engine We help promising healthcare startups secure customers and attract funding Work With Mentors XLerateHealth selects promising healthcare startup companies to participate in an intensive 12-week Accelerator, working with a team of coaches and mentors to support the commercialization of innovative life science, med-tech, and digital healthcare technologies. Our Accelerator aims to bring early stage startups to a level where they are attractive to customers and investors. What We're Looking For We look for early-stage companies and entrepreneurs who are working to find solutions that solve pain points in the healthcare marketplace. Ideal candidates have: 01 A team with at least 1 full time committed founder 03 Intellectual property (if applicable) with patent filed 05 Previous success raising capital and/or revenue positive (desired but not necessary) 02 At least an MVP (minimal viable product) that’s ready to pilot 04 Coachable founder(s) and team 06 Ability to"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
-    "applicationUrl": [],
-    "applicationsOpen": [],
+    "routes": [
+      {
+        "value": "http://gust.com/programs/xleratehealth-2019-bootcamp-program-will-also-consider-applicants-for-intersession-program",
+        "evidenceId": "check-route-69b53f857d"
+      },
+      {
+        "value": "https://www.xleratehealth.com/mentors-form/",
+        "evidenceId": "check-route-b27d4182ac"
+      },
+      {
+        "value": "https://gust.com/programs/xleratehealth-2024",
+        "evidenceId": "check-route-ae3c3231e9"
+      },
+      {
+        "value": "https://www.f6s.com/xleratehealth-bootcamp-louisville-2022/about",
+        "evidenceId": "check-route-862b01f57d"
+      },
+      {
+        "value": "https://www.f6s.com/xleratehealth-bootcamp-flint-2022/about",
+        "evidenceId": "check-route-cb0edf5815"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.xleratehealth.com/mentors-form/",
+        "evidenceId": "check-route-b27d4182ac"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-23a3383e13"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12",
+        "evidenceId": "check-duration-060016d1ee"
+      },
+      {
+        "value": "9 months",
+        "evidenceId": "check-duration-784adc643b"
+      },
+      {
+        "value": "13",
+        "evidenceId": "check-duration-86e55aa1cd"
+      },
+      {
+        "value": "16",
+        "evidenceId": "check-duration-21cd11fac9"
+      },
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-76fee5298f"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-c6012a2622"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-d763fb37e4"
+      }
+    ],
+    "location": [
+      {
+        "value": "Louisville",
+        "evidenceId": "check-location-f38aa4ccf5"
+      },
+      {
+        "value": "San Francisco",
+        "evidenceId": "check-location-896a53a178"
+      },
+      {
+        "value": "Flint",
+        "evidenceId": "check-location-5743b0437e"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.xleratehealth.com/portfolio/",
         "evidenceId": "check-portfolio-757e41c973"
+      },
+      {
+        "value": "http://xleratehealth.com/portfolio/",
+        "evidenceId": "check-portfolio-d018028712"
       }
     ],
     "name": [

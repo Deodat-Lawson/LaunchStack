@@ -1,11 +1,11 @@
 {
   "programId": "lifesciky",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
-      "url": "https://lifesciky.com/apply/",
-      "page": "application",
-      "anchor": "Apply Now",
+      "url": "https://lifesciky.com/about-us-2/",
+      "page": "details",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -22,7 +22,31 @@
       "url": "https://lifesciky.com/apply-for-residency/",
       "page": "application",
       "anchor": "Start at LifeSciKY",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lifesciky.com/apply/",
+      "page": "application",
+      "anchor": "Apply Now",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lifesciky.com/kentucky-gets-serious-about-life-sciences-growth/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lifesciky.com/terms-and-disclaimer/",
+      "page": "terms",
+      "anchor": "Terms and Disclaimer",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

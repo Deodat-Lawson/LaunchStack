@@ -1,13 +1,11 @@
 {
   "programId": "one-eleven",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://oneeleven.com/",
     "https://oneeleven.com/apply-here/",
     "https://oneeleven.com/about-2/",
     "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
-    "https://oneeleven.com/tag/accelerator/",
-    "https://oneeleven.com/tag/programming/",
     "https://oneeleven.com/how-oneeleven-companies-are-creating-jobs-and-opportunities-outside-of-cities/",
     "https://oneeleven.com/how-oneelevens-companies-and-partners-have-responded-to-covid-19/",
     "https://oneeleven.com/maverixs-john-ruffolo-on-resilience-passion-and-investing-in-companies-that-will-benefit-canadas-future/",
@@ -16,9 +14,26 @@
     "https://oneeleven.com/apply/",
     "https://oneeleven.com/membership-guide/for-graduating-companies/",
     "https://oneeleven.com/oneeleven-alumni-cross-the-usd-2-billion-mark-in-collective-funds-raised/",
-    "https://oneeleven.com/oneeleven-focuses-on-talent-upskilling-to-help-post-seed-companies-scale/"
+    "https://oneeleven.com/oneeleven-focuses-on-talent-upskilling-to-help-post-seed-companies-scale/",
+    "https://oneeleven.com/2507-2/",
+    "https://oneeleven.com/tag/accelerator/",
+    "https://oneeleven.com/tag/programming/"
   ],
   "evidence": [
+    {
+      "id": "check-deal-a94a5fd39b",
+      "url": "https://oneeleven.com/2507-2/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "through offering a SAFE that will convert at a price per share of $1.00. Upon the occurrence of a future financing at $1.20/share, the SAFE",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-deal-e8bfd38aff",
+      "url": "https://oneeleven.com/2507-2/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "per share of $1.00. Upon the occurrence of a future financing at $1.20/share, the SAFE holder will receive the upside as the financing",
+      "page": "portfolio"
+    },
     {
       "id": "check-duration-05f3f08b28",
       "url": "https://oneeleven.com/maverixs-john-ruffolo-on-resilience-passion-and-investing-in-companies-that-will-benefit-canadas-future/",
@@ -391,6 +406,13 @@
       "page": "portfolio"
     },
     {
+      "id": "check-route-a962ab486c",
+      "url": "https://oneeleven.com/2507-2/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-cbd0afd55d",
       "url": "https://oneeleven.com/apply/",
       "title": "OneEleven — application page",
@@ -413,6 +435,18 @@
       "excerpt": "Home – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs Home Paris samiei 2026-11-06T14:22:18+00:00 Built to Scale . OneEleven is Canada’s leading community for venture-backed tech companies with a proven track record to scale 5x-10x within 18-24 months. Home to ambitious founders, bold ideas, and big growth, it’s where companies like Wealthsimple, Borrowell, Clio, Koho, and 1Password found the momentum to go global. A community of elite founders who learn from each other, build exceptional teams, and shape the next generation of leaders. It’s where investors and partners gain direct access to Canada’s most promising ventures in a community built on trust, collaboration, and impact. OneEleven is where Canada’s top tech companies grow and scale together. Space Community Services Capital Focus on Growth . At OneEleven, membership provides more than just workspace — it opens the door to community, resources, and programming designed to help scaling tech companies grow faster. Community Driven . Our ambitious founders and their teams motivate and support one another, leveraging the expertise of a strong peer network as they build something great. Our companies succeed because they don’t just share the same space, they share the same goals and experiences. About OneEleven . Real partnerships . Our partners support our mission to help the"
     },
     {
+      "id": "check-page-71ea63dcfa",
+      "url": "https://oneeleven.com/",
+      "page": "details",
+      "excerpt": "OneEleven is home to Toronto’s most promising technology companies."
+    },
+    {
+      "id": "check-page-5158c89ebc",
+      "url": "https://oneeleven.com/",
+      "page": "details",
+      "excerpt": "W Toronto, Ontario M5V 2Y1 [email protected] With thanks to the partners who back OneEleven’s members 2023 COPYRIGHT AND TRADEMARK."
+    },
+    {
       "id": "check-page-7eb769afb6",
       "url": "https://oneeleven.com/apply-here/",
       "page": "application",
@@ -425,22 +459,76 @@
       "excerpt": "About – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs About Paris samiei 2026-10-30T18:08:10+00:00 About us . Facilities With a 55,000 square foot facility in the heart of downtown Toronto, we provide open concept seating and private offices for growing technology companies. Easy to access by transit, car, bike or foot, our well-designed collaborative spaces & offices allow our companies to grow with us, with month-to-month leases and secure, turnkey infrastructure. Our companies are provided with state-of-the-art facilities, 60+ meeting rooms, event space available for community use, podcast studios, a parenting room, secure bike storage facilities & showers, a wellness, faith and meditation space, as well as reception & operational support. Programming & Support With programming for founders and employees at all levels, OneEleven provides an unparalleled support network for rapidly scaling tech companies. We’ve built a first-of-its-kind-in-Canada program around talent upskilling for emerging people managers. Our curriculum-based learning focuses on four areas: marketing, customer success, product, and leadership. This allows OneEleven companies to get the most out of their talent, and ensure that emerging people managers are growing and learning, as fast as their companies are scaling. OneEleven’s bespoke programming is augmented by"
     },
     {
+      "id": "check-page-47b5973a54",
+      "url": "https://oneeleven.com/about-2/",
+      "page": "details",
+      "excerpt": "OneEleven’s bespoke programming is augmented by access to community peer groups, EIR (experts in residence), as well as curated mentors and advisors."
+    },
+    {
+      "id": "check-page-415f59aae8",
+      "url": "https://oneeleven.com/about-2/",
+      "page": "details",
+      "excerpt": "From our 1,500-person TechSummer Social, to quarterly investor showcases, and health & wellness initiatives, we play a central role in helping companies navigate the challenges of scaling a technology company."
+    },
+    {
+      "id": "check-page-3f9c3606f8",
+      "url": "https://oneeleven.com/about-2/",
+      "page": "details",
+      "excerpt": "Partnership OneEleven partners are a valuable part of our community, where they gain valuable insights into the growing Toronto technology landscape while providing expertise to our founders and their teams."
+    },
+    {
+      "id": "check-page-27857a92e0",
+      "url": "https://oneeleven.com/about-2/",
+      "page": "details",
+      "excerpt": "We also provide our partner with tech sector landscape analysis, data insights, challenge scoping and path to procurement arrangements that can help corporate and enterprise clients navigate Toronto’s growing technology sector and find new products, solutions and vendors."
+    },
+    {
+      "id": "check-page-f9e1a6e385",
+      "url": "https://oneeleven.com/about-2/",
+      "page": "details",
+      "excerpt": "Meet Our Team Dan Ruby Acting Managing Director, OneEleven Assistant Vice President, Business Development, Ontario Centre of Innovation Kate Tomen Director of Operations Paris Samiei Marketing Manager Ujwal Jain Programs Associate Unlock exclusive content."
+    },
+    {
+      "id": "check-page-b1f88f29d9",
+      "url": "https://oneeleven.com/about-2/",
+      "page": "details",
+      "excerpt": "OneEleven is home to Toronto’s most promising technology companies."
+    },
+    {
+      "id": "check-page-d129736e99",
+      "url": "https://oneeleven.com/about-2/",
+      "page": "details",
+      "excerpt": "W Toronto, Ontario M5V 2Y1 [email protected] With thanks to the partners who back OneEleven’s members 2023 COPYRIGHT AND TRADEMARK."
+    },
+    {
       "id": "check-page-b82d42f81b",
       "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
       "page": "details",
       "excerpt": "OneEleven Shifts to Virtual Programming – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs OneEleven Shifts to Virtual Programming March 31, 2020 The Programming & Events team at OneEleven have launched a roster of webinars, virtual meet-ups, online wellness resources and other remote programming to help its community navigate the work from home mandates and social distancing protocols made necessary by COVID-19. The aim of this virtual programming is to keep the community connected, informed as well as entertained during what has become an isolating and anxious time for many. Some of the programming being taken remote are pre-existing, regular events, such as Peer Groups and the OneEleven Community Lunch, while other offerings are brand new, developed by taking into account the unique set of circumstances the community, and the city at large, is under. Part of helping the community feel supported while shifting to remote work was a focus on continuity. The OneEleven Community Lunch is an event that happens every two months in the main lunchroom at OneEleven and is a chance for the community to come together over food and mutual appreciation of community standouts. A “Golden Dongle” award (an HDMI dongle that is spray painted gold) is always handed out at the lunch, an accolade given to a member who has, in the eyes of their peers, gone"
     },
     {
-      "id": "check-page-7e832849d4",
-      "url": "https://oneeleven.com/tag/accelerator/",
+      "id": "check-page-61c1603075",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
       "page": "details",
-      "excerpt": "accelerator Archives – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs accelerator Home » accelerator OneEleven alumni cross the USD $2-billion mark in collective funds raised Gallery OneEleven alumni cross the USD $2-billion mark in collective funds raised Uncategorized OneEleven alumni cross the USD $2-billion mark in collective funds raised Eight years after its founding, alumni of OneEleven have raised [...] OneEleven 2021-11-25T14:34:56+00:00 September 17, 2021 | Read More Unlock exclusive content. OneEleven is home to Toronto’s most promising technology companies. Stay up to date on who’s joining, who’s raising, who’s making moves and everything that matters in a city and sector that’s built to scale. Sign up for our newsletter Leave this field empty if you're human: About Toggle Navigation About News Companies Toggle Navigation Careers Apply Here Members Contact 325 Front St. W Toronto, Ontario M5V 2Y1 [email protected] With thanks to the partners who back OneEleven’s members 2023 COPYRIGHT AND TRADEMARK. ONEELEVEN IS AN INITIATIVE LED BY THE ONTARIO CENTRE OF INNOVATION. SUBSIDIARIES AND AFFILIATES. ALL INTELLECTUAL PROPERTY RIGHTS RESERVED. [email protected] Go to Top"
+      "excerpt": "A “Golden Dongle” award (an HDMI dongle that is spray painted gold) is always handed out at the lunch, an accolade given to a member who has, in the eyes of their peers, gone above and beyond for the community."
     },
     {
-      "id": "check-page-4e2aa6d21f",
-      "url": "https://oneeleven.com/tag/programming/",
+      "id": "check-page-7b17396fa0",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
       "page": "details",
-      "excerpt": "Programming Archives – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs Programming Home » Programming Maverix’s John Ruffolo on resilience, passion, and investing in companies that will benefit Canada’s future Gallery Maverix’s John Ruffolo on resilience, passion, and investing in companies that will benefit Canada’s future Uncategorized Maverix’s John Ruffolo on resilience, passion, and investing in companies that will benefit Canada’s future Last week, the OneEleven community heard from John Ruffolo, Managing [...] OneEleven 2021-11-25T18:20:22+00:00 July 12, 2021 | Read More Unlock exclusive content. OneEleven is home to Toronto’s most promising technology companies. Stay up to date on who’s joining, who’s raising, who’s making moves and everything that matters in a city and sector that’s built to scale. Sign up for our newsletter Leave this field empty if you're human: About Toggle Navigation About News Companies Toggle Navigation Careers Apply Here Members Contact 325 Front St. W Toronto, Ontario M5V 2Y1 [email protected] With thanks to the partners who back OneEleven’s members 2023 COPYRIGHT AND TRADEMARK. ONEELEVEN IS AN INITIATIVE LED BY THE ONTARIO CENTRE OF INNOVATION. SUBSIDIARIES AND AFFILIATES. ALL INTELLECTUAL PROPERTY RIGHTS RESERVED. [email protected] Go to Top"
+      "excerpt": "“From remote Investor Office Hours to webinars with partners like Deloitte and Silicon Valley Bank, we are offering a robust calendar of programming to our members and are thankful to be working with a committed network of partners, willing to provide their time and expertise to our community.” Filipe says."
+    },
+    {
+      "id": "check-page-56bdd1058b",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "page": "details",
+      "excerpt": "OneEleven is home to Toronto’s most promising technology companies."
+    },
+    {
+      "id": "check-page-2ffd091ad1",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "page": "details",
+      "excerpt": "W Toronto, Ontario M5V 2Y1 [email protected] With thanks to the partners who back OneEleven’s members 2023 COPYRIGHT AND TRADEMARK."
     },
     {
       "id": "check-page-925d322556",
@@ -495,6 +583,24 @@
       "url": "https://oneeleven.com/oneeleven-focuses-on-talent-upskilling-to-help-post-seed-companies-scale/",
       "page": "portfolio",
       "excerpt": "OneEleven focuses on talent upskilling to help post-seed companies scale – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs OneEleven focuses on talent upskilling to help post-seed companies scale August 11, 2021 What is OneEleven? Since its founding in 2013, OneEleven has become the premier innovation hub for post-seed tech companies in Canada to grow and scale. We’ve had the good fortune to call companies such as Wealthsimple, Clio, Koho, Borrowell, Maple, Properly, and Tulip our members. Our organization’s cultivation of a community, housed together in one turnkey downtown Toronto facility, was the first of its kind focused on post-seed companies in Canada, building on the philosophy of late entrepreneur Tony Hsieh, who believed in unleashing the power of community collisions. But two factors — the COVID-19 pandemic, and Toronto’s maturation as a global tech hub — meant that OneEleven had to do more, and provide a new kind of value to rapidly scaling companies. When COVID-19 temporarily halted our ability to use our state-of-the-art space, we pivoted our focus to building a new, unique, and attributable value-added programming curriculum, custom built to help Canada’s fastest growing companies. Through discussions with our members, alumni, and ecosystem partners, we learned not only where we could fill an underserved need, but also"
+    },
+    {
+      "id": "check-page-ae9d9a81cc",
+      "url": "https://oneeleven.com/2507-2/",
+      "page": "portfolio",
+      "excerpt": "From Vision to Valuation: Empowering Emerging Companies with Simple Agreements for Future Equity (SAFEs) – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs From Vision to Valuation: Empowering Emerging Companies with Simple Agreements for Future Equity (SAFEs) July 17, 2023 From Vision to Valuation: Empowering Emerging Companies with Simple Agreements for Future Equity (SAFEs) Article by: Myron Mallia-Dare and Andrew Gunpat , Miller Thomson LLP Start-ups and emerging companies are always seeking future investment opportunities. In recent years, a financing alternative called Simple Agreements for Future Equity (“ SAFEs “) has gained popularity and proven useful for emerging companies when conducting their early-stage raises. SAFEs offer an efficient mechanism for raising capital in the early stages of an emerging company. SAFEs emerged due to the need to bridge the financing gap during early-stage investments where the value of the company was unknown or difficult to determine. SAFEs enable companies to raise capital by granting investors the right to receive equity in the future, upon the occurrence of specific triggering events. This article explores the key provisions and advantages of utilizing SAFEs in comparison to other financing instruments. Additionally, this article will outline some of the key issues emerging companies should"
+    },
+    {
+      "id": "check-page-7e832849d4",
+      "url": "https://oneeleven.com/tag/accelerator/",
+      "page": "details",
+      "excerpt": "accelerator Archives – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs accelerator Home » accelerator OneEleven alumni cross the USD $2-billion mark in collective funds raised Gallery OneEleven alumni cross the USD $2-billion mark in collective funds raised Uncategorized OneEleven alumni cross the USD $2-billion mark in collective funds raised Eight years after its founding, alumni of OneEleven have raised [...] OneEleven 2021-11-25T14:34:56+00:00 September 17, 2021 | Read More Unlock exclusive content. OneEleven is home to Toronto’s most promising technology companies. Stay up to date on who’s joining, who’s raising, who’s making moves and everything that matters in a city and sector that’s built to scale. Sign up for our newsletter Leave this field empty if you're human: About Toggle Navigation About News Companies Toggle Navigation Careers Apply Here Members Contact 325 Front St. W Toronto, Ontario M5V 2Y1 [email protected] With thanks to the partners who back OneEleven’s members 2023 COPYRIGHT AND TRADEMARK. ONEELEVEN IS AN INITIATIVE LED BY THE ONTARIO CENTRE OF INNOVATION. SUBSIDIARIES AND AFFILIATES. ALL INTELLECTUAL PROPERTY RIGHTS RESERVED. [email protected] Go to Top"
+    },
+    {
+      "id": "check-page-4e2aa6d21f",
+      "url": "https://oneeleven.com/tag/programming/",
+      "page": "details",
+      "excerpt": "Programming Archives – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs Programming Home » Programming Maverix’s John Ruffolo on resilience, passion, and investing in companies that will benefit Canada’s future Gallery Maverix’s John Ruffolo on resilience, passion, and investing in companies that will benefit Canada’s future Uncategorized Maverix’s John Ruffolo on resilience, passion, and investing in companies that will benefit Canada’s future Last week, the OneEleven community heard from John Ruffolo, Managing [...] OneEleven 2021-11-25T18:20:22+00:00 July 12, 2021 | Read More Unlock exclusive content. OneEleven is home to Toronto’s most promising technology companies. Stay up to date on who’s joining, who’s raising, who’s making moves and everything that matters in a city and sector that’s built to scale. Sign up for our newsletter Leave this field empty if you're human: About Toggle Navigation About News Companies Toggle Navigation Careers Apply Here Members Contact 325 Front St. W Toronto, Ontario M5V 2Y1 [email protected] With thanks to the partners who back OneEleven’s members 2023 COPYRIGHT AND TRADEMARK. ONEELEVEN IS AN INITIATIVE LED BY THE ONTARIO CENTRE OF INNOVATION. SUBSIDIARIES AND AFFILIATES. ALL INTELLECTUAL PROPERTY RIGHTS RESERVED. [email protected] Go to Top"
     }
   ],
   "findings": {
@@ -566,8 +672,30 @@
       }
     ],
     "selectivity": [],
-    "dealText": [],
-    "dealComponents": [],
+    "dealText": [
+      {
+        "value": "through offering a SAFE that will convert at a price per share of $1.00. Upon the occurrence of a future financing at $1.20/share, the SAFE",
+        "evidenceId": "check-deal-a94a5fd39b"
+      },
+      {
+        "value": "per share of $1.00. Upon the occurrence of a future financing at $1.20/share, the SAFE holder will receive the upside as the financing",
+        "evidenceId": "check-deal-e8bfd38aff"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "1",
+          "currency": "USD",
+          "equity": null,
+          "label": "SAFE",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-a94a5fd39b"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

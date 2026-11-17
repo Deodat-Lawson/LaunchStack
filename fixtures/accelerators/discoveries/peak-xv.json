@@ -1,6 +1,6 @@
 {
   "programId": "peak-xv",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.peakxv.com/about-us",
@@ -44,14 +44,6 @@
     },
     {
       "url": "https://www.peakxv.com/companies/aampe",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.peakxv.com/companies/absolute-foods",
       "page": "portfolio",
       "anchor": "",
       "fetched": true,
@@ -203,6 +195,14 @@
       "origin": "official"
     },
     {
+      "url": "https://www.peakxv.com/insight/from-sun-microsystems-to-openai-vinod-khosla-on-bold-bets-building-enduring-companies",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.peakxv.com/insight/meet-the-first-cohort-of-the-sequoia-spark-fellowship-for-female-founders",
       "page": "batches",
       "anchor": "",
@@ -235,6 +235,22 @@
       "origin": "official"
     },
     {
+      "url": "https://www.peakxv.com/newsletter/model-companies-have-to-ensure-unsafe-models-are-not-released-rajan-anandan",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/newsletter/peak-xv-s-mohit-bhatnagar-bullish-on-ai-deep-tech-sees-50-portfolio-firms-nearing-ipo-scale",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.peakxv.com/newsletter/peak-xv-ups-surge-seed-investment-ceiling-to-5m-unveils-18-startup-cohort",
       "page": "terms",
       "anchor": "",
@@ -246,7 +262,15 @@
       "url": "https://www.peakxv.com/our-companies",
       "page": "portfolio",
       "anchor": "Companies",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/our-companies?e6a89e8b_page=2",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

@@ -1,6 +1,6 @@
 {
   "programId": "setsquared",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.setsquared.co.uk/?page_id=158",
@@ -171,6 +171,22 @@
       "origin": "official"
     },
     {
+      "url": "https://www.setsquared.co.uk/innovation-labs-application-received/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/investing-in-health-innovation-panel-discussion-application-confirmation/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.setsquared.co.uk/investment-futures-25/",
       "page": "terms",
       "anchor": "Investment Futures ’25",
@@ -183,6 +199,30 @@
       "page": "terms",
       "anchor": "View the series",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/last-chance-to-get-applications-in-for-oracle-startup-cloud-accelerator/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/medtech-invest-2020-application-received/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/nextgen-invest-2020-application-received/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

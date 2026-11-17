@@ -1,6 +1,6 @@
 {
   "programId": "berkeley-skydeck",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://skydeck.berkeley.edu/",
     "https://skydeck.berkeley.edu/apply/",
@@ -16,9 +16,21 @@
     "https://skydeck.berkeley.edu/batch16/",
     "https://skydeck.berkeley.edu/batch17/",
     "https://skydeck.berkeley.edu/batch18/",
-    "https://skydeck.berkeley.edu/batch19-1/"
+    "https://skydeck.berkeley.edu/batch19-1/",
+    "https://skydeck.berkeley.edu/batch19/",
+    "https://skydeck.berkeley.edu/batch20/",
+    "https://skydeck.berkeley.edu/batch21/",
+    "https://skydeck.berkeley.edu/batch22/",
+    "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-presents-batch-12-startups-at-demo-day-sept-28/"
   ],
   "evidence": [
+    {
+      "id": "check-announced-1ec173ed8d",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-presents-batch-12-startups-at-demo-day-sept-28/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Berkeley SkyDeck Accelerator Presents Batch 12 Startups at Demo Day Sept. 28 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS",
+      "page": "batches"
+    },
     {
       "id": "check-announced-4a874dd86d",
       "url": "https://skydeck.berkeley.edu/apply/",
@@ -32,6 +44,13 @@
       "title": "Berkeley SkyDeck — homepage",
       "excerpt": "Berkeley SkyDeck ADVISORS JOBS Where visionaries take flight SkyDeck Batch 24 Applications open in January! LEARN MORE Our Journey to make SkyDeck the best accelerator for",
       "page": "details"
+    },
+    {
+      "id": "check-announced-d698347a32",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-presents-batch-12-startups-at-demo-day-sept-28/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "JOBS 30 September 2021 Berkeley SkyDeck Accelerator Presents Batch 12 Startups at Demo Day Sept. 28 BACK TO NEWS NEXT STORY 0 Likes News from SkyDeck Newsletter –",
+      "page": "batches"
     },
     {
       "id": "check-deal-09726e7916",
@@ -52,6 +71,13 @@
       "url": "https://skydeck.berkeley.edu/batch13/",
       "title": "Berkeley SkyDeck — batches page",
       "excerpt": "market which we will be pursuing in the next 12-18 months after we prove the reliability and safety of our",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-5eecf15ec7",
+      "url": "https://skydeck.berkeley.edu/batch22/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "time, we help reduce compliance turnaround from 9 weeks to 4 days, cut compliance team workload by one",
       "page": "batches"
     },
     {
@@ -118,6 +144,20 @@
       "page": "batches"
     },
     {
+      "id": "check-format-3af4bbf47f",
+      "url": "https://skydeck.berkeley.edu/batch20/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-5bfd1051be",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "batches"
+    },
+    {
       "id": "check-format-639dc3d54c",
       "url": "https://skydeck.berkeley.edu/fall-2019-applications-open/",
       "title": "Berkeley SkyDeck — application page",
@@ -139,6 +179,13 @@
       "page": "batches"
     },
     {
+      "id": "check-format-77dbac6448",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-presents-batch-12-startups-at-demo-day-sept-28/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "batches"
+    },
+    {
       "id": "check-format-7affbde738",
       "url": "https://skydeck.berkeley.edu/batch12/",
       "title": "Berkeley SkyDeck — batches page",
@@ -146,8 +193,22 @@
       "page": "batches"
     },
     {
+      "id": "check-format-8136ddb741",
+      "url": "https://skydeck.berkeley.edu/batch22/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "batches"
+    },
+    {
       "id": "check-format-9617fd031d",
       "url": "https://skydeck.berkeley.edu/batch17/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-9952a811b6",
+      "url": "https://skydeck.berkeley.edu/batch19/",
       "title": "Berkeley SkyDeck — batches page",
       "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
       "page": "batches"
@@ -223,6 +284,13 @@
       "page": "batches"
     },
     {
+      "id": "check-format-d7b8db4eb0",
+      "url": "https://skydeck.berkeley.edu/batch22/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "markets and trading desks. The platform already places virtual ads for clients including UFC and WWE across 16+",
+      "page": "batches"
+    },
+    {
       "id": "check-format-e64d279a5b",
       "url": "https://skydeck.berkeley.edu/batch18/",
       "title": "Berkeley SkyDeck — batches page",
@@ -279,8 +347,22 @@
       "page": "batches"
     },
     {
+      "id": "check-portfolio-03b5b642f0",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-presents-batch-12-startups-at-demo-day-sept-28/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-1c9e710085",
       "url": "https://skydeck.berkeley.edu/batch13/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-1cbf385c32",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-presents-batch-12-startups-at-demo-day-sept-28/",
       "title": "Berkeley SkyDeck — batches page",
       "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
       "page": "batches"
@@ -370,6 +452,13 @@
       "page": "batches"
     },
     {
+      "id": "check-portfolio-43a13e37e3",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-45754d13f2",
       "url": "https://skydeck.berkeley.edu/batch11/",
       "title": "Berkeley SkyDeck — batches page",
@@ -382,6 +471,13 @@
       "title": "Berkeley SkyDeck — application page",
       "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-56186184b3",
+      "url": "https://skydeck.berkeley.edu/batch20/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "batches"
     },
     {
       "id": "check-portfolio-56602800f9",
@@ -402,6 +498,20 @@
       "url": "https://skydeck.berkeley.edu/batch12/",
       "title": "Berkeley SkyDeck — batches page",
       "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-600b220c10",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-60e230c3b2",
+      "url": "https://skydeck.berkeley.edu/batch20/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
       "page": "batches"
     },
     {
@@ -496,6 +606,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-a6e3ffe06f",
+      "url": "https://skydeck.berkeley.edu/batch22/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-ab0cb9a508",
       "url": "https://skydeck.berkeley.edu/batch19-1/",
       "title": "Berkeley SkyDeck — batches page",
@@ -510,8 +627,22 @@
       "page": "batches"
     },
     {
+      "id": "check-portfolio-ac88ee09d5",
+      "url": "https://skydeck.berkeley.edu/batch22/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-b702006515",
       "url": "https://skydeck.berkeley.edu/batch11/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-be36fc472f",
+      "url": "https://skydeck.berkeley.edu/batch22/",
       "title": "Berkeley SkyDeck — batches page",
       "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
       "page": "batches"
@@ -545,6 +676,34 @@
       "page": "batches"
     },
     {
+      "id": "check-portfolio-d3cc2c4806",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-d47e81cb2c",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-d49735af2c",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-d4da669329",
+      "url": "https://skydeck.berkeley.edu/batch20/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-dd2babdb2e",
       "url": "https://skydeck.berkeley.edu/batch13/",
       "title": "Berkeley SkyDeck — batches page",
@@ -571,6 +730,20 @@
       "title": "Berkeley SkyDeck — application page",
       "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-f4a5986f3d",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-f7c1803de6",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-presents-batch-12-startups-at-demo-day-sept-28/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "batches"
     },
     {
       "id": "check-portfolio-f8308b7580",
@@ -601,6 +774,13 @@
       "page": "details"
     },
     {
+      "id": "check-route-33ef37ab58",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "batches"
+    },
+    {
       "id": "check-route-34c3dd4994",
       "url": "https://skydeck.berkeley.edu/",
       "title": "Berkeley SkyDeck — homepage",
@@ -615,11 +795,25 @@
       "page": "batches"
     },
     {
+      "id": "check-route-485ef15ddd",
+      "url": "https://skydeck.berkeley.edu/batch20/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "batches"
+    },
+    {
       "id": "check-route-514e1d0ffd",
       "url": "https://skydeck.berkeley.edu/berkeley-skydeck-fund-hits-milestone-as-most-active-seed-fund-with-more-than-100-investments-in-three-years/",
       "title": "Berkeley SkyDeck — terms page",
       "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
       "page": "terms"
+    },
+    {
+      "id": "check-route-561bb17281",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "batches"
     },
     {
       "id": "check-route-7abc31fb3e",
@@ -631,6 +825,20 @@
     {
       "id": "check-route-923b95a14a",
       "url": "https://skydeck.berkeley.edu/batch14/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-9c23b501ca",
+      "url": "https://skydeck.berkeley.edu/batch22/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-a66f5e69cb",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-presents-batch-12-startups-at-demo-day-sept-28/",
       "title": "Berkeley SkyDeck — batches page",
       "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
       "page": "batches"
@@ -707,16 +915,130 @@
       "excerpt": "Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS Where visionaries take flight SkyDeck Batch 24 Applications open in January! LEARN MORE Our Journey to make SkyDeck the best accelerator for startups The SkyDeck Experience (2 mins.) “SkyDeck has provided us with the opportunity to connect with world class advisors.” – Chantal, CTO of LimeLoop APPLY NOW “Berkeley SkyDeck gave us the network and support we needed to succeed in the early stage of our company. They helped us hire top talent, identify go to market strategies, and raise our seed round.” – Davit Baghdasaryan, Co-Founder & CEO of Krisp APPLY NOW SkyDeck by the numbers Since 2012, Berkeley SkyDeck has been at the forefront of innovation. $2.7B Raised by SkyTeams $200K Investment per startup 25 Series A, B rounds raised 17 Exits through acquisitions 1000 Attendees at Demo Day What makes SkyDeck special? SkyDeck has developed a strong global reputation and"
     },
     {
+      "id": "check-page-d81f685abd",
+      "url": "https://skydeck.berkeley.edu/",
+      "page": "details",
+      "excerpt": "SkyDeck’s commitment to: Diversity, Equity, & Inclusion Venture Capital We facilitate intros and help build relationships with our extensive network of top tier VCs and investors."
+    },
+    {
+      "id": "check-page-c86a8c855d",
+      "url": "https://skydeck.berkeley.edu/",
+      "page": "details",
+      "excerpt": "Berkeley SkyDeckFund – Learn more at SkyDeck.vc Investors Mentorship Our 900 advisors and mentors actively coach and advise our founders on everything from product development to customer acquisition to go-to-market strategy to fundraising and beyond."
+    },
+    {
+      "id": "check-page-ede1966040",
+      "url": "https://skydeck.berkeley.edu/",
+      "page": "details",
+      "excerpt": "We also match faculty to advisory boards."
+    },
+    {
+      "id": "check-page-9585f15d29",
+      "url": "https://skydeck.berkeley.edu/",
+      "page": "details",
+      "excerpt": "Faculty Advisors Haas Startup Squad Berkeley Science Fellows Berkeley ACE Customer Development We have strong relationships with hundreds of businesses and enterprises that are often early adopters of our startups’ technology, and we facilitate key introductions to executives from countless companies across our vast network of Berkeley alums."
+    },
+    {
+      "id": "check-page-a80be936bd",
+      "url": "https://skydeck.berkeley.edu/",
+      "page": "details",
+      "excerpt": "In addition, we continue to grow our network of advisors and mentors who are committed to supporting founders from a broad range of cultural, racial, gender and socioeconomic backgrounds."
+    },
+    {
+      "id": "check-page-e0f22ea69e",
+      "url": "https://skydeck.berkeley.edu/",
+      "page": "details",
+      "excerpt": "See all the companies Why SkyDeck is the best accelerator for startups 3 Tailored programs for startups Berkeley SkyDeck hosts over 250 startups per year across three programs."
+    },
+    {
+      "id": "check-page-7827ff717b",
+      "url": "https://skydeck.berkeley.edu/",
+      "page": "details",
+      "excerpt": "See SkyDeck programs SkyDeck Accelerator Program Roughly 20 startups are selected every 6 months to receive a $200,000 investment from the Berkeley SkyDeck Fund."
+    },
+    {
+      "id": "check-page-b71d7e8298",
+      "url": "https://skydeck.berkeley.edu/",
+      "page": "details",
+      "excerpt": "Learn more Pad-13 THE SKYDECK INCUBATOR Pad-13 is for early stage startups focused on growth and becoming more competitive for selection to SkyDeck’s Accelerator program."
+    },
+    {
+      "id": "check-page-3ac8d292d4",
+      "url": "https://skydeck.berkeley.edu/",
+      "page": "details",
+      "excerpt": "Pad-13 startups can be as early as the idea stage, with just one or two founders."
+    },
+    {
+      "id": "check-page-7e6e217d39",
+      "url": "https://skydeck.berkeley.edu/",
+      "page": "details",
+      "excerpt": "Learn more SKYADVISOR SPOTLIGHT Ruth Bader Ginsberg HotDesk startups are generally in an early stage of the startup lifecycle."
+    },
+    {
+      "id": "check-page-882f2f10fa",
+      "url": "https://skydeck.berkeley.edu/",
+      "page": "details",
+      "excerpt": "SkyDeck News and Upcoming Events Subscribe to our newsletter 22 June 2023 UC Berkeley cultivates festive culture of ‘free thinkers’ at AI hackathon Over 1,200 computer hackers from around the world packed UC Berkeley’s Martin Luther King Jr."
+    },
+    {
+      "id": "check-page-14e0f1c779",
+      "url": "https://skydeck.berkeley.edu/",
+      "page": "details",
+      "excerpt": "Student Union last weekend during a 36-hour artificial intelligence (AI) learning language model (LLM) hackathon that Berkeley leaders say was the largest event of its kind."
+    },
+    {
       "id": "check-page-e41b1964b9",
       "url": "https://skydeck.berkeley.edu/apply/",
       "page": "application",
       "excerpt": "APPLY – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS Applications for Batch 24 open in January! CONNECT Why do startups come to SkyDeck? SkyDeck is industry-agnostic: we accept applications from companies in all industries. CONNECT About the program ELIGIBILITY REQUIREMENTS UC & GLOBAL COMMUNITY Roughly 20 startups are selected every 6 months to receive a $210,000 investment from the Berkeley SkyDeck Fund. Startups from all over the world are eligible and encouraged to apply. Historically, about 2/3 of the startups were founded outside the US. UC-affiliated companies and international startups continue to be a priority for SkyDeck. Learn more about the Global Founders Program . The SkyDeck Berkeley Acceleration Method is a 6-month acceleration process for promising startups in any vertical. Between 20 and 25 selected Cohort teams receive a $210K investment from Berkeley SkyDeck Fund. Cohort teams participate"
     },
     {
+      "id": "check-page-0961f8b063",
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "page": "application",
+      "excerpt": "Cohort teams participate in mandatory sessions, are matched with a Lead Advisor, have designated work space at SkyDeck, and present at Demo Day."
+    },
+    {
+      "id": "check-page-1581b16921",
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "page": "application",
+      "excerpt": "Between 60 and 80 selected Pad-13 teams have access to some of the same resources as Cohort teams, excluding the guaranteed fund investment, aspects of the mentorship program, and ability to pitch to 900+ investors at Demo Day."
+    },
+    {
+      "id": "check-page-4cf40850f0",
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "page": "application",
+      "excerpt": "SkyDeck Accelerator startups receive access to: 900+ SkyDeck Advisors, weekly roundtables, workshops, and events, space to work at SkyDeck (Pad-13 do not have designated space but may work in open areas), and $750K+ in-kind legal, financial, and tech resources from SkyDeck Resource Partners!"
+    },
+    {
       "id": "check-page-024dfe05cd",
       "url": "https://skydeck.berkeley.edu/applyli/",
       "page": "application",
       "excerpt": "APPLY-Linkedin – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS Applications for Batch 21 are now open! APPLY HERE Why do startups come to SkyDeck? SkyDeck is industry-agnostic: we accept applications from companies in all industries. APPLY About the program ELIGIBILITY REQUIREMENTS UC & GLOBAL COMMUNITY To be eligible to apply for SkyDeck, there must be at least one team member that is UC-affiliated or qualifies as a “global” founder. UC affiliated is defined as someone who is a founder, investor, advisor, or board member affiliated with UC Berkeley, another University of California campus, or Berkeley Lab (LBNL). UC affiliated founders can be students, alumni, faculty, staff, postdoc researchers, or visiting scholars. Global founders are individuals born outside of the U.S., or have lived outside of the U.S. for most of their life. Learn more about the Global Founders Program . The SkyDeck Berkeley"
+    },
+    {
+      "id": "check-page-9560904da1",
+      "url": "https://skydeck.berkeley.edu/applyli/",
+      "page": "application",
+      "excerpt": "Cohort teams participate in mandatory sessions, are matched with a Lead Advisor, have designated work space at SkyDeck, and present at Demo Day."
+    },
+    {
+      "id": "check-page-0b384efaac",
+      "url": "https://skydeck.berkeley.edu/applyli/",
+      "page": "application",
+      "excerpt": "Between 10 and 12 selected SkyDeck Europe teams receive a €145K investment from the Berkeley SkyDeck Fund."
+    },
+    {
+      "id": "check-page-e36d4cab7a",
+      "url": "https://skydeck.berkeley.edu/applyli/",
+      "page": "application",
+      "excerpt": "SkyDeck Europe teams participate in mandatory sessions, are matched with a Lead Advisor, have designated work space when in-person at SkyDeck in Berkeley, and designated work space when in-person at SkyDeck in Milan, and present at Demo Day."
+    },
+    {
+      "id": "check-page-919d0f7373",
+      "url": "https://skydeck.berkeley.edu/applyli/",
+      "page": "application",
+      "excerpt": "Between 60 and 80 selected Pad-13 teams have access to some of the same resources as Cohort teams, excluding the guaranteed fund investment, aspects of the mentorship program, and ability to pitch to 800+ investors at Demo Day."
     },
     {
       "id": "check-page-81af6ef7ad",
@@ -737,10 +1059,64 @@
       "excerpt": "Berkeley SkyDeck Fund Hits Milestone as Most Active Seed Fund with More Than 100 Investments in Three Years – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS 29 January 2021 Berkeley SkyDeck Fund Hits Milestone as Most Active Seed Fund with More Than 100 Investments in Three Years BACK TO NEWS NEXT STORY 0 Likes News from SkyDeck Newsletter – September 16, 2026 Berkeley SkyDeck is excited to partner with Pianeta Accelerator, in collaboration with Factory Plus, to build a cross-border bridge between the European innovation ecosystem and Silicon Valley. Built for ambitious founders developing breakthrough technologies in Clean Tech, AI, Bio &... Newsletter – September 2, 2026 On September 30, Berkeley SkyDeck’s Batch 22 startups will take stage. 18 companies spanning physical AI, GPU hardware accelerators, biotech therapeutics, and enterprise agent infrastructure will pitch. Following the pitches, meet the"
     },
     {
+      "id": "check-page-a3d7b6b259",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-fund-hits-milestone-as-most-active-seed-fund-with-more-than-100-investments-in-three-years/",
+      "page": "terms",
+      "excerpt": "Following the pitches, meet the founders at the Demo Day Expo and attend..."
+    },
+    {
       "id": "check-page-e8f2d94eef",
       "url": "https://skydeck.berkeley.edu/batch11/",
       "page": "batches",
       "excerpt": "Demo Day Batch 11 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS Berkeley SkyDeck Demo Day Batch 11 CONTACT WEBSITE Dcipher Analytics USA/Sweden – SaaS/Text analytics/NLP Dcipher Analytics provides a SaaS-based toolbox for accelerating, automating, and improving the process of turning unstructured text into insights. Through innovation in Natural Language Processing, we are pursuing the goal of saving competitive intelligence professionals billions of hours of insight work per year collectively, while increasing the quality of their output. click to read more Meet the Team Mats Lindgren Tomas Larsson Zafer Çavdar CONTACT WEBSITE EndoCrine USA – BioTech/Pharma/Therapeutics EndoCrine is working on providing transformational therapies for patients with diabetes by harnessing the power of miniaturized human cellular models. We are using advanced human stem cell technologies and cellular metabolic models to"
+    },
+    {
+      "id": "check-page-e8901d1060",
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "page": "batches",
+      "excerpt": "Humm is currently in closed alpha, and has 1000+ paid preorders, nearly 10k signups and purchase offers from the likes of the USAF. click to read more Meet the Team Iain Cameron McIntyre CONTACT WEBSITE Intento USA/Russia – AI/Enterprise SaaS Intento helps global companies procure and utilize the best-fit cognitive AI services."
+    },
+    {
+      "id": "check-page-a02d8cd09d",
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "page": "batches",
+      "excerpt": "The Intento AI Hub connects AI models trained on multiple platforms (such as Amazon, Google AutoML or Microsoft Cognitive Services) with many enterprise software systems."
+    },
+    {
+      "id": "check-page-8153c350ac",
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "page": "batches",
+      "excerpt": "Launched in 2017, Intento recently received a U.S. patent for its core platform and works with global technology, retail and travel companies, augmenting their Localization, Content Management, Customer Support and Marketing Operations with AI. click to read more Meet the Team Konstantin Savenkov Grigory Sapunov CONTACT WEBSITE NuPort Robotics Inc."
+    },
+    {
+      "id": "check-page-1abc39f981",
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "page": "batches",
+      "excerpt": "Pow uses AI-driven optimization and continuous fermentation to help customers scale up faster and more robustly, getting them to market quicker and allowing them to abstract the final layer in the synthetic biology stack: process development and scale up."
+    },
+    {
+      "id": "check-page-c20f867d77",
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "page": "batches",
+      "excerpt": "The solution identifies churn and retention issues and trends as well as their impact on growth. click to read more Meet the Team Stefan Link Christopher Schultes Eugen Kandakov Ronny Denk Taras Frank CONTACT WEBSITE RJH Biosciences USA/Canada – BioTech/Pharma/Therapeutics RJH Biosciences is developing effective therapies to combat deadly blood cancers."
+    },
+    {
+      "id": "check-page-5e1fb7677c",
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "page": "batches",
+      "excerpt": "USA – Hardware/Chip/New Materials Serinus Labs is developing early warning sensors for lithium-ion battery safety."
+    },
+    {
+      "id": "check-page-e6ad595051",
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "page": "batches",
+      "excerpt": "USA – GreenTech/Sustainability Tech The Hurd Co makes it possible make clothes from agricultural waste with agrilose™: a cost-competitive, sustainable, fiber feedstock pulp."
+    },
+    {
+      "id": "check-page-dd5142265a",
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "page": "batches",
+      "excerpt": "Apparel brands use agrilose™ to produce viscose/rayon, modal, or lyocell fabric, which are normally made from trees. click to read more Meet the Team Taylor Heisley-Cook David Mun Thank you to our SkyDeck Batch 11 Virtual Demo Day Sponsors!"
     },
     {
       "id": "check-page-5d3f4f31f1",
@@ -749,10 +1125,154 @@
       "excerpt": "Demo Day Batch 12 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS Berkeley SkyDeck Demo Day Batch 12 CONTACT WEBSITE Accountstory USA – Enterprise/B2B Software Accountstory is building the source of truth for how companies buy. Using our web app, B2B sales teams get a very good understanding of how their target accounts buy software and services. click to read more Meet the Team David K. Iyamah Chijoke (CJ) Nwuzi Fadi Kfoury CONTACT WEBSITE Artivive USA/Austria – Software Artivive is defining the art form of the 21st century by building a growing community around creative augmented reality. With 110k creators from 120 countries, we have the 3rd biggest creator community after Facebook and Snapchat. Take a look at some of the great artworks brought to life with Artivive: www.instagram.com/artiviveapp/ click to read more Meet the Team Sergiu Ardelean Codin Popescu CONTACT WEBSITE Berkm USA/Taiwan–"
     },
     {
+      "id": "check-page-37205fa5a0",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "page": "batches",
+      "excerpt": "Take a look at some of the great artworks brought to life with Artivive: www.instagram.com/artiviveapp/ click to read more Meet the Team Sergiu Ardelean Codin Popescu CONTACT WEBSITE Berkm USA/Taiwan– GreenTech/Packaging/Materials BERKM works on solving plastic pollution, food&beverage waste, and CO2 emission problems."
+    },
+    {
+      "id": "check-page-02afb30005",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "page": "batches",
+      "excerpt": "It does this via its additive technology that enables to use of 8-20% less plastic per packaging and extends the product shelf life for 3-5X. click to read more Meet the Team Bahruz Mammadov Naveen Bunekar Tsung-Yen Tsai CONTACT WEBSITE CancerFree Biotech USA/Taiwan – BioTech Taking ineffective drugs and running out of time are serious concerns for all cancer patients."
+    },
+    {
+      "id": "check-page-c2d6c27d93",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "page": "batches",
+      "excerpt": "This system is used during the movement of complex assets such as commercial aircraft and will be used as a foundation to build other functionalities for our airport automation platform. click to read more Meet the Team Alexander Kasinec Andrew Moakes CONTACT WEBSITE Experify USA/Switzerland – Marketplace Connecting people for honest insights around products – that’s what Experify is all about."
+    },
+    {
+      "id": "check-page-6a55c2f125",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "page": "batches",
+      "excerpt": "With its hybrid social messaging platform and SaaS, Experify helps businesses convert more leads with the help of their network of engaged customers."
+    },
+    {
+      "id": "check-page-1799f12dc5",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "page": "batches",
+      "excerpt": "Most of the technology was developed at Georgia Tech at one of the best academic research labs in the field with an aggregate of over 20 years of experience designing semiconductor solutions to address a wide variety of high-impact applications, including wireless communication, IoT, and radar."
+    },
+    {
+      "id": "check-page-26ba12b69a",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "page": "batches",
+      "excerpt": "In the past, Falcomm’s team has developed technology for research organizations/companies such as the Air Force Research Laboratory, Lockheed Martin, and many others. click to read more Meet the Team Edgar Garay Gary Karstedt CONTACT WEBSITE Legato Logic USA – Hardware/Chip/New Materials At Legato Logic, we are building compact ultra-low power sensors with embedded intelligence."
+    },
+    {
+      "id": "check-page-325277b14e",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "page": "batches",
+      "excerpt": "Our solution can perform computer vision tasks like object detection while using only fraction of milliwatt power. click to read more Meet the Team Shahrzad Naraghi Ankush Goel CONTACT WEBSITE Loxagen USA – BioTech/Pharma/Therapeutics Loxagen has developed an unique platform to generate innovative medicines for areas of strong unmet need."
+    },
+    {
+      "id": "check-page-9d059b1f59",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "page": "batches",
+      "excerpt": "Our approach is backed by more than $10MM in funding and over 15+ years of research. click to read more Meet the Team Kalidip Choudhury Klaus van Leyen Ted Holman CONTACT WEBSITE Nanode Battery Tech USA/Canada – GreenTech/Hardware Nanode is revolutionizing battery anodes."
+    },
+    {
+      "id": "check-page-4c99e1f7df",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "page": "batches",
+      "excerpt": "Our technology unlocks the potential for a super fast and scalable fabrication process for dramatic cost reduction. click to read more Meet the Team Bing Cao Peter Kalisvaart CONTACT WEBSITE Netris USA/Armenia – Software Netris is the new automatic netops."
+    },
+    {
+      "id": "check-page-bfc70a4575",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "page": "batches",
+      "excerpt": "Our customers are trusting up to 100% of their production networks to Netris – the automatic netops. click to read more Meet the Team Alex Saroyan CONTACT WEBSITE Paidiem USA/Canada – Fintech/SaaS Paidiem is a fintech company focused on delivering modern financial solutions to the future workforce and the companies which employ them."
+    },
+    {
+      "id": "check-page-8ec267267b",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "page": "batches",
+      "excerpt": "Insights learned via our SaaS platform enable faster lending, with less risk. click to read more Meet the Team Richard Cromie CONTACT WEBSITE StudyFree USA – EdTech StudyFree – EdTech startup that allows talented students around the world to get successfully admitted to study abroad programs and helps to get financing through scholarships and grants."
+    },
+    {
+      "id": "check-page-72262ca32c",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "page": "batches",
+      "excerpt": "Through an extensive network of partner organizations and ambassadors with similar values, we are creating a whole ecosystem to connect students to international opportunities worldwide. click to read more Meet the Team Dasha Kroshkina CONTACT WEBSITE SUN METALON USA/Japan – Hardware SUN METALON develops extraordinary fast, economic and huge metal 3d-printers, based on a totally new principle."
+    },
+    {
       "id": "check-page-9a5e571303",
       "url": "https://skydeck.berkeley.edu/batch13/",
       "page": "batches",
       "excerpt": "Demo Day Batch 13 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS BATCH 13 DEMO DAY CONTACT WEBSITE Akin Mental Health USA – HealthTech/Digital Health Akin Mental Health supports families caring for a loved one with a severe mental illness (for example bipolar disorder or schizophrenia). Decades of research show that when family caregivers are given knowledge and support this creates an outsized impact on patient recovery. Akin provides families with personalized lessons, community connections and access to expereinced guides that help families navigate the challenges of mental illness and find healing together. click to read more Meet the Team Stephanie Greer Matthew Montañez CONTACT WEBSITE Cura Therapeutics USA – BioTech Cura therapeutics is developing innovative immunotherapies to cure a wide range of cancers, specifically solid malignancies. Our technologies are based on multi-functional immune proteins"
+    },
+    {
+      "id": "check-page-2599a03f71",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "page": "batches",
+      "excerpt": "Our technologies are based on multi-functional immune proteins with potent anti-cancer properties. click to read more Meet the Team Claudia Penafuerte Collin Horner Moutih Rafei CONTACT WEBSITE Güeno USA/Argentina – Enterprise SaaS Güeno is the new way to onboard users end-to-end in LatAm."
+    },
+    {
+      "id": "check-page-c1c307fdeb",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "page": "batches",
+      "excerpt": "LatAm user onboarding is complex, 20 Countries, manage 10-12 providers, multiple currencies, languages, and legal jurisdictions. click to read more Meet the Team Mark Sebastian Tomas Ramella Sanguinetti CONTACT WEBSITE Hypernova Space Luxem./S."
+    },
+    {
+      "id": "check-page-50bf405c5b",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "page": "batches",
+      "excerpt": "Africa– Space/Hardware Hypernova is building technology to enable satellites to operate in Very Low Earth Orbits (VLEO)."
+    },
+    {
+      "id": "check-page-89c223723f",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "page": "batches",
+      "excerpt": "Our proprietary technology, which includes our refuelable Vacuum Arc Thruster (VAT), will unlock the potential of VLEO for commercial satellite constellations. click to read more Meet the Team Gareth Halstead Jonathan Lun CONTACT WEBSITE Inkah USA/Singapore – EdTech In an increasingly globalized world, demand for language learning has soared."
+    },
+    {
+      "id": "check-page-825bb8394a",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "page": "batches",
+      "excerpt": "Level 42 AI hardware and software turns “noise” into signal that gives primary health care providers, community healthcare workers, and individuals superhuman hearing abilities to rapidly, accurately, and cheaply diagnose more than 60 diseases with altered gas, liquid, and solid movement early symptoms."
+    },
+    {
+      "id": "check-page-4090b53c58",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "page": "batches",
+      "excerpt": "While digital therapeutics /software as medical devices are undoubtedly the future, therapists, patients, and developers struggle to deploy them effectively."
+    },
+    {
+      "id": "check-page-136b26880c",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "page": "batches",
+      "excerpt": "Mentalyc bridges the gap between stakeholders by becoming the app store for mental health applications."
+    },
+    {
+      "id": "check-page-91b20fcbd0",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "page": "batches",
+      "excerpt": "After establishing the world’s largest network of therapists and patients through a suite of (free!) connected clinical tools, Mentalyc will leverage advanced AI/NLP to help therapists recommend the right software app, at the right time, for the right patient."
+    },
+    {
+      "id": "check-page-eedbc8789e",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "page": "batches",
+      "excerpt": "And in doing so, it will be a funnel of highly motivated and precisely selected customers to the providers of these digital therapeutics. click to read more Meet the Team Maria Szandrach Georgi Urumov CONTACT WEBSITE Metricsbird USA – Enterprise/B2B Software Metricsbird is the monitoring and analytics platform for developers, IT operations teams and business users in the cloud."
+    },
+    {
+      "id": "check-page-08326feb21",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "page": "batches",
+      "excerpt": "We make it possible with BlindAI , our open-source solution for one-click secure deployment of AI models."
+    },
+    {
+      "id": "check-page-7ea1686f59",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "page": "batches",
+      "excerpt": "Modelwise provides a solution that applies AI and theorem-proving to automatically simulate and assess the compliance of electronics components and complex engineering designs – this allows us to launch a marketplace where design specifications and models are stored, and safe / drop-in replacements can be identified and sourced at any time."
+    },
+    {
+      "id": "check-page-b966c1ac5d",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "page": "batches",
+      "excerpt": "Utilizing large-scale 3D scanning and proprietary AI, we’re able to quickly generate push-button, fully interactive models of actual facilities that guarantee accurate data access to every stakeholder involved."
     },
     {
       "id": "check-page-9ad15feb5d",
@@ -773,10 +1293,76 @@
       "excerpt": "Demo Day Batch 16 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS BATCH 16 DEMO DAY CONTACT WEBSITE AI Embodied USA/UK- B2B Software AI Embodied is a B2B SaaS platform designed to empower businesses to rapidly test and deploy AI-driven solutions for text-rich data. With our intuitive no-code interface, you can harness the power and flexibility of an ML expert. click to read more Meet the Team Hamzah Shahkhan Fizza Tariq Shahkhan CONTACT WEBSITE Augmental USA – BioTech/MedTech Augmental is building smart mouthwear for hands-free device control and conversational AI. We are defining a new wearable category to enhance on-the-go human-computer interaction. click to read more Meet the Team Corten Singer Tomás Vega CONTACT WEBSITE CarbonGraph USA/Canada – Climate / B2B Software CarbonGraph is a digital platform that companies use to measure and communicate the carbon footprint of their products, allowing them to"
     },
     {
+      "id": "check-page-d9d4121fd9",
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "page": "batches",
+      "excerpt": "Our product provides end-to-end guidance for patients from scheduling to post-operative care- automating tedious tasks and increasing revenue. click to read more Meet the Team Louis Sallerson Val Zinchenko Adam Teitelman CONTACT WEBSITE CYQIQ USA – B2B Software CYQIQ brings efficiency and effectiveness to the professional services industry by implementing generative AI."
+    },
+    {
+      "id": "check-page-ef282b4b7d",
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "page": "batches",
+      "excerpt": "Adopting a “CRISPR as biologic” approach, Editpep employs proprietary delivery technology to gently convey pre-formed genome editing enzymes into clinically-important cells. click to read more Meet the Team Ross Wilson Genine Winslow CONTACT WEBSITE El Dorado Colombia -Fin Tech El Dorado is building Latin America’s Payments SuperApp."
+    },
+    {
+      "id": "check-page-c6bdfd865e",
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "page": "batches",
+      "excerpt": "We facilitate domestic and cross-border transactions, with connections to 70+ local payment channels, all powered by a network of currency exchange agents. click to read more Meet the Team Guillermo Goncalvez Juan Andreu CONTACT WEBSITE Enerza USA/Canada – Climate/Energy Tech Enerza is redefining asset and vegetation inspection for utilities with their groundbreaking autonomous on-wire robots."
+    },
+    {
+      "id": "check-page-db7e28fc02",
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "page": "batches",
+      "excerpt": "GuardHash pioneers a new anonymization approach based on differential privacy that makes data faster, easier and safer to use. click to read more Meet the Team Piergiacomo De Marchi Francesco Stefani CONTACT WEBSITE Hyperable USA/Italy – Chip/Hardware Hyperable develops IP cores for AI/ML accelerators."
+    },
+    {
+      "id": "check-page-ac001d9cec",
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "page": "batches",
+      "excerpt": "By utilizing the open-source and highly customizable RISC-V instruction set, Hyperable creates specialized and efficient hardware solutions for various AI/ML applications. click to read more Meet the Team Marco Spaziani Brunella Giulia Cassara CONTACT WEBSITE Jacobi Robotics USA – Robotics Jacobi Robotics is bringing the modern software development framework to industrial robotics."
+    },
+    {
+      "id": "check-page-707eb4817e",
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "page": "batches",
+      "excerpt": "We create AI copilots for advanced manufacturing that learn from the best operators in the factory, help them do what they do best and automate the rest. click to read more Meet the Team Douglas Brion Sebastian Pattinson Tom Walker Damjan Denic CONTACT WEBSITE MZR Neurotech USA – BioTech/MedTech MZR Neurotech is putting a sleep clinic into your ears."
+    },
+    {
+      "id": "check-page-73dbdf99d6",
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "page": "batches",
+      "excerpt": "Small businesses will no longer have to struggle with conventional bank accounts with high fees, limited services for managing and moving money, and the need to juggle various platforms. click to read more Meet the Team Tapan Ramachandran Semih Korkmaz CONTACT WEBSITE Roger USA – Digital Health Roger is building the elder care operating system – powered by LLMs."
+    },
+    {
+      "id": "check-page-e4c4141d95",
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "page": "batches",
+      "excerpt": "We enable small to mid-sized hotel groups to capture every booking – with less effort and at a lower cost. click to read more Meet the Team Kyle Killion Blaire McCoy Thank you to our SkyDeck Batch 16 Demo Day Sponsors!"
+    },
+    {
       "id": "check-page-37e4bb308f",
       "url": "https://skydeck.berkeley.edu/batch17/",
       "page": "batches",
       "excerpt": "Batch 17 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS BATCH 17 DEMO DAY CONTACT WEBSITE Algorized USA/Switzerland – DeepTech Sensing and perception AI software for presence sensing. Leveraging advanced algorithms with Ultra-Wideband chips for indoor navigation, human presence detection, age differentiation, and vital sign monitoring for consumer electronics, mobile and automotive. click to read more Meet the Team Natalya Lopareva Andrey Katz Christian Gomes CONTACT WEBSITE Allos AI USA/UK – Digital Health Allos is a complex generics pharma startup enabled by Causal AI. Leveraging EHR and prescription data, we are using Causal AI to identify unmet clinical needs, and forecast clinical trial patient response to derisk our pipeline of complex generics. With our differentiated approach we are making complex generics more accessible. click to read more Meet the Team Aditya Varna Iyer Isaac To Ivano Lodato Balu"
+    },
+    {
+      "id": "check-page-af4326e233",
+      "url": "https://skydeck.berkeley.edu/batch17/",
+      "page": "batches",
+      "excerpt": "We provide real time visibility to parents on how their kids are doing and offer them targeted tutoring ($40B market). click to read more Meet the Team Gil Quadros Flores Gabriel Adamante Vitor Barbosa CONTACT WEBSITE DeepSeq.AI USA – BioTech DeepSeq empowers pharma/biotech to create functional protein drugs with highly interpretable generative AI and proprietary wet-lab screening technology."
+    },
+    {
+      "id": "check-page-3e52d4fda9",
+      "url": "https://skydeck.berkeley.edu/batch17/",
+      "page": "batches",
+      "excerpt": "Unlike many other biotech companies, we will generate early revenue and data from our brain aging diagnostic, the NeuroAge Test."
+    },
+    {
+      "id": "check-page-e0d7ea29a6",
+      "url": "https://skydeck.berkeley.edu/batch17/",
+      "page": "batches",
+      "excerpt": "This powerful tool empowers supervisors to lead more effectively, ensuring their teams are agile, well-informed, and aligned with business goals. click to read more Meet the Team Guillermo Garza Nomara Parra Ernesto Rodriguez CONTACT WEBSITE Pickaxe USA – B2SMB Software Pickaxe is platforming the future GPT economy."
     },
     {
       "id": "check-page-22ad6e3040",
@@ -785,10 +1371,298 @@
       "excerpt": "Demo Day Batch 18 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS BATCH 18 DEMO DAY CONTACT WEBSITE ALKEMIO USA/Argentina- Climate Tech Alkemio’s modular refining innovation empowers miners to produce domestic rare earth metals on-site through a cost-effective and easily deployable process, driven by proprietary selective molecular technology. click to read more Meet the Team Francisco Morrone Lucia Curti Ailin Svagzdys Federico Pereyra Bonnet CONTACT WEBSITE Blocq USA/Japan – Crypto/Blockchain BlocQ is the world’s first quantum cybersecurity company, leveraging advanced quantum computing technologies to provide a wide range of quantum-resistant software, ensure a seamless transition to post-quantum cryptography, and safeguard digital assets against emerging quantum-era risks. click to read more Meet the Team Sho Sugiura Takashi Nishina CONTACT WEBSITE Congrify USA/Germany – Enterprise / B2B Software Payments"
     },
     {
+      "id": "check-page-14db56f926",
+      "url": "https://skydeck.berkeley.edu/batch18/",
+      "page": "batches",
+      "excerpt": "FirstRead executes tasks for transactional attorneys with unmatched precision, to become an integral part of your legal team. click to read more Meet the Team Eran Lahav Chen Kossover CONTACT WEBSITE Forelight.ai USA/France – Enterprise/B2B Software We’re building an AI customer researcher who answers any business, product or marketing question in 72 hours."
+    },
+    {
+      "id": "check-page-1b13d410c4",
+      "url": "https://skydeck.berkeley.edu/batch18/",
+      "page": "batches",
+      "excerpt": "Partner Element uses AI to save Fortune 2000 companies up to $85B annually through real-time buying detection and employee engagement at scale. click to read more Meet the Team Arina Bobrova Alvin Yates CONTACT WEBSITE PropulsionAI USA/India – Enterprise/B2B Software As businesses deploy AI agents and copilots, achieving perfect accuracy becomes extremely critical."
+    },
+    {
+      "id": "check-page-1b51ded106",
+      "url": "https://skydeck.berkeley.edu/batch18/",
+      "page": "batches",
+      "excerpt": "These skills are programmed through a conversational robot agent that makes it extremely easy and intuitive to program industrial robots. click to read more Meet the Team Asad Tirmizi Lars Tingelstad CONTACT WEBSITE Taltrics USA – Enterprise/B2B Software Taltrics helps software service firms grow revenue faster with AI agents that automate quoting and optimizes pricing."
+    },
+    {
+      "id": "check-page-46bb89d89f",
+      "url": "https://skydeck.berkeley.edu/batch18/",
+      "page": "batches",
+      "excerpt": "Mayank Galgat Casey Ortiz CONTACT WEBSITE The Hurd Co USA – Climate Tech The Hurd Co makes agrilose: an agriwaste-based pulp used by apparel brands to make fabrics like viscose, rayon, and lyocell, which are normally made from trees."
+    },
+    {
+      "id": "check-page-a7495c9860",
+      "url": "https://skydeck.berkeley.edu/batch18/",
+      "page": "batches",
+      "excerpt": "Israel Gutierrez CONTACT WEBSITE Vambe USA/Chile – Enterprise/B2B Software Vambe empowers LatAm SMBs to grow revenue by leveraging AI agents to manage sales complexities and customer engagement."
+    },
+    {
       "id": "check-page-65abdaddeb",
       "url": "https://skydeck.berkeley.edu/batch19-1/",
       "page": "batches",
       "excerpt": "Demo Day Batch 19 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS This content is password protected. To view it please enter your password below: Password: Berkeley SkyDeck University of California, Berkeley 2150 Shattuck Avenue, Penthouse Berkeley, CA 94704 © 2026 University of California, Berkeley Berkeley SkyDeck is a program of the University of California, Berkeley Contact Us About Companies Begin.Berkeley GIVE TO SKYDECK Press Release Podcast We are using cookies to give you the best experience on our website. You can find out more about which cookies we are using or switch them off in settings . Accept Change cookie settings Close GDPR Cookie Settings Privacy Overview Strictly Necessary Cookies 3rd Party Cookies Privacy Overview This website uses cookies so that we can provide you with the best user experience possible. Cookie information is stored in your browser and performs functions such as"
+    },
+    {
+      "id": "check-page-2ebfbb2047",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "page": "batches",
+      "excerpt": "Demo Day Batch 19 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS BATCH 19 DEMO DAY CONTACT WEBSITE AtlasNova USA/China – Enterprise/B2B Software AtlasNova is an AI-powered platform that gives SMBs on-demand access to expert knowledge, tools, and strategies, enabling them to scale efficiently and cost-effectively without needing in-house expertise. click to read more Meet the Team Xing Wen Michael Wohlert CONTACT WEBSITE Bicameral USA – FinTech Bicameral transforms commercial lending by replacing outdated manual underwriting with instant, explainable AI reports—accelerating deal velocity, automating decision-making, and unlocking a $3.1T borrower-lender marketplace click to read more Meet the Team Alex Dulisse Daniel Pravich CONTACT WEBSITE Clearpol USA – Enterprise/B2B Healthcare Software Clearpol is an end-to-end Agentic AI platform that automates compliance and clinical quality assurance, freeing clinical"
+    },
+    {
+      "id": "check-page-a73dacc1c1",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "page": "batches",
+      "excerpt": "Through a proprietary AI-powered device management platform and a global network of resellers, it enhances the Buy Now Pay Later experience by offering a fully managed subscription model that plugs into any checkout—online or in-store—boosting sales by up to 80%."
+    },
+    {
+      "id": "check-page-46a4eeb6b7",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "page": "batches",
+      "excerpt": "We improve clinician quality scores, increase revenue, and save payors and hospitals $13 billion annually. click to read more Meet the Team Saisri Akondi Jehan Yang CONTACT WEBSITE El Dorado USA – P2P Software El Dorado is a stablecoin-powered cross-border payment app connected to over 80 local payment methods across Latin America."
+    },
+    {
+      "id": "check-page-db12996b20",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "page": "batches",
+      "excerpt": "Carlos Fontes CONTACT WEBSITE Enkrypt AI USA/Canada – Security Tech Enkrypt AI is an AI safety and compliance company."
+    },
+    {
+      "id": "check-page-4b43f19edf",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "page": "batches",
+      "excerpt": "The Enkrypt AI platform delivers comprehensive security and compliance solutions for enterprise AI systems, applications, and agents."
+    },
+    {
+      "id": "check-page-388f3bbaa9",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "page": "batches",
+      "excerpt": "These solutions (AI Red-Teaming, Guardrails, Safety Alignment, and Compliance Monitoring) ensure the safe, compliant, and reliable deployment of AI technologies."
+    },
+    {
+      "id": "check-page-8825313328",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "page": "batches",
+      "excerpt": "But with AI Agents, Voice Assistants, Chatbots, and Copilots, user interactions are now conversations, not clicks."
+    },
+    {
+      "id": "check-page-fee2572535",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "page": "batches",
+      "excerpt": "Feedback Intelligence helps companies understand what users really want in this new era of natural language interfaces. click to read more Meet the Team Chinar Movsisyan Stefan Radisavljevic Erik Harutyunyan CONTACT WEBSITE Greaten AI USA – Healthcare/B2B Software Greaten AI builds AI staff for private clinics."
+    },
+    {
+      "id": "check-page-7678e8da75",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "page": "batches",
+      "excerpt": "Their AI agents streamline time-consuming insurance and patient workflows, improving profitability and patient satisfaction."
+    },
+    {
+      "id": "check-page-e49937ef9d",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "page": "batches",
+      "excerpt": "Built on an advanced unstructured data automation engine and a multi-modal computer agent framework, Greaten offers seamless automation of tedious front-office tasks, reducing the burden of managing timely insurance payments."
+    },
+    {
+      "id": "check-page-643f224a48",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "page": "batches",
+      "excerpt": "We automatically translate queries between dialects and route them to the query engine best suited for each workload, saving up to 70% on compute costs. click to read more Meet the Team Kyle Cheung Arsham Eslami CONTACT WEBSITE Guepard France – Enterprise/B2B Software Guepard makes the database infrastructure faster for software teams and AI agents."
+    },
+    {
+      "id": "check-page-aaa0225250",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "page": "batches",
+      "excerpt": "Designed for industries including manufacturing, logistics, and retail, MetaLearner’s AI agents automate supply chain management including data cleaning, feature engineering, and forecasting optimization."
+    },
+    {
+      "id": "check-page-9a5b69aeed",
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "page": "batches",
+      "excerpt": "The system enhances decision-making by providing real-time insights, personalized recommendations, and explainable AI-driven analysis click to read more Meet the Team Kevin Good Ting Hui Lim Jose Manuel Lama Morel Rafael Nicolas Fermin Cota CONTACT WEBSITE Plaid Semiconductors USA – Hardware/Chip/New Materials Plaid Semiconductors is building revolutionary glass substrates for AI computing."
+    },
+    {
+      "id": "check-page-6a10273053",
+      "url": "https://skydeck.berkeley.edu/batch20/",
+      "page": "batches",
+      "excerpt": "Demo Day Batch 20 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS BATCH 20 DEMO DAY CONTACT WEBSITE Algorized USA – Robotics Algorized builds physical edge-ML/AI models with a software-only upgrade on existing wireless sensors to detect human presence, vital signs, and stress for industrial robotics and automotive. click to read more Meet the Team Natalya Lopareva Andrey Katz CONTACT WEBSITE April USA – B2C April is a voice AI executive assistant that manages email & calendar hands-free. Built for busy individuals who need an EA, but don’t have one. click to read more Meet the Team Neha Suresh Akash Thakur CONTACT WEBSITE CipherSonic Labs USA – Security Tech CipherSonic provides a practical security platform for enterprises to process sensitive data using GenAI while it remains encrypted. Unlike traditional cloud-hosted LLMs that expose confidential information in the clear, it safeguards privacy and"
+    },
+    {
+      "id": "check-page-5c75c14cbd",
+      "url": "https://skydeck.berkeley.edu/batch20/",
+      "page": "batches",
+      "excerpt": "It also creates subsurface 3D density maps to aid in identifying mineral ore bodies and voids. click to read more Meet the Team Jeremiah Anderson Balaji Santhanam Tatsuya Satsuka Andi Ferataj Fugo Yoshida Olaf Vandāns CONTACT WEBSITE PYRAMYD USA- Marketplace PYRAMYD drives the best software decisions by precisely matching buyers and vendors."
+    },
+    {
+      "id": "check-page-0c112ed45b",
+      "url": "https://skydeck.berkeley.edu/batch20/",
+      "page": "batches",
+      "excerpt": "Vendors access high-intent opportunities and pay a small fee on wins, cutting CAC up to 50%. click to read more Meet the Team Jonathan Krasnow Shai Ber Samuel Farren Christian Simmons CONTACT WEBSITE ReIGNITE Therapeutics USA – BioTech/MedTech ReIGNITE is developing next-generation oncolytic immunotherapies."
+    },
+    {
+      "id": "check-page-edeab92ce8",
+      "url": "https://skydeck.berkeley.edu/batch20/",
+      "page": "batches",
+      "excerpt": "It leverages a large proprietary dataset, and is powered by AI agents that collect the latest and most diverse deepfakes and scams 24/7, to automate the model training pipeline."
+    },
+    {
+      "id": "check-page-4b8fbee48c",
+      "url": "https://skydeck.berkeley.edu/batch20/",
+      "page": "batches",
+      "excerpt": "It’s Crowdstrike for humans. click to read more Meet the Team Dennis Ng Ben Ren CONTACT WEBSITE SplitSecure Canada/USA – Security Tech SplitSecure is building a transformative security protocol, “S2,” allowing enterprises to distribute trust across groups of devices in a manner conceptually similar to blockchain."
+    },
+    {
+      "id": "check-page-090d2be3a1",
+      "url": "https://skydeck.berkeley.edu/batch20/",
+      "page": "batches",
+      "excerpt": "Legacy security firms protect secrets with hardware and software, but SplitSecure protects secrets by eliminating them entirely."
+    },
+    {
+      "id": "check-page-3a43621df7",
+      "url": "https://skydeck.berkeley.edu/batch20/",
+      "page": "batches",
+      "excerpt": "With SplitSecure, there are no secrets to steal or phish, and every action is ephemeral and auditable by default. click to read more Meet the Team Tristan Morris Marc Tremblay CONTACT WEBSITE Traversing.ai USA – Travel Tech Traversing.ai is the AI solution for hotels – linking existing hotel systems with an AI-powered contact center, conversational distribution engine, and direct booking solution."
+    },
+    {
+      "id": "check-page-e65daf5a63",
+      "url": "https://skydeck.berkeley.edu/batch20/",
+      "page": "batches",
+      "excerpt": "Their solutions unlock new revenue, streamline operations, and deliver world-class guest experiences – all while reducing cost. click to read more Meet the Team Kyle Killion Blaire McCoy CONTACT WEBSITE VoiceBit USA – FoodTech VoiceBit is rebuilding restaurants’ direct ordering stack with AI."
+    },
+    {
+      "id": "check-page-03d7cbec1c",
+      "url": "https://skydeck.berkeley.edu/batch20/",
+      "page": "batches",
+      "excerpt": "Its first product, a voice ordering platform, connects to existing phone lines to automate orders, payments, delivery, and loyalty – making ordering seamless while reducing reliance on margin-draining third-party platforms. click to read more Meet the Team Hitseh Kenjale Jay Patel Lovre Soric Thank you to our SkyDeck Batch 20 Demo Day Sponsors!"
+    },
+    {
+      "id": "check-page-3a662e1092",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "page": "batches",
+      "excerpt": "Demo Day Batch 21 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS BATCH 21 DEMO DAY WEBSITE Agentic Trust USA – Applied AI/B2B Enterprise The future of software is agentic and deeply personal: users now expect software to do the work for them, yet most SaaS products were never built this way. Agentic Trust makes any B2B SaaS product AI-native, giving users a natural language interface to execute actions and orchestrate workflows across their UI and every connected tool. click to read more Meet the Team Yash Kejariwal Subramanya Nagabhushanaradhya WEBSITE Autonomi Robotics South Africa – Industrial Tech & Robotics Autonomi Robotics deploys secure, AI-driven robots that automate the movement of medicines, supplies, meals and specimens across hospitals. Our systems integrate with elevators, doors, and pharmacy workflows to deliver reliable, traceable, 24/7 transport. We replace manual internal logistics with"
+    },
+    {
+      "id": "check-page-5410d86445",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "page": "batches",
+      "excerpt": "We replace manual internal logistics with scalable automation reducing cost while freeing clinical staff for patient care click to read more Meet the Team Steven Pinto Nikhil Ranchod WEBSITE BrandContext India – Applied AI/B2B Enterprise The world’s most valuable AI companies are built on proprietary data."
+    },
+    {
+      "id": "check-page-477c3a9b28",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "page": "batches",
+      "excerpt": "By generating revenue through its SaaS AI Sales Agent platform specifically designed for physical touchpoints where assistive selling is required — BrandContext creates immersive, phone-driven shopping experiences that brands and retailers can deploy effortlessly."
+    },
+    {
+      "id": "check-page-d2e16dedca",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "page": "batches",
+      "excerpt": "We turn empty miles into profit for drivers by harvesting load boards, negotiating deals, and submitting booking paperwork instantly. click to read more Meet the Team Albert Zheng Steven Li WEBSITE Code Blue AI USA – Life Science/Health 1 in 4 people will experience a stroke, yet most don’t recognize the warning signs in time."
+    },
+    {
+      "id": "check-page-9c8c24caa0",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "page": "batches",
+      "excerpt": "Code Blue AI uses patent-pending AI to detect FAST stroke symptoms through any camera- and mic-enabled device."
+    },
+    {
+      "id": "check-page-b6554b344f",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "page": "batches",
+      "excerpt": "Nearly 90% of AI energy is spent moving data between memory and processors, creating power, cost, and infrastructure ceilings."
+    },
+    {
+      "id": "check-page-c24ceab38a",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "page": "batches",
+      "excerpt": "Fundamentally different from analog or neuromorphic approaches, Ludwig encodes probability directly in hardware — reducing the data-movement burden that dominates AI energy consumption."
+    },
+    {
+      "id": "check-page-9fee7d6835",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "page": "batches",
+      "excerpt": "We replace traditional contractors by recruiting, training, and managing field crews end to end — powered by an AI infrastructure we’ve built with 20+ customers and 1.5M+ field interactions."
+    },
+    {
+      "id": "check-page-db22ccd91a",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "page": "batches",
+      "excerpt": "Better for workers, better economics for farmers. click to read more Meet the Team Nicolás Castellón Benjamín Martinez Thomas Soto Fuica WEBSITE RevReply USA – Applied AI/B2B Enterprise RevReply is the Autonomous Conversion System– powered by agentic orchestration, deep-think decision trees, and proprietary conversion intelligence built from 100M+ real emails."
+    },
+    {
+      "id": "check-page-65b44d41c1",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "page": "batches",
+      "excerpt": "Sagar Sarsani Anna Sorokina WEBSITE Vectorial AI USA – Applied AI/B2B Enterprise Vectorial is building the human behavior simulation layer for modern product teams."
+    },
+    {
+      "id": "check-page-7f4512f6d9",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "page": "batches",
+      "excerpt": "As AI makes building 10x faster, user validation is becoming the next major bottleneck—slow, expensive, and constrained to small, biased user samples."
+    },
+    {
+      "id": "check-page-4b17f44fd5",
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "page": "batches",
+      "excerpt": "At the core is SAPIENS, our proprietary behavior foundation model, which learns the latent traits driving human behavior and decision-making, enabling accurate, scalable simulation. click to read more Meet the Team Taranveer Singh Rahul Garg Jasmine Kaur Thank you to our SkyDeck Batch 21 Demo Day Sponsors!"
+    },
+    {
+      "id": "check-page-bf511aa58b",
+      "url": "https://skydeck.berkeley.edu/batch22/",
+      "page": "batches",
+      "excerpt": "Demo Day Batch 22 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS BATCH 22 DEMO DAY WEBSITE 4D Sight Turkey – Applied AI 4D Sight is a real-time, deterministic AI engine that makes live video programmable, turning a single broadcast feed into both photorealistic in-game advertising inventory and machine-verifiable data for prediction markets and trading desks. The platform already places virtual ads for clients including UFC and WWE across 16+ countries, with a personalized advertising launch alongside Netflix slated for Q4. click to read more Meet the Team Erhan Chris WEBSITE Algorized USA – Physical AI Algorized is building the edge-native nervous system for physical AI, giving robots, vehicles, and smart spaces real-time human awareness at sub-100ms latency. Its foundation model fuses radar, UWB, and mmWave sensing to detect presence, positioning, and behavior even through obstacles, enabling safe"
+    },
+    {
+      "id": "check-page-d6fd2308e0",
+      "url": "https://skydeck.berkeley.edu/batch22/",
+      "page": "batches",
+      "excerpt": "It starts at one desk and expands to support, tenders, order entry, and invoicing. click to read more Meet the Team Filip Mitske Anthony Boschung Tristan Zerweck WEBSITE DEALPRINT USA – Applied AI DEALPRINT is the AI-native transaction layer for SMB acquisitions."
+    },
+    {
+      "id": "check-page-cc8c49e379",
+      "url": "https://skydeck.berkeley.edu/batch22/",
+      "page": "batches",
+      "excerpt": "Powered by proprietary nano-film evaporation, its architecture unlocks peak silicon performance with mission-critical reliability. click to read more Meet the Team Catherine Liu Zachary Wu WEBSITE Fortune AI USA – Applied AI Fortune AI is the application layer for physical operations, bringing software-like programmability to existing cameras."
+    },
+    {
+      "id": "check-page-bd00e17289",
+      "url": "https://skydeck.berkeley.edu/batch22/",
+      "page": "batches",
+      "excerpt": "Its model compression, KV-cache optimization, custom kernels, and inference engine cut GPU requirements and per-token costs across hosted, enterprise, and edge deployments. click to read more Meet the Team Sergii Kozyrev David Mayboroda WEBSITE OORB Tunisia – Robotics OORB is the reliability layer for robotics and physical AI."
+    },
+    {
+      "id": "check-page-cfc85930c9",
+      "url": "https://skydeck.berkeley.edu/batch22/",
+      "page": "batches",
+      "excerpt": "OORB rides along on robots already deployed, watching every run to pinpoint exactly what changed and what caused it — in minutes, not days. click to read more Meet the Team Kayoum Djedidi Bassem Gouty Asma Basly Azer Ben Abdallah WEBSITE Optagon USA – Life Science Optagon is an AI-native drug engineering company built to replace the trial-and-error process used to optimize drugs today."
+    },
+    {
+      "id": "check-page-7a13422cf2",
+      "url": "https://skydeck.berkeley.edu/batch22/",
+      "page": "batches",
+      "excerpt": "Models decide what to do; Swytchcode governs whether and how those actions run in production. click to read more Meet the Team Aditya Rohit Chilarai Mushahary WEBSITE TrueCourse USA – AI Infrastructure & Tooling TrueCourse is building the IDE for product owners, turning requirements into executable tests that catch the bugs coding agents create and AI code review tools miss."
+    },
+    {
+      "id": "check-page-bdc0054a2d",
+      "url": "https://skydeck.berkeley.edu/batch22/",
+      "page": "batches",
+      "excerpt": "Product owners no longer just define what gets built — they verify it. click to read more Meet the Team Mushegh Gevorgyan WEBSITE Vanellus UK – Hardware/Chip Vanellus builds GPU-native thermal simulation software for electronics cooling, replacing slow, experiment-heavy iteration with rapid, simulation-driven design."
+    },
+    {
+      "id": "check-page-850f9eba4b",
+      "url": "https://skydeck.berkeley.edu/batch22/",
+      "page": "batches",
+      "excerpt": "By combining their bank relationships, recurring workflows, and expert judgment, ZorroFi scales existing businesses today while building toward increasingly autonomous underwriting. click to read more Meet the Team Sandra Wasicek Armin Wasicek Thank you to our SkyDeck Batch 22 Demo Day Sponsors!"
+    },
+    {
+      "id": "check-page-a44582476f",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-presents-batch-12-startups-at-demo-day-sept-28/",
+      "page": "batches",
+      "excerpt": "Berkeley SkyDeck Accelerator Presents Batch 12 Startups at Demo Day Sept. 28 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS 30 September 2021 Berkeley SkyDeck Accelerator Presents Batch 12 Startups at Demo Day Sept. 28 BACK TO NEWS NEXT STORY 0 Likes News from SkyDeck Newsletter – September 16, 2026 Berkeley SkyDeck is excited to partner with Pianeta Accelerator, in collaboration with Factory Plus, to build a cross-border bridge between the European innovation ecosystem and Silicon Valley. Built for ambitious founders developing breakthrough technologies in Clean Tech, AI, Bio &... Newsletter – September 2, 2026 On September 30, Berkeley SkyDeck’s Batch 22 startups will take stage. 18 companies spanning physical AI, GPU hardware accelerators, biotech therapeutics, and enterprise agent infrastructure will pitch. Following the pitches, meet the founders at the Demo Day Expo and attend... Newsletter – August 20,"
     }
   ],
   "findings": {
@@ -819,6 +1693,10 @@
       {
         "value": "January",
         "evidenceId": "check-announced-6334d24df8"
+      },
+      {
+        "value": "Sept",
+        "evidenceId": "check-announced-1ec173ed8d"
       }
     ],
     "cohortStarts": [],
@@ -834,6 +1712,10 @@
       {
         "value": "18 months",
         "evidenceId": "check-duration-373ef6e28e"
+      },
+      {
+        "value": "9",
+        "evidenceId": "check-duration-5eecf15ec7"
       }
     ],
     "format": [

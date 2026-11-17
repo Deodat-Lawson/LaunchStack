@@ -1,6 +1,6 @@
 {
   "programId": "capital-factory",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://capitalfactory.com/",
     "https://apply.workable.com/capital-factory/",
@@ -15,6 +15,7 @@
     "https://capitalfactory.com/texas-fund",
     "https://capitalfactory.com/about",
     "https://capitalfactory.com/portfolio",
+    "https://capitalfactory.com/texas",
     "https://capitalfactory.com/portfolio/1-true-health-care-management-inc",
     "https://capitalfactory.com/portfolio/2a-biosciences"
   ],
@@ -300,6 +301,13 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-4504314760",
+      "url": "https://capitalfactory.com/texas",
+      "title": "Capital Factory — portfolio page",
+      "excerpt": "Explore the full portfolio → → https://capitalfactory.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-4dfeac40e6",
       "url": "https://capitalfactory.com/portfolio/1-true-health-care-management-inc",
       "title": "Capital Factory — portfolio page",
@@ -335,6 +343,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-c42354e24d",
+      "url": "https://capitalfactory.com/texas",
+      "title": "Capital Factory — portfolio page",
+      "excerpt": "Portfolio → https://capitalfactory.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-d682cd5f83",
       "url": "https://capitalfactory.com/texas-fund",
       "title": "Capital Factory — terms page",
@@ -353,6 +368,13 @@
       "url": "https://capitalfactory.com/portfolio/2a-biosciences",
       "title": "Capital Factory — portfolio page",
       "excerpt": "← Portfolio → https://capitalfactory.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-01d71983d7",
+      "url": "https://capitalfactory.com/texas",
+      "title": "Capital Factory — portfolio page",
+      "excerpt": "Careers → https://apply.workable.com/capital-factory/",
       "page": "portfolio"
     },
     {
@@ -665,6 +687,36 @@
       "excerpt": "Capital Factory — Startups advancing civilization Skip to content Portfolio Texas Fund Fellowship Fund All Access Government Team Investors Est. 2009 · Austin, Texas Startups advancing civilization. We back the most ambitious founders in Texas — humanoid robots, autonomous ships, neural interfaces, rockets to the Moon — with cash, customers, and the most powerful network in the state. First investor in Apptronik · Cemvita · Colossal · Multicoin · Wander Early investor in Allen Control Systems · Firefly · ICON 3D · Paradromics · Saronic · X-Bow Apptronik Saronic Technologies Paradromics Inc. Colossal Biosciences Casimir Space Multicoin Capital Aceable Wander.com Firefly Aerospace ICON Living Security Pipedream TRAXyL, Inc. Intuitive Machines Voyager Space Storable (formerly SpareFoot) Apptronik Saronic Technologies Paradromics Inc. Colossal Biosciences Casimir Space Multicoin Capital Aceable Wander.com Firefly Aerospace ICON Living Security Pipedream TRAXyL, Inc. Intuitive Machines Voyager Space Storable (formerly SpareFoot) The most active early-stage investor backing America’s most ambitious founders — and we bring Texas to the table. 0 + Companies backed 0 Texas Fund I 0 Texas Fund II 0 All Access companies Portfolio by vehicle Texas Fund I · 133 Texas Fund II · 8 All Access · 559 Texas Fund We write the first check into the hardest problems. Cash investments in Texas deep"
     },
     {
+      "id": "check-page-a41f54fb02",
+      "url": "https://capitalfactory.com/",
+      "page": "details",
+      "excerpt": "Cash investments in Texas deep tech — pitch us, no warm intro needed. → All Access Introductions that matter."
+    },
+    {
+      "id": "check-page-08fcd0c8f6",
+      "url": "https://capitalfactory.com/",
+      "page": "details",
+      "excerpt": "Space Firefly Aerospace Intuitive Machines Venus Aerospace Mantis Space Energy Aalo Atomics Casimir Space Cemvita Inc."
+    },
+    {
+      "id": "check-page-7a3190a77f",
+      "url": "https://capitalfactory.com/",
+      "page": "details",
+      "excerpt": "Colossal Biosciences Phantom Neuro Vironexis Defense Saronic Technologies X-Bow Systems Allen Control Systems Red 6 In the room The world comes to see you."
+    },
+    {
+      "id": "check-page-a6d14224bf",
+      "url": "https://capitalfactory.com/",
+      "page": "details",
+      "excerpt": "Firefly Aerospace IPO · NASDAQ: FLY Intuitive Machines IPO · NASDAQ: LUNR Voyager Space IPO · NYSE: VOYG Invoiced Acquired · Flywire Wonder Dynamics (Aether) Acquired · Autodesk Storable (formerly SpareFoot) Acquired · EQT Backing the most ambitious founders working on the hardest problems."
+    },
+    {
+      "id": "check-page-94b6bba25d",
+      "url": "https://capitalfactory.com/",
+      "page": "details",
+      "excerpt": "Texas Fund Fellowship Fund All Access Investors Team Careers Partners Government Events News About Terms Privacy Code of Conduct For agents © 2026 Capital Factory · The most active investor in Texas"
+    },
+    {
       "id": "check-page-6631a7ad2b",
       "url": "https://apply.workable.com/capital-factory/",
       "page": "application",
@@ -677,10 +729,82 @@
       "excerpt": "Venture Associate - Capital Factory Venture Associate On-site Ventures Full time Austin, Texas, United States Overview Application Share this job Description Austin, Texas Venture Team reporting to Venture Principal Full-time, on site The next generation of American industry is being built by engineers, scientists, and operators who left the lab, the prime, or the program to start something. Your job is to find them first. As a Venture Associate at Capital Factory, you bring the technical credibility these founders want on their cap table. You’ll meet new founders everyday, determine the true breakthrough ventures and recruit the real ones into CF’s All Access Fund. Requirements What you will do… Meet the best technology entrepreneurs and recruit them into CF’s All Access Fund. Participate in startup community events & programs as a speaker. Use Twitter, LinkedIn, and other digital platforms to discover new startups and connect with the founders. Develop relationships with CEOs, Angel Investors, and Venture Capitalists and connect them with startups that matter. Read all of the local startup news and engage in social media. Use a suite of AI tools provided by Capital Factory to manage deal flow, publish deal memos and perform at a high level. Get ten years of venture capital experience in three years time! You'll know you're successful if.... You sponsor 25+ Austin startups"
     },
     {
+      "id": "check-page-4611b40fa4",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "page": "application",
+      "excerpt": "Founders, mentors and investors come to you to ask for introductions."
+    },
+    {
+      "id": "check-page-3145021039",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "page": "application",
+      "excerpt": "Regardless of whether you launched an award winning initiative, lead a team in the military, have patents under your belt, or launched hardware off-world, you are an expert in the making in an area of technology which is changing the world."
+    },
+    {
+      "id": "check-page-2b220acf8b",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "page": "application",
+      "excerpt": "You love founders and startups, You are passionate about emerging technologies such as artificial intelligence, quantum, energy, agtech, advanced manufacturing, and robotics."
+    },
+    {
+      "id": "check-page-f557002ba0",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "page": "application",
+      "excerpt": "You are committed to building the best AI version of yourself."
+    },
+    {
+      "id": "check-page-0f61ce325d",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "page": "application",
+      "excerpt": "You are embracing AI tools and using them to delegate and supercharge your abilities."
+    },
+    {
+      "id": "check-page-0a1fdf3c10",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "page": "application",
+      "excerpt": "We are AI first We have excellent written and verbal communication skills."
+    },
+    {
+      "id": "check-page-9caea7ce49",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "page": "application",
+      "excerpt": "We’re ready to deal with an immature student, a pushy salesperson, top VC’s, a fortune 500 CEO, and even the President of the United States."
+    },
+    {
+      "id": "check-page-0708ebc2b3",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "page": "application",
+      "excerpt": "We are excited to work in downtown Austin and have reliable transportation."
+    },
+    {
+      "id": "check-page-378c474cf8",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "page": "application",
+      "excerpt": "We back the most ambitious founders working on the hardest problems, investing nationally from early stage through growth across defense, space, energy, advanced manufacturing, robotics, and the life sciences."
+    },
+    {
+      "id": "check-page-12046f7e1e",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "page": "application",
+      "excerpt": "With deep ties to the government and the national security sector, Capital Factory backs founders with the capital and institutional resources to build companies that strengthen American industry and advance civilization."
+    },
+    {
       "id": "check-page-975f1b1f39",
       "url": "https://apply.workable.com/capital-factory/j/ABA27178DF/",
       "page": "application",
       "excerpt": "Guest Experience Coordinator - Capital Factory Guest Experience Coordinator On-site Part time Austin, Texas, United States Overview Application Share this job Description Austin, Texas, United States Workplace Team reporting to Workplace Manager This is an on-site role Ever wondered what it’s like to be the heartbeat of an innovation hub? At STATION Austin , you’re not just the friendly face who greets everyone with a smile—you’re the ultimate connector! From helping visitors find their way to their next big meeting to giving them the insider scoop on our vibrant community, you’re the go-to person for all things STATION Austin . Your knack for striking up conversations and your love for stellar customer service make every interaction memorable. Plus, you’re the behind-the-scenes pro supporting our gift shop that’s buzzing with sales and inventory magic. About STATION Austin STATION Austin is the center of gravity for entrepreneurs in Texas, the number one startup state in the U.S. Hundreds of thousands of entrepreneurs, programmers, and designers gather day and night, in-person and online for meetups, classes, and coworking. With boots on the ground in Austin, Dallas, Houston and San Antonio, we meet the best entrepreneurs in Texas and introduce them to their first investors, employees, mentors, and customers. According to Pitchbook, STATION Austin has been the most active"
+    },
+    {
+      "id": "check-page-c6d53a2b55",
+      "url": "https://apply.workable.com/capital-factory/j/ABA27178DF/",
+      "page": "application",
+      "excerpt": "We’re ready to deal with an immature student, a pushy salesperson, top VC’s, a fortune 500 CEO, and even the President of the United States."
+    },
+    {
+      "id": "check-page-950d561f23",
+      "url": "https://apply.workable.com/capital-factory/j/ABA27178DF/",
+      "page": "application",
+      "excerpt": "We are excited to work in downtown [Austin/Dallas/Houston/San Antonio] and have reliable transportation."
     },
     {
       "id": "check-page-78d865ff6e",
@@ -689,10 +813,136 @@
       "excerpt": "Venture Associate - Capital Factory Venture Associate On-site Ventures Full time Washington, District of Columbia, United States Overview Application Share this job Description Washington, DC, United States Venture Team reporting to Venture Principal This is an on-site role The next generation of American industry is being built by engineers, scientists, and operators who left the lab, the prime, or the program to start something. Your job is to find them first. As a Venture Associate at Capital Factory, you bring the technical credibility these founders want on their cap table. You’ll meet new founders everyday, determine the true breakthrough ventures and recruit the real ones into CF’s All Access Fund. What you will do… Meet the best technology entrepreneurs and recruit them into CF’s All Access Fund. Participate in startup community events & programs as a speaker. Use Twitter, LinkedIn, and other digital platforms to discover new startups and connect with the founders. Develop relationships with CEOs, Angel Investors, and Venture Capitalists and connect them with startups that matter. Read all of the local startup news and engage in social media. Use a suite of AI tools provided by Capital Factory to manage deal flow, publish deal memos and perform at a high level. Get ten years of venture capital experience in three years time! Requirements You'll know you're successful"
     },
     {
+      "id": "check-page-e658aa6b49",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "page": "application",
+      "excerpt": "Founders, mentors and investors come to you to ask for introductions."
+    },
+    {
+      "id": "check-page-72c8f61666",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "page": "application",
+      "excerpt": "Regardless of whether you launched an award winning initiative, lead a team in the military, have patents under your belt, or launched hardware off-world, you are an expert in the making in an area of technology which is changing the world."
+    },
+    {
+      "id": "check-page-d50c9760d7",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "page": "application",
+      "excerpt": "You love founders and startups, You are passionate about emerging technologies such as artificial intelligence, quantum, energy, agtech, advanced manufacturing, and robotics."
+    },
+    {
+      "id": "check-page-bf39181dcc",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "page": "application",
+      "excerpt": "You are committed to building the best AI version of yourself."
+    },
+    {
+      "id": "check-page-35428686eb",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "page": "application",
+      "excerpt": "You are embracing AI tools and using them to delegate and supercharge your abilities."
+    },
+    {
+      "id": "check-page-12051fc6ae",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "page": "application",
+      "excerpt": "You plan to stay in Washington, DC for at least three years."
+    },
+    {
+      "id": "check-page-b5378901ee",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "page": "application",
+      "excerpt": "We are AI first We have excellent written and verbal communication skills."
+    },
+    {
+      "id": "check-page-0c15d9e6aa",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "page": "application",
+      "excerpt": "We’re ready to deal with an immature student, a pushy salesperson, top VC’s, a fortune 500 CEO, and even the President of the United States."
+    },
+    {
+      "id": "check-page-683ca05345",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "page": "application",
+      "excerpt": "We are excited to work in downtown DC and have reliable transportation."
+    },
+    {
+      "id": "check-page-e7d1362748",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "page": "application",
+      "excerpt": "We back the most ambitious founders working on the hardest problems, investing nationally from early stage through growth across defense, space, energy, advanced manufacturing, robotics, and the life sciences."
+    },
+    {
+      "id": "check-page-15d46601cc",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "page": "application",
+      "excerpt": "With deep ties to the government and the national security sector, Capital Factory backs founders with the capital and institutional resources to build companies that strengthen American industry and advance civilization."
+    },
+    {
       "id": "check-page-58e0a24088",
       "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
       "page": "application",
       "excerpt": "Venture Associate - Capital Factory Venture Associate Hybrid Ventures St. Petersburg, Florida, United States Overview Application Share this job Description St. Petersburg, Florida United States Venture Team reporting to Venture Principal This is a hybrid role The next generation of American industry is being built by engineers, scientists, and operators who left the lab, the prime, or the program to start something. Your job is to find them first. As a Venture Associate at Capital Factory, you bring the technical credibility these founders want on their cap table. You’ll meet new founders everyday, determine the true breakthrough ventures and recruit the real ones into CF’s All Access Fund. What you will do… Meet the best technology entrepreneurs and recruit them into CF’s All Access Fund. Participate in startup community events & programs as a speaker. Use Twitter, LinkedIn, and other digital platforms to discover new startups and connect with the founders. Develop relationships with CEOs, Angel Investors, and Venture Capitalists and connect them with startups that matter. Read all of the local startup news and engage in social media. Use a suite of AI tools provided by Capital Factory to manage deal flow, publish deal memos and perform at a high level. Get ten years of venture capital experience in three years time! Requirements You'll know you're successful if.... You"
+    },
+    {
+      "id": "check-page-966c4b385a",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "page": "application",
+      "excerpt": "Founders, mentors and investors come to you to ask for introductions."
+    },
+    {
+      "id": "check-page-82f65d3ab2",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "page": "application",
+      "excerpt": "Regardless of whether you launched an award winning initiative, lead a team in the military, have patents under your belt, or launched hardware off-world, you are an expert in the making in an area of technology which is changing the world."
+    },
+    {
+      "id": "check-page-6810e02640",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "page": "application",
+      "excerpt": "You love founders and startups, You are passionate about emerging technologies such as artificial intelligence, quantum, energy, agtech, advanced manufacturing, and robotics."
+    },
+    {
+      "id": "check-page-52815cd07b",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "page": "application",
+      "excerpt": "You are committed to building the best AI version of yourself."
+    },
+    {
+      "id": "check-page-52184550be",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "page": "application",
+      "excerpt": "You are embracing AI tools and using them to delegate and supercharge your abilities."
+    },
+    {
+      "id": "check-page-20c326d48e",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "page": "application",
+      "excerpt": "We are AI first We have excellent written and verbal communication skills."
+    },
+    {
+      "id": "check-page-878f5a27c4",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "page": "application",
+      "excerpt": "We’re ready to deal with an immature student, a pushy salesperson, top VC’s, a fortune 500 CEO, and even the President of the United States."
+    },
+    {
+      "id": "check-page-e49a87b130",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "page": "application",
+      "excerpt": "Petersburg and have reliable transportation."
+    },
+    {
+      "id": "check-page-69cd08effc",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "page": "application",
+      "excerpt": "We back the most ambitious founders working on the hardest problems, investing nationally from early stage through growth across defense, space, energy, advanced manufacturing, robotics, and the life sciences."
+    },
+    {
+      "id": "check-page-9d0a4f4f0d",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "page": "application",
+      "excerpt": "With deep ties to the government and the national security sector, Capital Factory backs founders with the capital and institutional resources to build companies that strengthen American industry and advance civilization."
     },
     {
       "id": "check-page-03cdf5a824",
@@ -701,10 +951,46 @@
       "excerpt": "Your Dream Job - Capital Factory Your Dream Job On-site Austin, Texas, United States Overview Application Share this job Description Don't see your role listed? No problem! Feel free to submit your Resume and Cover Letter for review. We hire great people in Austin, Houston, Dallas, and San Antonio. Benefits 4 weeks paid time off (one week is between Christmas and New Year’s) Personal health, vision and dental insurance paid 100% by Capital Factory Additional benefits such as 401k program (50% company matching), life insurance, short & long term disability and and employee assistance program $1,000 personal innovation budget on your first year anniversary and then an additional $500 each anniversary thereafter 10 Weeks of paid leave for birthing parents, and 4 weeks paid leave for non-birthing parents Coworking membership at Capital Factory with garage parking space, metro pass, or rideshare credits and access to the onsite gym A priceless network About Capital Factory Capital Factory is the center of gravity for entrepreneurs in Texas, the number one startup state in the U.S. Hundreds of thousands of entrepreneurs, programmers, and designers gather day and night, in-person and online for meetups, classes, and coworking. With boots on the ground in Austin, Dallas, Houston and San Antonio, we meet the best entrepreneurs in Texas and introduce them to their first investors,"
     },
     {
+      "id": "check-page-7fe57c6e0f",
+      "url": "https://apply.workable.com/capital-factory/j/E29CBF1F2D/",
+      "page": "application",
+      "excerpt": "With boots on the ground in Austin, Dallas, Houston and San Antonio, we meet the best entrepreneurs in Texas and introduce them to their first investors, employees, mentors, and customers."
+    },
+    {
       "id": "check-page-c43c507221",
       "url": "https://apply.workable.com/capital-factory/j/E8319084FF/",
       "page": "application",
       "excerpt": "Account Executive (STATION) - Capital Factory Account Executive (STATION) On-site Full time Austin, Texas, United States Overview Application Share this job Description Austin, Texas, United States Sales Team reporting to VP of Sales This is an on-site role Are you a sales guru who excels at building relationships and closing mutually beneficial deals in a fast-paced environment? Do you want to take your skill set and strengthen it with one of the most active venture capital firms investing in technology startups? The Account Executive is a quota carrying sales professional selling Capital Factory program sponsorships. This is completed by driving inbound and outbound sales activities to identify new prospective sponsors, presenting program solutions, negotiating sponsorships up to $100,000, creating sponsorship proposals, and managing sponsorship deliverables for all CF partners. All of our partners are understaffed and can be hard to work with at times. It’s up to us to make them successful – that’s a big reason they choose to keep working with us. Our goal is to provide the type of service you might expect from the Four Seasons or Tiffany’s. We sweat the small stuff. We respect their time. We do whatever it takes and do it with style. Requirements What you will do… Identify and develop relationships with potential community sponsors for Capital Factory events ranging from"
+    },
+    {
+      "id": "check-page-b76c37aa9d",
+      "url": "https://apply.workable.com/capital-factory/j/E8319084FF/",
+      "page": "application",
+      "excerpt": "Requirements What you will do… Identify and develop relationships with potential community sponsors for Capital Factory events ranging from title sponsorships for Cornerstone Events (SXSW, Austin Tech Week, Fed Supernova, and Health Supernova) to smaller community events, like Cup of Capital."
+    },
+    {
+      "id": "check-page-b1aba722ca",
+      "url": "https://apply.workable.com/capital-factory/j/E8319084FF/",
+      "page": "application",
+      "excerpt": "We’re ready to deal with an immature student, a pushy salesperson, top VC’s, a fortune 500 CEO, and even the President of the United States."
+    },
+    {
+      "id": "check-page-ed38044ebe",
+      "url": "https://apply.workable.com/capital-factory/j/E8319084FF/",
+      "page": "application",
+      "excerpt": "We are excited to work in downtown [Austin/Dallas/Houston/San Antonio] and have reliable transportation."
+    },
+    {
+      "id": "check-page-3b898f33d9",
+      "url": "https://apply.workable.com/capital-factory/j/E8319084FF/",
+      "page": "application",
+      "excerpt": "Our growing network of innovation hubs brings together founders, investors, industry leaders, mentors, and public-sector partners to collaborate, build relationships, and create what’s next."
+    },
+    {
+      "id": "check-page-5838e3a16e",
+      "url": "https://apply.workable.com/capital-factory/j/E8319084FF/",
+      "page": "application",
+      "excerpt": "Through year-round programming, cornerstone events, mentorship, education, and curated connections, STATION gives entrepreneurs access to the people, knowledge, resources, and opportunities they need to grow and make an impact."
     },
     {
       "id": "check-page-21a6ec4415",
@@ -713,10 +999,88 @@
       "excerpt": "Government Relations & Partnership Specialist - Capital Factory Government Relations & Partnership Specialist On-site Community Engagement Full time Austin, Texas, United States Overview Application Share this job Description The Government Relations & Partnerships Specialist serves as a key connector between STATION Austin and government, defense, and national security innovation partners. This role is responsible for developing and maintaining strong relationships with government partners, understanding their priorities and objectives, and translating those needs into meaningful engagement across the STATION Austin ecosystem. You’ll work closely with government innovation organizations, founders, mentors, investors, industry partners, and the broader STATION Austin team to create opportunities for collaboration—from curated introductions and roundtables to office hours, programming, events, and strategic partnerships. Success in this role means our government partners see STATION Austin not simply as a place to attend events, but as a year-round resource for accessing founders, technology, expertise, capital, and the broader innovation ecosystem. STATION Austin’s Community Engagement Team connects the defense innovation ecosystem in Texas (and beyond) to the most innovative startups and technology in Texas. Defense Secretaries, Four-Star Generals, Presidents, and delegations"
     },
     {
+      "id": "check-page-8e3ac37610",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "page": "application",
+      "excerpt": "Defense Secretaries, Four-Star Generals, Presidents, and delegations from other countries regularly interact with members of our Federal team."
+    },
+    {
+      "id": "check-page-5f1268135d",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "page": "application",
+      "excerpt": "Notable government partners include Army Applications Laboratory, AFWERX and DIU."
+    },
+    {
+      "id": "check-page-ab7feaae0a",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "page": "application",
+      "excerpt": "What you will do… Government Partner Engagement Serve as a primary relationship manager for assigned government and defense innovation partners."
+    },
+    {
+      "id": "check-page-7945aa8d77",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "page": "application",
+      "excerpt": "Develop strong relationships across organizations such as DIU, AFWERX, Army Applications Laboratory, SOFWERX, Marine Innovation Unit, and other federal, state, and local government entities."
+    },
+    {
+      "id": "check-page-205cad8b90",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "page": "application",
+      "excerpt": "Ecosystem Activation Translate government partner needs into opportunities for engagement with STATION Austin founders, member companies, mentors, investors, and other partners."
+    },
+    {
+      "id": "check-page-e76d035b25",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "page": "application",
+      "excerpt": "Work across the STATION Austin team to identify and curate the right people for government partners to meet."
+    },
+    {
+      "id": "check-page-a0fcab328c",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "page": "application",
+      "excerpt": "Facilitate targeted introductions between government stakeholders and relevant startups, subject-matter experts, investors, and ecosystem leaders."
+    },
+    {
+      "id": "check-page-5e1f58a4e9",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "page": "application",
+      "excerpt": "Help government partners navigate STATION Austin's broader network and identify resources that can advance their objectives."
+    },
+    {
+      "id": "check-page-d84dada973",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "page": "application",
+      "excerpt": "Programming & Convening Help develop a consistent cadence of government-focused programming, including roundtables, happy hours, speaker sessions, office hours, working sessions, and other targeted gatherings."
+    },
+    {
+      "id": "check-page-dc7eb9b81e",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "page": "application",
+      "excerpt": "Support the activation of STATION Austin's government and defense-focused spaces by bringing the right people into the room, rather than measuring success solely through attendance."
+    },
+    {
+      "id": "check-page-9e01eba6eb",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "page": "application",
+      "excerpt": "Support major STATION Austin programs and events, including Fed Supernova and other defense and national security innovation initiatives."
+    },
+    {
+      "id": "check-page-e6d4c46394",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "page": "application",
+      "excerpt": "Partnership Growth & Strategy Identify opportunities to expand existing government relationships and develop new strategic partnerships."
+    },
+    {
       "id": "check-page-74ed3043ea",
       "url": "https://capitalfactory.com/terms",
       "page": "terms",
       "excerpt": "Terms of Service — Capital Factory Skip to content Portfolio Texas Fund Fellowship Fund All Access Government Team Investors Legal Terms of Service Last updated: 2026-06-13 Capital Factory (“Capital Factory,” “we,” “us”) operates capitalfactory.com . These Terms govern your use of the site and the services offered through it. By using the site, you agree to these Terms. Use of the site You may use the site for lawful purposes only. You agree not to interfere with its operation, attempt unauthorized access, scrape it in violation of these Terms, or use it to transmit unlawful or harmful content. Applications and submissions If you submit an application (to the Texas Fund, All Access, or any program) or other materials, you represent that the information is accurate and that you have the right to share it. Submitting an application does not create any obligation on our part to invest, admit, or respond, and does not form an investor, advisory, or fiduciary relationship. No investment advice or offer Nothing on this site is an offer to sell or a solicitation to buy any security, nor investment, legal, tax, or financial advice. Fund participation is offered only to qualified investors through separate definitive documents, and past performance does not guarantee future results. Intellectual property The site’s content, marks, and design are owned by Capital Factory or its"
+    },
+    {
+      "id": "check-page-faf88761af",
+      "url": "https://capitalfactory.com/terms",
+      "page": "terms",
+      "excerpt": "Texas Fund Fellowship Fund All Access Investors Team Careers Partners Government Events News About Terms Privacy Code of Conduct For agents © 2026 Capital Factory · The most active investor in Texas"
     },
     {
       "id": "check-page-b61936346c",
@@ -725,16 +1089,136 @@
       "excerpt": "Texas Fund — Capital Factory Skip to content Portfolio Texas Fund Fellowship Fund All Access Government Team Investors The flagship venture fund We write the first check into the future. The Texas Fund backs founders building deep and frontier technology — from seed through Series C, in cash, with conviction. Most firms wait for the proof. We write the check that creates it. The Texas Fund goes early into the companies solving problems at the edge of what's possible — autonomy, robotics, space, defense, neurotech, energy — and stays in for the long build. Our founders don't just raise from us; they raise through us. We fill rounds, open doors at the Pentagon and the Fortune 500, and put the full weight of Texas's densest network behind every company we back. Apptronik, Saronic, Paradromics, Colossal, Firefly — they all have one thing in common, and we were in the room early. If you're building something the world isn't ready for yet, pitch us. Pitch the Texas Fund → Featured Apptronik Saronic Technologies Paradromics Inc. In the Texas Fund portfolio Browse the full portfolio → All Texas Fund Fellowship Fund All Access Exited All frontiers Space Energy Bio & Health Defense AI & Robotics Hardware More Showing 1–24 of 131 companies Aalo Atomics ★ We build mass-manufactured nuclear plants that will power anything from a datacenter to a city. Texas Fund I Allen Control Systems ★"
     },
     {
+      "id": "check-page-86e25948b6",
+      "url": "https://capitalfactory.com/texas-fund",
+      "page": "terms",
+      "excerpt": "Texas Fund I Allen Control Systems ★ Autonomous weapon stations and drone detection systems for defense applications Texas Fund I AmplifAI ★ AmplifAI transforms employee data into actions modeled after an enterprise’s best-performing people - helping hybrid teams maximize business outcomes, boost productivity and improve engagement."
+    },
+    {
+      "id": "check-page-63260057e6",
+      "url": "https://capitalfactory.com/texas-fund",
+      "page": "terms",
+      "excerpt": "Texas Fund I Andromeda ★ Turn enterprise documents into enterprise knowledge Texas Fund I Apptronik ★ Robots for Humans Texas Fund I Autonomize, Inc. ★ Autonomize Health is a healthcare AI company."
+    },
+    {
+      "id": "check-page-75b0e0355f",
+      "url": "https://capitalfactory.com/texas-fund",
+      "page": "terms",
+      "excerpt": "Texas Fund I BizzyCar ★ BizzyCar provides a SaaS based platform to facilitate car service, focusing on warranty recalls."
+    },
+    {
+      "id": "check-page-259683e6fc",
+      "url": "https://capitalfactory.com/texas-fund",
+      "page": "terms",
+      "excerpt": "Texas Fund I Cart.com ★ Cart.com is creating e-commerce as a service."
+    },
+    {
+      "id": "check-page-2247ac6b45",
+      "url": "https://capitalfactory.com/texas-fund",
+      "page": "terms",
+      "excerpt": "Texas Fund I General Radar ★ Building the first commercial AESA radar Texas Fund I Harbor Health ★ Harbor Health is building a fully integrated health insurance solution to more effectively deliver quality patient outcomes at lower costs."
+    },
+    {
+      "id": "check-page-2965014e68",
+      "url": "https://capitalfactory.com/texas-fund",
+      "page": "terms",
+      "excerpt": "Texas Fund I Intuitive Machines ★ Diversified space company focused on space exploration Public · NASDAQ: LUNR Texas Fund I Mantis Space ★ Delivering Energy in Orbit through laser power transmission technology for satellites Texas Fund II MedScout ★ MedScout is a sales enablement tool for healthcare pipelines."
+    },
+    {
+      "id": "check-page-c96defbc39",
+      "url": "https://capitalfactory.com/texas-fund",
+      "page": "terms",
+      "excerpt": "Texas Fund I Nada ★ Fintech platform unlocking the $35T home equity market Texas Fund I NATILUS ★ RESHAPING THE SKIES WITH THE MOST EFFICIENT AIRCRAFT EVER DEVELOPED Texas Fund I Neurable ★ Enabling everyday brain-computer interfaces Texas Fund I Outlier.bet ★ social sports talk app that allows anyone, anywhere, with no equipment, to commentate on live sports."
+    },
+    {
+      "id": "check-page-b163c40185",
+      "url": "https://capitalfactory.com/texas-fund",
+      "page": "terms",
+      "excerpt": "Texas Fund Fellowship Fund All Access Investors Team Careers Partners Government Events News About Terms Privacy Code of Conduct For agents © 2026 Capital Factory · The most active investor in Texas"
+    },
+    {
       "id": "check-page-81d5f48a45",
       "url": "https://capitalfactory.com/about",
       "page": "details",
       "excerpt": "About — Capital Factory Skip to content Portfolio Texas Fund Fellowship Fund All Access Government Team Investors About We bet on the hardest problems — early. Capital Factory is the venture firm at the center of Texas. We've been the most active early-stage investor in the state since 2010, and we back founders building things most people think are impossible. We do it two ways. The Texas Fund writes the first cash check into deep and frontier technology — national security, healthcare, next-generation industrial. All Access plugs 800+ companies into the introductions, customers, and capital that turn an idea into an outcome. We started as a software accelerator in 2009 and grew into the firm those founders choose first. The portfolio tells the story: Apptronik's humanoids on the factory floor, Saronic's autonomous ships, Paradromics in the human brain, Firefly on the surface of the Moon. The common thread is nerve — and a network that shows up when it counts. If you're building something ambitious in Texas, this is where you start. How we got here. From a five-companies-a-year accelerator in the downturn to the venture firm at the center of Texas — here's the path. 2009 Capital Factory is founded Joshua Baer starts Capital Factory in Austin as a mentorship-driven software accelerator — five companies a year, in the teeth of the downturn. 2010 Texas' most active investor Per"
     },
     {
+      "id": "check-page-78810b345a",
+      "url": "https://capitalfactory.com/about",
+      "page": "details",
+      "excerpt": "2010 Texas' most active investor Per Pitchbook, Capital Factory has been the most active early-stage investor in Texas every year since 2010."
+    },
+    {
+      "id": "check-page-149e7eb5d6",
+      "url": "https://capitalfactory.com/about",
+      "page": "details",
+      "excerpt": "2019 Center for Defense Innovation opens 23,000 sq ft of public-private collaboration space opens with Army Futures Command, AFWERX, and DIU as tenants — later the Center for Dual-Use Innovation."
+    },
+    {
+      "id": "check-page-86b2461de6",
+      "url": "https://capitalfactory.com/about",
+      "page": "details",
+      "excerpt": "2021 The Texas Fund launches Capital Factory's flagship venture vehicle writes its first cash checks — formalizing the evolution from accelerator into a venture firm."
+    },
+    {
+      "id": "check-page-4e2028a699",
+      "url": "https://capitalfactory.com/about",
+      "page": "details",
+      "excerpt": "2023 Fellowship Fund launches A new fund opens the door even wider, broadening who gets access to Capital Factory's capital and network."
+    },
+    {
+      "id": "check-page-1266d8c4dd",
+      "url": "https://capitalfactory.com/about",
+      "page": "details",
+      "excerpt": "2025 Firefly Aerospace IPOs Launch-and-lunar company Firefly Aerospace lists on the Nasdaq (FLY) in August at a multi-billion-dollar valuation."
+    },
+    {
+      "id": "check-page-78810b345a",
+      "url": "https://capitalfactory.com/about",
+      "page": "details",
+      "excerpt": "2010 Texas' most active investor Per Pitchbook, Capital Factory has been the most active early-stage investor in Texas every year since 2010."
+    },
+    {
+      "id": "check-page-149e7eb5d6",
+      "url": "https://capitalfactory.com/about",
+      "page": "details",
+      "excerpt": "2019 Center for Defense Innovation opens 23,000 sq ft of public-private collaboration space opens with Army Futures Command, AFWERX, and DIU as tenants — later the Center for Dual-Use Innovation."
+    },
+    {
+      "id": "check-page-86b2461de6",
+      "url": "https://capitalfactory.com/about",
+      "page": "details",
+      "excerpt": "2021 The Texas Fund launches Capital Factory's flagship venture vehicle writes its first cash checks — formalizing the evolution from accelerator into a venture firm."
+    },
+    {
+      "id": "check-page-4e2028a699",
+      "url": "https://capitalfactory.com/about",
+      "page": "details",
+      "excerpt": "2023 Fellowship Fund launches A new fund opens the door even wider, broadening who gets access to Capital Factory's capital and network."
+    },
+    {
+      "id": "check-page-1266d8c4dd",
+      "url": "https://capitalfactory.com/about",
+      "page": "details",
+      "excerpt": "2025 Firefly Aerospace IPOs Launch-and-lunar company Firefly Aerospace lists on the Nasdaq (FLY) in August at a multi-billion-dollar valuation."
+    },
+    {
+      "id": "check-page-5c17251ffb",
+      "url": "https://capitalfactory.com/about",
+      "page": "details",
+      "excerpt": "Texas Fund Fellowship Fund All Access Investors Team Careers Partners Government Events News About Terms Privacy Code of Conduct For agents © 2026 Capital Factory · The most active investor in Texas"
+    },
+    {
       "id": "check-page-399674adb1",
       "url": "https://capitalfactory.com/portfolio",
       "page": "portfolio",
       "excerpt": "Portfolio — Capital Factory Skip to content Portfolio Texas Fund Fellowship Fund All Access Government Team Investors Portfolio 800+ companies, reshaping civilization. From humanoid robots to autonomous ships to neurotech — we back the founders working on the hardest problems. Filter by sector, fund, or exit. ● Watch Featured Apptronik Robots for Humans Texas Fund I View → Also featured Saronic Technologies Paradromics Inc. All Texas Fund Fellowship Fund All Access Exited All frontiers Space Energy Bio & Health Defense AI & Robotics Hardware More Showing 1–24 of 775 companies Aalo Atomics ★ We build mass-manufactured nuclear plants that will power anything from a datacenter to a city. Texas Fund I Advanced Bifurcation Systems Inc. ★ First dedicated platform for the treatment of coronary bifurcation lesions. All Access Airloom Energy ★ The Next Era of Resilient Energy All Access Allen Control Systems ★ Autonomous weapon stations and drone detection systems for defense applications Texas Fund I AmplifAI ★ AmplifAI transforms employee data into actions modeled after an enterprise’s best-performing people - helping hybrid teams maximize business outcomes, boost productivity and improve engagement. Texas Fund I Andromeda ★ Turn enterprise documents into enterprise knowledge Texas Fund I Apptronik ★ Robots for Humans Texas Fund I Asylon ★ Robotic Perimeter Security All Access"
+    },
+    {
+      "id": "check-page-a958ed5520",
+      "url": "https://capitalfactory.com/texas",
+      "page": "portfolio",
+      "excerpt": "Across Texas — Capital Factory Skip to content Portfolio Texas Fund Fellowship Fund All Access Government Team Investors Footprint Across Texas We invest in founders building all over the state — not just one zip code. Here's where the portfolio actually is, mapped live from the companies' own profiles. Across Texas A statewide portfolio. 324 companies with a home base in 5 Texas cities . Every dot is a real portfolio company, sized by how many we back in that metro. Explore the full portfolio → Backing the most ambitious founders working on the hardest problems. Texas Fund Fellowship Fund All Access Investors Team Careers Partners Government Events News About Terms Privacy Code of Conduct For agents © 2026 Capital Factory · The most active investor in Texas"
     },
     {
       "id": "check-page-d734e8b4a9",

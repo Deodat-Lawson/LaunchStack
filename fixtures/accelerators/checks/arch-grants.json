@@ -1,6 +1,6 @@
 {
   "programId": "arch-grants",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://archgrants.org/",
     "http://archgrants.org/programs/application-reminder-form/",
@@ -14,9 +14,14 @@
     "http://archgrants.org/about-us/our-impact/",
     "http://archgrants.org/about-us/our-supporters/",
     "http://archgrants.org/about-us/sustained-impact/",
-    "http://archgrants.org/about-us/team/",
     "http://archgrants.org/get-involved/expert-in-residence-program/",
-    "http://archgrants.org/hq-expansion-and-lending-program/"
+    "http://archgrants.org/hq-expansion-and-lending-program/",
+    "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+    "http://archgrants.org/programs/",
+    "http://archgrants.org/programs/fellows-program/",
+    "http://archgrants.org/programs/founder-lending-program/",
+    "http://archgrants.org/programs/growth-grants/",
+    "http://archgrants.org/programs/innovation-summit/"
   ],
   "evidence": [
     {
@@ -62,10 +67,24 @@
       "page": "details"
     },
     {
+      "id": "check-deal-aef08733e1",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "CEO of COUNSELMEDS) We are pleased to announce that we’ve awarded $100,000 in a non-dilutive […] Read More Contact 2315 Locust St. Suite 2B St.",
+      "page": "details"
+    },
+    {
       "id": "check-deal-b21f81e6f5",
       "url": "http://archgrants.org/about-us/sustained-impact/",
       "title": "Arch Grants — program page",
       "excerpt": "to help our Founders raise growth capital by awarding additional $100,000 non-dilutive grants to Arch Grants portfolio companies based in St.",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-bc575785de",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "title": "Arch Grants — program page",
+      "excerpt": "St. Louis’ economy through entrepreneurship, these non-dilutive $100,000 grants help our high-performing startups accelerate growth while",
       "page": "details"
     },
     {
@@ -174,6 +193,13 @@
       "page": "terms"
     },
     {
+      "id": "check-email-33d8ab14a6",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
       "id": "check-email-36c6a33674",
       "url": "http://archgrants.org/about-us/our-supporters/",
       "title": "Arch Grants — program page",
@@ -216,10 +242,38 @@
       "page": "application"
     },
     {
+      "id": "check-email-4873f2587b",
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "title": "Arch Grants — program page",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
       "id": "check-email-56e33fedc0",
       "url": "http://archgrants.org/about-us/sustained-impact/",
       "title": "Arch Grants — program page",
       "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-65ac108e84",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "title": "Arch Grants — program page",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-76352a5433",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-814ad6dd91",
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "title": "Arch Grants — program page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
       "page": "details"
     },
     {
@@ -235,6 +289,20 @@
       "title": "Arch Grants — terms page",
       "excerpt": "info@archgrants.org",
       "page": "terms"
+    },
+    {
+      "id": "check-email-8bbf13d1cc",
+      "url": "http://archgrants.org/programs/founder-lending-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8cda4c1ac0",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "details"
     },
     {
       "id": "check-email-932a198628",
@@ -258,10 +326,31 @@
       "page": "details"
     },
     {
+      "id": "check-email-a49993a2c9",
+      "url": "http://archgrants.org/programs/",
+      "title": "Arch Grants — program page",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ab5410b88c",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "details"
+    },
+    {
       "id": "check-email-b4233e6b74",
       "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
       "title": "Arch Grants — program page",
       "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b4d1c83891",
+      "url": "http://archgrants.org/programs/",
+      "title": "Arch Grants — program page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
       "page": "details"
     },
     {
@@ -286,8 +375,22 @@
       "page": "application"
     },
     {
+      "id": "check-email-cc107f8224",
+      "url": "http://archgrants.org/programs/founder-lending-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
       "id": "check-email-cf0b62755f",
       "url": "http://archgrants.org/about-us/sustained-impact/",
+      "title": "Arch Grants — program page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ee43613652",
+      "url": "http://archgrants.org/programs/growth-grants/",
       "title": "Arch Grants — program page",
       "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
       "page": "details"
@@ -307,24 +410,10 @@
       "page": "batches"
     },
     {
-      "id": "check-email-f6d97f67af",
-      "url": "http://archgrants.org/about-us/team/",
-      "title": "Arch Grants — program page",
-      "excerpt": "info@archgrants.org",
-      "page": "details"
-    },
-    {
       "id": "check-email-fb0258d71c",
       "url": "http://archgrants.org/about-us/our-supporters/",
       "title": "Arch Grants — program page",
       "excerpt": "info@archgrants.org",
-      "page": "details"
-    },
-    {
-      "id": "check-email-fb5b7f8480",
-      "url": "http://archgrants.org/about-us/team/",
-      "title": "Arch Grants — program page",
-      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
       "page": "details"
     },
     {
@@ -384,15 +473,15 @@
       "page": "details"
     },
     {
-      "id": "check-phone-0251d862f3",
-      "url": "http://archgrants.org/about-us/team/",
+      "id": "check-phone-028fc98b38",
+      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
       "title": "Arch Grants — program page",
       "excerpt": "314-272-4857",
       "page": "details"
     },
     {
-      "id": "check-phone-028fc98b38",
-      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
+      "id": "check-phone-3759e4b31f",
+      "url": "http://archgrants.org/programs/",
       "title": "Arch Grants — program page",
       "excerpt": "314-272-4857",
       "page": "details"
@@ -405,8 +494,36 @@
       "page": "application"
     },
     {
+      "id": "check-phone-5716e12839",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "title": "Arch Grants — program page",
+      "excerpt": "314-272-4857",
+      "page": "details"
+    },
+    {
       "id": "check-phone-648ada673a",
       "url": "http://archgrants.org/about-us/our-supporters/",
+      "title": "Arch Grants — program page",
+      "excerpt": "314-272-4857",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-64d0fbc959",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "314-272-4857",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-7b1cf94224",
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "title": "Arch Grants — program page",
+      "excerpt": "314-272-4857",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-7ba41adc11",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
       "title": "Arch Grants — program page",
       "excerpt": "314-272-4857",
       "page": "details"
@@ -424,6 +541,13 @@
       "title": "Arch Grants — terms page",
       "excerpt": "314-272-4857",
       "page": "terms"
+    },
+    {
+      "id": "check-phone-b01adfed18",
+      "url": "http://archgrants.org/programs/founder-lending-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "314-272-4857",
+      "page": "details"
     },
     {
       "id": "check-phone-b233a4d6fd",
@@ -538,6 +662,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-3181b9074b",
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-35ad39bbea",
       "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
       "title": "Arch Grants — program page",
@@ -552,6 +683,20 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-4262b9aedb",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-46091c6d40",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "Explore Our Fellows Companies → https://archgrants.org/companies/?_company_year=fellows&_paged=2",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-4c9d834262",
       "url": "http://archgrants.org/about-us/",
       "title": "Arch Grants — program page",
@@ -563,6 +708,20 @@
       "url": "https://archgrants.org/",
       "title": "Arch Grants — homepage",
       "excerpt": "The Startups → https://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-55913441c4",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-61f2509ef8",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
       "page": "details"
     },
     {
@@ -594,8 +753,8 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-6e442ccda0",
-      "url": "http://archgrants.org/about-us/team/",
+      "id": "check-portfolio-7c35508402",
+      "url": "http://archgrants.org/programs/growth-grants/",
       "title": "Arch Grants — program page",
       "excerpt": "The Companies → http://archgrants.org/companies/",
       "page": "details"
@@ -606,13 +765,6 @@
       "title": "Arch Grants — application page",
       "excerpt": "The Startups → http://archgrants.org/companies/",
       "page": "application"
-    },
-    {
-      "id": "check-portfolio-7de000cfb8",
-      "url": "http://archgrants.org/about-us/team/",
-      "title": "Arch Grants — program page",
-      "excerpt": "The Startups → http://archgrants.org/companies/",
-      "page": "details"
     },
     {
       "id": "check-portfolio-7fbc07f916",
@@ -633,6 +785,13 @@
       "url": "https://archgrants.org/",
       "title": "Arch Grants — homepage",
       "excerpt": "Explore All Startups → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8cd23b3593",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
       "page": "details"
     },
     {
@@ -664,6 +823,20 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-af906e3c4c",
+      "url": "http://archgrants.org/programs/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b3f43e68ab",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-ba837ff5c8",
       "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
       "title": "Arch Grants — program page",
@@ -678,11 +851,25 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-befbcaea21",
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-ccc5a36ea3",
       "url": "http://archgrants.org/wepower-announces-first-investment-in-st-louis-startup-bold-xchange/",
       "title": "Arch Grants — terms page",
       "excerpt": "The Startups → http://archgrants.org/companies/",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d676b78631",
+      "url": "http://archgrants.org/programs/founder-lending-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-d77098a8f5",
@@ -699,11 +886,39 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-e1e3b98beb",
+      "url": "http://archgrants.org/programs/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f0066391be",
+      "url": "http://archgrants.org/programs/founder-lending-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-f7be4a0de5",
       "url": "http://archgrants.org/mission-driven-tech-startup-selected-to-join-latest-cohort-of-fintechs-in-mastercard-start-path-program/",
       "title": "Arch Grants — batches page",
       "excerpt": "The Startups → http://archgrants.org/companies/",
       "page": "batches"
+    },
+    {
+      "id": "check-rolling-4ed349c4a7",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "title": "Arch Grants — program page",
+      "excerpt": "startup to the next level? Applications for Growth Grants are reviewed on a rolling basis. Review our Growth Grants FAQs , or contact our portfolio team to learn more",
+      "page": "details"
+    },
+    {
+      "id": "check-route-08026c9325",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "title": "Arch Grants — program page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
+      "page": "details"
     },
     {
       "id": "check-route-0d6277ecde",
@@ -720,11 +935,25 @@
       "page": "details"
     },
     {
+      "id": "check-route-1871b64df6",
+      "url": "http://archgrants.org/programs/",
+      "title": "Arch Grants — program page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
+      "page": "details"
+    },
+    {
       "id": "check-route-1e1d8fa0cc",
       "url": "https://archgrants.org/programs/faqs/",
       "title": "Arch Grants — terms page",
       "excerpt": "applying to judge → http://archgrants.org/get-involved/become-a-competition-judge/",
       "page": "terms"
+    },
+    {
+      "id": "check-route-2768dedc9a",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
+      "page": "details"
     },
     {
       "id": "check-route-39bb08574e",
@@ -750,13 +979,6 @@
     {
       "id": "check-route-775d0264a3",
       "url": "http://archgrants.org/about-us/our-supporters/",
-      "title": "Arch Grants — program page",
-      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
-      "page": "details"
-    },
-    {
-      "id": "check-route-7eed1f8fb4",
-      "url": "http://archgrants.org/about-us/team/",
       "title": "Arch Grants — program page",
       "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
       "page": "details"
@@ -818,6 +1040,20 @@
       "page": "terms"
     },
     {
+      "id": "check-route-c3d20ed242",
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "title": "Arch Grants — program page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ce56b99492",
+      "url": "http://archgrants.org/programs/founder-lending-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
+      "page": "details"
+    },
+    {
       "id": "check-route-dbf865ac57",
       "url": "https://archgrants.org/",
       "title": "Arch Grants — homepage",
@@ -844,6 +1080,13 @@
       "title": "Arch Grants — program page",
       "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
       "page": "details"
+    },
+    {
+      "id": "check-route-fd1f43e49f",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
+      "page": "details"
     }
   ],
   "pageQuotes": [
@@ -854,16 +1097,106 @@
       "excerpt": "Home | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Champion the Bold. The future of St. Louis starts here. Join us at neXus, an event showcasing how the innovation community is reshaping St. Louis. neXus isn’t just another event — it’s where investors, founders, civic leaders, and bold thinkers collide to shape what’s next for our city, our startups, and our region’s economy. Expect"
     },
     {
+      "id": "check-page-f7ddcd8e9f",
+      "url": "https://archgrants.org/",
+      "page": "details",
+      "excerpt": "Louis Through Game-Changing Entrepreneurship Since 2012, Arch Grants has fueled big ideas shaping St."
+    },
+    {
+      "id": "check-page-10a18a0497",
+      "url": "https://archgrants.org/",
+      "page": "details",
+      "excerpt": "291 companies funded 4300 + jobs created in STL $ 276 M+ STL wages paid $ 955 M+ capital raised $ 1.4 B+ revenue generated See More Founder Stories The Arch Grants team is passionate about the family of entrepreneurs they have nurtured and launched throughout the decade."
+    },
+    {
+      "id": "check-page-8a9fc1f0f1",
+      "url": "https://archgrants.org/",
+      "page": "details",
+      "excerpt": "Arch Grants’ creation in St."
+    },
+    {
+      "id": "check-page-256840e7ec",
+      "url": "https://archgrants.org/",
+      "page": "details",
+      "excerpt": "Louis and grow with Arch Grants’ always helping hand and friendship."
+    },
+    {
+      "id": "check-page-d04ffaab68",
+      "url": "https://archgrants.org/",
+      "page": "details",
+      "excerpt": "Shower Zhang Co-Founder Equine Smartbit See More Founder Stories Featured Companies Explore All Startups We’re on a mission to accelerate place-based economic development through equity-free business startup funding."
+    },
+    {
+      "id": "check-page-07c31777e2",
+      "url": "https://archgrants.org/",
+      "page": "details",
+      "excerpt": "Our Startup Competition attracts innovative entrepreneurs from around the world to compete for startup grants and equity in order to grow and scale their businesses."
+    },
+    {
+      "id": "check-page-ebd49906d0",
+      "url": "https://archgrants.org/",
+      "page": "details",
+      "excerpt": "Join us by applying to our Startup Competition, becoming a financial supporter, volunteering your time or amplifying our message."
+    },
+    {
+      "id": "check-page-fea91559c1",
+      "url": "https://archgrants.org/",
+      "page": "details",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-3204aa1b8d",
+      "url": "https://archgrants.org/",
+      "page": "details",
+      "excerpt": "Follow us on LinkedIn Follow us on Facebook Follow Us on X Follow us on Instagram Find us on YouTube Copyright © 2026 Arch Grants | All rights reserved."
+    },
+    {
       "id": "check-page-82d0234169",
       "url": "http://archgrants.org/programs/application-reminder-form/",
       "page": "application",
-      "excerpt": "Application Reminder Form | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Application Reminder Form Fill out the form below to receive reminders and updates regarding our Startup Competition application cycle. Facebook This field is for validation purposes and should be left unchanged. Name (Required) First Last Email (Required) Company Name (Required) (If Company Name is not"
+      "excerpt": "Application Reminder Form | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Application Reminder Form Fill out the form below to receive reminders and updates regarding our Startup Competition application cycle. LinkedIn This field is for validation purposes and should be left unchanged. Name (Required) First Last Email (Required) Company Name (Required) (If Company Name is not"
+    },
+    {
+      "id": "check-page-0af8692658",
+      "url": "http://archgrants.org/programs/application-reminder-form/",
+      "page": "application",
+      "excerpt": "(Required) Select One Accelerator, Incubator, Co-Working Space, Venture Capital University Program/Communications Email from Arch Grants Previous Applicant Word of Mouth Internet Search Previous Founder Arch Grants Staff News Article Facebook LinkedIn YouTube Twitter Instagram CAPTCHA Submit Contact 2315 Locust St."
+    },
+    {
+      "id": "check-page-630f768ce6",
+      "url": "http://archgrants.org/programs/application-reminder-form/",
+      "page": "application",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-64e8c68dac",
+      "url": "http://archgrants.org/programs/application-reminder-form/",
+      "page": "application",
+      "excerpt": "Follow us on LinkedIn Follow us on Facebook Follow Us on X Follow us on Instagram Find us on YouTube Copyright © 2026 Arch Grants | All rights reserved."
     },
     {
       "id": "check-page-168ea72ef1",
       "url": "https://archgrants.org/programs/application-reminder-form/",
       "page": "application",
-      "excerpt": "Application Reminder Form | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Application Reminder Form Fill out the form below to receive reminders and updates regarding our Startup Competition application cycle. Name This field is for validation purposes and should be left unchanged. Name (Required) First Last Email (Required) Company Name (Required) (If Company Name is not applicable,"
+      "excerpt": "Application Reminder Form | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Application Reminder Form Fill out the form below to receive reminders and updates regarding our Startup Competition application cycle. Email This field is for validation purposes and should be left unchanged. Name (Required) First Last Email (Required) Company Name (Required) (If Company Name is not applicable,"
+    },
+    {
+      "id": "check-page-17a9df04e0",
+      "url": "https://archgrants.org/programs/application-reminder-form/",
+      "page": "application",
+      "excerpt": "(Required) Select One Accelerator, Incubator, Co-Working Space, Venture Capital University Program/Communications Email from Arch Grants Previous Applicant Word of Mouth Internet Search Previous Founder Arch Grants Staff News Article Facebook LinkedIn YouTube Twitter Instagram CAPTCHA Submit Contact 2315 Locust St."
+    },
+    {
+      "id": "check-page-bbd2eeeb72",
+      "url": "https://archgrants.org/programs/application-reminder-form/",
+      "page": "application",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-0e08b666f9",
+      "url": "https://archgrants.org/programs/application-reminder-form/",
+      "page": "application",
+      "excerpt": "Follow us on LinkedIn Follow us on Facebook Follow Us on X Follow us on Instagram Find us on YouTube Copyright © 2026 Arch Grants | All rights reserved."
     },
     {
       "id": "check-page-1c3d825471",
@@ -872,10 +1205,112 @@
       "excerpt": "FAQs | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Frequently Asked Questions General Questions Questions about the Startup Competition About The Competition Why should I enter the Arch Grants Startup Competition? Arch Grants is a source of equity-free funding for early-stage startups, and also an opportunity to grow your business within St. Louis’ expanding entrepreneurial hub"
     },
     {
+      "id": "check-page-99b27deeda",
+      "url": "http://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "Louis’ expanding entrepreneurial hub surrounded by a community of mentors, collaborators, and resources."
+    },
+    {
+      "id": "check-page-5ea7dd80b9",
+      "url": "http://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "Arch Grants Companies receive $75,000 and access to an ecosystem of resources and support to help grow and scale their businesses."
+    },
+    {
+      "id": "check-page-675b9f0470",
+      "url": "http://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "How is Arch Grants different from angel investors and venture capital firms?"
+    },
+    {
+      "id": "check-page-ae8edd0601",
+      "url": "http://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "Arch Grants is a nonprofit organization whose purpose is to improve the St."
+    },
+    {
+      "id": "check-page-d006aa221a",
+      "url": "http://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "We do not take an equity stake in the companies to which we award grants."
+    },
+    {
+      "id": "check-page-fe6bd1cd72",
+      "url": "http://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "If I am selected for the Arch Grants program, what will I need to agree to?"
+    },
+    {
+      "id": "check-page-f2d506092c",
+      "url": "http://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "Arch Grants Companies must meet the following requirements to receive the grant: Headquarter the business or establish significant operations in St."
+    },
+    {
+      "id": "check-page-f3a5e68c51",
+      "url": "http://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "Louis for one year Meet additional participation requirements, including program attendance, company data submissions, and civic engagement How has Arch Grants been successful in supporting startups?"
+    },
+    {
+      "id": "check-page-81b831761f",
+      "url": "http://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "Arch Grants has funded 290+ companies since our first Competition in 2012."
+    },
+    {
+      "id": "check-page-06881a8b19",
+      "url": "http://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "Arch Grants supports our portfolio companies with mentorship, help in securing follow-on capital, assistance hiring key talent, and access to our robust network of connections in the St."
+    },
+    {
+      "id": "check-page-dac28711ca",
+      "url": "http://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "In addition, established companies within the Arch Grants portfolio are readily available to newer startups for peer-to-peer learning and connections."
+    },
+    {
+      "id": "check-page-8189200402",
+      "url": "http://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "While our companies have a high success rate, Founders of several Arch Grants companies that are no longer in operation have gone on to start their second company in St."
+    },
+    {
       "id": "check-page-69de40ca14",
       "url": "http://archgrants.org/get-involved/become-a-competition-judge/",
       "page": "application",
       "excerpt": "Become a Competition Judge | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Calling All Competition Judges Arch Grants is looking for industry experts to judge and aid in the evaluation process of our annual Startup Competition applicants. Our competition attracts applicants from around the world, representing nearly every industry and sector. To evaluate the diverse array of startups"
+    },
+    {
+      "id": "check-page-72bb49c04a",
+      "url": "http://archgrants.org/get-involved/become-a-competition-judge/",
+      "page": "application",
+      "excerpt": "To evaluate the diverse array of startups that apply to our program each year, Arch Grants leverages an immense pool of talent, expertise, and passion from hundreds of expert volunteers from the St."
+    },
+    {
+      "id": "check-page-61d1b7831a",
+      "url": "http://archgrants.org/get-involved/become-a-competition-judge/",
+      "page": "application",
+      "excerpt": "Become a Competition Judge for Arch Grants \" * \" indicates required fields LinkedIn This field is for validation purposes and should be left unchanged."
+    },
+    {
+      "id": "check-page-d7934ce18a",
+      "url": "http://archgrants.org/get-involved/become-a-competition-judge/",
+      "page": "application",
+      "excerpt": "Join us by applying to our Global Startup Competition, becoming a financial supporter, volunteering your time or amplifying our message."
+    },
+    {
+      "id": "check-page-48b50898ba",
+      "url": "http://archgrants.org/get-involved/become-a-competition-judge/",
+      "page": "application",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-e407fcada1",
+      "url": "http://archgrants.org/get-involved/become-a-competition-judge/",
+      "page": "application",
+      "excerpt": "Follow us on LinkedIn Follow us on Facebook Follow Us on X Follow us on Instagram Find us on YouTube Copyright © 2026 Arch Grants | All rights reserved."
     },
     {
       "id": "check-page-1b1165fd11",
@@ -884,10 +1319,112 @@
       "excerpt": "WEPOWER Announces First Investment in St. Louis Startup, Bold Xchange | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media WEPOWER Announces First Investment in St. Louis Startup, Bold Xchange Sep 22, 2022 Founders Associated Companies Bold Xchange Recent News View All News Nov 3, 2026 Arch Grants Arch Grants Awards $1.35M to 2026 Cohort – Announces 20 New Startups joining"
     },
     {
+      "id": "check-page-d81cfac586",
+      "url": "http://archgrants.org/wepower-announces-first-investment-in-st-louis-startup-bold-xchange/",
+      "page": "terms",
+      "excerpt": "Louis Startup, Bold Xchange Sep 22, 2022 Founders Associated Companies Bold Xchange Recent News View All News Nov 3, 2026 Arch Grants Arch Grants Awards $1.35M to 2026 Cohort – Announces 20 New Startups joining their Portfolio (pictured: photo of the 2026 Arch Grants Cohort) ST."
+    },
+    {
+      "id": "check-page-52a3d94565",
+      "url": "http://archgrants.org/wepower-announces-first-investment-in-st-louis-startup-bold-xchange/",
+      "page": "terms",
+      "excerpt": "LOUIS, MO – October 30, 2026 – Arch Grants today announced […] Read More Jul 8, 2026 Arch Grants Arch Grants Awards $100,000 Growth Grant to OrgAcuity (pictured: Craig Starbuck Ph.D., Founder and CEO of OrgAcuity) ST."
+    },
+    {
+      "id": "check-page-5a9f0fa4de",
+      "url": "http://archgrants.org/wepower-announces-first-investment-in-st-louis-startup-bold-xchange/",
+      "page": "terms",
+      "excerpt": "LOUIS, MO – Arch Grants, a 501(c)(3) nonprofit organization, has […] Read More Jan 9, 2026 Arch Grants Arch Grants Awards $100,000 Growth Grant to COUNSELMEDS (pictured: Marcus Howard, Founder and CEO of COUNSELMEDS) We are pleased to announce that we’ve awarded $100,000 in a non-dilutive […] Read More Contact 2315 Locust St."
+    },
+    {
+      "id": "check-page-15c3cbc97e",
+      "url": "http://archgrants.org/wepower-announces-first-investment-in-st-louis-startup-bold-xchange/",
+      "page": "terms",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-9dda6785fa",
+      "url": "http://archgrants.org/wepower-announces-first-investment-in-st-louis-startup-bold-xchange/",
+      "page": "terms",
+      "excerpt": "Follow us on LinkedIn Follow us on Facebook Follow Us on X Follow us on Instagram Find us on YouTube Copyright © 2026 Arch Grants | All rights reserved."
+    },
+    {
       "id": "check-page-cd52dca562",
       "url": "https://archgrants.org/programs/faqs/",
       "page": "terms",
       "excerpt": "FAQs | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Frequently Asked Questions General Questions Questions about the Startup Competition About The Competition Why should I enter the Arch Grants Startup Competition? Arch Grants is a source of equity-free funding for early-stage startups, and also an opportunity to grow your business within St. Louis’ expanding entrepreneurial hub"
+    },
+    {
+      "id": "check-page-9f7d255d0c",
+      "url": "https://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "Louis’ expanding entrepreneurial hub surrounded by a community of mentors, collaborators, and resources."
+    },
+    {
+      "id": "check-page-779b64182b",
+      "url": "https://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "Arch Grants Companies receive $75,000 and access to an ecosystem of resources and support to help grow and scale their businesses."
+    },
+    {
+      "id": "check-page-b393d5a0e2",
+      "url": "https://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "How is Arch Grants different from angel investors and venture capital firms?"
+    },
+    {
+      "id": "check-page-5f48be32dc",
+      "url": "https://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "Arch Grants is a nonprofit organization whose purpose is to improve the St."
+    },
+    {
+      "id": "check-page-2854797340",
+      "url": "https://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "We do not take an equity stake in the companies to which we award grants."
+    },
+    {
+      "id": "check-page-c8bd63e9bc",
+      "url": "https://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "If I am selected for the Arch Grants program, what will I need to agree to?"
+    },
+    {
+      "id": "check-page-88acb90a2b",
+      "url": "https://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "Arch Grants Companies must meet the following requirements to receive the grant: Headquarter the business or establish significant operations in St."
+    },
+    {
+      "id": "check-page-83a8ae43cb",
+      "url": "https://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "Louis for one year Meet additional participation requirements, including program attendance, company data submissions, and civic engagement How has Arch Grants been successful in supporting startups?"
+    },
+    {
+      "id": "check-page-2443c421a9",
+      "url": "https://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "Arch Grants has funded 290+ companies since our first Competition in 2012."
+    },
+    {
+      "id": "check-page-1e7332987e",
+      "url": "https://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "Arch Grants supports our portfolio companies with mentorship, help in securing follow-on capital, assistance hiring key talent, and access to our robust network of connections in the St."
+    },
+    {
+      "id": "check-page-62aab73abb",
+      "url": "https://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "In addition, established companies within the Arch Grants portfolio are readily available to newer startups for peer-to-peer learning and connections."
+    },
+    {
+      "id": "check-page-2453846bf2",
+      "url": "https://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "While our companies have a high success rate, Founders of several Arch Grants companies that are no longer in operation have gone on to start their second company in St."
     },
     {
       "id": "check-page-989e540447",
@@ -896,10 +1433,88 @@
       "excerpt": "Mission-driven tech startup selected to join latest cohort of fintechs in Mastercard Start Path program | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Mission-driven tech startup selected to join latest cohort of fintechs in Mastercard Start Path program Aug 23, 2022 Founders Associated Companies oneKIN Recent News View All News Nov 3, 2026 Arch Grants Arch Grants Awards"
     },
     {
+      "id": "check-page-9aee8014e1",
+      "url": "http://archgrants.org/mission-driven-tech-startup-selected-to-join-latest-cohort-of-fintechs-in-mastercard-start-path-program/",
+      "page": "batches",
+      "excerpt": "LOUIS, MO – October 30, 2026 – Arch Grants today announced […] Read More Jul 8, 2026 Arch Grants Arch Grants Awards $100,000 Growth Grant to OrgAcuity (pictured: Craig Starbuck Ph.D., Founder and CEO of OrgAcuity) ST."
+    },
+    {
+      "id": "check-page-bb386aa5bc",
+      "url": "http://archgrants.org/mission-driven-tech-startup-selected-to-join-latest-cohort-of-fintechs-in-mastercard-start-path-program/",
+      "page": "batches",
+      "excerpt": "LOUIS, MO – Arch Grants, a 501(c)(3) nonprofit organization, has […] Read More Jan 9, 2026 Arch Grants Arch Grants Awards $100,000 Growth Grant to COUNSELMEDS (pictured: Marcus Howard, Founder and CEO of COUNSELMEDS) We are pleased to announce that we’ve awarded $100,000 in a non-dilutive […] Read More Contact 2315 Locust St."
+    },
+    {
+      "id": "check-page-76392286fe",
+      "url": "http://archgrants.org/mission-driven-tech-startup-selected-to-join-latest-cohort-of-fintechs-in-mastercard-start-path-program/",
+      "page": "batches",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-c46dda2824",
+      "url": "http://archgrants.org/mission-driven-tech-startup-selected-to-join-latest-cohort-of-fintechs-in-mastercard-start-path-program/",
+      "page": "batches",
+      "excerpt": "Follow us on LinkedIn Follow us on Facebook Follow Us on X Follow us on Instagram Find us on YouTube Copyright © 2026 Arch Grants | All rights reserved."
+    },
+    {
       "id": "check-page-71f345c39b",
       "url": "http://archgrants.org/about-us/",
       "page": "details",
       "excerpt": "About | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus About Arch Grants We Champion The Bold. Arch Grants disrupted the status quo of economic development in 2012 with a mission to transform the economy – in St. Louis and throughout the world – by attracting and retaining extraordinary entrepreneurs. Through our unique and groundbreaking annual Startup Competition model, we provide up"
+    },
+    {
+      "id": "check-page-01026f29de",
+      "url": "http://archgrants.org/about-us/",
+      "page": "details",
+      "excerpt": "Through our unique and groundbreaking annual Startup Competition model, we provide up to $100,000 in equity-free grants and access to an ecosystem of resources, helping early-stage startups grow and scale."
+    },
+    {
+      "id": "check-page-e70cab44bf",
+      "url": "http://archgrants.org/about-us/",
+      "page": "details",
+      "excerpt": "These believers and builders are at the core of what Arch Grants stands for: the unwavering spirit of big ideas and a community that rallies behind the entrepreneurs who pursue them."
+    },
+    {
+      "id": "check-page-1834124008",
+      "url": "http://archgrants.org/about-us/",
+      "page": "details",
+      "excerpt": "Accelerating Economic Development Arch Grants Companies have gone on to create more than 4,000 jobs in Missouri, generate over $1.2 billion in revenue, and attract more than $870 million in follow-on capital."
+    },
+    {
+      "id": "check-page-bdd97b2b27",
+      "url": "http://archgrants.org/about-us/",
+      "page": "details",
+      "excerpt": "Louis community welcomes Arch Grants Founders into a robust ecosystem of support, resources, and talent that nurtures and empowers these leaders to thrive as their companies grow and scale."
+    },
+    {
+      "id": "check-page-78146a0ae8",
+      "url": "http://archgrants.org/about-us/",
+      "page": "details",
+      "excerpt": "Each one has a vision to change the world, and Arch Grants is committed to helping them to succeed."
+    },
+    {
+      "id": "check-page-269fac485e",
+      "url": "http://archgrants.org/about-us/",
+      "page": "details",
+      "excerpt": "Read More Founder Stories Pursuing Lasting Change at Arch Grants Our job is to create and build momentum."
+    },
+    {
+      "id": "check-page-d78d066cd1",
+      "url": "http://archgrants.org/about-us/",
+      "page": "details",
+      "excerpt": "Louis metro area come together to build for the future?” It’s an easy answer: Arch Grants."
+    },
+    {
+      "id": "check-page-e4e6f07e09",
+      "url": "http://archgrants.org/about-us/",
+      "page": "details",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-0d1dee1e9e",
+      "url": "http://archgrants.org/about-us/",
+      "page": "details",
+      "excerpt": "Follow us on LinkedIn Follow us on Facebook Follow Us on X Follow us on Instagram Find us on YouTube Copyright © 2026 Arch Grants | All rights reserved."
     },
     {
       "id": "check-page-decec89cab",
@@ -908,10 +1523,76 @@
       "excerpt": "Our Impact | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Accelerating Economic Development Arch Grants’ portfolio companies have gone on to create over 4,300 jobs in Missouri, generate over $1.4 billion in revenue and attract more than $928 million in follow-on capital (and counting!). $ 1.4 B+ revenue generated $ 955 M+ capital raised $ 276 M+ STL wages paid 4300 + jobs created in"
     },
     {
+      "id": "check-page-46b9622221",
+      "url": "http://archgrants.org/about-us/our-impact/",
+      "page": "details",
+      "excerpt": "Louis by founders Connect We help forge connections between Arch Grants Founders and potential investors, customers, and talent."
+    },
+    {
+      "id": "check-page-2664be77a4",
+      "url": "http://archgrants.org/about-us/our-impact/",
+      "page": "details",
+      "excerpt": "Recruit We know that Arch Grants Companies that hire in St."
+    },
+    {
+      "id": "check-page-9401c5736b",
+      "url": "http://archgrants.org/about-us/our-impact/",
+      "page": "details",
+      "excerpt": "Louis metro area come together to build for the future?” It’s an easy answer: Arch Grants."
+    },
+    {
+      "id": "check-page-94defe72f8",
+      "url": "http://archgrants.org/about-us/our-impact/",
+      "page": "details",
+      "excerpt": "Join us by applying to our Startup Competition, becoming a financial supporter, volunteering your time or amplifying our message."
+    },
+    {
+      "id": "check-page-ed24ebe25f",
+      "url": "http://archgrants.org/about-us/our-impact/",
+      "page": "details",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-523ba4aa4c",
+      "url": "http://archgrants.org/about-us/our-impact/",
+      "page": "details",
+      "excerpt": "Follow us on LinkedIn Follow us on Facebook Follow Us on X Follow us on Instagram Find us on YouTube Copyright © 2026 Arch Grants | All rights reserved."
+    },
+    {
       "id": "check-page-28c20cfcbe",
       "url": "http://archgrants.org/about-us/our-supporters/",
       "page": "details",
       "excerpt": "Our Supporters | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Annual Supporters Arch Grants is only able to achieve our mission through our community’s tremendous generosity. Arch Grants’ annual donors, sponsors, and supporters believe in the immense power of bold entrepreneurs to positively impact the economy, the culture, and the fabric of St. Louis. They support believers and"
+    },
+    {
+      "id": "check-page-2e66d14e00",
+      "url": "http://archgrants.org/about-us/our-supporters/",
+      "page": "details",
+      "excerpt": "For a full list of our generous supporters, please see the 2024 Arch Grants Impact Report ."
+    },
+    {
+      "id": "check-page-a5abe5725a",
+      "url": "http://archgrants.org/about-us/our-supporters/",
+      "page": "details",
+      "excerpt": "Louis County Port Authority The JSM Charitable Trust Accelerators $25K-$49K Annual Donation Anne & Jack Bader Jim & Randie Eberlin Jerry & Sue Schlichter Verizon Wireless Donors Since Inception Emerson Charitable Trust Kellie Hynes & Robert Guller Charles & Rosalyn Lowenhaupt Missouri Technology Corporation Jerry & Sue Schlichter St."
+    },
+    {
+      "id": "check-page-a17c1a7af6",
+      "url": "http://archgrants.org/about-us/our-supporters/",
+      "page": "details",
+      "excerpt": "Join us by applying to our annual Startup Competition, becoming a financial supporter, volunteering your time, or amplifying our message."
+    },
+    {
+      "id": "check-page-ea9c84498a",
+      "url": "http://archgrants.org/about-us/our-supporters/",
+      "page": "details",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-13dcf1897f",
+      "url": "http://archgrants.org/about-us/our-supporters/",
+      "page": "details",
+      "excerpt": "Follow us on LinkedIn Follow us on Facebook Follow Us on X Follow us on Instagram Find us on YouTube Copyright © 2026 Arch Grants | All rights reserved."
     },
     {
       "id": "check-page-7f46d16c89",
@@ -920,10 +1601,58 @@
       "excerpt": "Sustained Impact | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Sustained Impact Campaign The Arch Grants Sustained Impact Campaign supports a community-funded endowment that ensures that our unique and effective model can both grow in scale year-over-year and that we can continue to fund extraordinary entrepreneurs and their innovative companies in perpetuity. This effort is the"
     },
     {
-      "id": "check-page-853f9acc1c",
-      "url": "http://archgrants.org/about-us/team/",
+      "id": "check-page-989b006d89",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
       "page": "details",
-      "excerpt": "Team | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Meet the Team Who We Are. Arch Grants staff and volunteer leadership are believers and builders themselves and are relentless in their efforts to champion bold entrepreneurs and build a robust future for the St. Louis region, and for the world. Gabe Angieri Executive Director Connect on LinkedIn Betsy Barton Director of Strategic"
+      "excerpt": "Donors who contribute to Arch Grants’ Sustained Impact Campaign help catalyze a virtuous cycle of economic development and community building that will meaningfully benefit the St."
+    },
+    {
+      "id": "check-page-a0989ae90a",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "page": "details",
+      "excerpt": "Attract & Retain Entrepreneurs Funding for new Arch Grants Founders in perpetuity will grow the pipeline for entrepreneurial mentors, talent and local investors."
+    },
+    {
+      "id": "check-page-79f5d98614",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "page": "details",
+      "excerpt": "Meet Our Founders Build Growth Grants Program Every startup needs capital to grow and scale their operations."
+    },
+    {
+      "id": "check-page-e5cb1035d7",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "page": "details",
+      "excerpt": "Arch Grants’ new Growth Grants program is designed to help our Founders raise growth capital by awarding additional $100,000 non-dilutive grants to Arch Grants portfolio companies based in St."
+    },
+    {
+      "id": "check-page-78fd330788",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "page": "details",
+      "excerpt": "Arch Grants represents exactly the type of activity that we need to grow our region, and their impressive statistics speak for themselves."
+    },
+    {
+      "id": "check-page-56c37ca9c7",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "page": "details",
+      "excerpt": "This Campaign will solidify Arch Grants as a major contributor to St."
+    },
+    {
+      "id": "check-page-4514144734",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "page": "details",
+      "excerpt": "We need to continue to look for new ways to uplift Arch Grants companies and increase the multiplier effect that generates wealth creation at an unprecedented pace and scale."
+    },
+    {
+      "id": "check-page-8b7bcded64",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "page": "details",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-8d11da4056",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "page": "details",
+      "excerpt": "Follow us on LinkedIn Follow us on Facebook Follow Us on X Follow us on Instagram Find us on YouTube Copyright © 2026 Arch Grants | All rights reserved."
     },
     {
       "id": "check-page-184fd139db",
@@ -932,10 +1661,442 @@
       "excerpt": "Expert-in-Residence Program | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Expert-in-Residence Program Summary of Program The Arch Grants Expert-in-Residence (EIR) program provides mentorship and coaching assistance to current and past Arch Grants Founders by connecting them with seasoned entrepreneurs, technologists, and executives. The Expert-in-Residence (EIR) position is a"
     },
     {
+      "id": "check-page-a2bfb19aef",
+      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
+      "page": "details",
+      "excerpt": "The Expert-in-Residence (EIR) position is a contracted position with Arch Grants, a Missouri-based 501(c)(3) nonprofit organization."
+    },
+    {
+      "id": "check-page-43a40de8cf",
+      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
+      "page": "details",
+      "excerpt": "EIRs are tasked with providing individual support, advice, and mentorship to Arch Grants portfolio companies."
+    },
+    {
+      "id": "check-page-b6524defaf",
+      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
+      "page": "details",
+      "excerpt": "Term & Time Commitment Arch Grants EIRs are brought on for an initial 6-month trial period after which their participation in the EIR program will be reviewed monthly."
+    },
+    {
+      "id": "check-page-d088cb6608",
+      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
+      "page": "details",
+      "excerpt": "Join us by applying to our annual Startup Competition, becoming a financial supporter, volunteering your time, or amplifying our message."
+    },
+    {
+      "id": "check-page-6751f4a01f",
+      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
+      "page": "details",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-0bff56db6f",
+      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
+      "page": "details",
+      "excerpt": "Follow us on LinkedIn Follow us on Facebook Follow Us on X Follow us on Instagram Find us on YouTube Copyright © 2026 Arch Grants | All rights reserved."
+    },
+    {
       "id": "check-page-795e8eb440",
       "url": "http://archgrants.org/hq-expansion-and-lending-program/",
       "page": "details",
       "excerpt": "Arch Grants Marks Milestone with Headquarters Expansion and New Lending Program to Accelerate Startup Growth in St. Louis | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Arch Grants Marks Milestone with Headquarters Expansion and New Lending Program to Accelerate Startup Growth in St. Louis Oct 15, 2025 Arch Grants FOR IMMEDIATE RELEASE October 15, 2025 ST. LOUIS, Mo –"
+    },
+    {
+      "id": "check-page-85cd74736c",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "page": "details",
+      "excerpt": "LOUIS, Mo – Arch Grants today celebrated more than a decade of catalyzing St."
+    },
+    {
+      "id": "check-page-d37b71bbeb",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "page": "details",
+      "excerpt": "Since its founding in 2012, Arch Grants has awarded over $18.9 million in equity-free grants to more than 270 startups."
+    },
+    {
+      "id": "check-page-5c515efa6b",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "page": "details",
+      "excerpt": "In turn, Arch Grants-backed companies have generated over $1.2 billion in revenue, attracted $870 million in follow-on capital, and created more than 4,000 jobs, transforming vacant storefronts into thriving businesses and fueling a stronger, more resilient regional economy."
+    },
+    {
+      "id": "check-page-9033e8ec43",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "page": "details",
+      "excerpt": "“This is a milestone moment for Arch Grants,” said Gabe Angieri, Executive Director of Arch Grants."
+    },
+    {
+      "id": "check-page-60379931a4",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "page": "details",
+      "excerpt": "“Over the last decade, we’ve evolved far beyond our startup competition roots."
+    },
+    {
+      "id": "check-page-4274b38583",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "page": "details",
+      "excerpt": "Today, Arch Grants is a grassroots economic engine for the region."
+    },
+    {
+      "id": "check-page-e7f7f2e9ec",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "page": "details",
+      "excerpt": "Economic Development Administration’s Build to Scale program awarded in 2023, Arch Grants’ expanded headquarters establishes a permanent hub for innovation in St."
+    },
+    {
+      "id": "check-page-e7d6c3edcd",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "page": "details",
+      "excerpt": "The new space increases capacity for founder coworking, programming, events, and cross-sector convenings, serving as civic infrastructure to connect entrepreneurs, investors, corporate leaders, and community partners."
+    },
+    {
+      "id": "check-page-7b8baec86d",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "page": "details",
+      "excerpt": "New Lending Program: Expanding Equitable Access to Capital Arch Grants also announced the launch of a new lending program, in partnership with the James S."
+    },
+    {
+      "id": "check-page-c57de8854b",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "page": "details",
+      "excerpt": "Launching in 2025, the program will expand access to loans for Arch Grants founders from historically marginalized backgrounds or those expanding operations in underserved areas of St."
+    },
+    {
+      "id": "check-page-c229b2454b",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "page": "details",
+      "excerpt": "“This partnership with Arch Grants and St."
+    },
+    {
+      "id": "check-page-b55a3c0674",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "page": "details",
+      "excerpt": "“Working alongside Arch Grants allows us to channel more capital into the hands of local entrepreneurs, helping them grow their businesses, create good jobs, and strengthen the economic fabric of St."
+    },
+    {
+      "id": "check-page-803b79572c",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "page": "details",
+      "excerpt": "Introducing The Arch Grants Fellows Program | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Introducing The Arch Grants Fellows Program Sep 19, 2024 Arch Grants Running a business of any size, let alone a startup, can be a challenging and isolating experience. To bring our Founders together in a supportive environment, we are pleased to announce the formation of a new"
+    },
+    {
+      "id": "check-page-c1950641c3",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "page": "details",
+      "excerpt": "To bring our Founders together in a supportive environment, we are pleased to announce the formation of a new group known as the Arch Grants Fellows."
+    },
+    {
+      "id": "check-page-016213630c",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "page": "details",
+      "excerpt": "The Fellows are a peer advisory and business growth collective comprised of select Arch Grants Founders and the leaders of St."
+    },
+    {
+      "id": "check-page-bcf4931c19",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "page": "details",
+      "excerpt": "The Fellows have come together to accelerate their learning, ideation, execution, connections, and growth, with the goal of supporting and energizing each other and St."
+    },
+    {
+      "id": "check-page-ac7b163d1f",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "page": "details",
+      "excerpt": "Arch Grants Fellows are leading companies that have reached certain revenue and follow-on capital thresholds."
+    },
+    {
+      "id": "check-page-5edd2f8dd0",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "page": "details",
+      "excerpt": "Founders of Arch Grants Companies and the leaders of select organizations outside the Arch Grants family will join the Fellows on an invitation basis."
+    },
+    {
+      "id": "check-page-8ed23c4686",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "page": "details",
+      "excerpt": "Louis-based companies applying to our annual Startup Competition."
+    },
+    {
+      "id": "check-page-da6989affd",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "page": "details",
+      "excerpt": "Simply put, these companies were too far along in their startup journeys for our non-dilutive grant funding to make a difference."
+    },
+    {
+      "id": "check-page-0f0713d895",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "page": "details",
+      "excerpt": "The majority of Fellows are entrepreneurs who have been funded by Arch Grants over the years and whose companies are meeting our established performance criteria."
+    },
+    {
+      "id": "check-page-4ece9805e3",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "page": "details",
+      "excerpt": "In addition, two to three startup founders who have not received prior funding through Arch Grants will be selected for the program each year, and these Fellows new to Arch Grants will receive the same wraparound support services our Founders have come to expect."
+    },
+    {
+      "id": "check-page-8f0a318d6e",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "page": "details",
+      "excerpt": "They expressed interest in working with Arch Grants, and we are proud to say they were the first Fellows named to the program."
+    },
+    {
+      "id": "check-page-b843ca65f5",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "page": "details",
+      "excerpt": "Chris and Drew are volunteering their time and energy to develop this program, and we’re grateful for that."
+    },
+    {
+      "id": "check-page-10ed4598c8",
+      "url": "http://archgrants.org/introducing-the-arch-grants-fellows-program/",
+      "page": "details",
+      "excerpt": "The Fellows are entrepreneurial leaders and will serve as a brain trust, support network, and hopefully, a future funding and investment source for Arch Grants and its awardees for many years to come."
+    },
+    {
+      "id": "check-page-11678a07c4",
+      "url": "http://archgrants.org/programs/",
+      "page": "details",
+      "excerpt": "Programs | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Be a Part of the Movement We champion extraordinary entrepreneurs to create positive change – for St. Louis and for the world. Join us by applying to our annual Startup Competition, becoming a financial supporter, volunteering your time, or amplifying our message. Learn About the Competition See How You Can Get Involved Contact"
+    },
+    {
+      "id": "check-page-05c2bd37c0",
+      "url": "http://archgrants.org/programs/",
+      "page": "details",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-8ac1b82a8a",
+      "url": "http://archgrants.org/programs/",
+      "page": "details",
+      "excerpt": "Follow us on LinkedIn Follow us on Facebook Follow Us on X Follow us on Instagram Find us on YouTube Copyright © 2026 Arch Grants | All rights reserved."
+    },
+    {
+      "id": "check-page-8dfb94f7a9",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "page": "details",
+      "excerpt": "Fellows Program | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Fellows Program The Fellows are a peer advisory and business growth collective comprised of Arch Grants Founders and the leaders of St. Louis’ fastest growing startups. The Fellows have come together to accelerate their learning, ideation, execution, connections, and growth, with the goal of supporting and energizing each"
+    },
+    {
+      "id": "check-page-7d604ff135",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "page": "details",
+      "excerpt": "The Fellows have come together to accelerate their learning, ideation, execution, connections, and growth, with the goal of supporting and energizing each other and St."
+    },
+    {
+      "id": "check-page-4ce6d2da5f",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "page": "details",
+      "excerpt": "Arch Grants Fellows are leading companies that have reached certain revenue and follow-on capital thresholds."
+    },
+    {
+      "id": "check-page-111ead1ee5",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "page": "details",
+      "excerpt": "The majority of Fellows are entrepreneurs who have been funded by Arch Grants over the years and whose companies are meeting our established performance criteria."
+    },
+    {
+      "id": "check-page-877a75f6d6",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "page": "details",
+      "excerpt": "In addition, two to three startup founders who have not received prior funding through Arch Grants are invited to the program each year, and these Fellows new to Arch Grants receive the same wraparound support services our Founders have come to expect."
+    },
+    {
+      "id": "check-page-39436da405",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "page": "details",
+      "excerpt": "Louis is evolving as a startup city, and the Fellows program is a significant stride forward for Arch Grants to meet that moment."
+    },
+    {
+      "id": "check-page-7e196aa384",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "page": "details",
+      "excerpt": "Explore Our Fellows Companies We jumped at the chance to join Arch Grants in creating the Fellows Program."
+    },
+    {
+      "id": "check-page-1df2d6a09b",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "page": "details",
+      "excerpt": "Whistle is growing quickly, and we’re thrilled to collaborate with Arch Grants Founders."
+    },
+    {
+      "id": "check-page-5365cae21e",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "page": "details",
+      "excerpt": "Join us by applying to our annual Startup Competition, becoming a financial supporter, volunteering your time, or amplifying our message."
+    },
+    {
+      "id": "check-page-4a3900b428",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "page": "details",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-8b51b7469f",
+      "url": "http://archgrants.org/programs/fellows-program/",
+      "page": "details",
+      "excerpt": "Follow us on LinkedIn Follow us on Facebook Follow Us on X Follow us on Instagram Find us on YouTube Copyright © 2026 Arch Grants | All rights reserved."
+    },
+    {
+      "id": "check-page-47257473e7",
+      "url": "http://archgrants.org/programs/founder-lending-program/",
+      "page": "details",
+      "excerpt": "Founder Lending Program | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Founder Lending Program The Founder Lending Program provides low-interest, de-risked loans to Arch Grants Founders from historically marginalized backgrounds or operating in underserved areas of St. Louis City or North St. Louis County. Backed by a loan guarantee fund, the program reduces barriers to capital while"
+    },
+    {
+      "id": "check-page-927d1d101d",
+      "url": "http://archgrants.org/programs/founder-lending-program/",
+      "page": "details",
+      "excerpt": "The Founder Lending Program was created to help close that gap by connecting capital-ready Arch Grants Founders with mission-aligned financial institutions and a guarantee structure that reduces risk for lenders."
+    },
+    {
+      "id": "check-page-8bd756ccd5",
+      "url": "http://archgrants.org/programs/founder-lending-program/",
+      "page": "details",
+      "excerpt": "Designed to complement Arch Grants’ equity-free grant model, the program provides responsible debt capital that supports sustainable growth and long-term financial stability."
+    },
+    {
+      "id": "check-page-4bd58a2b3d",
+      "url": "http://archgrants.org/programs/founder-lending-program/",
+      "page": "details",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-ac217b008a",
+      "url": "http://archgrants.org/programs/founder-lending-program/",
+      "page": "details",
+      "excerpt": "Follow us on LinkedIn Follow us on Facebook Follow Us on X Follow us on Instagram Find us on YouTube Copyright © 2026 Arch Grants | All rights reserved."
+    },
+    {
+      "id": "check-page-e71efd7cae",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "page": "details",
+      "excerpt": "Growth Grants | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Growth Grants Fueling the Next Stage of Growth Our Growth Grants program provides follow-on funding to our most promising portfolio companies ready to scale. Building on our mission to transform St. Louis’ economy through entrepreneurship, these non-dilutive $100,000 grants help our high-performing startups accelerate"
+    },
+    {
+      "id": "check-page-4c449ea4c6",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "page": "details",
+      "excerpt": "Louis’ economy through entrepreneurship, these non-dilutive $100,000 grants help our high-performing startups accelerate growth while maintaining their headquarters in the St."
+    },
+    {
+      "id": "check-page-11b93d0f05",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "page": "details",
+      "excerpt": "Capital That Amplifies Investment Growth Grants are designed to leverage external capital, requiring a 2:1 match from outside investors."
+    },
+    {
+      "id": "check-page-06f62ea00a",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "page": "details",
+      "excerpt": "This structure helps founders secure additional funding while demonstrating Arch Grants’ continued commitment to their success."
+    },
+    {
+      "id": "check-page-9e926a8907",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "page": "details",
+      "excerpt": "For Companies Ready to Scale Open exclusively to past Arch Grants recipients who have completed their initial program year, Growth Grants target companies positioned for significant expansion in revenue, market reach, and job creation within the St."
+    },
+    {
+      "id": "check-page-5511e593cc",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "page": "details",
+      "excerpt": "Proven Impact Since launching in 2021, the Growth Grants program has awarded $2.05 million to 21 portfolio companies."
+    },
+    {
+      "id": "check-page-d64e3318b7",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "page": "details",
+      "excerpt": "Non-Dilutive Capital Like our initial grants, Growth Grants are 100% non-dilutive and equity-free, allowing founders to maintain ownership while extending their runway."
+    },
+    {
+      "id": "check-page-8179200d0b",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "page": "details",
+      "excerpt": "Apply for a Growth Grant Are you an Arch Grants portfolio company ready to take your St."
+    },
+    {
+      "id": "check-page-2118a3086c",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "page": "details",
+      "excerpt": "Applications for Growth Grants are reviewed on a rolling basis."
+    },
+    {
+      "id": "check-page-1f7472a37b",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "page": "details",
+      "excerpt": "Review our Growth Grants FAQs , or contact our portfolio team to learn more about eligibility requirements and application timelines."
+    },
+    {
+      "id": "check-page-13f764d8b8",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "page": "details",
+      "excerpt": "See More Founder Stories The influx of Growth Grants funding provided the financial support we needed to aggressively scale our operations and make an even greater impact."
+    },
+    {
+      "id": "check-page-b70bc7e4e5",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "page": "details",
+      "excerpt": "Such support exemplifies how Arch Grants empowers Founders to bring their visions to life while strengthening St."
+    },
+    {
+      "id": "check-page-aca5999cf2",
+      "url": "http://archgrants.org/programs/growth-grants/",
+      "page": "details",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-671b2895f6",
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "page": "details",
+      "excerpt": "Innovation Summit | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Innovation Summit On June 4, 2026, over 100 founders, investors, and corporate leaders came together at 18 Rails at The Foundry for a day of curated, 1:1 meetings designed to spark strategic partnerships, investment opportunities, and real economic impact. Thank you to everyone who joined us — and to our sponsors who"
+    },
+    {
+      "id": "check-page-a32b5dd3a4",
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "page": "details",
+      "excerpt": "A new iteration of the Arch Grants Innovation Summit is coming this fall — and we’d love to have you there."
+    },
+    {
+      "id": "check-page-b32af1b7ad",
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "page": "details",
+      "excerpt": "Testimonials The Arch Grants Innovation Summit was a great opportunity for us to go to the next level with Arch Grants Founders."
+    },
+    {
+      "id": "check-page-105f46374f",
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "page": "details",
+      "excerpt": "This day is quickly becoming my favorite Arch Grants day of the year."
+    },
+    {
+      "id": "check-page-7713ddf879",
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "page": "details",
+      "excerpt": "David Sell – SVP, Chief Innovation Officer, MiTek The Arch Grants vetting process means their portfolio companies are ready to invest in."
+    },
+    {
+      "id": "check-page-ba006a5a76",
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "page": "details",
+      "excerpt": "Alvin Vitangcol – General Partner, Capital Midwest Fund The Summit is a fantastic opportunity for Arch Grants Founders to meet investors, strategic partners, and organizations we don’t normally have access to."
+    },
+    {
+      "id": "check-page-cd5657d8c3",
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "page": "details",
+      "excerpt": "Stephen Von Rump – CEO, Aegis Digital Health 2025 Attendees Included Contact 2315 Locust St."
+    },
+    {
+      "id": "check-page-26dc0d41c2",
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "page": "details",
+      "excerpt": "Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form 990 - 2024 Arch Grants neXus Gala Privacy Policy Champion the Bold."
+    },
+    {
+      "id": "check-page-5c4b84081c",
+      "url": "http://archgrants.org/programs/innovation-summit/",
+      "page": "details",
+      "excerpt": "Follow us on LinkedIn Follow us on Facebook Follow Us on X Follow us on Instagram Find us on YouTube Copyright © 2026 Arch Grants | All rights reserved."
     }
   ],
   "findings": {
@@ -978,7 +2139,12 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
-    "rolling": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-4ed349c4a7"
+      }
+    ],
     "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [
@@ -1024,6 +2190,10 @@
       {
         "value": "to help our Founders raise growth capital by awarding additional $100,000 non-dilutive grants to Arch Grants portfolio companies based in St.",
         "evidenceId": "check-deal-b21f81e6f5"
+      },
+      {
+        "value": "St. Louis’ economy through entrepreneurship, these non-dilutive $100,000 grants help our high-performing startups accelerate growth while",
+        "evidenceId": "check-deal-bc575785de"
       }
     ],
     "dealComponents": [
@@ -1072,6 +2242,10 @@
       {
         "value": "http://archgrants.org/companies/",
         "evidenceId": "check-portfolio-8af0699f99"
+      },
+      {
+        "value": "https://archgrants.org/companies/?_company_year=fellows&_paged=2",
+        "evidenceId": "check-portfolio-46091c6d40"
       }
     ],
     "name": [

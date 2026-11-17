@@ -1,6 +1,6 @@
 {
   "programId": "capital-innovators",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://capitalinnovators.com/about",
@@ -27,6 +27,22 @@
       "origin": "official"
     },
     {
+      "url": "https://capitalinnovators.com/alumni-workshop-week",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/ameren-accelerator-case-study",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://capitalinnovators.com/blog/2020/2/24/capital-innovators-welcomes-spring-2020-cohort-to-st-louis",
       "page": "batches",
       "anchor": "",
@@ -37,30 +53,6 @@
     {
       "url": "https://capitalinnovators.com/blog/2020/3/4/using-equity-crowdfunding-alongside-traditional-investment-vehicles",
       "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalinnovators.com/blog/2021/12/1/nga-accelerator-seeks-third-cohort",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalinnovators.com/blog/2021/9/23/capital-innovators-welcomes-fall-2021-cohort-to-st-louis",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalinnovators.com/blog/2021/9/28/nga-accelerator-announces-participant-startups-for-second-cohort",
-      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -78,7 +70,7 @@
       "url": "https://capitalinnovators.com/corporate-accelerator",
       "page": "details",
       "anchor": "Corporate Accelerator",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -99,10 +91,18 @@
       "origin": "official"
     },
     {
+      "url": "https://capitalinnovators.com/meren-accelerator-case-study-form",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://capitalinnovators.com/nga-accelerator-press",
       "page": "details",
       "anchor": "NGA Accelerator Press",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -110,7 +110,7 @@
       "url": "https://capitalinnovators.com/nga-accelerator-program",
       "page": "details",
       "anchor": "NGA Accelerator",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -120,6 +120,14 @@
       "anchor": "Portfolio",
       "fetched": false,
       "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/s/Ameren-Accelerator-Case-Study-Long-Version-1.pdf",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -150,7 +158,7 @@
       "url": "https://capitalinnovators.com/venturereadymissouri",
       "page": "details",
       "anchor": "Learn More about Venture Ready Missouri",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

@@ -1,6 +1,6 @@
 {
   "programId": "startmate",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.startmate.com/",
     "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
@@ -16,7 +16,12 @@
     "https://www.startmate.com/writing/investment-notes-butter",
     "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
     "https://www.startmate.com/writing/investment-notes-dexta",
-    "https://www.startmate.com/writing/investment-notes-eggy"
+    "https://www.startmate.com/writing/investment-notes-eggy",
+    "https://www.startmate.com/writing/investment-notes-femmi",
+    "https://www.startmate.com/writing/investment-notes-soundsmith",
+    "https://www.startmate.com/writing/investment-notes-storipress",
+    "https://www.startmate.com/writing/investment-notes-tutero",
+    "https://www.startmate.com/writing/investment-notes-xylo-systems"
   ],
   "evidence": [
     {
@@ -160,6 +165,20 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-158ce70868",
+      "url": "https://www.startmate.com/writing/investment-notes-xylo-systems",
+      "title": "Startmate — terms page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1b349c3809",
+      "url": "https://www.startmate.com/writing/investment-notes-soundsmith",
+      "title": "Startmate — terms page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-22060fe513",
       "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
       "title": "Startmate — application page",
@@ -209,10 +228,24 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-44f4f37592",
+      "url": "https://www.startmate.com/writing/investment-notes-storipress",
+      "title": "Startmate — terms page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-4673e55257",
       "url": "https://www.startmate.com/faq",
       "title": "Startmate — terms page",
       "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-46fde0ae4c",
+      "url": "https://www.startmate.com/writing/investment-notes-femmi",
+      "title": "Startmate — terms page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
       "page": "terms"
     },
     {
@@ -258,8 +291,22 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-936a42dc3c",
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
+      "title": "Startmate — terms page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-95101606e4",
       "url": "https://www.startmate.com/faq",
+      "title": "Startmate — terms page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9a07d37a7f",
+      "url": "https://www.startmate.com/writing/investment-notes-storipress",
       "title": "Startmate — terms page",
       "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
       "page": "terms"
@@ -284,6 +331,13 @@
       "title": "Startmate — application page",
       "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-af1c9541b3",
+      "url": "https://www.startmate.com/writing/investment-notes-xylo-systems",
+      "title": "Startmate — terms page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-b86f21ea48",
@@ -314,6 +368,13 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-df4eb5d579",
+      "url": "https://www.startmate.com/writing/investment-notes-femmi",
+      "title": "Startmate — terms page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-dfb0640bdd",
       "url": "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
       "title": "Startmate — terms page",
@@ -323,6 +384,13 @@
     {
       "id": "check-portfolio-e335f8f9bf",
       "url": "https://www.startmate.com/terms-and-conditions",
+      "title": "Startmate — terms page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e70003c99a",
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
       "title": "Startmate — terms page",
       "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
       "page": "terms"
@@ -356,6 +424,13 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-ff90b32622",
+      "url": "https://www.startmate.com/writing/investment-notes-soundsmith",
+      "title": "Startmate — terms page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-route-0c28ec9c0a",
       "url": "https://www.startmate.com/writing/investment-notes-eggy",
       "title": "Startmate — terms page",
@@ -365,6 +440,13 @@
     {
       "id": "check-route-109f7b1092",
       "url": "https://www.startmate.com/terms-and-conditions",
+      "title": "Startmate — terms page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1230c6b60d",
+      "url": "https://www.startmate.com/writing/investment-notes-storipress",
       "title": "Startmate — terms page",
       "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
       "page": "terms"
@@ -381,6 +463,20 @@
       "url": "https://www.startmate.com/terms-and-conditions",
       "title": "Startmate — terms page",
       "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1961d78cac",
+      "url": "https://www.startmate.com/writing/investment-notes-xylo-systems",
+      "title": "Startmate — terms page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1b7579c4c6",
+      "url": "https://www.startmate.com/writing/investment-notes-xylo-systems",
+      "title": "Startmate — terms page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
       "page": "terms"
     },
     {
@@ -412,6 +508,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-3414bba95c",
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
+      "title": "Startmate — terms page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
       "id": "check-route-35d93c1e3f",
       "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
       "title": "Startmate — application page",
@@ -433,8 +536,22 @@
       "page": "terms"
     },
     {
+      "id": "check-route-4a8ca6ce08",
+      "url": "https://www.startmate.com/writing/investment-notes-femmi",
+      "title": "Startmate — terms page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
       "id": "check-route-506bd0bd80",
       "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "title": "Startmate — terms page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-5081cadd7b",
+      "url": "https://www.startmate.com/writing/investment-notes-soundsmith",
       "title": "Startmate — terms page",
       "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
       "page": "terms"
@@ -496,6 +613,13 @@
       "page": "terms"
     },
     {
+      "id": "check-route-97fa725c41",
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
+      "title": "Startmate — terms page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
       "id": "check-route-97fb6f3441",
       "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
       "title": "Startmate — application page",
@@ -531,6 +655,13 @@
       "page": "terms"
     },
     {
+      "id": "check-route-a15f7332b9",
+      "url": "https://www.startmate.com/writing/investment-notes-soundsmith",
+      "title": "Startmate — terms page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
       "id": "check-route-a9e5eddee4",
       "url": "https://www.startmate.com/writing/investment-notes-andromeda",
       "title": "Startmate — terms page",
@@ -554,6 +685,20 @@
     {
       "id": "check-route-bf072ebb8e",
       "url": "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
+      "title": "Startmate — terms page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-c5eaac79e6",
+      "url": "https://www.startmate.com/writing/investment-notes-femmi",
+      "title": "Startmate — terms page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-c983169588",
+      "url": "https://www.startmate.com/writing/investment-notes-storipress",
       "title": "Startmate — terms page",
       "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
       "page": "terms"
@@ -602,10 +747,112 @@
       "excerpt": "Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a"
     },
     {
+      "id": "check-page-2160806f5e",
+      "url": "https://www.startmate.com/",
+      "page": "details",
+      "excerpt": "LEARN MORE LEARN MORE invest in anz’s top startups Be a first believer in the region's most promising startups alongside Startmate - the most active early-stage ANZ investor."
+    },
+    {
+      "id": "check-page-b4dfe0aea1",
+      "url": "https://www.startmate.com/",
+      "page": "details",
+      "excerpt": "LEARN MORE LEARN MORE build your network or land a job Land your dream startup position or build your network with the support of ANZ’s top startup community."
+    },
+    {
+      "id": "check-page-c8f2ed0b3f",
+      "url": "https://www.startmate.com/",
+      "page": "details",
+      "excerpt": "Our memberships and programs give you the skills, mentorship, network and job opportunities to excel in your career as a startup operator."
+    },
+    {
+      "id": "check-page-4059c1033d",
+      "url": "https://www.startmate.com/",
+      "page": "details",
+      "excerpt": "From Demo Day’s energy and world-class ideas to a community that grows in ambition year after year, it’s where founders, investors & operators all find their place; the real magic is the people."
+    },
+    {
+      "id": "check-page-de59ffb05c",
+      "url": "https://www.startmate.com/",
+      "page": "details",
+      "excerpt": "It surrounds founders with the “village” they need; mentors, investors, peers, to do their best work."
+    },
+    {
+      "id": "check-page-449f9d03fd",
+      "url": "https://www.startmate.com/",
+      "page": "details",
+      "excerpt": "Dom Pym Founder @ Up ESSENTIAL READS VIEW ALL VIEW ALL Accelerator Community Startmate Startups 101 From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Bell Allen October 10, 2025 Since 2010, Startmate has invested in over 350 startups."
+    },
+    {
+      "id": "check-page-48a9e456e1",
+      "url": "https://www.startmate.com/",
+      "page": "details",
+      "excerpt": "Often pre-revenue, pre-product, for all our founders, we are their very first believers."
+    },
+    {
+      "id": "check-page-d78c8678fc",
+      "url": "https://www.startmate.com/",
+      "page": "details",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Investments Top 20 Startmate companies Holly Brooks September 6, 2025 Since 2010, Startmate has invested in over 300 startups."
+    },
+    {
+      "id": "check-page-e32d5daf98",
+      "url": "https://www.startmate.com/",
+      "page": "details",
+      "excerpt": "LEARN MORE LEARN MORE First Believers The next investable wave: where Bill Tai sees billions being built in AI, energy, and creator economies Holly Brooks August 29, 2025 \"You don’t need to be smarter than the world."
+    },
+    {
       "id": "check-page-2f154f8c5a",
       "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
       "page": "application",
       "excerpt": "How to Write a Killer Application for the Student Founder Bootcamp | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Student Founder Bootcamp How to Write a Killer Application for the Student Founder Bootcamp You don’t need to sound like a startup veteran to get into the Student Founder Bootcamp. In fact, you’ll stand out more if you don’t. Spoiler: we ain't looking for your CV. Share: By Bell Allen Bell Allen October 14, 2025 Updated October 2026: the Bootcamp is now two days in person in Sydney and Melbourne. This article reflects the March 2027 Bootcamp. You don’t need to sound like a startup veteran to get into the Student Founder Bootcamp."
+    },
+    {
+      "id": "check-page-c7566f3c5a",
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "page": "application",
+      "excerpt": "The best answers sound like this: “I noticed how hard it is for students to find mentors who actually reply."
+    },
+    {
+      "id": "check-page-522f36f050",
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "page": "application",
+      "excerpt": "I want to explore how we could make mentorship easier to access.” Not like this: “I am passionate about innovation and creating change in the education ecosystem.” The first one tells us what you notice ."
+    },
+    {
+      "id": "check-page-345aa260f2",
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "page": "application",
+      "excerpt": "If you can communicate genuine energy (even about something small) it stands out instantly. ‍ 🤝 Show how you work with others The Bootcamp is built around teamwork."
+    },
+    {
+      "id": "check-page-5bcf9e2cd1",
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "page": "application",
+      "excerpt": "Every Bootcamp brings together students from every kind of background."
+    },
+    {
+      "id": "check-page-9a8b224ad5",
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "page": "application",
+      "excerpt": "We’re looking for energy, openness, and curiosity, not polish."
+    },
+    {
+      "id": "check-page-dffff5b9eb",
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "page": "application",
+      "excerpt": "If you’re accepted, you’ll join the Student Founder Bootcamp: two days in person in Sydney or Melbourne in March 2027."
+    },
+    {
+      "id": "check-page-a81d40a2c7",
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "page": "application",
+      "excerpt": "Top teams can earn an interview for the Startmate Accelerator."
+    },
+    {
+      "id": "check-page-a762073b16",
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "page": "application",
+      "excerpt": "Goodluck legends! ‍ Express interest in the Student Founder Bootcamp ‍ Bell Allen Junior Content Creator Meet the author On this page More articles like this VIEW ALL VIEW ALL Student Founder Bootcamp How to Write a Killer Application for the Student Founder Bootcamp Bell Allen October 14, 2025 You don’t need to sound like a startup veteran to get into the Student Founder Bootcamp."
     },
     {
       "id": "check-page-d55ae62dbd",
@@ -614,10 +861,100 @@
       "excerpt": "Everything Moonshot's co-founders learnt from applying for Y Combinator | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Launch Club Everything Moonshot's co-founders learnt from applying for Y Combinator \"I wasn’t expecting anything; I was sure we had a horrible application.\" Share: By Daniel Han-Chen February 1, 2022 ‍ ‘Y Combinator? What’s that?' That was my first reaction in September 2021 when my fellow founders in Startmate Founder’s Fellowship posted about applying to YC! So I did some research, and OH MY, September 9 was the deadline for the Winter 2022 batch. It was already September 8, so I quickly cobbled up an application in the"
     },
     {
+      "id": "check-page-ec19aa0349",
+      "url": "https://www.startmate.com/writing/moonshot-co-founders-learnt-applying-y-combinator",
+      "page": "application",
+      "excerpt": "I recorded a 1-minute intro, had no time for a demo, and submitted it at 4am Sydney time."
+    },
+    {
+      "id": "check-page-606d1dae5e",
+      "url": "https://www.startmate.com/writing/moonshot-co-founders-learnt-applying-y-combinator",
+      "page": "application",
+      "excerpt": "We’re predicting climate change, the weather, stock prices, fire, flood risks, air pollution, cancer rates, how long you’ll live and more!"
+    },
+    {
+      "id": "check-page-81f024bd5e",
+      "url": "https://www.startmate.com/writing/moonshot-co-founders-learnt-applying-y-combinator",
+      "page": "application",
+      "excerpt": "Without Startmate’s Founder’s Fellowship, we would have never known about YC, let alone be able to contact so many investors."
+    },
+    {
       "id": "check-page-a455cde267",
       "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
       "page": "application",
       "excerpt": "We've made changes to Open House, Office Hours and the Accelerator application process: Here's everything you need to know | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator We've made changes to Open House, Office Hours and the Accelerator application process: Here's everything you need to know Here is the what, why and how of our changes to Open House and the Accelerator application process. Share: By Bronte McHenry Bronte McHenry November 4, 2021 ‍ One of our values is ‘we’re a startup too’. What this means is we tend to move fast, experiment, test, and ditch what isn’t working. It’s for this reason we’ve made changes to Open House"
+    },
+    {
+      "id": "check-page-119cc98031",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "page": "application",
+      "excerpt": "It’s for this reason we’ve made changes to Open House (formerly Office Hours) and the Accelerator application process."
+    },
+    {
+      "id": "check-page-08436d4397",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "page": "application",
+      "excerpt": "What’s changed is there will no longer be a 1:1 mentoring component to Open House."
+    },
+    {
+      "id": "check-page-dd842aff47",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "page": "application",
+      "excerpt": "Instead, every startup that applies for the Accelerator will receive a 1:1 slot with one of our mentors."
+    },
+    {
+      "id": "check-page-8d225de28a",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "page": "application",
+      "excerpt": "Here is the what, why and how of our changes to Open House and the Accelerator application process ."
+    },
+    {
+      "id": "check-page-b4083ed705",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "page": "application",
+      "excerpt": "What’s changed is there is no longer a 1:1 mentoring component."
+    },
+    {
+      "id": "check-page-606fa528ac",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "page": "application",
+      "excerpt": "When we began our Office Hours program, we wanted to make the idea of startup mentorship and investment much more accessible to a broader group of founders, especially those without warm networks in the industry."
+    },
+    {
+      "id": "check-page-df9d1177b4",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "page": "application",
+      "excerpt": "Since then, the industry has come in leaps and bounds and many different organisations have followed on to open up their calendars for mentorship and investment intros throughout the year."
+    },
+    {
+      "id": "check-page-c8c3c045be",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "page": "application",
+      "excerpt": "Looking ahead, we want to throw our energy and resources at two new challenges."
+    },
+    {
+      "id": "check-page-271e118625",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "page": "application",
+      "excerpt": "First, we want to offer more first round Accelerator interviews than ever before."
+    },
+    {
+      "id": "check-page-b4c79e29e9",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "page": "application",
+      "excerpt": "Q: Who are your mentors?"
+    },
+    {
+      "id": "check-page-88e5d86b27",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "page": "application",
+      "excerpt": "Our mentor community is made up of the most experienced founders and operators in the Australian and New Zealand startup ecosystem."
+    },
+    {
+      "id": "check-page-99d1f68a62",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "page": "application",
+      "excerpt": "Every single one of our mentors is a handful of steps ahead of the founders who go through our Accelerator program, making them the best people to offer tailored mentorship."
     },
     {
       "id": "check-page-d16c9310ec",
@@ -626,10 +963,154 @@
       "excerpt": "How Steppen got into the Accelerator (after being rejected) | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator How Steppen got into the Accelerator (after being rejected) In this article, Steppen Founder Cara Davies reflects on both of her Startmate Accelerator applications. Share: By Cara Davies May 3, 2022 In June 2021, we applied for Startmate's Winter21 Accelerator cohort. We did not get in. In December 2021, however, we applied again — and heard the exciting news that we were selected for the Summer22 cohort! In this article I will highlight the changes we made between applying in June and November, and explain the process of"
     },
     {
+      "id": "check-page-8ddd209097",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "page": "application",
+      "excerpt": "Specifically, as first-time founders, Jake and I knew we had tonnes to learn, and were looking for mentors in product, investor relations and strategy."
+    },
+    {
+      "id": "check-page-7a035ecf7e",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "page": "application",
+      "excerpt": "What we did have: A great (albeit naive) we got this attitude; A recently closed pre-seed round; Recent market launch with a total of 200 users; and Dave as our third co-founder and CTO."
+    },
+    {
+      "id": "check-page-422497fd3e",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "page": "application",
+      "excerpt": "Written application and video -> 15-minute interview with a Startmate mentor -> Speed interview round -> 45-minute in-depth interview with three mentors."
+    },
+    {
+      "id": "check-page-2ed39439a6",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "page": "application",
+      "excerpt": "To prep, I would recommend asking someone who has gone through the process before to do a test run with you ( HMU if you like ), chatting to one of your mentors about it, or getting a friend to test you."
+    },
+    {
+      "id": "check-page-119cba5035",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "page": "application",
+      "excerpt": "Essentially, we would both act as mentors to the other person and do practice 10-minute interviews."
+    },
+    {
+      "id": "check-page-229f83b383",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "page": "application",
+      "excerpt": "The mentors will have read your application but, just like you are doing 15 interviews, they are interviewing 15 companies, so the intro provides context."
+    },
+    {
+      "id": "check-page-09d872b8ea",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "page": "application",
+      "excerpt": "If the mentors want more information they will ask for it."
+    },
+    {
+      "id": "check-page-f1ca619191",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "page": "application",
+      "excerpt": "Know that mentors will ask the same few questions (as there will likely be the same few big questions/concerns about your company)."
+    },
+    {
+      "id": "check-page-08d1e4ba80",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "page": "application",
+      "excerpt": "Also the mentors are all really lovely — you don’t need to be super formal."
+    },
+    {
+      "id": "check-page-675daff79f",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "page": "application",
+      "excerpt": "At the end of the day, accelerators are backing the team — so show what makes you an awesome founder."
+    },
+    {
+      "id": "check-page-2b2b99c546",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "page": "application",
+      "excerpt": "45-minute in-depth interview with three Mentors In the final stage of the Startmate interview process you'll meet with 3 mentors for 45 minutes each."
+    },
+    {
+      "id": "check-page-206e60b6c3",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "page": "application",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Sunburnt Space Co Founder Story Sid Tatikonda October 15, 2026 A rocket kit bought with a first pay cheque, factory keys collected at 4:55pm on 20 December, and a mission to make Australia a launch nation."
+    },
+    {
       "id": "check-page-2c9e4562b7",
       "url": "https://www.startmate.com/faq",
       "page": "terms",
       "excerpt": "FAQs | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR FAQ Frequently asked questions Got questions? We’ve got answers! Dive into our FAQ to find everything you need to know about Startmate. All Get to know Startmate Getting investment Our offerings How to get involved Other Can you explain what Startmate does? Startmate is building the ecosystem that startups need to thrive in Australia and New Zealand. ‍ We bring the most ambitious founders , operators and investors together in our programs. Founders - we help you get started and invest in your company Operators - we help you launch and perform in your career in startups Investors - we help you work through"
+    },
+    {
+      "id": "check-page-d795834510",
+      "url": "https://www.startmate.com/faq",
+      "page": "terms",
+      "excerpt": "Startmate was founded in 2010, a time when Australia had latent creativity and potential, but lacked venture capital and accelerators to support it."
+    },
+    {
+      "id": "check-page-bfe9196873",
+      "url": "https://www.startmate.com/faq",
+      "page": "terms",
+      "excerpt": "Everyone invested $10k into a micro-fund to invest in the next generation of early-stage founders, and started building a community of successful founders to support them."
+    },
+    {
+      "id": "check-page-5adee82f7e",
+      "url": "https://www.startmate.com/faq",
+      "page": "terms",
+      "excerpt": "Since ~2016, Startmate has become the Switzerland of VC in Australia and New Zealand."
+    },
+    {
+      "id": "check-page-00d2ec81cd",
+      "url": "https://www.startmate.com/faq",
+      "page": "terms",
+      "excerpt": "Whilst we work closely with the Blackbird investment team, we have most VC funds in the countries investing, selecting and mentoring in our programs such as AirTree, SquarePeg, Main Sequence, Rampersand, Skip Capital, Grok Ventures, to name a few."
+    },
+    {
+      "id": "check-page-4ac675a248",
+      "url": "https://www.startmate.com/faq",
+      "page": "terms",
+      "excerpt": "Where Australia and New Zealand will be known as the most innovative nations in the world."
+    },
+    {
+      "id": "check-page-4265e541db",
+      "url": "https://www.startmate.com/faq",
+      "page": "terms",
+      "excerpt": "We’re building an ecosystem within Startmate bottom-up instead of waiting for nationwide government or systemic changes."
+    },
+    {
+      "id": "check-page-66ca944cc0",
+      "url": "https://www.startmate.com/faq",
+      "page": "terms",
+      "excerpt": "We want to make Australia and New Zealand leaders in technology."
+    },
+    {
+      "id": "check-page-147ab450a8",
+      "url": "https://www.startmate.com/faq",
+      "page": "terms",
+      "excerpt": "So the people who apply for our programs and memberships are generally people who are living, working, building & investing in Australia and New Zealand."
+    },
+    {
+      "id": "check-page-a57867a3be",
+      "url": "https://www.startmate.com/faq",
+      "page": "terms",
+      "excerpt": "We have founders, mentors, investors, operators and partners scattered around the world."
+    },
+    {
+      "id": "check-page-ed08d04f6c",
+      "url": "https://www.startmate.com/faq",
+      "page": "terms",
+      "excerpt": "Founders who apply and are accepted into our Accelerator program receive an investment of 120k."
+    },
+    {
+      "id": "check-page-bdbeb58078",
+      "url": "https://www.startmate.com/faq",
+      "page": "terms",
+      "excerpt": "Pre-product and pre-revenue."
+    },
+    {
+      "id": "check-page-c3f3869be1",
+      "url": "https://www.startmate.com/faq",
+      "page": "terms",
+      "excerpt": "Roughly two-thirds (67%) of the companies we back are pre-revenue and often pre-product."
     },
     {
       "id": "check-page-338d0a6a3f",
@@ -638,10 +1119,94 @@
       "excerpt": "Terms and Conditions TERMS & CONDITIONS 1. Our Disclosures 2 Welcome to the Startmate Program! 3 Startmate Program 4 Opportunities and introductions 5 Fees and payment 6 Code of conduct 7 General 1. Our Disclosures Our complete terms and conditions are contained below, but some important points for you to know before you become a customer are set out below:we will handle your personal information in accordance with our privacy policy, available at www.startmate.com.au ; to the maximum extent permitted by law, the Fees are non-refundable unless you cancel participation in the Startmate Program at least 1 week prior to its commencement; subject to your rights as a consumer under the Australian Consumer Law, you have not relied on any representations or warranties made by us prior to accepting these Terms that are not included in these Terms; and subject to your rights as a consumer under the Australian Consumer Law, our liability under these Terms is limited to the value of the Fees paid by you to us, and we will not be liable for Consequential Loss.Nothing in these terms limit your rights under the Australian Consumer Law. 2. Welcome to the Startmate Program! [2.1] These terms and conditions ( Terms ) are entered into between Startmate Ops Pty Ltd ABN 11 618 178 957 ( we , us or our ) and you , together the Parties and each a Party . [2.2] You have registered, or will register,"
     },
     {
+      "id": "check-page-1d576bb88f",
+      "url": "https://www.startmate.com/terms-and-conditions",
+      "page": "terms",
+      "excerpt": "The creation of these opportunities is assisted by the generous support of our corporate sponsors, who provide time, energy, and in some cases, financial assistance."
+    },
+    {
+      "id": "check-page-b93f96b1d8",
+      "url": "https://www.startmate.com/terms-and-conditions",
+      "page": "terms",
+      "excerpt": "In certain circumstances, we may disclose your personal information to third parties located, or who store data, outside Australia."
+    },
+    {
       "id": "check-page-effaa670a4",
       "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
       "page": "terms",
       "excerpt": "How Bec Rozencwajg landed a job as LaunchVic's Alice Anderson Fund Investment Manager | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Startmate Collective Career How Bec Rozencwajg landed a job as LaunchVic's Alice Anderson Fund Investment Manager When re-entering the workforce after maternity leave, Bec Rozencwajg found herself seeking a role with a tangible, positive impact. Share: By Bronte McHenry Bronte McHenry February 28, 2022 ‍ Bec Rozencwajg is frank, warm and reflective — and has had a career that surprises, delights and impresses. It's filled with international travel, cultural immersion, government relations and a relentless"
+    },
+    {
+      "id": "check-page-b8a91d6402",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "page": "terms",
+      "excerpt": "It's filled with international travel, cultural immersion, government relations and a relentless pursuit of meaning."
+    },
+    {
+      "id": "check-page-cdc0037813",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "page": "terms",
+      "excerpt": "Some time at B Lab Australia and New Zealand, the Women Fellowship and an internship at Flying Fox Ventures later, she landed her dream job as Investment Manager of LaunchVic's Alice Anderson Fund."
+    },
+    {
+      "id": "check-page-32e8ba26bc",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "page": "terms",
+      "excerpt": "Here's how she got there. ‍ Part one: Learning by doing \"I'm Melbourne born and bred, but I've spent time living in Sydney, Japan and Canada,\" Bec tells me."
+    },
+    {
+      "id": "check-page-58d16b6ddb",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "page": "terms",
+      "excerpt": "\"My grandfather learnt the skill of a blacksmith in Germany, and it was what kept him alive through World War II and in concentration camps."
+    },
+    {
+      "id": "check-page-c3c37cf331",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "page": "terms",
+      "excerpt": "He managed to escape, and when he and my grandmother came to Australia post-war, he used that skill to set up a business of his own."
+    },
+    {
+      "id": "check-page-ec7bd54fe8",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "page": "terms",
+      "excerpt": "\"When I came back to Australia, I decided to finish off my commerce/arts degree and complete a postgrad in Asian studies."
+    },
+    {
+      "id": "check-page-aa16077528",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "page": "terms",
+      "excerpt": "(And, oh the perks!) “I did a rotation with the government and international relations team, and I loved it."
+    },
+    {
+      "id": "check-page-0ed1d0659d",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "page": "terms",
+      "excerpt": "I flew around the world encouraging airlines to fly into Melbourne and also saw the interplay of commerce and government from the other side.” Part three: Finding impact \"Before I started a family, I decided to take some time off and learn about something I was quietly building a passion for: cheese,\" Bec tells me."
+    },
+    {
+      "id": "check-page-d0549f6adc",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "page": "terms",
+      "excerpt": "I took myself off to the US and France to spend time with some of the leading artisan producers."
+    },
+    {
+      "id": "check-page-9493188c21",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "page": "terms",
+      "excerpt": "That pursuit led me to a role with B Lab Australia and New Zealand (the not-for-profit behind the B Corp Certification) as their Head of Policy and Government Relations."
+    },
+    {
+      "id": "check-page-509234b8c4",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "page": "terms",
+      "excerpt": "“Working in a co-working space with Impact Investment Group and Giant Leap Fund also exposed me to the world of finance and how investing with an impact lens could help support solutions that create a better future."
+    },
+    {
+      "id": "check-page-9b96f57b1f",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "page": "terms",
+      "excerpt": "I also started investing in and advising impact focussed companies in their infancy.” Part four: The Women Fellowship and the Alice Anderson Fund \"I came across the Women's Fellowship in the midst of working from home and home-schooling my kids during the pandemic,\" Bec says."
     },
     {
       "id": "check-page-26e8017635",
@@ -650,10 +1215,88 @@
       "excerpt": "How to Make Your First Startup Investment | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing First Believers How to Make Your First Startup Investment This article shares a cheat sheet for making your first startup investment: how to build confidence, why community matters, and why getting started is more important than being perfect. Share: By Bell Allen Bell Allen August 26, 2025 ‍ Here’s the truth about angel investing: ‍ It’s not always about spreadsheets or perfect timing. It’s about believing in ambitious founders early and learning as you go. But building that 'gut feel' takes years of reviewing startups, meeting founders and making the"
     },
     {
+      "id": "check-page-248560b572",
+      "url": "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
+      "page": "terms",
+      "excerpt": "It’s your entry point into Australia and New Zealand’s most high-trust angel investing community - and the fastest way to build your conviction as an investor. 🚀 Learn more about First Believers ‍ This article is provided for informational purposes only and does not constitute financial product advice."
+    },
+    {
+      "id": "check-page-d6909ab33a",
+      "url": "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE First Believers Investments Community Impact Doesn’t Retire: What translates from boardrooms to early-stage startups Bell Allen February 17, 2026 After more than 30 years in strategy consulting, including 25 as a partner at L.E.K., Simon Barrett has worked on over 800 projects around the world."
+    },
+    {
+      "id": "check-page-ad9967c3a3",
+      "url": "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE First Believers Investments Community From Outsiders to Insiders: How AgTech Is Opening Its Gates Bell Allen February 17, 2026 For generations, agriculture has been defined by those born into it."
+    },
+    {
+      "id": "check-page-c09b19f392",
+      "url": "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
+      "page": "terms",
+      "excerpt": "Join us in conversation with Victoria Taylor, First Believer alumni on the next era for the agriculture industry."
+    },
+    {
       "id": "check-page-8bd6666c34",
       "url": "https://www.startmate.com/writing/investment-notes-andromeda",
       "page": "terms",
       "excerpt": "Investment notes: Andromeda | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Andromeda We're proud to invest in Andromeda as part of our Winter22 Accelerator cohort. Here's why. Share: By Frederic LeForestier September 26, 2022 Using advanced robotic technology to solve the universal problem of loneliness Co-founded by University of Melbourne robotics graduates Grace Brown and Tasmin Ahmed in early-2022, Andromeda is building robots that resonate with people. Grace and Tasmin’s first robot Abi is an endearing, multi-talented humanoid robot who can help people maintain their independence, learn and socialise."
+    },
+    {
+      "id": "check-page-ee60dc0910",
+      "url": "https://www.startmate.com/writing/investment-notes-andromeda",
+      "page": "terms",
+      "excerpt": "The team’s Startmate mentor squad includes Megan Elizabeth , John Wood , Michael Batko and me ( Frederic Leforestier , squad partner). 💜 What we love about the founders Simply put, Grace is a bowl of energy!"
+    },
+    {
+      "id": "check-page-852b53ead6",
+      "url": "https://www.startmate.com/writing/investment-notes-andromeda",
+      "page": "terms",
+      "excerpt": "This energy is translating into growing recognition and progress too."
+    },
+    {
+      "id": "check-page-b48fdfc385",
+      "url": "https://www.startmate.com/writing/investment-notes-andromeda",
+      "page": "terms",
+      "excerpt": "The movement to robotics is now."
+    },
+    {
+      "id": "check-page-f5a5f91594",
+      "url": "https://www.startmate.com/writing/investment-notes-andromeda",
+      "page": "terms",
+      "excerpt": "Amazon’s acquisition of iRobot shows the move beyond voice assistants such as Alexa and Apple’s Siri to assistants with mobility."
+    },
+    {
+      "id": "check-page-d6c91d6642",
+      "url": "https://www.startmate.com/writing/investment-notes-andromeda",
+      "page": "terms",
+      "excerpt": "Andromeda’s first market opportunity (the elderly and disability healthcare sector) is ripe for change."
+    },
+    {
+      "id": "check-page-530722b43e",
+      "url": "https://www.startmate.com/writing/investment-notes-andromeda",
+      "page": "terms",
+      "excerpt": "This is a pair who are comfortable seeking out and taking on board input from the global community of leaders creating the future of robotics… even as they themselves play an important part in building this future with Andromeda."
+    },
+    {
+      "id": "check-page-41fbd954a8",
+      "url": "https://www.startmate.com/writing/investment-notes-andromeda",
+      "page": "terms",
+      "excerpt": "Frederic LeForestier Community Author Meet the author On this page More articles like this VIEW ALL VIEW ALL Accelerator Veltora Founder Story Sid Tatikonda October 15, 2026 Coding since age 10, 19-year-old solo founder Aan Mehta is building the predictive intelligence layer running underneath data centres."
+    },
+    {
+      "id": "check-page-687ff428a7",
+      "url": "https://www.startmate.com/writing/investment-notes-andromeda",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Sunburnt Space Co Founder Story Sid Tatikonda October 15, 2026 A rocket kit bought with a first pay cheque, factory keys collected at 4:55pm on 20 December, and a mission to make Australia a launch nation."
+    },
+    {
+      "id": "check-page-c80ffc2201",
+      "url": "https://www.startmate.com/writing/investment-notes-andromeda",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Security Break Founder Story Sid Tatikonda October 15, 2026 After 15 years in cybersecurity at McAfee and Microsoft, Thomas Roccia is building the AI security foundation for enterprises with Security Break."
     },
     {
       "id": "check-page-4a03e7ef0f",
@@ -662,10 +1305,154 @@
       "excerpt": "Investment notes: Aquila | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Aquila We're proud to invest in Aquila as part of our Winter22 Accelerator cohort. Here's why. Share: By Tom McLeod September 26, 2022 Beaming renewable energy anywhere on (or off) earth using lasers Decarbonising the planet is the greatest challenge of our lifetime. Renewable energy sources hold the key to reducing carbon in the atmosphere to a sustainable level where we can keep earth inhabitable and prosperous for many generations to come. However, while the planet has access to more energy from renewable sources than it could possibly"
     },
     {
+      "id": "check-page-aedfe396db",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "page": "terms",
+      "excerpt": "However, while the planet has access to more energy from renewable sources than it could possibly use, it has one huge problem: getting that energy to the right place, at the right time in the right quantities."
+    },
+    {
+      "id": "check-page-b97667e788",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "page": "terms",
+      "excerpt": "Typically this has been solved through building more transmission lines (getting energy from one place to another) or storage (mostly large batteries or hydroelectric dams) — but these approaches are very expensive, geographically constrained and slow to build."
+    },
+    {
+      "id": "check-page-4e2fba4d82",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "page": "terms",
+      "excerpt": "But imagine if we could take energy generated at a solar farm in outback Australia and power factories in Europe."
+    },
+    {
+      "id": "check-page-0309c5ac69",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "page": "terms",
+      "excerpt": "Or use the energy from a wind farm in California to directly power electric planes in flight between San Francisco and Los Angeles."
+    },
+    {
+      "id": "check-page-43f0f3f56f",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "page": "terms",
+      "excerpt": "Using a network of lasers, specialised mirrors and receivers, Aquila is able to deliver energy from where it is being generated, to where it is needed, anywhere on the planet."
+    },
+    {
+      "id": "check-page-09b94966b7",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "page": "terms",
+      "excerpt": "Between the two of them they are the ‘swiss army knives of energy, space and lasers’ (side note, if you’re reading this Victorinox, that’d be a pretty sweet swiss army knife add-on)."
+    },
+    {
+      "id": "check-page-d4747f0d75",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "page": "terms",
+      "excerpt": "Aquila’s technology can transcend the two largest barriers to the creation of an entirely renewable, global energy system."
+    },
+    {
+      "id": "check-page-8f30da0954",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "page": "terms",
+      "excerpt": "The internet used commodity hardware and open protocols to allow as many machines as possible to join the network, and in turn, allowed the collective knowledge of humankind to be shared with anyone connected to that network."
+    },
+    {
+      "id": "check-page-0316ce3e7e",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "page": "terms",
+      "excerpt": "We can think of Aquila like ‘the internet of energy’."
+    },
+    {
+      "id": "check-page-810fbe8302",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "page": "terms",
+      "excerpt": "Billy and Nelson are combining existing technologies and components together in a novel way that will allow many players in the renewable energy space to be involved in this network of energy."
+    },
+    {
+      "id": "check-page-6d547b9452",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "page": "terms",
+      "excerpt": "Just as the internet allowed data to be shared between any connected machines, so will Aquila allow the global sharing of clean energy between any connected devices. 🚀 Why now?"
+    },
+    {
+      "id": "check-page-01a2ba3dcb",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "page": "terms",
+      "excerpt": "Mass electrification of the planet requires enormous amounts of renewable energy sources to be built in the coming years."
+    },
+    {
       "id": "check-page-3c243c5c26",
       "url": "https://www.startmate.com/writing/investment-notes-butter",
       "page": "terms",
       "excerpt": "Investment notes: Butter | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Butter We're proud to invest in Butter as part of our Winter22 Accelerator cohort. Here's why. Share: By Zak Islam September 26, 2022 Providing a safety net for your important assets Butter is an insurtech startup like no other. Founded by Cassie Bell and Steph Skevington, Butter boasts flexible, single-item policies that can be taken out online and managed like any other subscription. Together, this founding pair are on a mission to bring much-needed energy and creativity to the insurance industry, and of course, help people easily protect"
+    },
+    {
+      "id": "check-page-8eeba7438b",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "page": "terms",
+      "excerpt": "Together, this founding pair are on a mission to bring much-needed energy and creativity to the insurance industry, and of course, help people easily protect the things they love."
+    },
+    {
+      "id": "check-page-20f113e36e",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "page": "terms",
+      "excerpt": "The team’s Startmate mentor squad includes Michael Stocks , Felix Wong , Natalie Collins and me ( Zak Islam , squad partner). 💜 What we love about the founders The Butter team’s combined creativity, energy and intelligence is a force to be reckoned with."
+    },
+    {
+      "id": "check-page-ba1b10cf54",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "page": "terms",
+      "excerpt": "Butter is focussed on solving this problem by enabling consumers to insure their most loved assets with a single item insurance policy that is affordable and easy to access."
+    },
+    {
+      "id": "check-page-fa14ba78df",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "page": "terms",
+      "excerpt": "Consumers can now purchase insurance and gain peace of mind should something happen to their valuable assets. 🚀 Why now?"
+    },
+    {
+      "id": "check-page-1b99ce09cf",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "page": "terms",
+      "excerpt": "It is estimated 74% of Australians renting households do not have contents insurance."
+    },
+    {
+      "id": "check-page-b121aa12ce",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "page": "terms",
+      "excerpt": "Furthermore, 68% of millennials and 86% of Gen Z do not have insurance of any kind."
+    },
+    {
+      "id": "check-page-57e6833e8b",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "page": "terms",
+      "excerpt": "Furthermore, as the cost of major assets such as property become increasingly unaffordable, millennials and Gen Z are spending their disposable income on assets including expensive phones, jewellery, electronics and other branded goods."
+    },
+    {
+      "id": "check-page-c4be49fa43",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "page": "terms",
+      "excerpt": "There isn’t an insurance product on the market today that will insure these singular items."
+    },
+    {
+      "id": "check-page-f267b60e94",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "page": "terms",
+      "excerpt": "This creates an opportunity for Butter to provide much-needed peace of mind for consumers to build confidence that they won’t be left out of pocket if their valuable assets are damaged, stolen or destroyed."
+    },
+    {
+      "id": "check-page-616a863c76",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "page": "terms",
+      "excerpt": "Zak Islam Community Author Meet the author On this page More articles like this VIEW ALL VIEW ALL Accelerator Veltora Founder Story Sid Tatikonda October 15, 2026 Coding since age 10, 19-year-old solo founder Aan Mehta is building the predictive intelligence layer running underneath data centres."
+    },
+    {
+      "id": "check-page-a684166017",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Sunburnt Space Co Founder Story Sid Tatikonda October 15, 2026 A rocket kit bought with a first pay cheque, factory keys collected at 4:55pm on 20 December, and a mission to make Australia a launch nation."
+    },
+    {
+      "id": "check-page-82583c42df",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Security Break Founder Story Sid Tatikonda October 15, 2026 After 15 years in cybersecurity at McAfee and Microsoft, Thomas Roccia is building the AI security foundation for enterprises with Security Break."
     },
     {
       "id": "check-page-18edf25f75",
@@ -674,16 +1461,364 @@
       "excerpt": "Investment notes: Dennisson Technologies | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Dennisson Technologies We're proud to invest in Dennisson as part of our Winter22 Accelerator cohort. Here's why. Share: By John Wood September 26, 2022 Unlocking full VR immersion, redefining human capability, and beyond Dennisson is creating the most low-profile, affordable Force Feedback Haptic Gloves on the market in order to deliver natural ‘touching’ and ‘holding’ experiences in the fast-growing virtual reality (VR), augmented reality (AR) and mixed reality (MR) worlds. Dennisson’s co-founders Anvil and Kim are"
     },
     {
+      "id": "check-page-d25761cec9",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "page": "terms",
+      "excerpt": "While the initial focus is to deliver a paradigm shift in haptics for online gaming and training, Dennisson’s technology and the experience it delivers will evolve as a platform to provide many solutions for human augmentation and beyond, including health, defense and mobility enhancement."
+    },
+    {
+      "id": "check-page-0c162c03af",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "page": "terms",
+      "excerpt": "They have a very clear vision to succeed in an exciting marketplace."
+    },
+    {
+      "id": "check-page-629201e62f",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "page": "terms",
+      "excerpt": "But where they’ve knocked it out of the park is in the combination of their exceptional energy combined with their willingness to take on and demonstrate strong leadership characteristics in the hard, disciplined work of market discovery, planning and MVP resolution."
+    },
+    {
+      "id": "check-page-d354f7b3ec",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "page": "terms",
+      "excerpt": "The way these founders have responded to the stretch put to them in the Accelerator gives very strong evidence that this is a team with the spirit and endurance to launch their technology, product visions and company successfully."
+    },
+    {
+      "id": "check-page-ef1b2ffea7",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "page": "terms",
+      "excerpt": "All deep tech has risks… It is the ability of the founders and team to adapt and their resilience and willingness to challenge all assumptions that maximizes the potential for extraordinary outcomes."
+    },
+    {
+      "id": "check-page-bc59dc3021",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "page": "terms",
+      "excerpt": "My personal decision (NOAB.Ventures) to invest in Dennisson was based on the exceptional combination of the exciting technology and market with the strength and effective approach to business execution I’ve seen Anvil and Kimberly demonstrate during the Accelerator."
+    },
+    {
+      "id": "check-page-272114340d",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "page": "terms",
+      "excerpt": "Can the ‘holy grail’ for the hottest need in the intersection of the online and real worlds really be found in a startup in New Zealand… Hell yeah!!!"
+    },
+    {
+      "id": "check-page-3d631120e6",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "page": "terms",
+      "excerpt": "In the course of the Accelerator, our squad had the opportunity to introduce Anvil and Kimberly to a key future architect in the US who has been focal to major breakthrough campaigns including in Microsoft, Meta, Dreamworks and Disney."
+    },
+    {
+      "id": "check-page-cda4a65571",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "page": "terms",
+      "excerpt": "John Wood Community Author Meet the author On this page More articles like this VIEW ALL VIEW ALL Accelerator Veltora Founder Story Sid Tatikonda October 15, 2026 Coding since age 10, 19-year-old solo founder Aan Mehta is building the predictive intelligence layer running underneath data centres."
+    },
+    {
+      "id": "check-page-e2f11f7840",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Sunburnt Space Co Founder Story Sid Tatikonda October 15, 2026 A rocket kit bought with a first pay cheque, factory keys collected at 4:55pm on 20 December, and a mission to make Australia a launch nation."
+    },
+    {
+      "id": "check-page-14b3b50926",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Security Break Founder Story Sid Tatikonda October 15, 2026 After 15 years in cybersecurity at McAfee and Microsoft, Thomas Roccia is building the AI security foundation for enterprises with Security Break."
+    },
+    {
       "id": "check-page-eee79d9b00",
       "url": "https://www.startmate.com/writing/investment-notes-dexta",
       "page": "terms",
       "excerpt": "Investment notes: Dexta | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Dexta We're proud to invest in Dexta as part of our Winter22 Accelerator cohort. Here's why. Share: By Gaby Howard September 26, 2022 Find, filter and hire production pros at scale Dexta is a new way for agencies to find and book vetted production professionals. Founded by Jack Phillips, Dexta aims to take advantage of the gig economy’s growth and reshape how businesses find creative talent, by bringing a new streamlined marketplace solution to source and book crew. The team’s Startmate mentor squad includes Rain Hsu , Luke Howes , Felix Wong"
     },
     {
+      "id": "check-page-c3b74b5fdf",
+      "url": "https://www.startmate.com/writing/investment-notes-dexta",
+      "page": "terms",
+      "excerpt": "At first glance, you might think Dexta is merely a marketplace that connects the content producers with the workers they need."
+    },
+    {
+      "id": "check-page-bf35f36729",
+      "url": "https://www.startmate.com/writing/investment-notes-dexta",
+      "page": "terms",
+      "excerpt": "Dexta is not just a marketplace that facilitates highly transactional, one-to-one connections between businesses and individuals."
+    },
+    {
+      "id": "check-page-66b28426f0",
+      "url": "https://www.startmate.com/writing/investment-notes-dexta",
+      "page": "terms",
+      "excerpt": "Gaby Howard Community Author Meet the author On this page More articles like this VIEW ALL VIEW ALL Accelerator Veltora Founder Story Sid Tatikonda October 15, 2026 Coding since age 10, 19-year-old solo founder Aan Mehta is building the predictive intelligence layer running underneath data centres."
+    },
+    {
+      "id": "check-page-0cd680f87a",
+      "url": "https://www.startmate.com/writing/investment-notes-dexta",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Sunburnt Space Co Founder Story Sid Tatikonda October 15, 2026 A rocket kit bought with a first pay cheque, factory keys collected at 4:55pm on 20 December, and a mission to make Australia a launch nation."
+    },
+    {
+      "id": "check-page-f2d76bafcf",
+      "url": "https://www.startmate.com/writing/investment-notes-dexta",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Security Break Founder Story Sid Tatikonda October 15, 2026 After 15 years in cybersecurity at McAfee and Microsoft, Thomas Roccia is building the AI security foundation for enterprises with Security Break."
+    },
+    {
       "id": "check-page-7e5cc08cfa",
       "url": "https://www.startmate.com/writing/investment-notes-eggy",
       "page": "terms",
       "excerpt": "Investment notes: Eggy | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Eggy We're proud to invest in Eggy as part of our Winter22 Accelerator cohort. Here's why. Share: By Michael Stocks September 26, 2022 Helping families unscramble life admin Life admin. The office work of life. Billions of people all over the world have to do it every single day. Paying bills, making appointments, storing documents and keeping to-do lists. The experience is unrelenting, overwhelming and fragmented. Parents feel this pain the most acutely — which is why Eggy is the all-in-one life-management tool for busy families. The team’s"
+    },
+    {
+      "id": "check-page-f49ab102bd",
+      "url": "https://www.startmate.com/writing/investment-notes-eggy",
+      "page": "terms",
+      "excerpt": "The degree of clarity and conviction is rare in early-stage founders."
+    },
+    {
+      "id": "check-page-f18ae44de8",
+      "url": "https://www.startmate.com/writing/investment-notes-eggy",
+      "page": "terms",
+      "excerpt": "In fact, 83% of parents flagged that the volume of life admin they are required to undertake is negatively impacting their mental health."
+    },
+    {
+      "id": "check-page-0117304086",
+      "url": "https://www.startmate.com/writing/investment-notes-eggy",
+      "page": "terms",
+      "excerpt": "The focus has solely been on the AU Market (TAM = 4 million families), the next frontier is the US and UK (TAM = 47 million families), and the long-term plan is to go global (TAM = 2 billion families)."
+    },
+    {
+      "id": "check-page-5c65ba9e80",
+      "url": "https://www.startmate.com/writing/investment-notes-eggy",
+      "page": "terms",
+      "excerpt": "There are plans to explore higher ARPU plans for these groups in H1 2023. ‍ Michael Stocks Community Author Meet the author On this page More articles like this VIEW ALL VIEW ALL Accelerator Veltora Founder Story Sid Tatikonda October 15, 2026 Coding since age 10, 19-year-old solo founder Aan Mehta is building the predictive intelligence layer running underneath data centres."
+    },
+    {
+      "id": "check-page-75497e75e3",
+      "url": "https://www.startmate.com/writing/investment-notes-eggy",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Sunburnt Space Co Founder Story Sid Tatikonda October 15, 2026 A rocket kit bought with a first pay cheque, factory keys collected at 4:55pm on 20 December, and a mission to make Australia a launch nation."
+    },
+    {
+      "id": "check-page-be7ca0fed4",
+      "url": "https://www.startmate.com/writing/investment-notes-eggy",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Security Break Founder Story Sid Tatikonda October 15, 2026 After 15 years in cybersecurity at McAfee and Microsoft, Thomas Roccia is building the AI security foundation for enterprises with Security Break."
+    },
+    {
+      "id": "check-page-67cfee7099",
+      "url": "https://www.startmate.com/writing/investment-notes-femmi",
+      "page": "terms",
+      "excerpt": "Investment notes: Femmi | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Femmi We're proud to invest in Femmi as part of our Winter22 Accelerator cohort. Here's why. Share: By Megan Woff September 26, 2022 Female-led fitness coaching based on the specifics of female physiology Femmi’s mission is to leverage education to break down gender-equality barriers. Femmi is a female-led fitness platform that empowers users through education, exercise and connection. Tackling gender inequality from two angles, Femmi both coaches females in a holistic manner that aligns with their menstrual cycle, while also educating others"
+    },
+    {
+      "id": "check-page-04a44c1fff",
+      "url": "https://www.startmate.com/writing/investment-notes-femmi",
+      "page": "terms",
+      "excerpt": "As the world continues to drive conversation about gender equality and look for meaningful ways to take action, now is the time for Femmi’s education, community and tools to have an outsized impact globally."
+    },
+    {
+      "id": "check-page-65034cee86",
+      "url": "https://www.startmate.com/writing/investment-notes-femmi",
+      "page": "terms",
+      "excerpt": "Megan Woff Community Author Meet the author On this page More articles like this VIEW ALL VIEW ALL Accelerator Veltora Founder Story Sid Tatikonda October 15, 2026 Coding since age 10, 19-year-old solo founder Aan Mehta is building the predictive intelligence layer running underneath data centres."
+    },
+    {
+      "id": "check-page-252f8329d8",
+      "url": "https://www.startmate.com/writing/investment-notes-femmi",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Sunburnt Space Co Founder Story Sid Tatikonda October 15, 2026 A rocket kit bought with a first pay cheque, factory keys collected at 4:55pm on 20 December, and a mission to make Australia a launch nation."
+    },
+    {
+      "id": "check-page-d11f00e936",
+      "url": "https://www.startmate.com/writing/investment-notes-femmi",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Security Break Founder Story Sid Tatikonda October 15, 2026 After 15 years in cybersecurity at McAfee and Microsoft, Thomas Roccia is building the AI security foundation for enterprises with Security Break."
+    },
+    {
+      "id": "check-page-b28e0b50ac",
+      "url": "https://www.startmate.com/writing/investment-notes-soundsmith",
+      "page": "terms",
+      "excerpt": "Investment notes: SoundSmith | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: SoundSmith We're proud to invest in SoundSmith as part of our Winter22 Accelerator cohort. Here's why. Share: By Hamid Nazari September 26, 2022 ‍ A marketplace connecting musicians and social media content creators to promote music SoundSmith helps musicians promote their work by connecting them with the right influencers. In this day and age, the music industry heavily relies on the influence of social media to keep a competitive edge. A great song or album alone is not enough to achieve success. Currently, musicians and their managers"
+    },
+    {
+      "id": "check-page-4bb71e9ddd",
+      "url": "https://www.startmate.com/writing/investment-notes-soundsmith",
+      "page": "terms",
+      "excerpt": "There is an immense opportunity here for a marketplace to bring all of these efforts under one roof to benefit everyone involved."
+    },
+    {
+      "id": "check-page-315dcc9bc9",
+      "url": "https://www.startmate.com/writing/investment-notes-soundsmith",
+      "page": "terms",
+      "excerpt": "This marketplace is SoundSmith."
+    },
+    {
+      "id": "check-page-6c885ad658",
+      "url": "https://www.startmate.com/writing/investment-notes-soundsmith",
+      "page": "terms",
+      "excerpt": "Hamid Nazari Community Author Meet the author On this page More articles like this VIEW ALL VIEW ALL Accelerator Veltora Founder Story Sid Tatikonda October 15, 2026 Coding since age 10, 19-year-old solo founder Aan Mehta is building the predictive intelligence layer running underneath data centres."
+    },
+    {
+      "id": "check-page-4106935f57",
+      "url": "https://www.startmate.com/writing/investment-notes-soundsmith",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Sunburnt Space Co Founder Story Sid Tatikonda October 15, 2026 A rocket kit bought with a first pay cheque, factory keys collected at 4:55pm on 20 December, and a mission to make Australia a launch nation."
+    },
+    {
+      "id": "check-page-3803928ca9",
+      "url": "https://www.startmate.com/writing/investment-notes-soundsmith",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Security Break Founder Story Sid Tatikonda October 15, 2026 After 15 years in cybersecurity at McAfee and Microsoft, Thomas Roccia is building the AI security foundation for enterprises with Security Break."
+    },
+    {
+      "id": "check-page-aed4df3a5f",
+      "url": "https://www.startmate.com/writing/investment-notes-storipress",
+      "page": "terms",
+      "excerpt": "Investment notes: Storipress | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Storipress We're proud to invest in Storipress as part of our Winter22 Accelerator cohort. Here's why. Share: By Ben Grabiner September 26, 2022 Enabling every brand and creator to become a media company Storipress is a platform that enables brands and creators to build their own media companies —- founded by Alex Pan, a Sydney-based founder, and his co-founders Kevin and David, with a development and product team out of Taiwan. Obsessed with mass media since childhood, Alex hustled his way into studying media at Macquarie University"
+    },
+    {
+      "id": "check-page-b93691b33e",
+      "url": "https://www.startmate.com/writing/investment-notes-storipress",
+      "page": "terms",
+      "excerpt": "It has become a critical driver for so many ‘non-traditional’ media businesses — from e-commerce to health to finance."
+    },
+    {
+      "id": "check-page-e2ffd77620",
+      "url": "https://www.startmate.com/writing/investment-notes-storipress",
+      "page": "terms",
+      "excerpt": "This is in part due to movements towards enhanced privacy that lessen the effectiveness of Facebook advertising, making content an increasingly important part of e-commerce and DTC brands’ share of voice."
+    },
+    {
+      "id": "check-page-09856b54d4",
+      "url": "https://www.startmate.com/writing/investment-notes-storipress",
+      "page": "terms",
+      "excerpt": "Ben Grabiner Community Author Meet the author On this page More articles like this VIEW ALL VIEW ALL Accelerator Veltora Founder Story Sid Tatikonda October 15, 2026 Coding since age 10, 19-year-old solo founder Aan Mehta is building the predictive intelligence layer running underneath data centres."
+    },
+    {
+      "id": "check-page-487fe19af6",
+      "url": "https://www.startmate.com/writing/investment-notes-storipress",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Sunburnt Space Co Founder Story Sid Tatikonda October 15, 2026 A rocket kit bought with a first pay cheque, factory keys collected at 4:55pm on 20 December, and a mission to make Australia a launch nation."
+    },
+    {
+      "id": "check-page-8fbf750ef1",
+      "url": "https://www.startmate.com/writing/investment-notes-storipress",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Security Break Founder Story Sid Tatikonda October 15, 2026 After 15 years in cybersecurity at McAfee and Microsoft, Thomas Roccia is building the AI security foundation for enterprises with Security Break."
+    },
+    {
+      "id": "check-page-a12e4b48a8",
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
+      "page": "terms",
+      "excerpt": "Investment notes: Tutero | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Tutero We're proud to invest in Tutero as part of our Winter22 Accelerator cohort. Here's why. Share: By Chris Quirk September 26, 2022 ‍ Optimising STEM education by personalising teaching and solving student motivation Tutero is a young and exciting team out of Melbourne, Australia taking on the way children learn and optimising every second of STEM teaching and learning. Tutero has developed a ‘knowledge graph’ that helps children navigate the STEM curriculum by understanding their personal knowledge of a subject. The software shows"
+    },
+    {
+      "id": "check-page-22335db9d1",
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
+      "page": "terms",
+      "excerpt": "The team’s Startmate mentor squad includes Natalie Collins , Lauren Capelin , Bill Kerr and me ( Chris Quirk , squad partner). 💜 What we love about the founders There is a lot to love about Tutero — but there were four specific things about the founding team that captured the Startmate Mentors’ attention."
+    },
+    {
+      "id": "check-page-406d7f41c9",
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
+      "page": "terms",
+      "excerpt": "It doesn’t take long talking to the team to sense that they love STEM education and improving the outcome for all students."
+    },
+    {
+      "id": "check-page-a4da6c6a82",
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
+      "page": "terms",
+      "excerpt": "Finally, Joey, Sonny and Richard ask the hard questions and stare into the uncomfortable, which they did during the selection process and have continued to do throughout the Accelerator."
+    },
+    {
+      "id": "check-page-77bf7d31da",
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
+      "page": "terms",
+      "excerpt": "We think this determination will serve them well as they build the next generation of education software. ‍ Tutero co-founder Joey Moshinsky 🔮 What's the magic?"
+    },
+    {
+      "id": "check-page-16103abb5e",
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
+      "page": "terms",
+      "excerpt": "The Mentors also couldn’t overlook the traction of the first market wedge that the team is pursuing: online tutoring."
+    },
+    {
+      "id": "check-page-2983afb00c",
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
+      "page": "terms",
+      "excerpt": "We don’t want to spoil Demo Day, but it hasn't stopped there!"
+    },
+    {
+      "id": "check-page-7a925e3127",
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
+      "page": "terms",
+      "excerpt": "STEM education is failing throughout Australia, with less than 54% of students achieving national proficiency in STEM subjects and 92% of teachers saying there is inadequate time for lesson planning and reviewing students’ work."
+    },
+    {
+      "id": "check-page-6c2f515363",
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
+      "page": "terms",
+      "excerpt": "Chris Quirk Community Author Meet the author On this page More articles like this VIEW ALL VIEW ALL Accelerator Veltora Founder Story Sid Tatikonda October 15, 2026 Coding since age 10, 19-year-old solo founder Aan Mehta is building the predictive intelligence layer running underneath data centres."
+    },
+    {
+      "id": "check-page-dcc7fe454d",
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Sunburnt Space Co Founder Story Sid Tatikonda October 15, 2026 A rocket kit bought with a first pay cheque, factory keys collected at 4:55pm on 20 December, and a mission to make Australia a launch nation."
+    },
+    {
+      "id": "check-page-f9b646f1c0",
+      "url": "https://www.startmate.com/writing/investment-notes-tutero",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Security Break Founder Story Sid Tatikonda October 15, 2026 After 15 years in cybersecurity at McAfee and Microsoft, Thomas Roccia is building the AI security foundation for enterprises with Security Break."
+    },
+    {
+      "id": "check-page-94e8e8a142",
+      "url": "https://www.startmate.com/writing/investment-notes-xylo-systems",
+      "page": "terms",
+      "excerpt": "Investment notes: Xylo Systems | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Xylo Systems We're proud to invest in Xylo Systems as part of our Winter22 Accelerator cohort. Here's why. Share: By Lauren Capelin September 26, 2022 ‍ Enabling better data management and collaboration for biodiversity and conservation management Fires, floods, drought, heatwaves, unseasonal and devastating storms, pollution. There is a long list of impacts (and it doesn’t stop there) that our global community is increasingly experiencing, pointing to our changing climate as the number one threat facing humanity. What’s less well"
+    },
+    {
+      "id": "check-page-ba9673fb04",
+      "url": "https://www.startmate.com/writing/investment-notes-xylo-systems",
+      "page": "terms",
+      "excerpt": "Throughout the Startmate program, Camille and Jada have shown themselves to be hungry for mentorship and feedback, determined to learn, and open to constantly iterating on their approach and process as they consolidate feedback from both customers and advisors."
+    },
+    {
+      "id": "check-page-45339cef1a",
+      "url": "https://www.startmate.com/writing/investment-notes-xylo-systems",
+      "page": "terms",
+      "excerpt": "While this intense feedback process can be overwhelming for many, the Xylo founders have continued to demonstrate the single-minded passion for their mission, resilience to obstacles and the clear strategic thinking that won over Startmate mentors through the selection process. ‍ Xylo Systems founders Camille Goldstone-Henry and Jada Andersen 🔮 What’s the magic?"
+    },
+    {
+      "id": "check-page-8afc93703a",
+      "url": "https://www.startmate.com/writing/investment-notes-xylo-systems",
+      "page": "terms",
+      "excerpt": "With initial customer interest in the construction and retail sectors, Xylo is well-positioned as a niche vertical SaaS play with a broader opportunity to both expand its own offerings as well as integrate with adjacent technologies (project management, collaborative communication tools, data insights visualisation and reporting). 🚀 Why now?"
+    },
+    {
+      "id": "check-page-39f0ee9021",
+      "url": "https://www.startmate.com/writing/investment-notes-xylo-systems",
+      "page": "terms",
+      "excerpt": "Corporations around the world are already responsible for increased ESG reporting requirements and strategic plans toward net zero/positive — and this responsibility will only get more weighty as regulatory pressure increases."
+    },
+    {
+      "id": "check-page-082cb10066",
+      "url": "https://www.startmate.com/writing/investment-notes-xylo-systems",
+      "page": "terms",
+      "excerpt": "Lauren Capelin Community Author Meet the author On this page More articles like this VIEW ALL VIEW ALL Accelerator Veltora Founder Story Sid Tatikonda October 15, 2026 Coding since age 10, 19-year-old solo founder Aan Mehta is building the predictive intelligence layer running underneath data centres."
+    },
+    {
+      "id": "check-page-91bbc772ef",
+      "url": "https://www.startmate.com/writing/investment-notes-xylo-systems",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Sunburnt Space Co Founder Story Sid Tatikonda October 15, 2026 A rocket kit bought with a first pay cheque, factory keys collected at 4:55pm on 20 December, and a mission to make Australia a launch nation."
+    },
+    {
+      "id": "check-page-2b5bf1f865",
+      "url": "https://www.startmate.com/writing/investment-notes-xylo-systems",
+      "page": "terms",
+      "excerpt": "LEARN MORE LEARN MORE Accelerator Security Break Founder Story Sid Tatikonda October 15, 2026 After 15 years in cybersecurity at McAfee and Microsoft, Thomas Roccia is building the AI security foundation for enterprises with Security Break."
     }
   ],
   "findings": {

@@ -1,6 +1,6 @@
 {
   "programId": "a16z-speedrun",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-17T00:44:46.000Z",
   "pagesRead": [
     "https://speedrun.a16z.com/apply",
     "https://speedrun.a16z.com/application-login",
@@ -211,10 +211,10 @@
       "page": "terms"
     },
     {
-      "id": "check-selectivity-acbf2030bb",
+      "id": "check-selectivity-c8d5e529a6",
       "url": "https://speedrun.a16z.com/faq",
       "title": "a16z speedrun — terms page",
-      "excerpt": "do you back each residency? Recent residencies have had 70 to 80 companies. Fewer than 0.4% of applicants are accepted. Who will I work with? Your investing partner and the wider",
+      "excerpt": "do you back each residency? Recent residencies have had 70 to 80 companies. Fewer than 0.4% of applicants are accepted. Who will I work with? Your investing partner and the wider speedrun team,",
       "page": "terms"
     }
   ],
@@ -224,6 +224,12 @@
       "url": "https://speedrun.a16z.com/apply",
       "page": "details",
       "excerpt": "Apply to speedrun today. We invest up to $1M in your new startup. SR008 runs February 1 to April 16, 2027, in San Francisco. If you apply after November 1, we’ll consider you for the following residency. We review applications year-round, so whenever you’re ready, we’d love for you to apply. We help founders with capital, customers, and talent. When you join speedrun, you get: Capital: Up to $1M, plus $10M+ in credits from 200+ partners through the speedrun Marketplace. When you’re ready to raise your next round, Demo Day puts you in front of a room full of investors. Customers: Introductions to executives and customers through SR Insiders, our network of 150+ C-suite founding members and 1,000+ executives and operators. You’ll also get AI Faire and Tech Week to meet buyers in person, Launch Lab to get your product in front of people, and Brand Lab to shape how you show up from day one. Talent: Access to the Talent Network of 171,000+ people, which our team is always growing, plus hiring and HR support as your team scales. You’ll also be building alongside a community of 1,000+ speedrun founders who support each other with customer introductions and product feedback. Want to check the status of an existing application? Log in here. Please enter your email to begin the application. By clicking \"Get Started\", you agree to our Terms of Use and acknowledge our Privacy Policy ."
+    },
+    {
+      "id": "check-page-dac8930f6e",
+      "url": "https://speedrun.a16z.com/apply",
+      "page": "details",
+      "excerpt": "View application status Founders Capital Customers Talent Residency FAQ Apply to speedrun Log in Investors Demo day & investor network Request an invitation Log in Partners Buyers, partners & advisors Follow us Substack LinkedIn X Privacy Policy Terms of Use Disclosures Speedrun Talent Network © 2026 Andreessen Horowitz"
     },
     {
       "id": "check-page-fd24ad2a52",
@@ -236,6 +242,78 @@
       "url": "https://speedrun.a16z.com/faq",
       "page": "terms",
       "excerpt": "FAQ FAQ Browse categories to find answers to common questions about our residency, eligibility, application steps, and resources. If you need further help, don't hesitate to contact us . About speedrun Applying After you apply Capital and terms Residency and the office Demo Day and fundraising Customers, talent, and visas Investors and executives About speedrun Applying After you apply Capital and terms Residency and the office Demo Day and fundraising Customers, talent, and visas Investors and executives About speedrun What is speedrun? We invest up to $1M in your startup, add $10M+ in credits, and help you with capital, customers, and talent as you build. The in-person part is the residency: twelve weeks of firesides, practitioner sessions, office hours, and events at our San Francisco office, alongside other founders building at the same stage. How often do you run a residency? Twice a year, both in San Francisco. SR008 starts in February 2027. SR009 starts in late July 2027, with Demo Day on October 5, 2027. How many companies do you back each residency? Recent residencies have had 70 to 80 companies. Fewer than 0.4% of applicants are accepted. Who will I work with? Your investing partner and the wider speedrun team, about 40 people. Around eight are investors, and the rest are operators who help with go-to-market, talent, marketing, fundraising, and more. What sectors do"
+    },
+    {
+      "id": "check-page-8f3978bcc1",
+      "url": "https://speedrun.a16z.com/faq",
+      "page": "terms",
+      "excerpt": "We invest in founders across almost every sector, from AI and robotics to fintech, consumer, B2B, security, and more."
+    },
+    {
+      "id": "check-page-a057872400",
+      "url": "https://speedrun.a16z.com/faq",
+      "page": "terms",
+      "excerpt": "The alpha fellowship invests up to $250K plus credits in students, recent grads, and dropouts who are still finding their idea, product, or team. speedrun invests up to $1M in founders who are already building, or further along in their careers, with an idea, a product, and a team."
+    },
+    {
+      "id": "check-page-166d4568f9",
+      "url": "https://speedrun.a16z.com/faq",
+      "page": "terms",
+      "excerpt": "If you're a student, recent grad, or dropout who's still finding your idea or your team, the alpha fellowship may be a great fit."
+    },
+    {
+      "id": "check-page-2bd7e30652",
+      "url": "https://speedrun.a16z.com/faq",
+      "page": "terms",
+      "excerpt": "Applications for the SR008 residency are open October 12 through November 1, 2026 at 11:59 PM PT."
+    },
+    {
+      "id": "check-page-1459fe7c8d",
+      "url": "https://speedrun.a16z.com/faq",
+      "page": "terms",
+      "excerpt": "You can still apply, and we'll review your application for the next residency."
+    },
+    {
+      "id": "check-page-8d11a391d2",
+      "url": "https://speedrun.a16z.com/faq",
+      "page": "terms",
+      "excerpt": "We aim to be the first check into your company, but we also accept early-stage companies that have already raised capital."
+    },
+    {
+      "id": "check-page-d23085a71f",
+      "url": "https://speedrun.a16z.com/faq",
+      "page": "terms",
+      "excerpt": "We aren't able to re-review a team within the same application window, but early-stage companies change quickly."
+    },
+    {
+      "id": "check-page-b3079c4ef6",
+      "url": "https://speedrun.a16z.com/faq",
+      "page": "terms",
+      "excerpt": "Keep building, and apply again for a future residency with what's new."
+    },
+    {
+      "id": "check-page-7d0b33186c",
+      "url": "https://speedrun.a16z.com/faq",
+      "page": "terms",
+      "excerpt": "And you'll be building next to other founders at the residency."
+    },
+    {
+      "id": "check-page-6ab74f8c8b",
+      "url": "https://speedrun.a16z.com/faq",
+      "page": "terms",
+      "excerpt": "During the residency, we ask for about one day a week in person at our San Francisco office for sessions, office hours, and events."
+    },
+    {
+      "id": "check-page-b8b0b89bfa",
+      "url": "https://speedrun.a16z.com/faq",
+      "page": "terms",
+      "excerpt": "If you're a student who's still finding your idea or team, the alpha fellowship may be a better fit right now."
+    },
+    {
+      "id": "check-page-a7682e81b6",
+      "url": "https://speedrun.a16z.com/faq",
+      "page": "terms",
+      "excerpt": "We invest very early, and we've backed founders before they left their jobs."
     }
   ],
   "findings": {
@@ -288,10 +366,11 @@
     "selectivity": [
       {
         "value": {
-          "rate": null,
-          "bounded": true
+          "rate": 0.004,
+          "bounded": true,
+          "qualifier": "under"
         },
-        "evidenceId": "check-selectivity-acbf2030bb"
+        "evidenceId": "check-selectivity-c8d5e529a6"
       }
     ],
     "dealText": [

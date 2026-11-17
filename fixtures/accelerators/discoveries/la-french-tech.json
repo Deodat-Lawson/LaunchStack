@@ -1,6 +1,6 @@
 {
   "programId": "la-french-tech",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://lafrenchtech.gouv.fr/en/launch-of-the-french-tech-2030-support-programme/",
@@ -107,6 +107,14 @@
       "origin": "official"
     },
     {
+      "url": "https://lafrenchtech.gouv.fr/fr/evenements/lancement-du-programme-dapi-directions-achats-pour-linnovation/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://lafrenchtech.gouv.fr/fr/faq/",
       "page": "terms",
       "anchor": "",
@@ -118,7 +126,31 @@
       "url": "https://lafrenchtech.gouv.fr/fr/je-choisis-la-french-tech/",
       "page": "details",
       "anchor": "Découvrir le programme",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/fr/la-mission-french-tech-associe-son-programme-french-tech-rise-au-fundtruck-de-maddyness/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/fr/lancement-du-programme-daccompagnement-french-tech-2030/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/fr/les-criteres-du-programme-french-tech-next40-120-evoluent/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

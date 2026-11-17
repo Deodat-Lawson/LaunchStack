@@ -1,6 +1,6 @@
 {
   "programId": "venture-center",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.venturecenter.co.in/PMU",
@@ -46,7 +46,7 @@
       "url": "https://www.venturecenter.co.in/about/people",
       "page": "details",
       "anchor": "Our People",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -70,7 +70,7 @@
       "url": "https://www.venturecenter.co.in/events/197/immersion-program-for-managers-of-incubation-centers",
       "page": "details",
       "anchor": "Read more",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -115,10 +115,18 @@
       "origin": "official"
     },
     {
+      "url": "https://www.venturecenter.co.in/incubation-support",
+      "page": "details",
+      "anchor": "Incubation & Accelerators",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.venturecenter.co.in/incubation-support/accelerators",
       "page": "details",
       "anchor": "Accelerators",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -126,7 +134,7 @@
       "url": "https://www.venturecenter.co.in/incubation-support/lab2mkt",
       "page": "details",
       "anchor": "Lab Spin-out Program",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -134,7 +142,15 @@
       "url": "https://www.venturecenter.co.in/irp/",
       "page": "details",
       "anchor": "Investor Readiness Program",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.venturecenter.co.in/irp/irp_cohorts/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -142,7 +158,7 @@
       "url": "https://www.venturecenter.co.in/programs",
       "page": "details",
       "anchor": "Programs",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -150,7 +166,7 @@
       "url": "https://www.venturecenter.co.in/programs/lab2mkt",
       "page": "details",
       "anchor": "Lab2Mkt: Spinouts from academic organizations",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

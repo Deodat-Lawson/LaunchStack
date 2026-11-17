@@ -1,10 +1,26 @@
 {
   "programId": "orbit-startups",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://orbitventures.com/11-startups-backed-by-sanabil-accelerator-by-orbit-advance-innovation-across-mena/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
       "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://orbitventures.com/2-nigerian-startups-selected-for-sosvs-orbit-startups-programme-secure-180k-each/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -43,6 +59,22 @@
       "origin": "official"
     },
     {
+      "url": "https://orbitventures.com/case_studies/neufast-listed-on-sap-store-after-completing-sap-io-future-of-work-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://orbitventures.com/case_studies/orbit-partners-with-cdp-venture-capital-to-launch-next-age-europes-first-accelerator-targeting-the-silver-economy/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://orbitventures.com/company/videoverse/",
       "page": "application",
       "anchor": "VideoVerse A universe of video applications, powered by deep learning",
@@ -51,34 +83,10 @@
       "origin": "official"
     },
     {
-      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
       "page": "batches",
       "anchor": "Check out Sanabil Accelerator by Orbit Batch 4 Demo day!",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -93,6 +101,14 @@
     {
       "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://orbitventures.com/orbit-backs-9-startups-in-latest-accelerator-cohort/",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -115,6 +131,14 @@
       "origin": "official"
     },
     {
+      "url": "https://orbitventures.com/sanabil-accelerator-by-orbit-batch-3-unveils-11-innovative-startups-on-demo-day/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://orbitventures.com/sanabil-accelerator-by-orbit-selects-13-companies-for-batch-4/",
       "page": "portfolio",
       "anchor": "Sep 01, 2026 Sanabil Accelerator by Orbit Selects 13 Companies for Batch 4",
@@ -123,10 +147,34 @@
       "origin": "official"
     },
     {
+      "url": "https://orbitventures.com/sanabil-accelerator-by-orbit/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://orbitventures.com/sosv-backs-5-startups-as-part-of-latest-orbit-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://orbitventures.com/startups-portfolio/",
       "page": "portfolio",
       "anchor": "Portfolio",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://orbitventures.com/the-market-people-equation-how-20-years-of-global-expansion-taught-one-operator-the-hard-truths-about-scaling/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

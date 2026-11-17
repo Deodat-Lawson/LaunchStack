@@ -1,6 +1,6 @@
 {
   "programId": "dcamp",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://dcamp.kr/",
     "https://dcamp.kr/program/investment",
@@ -16,7 +16,12 @@
     "https://dcamp.kr/about/who-we-are",
     "https://dcamp.kr/program/250262",
     "https://dcamp.kr/program/250267",
-    "https://dcamp.kr/program/business-desk"
+    "https://dcamp.kr/program/business-desk",
+    "https://dcamp.kr/program/dday",
+    "https://dcamp.kr/program/family-service",
+    "https://dcamp.kr/program/family-service?tab=benefit",
+    "https://dcamp.kr/program/family-service?tab=consulting",
+    "https://dcamp.kr/program/global"
   ],
   "evidence": [
     {
@@ -104,6 +109,13 @@
       "page": "batches"
     },
     {
+      "id": "check-portfolio-6f21544537",
+      "url": "https://dcamp.kr/program/family-service?tab=consulting",
+      "title": "D.CAMP — program page",
+      "excerpt": "Startup → https://dcamp.kr/startups",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-7b8e6320c1",
       "url": "https://dcamp.kr/program/investment",
       "title": "D.CAMP — terms page",
@@ -139,6 +151,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-97ac150484",
+      "url": "https://dcamp.kr/program/family-service",
+      "title": "D.CAMP — program page",
+      "excerpt": "Startup → https://dcamp.kr/startups",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-a887fa112b",
       "url": "https://dcamp.kr/program/batch_5",
       "title": "D.CAMP — batches page",
@@ -146,11 +165,25 @@
       "page": "batches"
     },
     {
+      "id": "check-portfolio-b0464143f2",
+      "url": "https://dcamp.kr/program/dday",
+      "title": "D.CAMP — program page",
+      "excerpt": "Startup → https://dcamp.kr/startups",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-b9b8158eb8",
       "url": "https://dcamp.kr/terms",
       "title": "D.CAMP — terms page",
       "excerpt": "Startup → https://dcamp.kr/startups",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c5f84e67df",
+      "url": "https://dcamp.kr/program/family-service?tab=benefit",
+      "title": "D.CAMP — program page",
+      "excerpt": "Startup → https://dcamp.kr/startups",
+      "page": "details"
     },
     {
       "id": "check-portfolio-cc6d3369c0",
@@ -172,6 +205,13 @@
       "title": "D.CAMP — batches page",
       "excerpt": "More → https://dcamp.kr/startups",
       "page": "batches"
+    },
+    {
+      "id": "check-portfolio-f29c351dd7",
+      "url": "https://dcamp.kr/program/global",
+      "title": "D.CAMP — program page",
+      "excerpt": "Startup → https://dcamp.kr/startups",
+      "page": "details"
     },
     {
       "id": "check-portfolio-fd65d2381b",
@@ -226,6 +266,12 @@
       "excerpt": "dcamp batch1 About About Who we are 스타트업 성장 파트너, 디캠프 What we do 스타트업의 성장을 이끄는 통합 솔루션 Program Program dcamp batch 스타트업을 위한 압도적인 성장 솔루션 investment 폭발적인 도약을 이끄는 최적의 투자 global 미국 일본 글로벌 시장에서 작동하는 성장 전략 growth coaching 모집중 실행력을 높이는 영역별 전문 코칭 d.day 성장을 넘어 도약을 위한 비즈니스 무대 space 입주 대관 성장과 연결을 위한 업무∙행사 공간 officehour 모집중 벤처투자 사업협력 OI 가능성을 여는 투자∙사업협력 기회 family service 전문자문 복지∙제휴 안정적인 사업∙조직 운영을 위한 상시지원 Featured Startup News News Notice 공지사항과 중요한 업데이트를 확인하세요. Media 다양한 미디어 채널의 디캠프 관련 보도를 확인하세요. Story 디캠프의 다양한 소식, 스토리를 확인하세요. Featured KR EN JP KR EN About Program Startup News About Who we are 스타트업 성장 파트너, 디캠프 What we do 스타트업의 성장을 이끄는 통합 솔루션 Program dcamp batch 스타트업을 위한 압도적인 성장 솔루션 d.day 성장을 넘어 도약을 위한 비즈니스 무대 investment 폭발적인 도약을 이끄는 최적의 투자 space 성장과 연결을 위한 업무∙행사 공간 global 글로벌 시장에서 작동하는 성장 전략 officehour 모집중 가능성을 여는 투자∙사업협력 기회 growth coaching 모집중 실행력을 높이는 영역별 전문 코칭 family service 안정적인 사업∙조직 운영을 위한 상시지원 News Notice 공지사항과 중요한 업데이트를 확인하세요. Media 다양한 미디어 채널의 디캠프 관련 보도를 확인하세요. Story 디캠프의 다양한 소식, 스토리를 확인하세요. program dcamp batch Share 디캠프의 진심이 담긴 새로운 시작 스타트업 성장에 다음을 제시합니다. 모집종료 배치 9기 배치 8기 배치 7기 배치 6기 배치 5기 배치 4기 배치 3기 배치 2기 배치 1기 스타트업이 성장에만 집중할 수 있는 새로운 방법을 제시합니다 투자 참여 스타트업 대상 최대 15억원 투자 육성 데이터 기반 사업점검을 통한 전략 도출 영역별 전문가의 맞춤형 밀착 코칭 공간 프론트원 최대 18개월 입주 창업자 및 투자자 네트워크 연결 채용 대학 및 기관을 통한 인재풀 확보 인턴에서 C-level까지 전 단계 채용 연계 홍보 및 사업 연결 미디어를 활용한 기업 홍보 지원 국내외 기업·기관 사업기회 창출 지원 자금 은행 및 정책금융기관의 전문 컨설팅 디캠프 추천을 통한 우대"
     },
     {
+      "id": "check-page-ddcef7f071",
+      "url": "https://dcamp.kr/program/batch_1",
+      "page": "batches",
+      "excerpt": "25년 1분기 프로그램의 모집 분야는 ICT서비스입니다. 따라서 금번 기수에는 ICT분야의 스타트업을 선발할 예정이며 분기마다 주제가 달라질 예정입니다. 향후 진행할 주제와 일정은 아래와 같습니다. 모집시기 주제 시작시기 파트너 VC '24년 4분기 ICT서비스 '25년 1월 캡스톤파트너스, 크릿벤처스, 더벤처스 '25년 1분기 딥테크/기후테크 '25년 4월 추후 공지 '25년 2분기 ICT서비스 '25년 7월 추후 공지 '25년 3분기 딥테크/기후테크 '25년 10월 추후 공지 Q 선발 과정에서 창업자의 나이 또는 창업연차도 고려대상이 되나요? 아니요. 창업자의 나이와 창업 연차는 고려대상이 아닙니다. 디캠프는 나이와 무관하게 빠르게 성장하고자 하는 열정과 실행력을 더 고려합니다."
+    },
+    {
       "id": "check-page-866c017966",
       "url": "https://dcamp.kr/program/batch_2",
       "page": "batches",
@@ -278,6 +324,36 @@
       "url": "https://dcamp.kr/program/business-desk",
       "page": "details",
       "excerpt": "business Desk About About Who we are 스타트업 성장 파트너, 디캠프 What we do 스타트업의 성장을 이끄는 통합 솔루션 Program Program dcamp batch 스타트업을 위한 압도적인 성장 솔루션 investment 폭발적인 도약을 이끄는 최적의 투자 global 미국 일본 글로벌 시장에서 작동하는 성장 전략 growth coaching 모집중 실행력을 높이는 영역별 전문 코칭 d.day 성장을 넘어 도약을 위한 비즈니스 무대 space 입주 대관 성장과 연결을 위한 업무∙행사 공간 officehour 모집중 벤처투자 사업협력 OI 가능성을 여는 투자∙사업협력 기회 family service 전문자문 복지∙제휴 안정적인 사업∙조직 운영을 위한 상시지원 Featured Startup News News Notice 공지사항과 중요한 업데이트를 확인하세요. Media 다양한 미디어 채널의 디캠프 관련 보도를 확인하세요. Story 디캠프의 다양한 소식, 스토리를 확인하세요. Featured KR EN JP KR EN About Program Startup News About Who we are 스타트업 성장 파트너, 디캠프 What we do 스타트업의 성장을 이끄는 통합 솔루션 Program dcamp batch 스타트업을 위한 압도적인 성장 솔루션 d.day 성장을 넘어 도약을 위한 비즈니스 무대 investment 폭발적인 도약을 이끄는 최적의 투자 space 성장과 연결을 위한 업무∙행사 공간 global 글로벌 시장에서 작동하는 성장 전략 officehour 모집중 가능성을 여는 투자∙사업협력 기회 growth coaching 모집중 실행력을 높이는 영역별 전문 코칭 family service 안정적인 사업∙조직 운영을 위한 상시지원 News Notice 공지사항과 중요한 업데이트를 확인하세요. Media 다양한 미디어 채널의 디캠프 관련 보도를 확인하세요. Story 디캠프의 다양한 소식, 스토리를 확인하세요. program business Desk Share 다양한 사업분야의 문제 예방과 해결을 위한 전문 자문 스타트업이 성장 과정에서 마주하는 복잡한 과제를 해결하기 위해 마련된 전문가 자문 프로그램으로 법률, 노무, 재무·회계, 지식재산, 홍보 등 핵심 분야의 최고 전문가와 함께 비즈니스 성장을 가속화하고, 잠재적인 문제를 사전에 예방할 수 있습니다. 신청 기간이 아닙니다 신청대상 디캠프 패밀리기업 또는 디데이 출전기업 신청방법 본 페이지 내 신청하기로 지원 핵심분야 전문가와 함께 비즈니스 성장을 가속화하고, 잠재적인 문제를 사전에 예방할 수 있습니다. 핵심분야 전문가와 함께 비즈니스 성장을 가속화할 수 있습니다. 법률 입주기업 입주 기간 내 연간 10시간 법률 자문 법인 또는 사업 관련 법률 검토 각종"
+    },
+    {
+      "id": "check-page-516a5ede79",
+      "url": "https://dcamp.kr/program/dday",
+      "page": "details",
+      "excerpt": "d.day About About Who we are 스타트업 성장 파트너, 디캠프 What we do 스타트업의 성장을 이끄는 통합 솔루션 Program Program dcamp batch 스타트업을 위한 압도적인 성장 솔루션 investment 폭발적인 도약을 이끄는 최적의 투자 global 미국 일본 글로벌 시장에서 작동하는 성장 전략 growth coaching 모집중 실행력을 높이는 영역별 전문 코칭 d.day 성장을 넘어 도약을 위한 비즈니스 무대 space 입주 대관 성장과 연결을 위한 업무∙행사 공간 officehour 모집중 벤처투자 사업협력 OI 가능성을 여는 투자∙사업협력 기회 family service 전문자문 복지∙제휴 안정적인 사업∙조직 운영을 위한 상시지원 Featured Startup News News Notice 공지사항과 중요한 업데이트를 확인하세요. Media 다양한 미디어 채널의 디캠프 관련 보도를 확인하세요. Story 디캠프의 다양한 소식, 스토리를 확인하세요. Featured KR EN JP KR EN About Program Startup News About Who we are 스타트업 성장 파트너, 디캠프 What we do 스타트업의 성장을 이끄는 통합 솔루션 Program dcamp batch 스타트업을 위한 압도적인 성장 솔루션 d.day 성장을 넘어 도약을 위한 비즈니스 무대 investment 폭발적인 도약을 이끄는 최적의 투자 space 성장과 연결을 위한 업무∙행사 공간 global 글로벌 시장에서 작동하는 성장 전략 officehour 모집중 가능성을 여는 투자∙사업협력 기회 growth coaching 모집중 실행력을 높이는 영역별 전문 코칭 family service 안정적인 사업∙조직 운영을 위한 상시지원 News Notice 공지사항과 중요한 업데이트를 확인하세요. Media 다양한 미디어 채널의 디캠프 관련 보도를 확인하세요. Story 디캠프의 다양한 소식, 스토리를 확인하세요. 배치 4기 d.day 배치 3기 d.day 배치 2기 d.day d.day: founders summit 궤도에 오르기까지, 일곱 개의 기록 2026. 10. 29(목) @디캠프 마포 1층 10월 27일(화) 신청 마감 Sponsored by 한국성장금융 Scroll down 지금, 당신이 해결해야 하는 문제는 무엇인가요? 딥테크 기업은 제품이 완성되기 전에 투자를 설득해야 하고, 첫 고객을 만드는 데 몇 년이 걸리기도 합니다. 그 시간 동안 대표는 계속 새로운 질문 앞에 섭니다. 01. 증명 “매출도 제품도 아직 없는데, 내 기술의 가치를 무엇으로 증명해야 할까?” 02. 전환 “기술이 좋다는 말은 많은데, 왜 아무도 돈을 내지 않을까?” 03. 확장 “팀은 커졌는데, 모든 결정은 내가 해야 할까?” 기술을 사업으로"
+    },
+    {
+      "id": "check-page-31a99e6819",
+      "url": "https://dcamp.kr/program/family-service",
+      "page": "details",
+      "excerpt": "family service About About Who we are 스타트업 성장 파트너, 디캠프 What we do 스타트업의 성장을 이끄는 통합 솔루션 Program Program dcamp batch 스타트업을 위한 압도적인 성장 솔루션 investment 폭발적인 도약을 이끄는 최적의 투자 global 미국 일본 글로벌 시장에서 작동하는 성장 전략 growth coaching 모집중 실행력을 높이는 영역별 전문 코칭 d.day 성장을 넘어 도약을 위한 비즈니스 무대 space 입주 대관 성장과 연결을 위한 업무∙행사 공간 officehour 모집중 벤처투자 사업협력 OI 가능성을 여는 투자∙사업협력 기회 family service 전문자문 복지∙제휴 안정적인 사업∙조직 운영을 위한 상시지원 Featured Startup News News Notice 공지사항과 중요한 업데이트를 확인하세요. Media 다양한 미디어 채널의 디캠프 관련 보도를 확인하세요. Story 디캠프의 다양한 소식, 스토리를 확인하세요. Featured KR EN JP KR EN About Program Startup News About Who we are 스타트업 성장 파트너, 디캠프 What we do 스타트업의 성장을 이끄는 통합 솔루션 Program dcamp batch 스타트업을 위한 압도적인 성장 솔루션 d.day 성장을 넘어 도약을 위한 비즈니스 무대 investment 폭발적인 도약을 이끄는 최적의 투자 space 성장과 연결을 위한 업무∙행사 공간 global 글로벌 시장에서 작동하는 성장 전략 officehour 모집중 가능성을 여는 투자∙사업협력 기회 growth coaching 모집중 실행력을 높이는 영역별 전문 코칭 family service 안정적인 사업∙조직 운영을 위한 상시지원 News Notice 공지사항과 중요한 업데이트를 확인하세요. Media 다양한 미디어 채널의 디캠프 관련 보도를 확인하세요. Story 디캠프의 다양한 소식, 스토리를 확인하세요. program family service Share About Who we are What we do Program dcamp batch d.day investment space global officehour growth coaching family service Startup News Notice Story Media Family Site 하나은행 국민은행 신한은행 우리은행 기업은행 농협은행 한국산업은행 SC제일은행 씨티은행 부산은행 IM뱅크 한국수출입은행 경남은행 수협은행 광주은행 전북은행 한국주택금융공사 제주은행 카카오뱅크 신용보증기금 기술보증기금 중소기업벤처진흥공단 은행연합회 금융위원회 선릉 : 서울특별시 강남구 선릉로 551 새롬빌딩 2층 마포 : 서울특별시 마포구 마포대로 122 디캠프"
+    },
+    {
+      "id": "check-page-2b0870513b",
+      "url": "https://dcamp.kr/program/family-service?tab=benefit",
+      "page": "details",
+      "excerpt": "family service About About Who we are 스타트업 성장 파트너, 디캠프 What we do 스타트업의 성장을 이끄는 통합 솔루션 Program Program dcamp batch 스타트업을 위한 압도적인 성장 솔루션 investment 폭발적인 도약을 이끄는 최적의 투자 global 미국 일본 글로벌 시장에서 작동하는 성장 전략 growth coaching 모집중 실행력을 높이는 영역별 전문 코칭 d.day 성장을 넘어 도약을 위한 비즈니스 무대 space 입주 대관 성장과 연결을 위한 업무∙행사 공간 officehour 모집중 벤처투자 사업협력 OI 가능성을 여는 투자∙사업협력 기회 family service 전문자문 복지∙제휴 안정적인 사업∙조직 운영을 위한 상시지원 Featured Startup News News Notice 공지사항과 중요한 업데이트를 확인하세요. Media 다양한 미디어 채널의 디캠프 관련 보도를 확인하세요. Story 디캠프의 다양한 소식, 스토리를 확인하세요. Featured KR EN JP KR EN About Program Startup News About Who we are 스타트업 성장 파트너, 디캠프 What we do 스타트업의 성장을 이끄는 통합 솔루션 Program dcamp batch 스타트업을 위한 압도적인 성장 솔루션 d.day 성장을 넘어 도약을 위한 비즈니스 무대 investment 폭발적인 도약을 이끄는 최적의 투자 space 성장과 연결을 위한 업무∙행사 공간 global 글로벌 시장에서 작동하는 성장 전략 officehour 모집중 가능성을 여는 투자∙사업협력 기회 growth coaching 모집중 실행력을 높이는 영역별 전문 코칭 family service 안정적인 사업∙조직 운영을 위한 상시지원 News Notice 공지사항과 중요한 업데이트를 확인하세요. Media 다양한 미디어 채널의 디캠프 관련 보도를 확인하세요. Story 디캠프의 다양한 소식, 스토리를 확인하세요. program family service Share About Who we are What we do Program dcamp batch d.day investment space global officehour growth coaching family service Startup News Notice Story Media Family Site 하나은행 국민은행 신한은행 우리은행 기업은행 농협은행 한국산업은행 SC제일은행 씨티은행 부산은행 IM뱅크 한국수출입은행 경남은행 수협은행 광주은행 전북은행 한국주택금융공사 제주은행 카카오뱅크 신용보증기금 기술보증기금 중소기업벤처진흥공단 은행연합회 금융위원회 선릉 : 서울특별시 강남구 선릉로 551 새롬빌딩 2층 마포 : 서울특별시 마포구 마포대로 122 디캠프"
+    },
+    {
+      "id": "check-page-0561df5bad",
+      "url": "https://dcamp.kr/program/family-service?tab=consulting",
+      "page": "details",
+      "excerpt": "family service About About Who we are 스타트업 성장 파트너, 디캠프 What we do 스타트업의 성장을 이끄는 통합 솔루션 Program Program dcamp batch 스타트업을 위한 압도적인 성장 솔루션 investment 폭발적인 도약을 이끄는 최적의 투자 global 미국 일본 글로벌 시장에서 작동하는 성장 전략 growth coaching 모집중 실행력을 높이는 영역별 전문 코칭 d.day 성장을 넘어 도약을 위한 비즈니스 무대 space 입주 대관 성장과 연결을 위한 업무∙행사 공간 officehour 모집중 벤처투자 사업협력 OI 가능성을 여는 투자∙사업협력 기회 family service 전문자문 복지∙제휴 안정적인 사업∙조직 운영을 위한 상시지원 Featured Startup News News Notice 공지사항과 중요한 업데이트를 확인하세요. Media 다양한 미디어 채널의 디캠프 관련 보도를 확인하세요. Story 디캠프의 다양한 소식, 스토리를 확인하세요. Featured KR EN JP KR EN About Program Startup News About Who we are 스타트업 성장 파트너, 디캠프 What we do 스타트업의 성장을 이끄는 통합 솔루션 Program dcamp batch 스타트업을 위한 압도적인 성장 솔루션 d.day 성장을 넘어 도약을 위한 비즈니스 무대 investment 폭발적인 도약을 이끄는 최적의 투자 space 성장과 연결을 위한 업무∙행사 공간 global 글로벌 시장에서 작동하는 성장 전략 officehour 모집중 가능성을 여는 투자∙사업협력 기회 growth coaching 모집중 실행력을 높이는 영역별 전문 코칭 family service 안정적인 사업∙조직 운영을 위한 상시지원 News Notice 공지사항과 중요한 업데이트를 확인하세요. Media 다양한 미디어 채널의 디캠프 관련 보도를 확인하세요. Story 디캠프의 다양한 소식, 스토리를 확인하세요. program family service Share About Who we are What we do Program dcamp batch d.day investment space global officehour growth coaching family service Startup News Notice Story Media Family Site 하나은행 국민은행 신한은행 우리은행 기업은행 농협은행 한국산업은행 SC제일은행 씨티은행 부산은행 IM뱅크 한국수출입은행 경남은행 수협은행 광주은행 전북은행 한국주택금융공사 제주은행 카카오뱅크 신용보증기금 기술보증기금 중소기업벤처진흥공단 은행연합회 금융위원회 선릉 : 서울특별시 강남구 선릉로 551 새롬빌딩 2층 마포 : 서울특별시 마포구 마포대로 122 디캠프"
+    },
+    {
+      "id": "check-page-03f2b10dad",
+      "url": "https://dcamp.kr/program/global",
+      "page": "details",
+      "excerpt": "global About About Who we are 스타트업 성장 파트너, 디캠프 What we do 스타트업의 성장을 이끄는 통합 솔루션 Program Program dcamp batch 스타트업을 위한 압도적인 성장 솔루션 investment 폭발적인 도약을 이끄는 최적의 투자 global 미국 일본 글로벌 시장에서 작동하는 성장 전략 growth coaching 모집중 실행력을 높이는 영역별 전문 코칭 d.day 성장을 넘어 도약을 위한 비즈니스 무대 space 입주 대관 성장과 연결을 위한 업무∙행사 공간 officehour 모집중 벤처투자 사업협력 OI 가능성을 여는 투자∙사업협력 기회 family service 전문자문 복지∙제휴 안정적인 사업∙조직 운영을 위한 상시지원 Featured Startup News News Notice 공지사항과 중요한 업데이트를 확인하세요. Media 다양한 미디어 채널의 디캠프 관련 보도를 확인하세요. Story 디캠프의 다양한 소식, 스토리를 확인하세요. Featured KR EN JP KR EN About Program Startup News About Who we are 스타트업 성장 파트너, 디캠프 What we do 스타트업의 성장을 이끄는 통합 솔루션 Program dcamp batch 스타트업을 위한 압도적인 성장 솔루션 d.day 성장을 넘어 도약을 위한 비즈니스 무대 investment 폭발적인 도약을 이끄는 최적의 투자 space 성장과 연결을 위한 업무∙행사 공간 global 글로벌 시장에서 작동하는 성장 전략 officehour 모집중 가능성을 여는 투자∙사업협력 기회 growth coaching 모집중 실행력을 높이는 영역별 전문 코칭 family service 안정적인 사업∙조직 운영을 위한 상시지원 News Notice 공지사항과 중요한 업데이트를 확인하세요. Media 다양한 미디어 채널의 디캠프 관련 보도를 확인하세요. Story 디캠프의 다양한 소식, 스토리를 확인하세요. program global Share 글로벌 시장에서 작동하는 성장 전략 디캠프 글로벌은 미국과 일본 시장에서 시장 적합성 검증, 현지 파트너 협업, 사업 레퍼런스 확보를 통해 글로벌 진출의 불확실성을 줄이고, 다음 단계 투자와 사업 확장으로 이어질 수 있는 실질적인 성과를 만듭니다. 신청하기 신청하기 신청대상 미국 및 일본 진출을 희망하는 스타트업 신청방법 본 페이지 내 신청하기로 지원 About Who we are What we do Program dcamp batch d.day investment space global officehour growth coaching family service Startup News Notice Story Media Family Site 하나은행 국민은행 신한은행 우리은행"
     }
   ],
   "findings": {

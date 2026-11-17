@@ -1,23 +1,351 @@
 {
   "programId": "nsf-i-corps-southeast-region-hub",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://icorpssoutheasthub.org/",
-    "https://icorpssoutheasthub.org/about"
+    "https://icorpssoutheasthub.org/about",
+    "https://icorpssoutheasthub.org/programs",
+    "https://icorpssoutheasthub.org/programs/accelerate-program",
+    "https://icorpssoutheasthub.org/accelerate-application",
+    "https://icorpssoutheasthub.org/programs/i-corps-instructor-training",
+    "https://icorpssoutheasthub.org/programs/local-i-corps-courses",
+    "https://icorpssoutheasthub.org/nsf-i-corps-cohort-application",
+    "https://icorpssoutheasthub.org/programs/nsf-i-corps-program",
+    "https://icorpssoutheasthub.org/programs/regional-i-corps-courses-2"
   ],
   "evidence": [
     {
+      "id": "check-deal-fb98af056c",
+      "url": "https://icorpssoutheasthub.org/programs/regional-i-corps-courses-2",
+      "title": "NSF I-Corps Southeast Region Hub — program page",
+      "excerpt": "grant applications. Customer Discovery Expenses: Receive up to $500 in funding for expenses such as virtual conference fees and premium",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3d25cacf82",
+      "url": "https://icorpssoutheasthub.org/accelerate-application",
+      "title": "NSF I-Corps Southeast Region Hub — application page",
+      "excerpt": "through Research and Technology Advancement A 6-week Georgia Tech initiative to align tenure-track",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-5a29e77cd5",
+      "url": "https://icorpssoutheasthub.org/programs/nsf-i-corps-program",
+      "title": "NSF I-Corps Southeast Region Hub — program page",
+      "excerpt": "Must commit ~40 hours per week during the 7-week program. Technical Lead (TL)/Principal",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b0133a6c89",
+      "url": "https://icorpssoutheasthub.org/programs/nsf-i-corps-program",
+      "title": "NSF I-Corps Southeast Region Hub — program page",
+      "excerpt": "key reason for startup failure. The immersive 7-week curriculum combines online instruction with",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b805b48c3b",
+      "url": "https://icorpssoutheasthub.org/programs",
+      "title": "NSF I-Corps Southeast Region Hub — program page",
+      "excerpt": "key reason for startup failure. The immersive 7-week curriculum combines online instruction with",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d6379463da",
+      "url": "https://icorpssoutheasthub.org/programs/nsf-i-corps-program",
+      "title": "NSF I-Corps Southeast Region Hub — program page",
+      "excerpt": "to conduct 100+ customer interviews during the 7-week cohort. Commitment: Attendance at all cohort",
+      "page": "details"
+    },
+    {
+      "id": "check-format-cf6c349360",
+      "url": "https://icorpssoutheasthub.org/programs/regional-i-corps-courses-2",
+      "title": "NSF I-Corps Southeast Region Hub — program page",
+      "excerpt": "Receive up to $500 in funding for expenses such as virtual conference fees and premium LinkedIn accounts to aid",
+      "page": "details"
+    },
+    {
+      "id": "check-route-57b9743fef",
+      "url": "https://icorpssoutheasthub.org/programs/i-corps-instructor-training",
+      "title": "NSF I-Corps Southeast Region Hub — program page",
+      "excerpt": "Apply Now → https://airtable.com/appU65R7Of5HyDjKA/paghooxbbsHSUPkSj/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-790a8ea7a0",
+      "url": "https://icorpssoutheasthub.org/programs/accelerate-program",
+      "title": "NSF I-Corps Southeast Region Hub — program page",
+      "excerpt": "Apply Now → https://icorpssoutheasthub.org/accelerate-application",
+      "page": "details"
+    },
+    {
       "id": "check-route-b6bd12e458",
       "url": "https://icorpssoutheasthub.org/",
-      "title": "NSF I-Corps Southeast Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps Southeast Region Hub — homepage",
       "excerpt": "Home → https://icorpssoutheasthub.org/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-a53814a233",
+      "url": "https://icorpssoutheasthub.org/",
+      "page": "details",
+      "excerpt": "Home | I-Corps South Skip to main content Main navigation Home About Leadership Programs About Programs NSF I-Corps Program Regional I-Corps Courses Local I-Corps Courses Accelerate Program Get Involved I-Corps Mentor Network I-Corps Instructor Training Events News Resources I-Corps Hub: Southeast Region A cutting-edge partnership across the Southeast, advancing university-developed deep technology-based ventures. We help bring research-based innovations to market, boosting economic growth and creating societal benefits at local, regional and national levels. View All Programs Who We Are The staff and instructors of the NSF I-Corps Hub: Southeast Region are passionate about empowering academic researchers with the knowledge and skills needed to excel in innovation and entrepreneurship. Our mission is to guide researchers in transforming their discoveries into impactful solutions for society. About Us Impactful Empowerment The staff and instructors of the NSF I-Corps Hub: Southeast Region are passionate about empowering academic researchers with the knowledge and skills needed to excel in innovation and entrepreneurship. Our mission is to guide researchers in transforming their discoveries into impactful solutions for society. View Programs NSF I-Corps Program Equips scientists and engineers with the tools to extend their research beyond the lab and accelerate the"
+    },
+    {
+      "id": "check-page-087cd49a91",
+      "url": "https://icorpssoutheasthub.org/",
+      "page": "details",
+      "excerpt": "Learn More Regional I-Corps Courses Regional I-Corps courses are designed to help faculty, researchers, and graduate students assess the commercial viability of their technology-based innovations, using the Lean LaunchPad methodology."
+    },
+    {
+      "id": "check-page-c226bfa49f",
+      "url": "https://icorpssoutheasthub.org/",
+      "page": "details",
+      "excerpt": "Supported by NSF Award 2430380."
+    },
+    {
+      "id": "check-page-78b334f41c",
+      "url": "https://icorpssoutheasthub.org/about",
+      "page": "details",
+      "excerpt": "About | I-Corps South Skip to main content Main navigation Home About Leadership Programs About Programs NSF I-Corps Program Regional I-Corps Courses Local I-Corps Courses Accelerate Program Get Involved I-Corps Mentor Network I-Corps Instructor Training Events News Resources Southeast Region I-Corps Hub: Goals and Mission The Southeast Region I-Corps Hub is committed to transforming the university innovation process, empowering researchers, and fostering a robust regional and national ecosystem for technological advancement and commercialization View All Programs Who We Are The staff and instructors of the NSF I-Corps Hub: Southeast Region are passionate about empowering academic researchers with the knowledge and skills needed to excel in innovation and entrepreneurship. Our mission is to guide researchers in transforming their discoveries into impactful solutions for society. Goals Reimagine University Innovation: Enhance regional and national competitiveness by rethinking the journey from research ideation to invention to spinout. Leverage leadership in science to drive impactful innovation. Develop Tomorrow’s Technical Leaders: Equip researchers, faculty, and students with the entrepreneurial mindset, skills, and networks they need to pursue meaningful career paths. Transforming Traditional University Research The Hub fosters a fundamental shift in how universities"
+    },
+    {
+      "id": "check-page-202368b9ff",
+      "url": "https://icorpssoutheasthub.org/about",
+      "page": "details",
+      "excerpt": "Faculty, students, and staff are encouraged to engage directly with stakeholders and potential users of their technologies."
+    },
+    {
+      "id": "check-page-67d3482ea2",
+      "url": "https://icorpssoutheasthub.org/about",
+      "page": "details",
+      "excerpt": "From ideation to de-risking and funding support , our nationally recognized instructors, trainers, and mentors provide seamless guidance to help participants transition their ideas from lab to market efficiently and effectively."
+    },
+    {
+      "id": "check-page-bb02092067",
+      "url": "https://icorpssoutheasthub.org/about",
+      "page": "details",
+      "excerpt": "Together, this network advances innovation education to meet America’s need for cutting-edge technological development."
+    },
+    {
+      "id": "check-page-b68bc30a4e",
+      "url": "https://icorpssoutheasthub.org/about",
+      "page": "details",
+      "excerpt": "Teams I-Corps Teams are composed of academic researchers, student entrepreneurs, and business mentors¬ who participate in the curriculum via online instruction and onsite activities through Partners and Hubs."
+    },
+    {
+      "id": "check-page-eaa6ef10c6",
+      "url": "https://icorpssoutheasthub.org/about",
+      "page": "details",
+      "excerpt": "Partners I-Corps™ Partners are top universities that provide infrastructure, resources, mentorship, networking opportunities, and funding to enable teams to transition their work into the marketplace or into becoming I-Corps Team applicants."
+    },
+    {
+      "id": "check-page-18612fecd5",
+      "url": "https://icorpssoutheasthub.org/about",
+      "page": "details",
+      "excerpt": "Hubs I-Corps Hubs support regional needs for innovation education and work to build, utilize, and sustain a national innovation ecosystem that further enhances the development of technologies that benefit society."
+    },
+    {
+      "id": "check-page-6243e63a6f",
+      "url": "https://icorpssoutheasthub.org/about",
+      "page": "details",
+      "excerpt": "This network collaborates to address America’s growing need for innovation education."
+    },
+    {
+      "id": "check-page-9b7f9c3499",
+      "url": "https://icorpssoutheasthub.org/about",
+      "page": "details",
+      "excerpt": "Through collaboration and education, the Southeast Region I-Corps Hub is empowering innovators to create impactful solutions and drive America’s future forward."
+    },
+    {
+      "id": "check-page-bba2dfbab2",
+      "url": "https://icorpssoutheasthub.org/about",
+      "page": "details",
+      "excerpt": "Supported by NSF Award 2430380."
+    },
+    {
+      "id": "check-page-d90eb2d5cf",
+      "url": "https://icorpssoutheasthub.org/programs",
+      "page": "details",
+      "excerpt": "Programs | I-Corps South Skip to main content Main navigation Home About Leadership Programs About Programs NSF I-Corps Program Regional I-Corps Courses Local I-Corps Courses Accelerate Program Get Involved I-Corps Mentor Network I-Corps Instructor Training Events News Resources Programs NSF I-Corps Program The National Science Foundation Innovation Corps (I-Corps™) program equips scientists and engineers with the tools to extend their research beyond the laboratory and accelerate the commercialization of cutting-edge, NSF-funded innovations. By engaging extensively with potential customers, teams validate the real-world applications of their technology and avoid creating solutions that lack market demand—a key reason for startup failure. The immersive 7-week curriculum combines online instruction with on-site activities, challenging teams to conduct at least 15 customer interviews per week. By the end of the program, each team will have connected with over 100 potential customers, gaining invaluable insights to guide their commercialization journey. Learn More All Programs and Courses NSF I-Corps Program Equips scientists and engineers with the tools to extend their research beyond the lab and accelerate the commercialization of cutting-edge, NSF-funded innovations. Learn More Regional I-Corps Courses Regional I-Corps courses are designed to help faculty, researchers, and"
+    },
+    {
+      "id": "check-page-4dfe739889",
+      "url": "https://icorpssoutheasthub.org/programs",
+      "page": "details",
+      "excerpt": "Learn More Regional I-Corps Courses Regional I-Corps courses are designed to help faculty, researchers, and graduate students assess the commercial viability of their technology-based innovations, using the Lean LaunchPad methodology."
+    },
+    {
+      "id": "check-page-939e687a88",
+      "url": "https://icorpssoutheasthub.org/programs",
+      "page": "details",
+      "excerpt": "Supported by NSF Award 2430380."
+    },
+    {
+      "id": "check-page-c2db0e0d9d",
+      "url": "https://icorpssoutheasthub.org/programs/accelerate-program",
+      "page": "details",
+      "excerpt": "Accelerate Program | I-Corps South Skip to main content Main navigation Home About Leadership Programs About Programs NSF I-Corps Program Regional I-Corps Courses Local I-Corps Courses Accelerate Program Get Involved I-Corps Mentor Network I-Corps Instructor Training Events News Resources Accelerate Program Academic Commercialization and Economic Leadership through Research and Technology Advancement Pathways to Impact workshops are designed to help researchers think about impact beyond the laboratory and the publication. The workshops will help PhD students, Postdocs, and Faculty members at universities adopt an entrepreneurial mindset to question how they ultimately hope their research and careers will make an impact. Unlike the Local, Regional, and National I-Corps programs, participants in Pathways to Impact workshops are not expected to have a technology commercialization idea in mind. Apply Now Program Benefits Provide participants with a new framework to view their research goals. Expose participants to the entrepreneurial mindset, and how it can help guide their research and career. Inspire researchers to explore–through outside stakeholders and their own community–how their research/discoveries might be implemented for societal impact. Provide a set of tools to shape participants’ research objectives to be more use-inspired and impactful. Reduce psychological barriers"
+    },
+    {
+      "id": "check-page-45577206b4",
+      "url": "https://icorpssoutheasthub.org/programs/accelerate-program",
+      "page": "details",
+      "excerpt": "Supported by NSF Award 2430380."
+    },
+    {
+      "id": "check-page-10dde6577e",
+      "url": "https://icorpssoutheasthub.org/accelerate-application",
+      "page": "application",
+      "excerpt": "Accelerate Application | I-Corps South Skip to main content Main navigation Home About Leadership Programs About Programs NSF I-Corps Program Regional I-Corps Courses Local I-Corps Courses Accelerate Program Get Involved I-Corps Mentor Network I-Corps Instructor Training Events News Resources Accelerate Program Application Academic Commercialization and Economic Leadership through Research and Technology Advancement A 6-week Georgia Tech initiative to align tenure-track faculty R&D with commercialization for game-changing economic and societal impact. Primary Point of Contact Full Name Phone Number Email Address Title / Position Department / College University Affiliation - Select - University of Alabama Atlanta University Center Consoritium Clemson University University of Florida Georgia Institute of Technology University of Miami University of Central Florida University of South Florida University of Puerto Rico Research & Commercialization Background Briefly describe your current research focus and any innovative technologies you are working on (300 words max): Have you previously explored commercialization pathways (e.g., licensing, startup formation, industry collaboration)? What barriers have you faced in commercializing your research? What outcomes do you hope to achieve through the ACCELERATE program? Do you have any existing intellectual property (IP) related to your"
+    },
+    {
+      "id": "check-page-f0e96b59d5",
+      "url": "https://icorpssoutheasthub.org/accelerate-application",
+      "page": "application",
+      "excerpt": "Do you have any specific mentors, industries, or commercialization areas you’d like to be connected with?"
+    },
+    {
+      "id": "check-page-fe56311156",
+      "url": "https://icorpssoutheasthub.org/accelerate-application",
+      "page": "application",
+      "excerpt": "Stage of Development (Select one) Early Concept Prototype Lab-Validated Field-Tested Have you participated in any other entrepreneurial programs (e.g., I-Corps Site, VentureLab, accelerator programs)?"
+    },
+    {
+      "id": "check-page-34ca02992b",
+      "url": "https://icorpssoutheasthub.org/accelerate-application",
+      "page": "application",
+      "excerpt": "Supported by NSF Award 2430380."
+    },
+    {
+      "id": "check-page-4cfafa0a5f",
+      "url": "https://icorpssoutheasthub.org/programs/i-corps-instructor-training",
+      "page": "details",
+      "excerpt": "I-Corps Instructor Training | I-Corps South Skip to main content Main navigation Home About Leadership Programs About Programs NSF I-Corps Program Regional I-Corps Courses Local I-Corps Courses Accelerate Program Get Involved I-Corps Mentor Network I-Corps Instructor Training Events News Resources I-Corps Instructor Training The Southeast I-Corps Hub is dedicated to fostering the next generation of I-Corps instructors to deliver impactful, evidence-based entrepreneurship programs. These programs drive economic development and commercialization at undergraduate, graduate and faculty levels, helping transform innovative ideas and research into real-world solutions. With the success of the National Science Foundation’s I-Corps program, universities nationwide are adopting this proven methodology. To support these efforts, the Southeast I-Corps Hub provides comprehensive instructor training to equip emerging instructors with the skills and knowledge needed to deliver high-quality I-Corps programs. Find more details about our I-Corps instructor training and development pathways below. Southeast Regional Instructor Academy TRAINING OVERVIEW: The Regional Instructor Academy is designed to share: methodologies and instructor strategies for success, tactical classroom management techniques, and other tools to successfully host an evidence-based entrepreneurship (EBE) course. These"
+    },
+    {
+      "id": "check-page-a6d691c2b4",
+      "url": "https://icorpssoutheasthub.org/programs/i-corps-instructor-training",
+      "page": "details",
+      "excerpt": "Opportunities for Advanced Instructors OVERVIEW: We welcome continued engagement from experienced instructors joining Regional Hub or National I-Corps Mentoring Networks and have further opportunities available to them to support continued development and positioning within the national I-Corps ecosystem."
+    },
+    {
+      "id": "check-page-4cc2542ec8",
+      "url": "https://icorpssoutheasthub.org/programs/i-corps-instructor-training",
+      "page": "details",
+      "excerpt": "Additionally, I-Corps Offers ongoing growth opportunities for more advanced instructors, including nominated selection to become a National Instructor through I-Corps' competitive and formal Faculty-in-Training (FIT) program."
+    },
+    {
+      "id": "check-page-d8195a2836",
+      "url": "https://icorpssoutheasthub.org/programs/i-corps-instructor-training",
+      "page": "details",
+      "excerpt": "Supported by NSF Award 2430380."
+    },
+    {
+      "id": "check-page-daeafaee4e",
+      "url": "https://icorpssoutheasthub.org/programs/local-i-corps-courses",
+      "page": "details",
+      "excerpt": "Local I-Corps Courses | I-Corps South Skip to main content Main navigation Home About Leadership Programs About Programs NSF I-Corps Program Regional I-Corps Courses Local I-Corps Courses Accelerate Program Get Involved I-Corps Mentor Network I-Corps Instructor Training Events News Resources Local I-Corps Courses Local I-Corps courses utilize the Lean LaunchPad methodology to provide participants with a foundational understanding of how to evaluate their innovation ideas from both business and customer perspectives. These courses emphasize the importance of conducting effective customer discovery interviews—an essential first step in the commercialization process. Designed to build entrepreneurial skills, these courses are beneficial for anyone, regardless of their career path. Local I-Corps programs are typically hosted at individual universities and are often open to participants from outside the university community. Apply Now Program Benefits Participating in a Local I-Corps course provides numerous advantages: Master Customer Discovery: Learn best practices for conducting customer discovery interviews and identifying key stakeholders. Build Innovation Skills: Gain, practice, and refine entrepreneurial techniques. Increase Commercial Success: Improve your chances of successfully bringing your innovation to market. Understand Market Dynamics: Explore market trends and"
+    },
+    {
+      "id": "check-page-e981590e8c",
+      "url": "https://icorpssoutheasthub.org/programs/local-i-corps-courses",
+      "page": "details",
+      "excerpt": "Expand Your Network: Connect with peers, instructors, investors, customers, and mentors who share your entrepreneurial interests."
+    },
+    {
+      "id": "check-page-4c4eab09dd",
+      "url": "https://icorpssoutheasthub.org/programs/local-i-corps-courses",
+      "page": "details",
+      "excerpt": "Supported by NSF Award 2430380."
+    },
+    {
+      "id": "check-page-bc30701cb8",
+      "url": "https://icorpssoutheasthub.org/nsf-i-corps-cohort-application",
+      "page": "batches",
+      "excerpt": "NSF I-Corps Cohort Application | I-Corps South Skip to main content Main navigation Home About Leadership Programs About Programs NSF I-Corps Program Regional I-Corps Courses Local I-Corps Courses Accelerate Program Get Involved I-Corps Mentor Network I-Corps Instructor Training Events News Resources NSF I-Corps Cohort Application The NSF I-Corps program is designed to help researchers and innovators explore the commercial potential of their technology. Teams will participate in an intensive training program where they’ll engage with customers, refine their business hypotheses, and assess market opportunities. Team Information Team Name Proposed name for your team/project. Primary Point of Contact Your Name Full Name Your Email Address Email Address Phone Number Institution/Organization: Team Composition (3 members required) Entrepreneurial Lead (EL): Full Name Role (e.g., student, postdoc, etc.) Institution/Organization: Email Address Technical Lead (TL): Full Name Role (e.g., faculty, PI) Institution/Organization: Email Address Technical Lead (TL): Full Name Role (e.g., faculty, PI) Institution/Organization: Email Address Additional Team Members (Optional) Full Name Role (e.g., faculty, PI) Institution/Organization: Email Project and Technology Description Title of Technology or Innovation: Brief title or name of your project. Technology Summary (Max 250 words): Provide a"
+    },
+    {
+      "id": "check-page-3c98d9b5a4",
+      "url": "https://icorpssoutheasthub.org/nsf-i-corps-cohort-application",
+      "page": "batches",
+      "excerpt": "Stage of Development (Select one): Early Concept Prototype Lab-Validated Field-Tested Have you participated in any other entrepreneurial programs (e.g., I-Corps Site, VentureLab, accelerator programs)?"
+    },
+    {
+      "id": "check-page-b5863a0745",
+      "url": "https://icorpssoutheasthub.org/nsf-i-corps-cohort-application",
+      "page": "batches",
+      "excerpt": "Supported by NSF Award 2430380."
+    },
+    {
+      "id": "check-page-5cb6e9fb59",
+      "url": "https://icorpssoutheasthub.org/programs/nsf-i-corps-program",
+      "page": "details",
+      "excerpt": "NSF I-Corps Program | I-Corps South Skip to main content Main navigation Home About Leadership Programs About Programs NSF I-Corps Program Regional I-Corps Courses Local I-Corps Courses Accelerate Program Get Involved I-Corps Mentor Network I-Corps Instructor Training Events News Resources NSF I-Corps Program The National Science Foundation Innovation Corps (I-Corps™) program equips scientists and engineers with the tools to extend their research beyond the laboratory and accelerate the commercialization of cutting-edge, NSF-funded innovations. By engaging extensively with potential customers, teams validate the real-world applications of their technology and avoid creating solutions that lack market demand—a key reason for startup failure. The immersive 7-week curriculum combines online instruction with on-site activities, challenging teams to conduct at least 15 customer interviews per week. By the end of the program, each team will have connected with over 100 potential customers, gaining invaluable insights to guide their commercialization journey. Apply Now Program Benefits Participants in the I-Corps program gain: A deep understanding of their technology’s value and its target audience. Insights into previously unexplored markets for their innovation. Awareness of the challenges and requirements for technology commercialization. Access to a robust network of peers,"
+    },
+    {
+      "id": "check-page-c9ef4b5d02",
+      "url": "https://icorpssoutheasthub.org/programs/nsf-i-corps-program",
+      "page": "details",
+      "excerpt": "Access to a robust network of peers, mentors, investors, and industry leaders."
+    },
+    {
+      "id": "check-page-2da5d4d910",
+      "url": "https://icorpssoutheasthub.org/programs/nsf-i-corps-program",
+      "page": "details",
+      "excerpt": "Typically, a faculty member or another lab researcher."
+    },
+    {
+      "id": "check-page-0df16fdba8",
+      "url": "https://icorpssoutheasthub.org/programs/nsf-i-corps-program",
+      "page": "details",
+      "excerpt": "Supported by NSF Award 2430380."
+    },
+    {
+      "id": "check-page-1e84cd30f9",
+      "url": "https://icorpssoutheasthub.org/programs/regional-i-corps-courses-2",
+      "page": "details",
+      "excerpt": "Regional I-Corps Courses | I-Corps South Skip to main content Main navigation Home About Leadership Programs About Programs NSF I-Corps Program Regional I-Corps Courses Local I-Corps Courses Accelerate Program Get Involved I-Corps Mentor Network I-Corps Instructor Training Events News Resources Regional I-Corp Courses Regional I-Corps courses are designed to help faculty, researchers, and graduate students assess the commercial viability of their technology-based innovations. Using the Lean LaunchPad methodology (also known as Lean Startup), participants systematically test key assumptions about their innovations and identify customer problems their technology can solve better than current alternatives. This process, known as finding “technology-problem fit,” is a critical first step toward commercial success for any technology venture. Through this program, participants: Learn and apply customer discovery techniques to gain a deeper understanding of their ecosystem and stakeholders. Receive guidance from trained instructors and mentors to identify key milestones and chart a commercialization pathway. Connect with like-minded innovators across the Southeast, fostering collaboration and idea exchange. Apply Now Program Benefits Participants in the Regional I-Corps program gain access to valuable resources and opportunities, including: Market Insights: Obtain critical feedback"
+    },
+    {
+      "id": "check-page-0ef952a21a",
+      "url": "https://icorpssoutheasthub.org/programs/regional-i-corps-courses-2",
+      "page": "details",
+      "excerpt": "Networking and Mentorship: Build connections and receive mentorship from experienced industry experts, entrepreneurs, and innovators."
+    },
+    {
+      "id": "check-page-1ac1114916",
+      "url": "https://icorpssoutheasthub.org/programs/regional-i-corps-courses-2",
+      "page": "details",
+      "excerpt": "Entrepreneurial Skills: Develop the mindset and toolset necessary for success in academia, industry, startups, or government careers."
+    },
+    {
+      "id": "check-page-df3cdc83e0",
+      "url": "https://icorpssoutheasthub.org/programs/regional-i-corps-courses-2",
+      "page": "details",
+      "excerpt": "Eligibility Requirements Regional I-Corps courses are open to: Faculty, researchers, and students with technology-based innovation ideas or Intellectual Property (IP)."
+    },
+    {
+      "id": "check-page-d7905e30bc",
+      "url": "https://icorpssoutheasthub.org/programs/regional-i-corps-courses-2",
+      "page": "details",
+      "excerpt": "Supported by NSF Award 2430380."
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://icorpssoutheasthub.org/accelerate-application",
+        "evidenceId": "check-route-790a8ea7a0"
+      },
+      {
+        "value": "https://airtable.com/appU65R7Of5HyDjKA/paghooxbbsHSUPkSj/form",
+        "evidenceId": "check-route-57b9743fef"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://icorpssoutheasthub.org/",
@@ -27,8 +355,47 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "7",
+        "evidenceId": "check-duration-b805b48c3b"
+      },
+      {
+        "value": "6",
+        "evidenceId": "check-duration-3d25cacf82"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-cf6c349360"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "grant applications. Customer Discovery Expenses: Receive up to $500 in funding for expenses such as virtual conference fees and premium",
+        "evidenceId": "check-deal-fb98af056c"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "fee",
+          "amount": "500",
+          "currency": "USD",
+          "equity": null,
+          "label": "Fee",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-fb98af056c"
+      }
+    ],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

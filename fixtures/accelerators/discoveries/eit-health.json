@@ -1,6 +1,6 @@
 {
   "programId": "eit-health",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://eithealth.eu/?page_id=14",
@@ -132,6 +132,46 @@
     },
     {
       "url": "https://eithealth.eu/opportunity/bootcamps-providers/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/opportunity/innovation-microcredentials-call/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/opportunity/innovation-uptake/",
       "page": "other",
       "anchor": "",
       "fetched": true,

@@ -1,6 +1,6 @@
 {
   "programId": "chalmers-ventures",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "http://chalmersventures.com",
@@ -115,34 +115,74 @@
       "origin": "official"
     },
     {
+      "url": "https://chalmersventures.com/investments/night-sky_t20_kj9aer/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/investments/pontus-ottosson-chalmers-ventures-2/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-48-57/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-49-05/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/investments/screenshot-2023-03-08-at-11-51-21/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/investments/sectors-2024-2/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/investments/sectors/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/investments/ska%cc%88rmavbild-2022-08-15-kl-11-14-19/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://chalmersventures.com/mentorshipprogram/",
       "page": "details",
       "anchor": "The Mentorship Programme",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://chalmersventures.com/news/application-startup-camp-open/tw_1024x512_startupcamp_big3/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26-2/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

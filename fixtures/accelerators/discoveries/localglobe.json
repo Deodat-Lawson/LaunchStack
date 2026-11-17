@@ -1,12 +1,12 @@
 {
   "programId": "localglobe",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.phoenixcourt.vc/about",
       "page": "details",
       "anchor": "About Us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -108,94 +108,6 @@
     },
     {
       "url": "https://www.phoenixcourt.vc/news/latitudes-investment-in-flow",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.phoenixcourt.vc/news/latitudes-investment-in-goodlord",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.phoenixcourt.vc/news/making-banking-open-our-investment-in-yapily",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.phoenixcourt.vc/news/our-investment-in-comind-redefining-how-the-brain-is-measured",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.phoenixcourt.vc/news/our-investment-in-condense",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.phoenixcourt.vc/news/our-investment-in-cuspai",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.phoenixcourt.vc/news/our-investment-in-early-making-the-invisible-detectable",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.phoenixcourt.vc/news/our-investment-in-echo",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.phoenixcourt.vc/news/our-investment-in-ers",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.phoenixcourt.vc/news/our-investment-in-foondamate",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.phoenixcourt.vc/news/our-investment-in-gospel-technology",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.phoenixcourt.vc/news/our-investment-in-gotrade",
       "page": "terms",
       "anchor": "",
       "fetched": true,

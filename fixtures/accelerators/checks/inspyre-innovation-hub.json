@@ -1,6 +1,6 @@
 {
   "programId": "inspyre-innovation-hub",
-  "checkedAt": "2026-11-14T20:04:58.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://inspyrehub.com/",
     "https://inspyrehub.com/applications-open-epic/",
@@ -14,9 +14,14 @@
     "https://inspyrehub.com/venue-application/",
     "https://inspyrehub.com/applications-now-open-for-genius-ny-round-9-3m-in-investments-up-for-grabs/",
     "https://inspyrehub.com/how-two-cba-grads-founded-hot-syracuse-startup-that-just-landed-a-104m-investment/",
-    "https://inspyrehub.com/tag/investment/",
     "https://inspyrehub.com/cleantech-accelerator-powered-by-national-grid-introduces-its-2026-cohort/",
-    "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/"
+    "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/",
+    "https://inspyrehub.com/first-ever-startup-night-at-the-tech-garden-highlights-local-innovation-pitches-updates-and-genius-ny-2020-finalists-revealed/",
+    "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+    "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+    "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+    "https://inspyrehub.com/start-it-business-basics-cohort-celebrates-graduation-at-inspyre-pitch-night/",
+    "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/"
   ],
   "evidence": [
     {
@@ -76,6 +81,13 @@
       "page": "batches"
     },
     {
+      "id": "check-duration-ce64eec34b",
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "title": "INSPYRE Innovation Hub — batches page",
+      "excerpt": "confident pitches as participants completed the 10-week course and presented their business concepts",
+      "page": "batches"
+    },
+    {
       "id": "check-format-1f1e0e6d60",
       "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
       "title": "INSPYRE Innovation Hub — application page",
@@ -111,6 +123,13 @@
       "page": "details"
     },
     {
+      "id": "check-route-002b9bc86d",
+      "url": "https://inspyrehub.com/start-it-business-basics-cohort-celebrates-graduation-at-inspyre-pitch-night/",
+      "title": "INSPYRE Innovation Hub — batches page",
+      "excerpt": "Apply → https://inspyrehub.com/apply/",
+      "page": "batches"
+    },
+    {
       "id": "check-route-054e515f67",
       "url": "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/",
       "title": "INSPYRE Innovation Hub — batches page",
@@ -123,6 +142,13 @@
       "title": "INSPYRE Innovation Hub — application page",
       "excerpt": "INSPYRE Meeting Space Inquiries → https://inspyrehub.com/venue-application/",
       "page": "application"
+    },
+    {
+      "id": "check-route-1a1bd2bb97",
+      "url": "https://inspyrehub.com/first-ever-startup-night-at-the-tech-garden-highlights-local-innovation-pitches-updates-and-genius-ny-2020-finalists-revealed/",
+      "title": "INSPYRE Innovation Hub — batches page",
+      "excerpt": "INSPYRE Meeting Space Inquiries → https://inspyrehub.com/venue-application/",
+      "page": "batches"
     },
     {
       "id": "check-route-208ff20499",
@@ -139,8 +165,43 @@
       "page": "details"
     },
     {
+      "id": "check-route-33a1a138d3",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "title": "INSPYRE Innovation Hub — batches page",
+      "excerpt": "Apply → https://inspyrehub.com/apply/",
+      "page": "batches"
+    },
+    {
       "id": "check-route-3bc41a9d84",
       "url": "https://inspyrehub.com/cleantech-accelerator-powered-by-national-grid-introduces-its-2026-cohort/",
+      "title": "INSPYRE Innovation Hub — batches page",
+      "excerpt": "Apply → https://inspyrehub.com/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-405504f42b",
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "title": "INSPYRE Innovation Hub — batches page",
+      "excerpt": "Apply → https://inspyrehub.com/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-4bbf3362e1",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "title": "INSPYRE Innovation Hub — batches page",
+      "excerpt": "INSPYRE Meeting Space Inquiries → https://inspyrehub.com/venue-application/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-52a26551a7",
+      "url": "https://inspyrehub.com/first-ever-startup-night-at-the-tech-garden-highlights-local-innovation-pitches-updates-and-genius-ny-2020-finalists-revealed/",
+      "title": "INSPYRE Innovation Hub — batches page",
+      "excerpt": "Apply → https://inspyrehub.com/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-5b98455ec4",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
       "title": "INSPYRE Innovation Hub — batches page",
       "excerpt": "Apply → https://inspyrehub.com/apply/",
       "page": "batches"
@@ -151,6 +212,13 @@
       "title": "INSPYRE Innovation Hub — terms page",
       "excerpt": "INSPYRE Meeting Space Inquiries → https://inspyrehub.com/venue-application/",
       "page": "terms"
+    },
+    {
+      "id": "check-route-6eeb4afa32",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "title": "INSPYRE Innovation Hub — batches page",
+      "excerpt": "INSPYRE Meeting Space Inquiries → https://inspyrehub.com/venue-application/",
+      "page": "batches"
     },
     {
       "id": "check-route-7371b7fb9b",
@@ -165,13 +233,6 @@
       "title": "INSPYRE Innovation Hub — application page",
       "excerpt": "Apply → https://inspyrehub.com/apply/",
       "page": "application"
-    },
-    {
-      "id": "check-route-78b1da4687",
-      "url": "https://inspyrehub.com/tag/investment/",
-      "title": "INSPYRE Innovation Hub — terms page",
-      "excerpt": "Apply → https://inspyrehub.com/apply/",
-      "page": "terms"
     },
     {
       "id": "check-route-7c4ef59689",
@@ -200,6 +261,13 @@
       "title": "INSPYRE Innovation Hub — application page",
       "excerpt": "Apply → https://inspyrehub.com/apply/",
       "page": "application"
+    },
+    {
+      "id": "check-route-a0e7cb7849",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+      "title": "INSPYRE Innovation Hub — batches page",
+      "excerpt": "INSPYRE Meeting Space Inquiries → https://inspyrehub.com/venue-application/",
+      "page": "batches"
     },
     {
       "id": "check-route-a696eae520",
@@ -244,11 +312,11 @@
       "page": "application"
     },
     {
-      "id": "check-route-c6f8e64c37",
-      "url": "https://inspyrehub.com/tag/investment/",
-      "title": "INSPYRE Innovation Hub — terms page",
+      "id": "check-route-c6f0eb6ba2",
+      "url": "https://inspyrehub.com/start-it-business-basics-cohort-celebrates-graduation-at-inspyre-pitch-night/",
+      "title": "INSPYRE Innovation Hub — batches page",
       "excerpt": "INSPYRE Meeting Space Inquiries → https://inspyrehub.com/venue-application/",
-      "page": "terms"
+      "page": "batches"
     },
     {
       "id": "check-route-ca0370409b",
@@ -256,6 +324,13 @@
       "title": "INSPYRE Innovation Hub — application page",
       "excerpt": "INSPYRE Meeting Space Inquiries → https://inspyrehub.com/venue-application/",
       "page": "application"
+    },
+    {
+      "id": "check-route-d0e1e3d6ad",
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "title": "INSPYRE Innovation Hub — batches page",
+      "excerpt": "INSPYRE Meeting Space Inquiries → https://inspyrehub.com/venue-application/",
+      "page": "batches"
     },
     {
       "id": "check-route-d2de3ec432",
@@ -314,11 +389,25 @@
       "page": "application"
     },
     {
+      "id": "check-route-f89576094c",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "title": "INSPYRE Innovation Hub — batches page",
+      "excerpt": "Apply → https://inspyrehub.com/apply/",
+      "page": "batches"
+    },
+    {
       "id": "check-route-f9ac9435e9",
       "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
       "title": "INSPYRE Innovation Hub — application page",
       "excerpt": "Apply → https://inspyrehub.com/apply/",
       "page": "application"
+    },
+    {
+      "id": "check-status-21fbd2a591",
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "title": "INSPYRE Innovation Hub — batches page",
+      "excerpt": "15 in Syracuse. The course runs Monday evenings from 6 to 8 p.m. for ten weeks and is offered at no cost. Applications are now open for aspiring founders, early-stage entrepreneurs and community members with business ideas who want",
+      "page": "batches"
     },
     {
       "id": "check-status-837a1eb0cc",
@@ -378,10 +467,100 @@
       "excerpt": "INSPYRE Innovation Hub: The Largest Entrepreneurship Hub in NY Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store Welcome to the new INSPYRE Innovation Hub by CenterState CEO Learn more Be Our Client Book an Appointment Learn more Get Involved INSPYRE Offerings Learn more Meeting Spaces at INSPYRE Learn more Get Your Day Pass to INSPYRE! INSPYRE is a bold leap forward for Syracuse’s startup scene. INSPYRE is where entrepreneurs come to dream, build and scale. See it for yourself. GET YOUR DAY PASS INSPYRE News: Read more stories here. GENIUS NY Celebrates 10 Years of Innovation at Third Annual Founders Retreat Founders from across GENIUS NY's 10 cohorts... read more 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage... read more Client Spotlight: NextHealth AI What started as a frustrating personal... read more INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success In just one year, CenterState CEO’s INSPYRE... read more Client Spotlight: SINBUN What started as a passion concept shared with... read more CenterState CEO’s First Whiz Kidz Summer Program Inspires the Next"
     },
     {
+      "id": "check-page-8763dfde21",
+      "url": "https://inspyrehub.com/",
+      "page": "details",
+      "excerpt": "Brandy Young Syracuse Surge Accelerator Participant “We started out in The Tech Garden, and our success has enabled us to now support its evolution."
+    },
+    {
+      "id": "check-page-5452af9780",
+      "url": "https://inspyrehub.com/",
+      "page": "details",
+      "excerpt": "My wanting to give back and to show gratitude to CenteState, through our sponsorship in the new Innovation Hub, was a way to show that we appreciate what they're doing for the community."
+    },
+    {
+      "id": "check-page-95a6ceab45",
+      "url": "https://inspyrehub.com/",
+      "page": "details",
+      "excerpt": "And our sponsorship gives us a chance to support the next entrepreneurs and say, ‘look where you have a chance to go.’\" Tony Baird Innovation Hub Sponsor & Former tenant “They're really helping with the transformation of Syracuse."
+    },
+    {
       "id": "check-page-90526daf08",
       "url": "https://inspyrehub.com/applications-open-epic/",
       "page": "application",
       "excerpt": "Applications Open Now for the EPIC Buildings Accelerator - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store Applications Open Now for the EPIC Buildings Accelerator  December 12, 2023 Entering into its third year, the EPIC (Energy Program for Innovation Clusters) Buildings Acceleratoris currently accepting applications through Jan. 31, 2024, for the 2024 cohort. The EPIC Buildings Accelerator is a six-month, cohort-based program offered by CenterState CEO’s The Tech Garden in collaboration with the Syracuse Center of Excellence in Environmental and Energy Systems (SyracuseCoE) , with support from the U.S. Department of Energy’s (DOE) Office of Technology Transitions and the Energy Program for Innovation Clusters (EPIC), as well as DOE’s Building Technology Office.​Buildings account for more than 70% of U.S. electricity consumption and power sector carbon dioxide emissions. Companies participating in the EPIC Buildings Program help turn buildings into clean, flexible energy resources by combining energy efficiency and demand flexibility with communications and smart technologies. Through innovative products, American homes and"
+    },
+    {
+      "id": "check-page-af52852cde",
+      "url": "https://inspyrehub.com/applications-open-epic/",
+      "page": "application",
+      "excerpt": "Thisacceleratorprovides a suite of business incubation supports to early-mid stage companies targeting energy hardware innovations in G rid-interactive and E nergy-efficient B uilding (GEB) technologies."
+    },
+    {
+      "id": "check-page-ea89358d92",
+      "url": "https://inspyrehub.com/applications-open-epic/",
+      "page": "application",
+      "excerpt": "The goals are to strengthen the cluster of companies engaged with the GEB market, while promoting equity and public health in the built environment and supporting the nation’s transition to net-zero emissions."
+    },
+    {
+      "id": "check-page-8476ff725a",
+      "url": "https://inspyrehub.com/applications-open-epic/",
+      "page": "application",
+      "excerpt": "EPIC Building Accelerator cohort companies may also apply by Jan."
+    },
+    {
+      "id": "check-page-c9d52046ad",
+      "url": "https://inspyrehub.com/applications-open-epic/",
+      "page": "application",
+      "excerpt": "31, 2024 for other EPIC Buildings program offerings, including Innovation Law Center Intellectual Property Landscape Survey research projects offered in collaboration with students and faculty from Syracuse University’s Innovation Law Centerand small-scale prototype development projects ."
+    },
+    {
+      "id": "check-page-2b41d00f46",
+      "url": "https://inspyrehub.com/applications-open-epic/",
+      "page": "application",
+      "excerpt": "In2023, 22 companies were selected to participate in the EPIC Buildings Accelerator Cohort 2."
+    },
+    {
+      "id": "check-page-aa9b91aaa6",
+      "url": "https://inspyrehub.com/applications-open-epic/",
+      "page": "application",
+      "excerpt": "One of those companies, Hydronic Shell Technologies has just been awarded a $3 million grant from the Housing Affordability Breakthrough Challenge, with collaborators from other EPIC Buildings Accelerator participant companies."
+    },
+    {
+      "id": "check-page-319a8a6dd2",
+      "url": "https://inspyrehub.com/applications-open-epic/",
+      "page": "application",
+      "excerpt": "EPIC Buildings is an importantprogram that helps New York state companies accelerate development and commercialization of innovations for energy hardware to create grid-interactive and energy efficient buildings."
+    },
+    {
+      "id": "check-page-d54eab254f",
+      "url": "https://inspyrehub.com/applications-open-epic/",
+      "page": "application",
+      "excerpt": "Learn more about the EPIC Buildings Accelerator and apply by Jan ."
+    },
+    {
+      "id": "check-page-dbdea950d0",
+      "url": "https://inspyrehub.com/applications-open-epic/",
+      "page": "application",
+      "excerpt": "Recent News 10 Local Entrepreneurs Graduate from Up Start Accelerator read more Client Spotlight: NextHealth AI read more INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success read more ← Preview Post Next Post → Be Inspired!"
+    },
+    {
+      "id": "check-page-120ddd9dfb",
+      "url": "https://inspyrehub.com/applications-open-epic/",
+      "page": "application",
+      "excerpt": "From hands-on workshops and pitch nights to networking mixers and industry events, INSPYRE Innovation Hub is where ideas ignite and connections turn into opportunity."
+    },
+    {
+      "id": "check-page-48b513ab9e",
+      "url": "https://inspyrehub.com/applications-open-epic/",
+      "page": "application",
+      "excerpt": "With tailored client tiers, mentorship, startup support, and a community that shows up, this is where ideas become companies."
+    },
+    {
+      "id": "check-page-bacc6f2ce8",
+      "url": "https://inspyrehub.com/applications-open-epic/",
+      "page": "application",
+      "excerpt": "Learn More Related Articles Browse All Categories 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage business owners build the skills, connections and confidence to grow."
     },
     {
       "id": "check-page-d64d2ced3b",
@@ -396,10 +575,136 @@
       "excerpt": "Cut to the Chase Media™ Launches Innovative Dating Application at the Great New York State Fair - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store Cut to the Chase Media™ Launches Innovative Dating Application at the Great New York State Fair  September 12, 2017 Cut to the Chase Media, is proud to announce their new mobile application – Cut To The Chase™, now available in the Apple App Store. Cut to the Chase eliminates the complexities of finding people you are interested in; so you can quickly and easily connect, converse and meet! The company is currently a Tech Garden virtual member. Cut to the Chase employs a very fast onboarding process to get users in and using the system as quickly as possible and by employing technology to facilitate a connection between users. Members must take a selfie (no old high school pictures); select a few of their “likes” and can also create a 6 second video introducing them. “It’s all designed to get our members up and chasing as quickly as possible!” said Michele Shannon, coFounder. Unique to the industry, Cut to the Chase members can meet other members who interest them – face-to-face –"
     },
     {
+      "id": "check-page-8417372567",
+      "url": "https://inspyrehub.com/cut-to-the-chase-mediatm-launches-innovative-dating-application-at-the-great-new-york-state-fair/",
+      "page": "application",
+      "excerpt": "Our launch at the New York State Fair is the first step of our rollout out strategy."
+    },
+    {
+      "id": "check-page-aa328c0869",
+      "url": "https://inspyrehub.com/cut-to-the-chase-mediatm-launches-innovative-dating-application-at-the-great-new-york-state-fair/",
+      "page": "application",
+      "excerpt": "Recent News 10 Local Entrepreneurs Graduate from Up Start Accelerator read more Client Spotlight: NextHealth AI read more INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success read more ← Preview Post Next Post → Be Inspired!"
+    },
+    {
+      "id": "check-page-6e3e54ea9d",
+      "url": "https://inspyrehub.com/cut-to-the-chase-mediatm-launches-innovative-dating-application-at-the-great-new-york-state-fair/",
+      "page": "application",
+      "excerpt": "From hands-on workshops and pitch nights to networking mixers and industry events, INSPYRE Innovation Hub is where ideas ignite and connections turn into opportunity."
+    },
+    {
+      "id": "check-page-ba95fa55a8",
+      "url": "https://inspyrehub.com/cut-to-the-chase-mediatm-launches-innovative-dating-application-at-the-great-new-york-state-fair/",
+      "page": "application",
+      "excerpt": "With tailored client tiers, mentorship, startup support, and a community that shows up, this is where ideas become companies."
+    },
+    {
+      "id": "check-page-e698371753",
+      "url": "https://inspyrehub.com/cut-to-the-chase-mediatm-launches-innovative-dating-application-at-the-great-new-york-state-fair/",
+      "page": "application",
+      "excerpt": "Learn More Related Articles Browse All Categories 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage business owners build the skills, connections and confidence to grow."
+    },
+    {
+      "id": "check-page-0c331e8e53",
+      "url": "https://inspyrehub.com/cut-to-the-chase-mediatm-launches-innovative-dating-application-at-the-great-new-york-state-fair/",
+      "page": "application",
+      "excerpt": "SYRACUSE, NY – Ten local entrepreneurs are taking the next steps in their business journeys after completing the CenterState Up Start accelerator."
+    },
+    {
+      "id": "check-page-50efdb78a5",
+      "url": "https://inspyrehub.com/cut-to-the-chase-mediatm-launches-innovative-dating-application-at-the-great-new-york-state-fair/",
+      "page": "application",
+      "excerpt": "Client Spotlight: NextHealth AI What started as a frustrating personal experience navigating the healthcare insurance system has grown into a mission to make the process easier for providers and patients alike."
+    },
+    {
+      "id": "check-page-ad0350c696",
+      "url": "https://inspyrehub.com/cut-to-the-chase-mediatm-launches-innovative-dating-application-at-the-great-new-york-state-fair/",
+      "page": "application",
+      "excerpt": "Founded by Raelynn Lasonde, NextHealth AI is developing an AI-assisted healthcare..."
+    },
+    {
+      "id": "check-page-4bf9eeb250",
+      "url": "https://inspyrehub.com/cut-to-the-chase-mediatm-launches-innovative-dating-application-at-the-great-new-york-state-fair/",
+      "page": "application",
+      "excerpt": "INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success In just one year, CenterState CEO’s INSPYRE Innovation Hub has become a key component of Central New York’s innovation ecosystem, bringing together entrepreneurs, students, industry leaders and community partners to create new opportunities..."
+    },
+    {
       "id": "check-page-d199928d35",
       "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
       "page": "application",
       "excerpt": "GENIUS NY 2.0 Now Accepting Applications From Startups Focused On Unmanned Systems, Hardware, Software And Analytics - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store GENIUS NY 2.0 Now Accepting Applications From Startups Focused On Unmanned Systems, Hardware, Software And Analytics  May 15, 2017 Governor Andrew M. Cuomo today announced that applications are now being accepted for the second round of GENIUS NY – one of the world’s largest business competitions focused on unmanned systems, cross-connected platforms and other technology-based sectors. The year-long business accelerator is seeking applications from entrepreneurs and early-stage businesses focused on unmanned systems, hardware, software and analytics. The program will invest nearly $3 million in six finalist companies, including three grand prizes valued at up to $1 million, $600,000 and $400,000.”The GENIUS NY competition has already transformed the business landscape of Central New York by enticing next generation entrepreneurs to establish roots in the Empire State,” Governor Cuomo said. “By continuing to invest in the region’s unmanned systems sector and"
+    },
+    {
+      "id": "check-page-15fabcc257",
+      "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
+      "page": "application",
+      "excerpt": "The company is currently focused on inspection of agriculture and infrastructure assets."
+    },
+    {
+      "id": "check-page-0cffd1b628",
+      "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
+      "page": "application",
+      "excerpt": "The six finalist teams, which relocated to Central New York earlier this year, will use the GENIUS NY investments to continue accelerating their growth and expanding their presence in the region."
+    },
+    {
+      "id": "check-page-aee2efe2fc",
+      "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
+      "page": "application",
+      "excerpt": "Six companies will advance to participate in the competition, which is structured as a unique programmed incubator and accelerator experience."
+    },
+    {
+      "id": "check-page-a52297e801",
+      "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
+      "page": "application",
+      "excerpt": "These six teams will enter the in-residence accelerator at CenterState CEO’s Tech Garden, and will be immersed in the incubator’s events, resource pool, and mentoring."
+    },
+    {
+      "id": "check-page-82e429be55",
+      "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
+      "page": "application",
+      "excerpt": "Participants are required to operate their business in Central New York for one year during the competition."
+    },
+    {
+      "id": "check-page-9454323801",
+      "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
+      "page": "application",
+      "excerpt": "Central New York Regional Economic Development Council Co-chairs Robert Simpson, President, CenterState CEO and Dr."
+    },
+    {
+      "id": "check-page-9b587538cd",
+      "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
+      "page": "application",
+      "excerpt": "At the heart of that strategy is GENIUS NY, an accelerator that helps startups secure the capital, contacts and other resources they need to succeed in Upstate New York."
+    },
+    {
+      "id": "check-page-8079dc20af",
+      "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
+      "page": "application",
+      "excerpt": "This initiative fosters innovation – a cornerstone of our approach to economic development – and works to ensure these companies stay in Central New York, create jobs, and establish the region as a global hub for emerging technologies.” Onondaga County Executive Joanie Mahoney said, “Onondaga County is excited to welcome applications for the next round of the GENIUS NY competition."
+    },
+    {
+      "id": "check-page-a1c0f61f78",
+      "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
+      "page": "application",
+      "excerpt": "As this program continues to grow, we look forward to attracting new companies from across the country to participate in this competition right here in Central New York."
+    },
+    {
+      "id": "check-page-a276462894",
+      "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
+      "page": "application",
+      "excerpt": "GENIUS NY is funded by Empire State Development in a model similar to Western New York’s highly successful 43North program and 76West in the Southern Tier."
+    },
+    {
+      "id": "check-page-f7f6eb5a44",
+      "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
+      "page": "application",
+      "excerpt": "The advancement of the GENIUS NY program builds on the progress of CNY Rising, the region’s award-winning strategic plan to generate robust economic growth and community development."
+    },
+    {
+      "id": "check-page-346230ebd0",
+      "url": "https://inspyrehub.com/genius-ny-20-now-accepting-applications-from-startups-focused-on-unmanned-systems-hardware-software-and-analytics/",
+      "page": "application",
+      "excerpt": "The GENIUS NY competition and prize-winning companies strongly align with CNY Rising, which calls for major investments in the Unmanned Aircraft Systems industry in Central New York."
     },
     {
       "id": "check-page-a85938e7a8",
@@ -408,10 +713,124 @@
       "excerpt": "GENIUS NY Applications Now Open for 2021 Program - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store GENIUS NY Applications Now Open for 2021 Program  January 5, 2021 Empire State Development (ESD) today announced that the application window is now open for the fifth round of GENIUS NY– the world’s largest business accelerator competition focused on unmanned systems. ​ The year-long, in-residence accelerator program is operated out of CenterState CEO’s Tech Garden in downtown Syracuse and will invest $3 million in five finalist companies, including a grand prize of $1 million. GENIUS NY is funded through the CNY Rising Upstate Revitalization Initiative, the region’s award-winning strategic plan to generate robust economic growth and community development. The program also offers company stipends, resources, programming and networking opportunities to assist innovative startups with the tools they need to take advantage of emerging opportunities. GENIUS NY participants are required to operate their business in Central New York for at least one year.”Business plan competitions like Genius NY are creating opportunities across the"
     },
     {
+      "id": "check-page-b3d73df087",
+      "url": "https://inspyrehub.com/genius-ny-applications-now-open-for-2021-program/",
+      "page": "application",
+      "excerpt": "GENIUS NY participants are required to operate their business in Central New York for at least one year.”Business plan competitions like Genius NY are creating opportunities across the state with innovative new start-ups and good-paying jobs,” Lieutenant Governor Kathy Hochul said."
+    },
+    {
+      "id": "check-page-d86f8a331d",
+      "url": "https://inspyrehub.com/genius-ny-applications-now-open-for-2021-program/",
+      "page": "application",
+      "excerpt": "“Central New York is being recognized worldwide as a leader in the unmanned aerial systems industry because of unprecedented state support and investments."
+    },
+    {
+      "id": "check-page-bab1f441d8",
+      "url": "https://inspyrehub.com/genius-ny-applications-now-open-for-2021-program/",
+      "page": "application",
+      "excerpt": "“We are excited to open applications for the fifth round of the GENIUS NY accelerator program, which has proven to be a critical element of the region’s growing UAS and UTM ecosystem,” said Jeff Fuchsberg, director of GENIUS NY."
+    },
+    {
+      "id": "check-page-1cdac3b804",
+      "url": "https://inspyrehub.com/genius-ny-applications-now-open-for-2021-program/",
+      "page": "application",
+      "excerpt": "Five companies will advance to participate in the competition, which is structured as a unique programmed incubator and accelerator experience."
+    },
+    {
+      "id": "check-page-fd0ffb3d5d",
+      "url": "https://inspyrehub.com/genius-ny-applications-now-open-for-2021-program/",
+      "page": "application",
+      "excerpt": "These five teams will enter the in-residence accelerator at CenterState CEO’s Tech Garden in 2021, and will be immersed in the incubator’s events, resource pool and mentoring."
+    },
+    {
+      "id": "check-page-b0eae8aef7",
+      "url": "https://inspyrehub.com/genius-ny-applications-now-open-for-2021-program/",
+      "page": "application",
+      "excerpt": "Applicants should be prepared to relocate to Central New York to participate in the program starting in May."
+    },
+    {
+      "id": "check-page-d52bc385a0",
+      "url": "https://inspyrehub.com/genius-ny-applications-now-open-for-2021-program/",
+      "page": "application",
+      "excerpt": "Geopipe of New York City was named as the round four winner of the GENIUS NY $1 million grand prize in September of 2020 ."
+    },
+    {
+      "id": "check-page-d49f951291",
+      "url": "https://inspyrehub.com/genius-ny-applications-now-open-for-2021-program/",
+      "page": "application",
+      "excerpt": "Other round four winners who are now operating in Central New York include BotsAndUs from the United Kingdom, Droneseed from Seattle, Washington, Skyy Network from Australia and Eget Liber."
+    },
+    {
+      "id": "check-page-2d05e60909",
+      "url": "https://inspyrehub.com/genius-ny-applications-now-open-for-2021-program/",
+      "page": "application",
+      "excerpt": "President of CenterState CEO Rob Simpson said, “Startups from four prior cohorts have come from around the world to participate in this program and be immersed in Central New York’s strong unmanned systems ecosystem."
+    },
+    {
+      "id": "check-page-32d1339399",
+      "url": "https://inspyrehub.com/genius-ny-applications-now-open-for-2021-program/",
+      "page": "application",
+      "excerpt": "Our support will enable them to create high-skilled jobs and contribute to the regional economy.” In addition to the GENIUS NY competition, New York State continues to focus on investing in the unmanned aircraft systems industry in Central New York and Mohawk Valley."
+    },
+    {
+      "id": "check-page-ca97d28dcd",
+      "url": "https://inspyrehub.com/genius-ny-applications-now-open-for-2021-program/",
+      "page": "application",
+      "excerpt": "We have been lucky to have some great innovators and entrepreneurs participate in GENIUS NY and they have added to our workforce and economy in Central New York."
+    },
+    {
+      "id": "check-page-8d281f1e01",
+      "url": "https://inspyrehub.com/genius-ny-applications-now-open-for-2021-program/",
+      "page": "application",
+      "excerpt": "By investing in this incubator program, we are illustrating just how great a space Upstate can be to both build and grow any young business.” Assemblymember William B."
+    },
+    {
       "id": "check-page-9874ae70dd",
       "url": "https://inspyrehub.com/genius-ny-round-9-with-newschannel-9-applications-are-open-heres-what-you-need-to-know/",
       "page": "application",
       "excerpt": "GENIUS NY Round 9 with NewsChannel 9: Applications Are Open—Here’s What You Need to Know - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store GENIUS NY Round 9 with NewsChannel 9: Applications Are Open—Here’s What You Need to Know  February 5, 2025 CenterState CEO’s Kara Jones , Director of Programs & Engagement for Innovation & Entrepreneurship, recently joined NewsChannel 9 to spotlight the launch of GENIUS NY Round 9 , one of the world’s largest accelerator programs for uncrewed systems, robotics, and beyond. “We’re looking for innovative, tech-driven companies that are ready to grow fast,” said Jones. “While drones are a huge part of GENIUS, the program supports a wide range of emerging technologies—from robotics to AI and smart systems.” The competitive program awards $3 million in investment annually, with one grand prize of $1 million. It also includes mentorship, space, resources, and direct access to the region’s powerful UAS ecosystem—including the nation’s first FAA-designated drone corridor. If your startup is looking for serious support, a tight-knit founder community, and the chance to scale inside a nationally"
+    },
+    {
+      "id": "check-page-4e53aec678",
+      "url": "https://inspyrehub.com/genius-ny-round-9-with-newschannel-9-applications-are-open-heres-what-you-need-to-know/",
+      "page": "application",
+      "excerpt": "From hands-on workshops and pitch nights to networking mixers and industry events, INSPYRE Innovation Hub is where ideas ignite and connections turn into opportunity."
+    },
+    {
+      "id": "check-page-3b9b337b26",
+      "url": "https://inspyrehub.com/genius-ny-round-9-with-newschannel-9-applications-are-open-heres-what-you-need-to-know/",
+      "page": "application",
+      "excerpt": "With tailored client tiers, mentorship, startup support, and a community that shows up, this is where ideas become companies."
+    },
+    {
+      "id": "check-page-ef7aaf232c",
+      "url": "https://inspyrehub.com/genius-ny-round-9-with-newschannel-9-applications-are-open-heres-what-you-need-to-know/",
+      "page": "application",
+      "excerpt": "Learn More Related Articles Browse All Categories 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage business owners build the skills, connections and confidence to grow."
+    },
+    {
+      "id": "check-page-1ca45a7603",
+      "url": "https://inspyrehub.com/genius-ny-round-9-with-newschannel-9-applications-are-open-heres-what-you-need-to-know/",
+      "page": "application",
+      "excerpt": "SYRACUSE, NY – Ten local entrepreneurs are taking the next steps in their business journeys after completing the CenterState Up Start accelerator."
+    },
+    {
+      "id": "check-page-0d20879fe8",
+      "url": "https://inspyrehub.com/genius-ny-round-9-with-newschannel-9-applications-are-open-heres-what-you-need-to-know/",
+      "page": "application",
+      "excerpt": "Client Spotlight: NextHealth AI What started as a frustrating personal experience navigating the healthcare insurance system has grown into a mission to make the process easier for providers and patients alike."
+    },
+    {
+      "id": "check-page-936d638adb",
+      "url": "https://inspyrehub.com/genius-ny-round-9-with-newschannel-9-applications-are-open-heres-what-you-need-to-know/",
+      "page": "application",
+      "excerpt": "Founded by Raelynn Lasonde, NextHealth AI is developing an AI-assisted healthcare..."
+    },
+    {
+      "id": "check-page-86a101cd94",
+      "url": "https://inspyrehub.com/genius-ny-round-9-with-newschannel-9-applications-are-open-heres-what-you-need-to-know/",
+      "page": "application",
+      "excerpt": "INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success In just one year, CenterState CEO’s INSPYRE Innovation Hub has become a key component of Central New York’s innovation ecosystem, bringing together entrepreneurs, students, industry leaders and community partners to create new opportunities..."
     },
     {
       "id": "check-page-3d4a9804b3",
@@ -420,10 +839,118 @@
       "excerpt": "INSPYRE the Next Generation: Applications Now Open for Mentors - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store INSPYRE the Next Generation: Applications Now Open for Mentors  May 15, 2025 The INSPYRE Mentor Program is now accepting applications! We’re looking for experienced professionals, subject-matter experts, and founders who want to give back by guiding the next generation of entrepreneurs and small business leaders. As a mentor, you’ll provide real-world advice, encouragement and critical insight to early-stage companies working to grow and scale. Applications are open through May 31, 2025 . Apply now or share with someone who’d be a great fit. Apply to Be a Mentor Recent News 10 Local Entrepreneurs Graduate from Up Start Accelerator read more Client Spotlight: NextHealth AI read more INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success read more ← Preview Post Next Post → Be Inspired! From hands-on workshops and pitch nights to networking mixers and industry events, INSPYRE Innovation Hub is where ideas ignite and connections turn into opportunity. View Events Accepting New Clients!"
     },
     {
+      "id": "check-page-cc3b8336cf",
+      "url": "https://inspyrehub.com/inspyre-the-next-generation-applications-now-open-for-mentors/",
+      "page": "application",
+      "excerpt": "With tailored client tiers, mentorship, startup support, and a community that shows up, this is where ideas become companies."
+    },
+    {
+      "id": "check-page-552feb8a45",
+      "url": "https://inspyrehub.com/inspyre-the-next-generation-applications-now-open-for-mentors/",
+      "page": "application",
+      "excerpt": "Learn More Related Articles Browse All Categories 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage business owners build the skills, connections and confidence to grow."
+    },
+    {
+      "id": "check-page-9ee89f853f",
+      "url": "https://inspyrehub.com/inspyre-the-next-generation-applications-now-open-for-mentors/",
+      "page": "application",
+      "excerpt": "SYRACUSE, NY – Ten local entrepreneurs are taking the next steps in their business journeys after completing the CenterState Up Start accelerator."
+    },
+    {
+      "id": "check-page-c84e05ecc9",
+      "url": "https://inspyrehub.com/inspyre-the-next-generation-applications-now-open-for-mentors/",
+      "page": "application",
+      "excerpt": "Client Spotlight: NextHealth AI What started as a frustrating personal experience navigating the healthcare insurance system has grown into a mission to make the process easier for providers and patients alike."
+    },
+    {
+      "id": "check-page-145d6dc292",
+      "url": "https://inspyrehub.com/inspyre-the-next-generation-applications-now-open-for-mentors/",
+      "page": "application",
+      "excerpt": "Founded by Raelynn Lasonde, NextHealth AI is developing an AI-assisted healthcare..."
+    },
+    {
+      "id": "check-page-fb587d4e9a",
+      "url": "https://inspyrehub.com/inspyre-the-next-generation-applications-now-open-for-mentors/",
+      "page": "application",
+      "excerpt": "INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success In just one year, CenterState CEO’s INSPYRE Innovation Hub has become a key component of Central New York’s innovation ecosystem, bringing together entrepreneurs, students, industry leaders and community partners to create new opportunities..."
+    },
+    {
       "id": "check-page-c94f330b23",
       "url": "https://inspyrehub.com/new-steam-exhibit-at-the-great-new-york-state-fair-seeks-applications-from-potential-participating-organizations/",
       "page": "application",
       "excerpt": "New STEAM Exhibit at the Great New York State Fair Seeks Applications from Potential Participating Organizations - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store New STEAM Exhibit at the Great New York State Fair Seeks Applications from Potential Participating Organizations  May 8, 2017 Exhibit Highlights Careers in Science, Technology, Engineering, Arts and Mathematics The 2017 Great New York State Fair will feature a new exhibit highlighting exciting careers in several technical trades where the need for qualified workers is rising fast. The Fair is now accepting applications from potential exhibitors and participants for the STEAM exhibit that will be held in the Science and Engineering Building. STEAM stands for Science, Technology, Engineering, Arts and Mathematics. The exhibit will feature hands-on activities, workshops and demonstrations aimed at stimulating creativity in young fairgoers and encouraging them to consider careers in related fields. Federal government statistics indicate that employment in the science, technology, engineering and math fields will grow by 9 million by 2022. “The technical fields and the arts"
+    },
+    {
+      "id": "check-page-ab74132fb8",
+      "url": "https://inspyrehub.com/new-steam-exhibit-at-the-great-new-york-state-fair-seeks-applications-from-potential-participating-organizations/",
+      "page": "application",
+      "excerpt": "Examples of projects and fields that will be displayed include: drones, medical projects, advanced manufacturing, virtual reality, robotics, citizen science, wearable technology, soldering, 3D-printed prosthetics, architecture, stop-motion animation, and more."
+    },
+    {
+      "id": "check-page-6991c2cbdf",
+      "url": "https://inspyrehub.com/new-steam-exhibit-at-the-great-new-york-state-fair-seeks-applications-from-potential-participating-organizations/",
+      "page": "application",
+      "excerpt": "The New York State Fair, operated by the New York State Department of Agriculture and Markets, runs from August 23 to September 4, 2017."
+    },
+    {
+      "id": "check-page-ba3e94179d",
+      "url": "https://inspyrehub.com/new-steam-exhibit-at-the-great-new-york-state-fair-seeks-applications-from-potential-participating-organizations/",
+      "page": "application",
+      "excerpt": "The Fair’s mission, reflected in its theme, “FIND YOUR GREAT,” is to showcase the best of New York agriculture while providing top-quality entertainment."
+    },
+    {
+      "id": "check-page-38362f218d",
+      "url": "https://inspyrehub.com/new-steam-exhibit-at-the-great-new-york-state-fair-seeks-applications-from-potential-participating-organizations/",
+      "page": "application",
+      "excerpt": "The home of the Great New York State Fair is a 375-acre exhibit and entertainment complex that operates all year."
+    },
+    {
+      "id": "check-page-1180caa1a0",
+      "url": "https://inspyrehub.com/new-steam-exhibit-at-the-great-new-york-state-fair-seeks-applications-from-potential-participating-organizations/",
+      "page": "application",
+      "excerpt": "Find The Great New York State Fair on Facebook, follow @NYSFair on Twitter, on Snapchat at nysfair and enjoy photos from the Fair at Flickr.com/photos/nysfair."
+    },
+    {
+      "id": "check-page-f62204a830",
+      "url": "https://inspyrehub.com/new-steam-exhibit-at-the-great-new-york-state-fair-seeks-applications-from-potential-participating-organizations/",
+      "page": "application",
+      "excerpt": "Also, New Yorkers are invited to send their ideas for the Great New York State Fair at statefairideas@agriculture.ny.gov ."
+    },
+    {
+      "id": "check-page-c91ff9f0e3",
+      "url": "https://inspyrehub.com/new-steam-exhibit-at-the-great-new-york-state-fair-seeks-applications-from-potential-participating-organizations/",
+      "page": "application",
+      "excerpt": "From hands-on workshops and pitch nights to networking mixers and industry events, INSPYRE Innovation Hub is where ideas ignite and connections turn into opportunity."
+    },
+    {
+      "id": "check-page-8bc99c231a",
+      "url": "https://inspyrehub.com/new-steam-exhibit-at-the-great-new-york-state-fair-seeks-applications-from-potential-participating-organizations/",
+      "page": "application",
+      "excerpt": "With tailored client tiers, mentorship, startup support, and a community that shows up, this is where ideas become companies."
+    },
+    {
+      "id": "check-page-4ea32be4ca",
+      "url": "https://inspyrehub.com/new-steam-exhibit-at-the-great-new-york-state-fair-seeks-applications-from-potential-participating-organizations/",
+      "page": "application",
+      "excerpt": "Learn More Related Articles Browse All Categories 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage business owners build the skills, connections and confidence to grow."
+    },
+    {
+      "id": "check-page-75360d943e",
+      "url": "https://inspyrehub.com/new-steam-exhibit-at-the-great-new-york-state-fair-seeks-applications-from-potential-participating-organizations/",
+      "page": "application",
+      "excerpt": "SYRACUSE, NY – Ten local entrepreneurs are taking the next steps in their business journeys after completing the CenterState Up Start accelerator."
+    },
+    {
+      "id": "check-page-8a0d676e38",
+      "url": "https://inspyrehub.com/new-steam-exhibit-at-the-great-new-york-state-fair-seeks-applications-from-potential-participating-organizations/",
+      "page": "application",
+      "excerpt": "Client Spotlight: NextHealth AI What started as a frustrating personal experience navigating the healthcare insurance system has grown into a mission to make the process easier for providers and patients alike."
+    },
+    {
+      "id": "check-page-e41bc2a87d",
+      "url": "https://inspyrehub.com/new-steam-exhibit-at-the-great-new-york-state-fair-seeks-applications-from-potential-participating-organizations/",
+      "page": "application",
+      "excerpt": "Founded by Raelynn Lasonde, NextHealth AI is developing an AI-assisted healthcare..."
     },
     {
       "id": "check-page-36532a7762",
@@ -438,16 +965,112 @@
       "excerpt": "Applications Now Open for GENIUS NY Round 9—$3M in Investments Up for Grabs - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store Applications Now Open for GENIUS NY Round 9—$3M in Investments Up for Grabs  January 10, 2025 The world’s largest accelerator for uncrewed systems is back. GENIUS NY Round 9 is officially accepting applications through May 28, 2025 , offering five tech startups the chance to receive a combined $3 million in funding —including a $1 million grand prize . Backed by Empire State Development and operated by CenterState CEO , GENIUS NY is a game-changing, in-residence accelerator designed to attract world-class innovation to Central New York’s fast-growing UAS and advanced air mobility ecosystem . Finalists will receive funding, mentoring, and access to a newly renovated INSPYRE Innovation Hub —featuring a brand-new hardware center, drone demo deck, and expanded programming. Since 2017, the program has invested nearly $24 million in 42 companies from around the world, helping them raise over $350 million in follow-on funding . Startups working in drones, automation, data analytics, smart city tech, sensors, or"
     },
     {
+      "id": "check-page-36df0a0313",
+      "url": "https://inspyrehub.com/applications-now-open-for-genius-ny-round-9-3m-in-investments-up-for-grabs/",
+      "page": "terms",
+      "excerpt": "Startups working in drones, automation, data analytics, smart city tech, sensors, or advanced air mobility are encouraged to apply."
+    },
+    {
+      "id": "check-page-7c5a4d46f6",
+      "url": "https://inspyrehub.com/applications-now-open-for-genius-ny-round-9-3m-in-investments-up-for-grabs/",
+      "page": "terms",
+      "excerpt": "From hands-on workshops and pitch nights to networking mixers and industry events, INSPYRE Innovation Hub is where ideas ignite and connections turn into opportunity."
+    },
+    {
+      "id": "check-page-056314413b",
+      "url": "https://inspyrehub.com/applications-now-open-for-genius-ny-round-9-3m-in-investments-up-for-grabs/",
+      "page": "terms",
+      "excerpt": "With tailored client tiers, mentorship, startup support, and a community that shows up, this is where ideas become companies."
+    },
+    {
+      "id": "check-page-a9a1cce91a",
+      "url": "https://inspyrehub.com/applications-now-open-for-genius-ny-round-9-3m-in-investments-up-for-grabs/",
+      "page": "terms",
+      "excerpt": "Learn More Related Articles Browse All Categories 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage business owners build the skills, connections and confidence to grow."
+    },
+    {
+      "id": "check-page-c633d75f54",
+      "url": "https://inspyrehub.com/applications-now-open-for-genius-ny-round-9-3m-in-investments-up-for-grabs/",
+      "page": "terms",
+      "excerpt": "SYRACUSE, NY – Ten local entrepreneurs are taking the next steps in their business journeys after completing the CenterState Up Start accelerator."
+    },
+    {
+      "id": "check-page-7f36fbbabc",
+      "url": "https://inspyrehub.com/applications-now-open-for-genius-ny-round-9-3m-in-investments-up-for-grabs/",
+      "page": "terms",
+      "excerpt": "Client Spotlight: NextHealth AI What started as a frustrating personal experience navigating the healthcare insurance system has grown into a mission to make the process easier for providers and patients alike."
+    },
+    {
+      "id": "check-page-8ff327b463",
+      "url": "https://inspyrehub.com/applications-now-open-for-genius-ny-round-9-3m-in-investments-up-for-grabs/",
+      "page": "terms",
+      "excerpt": "Founded by Raelynn Lasonde, NextHealth AI is developing an AI-assisted healthcare..."
+    },
+    {
+      "id": "check-page-4360318be5",
+      "url": "https://inspyrehub.com/applications-now-open-for-genius-ny-round-9-3m-in-investments-up-for-grabs/",
+      "page": "terms",
+      "excerpt": "INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success In just one year, CenterState CEO’s INSPYRE Innovation Hub has become a key component of Central New York’s innovation ecosystem, bringing together entrepreneurs, students, industry leaders and community partners to create new opportunities..."
+    },
+    {
       "id": "check-page-576ba853d6",
       "url": "https://inspyrehub.com/how-two-cba-grads-founded-hot-syracuse-startup-that-just-landed-a-104m-investment/",
       "page": "terms",
       "excerpt": "How Two CBA Grads Founded Hot Syracuse Startup That Just Landed a $104M Investment - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store How Two CBA Grads Founded Hot Syracuse Startup That Just Landed a $104M Investment  February 8, 2023 Syracuse, N.Y. — A fast-growing Syracuse company that helps car dealers all over the world turn online shoppers into buyers has secured one of the largest single equity investments ever received by a local startup. Impel , whose digital engagement software is used by 4,000 auto dealerships in 53 countries, last month received a $104 million investment led by Silversmith Capital Partners , a Boston-based growth equity firm, with participation from existing investor Wavecrest Growth Partners . Impel said it will use the funding to rev up its growth even more through product expansion, and mergers and acquisitions. “This investment will significantly strengthen our ability to introduce new products and innovations that generate meaningful business impact for manufacturers and dealers alike, while enhancing the customer experience at every touchpoint,” said Devin Daly, Impel co-founder and CEO. ​ Impel"
     },
     {
-      "id": "check-page-d37c3949a2",
-      "url": "https://inspyrehub.com/tag/investment/",
+      "id": "check-page-b8a2d4ef00",
+      "url": "https://inspyrehub.com/how-two-cba-grads-founded-hot-syracuse-startup-that-just-landed-a-104m-investment/",
       "page": "terms",
-      "excerpt": "Investment Archives - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store INSPYRE NEWS TOPIC Investment Meet Andy: Systems Thinker, Process Improver & High-Five Enthusiast Andy Obernesser is the kind of person who makes things work better without making a big fuss about it — and does it with a lot of kindness (and high fives 🖐️) along the way. How Andy helps clients at INSPYRE:Working behind the scenes to improve systems and processes —... Read More CTA Title Goes Here In non pulvinar purus. Curabitur nisi odio, blandit et elit at, suscipit pharetra efficitur elit. Luctus lectus non quisque turpis bibendum posuere. Morbi tortor nibh, fringilla sed pretium sit amet. CTA Title Goes Here In non pulvinar purus. Curabitur nisi odio, blandit et elit at, suscipit pharetra efficitur elit. Luctus lectus non quisque turpis bibendum posuere. Morbi tortor nibh, fringilla sed pretium sit amet. No Results Found The page you requested could not be found. Try refining your search, or use the navigation above to locate the post. No Results Found The page you requested could not be found. Try refining your search, or use the navigation above to locate"
+      "excerpt": "“This investment will significantly strengthen our ability to introduce new products and innovations that generate meaningful business impact for manufacturers and dealers alike, while enhancing the customer experience at every touchpoint,” said Devin Daly, Impel co-founder and CEO. ​ Impel got its start at CenterState CEO ‘s business incubator, The Tech Garden, in downtown Syracuse."
+    },
+    {
+      "id": "check-page-7047b9a2ee",
+      "url": "https://inspyrehub.com/how-two-cba-grads-founded-hot-syracuse-startup-that-just-landed-a-104m-investment/",
+      "page": "terms",
+      "excerpt": "Recent News 10 Local Entrepreneurs Graduate from Up Start Accelerator read more Client Spotlight: NextHealth AI read more INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success read more ← Preview Post Next Post → Be Inspired!"
+    },
+    {
+      "id": "check-page-4848bbb9fb",
+      "url": "https://inspyrehub.com/how-two-cba-grads-founded-hot-syracuse-startup-that-just-landed-a-104m-investment/",
+      "page": "terms",
+      "excerpt": "From hands-on workshops and pitch nights to networking mixers and industry events, INSPYRE Innovation Hub is where ideas ignite and connections turn into opportunity."
+    },
+    {
+      "id": "check-page-6896a8bf1b",
+      "url": "https://inspyrehub.com/how-two-cba-grads-founded-hot-syracuse-startup-that-just-landed-a-104m-investment/",
+      "page": "terms",
+      "excerpt": "With tailored client tiers, mentorship, startup support, and a community that shows up, this is where ideas become companies."
+    },
+    {
+      "id": "check-page-2a6faf5c7d",
+      "url": "https://inspyrehub.com/how-two-cba-grads-founded-hot-syracuse-startup-that-just-landed-a-104m-investment/",
+      "page": "terms",
+      "excerpt": "Learn More Related Articles Browse All Categories 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage business owners build the skills, connections and confidence to grow."
+    },
+    {
+      "id": "check-page-0e3cde3895",
+      "url": "https://inspyrehub.com/how-two-cba-grads-founded-hot-syracuse-startup-that-just-landed-a-104m-investment/",
+      "page": "terms",
+      "excerpt": "SYRACUSE, NY – Ten local entrepreneurs are taking the next steps in their business journeys after completing the CenterState Up Start accelerator."
+    },
+    {
+      "id": "check-page-a587732409",
+      "url": "https://inspyrehub.com/how-two-cba-grads-founded-hot-syracuse-startup-that-just-landed-a-104m-investment/",
+      "page": "terms",
+      "excerpt": "Client Spotlight: NextHealth AI What started as a frustrating personal experience navigating the healthcare insurance system has grown into a mission to make the process easier for providers and patients alike."
+    },
+    {
+      "id": "check-page-5ff55c3c69",
+      "url": "https://inspyrehub.com/how-two-cba-grads-founded-hot-syracuse-startup-that-just-landed-a-104m-investment/",
+      "page": "terms",
+      "excerpt": "Founded by Raelynn Lasonde, NextHealth AI is developing an AI-assisted healthcare..."
+    },
+    {
+      "id": "check-page-e5d012a128",
+      "url": "https://inspyrehub.com/how-two-cba-grads-founded-hot-syracuse-startup-that-just-landed-a-104m-investment/",
+      "page": "terms",
+      "excerpt": "INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success In just one year, CenterState CEO’s INSPYRE Innovation Hub has become a key component of Central New York’s innovation ecosystem, bringing together entrepreneurs, students, industry leaders and community partners to create new opportunities..."
     },
     {
       "id": "check-page-d5ea68ee2f",
@@ -456,10 +1079,562 @@
       "excerpt": "Cleantech Accelerator Powered by National Grid Introduces its 2026 Cohort - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store Cleantech Accelerator Powered by National Grid Introduces its 2026 Cohort  March 5, 2026 CenterState CEO launched its Cleantech Accelerator powered by National Grid at the start of 2026 with a tour of INSPYRE Innovation Hub and orientation to the program and its resources. The Cleantech Accelerator is a one-year program designed to support early-stage cleantech startups with ties to higher education. Four finalists were selected from a competitive pool of applicants and are now working on validating their technology, running pilot projects and preparing for commercialization. All participating companies reside in or serve one of 12 eligible counties in New York state. This year’s participants are: Applied Biorefinery Sciences – Derived from research conducted at SUNY ESF, Applied Biorefinery Sciences is working to scale and deploy a patented biorefining platform that can produce a range of sustainable energy, chemical and material products from biomass. IoTRight (dba InteliEQ) – InteliEQ transforms indoor"
     },
     {
+      "id": "check-page-af868a8325",
+      "url": "https://inspyrehub.com/cleantech-accelerator-powered-by-national-grid-introduces-its-2026-cohort/",
+      "page": "batches",
+      "excerpt": "IoTRight (dba InteliEQ) – InteliEQ transforms indoor environments into living responsive ecosystems that actively support human health, performance and sustainability by employing an integrated intelligence engine that continuously monitors, actively purifies both air and surfaces and optimizes energy use in real-time."
+    },
+    {
+      "id": "check-page-074349ba42",
+      "url": "https://inspyrehub.com/cleantech-accelerator-powered-by-national-grid-introduces-its-2026-cohort/",
+      "page": "batches",
+      "excerpt": "TKFabricate (TKF) – TKF designs and manufactures integrated mechanical systems that dramatically reduce energy use, simplify building upgrades and maintenance, and enhance tenant well-being in multifamily housing."
+    },
+    {
+      "id": "check-page-1a06e680f4",
+      "url": "https://inspyrehub.com/cleantech-accelerator-powered-by-national-grid-introduces-its-2026-cohort/",
+      "page": "batches",
+      "excerpt": "“We’re thrilled to welcome the inaugural cohort of our new Cleantech Accelerator,” said CenterState CEO Entrepreneurial Manager Emad Rahim."
+    },
+    {
+      "id": "check-page-3a1019be90",
+      "url": "https://inspyrehub.com/cleantech-accelerator-powered-by-national-grid-introduces-its-2026-cohort/",
+      "page": "batches",
+      "excerpt": "“Each of these startups brings bold, inventive solutions that push the boundaries of what’s possible in addressing environmental challenges, while energizing and strengthening our local entrepreneurship ecosystem.” The Cleantech Accelerator offers participating founders access capital, mentorship and a high-growth entrepreneurial community rooted in sustainability."
+    },
+    {
+      "id": "check-page-6174156e83",
+      "url": "https://inspyrehub.com/cleantech-accelerator-powered-by-national-grid-introduces-its-2026-cohort/",
+      "page": "batches",
+      "excerpt": "During their 12 months in the accelerator, participating founders will hear from a range of professionals, providing insights on topics such as marketing, pitching, investment opportunities, intellectual property and much more."
+    },
+    {
+      "id": "check-page-2d0d0284d2",
+      "url": "https://inspyrehub.com/cleantech-accelerator-powered-by-national-grid-introduces-its-2026-cohort/",
+      "page": "batches",
+      "excerpt": "The Cleantech Accelerator is among the growing suite of programs and resources available to the region’s entrepreneurial community at the INSPYRE Innovation Hub by CenterState."
+    },
+    {
+      "id": "check-page-2569dd5d2c",
+      "url": "https://inspyrehub.com/cleantech-accelerator-powered-by-national-grid-introduces-its-2026-cohort/",
+      "page": "batches",
+      "excerpt": "Recent News 10 Local Entrepreneurs Graduate from Up Start Accelerator read more Client Spotlight: NextHealth AI read more INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success read more ← Preview Post Next Post → Be Inspired!"
+    },
+    {
+      "id": "check-page-6b88aade84",
+      "url": "https://inspyrehub.com/cleantech-accelerator-powered-by-national-grid-introduces-its-2026-cohort/",
+      "page": "batches",
+      "excerpt": "From hands-on workshops and pitch nights to networking mixers and industry events, INSPYRE Innovation Hub is where ideas ignite and connections turn into opportunity."
+    },
+    {
+      "id": "check-page-441f065c5d",
+      "url": "https://inspyrehub.com/cleantech-accelerator-powered-by-national-grid-introduces-its-2026-cohort/",
+      "page": "batches",
+      "excerpt": "With tailored client tiers, mentorship, startup support, and a community that shows up, this is where ideas become companies."
+    },
+    {
+      "id": "check-page-ee8328a5c5",
+      "url": "https://inspyrehub.com/cleantech-accelerator-powered-by-national-grid-introduces-its-2026-cohort/",
+      "page": "batches",
+      "excerpt": "Learn More Related Articles Browse All Categories 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage business owners build the skills, connections and confidence to grow."
+    },
+    {
+      "id": "check-page-5d42cc98fd",
+      "url": "https://inspyrehub.com/cleantech-accelerator-powered-by-national-grid-introduces-its-2026-cohort/",
+      "page": "batches",
+      "excerpt": "SYRACUSE, NY – Ten local entrepreneurs are taking the next steps in their business journeys after completing the CenterState Up Start accelerator."
+    },
+    {
+      "id": "check-page-bb109f9a22",
+      "url": "https://inspyrehub.com/cleantech-accelerator-powered-by-national-grid-introduces-its-2026-cohort/",
+      "page": "batches",
+      "excerpt": "Client Spotlight: NextHealth AI What started as a frustrating personal experience navigating the healthcare insurance system has grown into a mission to make the process easier for providers and patients alike."
+    },
+    {
       "id": "check-page-cfaca44913",
       "url": "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/",
       "page": "batches",
       "excerpt": "Empire State Development Announces Applications Open for GENIUS NY Cohort 10 - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store Empire State Development Announces Applications Open for GENIUS NY Cohort 10  January 28, 2026 The World’s Largest Business Accelerator for Uncrewed Systems is Accepting Applications through May 27, 2026 Empty heading GENIUS NY awards a total of $3 million to high-growth companies Empty heading The Competition is Supported by “CNY Rising” – The Region’s Comprehensive Strategy to Revitalize Communities and Grow the Economy Empty heading Empire State Development (ESD) today announced that GENIUS NY is now accepting applications for Round 10 of the yearlong program. GENIUS NY, operated by CenterState CEO and funded by Empire State Development, is the world’s largest accelerator program focused on drones, robotics and autonomous systems. The in-residence accelerator will invest more than $3 million in five finalist companies, including a $1 million grand prize awarded at the GENIUS NY Pitch Finals during CenterState CEO’s annual Innovation Night event. The program is funded through the CNY Rising Upstate"
+    },
+    {
+      "id": "check-page-329b14c98b",
+      "url": "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/",
+      "page": "batches",
+      "excerpt": "The program is funded through the CNY Rising Upstate Revitalization Initiative (URI), the region’s award-winning strategic plan to generate robust economic growth and community development."
+    },
+    {
+      "id": "check-page-d310e69315",
+      "url": "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/",
+      "page": "batches",
+      "excerpt": "Empire State Development President, CEO & Commissioner Hope Knight said, “New York’s strategic investments in the uncrewed aerial systems industry, bolstered by the GENIUS NY accelerator, continue to promote and fuel new growth."
+    },
+    {
+      "id": "check-page-6fae83598e",
+      "url": "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/",
+      "page": "batches",
+      "excerpt": "This renowned program in Central New York attracts and welcomes forward-thinking UAS innovators from around the world, ensuring that pioneering ideas take flight in the region.” Interested applicants can apply at geniusny.com through May 17, 2026."
+    },
+    {
+      "id": "check-page-c749619419",
+      "url": "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/",
+      "page": "batches",
+      "excerpt": "Early-stage technology startups building solutions in drones, robotics, autonomy and related systems are encouraged to apply."
+    },
+    {
+      "id": "check-page-1fdce3d202",
+      "url": "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/",
+      "page": "batches",
+      "excerpt": "GENIUS NY participants are required to operate their business in Central New York for at least one year."
+    },
+    {
+      "id": "check-page-95dc3e005d",
+      "url": "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/",
+      "page": "batches",
+      "excerpt": "“We look forward to welcoming five new companies who are ready to scale: hiring talent, raising capital and embedding themselves in Central New York."
+    },
+    {
+      "id": "check-page-c0387782f3",
+      "url": "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/",
+      "page": "batches",
+      "excerpt": "Cohort 10 builds on nearly a decade of momentum in Central New York and a growing track record of real impact from the GENIUS NY program.” Finalists are given office space in New York’s largest business incubator, INSPYRE Innovation Hub by CenterState."
+    },
+    {
+      "id": "check-page-effabf6dcd",
+      "url": "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/",
+      "page": "batches",
+      "excerpt": "The state-of-the-art innovation hub in downtown Syracuse offers direct access to specialized facilities, hardware resources and a collaborative ecosystem designed to support complex, capital-intensive technologies."
+    },
+    {
+      "id": "check-page-348d20ebe4",
+      "url": "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/",
+      "page": "batches",
+      "excerpt": "In addition to funding, GENIUS NY provides tailored programming, hands-on mentorship and strategic connections to customers, investors and partners to help companies accelerate commercialization."
+    },
+    {
+      "id": "check-page-9409b128c8",
+      "url": "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/",
+      "page": "batches",
+      "excerpt": "The program begins this fall, and selected teams should plan to relocate to Central New York starting in September 2026."
+    },
+    {
+      "id": "check-page-dc929e799b",
+      "url": "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/",
+      "page": "batches",
+      "excerpt": "Recent participants such as Flyhound and Modovolo expanded their presence in Central New York, while FLOX and Lamarr.AI have made local hires to grow their teams and advance their technologies."
+    },
+    {
+      "id": "check-page-311df3aa08",
+      "url": "https://inspyrehub.com/empire-state-development-announces-applications-open-for-genius-ny-cohort-10/",
+      "page": "batches",
+      "excerpt": "Other GENIUS NY alumni are actively closing investment rounds, securing new customers and deepening partnerships with industry and government stakeholders, demonstrating how GENIUS NY supports long-term growth well beyond the program year."
+    },
+    {
+      "id": "check-page-9532367c0c",
+      "url": "https://inspyrehub.com/first-ever-startup-night-at-the-tech-garden-highlights-local-innovation-pitches-updates-and-genius-ny-2020-finalists-revealed/",
+      "page": "batches",
+      "excerpt": "First Ever Startup Night at The Tech Garden Highlights Local Innovation – Pitches, Updates and GENIUS NY 2020 Finalists Revealed - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store First Ever Startup Night at The Tech Garden Highlights Local Innovation – Pitches, Updates and GENIUS NY 2020 Finalists Revealed  December 16, 2019 The Tech Garden held its first annual Startup Night and Holiday Party that included announcing the GENIUS NY 2020 finalists ; member updates from 20 startups; facility tours; networking; and a 2019 Tech Garden review. More than 100 people attended the inaugural event. Members that presented included teams from the GENIUS NY and The Clean Tech Center accelerators, including Adam Fine, Dropcopter; Kristin Mannion, The Alvina Group; Brian Streem, Vermeer; Chuck Storman, Acumen Detection; Greg Walker, PreVision; Josh Jenson, Blurpop; Jon Byrd, EagleHawk; Joe Dunaway, Knifehand Nutrition; Seth Major, Hestia; Paul Mutolo, Standard Hydrogen; Saïf-Deen Akanni, Sentient Blue; Peter Burr, The Mall App; Rachel Rosen, WexEnergy; Jon Thies, SkyOp; John Mansfield, 5R; Robi Banerjee, Moxi; Don Berchoff, TruWeather"
+    },
+    {
+      "id": "check-page-0b8a3d8d20",
+      "url": "https://inspyrehub.com/first-ever-startup-night-at-the-tech-garden-highlights-local-innovation-pitches-updates-and-genius-ny-2020-finalists-revealed/",
+      "page": "batches",
+      "excerpt": "Recent News 10 Local Entrepreneurs Graduate from Up Start Accelerator read more Client Spotlight: NextHealth AI read more INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success read more ← Preview Post Next Post → Be Inspired!"
+    },
+    {
+      "id": "check-page-8010701c67",
+      "url": "https://inspyrehub.com/first-ever-startup-night-at-the-tech-garden-highlights-local-innovation-pitches-updates-and-genius-ny-2020-finalists-revealed/",
+      "page": "batches",
+      "excerpt": "From hands-on workshops and pitch nights to networking mixers and industry events, INSPYRE Innovation Hub is where ideas ignite and connections turn into opportunity."
+    },
+    {
+      "id": "check-page-c6ad698abd",
+      "url": "https://inspyrehub.com/first-ever-startup-night-at-the-tech-garden-highlights-local-innovation-pitches-updates-and-genius-ny-2020-finalists-revealed/",
+      "page": "batches",
+      "excerpt": "With tailored client tiers, mentorship, startup support, and a community that shows up, this is where ideas become companies."
+    },
+    {
+      "id": "check-page-0c6e95fb40",
+      "url": "https://inspyrehub.com/first-ever-startup-night-at-the-tech-garden-highlights-local-innovation-pitches-updates-and-genius-ny-2020-finalists-revealed/",
+      "page": "batches",
+      "excerpt": "Learn More Related Articles Browse All Categories 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage business owners build the skills, connections and confidence to grow."
+    },
+    {
+      "id": "check-page-82e671d186",
+      "url": "https://inspyrehub.com/first-ever-startup-night-at-the-tech-garden-highlights-local-innovation-pitches-updates-and-genius-ny-2020-finalists-revealed/",
+      "page": "batches",
+      "excerpt": "SYRACUSE, NY – Ten local entrepreneurs are taking the next steps in their business journeys after completing the CenterState Up Start accelerator."
+    },
+    {
+      "id": "check-page-8432a86b93",
+      "url": "https://inspyrehub.com/first-ever-startup-night-at-the-tech-garden-highlights-local-innovation-pitches-updates-and-genius-ny-2020-finalists-revealed/",
+      "page": "batches",
+      "excerpt": "Client Spotlight: NextHealth AI What started as a frustrating personal experience navigating the healthcare insurance system has grown into a mission to make the process easier for providers and patients alike."
+    },
+    {
+      "id": "check-page-a43d5c7be3",
+      "url": "https://inspyrehub.com/first-ever-startup-night-at-the-tech-garden-highlights-local-innovation-pitches-updates-and-genius-ny-2020-finalists-revealed/",
+      "page": "batches",
+      "excerpt": "Founded by Raelynn Lasonde, NextHealth AI is developing an AI-assisted healthcare..."
+    },
+    {
+      "id": "check-page-31d49983f1",
+      "url": "https://inspyrehub.com/first-ever-startup-night-at-the-tech-garden-highlights-local-innovation-pitches-updates-and-genius-ny-2020-finalists-revealed/",
+      "page": "batches",
+      "excerpt": "INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success In just one year, CenterState CEO’s INSPYRE Innovation Hub has become a key component of Central New York’s innovation ecosystem, bringing together entrepreneurs, students, industry leaders and community partners to create new opportunities..."
+    },
+    {
+      "id": "check-page-c8916800d8",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "page": "batches",
+      "excerpt": "Meet GENIUS NY Cohort 9: Flox Intelligence - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store Meet GENIUS NY Cohort 9: Flox Intelligence  April 9, 2026 Collisions with wildlife often come with a heavy price tag. In the United States, the cost of vehicle and animal collisions cost up to $10 billion annually , and that is just accounting for accidents on the road. The cost is even higher when collisions in the sky and over rail are taken into account. Sara Nozkova noticed the recurring problem of moose colliding with trains when working in her home country of Sweden. The reality was undeniable; climate change, shrinking habitats, and shifting migration patterns are pushing wildlife closer to human activity and causing more collisions. However, there wasn’t a solution that effectively deterred animals without causing harm. With her background in transportation and artificial intelligence, Nozkova worked with her co-founder Tomas Becklin to turn research being done at KTH (Royal Institute of Technology) in Stockholm into Flox Intelligence. Flox Intelligence uses AI to communicate with animals, using each species’ own language to deter"
+    },
+    {
+      "id": "check-page-9976f01d62",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "page": "batches",
+      "excerpt": "Flox Intelligence uses AI to communicate with animals, using each species’ own language to deter and detect their presence."
+    },
+    {
+      "id": "check-page-9b466b933d",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "page": "batches",
+      "excerpt": "“From working with monkeys in Singapore to seals in Sweden to grizzly bears in Canada, we get it all.” As Flox Intelligence expanded, Nozkova and the Flox Intelligence team were spending an increasing about of time traveling between the U.S. and Europe."
+    },
+    {
+      "id": "check-page-11496c8749",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "page": "batches",
+      "excerpt": "Nozkova knew Flox Intelligence needed a U.S. office to grow faster, and the GENIUS NY program offered meaningful funding and a robust uncrewed systems ecosystem in Central New York."
+    },
+    {
+      "id": "check-page-f6cc8c0324",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "page": "batches",
+      "excerpt": "“We have been very lucky to have amazing mentors and advisors who have opened up their networks pretty much from day one,” Nozkova said."
+    },
+    {
+      "id": "check-page-f125463453",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "page": "batches",
+      "excerpt": "“Those connections have actually started to transfer into real commercial contracts now.” In addition to the connections made through GENIUS NY advisors and mentors, the cohort itself has been an asset to the team at Flox Intelligence."
+    },
+    {
+      "id": "check-page-f1dec4c4fc",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "page": "batches",
+      "excerpt": "We have really been able to help each other with intros, with different advice, or just being able to share how hard it is to be a founder.” In the months they’ve spent as a part of GENIUS NY, Flox Intelligence expanded their team in Central New York and raised $3 million during a Seed+ round."
+    },
+    {
+      "id": "check-page-cec9967ef3",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "page": "batches",
+      "excerpt": "Recent News 10 Local Entrepreneurs Graduate from Up Start Accelerator read more Client Spotlight: NextHealth AI read more INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success read more ← Preview Post Next Post → Be Inspired!"
+    },
+    {
+      "id": "check-page-0ec4888f1e",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "page": "batches",
+      "excerpt": "From hands-on workshops and pitch nights to networking mixers and industry events, INSPYRE Innovation Hub is where ideas ignite and connections turn into opportunity."
+    },
+    {
+      "id": "check-page-c2db7f5d21",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "page": "batches",
+      "excerpt": "With tailored client tiers, mentorship, startup support, and a community that shows up, this is where ideas become companies."
+    },
+    {
+      "id": "check-page-3a4a610e3c",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "page": "batches",
+      "excerpt": "Learn More Related Articles Browse All Categories 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage business owners build the skills, connections and confidence to grow."
+    },
+    {
+      "id": "check-page-7d1872c37a",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "page": "batches",
+      "excerpt": "SYRACUSE, NY – Ten local entrepreneurs are taking the next steps in their business journeys after completing the CenterState Up Start accelerator."
+    },
+    {
+      "id": "check-page-6720920e61",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-flox-intelligence/",
+      "page": "batches",
+      "excerpt": "Client Spotlight: NextHealth AI What started as a frustrating personal experience navigating the healthcare insurance system has grown into a mission to make the process easier for providers and patients alike."
+    },
+    {
+      "id": "check-page-9cdf5aef14",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+      "page": "batches",
+      "excerpt": "Meet GENIUS NY Cohort 9: Lighthouse Avionics - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store Meet GENIUS NY Cohort 9: Lighthouse Avionics  April 30, 2026 Emergency personnel often receive inaccurate or incomplete information. A caller may misidentify a location, and first responders don’t end up where they need to be. Having the ability to accurately identify where emergency services are needed provides additional time that can be the difference in life or death scenarios. Drone technology can help get eyes on a scene first and confirm necessary details of a situation. But piloting uncrewed systems comes with navigating FAA rules and regulations, especially in airspace beyond a pilot’s line of sight. Lighthouse Avionics makes it easier to satisfy FAA waiver rules and avoid collisions in the sky by using a ground-based system that drops the cost of low altitude airspace awareness. Their technology makes airspace easier to monitor and therefore easier for municipalities, police, fire and others to use. Lighthouse Avionics’ technology doesn’t only benefit emergency responders. By making low altitude airspace monitoring more"
+    },
+    {
+      "id": "check-page-cc94e7f2b4",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+      "page": "batches",
+      "excerpt": "By making low altitude airspace monitoring more ubiquitous, it’s also improving drone delivery services and advanced air mobility applications."
+    },
+    {
+      "id": "check-page-e2f15702c5",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+      "page": "batches",
+      "excerpt": "Co-founder and CEO Tyler Bair had been working there on an Ohio State University patented radar technology on two separate projects, one as a ground-based sensor to detect drones and the other to perform detect-and-avoid onboard the drone."
+    },
+    {
+      "id": "check-page-d5699137d4",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+      "page": "batches",
+      "excerpt": "“There’s all sorts of cool tech stuff that they’re working on here [Converge Technologies], like radar systems and quantum sensors, but this is the one that I kind of latched on to.” When a newspaper article was published on the work Bair was doing, it attracted the attention of Hillard, Ohio police chief Eric Grile."
+    },
+    {
+      "id": "check-page-6aff1dc9eb",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+      "page": "batches",
+      "excerpt": "There are all sorts of people that are really, really respected in the space and really know aviation, and the drone space in particular."
+    },
+    {
+      "id": "check-page-47f41dd118",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+      "page": "batches",
+      "excerpt": "Innovation Night brings together entrepreneurs, investors, and community leaders for a celebration of innovation across Central New York."
+    },
+    {
+      "id": "check-page-ff75ec4c6b",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+      "page": "batches",
+      "excerpt": "Recent News 10 Local Entrepreneurs Graduate from Up Start Accelerator read more Client Spotlight: NextHealth AI read more INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success read more ← Preview Post Next Post → Be Inspired!"
+    },
+    {
+      "id": "check-page-441033225d",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+      "page": "batches",
+      "excerpt": "From hands-on workshops and pitch nights to networking mixers and industry events, INSPYRE Innovation Hub is where ideas ignite and connections turn into opportunity."
+    },
+    {
+      "id": "check-page-f4eb8e8633",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+      "page": "batches",
+      "excerpt": "With tailored client tiers, mentorship, startup support, and a community that shows up, this is where ideas become companies."
+    },
+    {
+      "id": "check-page-55687e81a7",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+      "page": "batches",
+      "excerpt": "Learn More Related Articles Browse All Categories 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage business owners build the skills, connections and confidence to grow."
+    },
+    {
+      "id": "check-page-0a0bad845f",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+      "page": "batches",
+      "excerpt": "SYRACUSE, NY – Ten local entrepreneurs are taking the next steps in their business journeys after completing the CenterState Up Start accelerator."
+    },
+    {
+      "id": "check-page-5a23bd4490",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+      "page": "batches",
+      "excerpt": "Client Spotlight: NextHealth AI What started as a frustrating personal experience navigating the healthcare insurance system has grown into a mission to make the process easier for providers and patients alike."
+    },
+    {
+      "id": "check-page-5b70e4e239",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-lighthouse-avionics/",
+      "page": "batches",
+      "excerpt": "Founded by Raelynn Lasonde, NextHealth AI is developing an AI-assisted healthcare..."
+    },
+    {
+      "id": "check-page-da6af59480",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "page": "batches",
+      "excerpt": "Meet GENIUS NY Cohort 9: Modovolo - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store Meet GENIUS NY Cohort 9: Modovolo  April 23, 2026 Many drones on the market today are expensive and cumbersome. They’re made of thousands of intricate parts, cost tens of thousands of dollars, and often are limited in how long they can fly and how much they can hold. Modovolo is a product of Justin Call and his co-founder Arion Mangio’s shared frustration with the drone products they’d interacted with during their time working in tech. Call has a background in data and software and Mangio started working inthe commercial drone sector after retiring as an Air Force pilot. To solve the problem in front of them, they started experimenting with designs in Mangio’s garage while strictly adhering to a principle they call “performance to cost.” “In order to get to that output, you really need to think about things like, ‘I need to increase performance, but also decrease cost.’ I can’t use carbon fiber or Kevlar. That’s not going to work. So what can I use?” said Call. “It forces a level of thinking that produces radically different outcomes.” Their"
+    },
+    {
+      "id": "check-page-f1e2b10306",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "page": "batches",
+      "excerpt": "Modovolo drones are designed around the payload, or the cargo a drone will carry, and Modovolo customers can design a payload that fits their specific needs instead of relying on a manufacturer’s predetermined payload."
+    },
+    {
+      "id": "check-page-01891cc536",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "page": "batches",
+      "excerpt": "A drone used in military applications can be thousands of complex parts, but Modovolo’s drones are just 118 pieces."
+    },
+    {
+      "id": "check-page-18786ec4a1",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "page": "batches",
+      "excerpt": "Modovolo allows its customers the ability to purchase its manufacturing equipment and the right to repair."
+    },
+    {
+      "id": "check-page-98907115a8",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "page": "batches",
+      "excerpt": "Their manufacturing facility is in Vernon, NY, and Call is committed to growing in the Central New York region."
+    },
+    {
+      "id": "check-page-fc00788601",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "page": "batches",
+      "excerpt": "Innovation Night brings together entrepreneurs, investors, and community leaders for a celebration of innovation across Central New York."
+    },
+    {
+      "id": "check-page-0746d61f00",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "page": "batches",
+      "excerpt": "Recent News 10 Local Entrepreneurs Graduate from Up Start Accelerator read more Client Spotlight: NextHealth AI read more INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success read more ← Preview Post Next Post → Be Inspired!"
+    },
+    {
+      "id": "check-page-37e0e88222",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "page": "batches",
+      "excerpt": "From hands-on workshops and pitch nights to networking mixers and industry events, INSPYRE Innovation Hub is where ideas ignite and connections turn into opportunity."
+    },
+    {
+      "id": "check-page-fef8b56386",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "page": "batches",
+      "excerpt": "With tailored client tiers, mentorship, startup support, and a community that shows up, this is where ideas become companies."
+    },
+    {
+      "id": "check-page-4cdf6038ed",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "page": "batches",
+      "excerpt": "Learn More Related Articles Browse All Categories 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage business owners build the skills, connections and confidence to grow."
+    },
+    {
+      "id": "check-page-1a5c3434ea",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "page": "batches",
+      "excerpt": "SYRACUSE, NY – Ten local entrepreneurs are taking the next steps in their business journeys after completing the CenterState Up Start accelerator."
+    },
+    {
+      "id": "check-page-745f153b09",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "page": "batches",
+      "excerpt": "Client Spotlight: NextHealth AI What started as a frustrating personal experience navigating the healthcare insurance system has grown into a mission to make the process easier for providers and patients alike."
+    },
+    {
+      "id": "check-page-b43f1516cf",
+      "url": "https://inspyrehub.com/meet-genius-ny-cohort-9-modovolo/",
+      "page": "batches",
+      "excerpt": "Founded by Raelynn Lasonde, NextHealth AI is developing an AI-assisted healthcare..."
+    },
+    {
+      "id": "check-page-88dec76e40",
+      "url": "https://inspyrehub.com/start-it-business-basics-cohort-celebrates-graduation-at-inspyre-pitch-night/",
+      "page": "batches",
+      "excerpt": "Start It! Business Basics Cohort Celebrates Graduation at INSPYRE Pitch Night - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store Start It! Business Basics Cohort Celebrates Graduation at INSPYRE Pitch Night  April 13, 2026 The latest cohort of CenterState’s Start It! Business Basics wrapped up on April 6, with INSPYRE Pitch Night, an evening that brought energy, excitement and plenty of support as participants presented their businesses. The event featured a pitch competition with support from KeyBank and Blueprint 15, which hosted this cohort’s classes. Tamika Otis, Vice President, Corporate Responsibility and Community Relations Officer at KeyBank, served as a judge. The night was emceed by CenterState CEO Business Advisor Gregory Ayers and included catering by cohort member Tricia Stewart, founder of Spice Isle Cuisine. Participants took the stage to share their business ideas in front of a supportive audience, making for a night filled with nerves, laughs and celebration. Business concepts presented throughout the evening included new cultural food ventures, convenience-based vending solutions and teaching children financial"
+    },
+    {
+      "id": "check-page-3c1ca48120",
+      "url": "https://inspyrehub.com/start-it-business-basics-cohort-celebrates-graduation-at-inspyre-pitch-night/",
+      "page": "batches",
+      "excerpt": "Business Basics and INSPYRE Innovation Hub, visit: https://inspyrehub.com/?s=start+it Recent News 10 Local Entrepreneurs Graduate from Up Start Accelerator read more Client Spotlight: NextHealth AI read more INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success read more ← Preview Post Next Post → Be Inspired!"
+    },
+    {
+      "id": "check-page-01b5f4c669",
+      "url": "https://inspyrehub.com/start-it-business-basics-cohort-celebrates-graduation-at-inspyre-pitch-night/",
+      "page": "batches",
+      "excerpt": "From hands-on workshops and pitch nights to networking mixers and industry events, INSPYRE Innovation Hub is where ideas ignite and connections turn into opportunity."
+    },
+    {
+      "id": "check-page-0111e600f9",
+      "url": "https://inspyrehub.com/start-it-business-basics-cohort-celebrates-graduation-at-inspyre-pitch-night/",
+      "page": "batches",
+      "excerpt": "With tailored client tiers, mentorship, startup support, and a community that shows up, this is where ideas become companies."
+    },
+    {
+      "id": "check-page-63cc7da2e2",
+      "url": "https://inspyrehub.com/start-it-business-basics-cohort-celebrates-graduation-at-inspyre-pitch-night/",
+      "page": "batches",
+      "excerpt": "Learn More Related Articles Browse All Categories 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage business owners build the skills, connections and confidence to grow."
+    },
+    {
+      "id": "check-page-447570c765",
+      "url": "https://inspyrehub.com/start-it-business-basics-cohort-celebrates-graduation-at-inspyre-pitch-night/",
+      "page": "batches",
+      "excerpt": "SYRACUSE, NY – Ten local entrepreneurs are taking the next steps in their business journeys after completing the CenterState Up Start accelerator."
+    },
+    {
+      "id": "check-page-b5506ab255",
+      "url": "https://inspyrehub.com/start-it-business-basics-cohort-celebrates-graduation-at-inspyre-pitch-night/",
+      "page": "batches",
+      "excerpt": "Client Spotlight: NextHealth AI What started as a frustrating personal experience navigating the healthcare insurance system has grown into a mission to make the process easier for providers and patients alike."
+    },
+    {
+      "id": "check-page-bcb71728f0",
+      "url": "https://inspyrehub.com/start-it-business-basics-cohort-celebrates-graduation-at-inspyre-pitch-night/",
+      "page": "batches",
+      "excerpt": "Founded by Raelynn Lasonde, NextHealth AI is developing an AI-assisted healthcare..."
+    },
+    {
+      "id": "check-page-84100649b1",
+      "url": "https://inspyrehub.com/start-it-business-basics-cohort-celebrates-graduation-at-inspyre-pitch-night/",
+      "page": "batches",
+      "excerpt": "INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success In just one year, CenterState CEO’s INSPYRE Innovation Hub has become a key component of Central New York’s innovation ecosystem, bringing together entrepreneurs, students, industry leaders and community partners to create new opportunities..."
+    },
+    {
+      "id": "check-page-86c09c0b43",
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "page": "batches",
+      "excerpt": "Start It! Pitch Night Wraps a Strong Fall Cohort at INSPYRE - INSPYRE Innovation Hub Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store Start It! Pitch Night Wraps a Strong Fall Cohort at INSPYRE  January 14, 2026 The Fall 2025 cohort of Start It! Business Basics closed out the year with energy, new ideas and confident pitches as participants completed the 10-week course and presented their business concepts during Pitch Night on December 23. Start It! Business Basics is designed for early-stage and aspiring entrepreneurs looking to validate a business idea, learn foundational startup skills and build momentum alongside peers. Over the course of ten weeks participants learned from business advisors and subject-matter experts on topics such as defining a value proposition, identifying customers, financial modeling, market validation and preparing for launch. The course is powered by CenterState CEO’s INSPYRE Innovation Hub with guidance and support from the region’s Startup Business Advisors. Fall 2025 Cohort Participants: • Tori Shaw • Clifford Ryan Jr., United Society (Community Favorite) • Liza Bernard • Kiro and Krissy Dimitrovski, Get Grilled • Kevin"
+    },
+    {
+      "id": "check-page-d61e42f85d",
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "page": "batches",
+      "excerpt": "The evening closed with cash awards and recognitions for standout participants."
+    },
+    {
+      "id": "check-page-d040c8d16f",
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "page": "batches",
+      "excerpt": "Applications are now open for aspiring founders, early-stage entrepreneurs and community members with business ideas who want structured support, accountability and real-world startup tools to move forward."
+    },
+    {
+      "id": "check-page-396770508f",
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "page": "batches",
+      "excerpt": "Apply here: https://saltcitymarket.typeform.com/to/f3eARG3Z?typeform-source=centerstateceo.com Recent News 10 Local Entrepreneurs Graduate from Up Start Accelerator read more Client Spotlight: NextHealth AI read more INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success read more ← Preview Post Next Post → Be Inspired!"
+    },
+    {
+      "id": "check-page-90e7ba45ad",
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "page": "batches",
+      "excerpt": "From hands-on workshops and pitch nights to networking mixers and industry events, INSPYRE Innovation Hub is where ideas ignite and connections turn into opportunity."
+    },
+    {
+      "id": "check-page-819b169a31",
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "page": "batches",
+      "excerpt": "With tailored client tiers, mentorship, startup support, and a community that shows up, this is where ideas become companies."
+    },
+    {
+      "id": "check-page-7f192940b7",
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "page": "batches",
+      "excerpt": "Learn More Related Articles Browse All Categories 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage business owners build the skills, connections and confidence to grow."
+    },
+    {
+      "id": "check-page-d79003217b",
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "page": "batches",
+      "excerpt": "SYRACUSE, NY – Ten local entrepreneurs are taking the next steps in their business journeys after completing the CenterState Up Start accelerator."
+    },
+    {
+      "id": "check-page-b950d8463d",
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "page": "batches",
+      "excerpt": "Client Spotlight: NextHealth AI What started as a frustrating personal experience navigating the healthcare insurance system has grown into a mission to make the process easier for providers and patients alike."
+    },
+    {
+      "id": "check-page-8e798cb1b4",
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "page": "batches",
+      "excerpt": "Founded by Raelynn Lasonde, NextHealth AI is developing an AI-assisted healthcare..."
+    },
+    {
+      "id": "check-page-2279fc4efe",
+      "url": "https://inspyrehub.com/start-it-pitch-night-wraps-a-strong-fall-cohort-at-inspyre/",
+      "page": "batches",
+      "excerpt": "INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success In just one year, CenterState CEO’s INSPYRE Innovation Hub has become a key component of Central New York’s innovation ecosystem, bringing together entrepreneurs, students, industry leaders and community partners to create new opportunities..."
     }
   ],
   "findings": {
@@ -513,6 +1688,10 @@
       {
         "value": "12 months",
         "evidenceId": "check-duration-942ec196dc"
+      },
+      {
+        "value": "10",
+        "evidenceId": "check-duration-ce64eec34b"
       }
     ],
     "format": [

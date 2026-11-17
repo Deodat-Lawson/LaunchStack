@@ -208,18 +208,6 @@
       "status": "open"
     },
     {
-      "id": "chain-reaction:inaccessible:homepage",
-      "programId": "chain-reaction",
-      "group": "identity",
-      "field": "inaccessible:homepage",
-      "state": "inaccessible",
-      "evidenceIds": [
-        "homepage"
-      ],
-      "detail": "The page could not be fetched. The stored excerpt and last successful check were kept.",
-      "status": "open"
-    },
-    {
       "id": "climate-launchpad:applicationsOpen",
       "programId": "climate-launchpad",
       "group": "identity",
@@ -270,6 +258,19 @@
       "status": "open"
     },
     {
+      "id": "dmz:applicationsOpen",
+      "programId": "dmz",
+      "group": "identity",
+      "field": "applicationsOpen",
+      "state": "conflicting",
+      "evidenceIds": [
+        "check-status-d947bfc531",
+        "check-status-f300c3daac"
+      ],
+      "detail": "The checked pages say both that applications are open and that they are closed.",
+      "status": "open"
+    },
+    {
       "id": "entrepreneurs-first:stale:ef-apply-hub",
       "programId": "entrepreneurs-first",
       "group": "identity",
@@ -315,6 +316,18 @@
         "official-logo"
       ],
       "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "falak:inaccessible:homepage",
+      "programId": "falak",
+      "group": "identity",
+      "field": "inaccessible:homepage",
+      "state": "inaccessible",
+      "evidenceIds": [
+        "homepage"
+      ],
+      "detail": "robots.txt could not be fetched, so the page was treated as disallowed. The stored excerpt was kept.",
       "status": "open"
     },
     {
@@ -385,7 +398,7 @@
       "state": "conflicting",
       "evidenceIds": [
         "check-status-5e9dda4978",
-        "check-status-b41bf2b5de"
+        "check-status-a0a160bbda"
       ],
       "detail": "The checked pages say both that applications are open and that they are closed.",
       "status": "open"
@@ -487,6 +500,18 @@
       "status": "open"
     },
     {
+      "id": "icebreaker:inaccessible:homepage",
+      "programId": "icebreaker",
+      "group": "identity",
+      "field": "inaccessible:homepage",
+      "state": "inaccessible",
+      "evidenceIds": [
+        "homepage"
+      ],
+      "detail": "robots.txt disallows a refresh of this URL. The stored excerpt was kept.",
+      "status": "open"
+    },
+    {
       "id": "ideaspace:inaccessible:homepage",
       "programId": "ideaspace",
       "group": "identity",
@@ -508,6 +533,44 @@
         "homepage"
       ],
       "detail": "The page returned a bot check (\"you are using an unsupported browser\") instead of program text. The stored excerpt was kept.",
+      "status": "open"
+    },
+    {
+      "id": "mars-discovery:inaccessible:homepage",
+      "programId": "mars-discovery",
+      "group": "identity",
+      "field": "inaccessible:homepage",
+      "state": "inaccessible",
+      "evidenceIds": [
+        "homepage"
+      ],
+      "detail": "The page could not be fetched. The stored excerpt and last successful check were kept.",
+      "status": "open"
+    },
+    {
+      "id": "masschallenge:applicationsOpen",
+      "programId": "masschallenge",
+      "group": "identity",
+      "field": "applicationsOpen",
+      "state": "conflicting",
+      "evidenceIds": [
+        "check-status-2f8e741857",
+        "check-status-7d0c65b966"
+      ],
+      "detail": "The checked pages say both that applications are open and that they are closed.",
+      "status": "open"
+    },
+    {
+      "id": "next-canada:applicationsOpen",
+      "programId": "next-canada",
+      "group": "identity",
+      "field": "applicationsOpen",
+      "state": "conflicting",
+      "evidenceIds": [
+        "check-status-83d5dec0e0",
+        "check-status-276b08e27c"
+      ],
+      "detail": "The checked pages say both that applications are open and that they are closed.",
       "status": "open"
     },
     {
@@ -632,6 +695,19 @@
         "london-schedule"
       ],
       "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "usc-startup-garage:applicationsOpen",
+      "programId": "usc-startup-garage",
+      "group": "identity",
+      "field": "applicationsOpen",
+      "state": "conflicting",
+      "evidenceIds": [
+        "check-status-13a69882bd",
+        "check-status-b81c2ddfc5"
+      ],
+      "detail": "The checked pages say both that applications are open and that they are closed.",
       "status": "open"
     },
     {

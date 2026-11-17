@@ -1,13 +1,13 @@
 {
   "programId": "accelerating-asia",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
-      "url": "https://acceleratingasia.com/latest-news/2019/12/9/gender-advisory-group",
-      "page": "other",
+      "url": "https://acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
+      "page": "terms",
       "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
+      "fetched": true,
+      "blocked": null,
       "origin": "official"
     },
     {
@@ -38,13 +38,37 @@
       "url": "https://www.acceleratingasia.com/getfunded",
       "page": "batches",
       "anchor": "Apply for Cohort 13",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.acceleratingasia.com/latest-news/accelerating-asia-cohort-eight",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.acceleratingasia.com/latest-news/accelerating-asia-cohort-seven",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://www.acceleratingasia.com/latest-news/accelerating-asia-doubles-down-on-investment-startups-to-receive-s-200-000",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.acceleratingasia.com/latest-news/accelerating-asia-to-inject-funding-into-its-third-cohort-of-early-stage-high-growth-startups",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -171,7 +195,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.acceleratingasia.com/latest-news/tag/dealflow",
+      "url": "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
       "page": "terms",
       "anchor": "",
       "fetched": true,
@@ -179,7 +203,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
+      "url": "https://www.acceleratingasia.com/latest-news/why-cant-my-startup-close-investment",
       "page": "terms",
       "anchor": "",
       "fetched": true,

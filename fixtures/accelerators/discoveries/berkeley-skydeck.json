@@ -1,6 +1,6 @@
 {
   "programId": "berkeley-skydeck",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://skydeck.berkeley.edu/ace",
@@ -92,6 +92,46 @@
     },
     {
       "url": "https://skydeck.berkeley.edu/batch19-1/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/batch19/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/batch20/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/batch21/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/batch22/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-presents-batch-12-startups-at-demo-day-sept-28/",
       "page": "batches",
       "anchor": "",
       "fetched": true,

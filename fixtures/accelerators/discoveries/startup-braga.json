@@ -1,6 +1,6 @@
 {
   "programId": "startup-braga",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://accelerationprogram.startupbraga.com/",
@@ -69,6 +69,30 @@
     {
       "url": "https://www.startupbraga.com/Language/Change?culture=en-US&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2Ftermsandconditions",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FAceleracao",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FIncubation",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startupbraga.com/Language/Change?culture=pt-PT&returnUrl=https%3A%2F%2Fwww.startupbraga.com%2FPrograms%2FPreAcceleration",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,

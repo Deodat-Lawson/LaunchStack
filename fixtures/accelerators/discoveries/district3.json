@@ -1,12 +1,12 @@
 {
   "programId": "district3",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.district3.co/about",
       "page": "details",
       "anchor": "about",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -27,8 +27,8 @@
       "origin": "official"
     },
     {
-      "url": "https://www.district3.co/event/meet-greet-info-session---winter-2025-cohort",
-      "page": "batches",
+      "url": "https://www.district3.co/fr/about",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -51,14 +51,6 @@
       "origin": "official"
     },
     {
-      "url": "https://www.district3.co/fr/event/meet-greet-info-session---winter-2025-cohort",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.district3.co/fr/internal/self-host-news/news/diamond-edge-ventures-announces-strategic-investment-in-food-packaging-startup-freshr-sustainable-technologies",
       "page": "terms",
       "anchor": "",
@@ -67,32 +59,16 @@
       "origin": "official"
     },
     {
-      "url": "https://www.district3.co/fr/internal/self-host-news/news/modulari-t-selected-for-the-2nd-merck-digital-sciences-studio-mdss-cohort-in-montreal",
-      "page": "batches",
+      "url": "https://www.district3.co/fr/programs",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.district3.co/fr/internal/self-host-news/news/nanofacile-and-simmunome-have-been-invited-to-join-the-first-ever-canadian-cohort-of-the-merck-digital-sciences-studio-mdss",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.district3.co/fr/internal/self-host-news/news/our-winter-validation-cohorts-have-officially-kicked-off-their-12-week-journey",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.district3.co/fr/internal/self-host-news/news/the-alan-shepard-residency-summer-2024-cohort",
-      "page": "batches",
+      "url": "https://www.district3.co/fr/startups",
+      "page": "other",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -107,18 +83,10 @@
       "origin": "official"
     },
     {
-      "url": "https://www.district3.co/internal/self-host-news/news/diamond-edge-ventures-announces-strategic-investment-in-food-packaging-startup-freshr-sustainable-technologies",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.district3.co/programs",
       "page": "details",
       "anchor": "Programs",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -126,7 +94,7 @@
       "url": "https://www.district3.co/startups",
       "page": "portfolio",
       "anchor": "Startup portfolio",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

@@ -1,6 +1,6 @@
 {
   "programId": "sting",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://app.sting.co/auth/signup",
@@ -171,6 +171,54 @@
       "origin": "official"
     },
     {
+      "url": "https://www.sting.co/faqs/how-big-is-your-network",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/faqs/how-can-i-invest-in-sting-startups",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/faqs/how-can-i-nominate-a-startup-for-your-programs",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/faqs/how-do-i-apply-for-a-propel-capital-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/faqs/how-do-i-apply-to-stings-programs",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/faqs/how-do-i-become-a-partner-with-sting",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.sting.co/investors",
       "page": "portfolio",
       "anchor": "Investors Discover Stockholm’s latest innovative companies with Sting’s pre-screening and selection process, which saves you time and presents interesting investment objects.",
@@ -199,14 +247,6 @@
       "page": "batches",
       "anchor": "October 6, 2026 Meet the 21 startups joining Sting this autumn From technology built for the Moon to critical infrastructure beneath the ocean and new ways to understand our cells,",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.sting.co/newsroom/press/applications-are-now-open-for-the-cassini-business-accelerator-a-program-supporting-founders-in-the-european-space-tech-ecosystem",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

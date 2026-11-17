@@ -1,6 +1,6 @@
 {
   "programId": "copenhagen-fintech",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://copenhagenfintech.dk/about",
@@ -100,6 +100,46 @@
     },
     {
       "url": "https://copenhagenfintech.dk/cohorts/india-delegation-2025",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://copenhagenfintech.dk/cohorts/mentor-assembly-2026",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://copenhagenfintech.dk/cohorts/mentor-fall-2023",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://copenhagenfintech.dk/cohorts/mentor-program-fall-2024",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://copenhagenfintech.dk/cohorts/mentor-program-fall-2025",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://copenhagenfintech.dk/cohorts/mentor-program-spring-2026",
       "page": "batches",
       "anchor": "",
       "fetched": true,

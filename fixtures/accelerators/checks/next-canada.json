@@ -1,6 +1,6 @@
 {
   "programId": "next-canada",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.nextcanada.com/",
     "http://www.nextcanada.com/apply-to-next-ai-founder/",
@@ -16,7 +16,12 @@
     "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
     "http://www.nextcanada.com/program-timeline/",
     "https://www.nextcanada.com/2026-cohort/",
-    "https://www.nextcanada.com/program-timeline/"
+    "https://www.nextcanada.com/program-timeline/",
+    "http://www.nextcanada.com/federal-covid-19-support-programs-demystified-by-a-next-insider/",
+    "http://www.nextcanada.com/programs-overview/",
+    "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+    "http://www.nextcanada.com/voicehero-accepted-to-third-class-of-techstars-amazon-alexa-accelerator/",
+    "https://www.nextcanada.com/programs-overview/"
   ],
   "evidence": [
     {
@@ -25,6 +30,20 @@
       "title": "Next Canada — application page",
       "excerpt": "Apply to NEXT AI Saved Apply to NEXT AI English Français Deadline 📆 December 9th, 2026, at 11:59 p.m. EST Thank you for applying to NEXT AI, one",
       "page": "application"
+    },
+    {
+      "id": "check-deal-0b78a1a086",
+      "url": "http://www.nextcanada.com/voicehero-accepted-to-third-class-of-techstars-amazon-alexa-accelerator/",
+      "title": "Next Canada — program page",
+      "excerpt": "incubator network. Amazon and Techstars will invest an initial $20,000 in each startup for six percent common share equity, along with the",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-b4e9170e83",
+      "url": "http://www.nextcanada.com/voicehero-accepted-to-third-class-of-techstars-amazon-alexa-accelerator/",
+      "title": "Next Canada — program page",
+      "excerpt": "common share equity, along with the opportunity for an additional $100,000 convertible note. “We are beyond excited that Amazon and TechStars,",
+      "page": "details"
     },
     {
       "id": "check-duration-3aab87473d",
@@ -39,6 +58,20 @@
       "title": "Next Canada — batches page",
       "excerpt": "saving fuel. Right now, our lead time is about 2 months – way too long, we need to bring this down to 2",
       "page": "batches"
+    },
+    {
+      "id": "check-duration-883483290b",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "title": "Next Canada — program page",
+      "excerpt": "So, here you are on the other side of a wild 3 weeks. You’ve both delivered Immersion Week remotely",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ac4521a1c7",
+      "url": "http://www.nextcanada.com/voicehero-accepted-to-third-class-of-techstars-amazon-alexa-accelerator/",
+      "title": "Next Canada — program page",
+      "excerpt": "the program, which based out of Seattle, WA. The 13-week accelerator will give nine startups access to",
+      "page": "details"
     },
     {
       "id": "check-format-16fc50795a",
@@ -74,6 +107,13 @@
       "title": "Next Canada — batches page",
       "excerpt": "that raises mental health awareness and provides virtual counseling services to university students and young",
       "page": "batches"
+    },
+    {
+      "id": "check-format-5bd62b6a98",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "title": "Next Canada — program page",
+      "excerpt": "AI program. The week typically consists of an intensive, in person series of events, socials, lectures and workshops,",
+      "page": "details"
     },
     {
       "id": "check-format-5bf129f6b2",
@@ -130,6 +170,20 @@
       "title": "Next Canada — batches page",
       "excerpt": "incredible guest speakers, mentors, and leaders into our (virtual) classroom. We can’t wait to see what our 2021 cohorts",
       "page": "batches"
+    },
+    {
+      "id": "check-format-a12f17aa8e",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "title": "Next Canada — program page",
+      "excerpt": "and facilitators easily and comfortably teach in a remote environment? Would our postponing or cancelling hurt the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-a65c76485d",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "title": "Next Canada — program page",
+      "excerpt": "but have classes normally” to “Ok, everything has to go remote”. VK: In Toronto, we were confronted with similar choices,",
+      "page": "details"
     },
     {
       "id": "check-format-da89ebd474",
@@ -202,6 +256,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-106ba23edd",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "title": "Next Canada — program page",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-129ec5024c",
       "url": "https://www.nextcanada.com/program-timeline/",
       "title": "Next Canada — batches page",
@@ -223,11 +284,32 @@
       "page": "batches"
     },
     {
+      "id": "check-portfolio-2085b7564f",
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — program page",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-24c01b92e3",
       "url": "http://www.nextcanada.com/next-36-alum-venture-sniply-acquired-in-multi-million-dollar-deal/",
       "title": "Next Canada — terms page",
       "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-27af0f6d3b",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — program page",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-29133f7bf0",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — program page",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-308985fb88",
@@ -251,11 +333,39 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-4e7026df46",
+      "url": "http://www.nextcanada.com/federal-covid-19-support-programs-demystified-by-a-next-insider/",
+      "title": "Next Canada — program page",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-5f507deda1",
       "url": "http://www.nextcanada.com/2024-cohort/",
       "title": "Next Canada — batches page",
       "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
       "page": "batches"
+    },
+    {
+      "id": "check-portfolio-68571a1c7d",
+      "url": "http://www.nextcanada.com/voicehero-accepted-to-third-class-of-techstars-amazon-alexa-accelerator/",
+      "title": "Next Canada — program page",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6d86899480",
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — program page",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6eb985d5a4",
+      "url": "http://www.nextcanada.com/voicehero-accepted-to-third-class-of-techstars-amazon-alexa-accelerator/",
+      "title": "Next Canada — program page",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-7415ff26ad",
@@ -298,6 +408,20 @@
       "title": "Next Canada — application page",
       "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-912765a15f",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "title": "Next Canada — program page",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-91f2dc13b3",
+      "url": "http://www.nextcanada.com/federal-covid-19-support-programs-demystified-by-a-next-insider/",
+      "title": "Next Canada — program page",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-9bc87625b5",
@@ -384,10 +508,66 @@
       "page": "batches"
     },
     {
+      "id": "check-route-0302ad1314",
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — program page",
+      "excerpt": "CLICK HERE TO GET NOTIFIED WHEN APPLICATIONS OPEN → https://airtable.com/appl9JP8wsxwv4fws/pagTfVON2MbVH6Xp4/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2e3204b045",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — program page",
+      "excerpt": "CLICK HERE TO GET NOTIFIED WHEN APPLICATIONS OPEN → https://airtable.com/appl9JP8wsxwv4fws/pagTfVON2MbVH6Xp4/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-addf1cd970",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — program page",
+      "excerpt": "APPLY TO NEXT AI → https://my.nextcanada.com/apply/nai",
+      "page": "details"
+    },
+    {
       "id": "check-route-cf5a2e1200",
       "url": "https://www.nextcanada.com/",
       "title": "Next Canada — homepage",
       "excerpt": "APPLY TO NEXT AI → https://my.nextcanada.com/apply/nai",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d69715df5c",
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — program page",
+      "excerpt": "APPLY TO NEXT AI → https://my.nextcanada.com/apply/nai",
+      "page": "details"
+    },
+    {
+      "id": "check-status-276b08e27c",
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — program page",
+      "excerpt": "thanks to access to tactical education, mentorship, and a network of the strongest entrepreneurs in Canada. Applications are closed for the 2027 cohort. DISCOVER NEXT 36 CLICK HERE TO GET NOTIFIED WHEN APPLICATIONS OPEN For entrepreneurs",
+      "page": "details"
+    },
+    {
+      "id": "check-status-83d5dec0e0",
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — program page",
+      "excerpt": "on two campuses: Toronto and Montréal. NEXT AI – Montréal is delivered in partnership with HEC Montréal. Applications are open from October 15th – December 9th! DISCOVER NEXT AI APPLY TO NEXT AI For growth stage founders looking to",
+      "page": "details"
+    },
+    {
+      "id": "check-status-8ebc37b58c",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — program page",
+      "excerpt": "on two campuses: Toronto and Montréal. NEXT AI – Montréal is delivered in partnership with HEC Montréal. Applications are open from October 15th – December 9th! DISCOVER NEXT AI APPLY TO NEXT AI For growth stage founders looking to",
+      "page": "details"
+    },
+    {
+      "id": "check-status-b3830bfde9",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — program page",
+      "excerpt": "thanks to access to tactical education, mentorship, and a network of the strongest entrepreneurs in Canada. Applications are closed for the 2027 cohort. DISCOVER NEXT 36 CLICK HERE TO GET NOTIFIED WHEN APPLICATIONS OPEN For entrepreneurs",
       "page": "details"
     }
   ],
@@ -397,6 +577,60 @@
       "url": "https://www.nextcanada.com/",
       "page": "details",
       "excerpt": "NEXT Canada - Building a more ambitious and competitive Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us CREATING CANADA’S NEXT GENERATION OF HIGH-IMPACT ENTREPRENEURS 1,000+ entrepreneurs launched. 500+ ventures scaled. And counting. APPLY TO NEXT AI WHO WE ARE Canada’s strongest and most dedicated entrepreneurial network made up of 500+ top Canadian academics, entrepreneurs, investors and founders. We rally around the next generation of entrepreneurs, making it hard for them to fail. WHAT WE DO We uncover Canada’s next generation of entrepreneurs and supercharge their ambition by showing them what’s possible. We accelerate their trajectory with access to education, mentorship and funding. WHY WE DO IT To ensure a more ambitious and competitive Canada. We need"
+    },
+    {
+      "id": "check-page-322ea7b60d",
+      "url": "https://www.nextcanada.com/",
+      "page": "details",
+      "excerpt": "We need to engage, empower and keep our next generation of entrepreneurs in Canada."
+    },
+    {
+      "id": "check-page-02895561ba",
+      "url": "https://www.nextcanada.com/",
+      "page": "details",
+      "excerpt": "SEE MORE For AI-enabled ventures looking to disrupt industries."
+    },
+    {
+      "id": "check-page-91ae284b66",
+      "url": "https://www.nextcanada.com/",
+      "page": "details",
+      "excerpt": "SEE MORE LEARN WHICH PROGRAM IS RIGHT FOR YOU OUR NETWORK Our alumni accomplishments are powered by Canada’s strongest entrepreneurial network."
+    },
+    {
+      "id": "check-page-7299640df4",
+      "url": "https://www.nextcanada.com/",
+      "page": "details",
+      "excerpt": "Made up of 500+ of the strongest leaders, academics, entrepreneurs, investors, NEXT alumni and visionaries from across Canada."
+    },
+    {
+      "id": "check-page-799ce8d2e0",
+      "url": "https://www.nextcanada.com/",
+      "page": "details",
+      "excerpt": "As a not-for-profit, we rely on the generous support of donors, corporate partners and government funding to provide access and accelerate our next generation of entrepreneurs."
+    },
+    {
+      "id": "check-page-4e8fecdd7e",
+      "url": "https://www.nextcanada.com/",
+      "page": "details",
+      "excerpt": "Supporters include: SEE ALL ALUMNI SPOTLIGHT See how a few of our alumni have benefited from our programs and network MEET TIA HEALTH Tia Health (co-founded by Next 36 alumni David Del Balso and Matthew Mazzuca) is helping to change the way we access health care by providing online appointments with doctors across Canada."
+    },
+    {
+      "id": "check-page-39c7e5a31c",
+      "url": "https://www.nextcanada.com/",
+      "page": "details",
+      "excerpt": "They recently launched a Canada-wide partnership with Rexall and will handle all of Rexall’s virtual care service for patients to help relieve the current burden on the acute healthcare system, specifically emergency rooms and hospitals."
+    },
+    {
+      "id": "check-page-da25c11280",
+      "url": "https://www.nextcanada.com/",
+      "page": "details",
+      "excerpt": "READ MORE ALUMNI STORIES ABOUT US NEXT Canada accelerates the growth trajectory of aspiring and scaling entrepreneurs with education, mentorship, funding and access to Canada's strongest entrepreneurial network."
+    },
+    {
+      "id": "check-page-0170b87ee1",
+      "url": "https://www.nextcanada.com/",
+      "page": "details",
+      "excerpt": "81519 8403 RR0001 KEY LINKS News Events Careers Media Kit Newsletter Sign Up CONTACT US Email: [email protected] 175 Bloor Street East Suite 1800, South Building Toronto, ON M4W 3R8 ACKNOWLEDGEMENT NEXT Canada is situated on the traditional territory of many nations including the Mississaugas of the Credit, the Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples."
     },
     {
       "id": "check-page-e8ccc3de5b",
@@ -429,10 +663,76 @@
       "excerpt": "Next 36 Alum Venture Sniply Acquired in Multi-Million Dollar Deal – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us Next 36 Alum Venture Sniply Acquired in Multi-Million Dollar Deal News Kyle Winters January 28, 2020 NEWS Next 36 Alum Venture Sniply Acquired in Multi-Million Dollar Deal Sniply, a venture created by Next 36 alumni Michael Cheng, Chris Bowal and Nigel Gutzmann as a marketing tool for link sharing, is being acquired in a multi-million-dollar deal by Tim Schumacher, founder of Adblock Plus, a company whose ad-blocking plugin has more than 100 million users. Cheng created Sniply in 2014, shortly after he completed the Next 36 program, a national initiative supporting youth innovation. Since then he and his partners built Sniply to 500,000"
     },
     {
+      "id": "check-page-42783a0947",
+      "url": "http://www.nextcanada.com/next-36-alum-venture-sniply-acquired-in-multi-million-dollar-deal/",
+      "page": "terms",
+      "excerpt": "After spending three years growing Sniply, we saw how video was transforming internet use, and took the opportunity to build a new company, Lumen5.” By 2019 his latest venture was growing six times faster than Sniply, so the founders decided to put their focus on Lumen5, a video creation platform powered by artificial intelligence (AI)."
+    },
+    {
+      "id": "check-page-0da667c931",
+      "url": "http://www.nextcanada.com/next-36-alum-venture-sniply-acquired-in-multi-million-dollar-deal/",
+      "page": "terms",
+      "excerpt": "Cheng’s latest company, including 25 team members, is based in Vancouver’s Mount Pleasant area."
+    },
+    {
+      "id": "check-page-517b77789c",
+      "url": "http://www.nextcanada.com/next-36-alum-venture-sniply-acquired-in-multi-million-dollar-deal/",
+      "page": "terms",
+      "excerpt": "Cheng is the creator of nearly a dozen different ventures, from an early automotive buy and sell service (Automotive QuickTrade) to WittyCookie, a web development company that offers businesses the opportunity to speed-build new websites."
+    },
+    {
+      "id": "check-page-a84042914e",
+      "url": "http://www.nextcanada.com/next-36-alum-venture-sniply-acquired-in-multi-million-dollar-deal/",
+      "page": "terms",
+      "excerpt": "He is a former client of SFU’s Coast Capital Savings Venture Connection , SFU’s flagship program for early-stage ventures, and one of its first major success stories."
+    },
+    {
+      "id": "check-page-675ef7e7b7",
+      "url": "http://www.nextcanada.com/next-36-alum-venture-sniply-acquired-in-multi-million-dollar-deal/",
+      "page": "terms",
+      "excerpt": "Read More ABOUT US NEXT Canada accelerates the growth trajectory of aspiring and scaling entrepreneurs with education, mentorship, funding and access to Canada's strongest entrepreneurial network."
+    },
+    {
+      "id": "check-page-0ef4c1719d",
+      "url": "http://www.nextcanada.com/next-36-alum-venture-sniply-acquired-in-multi-million-dollar-deal/",
+      "page": "terms",
+      "excerpt": "81519 8403 RR0001 KEY LINKS News Events Careers Media Kit Newsletter Sign Up CONTACT US Email: [email protected] 175 Bloor Street East Suite 1800, South Building Toronto, ON M4W 3R8 ACKNOWLEDGEMENT NEXT Canada is situated on the traditional territory of many nations including the Mississaugas of the Credit, the Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples."
+    },
+    {
       "id": "check-page-0a698e353e",
       "url": "http://www.nextcanada.com/next-canada-celebrates-cohorts-at-venture-day-receives-1m-investment/",
       "page": "terms",
       "excerpt": "NEXT Canada Celebrates Cohorts At Venture Day, Receives $1M Investment – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us NEXT Canada Celebrates Cohorts At Venture Day, Receives $1M Investment News Kyle Winters August 15, 2019 NEWS NEXT Canada Celebrates Cohorts At Venture Day, Receives $1M Investment On Wednesday, more than 10 NEXT Canada ventures pitched their startup at NEXT Venture Day, to an audience of business leaders, partners, alum, and investors. Venture Day celebrated the end of three NEXT Canada programs, Next 36, which supports young founders of early-stage businesses; Founders, which focuses on founder development for existing startups with significant traction; and AI, which works with early or idea stage AI-enabled startups. Attendees were"
+    },
+    {
+      "id": "check-page-77c2f1649b",
+      "url": "http://www.nextcanada.com/next-canada-celebrates-cohorts-at-venture-day-receives-1m-investment/",
+      "page": "terms",
+      "excerpt": "Village Technologies , an AI startup looking to help parents get insights on their child’s cognitive development, was chosen by the audience as the People’s Choice Award."
+    },
+    {
+      "id": "check-page-3893fe6a8d",
+      "url": "http://www.nextcanada.com/next-canada-celebrates-cohorts-at-venture-day-receives-1m-investment/",
+      "page": "terms",
+      "excerpt": "The startup, led by CEO and founder Maryam Nabavi, offers an app that helps parents whose children have cognitive issues, to track development stages with the help of artificial intelligence."
+    },
+    {
+      "id": "check-page-e8fdf86d0f",
+      "url": "http://www.nextcanada.com/next-canada-celebrates-cohorts-at-venture-day-receives-1m-investment/",
+      "page": "terms",
+      "excerpt": "Correly , a customer interaction measurement platform, as well as CryptoNumereics , which focuses on AI-powered data privacy analytics, and earlier this year raised a $3.3 million CAD seed round, were named the runners up in the People’s Choice Award."
+    },
+    {
+      "id": "check-page-8e48f6a171",
+      "url": "http://www.nextcanada.com/next-canada-celebrates-cohorts-at-venture-day-receives-1m-investment/",
+      "page": "terms",
+      "excerpt": "READ MORE ABOUT US NEXT Canada accelerates the growth trajectory of aspiring and scaling entrepreneurs with education, mentorship, funding and access to Canada's strongest entrepreneurial network."
+    },
+    {
+      "id": "check-page-a8d3535436",
+      "url": "http://www.nextcanada.com/next-canada-celebrates-cohorts-at-venture-day-receives-1m-investment/",
+      "page": "terms",
+      "excerpt": "81519 8403 RR0001 KEY LINKS News Events Careers Media Kit Newsletter Sign Up CONTACT US Email: [email protected] 175 Bloor Street East Suite 1800, South Building Toronto, ON M4W 3R8 ACKNOWLEDGEMENT NEXT Canada is situated on the traditional territory of many nations including the Mississaugas of the Credit, the Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples."
     },
     {
       "id": "check-page-5954ab81d8",
@@ -441,10 +741,118 @@
       "excerpt": "NEXT Canada - Building a more ambitious and competitive Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us 2021 COHORT MEET THE 2021 COHORT Every year, NEXT Canada recruits some of the country’s highest potential entrepreneurs from coast to coast. Over the course of eight months, we give these founders all the tools they need to create game-changing, homegrown ventures with global potential. Thanks to our blend of real-world education, globally recognized faculty, and mentorship from top Canadian CEOs, our entrepreneurs go from ideation to launch and beyond within just eight months. For the second year in a row, our program is being delivered in a fully virtual environment. While we miss having the energy of the entrepreneurs in our co-working space, this new"
     },
     {
+      "id": "check-page-fb37cdfb41",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "page": "batches",
+      "excerpt": "While we miss having the energy of the entrepreneurs in our co-working space, this new format has allowed us to bring in even more incredible guest speakers, mentors, and leaders into our (virtual) classroom."
+    },
+    {
+      "id": "check-page-ea90dec673",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "page": "batches",
+      "excerpt": "A Friendlier Company’s unique QR code and centralized system allows them to conveniently incentivize consumers to reuse, as well as to collect invaluable data and insights on their process."
+    },
+    {
+      "id": "check-page-7ad38f540d",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "page": "batches",
+      "excerpt": "Aduane is a platform that aims to do just that and uses AI to give you insights on how to make your dishes."
+    },
+    {
+      "id": "check-page-330fe31234",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "page": "batches",
+      "excerpt": "Ash Founder: Isabella Gondim Ash is a marketplace that connects its community of fashion lovers to responsible brands and products."
+    },
+    {
+      "id": "check-page-1f53489daf",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "page": "batches",
+      "excerpt": "Circulr Founders: Tyler De Sousa , Charles Binks-Collier Circulr provides seamless back-end logistics and washing infrastructures for companies in the circular economy."
+    },
+    {
+      "id": "check-page-ff8d724f72",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "page": "batches",
+      "excerpt": "Emre Founders: Danial Betres , Jonathan Dhanapala Emre is a cloud-based electronic medical record system built for small to medium-sized clinics that are seeking a more efficient and cost-effective way to deliver healthcare."
+    },
+    {
+      "id": "check-page-15d7efec32",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "page": "batches",
+      "excerpt": "Pally Founder: Jay Lee , Joshua Park Pally is a B2B SaaS tool that helps eCommerce stores get their products into retail locations all over the world."
+    },
+    {
+      "id": "check-page-a28b13d5e5",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "page": "batches",
+      "excerpt": "Users can apply to retailers and manage their retail relationships all within one dashboard."
+    },
+    {
+      "id": "check-page-e6f1c31046",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "page": "batches",
+      "excerpt": "Hover Founder: Cameron Rowe Hover provides small, autonomous drones to help support First Responders during operations, increasing accountability, data collection capabilities, and improving resource allocation."
+    },
+    {
+      "id": "check-page-7d86613b02",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "page": "batches",
+      "excerpt": "Using Microsoft Protected B Azure Cloud Servers, we can store and analyze the video collected to not only teach the drones how to be more useful through computer vision and ML models, but also to better train police by analyzing encounters captured with the drones."
+    },
+    {
+      "id": "check-page-90142233a3",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "page": "batches",
+      "excerpt": "KinectMD Founder: Idy Udoeyop KinectMD aims to be a platform for sports medicine professionals to discuss, network, educate, and provide mentorship to aspiring healthcare professionals via live drop-in virtual events."
+    },
+    {
+      "id": "check-page-083c59fb85",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "page": "batches",
+      "excerpt": "Professionals can connect, collaborate and gain certified, self-learning Continuous Professional Development (CPD) credits with medical professionals and allied health professionals in the different fields of healthcare and in affiliated medical specialties."
+    },
+    {
       "id": "check-page-0335fc4e31",
       "url": "http://www.nextcanada.com/2024-cohort/",
       "page": "batches",
       "excerpt": "NEXT Canada - Building a more ambitious and competitive Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us MEET THE 2024 COHORT NEXT Canada is on a mission to find and cultivate the best entrepreneurial talent in the country. Every year, we search far and wide for the brightest and most innovative minds with the drive and passion to launch game-changing ventures with global potential. Our three programs are designed to equip these founders with the knowledge, tools, and network they need to launch and scale their ventures through a unique blend of real-world education, top-tier mentorship, and globally recognized faculty. Discover the 2024 ventures by program The NEXT 36 program is designed for students and recent grads with big dreams and an entrepreneurial"
+    },
+    {
+      "id": "check-page-5cbd2ceba6",
+      "url": "http://www.nextcanada.com/2024-cohort/",
+      "page": "batches",
+      "excerpt": "Our NEXT 36 2024 cohort comprises 34 founders leading 27 ventures across various industries, including Enterprise Software, Financial Services, Human Resources, Life Sciences & Advanced Health, Marketing, Proptech, Retail Consumer, Sustainable Fashion, Tourism & Culture, Advanced Materials, Agriculture, and Marketplace."
+    },
+    {
+      "id": "check-page-832a0982e9",
+      "url": "http://www.nextcanada.com/2024-cohort/",
+      "page": "batches",
+      "excerpt": "LEARN MORE ABOUT NEXT 36 The NEXT AI program is designed for entrepreneurs seeking to solve global challenges with AI-enabled solutions."
+    },
+    {
+      "id": "check-page-668ab8fc60",
+      "url": "http://www.nextcanada.com/2024-cohort/",
+      "page": "batches",
+      "excerpt": "LEARN MORE ABOUT NEXT AI NEXT Founders is for growth-stage founders seeking to scale their businesses into world-class ventures."
+    },
+    {
+      "id": "check-page-d3ec0d2919",
+      "url": "http://www.nextcanada.com/2024-cohort/",
+      "page": "batches",
+      "excerpt": "Our NEXT Founders program has 16 founders leading 16 ventures in the following industries: Enterprise Software, Health, Food and Beverage, Retail, Materials and Manufacturing, Financial Services, and Maintenance Repair."
+    },
+    {
+      "id": "check-page-7e6162ba03",
+      "url": "http://www.nextcanada.com/2024-cohort/",
+      "page": "batches",
+      "excerpt": "LEARN MORE ABOUT NEXT FOUNDERS DISCOVER OUR ALUMNI DISCOVER OUR VENTURES ABOUT US NEXT Canada accelerates the growth trajectory of aspiring and scaling entrepreneurs with education, mentorship, funding and access to Canada's strongest entrepreneurial network."
+    },
+    {
+      "id": "check-page-e796bde413",
+      "url": "http://www.nextcanada.com/2024-cohort/",
+      "page": "batches",
+      "excerpt": "81519 8403 RR0001 KEY LINKS News Events Careers Media Kit Newsletter Sign Up CONTACT US Email: [email protected] 175 Bloor Street East Suite 1800, South Building Toronto, ON M4W 3R8 ACKNOWLEDGEMENT NEXT Canada is situated on the traditional territory of many nations including the Mississaugas of the Credit, the Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples."
     },
     {
       "id": "check-page-e047c151a8",
@@ -453,10 +861,70 @@
       "excerpt": "NEXT Canada - Building a more ambitious and competitive Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us MEET THE 2026 COHORT NEXT Canada is on a mission to find and cultivate the best entrepreneurial talent in the country. Every year, we search far and wide for the brightest and most innovative minds with the drive and passion to launch game-changing ventures with global potential. Our three programs are designed to equip these founders with the knowledge, tools, and network they need to launch and scale their ventures through a unique blend of real-world education, top-tier mentorship, and globally recognized faculty. Discover the 2026 ventures by program The NEXT 36 program is designed for students and recent grads with big dreams and an entrepreneurial"
     },
     {
+      "id": "check-page-47fdbf27c9",
+      "url": "http://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "Our NEXT 36 2026 cohort comprises 41 founders leading 33 ventures across various industries, including Enterprise Software, Financial Services, Human Resources, Life Sciences & Advanced Health, Marketing, Clean Tech, Proptech, Retail Consumer, Sustainable Fashion, Consumer Packaged Goods, Tourism & Culture, Advanced Materials, Agriculture, and Marketplace."
+    },
+    {
+      "id": "check-page-f4f53efdad",
+      "url": "http://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "LEARN MORE ABOUT NEXT 36 The NEXT AI program is designed for entrepreneurs seeking to solve global challenges with AI-enabled solutions."
+    },
+    {
+      "id": "check-page-0c8386eb60",
+      "url": "http://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "This year’s NEXT AI Toronto cohort chose 18 ventures and NEXT AI Montreal chose 52 ventures across a diverse range of industries, including Life Sciences & Advanced Health, Enterprise Software, Digital Media & Telecommunications, Financial Services, Advanced Materials & Manufacturing, Retail Consumer, Clean Tech, E-commerce, Security, Mining, Transportation, Tourism, and Proptech."
+    },
+    {
+      "id": "check-page-34d8d7551a",
+      "url": "http://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "LEARN MORE ABOUT NEXT AI NEXT Founders is for growth-stage founders seeking to scale their businesses into world-class ventures."
+    },
+    {
+      "id": "check-page-8ba58259ad",
+      "url": "http://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "Our NEXT Founders program has 26 ventures in the following industries: Enterprise Software, Health, Food and Beverage, Retail, Materials and Manufacturing, Financial Services, and Maintenance Repair."
+    },
+    {
+      "id": "check-page-63f006816f",
+      "url": "http://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "LEARN MORE ABOUT NEXT FOUNDERS NEXT AI Montreal ABOUT US NEXT Canada accelerates the growth trajectory of aspiring and scaling entrepreneurs with education, mentorship, funding and access to Canada's strongest entrepreneurial network."
+    },
+    {
+      "id": "check-page-fbb95d5d56",
+      "url": "http://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "81519 8403 RR0001 KEY LINKS News Events Careers Media Kit Newsletter Sign Up CONTACT US Email: [email protected] 175 Bloor Street East Suite 1800, South Building Toronto, ON M4W 3R8 ACKNOWLEDGEMENT NEXT Canada is situated on the traditional territory of many nations including the Mississaugas of the Credit, the Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples."
+    },
+    {
       "id": "check-page-3278071323",
       "url": "http://www.nextcanada.com/nai-timeline-fr/",
       "page": "batches",
       "excerpt": "Next AI Program Timeline (FR) – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us Next AI – CALENDRIER DU PROGRAMME 2020 19 octobre 2020 Ouverture des candidatures Répondez à quelques questions sur votre équipe, votre entreprise ou votre localisation préférée (Montréal ou Toronto). La candidature doit aussi comprendre une courte entrevue vidéo. 2020 Octobre - décembre 2020 Formation des équipes (optionnel) Si vous êtes à la recherche d’un cofondateur partageant les mêmes idées que vous ou souhaitez ajouter une expertise à votre équipe déjà existante, connectez-vous avec une multitude de talents mondiaux en utilisant notre plateforme exclusive de jumelage . 2020 13 décembre 2020 Date limite pour le dépôt de votre candidature 2021 Février 2021 Interviews des"
+    },
+    {
+      "id": "check-page-8400c7feb5",
+      "url": "http://www.nextcanada.com/nai-timeline-fr/",
+      "page": "batches",
+      "excerpt": "2021 Avril/mai 2021 Dévoilement des entreprises Présentez votre prototype d’entreprise et recevez les commentaires d’un réseau de pairs, de mentors et d’autres membres de la communauté de NEXT Canada."
+    },
+    {
+      "id": "check-page-24d3207f3d",
+      "url": "http://www.nextcanada.com/nai-timeline-fr/",
+      "page": "batches",
+      "excerpt": "ABOUT US NEXT Canada accelerates the growth trajectory of aspiring and scaling entrepreneurs with education, mentorship, funding and access to Canada's strongest entrepreneurial network."
+    },
+    {
+      "id": "check-page-5a6558f7de",
+      "url": "http://www.nextcanada.com/nai-timeline-fr/",
+      "page": "batches",
+      "excerpt": "81519 8403 RR0001 KEY LINKS News Events Careers Media Kit Newsletter Sign Up CONTACT US Email: [email protected] 175 Bloor Street East Suite 1800, South Building Toronto, ON M4W 3R8 ACKNOWLEDGEMENT NEXT Canada is situated on the traditional territory of many nations including the Mississaugas of the Credit, the Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples."
     },
     {
       "id": "check-page-bb1d92630e",
@@ -465,10 +933,106 @@
       "excerpt": "NEXT Canada Mid-Summer Updates – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us NEXT Canada Mid-Summer Updates Blog , Events Kyle Winters July 20, 2022 NEWS NEXT Canada Mid-Summer Updates ALYANA SATCHU July 20, 2022 The summer has been a busy and exciting one so far. Just this month, our NEXT Canada team and founders have experienced an abundance of classes, events and workshops. The members of our Next AI, Next 36, and Next Founders program participants continue to be challenged personally and professionally as they expand their skillsets, supercharge their ambition, and scale their ventures. On June 30th, the Next Canada Team convened at The Oxley in Yorkville for a relaxing and sunny afternoon of just getting to know one another better. We were"
     },
     {
+      "id": "check-page-22c885c9a4",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "page": "batches",
+      "excerpt": "The event was hosted by Lauren DeSouza (Next 36, 2020) from NEXT Canada’s Alumni Advisory Council."
+    },
+    {
+      "id": "check-page-f2c0777eac",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "page": "batches",
+      "excerpt": "With half our students coming into the NEXT Canada office to use the co-working space and a number across the nation joining in via ZOOM, we are pleased to offer hybrid classes to the cohort."
+    },
+    {
+      "id": "check-page-49e8222397",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "page": "batches",
+      "excerpt": "Reza Satchu has taught multiple Economics of Entrepreneurship classes from our NEXT Canada offices and has been able to integrate both in-person and virtual students into thoughtful discussions."
+    },
+    {
+      "id": "check-page-49cf892ae4",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "page": "batches",
+      "excerpt": "NEXT Canada is excited to offer a more personal learning experience for the students as we look forward to working towards an entirely in-person class schedule again."
+    },
+    {
+      "id": "check-page-01f8a09970",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "page": "batches",
+      "excerpt": "July 11th, NEXT Canada’s Programs department held a workshop focused on storytelling."
+    },
+    {
+      "id": "check-page-b49ff753f3",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "page": "batches",
+      "excerpt": "July 13-15th, The NEXT Canada team joined the Next AI Montreal time in this year’s sold-out Startupfest, which features startups from various verticals and growth stages looking to connect with investors for mentorship, networking, and potential funding."
+    },
+    {
+      "id": "check-page-5d900d4425",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "page": "batches",
+      "excerpt": "From Fintech to AI and seed round to series A, Startupfest brought diverse companies ready to meet investors."
+    },
+    {
+      "id": "check-page-88f450452d",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "page": "batches",
+      "excerpt": "The festival has helped local entrepreneurs connect with world-class mentors and investors and has been the gateway to millions of dollars in business deals and investments made."
+    },
+    {
+      "id": "check-page-68a476b043",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "page": "batches",
+      "excerpt": "Want to stay in the loop on all things NEXT Canada?"
+    },
+    {
+      "id": "check-page-e02933293c",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "page": "batches",
+      "excerpt": "Tags: AI alumni entrepreneur entrepreneurship NEXT Canada Start up tech Toronto venture ABOUT US NEXT Canada accelerates the growth trajectory of aspiring and scaling entrepreneurs with education, mentorship, funding and access to Canada's strongest entrepreneurial network."
+    },
+    {
+      "id": "check-page-c1be1de952",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "page": "batches",
+      "excerpt": "81519 8403 RR0001 KEY LINKS News Events Careers Media Kit Newsletter Sign Up CONTACT US Email: [email protected] 175 Bloor Street East Suite 1800, South Building Toronto, ON M4W 3R8 ACKNOWLEDGEMENT NEXT Canada is situated on the traditional territory of many nations including the Mississaugas of the Credit, the Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples."
+    },
+    {
       "id": "check-page-8874fa3442",
       "url": "http://www.nextcanada.com/program-timeline/",
       "page": "batches",
       "excerpt": "Program Timeline – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us PROGRAM TIMELINE 2026 Spring Immersion week Next AI and Next Founders participants gain their first exposure to faculty and the NEXT network through an intense onboarding week in March (Next AI) and May (Next Founders), respectively. 2026 May Venture Reveal Select ventures from all three programs pitch and receive feedback from a network of peers, mentors and other members of the NEXT Canada community. 2026 May - August Courses and workshops Founders attend masters-level classes and workshops from our award-winning faculty, successful entrepreneurs and investors. Meet the network 2026 May - August Founder Education - Foundation Throughout the summer, founders attend multiple sessions on"
+    },
+    {
+      "id": "check-page-bb3c0be89f",
+      "url": "http://www.nextcanada.com/program-timeline/",
+      "page": "batches",
+      "excerpt": "Meet the network 2026 May - August Founder Education - Foundation Throughout the summer, founders attend multiple sessions on the Economics of Entrepreneurship (taught by Reza Satchu) as well as Strategy & Innovation (taught by Prof."
+    },
+    {
+      "id": "check-page-46f83740ea",
+      "url": "http://www.nextcanada.com/program-timeline/",
+      "page": "batches",
+      "excerpt": "2026 May - August Founder Education - Expertise Founders learn about Entrepreneurial Finance (taught by Imperial College London professor Ramana Nanda); Business, Government and the Global Economy (taught by Georgetown University professor Marc Busch); and Machine Learning (taught by University of Guelph professor and CIFAR Azrieli Global Scholar, Graham Taylor)."
+    },
+    {
+      "id": "check-page-50191e830b",
+      "url": "http://www.nextcanada.com/program-timeline/",
+      "page": "batches",
+      "excerpt": "2026 May - August Guest Speakers & Workshops Over the course of the summer, founders are exposed to a wide array of successful business leaders, investors and academics."
+    },
+    {
+      "id": "check-page-e1baf9c208",
+      "url": "http://www.nextcanada.com/program-timeline/",
+      "page": "batches",
+      "excerpt": "ABOUT US NEXT Canada accelerates the growth trajectory of aspiring and scaling entrepreneurs with education, mentorship, funding and access to Canada's strongest entrepreneurial network."
+    },
+    {
+      "id": "check-page-c9e58f07ad",
+      "url": "http://www.nextcanada.com/program-timeline/",
+      "page": "batches",
+      "excerpt": "81519 8403 RR0001 KEY LINKS News Events Careers Media Kit Newsletter Sign Up CONTACT US Email: [email protected] 175 Bloor Street East Suite 1800, South Building Toronto, ON M4W 3R8 ACKNOWLEDGEMENT NEXT Canada is situated on the traditional territory of many nations including the Mississaugas of the Credit, the Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples."
     },
     {
       "id": "check-page-4b7bc1591a",
@@ -477,10 +1041,352 @@
       "excerpt": "NEXT Canada - Building a more ambitious and competitive Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us MEET THE 2026 COHORT NEXT Canada is on a mission to find and cultivate the best entrepreneurial talent in the country. Every year, we search far and wide for the brightest and most innovative minds with the drive and passion to launch game-changing ventures with global potential. Our three programs are designed to equip these founders with the knowledge, tools, and network they need to launch and scale their ventures through a unique blend of real-world education, top-tier mentorship, and globally recognized faculty. Discover the 2026 ventures by program The NEXT 36 program is designed for students and recent grads with big dreams and an entrepreneurial"
     },
     {
+      "id": "check-page-00bb2dd8d3",
+      "url": "https://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "Our NEXT 36 2026 cohort comprises 41 founders leading 33 ventures across various industries, including Enterprise Software, Financial Services, Human Resources, Life Sciences & Advanced Health, Marketing, Clean Tech, Proptech, Retail Consumer, Sustainable Fashion, Consumer Packaged Goods, Tourism & Culture, Advanced Materials, Agriculture, and Marketplace."
+    },
+    {
+      "id": "check-page-8ef6cbe4c8",
+      "url": "https://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "LEARN MORE ABOUT NEXT 36 The NEXT AI program is designed for entrepreneurs seeking to solve global challenges with AI-enabled solutions."
+    },
+    {
+      "id": "check-page-d270b85b4d",
+      "url": "https://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "This year’s NEXT AI Toronto cohort chose 18 ventures and NEXT AI Montreal chose 52 ventures across a diverse range of industries, including Life Sciences & Advanced Health, Enterprise Software, Digital Media & Telecommunications, Financial Services, Advanced Materials & Manufacturing, Retail Consumer, Clean Tech, E-commerce, Security, Mining, Transportation, Tourism, and Proptech."
+    },
+    {
+      "id": "check-page-7c1a2b2b13",
+      "url": "https://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "LEARN MORE ABOUT NEXT AI NEXT Founders is for growth-stage founders seeking to scale their businesses into world-class ventures."
+    },
+    {
+      "id": "check-page-a4c6ab9ee2",
+      "url": "https://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "Our NEXT Founders program has 26 ventures in the following industries: Enterprise Software, Health, Food and Beverage, Retail, Materials and Manufacturing, Financial Services, and Maintenance Repair."
+    },
+    {
+      "id": "check-page-183e654a04",
+      "url": "https://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "LEARN MORE ABOUT NEXT FOUNDERS NEXT AI Montreal ABOUT US NEXT Canada accelerates the growth trajectory of aspiring and scaling entrepreneurs with education, mentorship, funding and access to Canada's strongest entrepreneurial network."
+    },
+    {
+      "id": "check-page-12c58832b9",
+      "url": "https://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "81519 8403 RR0001 KEY LINKS News Events Careers Media Kit Newsletter Sign Up CONTACT US Email: [email protected] 175 Bloor Street East Suite 1800, South Building Toronto, ON M4W 3R8 ACKNOWLEDGEMENT NEXT Canada is situated on the traditional territory of many nations including the Mississaugas of the Credit, the Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples."
+    },
+    {
       "id": "check-page-58d1715cc6",
       "url": "https://www.nextcanada.com/program-timeline/",
       "page": "batches",
       "excerpt": "Program Timeline – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us PROGRAM TIMELINE 2026 Spring Immersion week Next AI and Next Founders participants gain their first exposure to faculty and the NEXT network through an intense onboarding week in March (Next AI) and May (Next Founders), respectively. 2026 May Venture Reveal Select ventures from all three programs pitch and receive feedback from a network of peers, mentors and other members of the NEXT Canada community. 2026 May - August Courses and workshops Founders attend masters-level classes and workshops from our award-winning faculty, successful entrepreneurs and investors. Meet the network 2026 May - August Founder Education - Foundation Throughout the summer, founders attend multiple sessions on"
+    },
+    {
+      "id": "check-page-badcff91a9",
+      "url": "https://www.nextcanada.com/program-timeline/",
+      "page": "batches",
+      "excerpt": "Meet the network 2026 May - August Founder Education - Foundation Throughout the summer, founders attend multiple sessions on the Economics of Entrepreneurship (taught by Reza Satchu) as well as Strategy & Innovation (taught by Prof."
+    },
+    {
+      "id": "check-page-c518c0a1d5",
+      "url": "https://www.nextcanada.com/program-timeline/",
+      "page": "batches",
+      "excerpt": "2026 May - August Founder Education - Expertise Founders learn about Entrepreneurial Finance (taught by Imperial College London professor Ramana Nanda); Business, Government and the Global Economy (taught by Georgetown University professor Marc Busch); and Machine Learning (taught by University of Guelph professor and CIFAR Azrieli Global Scholar, Graham Taylor)."
+    },
+    {
+      "id": "check-page-e268564524",
+      "url": "https://www.nextcanada.com/program-timeline/",
+      "page": "batches",
+      "excerpt": "2026 May - August Guest Speakers & Workshops Over the course of the summer, founders are exposed to a wide array of successful business leaders, investors and academics."
+    },
+    {
+      "id": "check-page-650418d443",
+      "url": "https://www.nextcanada.com/program-timeline/",
+      "page": "batches",
+      "excerpt": "ABOUT US NEXT Canada accelerates the growth trajectory of aspiring and scaling entrepreneurs with education, mentorship, funding and access to Canada's strongest entrepreneurial network."
+    },
+    {
+      "id": "check-page-95a04962b8",
+      "url": "https://www.nextcanada.com/program-timeline/",
+      "page": "batches",
+      "excerpt": "81519 8403 RR0001 KEY LINKS News Events Careers Media Kit Newsletter Sign Up CONTACT US Email: [email protected] 175 Bloor Street East Suite 1800, South Building Toronto, ON M4W 3R8 ACKNOWLEDGEMENT NEXT Canada is situated on the traditional territory of many nations including the Mississaugas of the Credit, the Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples."
+    },
+    {
+      "id": "check-page-e10acfaa7d",
+      "url": "http://www.nextcanada.com/federal-covid-19-support-programs-demystified-by-a-next-insider/",
+      "page": "details",
+      "excerpt": "Federal COVID-19 Support Programs Demystified By a NEXT Insider – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us Federal COVID-19 Support Programs Demystified By a NEXT Insider News Kyle Winters May 11, 2020 EVENT Federal COVID-19 Support Programs Demystified By a NEXT Insider An AMA with Parvinder Sachdeva , Deputy Director of Policy to the Minister of Innovation, Science and Industry; Next 36 Alumni – Inaugural Cohort (2011) Moderated by Melinda Jacobs , Head of Wealth Management and Capital Markets, Borealis AI (RBC Institute for Research) at Borealis AI; Next 36 Alumna (2012) Date: May 15, 2020 Time: 1:00 PM This interactive session featuring two seasoned Next 36 alumni will give you an opportunity to learn how to navigate the alphabet soup of"
+    },
+    {
+      "id": "check-page-cc089c1210",
+      "url": "http://www.nextcanada.com/federal-covid-19-support-programs-demystified-by-a-next-insider/",
+      "page": "details",
+      "excerpt": "It will also highlight how an entrepreneur can have an impact on the country from inside the Government of Canada and how the NEXT experience translates across industries and sectors – including the public sector."
+    },
+    {
+      "id": "check-page-7bb86c27d0",
+      "url": "http://www.nextcanada.com/federal-covid-19-support-programs-demystified-by-a-next-insider/",
+      "page": "details",
+      "excerpt": "Act One CERB, CEWS, CEBA, BCAP, IAP, etc. – navigating government initiatives can be overwhelming and confusing."
+    },
+    {
+      "id": "check-page-b674ecd9c9",
+      "url": "http://www.nextcanada.com/federal-covid-19-support-programs-demystified-by-a-next-insider/",
+      "page": "details",
+      "excerpt": "Parvinder will share his insights from being directly involved in the crafting of these policies and programs inside the federal government."
+    },
+    {
+      "id": "check-page-fa054f6224",
+      "url": "http://www.nextcanada.com/federal-covid-19-support-programs-demystified-by-a-next-insider/",
+      "page": "details",
+      "excerpt": "Act Two Hear the story of a graduate of the first cohort of Next 36 and how Parvinder’s experience allowed him to bring an entrepreneurial lens to his role in the federal government."
+    },
+    {
+      "id": "check-page-08d5343f40",
+      "url": "http://www.nextcanada.com/federal-covid-19-support-programs-demystified-by-a-next-insider/",
+      "page": "details",
+      "excerpt": "You will hear discussion on the trends the government is seeing as the result of the current crisis and where opportunity lies in the future."
+    },
+    {
+      "id": "check-page-9522845faf",
+      "url": "http://www.nextcanada.com/federal-covid-19-support-programs-demystified-by-a-next-insider/",
+      "page": "details",
+      "excerpt": "REGISTER ABOUT US NEXT Canada accelerates the growth trajectory of aspiring and scaling entrepreneurs with education, mentorship, funding and access to Canada's strongest entrepreneurial network."
+    },
+    {
+      "id": "check-page-52a681e516",
+      "url": "http://www.nextcanada.com/federal-covid-19-support-programs-demystified-by-a-next-insider/",
+      "page": "details",
+      "excerpt": "81519 8403 RR0001 KEY LINKS News Events Careers Media Kit Newsletter Sign Up CONTACT US Email: [email protected] 175 Bloor Street East Suite 1800, South Building Toronto, ON M4W 3R8 ACKNOWLEDGEMENT NEXT Canada is situated on the traditional territory of many nations including the Mississaugas of the Credit, the Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples."
+    },
+    {
+      "id": "check-page-676ca2561e",
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "Discover Our Entrepreneurship Programs - NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us Which is the right program for you? Accelerate your growth and access our powerful entrepreneurial network with one of our 3 programs: NEXT 36, NEXT AI, and NEXT Founders. For students or recent grads with big dreams and an entrepreneurial mindset NEXT 36 selects 36 of the most entrepreneurial undergrads and recent grads from coast-to-coast who we believe have what it takes to build Canada’s next unicorn. With NEXT 36, you will go from ideation to launch and beyond, all within eight months. You will experience accelerated growth thanks to access to tactical education, mentorship, and a network of the strongest entrepreneurs in Canada. Applications are closed for the"
+    },
+    {
+      "id": "check-page-39a1bd74be",
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "DISCOVER NEXT 36 CLICK HERE TO GET NOTIFIED WHEN APPLICATIONS OPEN For entrepreneurs looking to solve global challenges with AI-enabled solutions NEXT AI is a world-class program for artificial intelligence-based ventures and technology commercialization."
+    },
+    {
+      "id": "check-page-f15fe524e6",
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "We identify talented idea or early-stage teams with ambitious solutions and leverage Canada’s leadership position in AI to provide them with the capital, mentorship, education and network to disrupt industries."
+    },
+    {
+      "id": "check-page-b7212e8a25",
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "NEXT AI is delivered on two campuses: Toronto and Montréal."
+    },
+    {
+      "id": "check-page-528c86eb5d",
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "NEXT AI – Montréal is delivered in partnership with HEC Montréal."
+    },
+    {
+      "id": "check-page-07751f21c6",
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "DISCOVER NEXT AI APPLY TO NEXT AI For growth stage founders looking to scale their businesses into world class ventures NEXT Founders accepts seed and growth stage founders who are looking to accelerate their business and their entrepreneurial mindset."
+    },
+    {
+      "id": "check-page-71e7c7bb91",
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "As NEXT Canada’s most flexible program, NEXT Founders offers à-la-carte education from some of North America’s top minds that entrepreneurs can opt in to based on their individual needs and knowledge gaps."
+    },
+    {
+      "id": "check-page-d83c2144c1",
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "DISCOVER NEXT FOUNDERS CLICK HERE TO GET NOTIFIED WHEN APPLICATIONS OPEN ABOUT US NEXT Canada accelerates the growth trajectory of aspiring and scaling entrepreneurs with education, mentorship, funding and access to Canada's strongest entrepreneurial network."
+    },
+    {
+      "id": "check-page-5226ef29c4",
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "81519 8403 RR0001 KEY LINKS News Events Careers Media Kit Newsletter Sign Up CONTACT US Email: [email protected] 175 Bloor Street East Suite 1800, South Building Toronto, ON M4W 3R8 ACKNOWLEDGEMENT NEXT Canada is situated on the traditional territory of many nations including the Mississaugas of the Credit, the Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples."
+    },
+    {
+      "id": "check-page-208f600edd",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "page": "details",
+      "excerpt": "Tales From Two Cities - How an Accelerator Program Shifted From the Physical World to the Digital, Amidst a Pandemic By Veronika Kvon and Simon Dandavino – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us Tales From Two Cities – How an Accelerator Program Shifted From the Physical World to the Digital, Amidst a Pandemic By Veronika Kvon and Simon Dandavino Blog Kyle Winters April 8, 2020 BLOG Tales From Two Cities - How an Accelerator Program Shifted From the Physical World to the Digital, Amidst a Pandemic Veronika Kvon , Next AI – Toronto Program Manager, and Simon Dandavino , Next AI – Montreal Director of Operations, discuss how they responded, in real time, to new challenges posed by COVID-19. Despite great uncertainty and some incredibly challenging"
+    },
+    {
+      "id": "check-page-80de06450d",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "page": "details",
+      "excerpt": "Despite great uncertainty and some incredibly challenging decisions, they forged ahead and kicked off Next AI in both cities, albeit remotely."
+    },
+    {
+      "id": "check-page-cd3187b991",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "page": "details",
+      "excerpt": "About Next AI: A world class accelerator program for artificial intelligence powered ventures and technology commercialization."
+    },
+    {
+      "id": "check-page-c38c0467b8",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "page": "details",
+      "excerpt": "Next AI is delivered on two campuses: Toronto and Montréal."
+    },
+    {
+      "id": "check-page-b4291bb595",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "page": "details",
+      "excerpt": "Next AI – Montréal is delivered in partnership with HEC Montréal."
+    },
+    {
+      "id": "check-page-b3de6f6391",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "page": "details",
+      "excerpt": "So, you’ve just wrapped Next AI immersion week in your respective cities."
+    },
+    {
+      "id": "check-page-16f9e927f0",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "page": "details",
+      "excerpt": "VK: Immersion Week is the official kick off of our Next AI program."
+    },
+    {
+      "id": "check-page-5178c150e3",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "page": "details",
+      "excerpt": "The week typically consists of an intensive, in person series of events, socials, lectures and workshops, bringing together all 30+ Next AI entrepreneurs and faculty from around the world."
+    },
+    {
+      "id": "check-page-0b454057f7",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "page": "details",
+      "excerpt": "SD: In Montreal, we welcome a similar group of 40+ entrepreneurs."
+    },
+    {
+      "id": "check-page-495ab2269a",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "page": "details",
+      "excerpt": "One of the highlights for me is a dinner hosted by Power Corporation of Canada where the entrepreneurs get to meet our community."
+    },
+    {
+      "id": "check-page-61ecf14406",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "page": "details",
+      "excerpt": "VK: COVID-19 really started escalating in Toronto the week before Immersion Week – perfect timing, right?"
+    },
+    {
+      "id": "check-page-f7b173020b",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "page": "details",
+      "excerpt": "I received an email on March 4 from a faculty member who was flying in from San Francisco."
+    },
+    {
+      "id": "check-page-b27ba219b3",
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "page": "details",
+      "excerpt": "SD: For us in Montreal, things really changed on Thursday March 12 (a few days before the start of Immersion Week), the day that the Quebec Prime minister François Legault made his first daily press briefing and started putting social distancing measures in place."
+    },
+    {
+      "id": "check-page-a100041c78",
+      "url": "http://www.nextcanada.com/voicehero-accepted-to-third-class-of-techstars-amazon-alexa-accelerator/",
+      "page": "details",
+      "excerpt": "VoiceHero Accepted To Third Class Of Techstars' Amazon Alexa Accelerator – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us VoiceHero Accepted To Third Class Of Techstars’ Amazon Alexa Accelerator News Kyle Winters July 29, 2019 NEWS VoiceHero Accepted To Third Class Of Techstars' Amazon Alexa Accelerator Two Canadian startups, EdTech company Yourika , and voice technology startup VoiceHero (co-founded by Next 36 alumni Jacob Chan and Joseph Truong), have been selected to participate in Techstars’ Amazon Alexa Accelerator . Both companies will join seven other early-stage startups taking part in the program, which based out of Seattle, WA. The 13-week accelerator will give nine startups access to Amazon employees and mentors from Seattle’s artificial"
+    },
+    {
+      "id": "check-page-85bd2c5366",
+      "url": "http://www.nextcanada.com/voicehero-accepted-to-third-class-of-techstars-amazon-alexa-accelerator/",
+      "page": "details",
+      "excerpt": "The 13-week accelerator will give nine startups access to Amazon employees and mentors from Seattle’s artificial intelligence ecosystem as well as Techstars’ incubator network."
+    },
+    {
+      "id": "check-page-c3a4ebacaa",
+      "url": "http://www.nextcanada.com/voicehero-accepted-to-third-class-of-techstars-amazon-alexa-accelerator/",
+      "page": "details",
+      "excerpt": "Amazon and Techstars will invest an initial $20,000 in each startup for six percent common share equity, along with the opportunity for an additional $100,000 convertible note."
+    },
+    {
+      "id": "check-page-e1cc044750",
+      "url": "http://www.nextcanada.com/voicehero-accepted-to-third-class-of-techstars-amazon-alexa-accelerator/",
+      "page": "details",
+      "excerpt": "“We are being granted rare access to world-class technology, professional networks, and capital through the Amazon Alexa Accelerator."
+    },
+    {
+      "id": "check-page-0e13480f15",
+      "url": "http://www.nextcanada.com/voicehero-accepted-to-third-class-of-techstars-amazon-alexa-accelerator/",
+      "page": "details",
+      "excerpt": "We recognize this is a pivotal inflection point for our company and a massive catalyst for future growth.” READ MORE ABOUT US NEXT Canada accelerates the growth trajectory of aspiring and scaling entrepreneurs with education, mentorship, funding and access to Canada's strongest entrepreneurial network."
+    },
+    {
+      "id": "check-page-52a8e6af8e",
+      "url": "http://www.nextcanada.com/voicehero-accepted-to-third-class-of-techstars-amazon-alexa-accelerator/",
+      "page": "details",
+      "excerpt": "81519 8403 RR0001 KEY LINKS News Events Careers Media Kit Newsletter Sign Up CONTACT US Email: [email protected] 175 Bloor Street East Suite 1800, South Building Toronto, ON M4W 3R8 ACKNOWLEDGEMENT NEXT Canada is situated on the traditional territory of many nations including the Mississaugas of the Credit, the Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples."
+    },
+    {
+      "id": "check-page-4b29ab28f6",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "Discover Our Entrepreneurship Programs - NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us Which is the right program for you? Accelerate your growth and access our powerful entrepreneurial network with one of our 3 programs: NEXT 36, NEXT AI, and NEXT Founders. For students or recent grads with big dreams and an entrepreneurial mindset NEXT 36 selects 36 of the most entrepreneurial undergrads and recent grads from coast-to-coast who we believe have what it takes to build Canada’s next unicorn. With NEXT 36, you will go from ideation to launch and beyond, all within eight months. You will experience accelerated growth thanks to access to tactical education, mentorship, and a network of the strongest entrepreneurs in Canada. Applications are closed for the"
+    },
+    {
+      "id": "check-page-c8f6eb9c75",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "DISCOVER NEXT 36 CLICK HERE TO GET NOTIFIED WHEN APPLICATIONS OPEN For entrepreneurs looking to solve global challenges with AI-enabled solutions NEXT AI is a world-class program for artificial intelligence-based ventures and technology commercialization."
+    },
+    {
+      "id": "check-page-c67bd98a1e",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "We identify talented idea or early-stage teams with ambitious solutions and leverage Canada’s leadership position in AI to provide them with the capital, mentorship, education and network to disrupt industries."
+    },
+    {
+      "id": "check-page-be5fb5e774",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "NEXT AI is delivered on two campuses: Toronto and Montréal."
+    },
+    {
+      "id": "check-page-f400d19613",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "NEXT AI – Montréal is delivered in partnership with HEC Montréal."
+    },
+    {
+      "id": "check-page-5c82022d34",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "DISCOVER NEXT AI APPLY TO NEXT AI For growth stage founders looking to scale their businesses into world class ventures NEXT Founders accepts seed and growth stage founders who are looking to accelerate their business and their entrepreneurial mindset."
+    },
+    {
+      "id": "check-page-f654851540",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "As NEXT Canada’s most flexible program, NEXT Founders offers à-la-carte education from some of North America’s top minds that entrepreneurs can opt in to based on their individual needs and knowledge gaps."
+    },
+    {
+      "id": "check-page-860dd02748",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "DISCOVER NEXT FOUNDERS CLICK HERE TO GET NOTIFIED WHEN APPLICATIONS OPEN ABOUT US NEXT Canada accelerates the growth trajectory of aspiring and scaling entrepreneurs with education, mentorship, funding and access to Canada's strongest entrepreneurial network."
+    },
+    {
+      "id": "check-page-ab34ed44d8",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "excerpt": "81519 8403 RR0001 KEY LINKS News Events Careers Media Kit Newsletter Sign Up CONTACT US Email: [email protected] 175 Bloor Street East Suite 1800, South Building Toronto, ON M4W 3R8 ACKNOWLEDGEMENT NEXT Canada is situated on the traditional territory of many nations including the Mississaugas of the Credit, the Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples."
     }
   ],
   "findings": {
@@ -490,6 +1396,10 @@
       {
         "value": "https://my.nextcanada.com/apply/nai",
         "evidenceId": "check-route-cf5a2e1200"
+      },
+      {
+        "value": "https://airtable.com/appl9JP8wsxwv4fws/pagTfVON2MbVH6Xp4/form",
+        "evidenceId": "check-route-0302ad1314"
       }
     ],
     "applicationUrl": [
@@ -498,7 +1408,16 @@
         "evidenceId": "check-route-cf5a2e1200"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-83d5dec0e0"
+      },
+      {
+        "value": false,
+        "evidenceId": "check-status-276b08e27c"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [
       {
@@ -517,6 +1436,14 @@
       {
         "value": "2",
         "evidenceId": "check-duration-3aab87473d"
+      },
+      {
+        "value": "3",
+        "evidenceId": "check-duration-883483290b"
+      },
+      {
+        "value": "13",
+        "evidenceId": "check-duration-ac4521a1c7"
       }
     ],
     "format": [
@@ -540,8 +1467,42 @@
       }
     ],
     "selectivity": [],
-    "dealText": [],
-    "dealComponents": [],
+    "dealText": [
+      {
+        "value": "incubator network. Amazon and Techstars will invest an initial $20,000 in each startup for six percent common share equity, along with the",
+        "evidenceId": "check-deal-0b78a1a086"
+      },
+      {
+        "value": "common share equity, along with the opportunity for an additional $100,000 convertible note. “We are beyond excited that Amazon and TechStars,",
+        "evidenceId": "check-deal-b4e9170e83"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "equity",
+          "amount": "20000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Equity",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-0b78a1a086"
+      },
+      {
+        "value": {
+          "kind": "convertible",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Convertible note",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-b4e9170e83"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://www.nextcanada.com/directory/alumni/",

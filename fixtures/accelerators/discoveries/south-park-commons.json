@@ -1,6 +1,6 @@
 {
   "programId": "south-park-commons",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.southparkcommons.com/apply",
@@ -54,7 +54,7 @@
       "url": "https://www.southparkcommons.com/companies/comun",
       "page": "portfolio",
       "anchor": "More About Comun",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -62,7 +62,7 @@
       "url": "https://www.southparkcommons.com/companies/deep-cogito",
       "page": "portfolio",
       "anchor": "Deep Cogito",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -70,7 +70,7 @@
       "url": "https://www.southparkcommons.com/companies/density-ai",
       "page": "portfolio",
       "anchor": "Density AI",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -78,7 +78,7 @@
       "url": "https://www.southparkcommons.com/companies/doppel",
       "page": "portfolio",
       "anchor": "Doppel",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -86,7 +86,7 @@
       "url": "https://www.southparkcommons.com/companies/gamma",
       "page": "portfolio",
       "anchor": "Gamma",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -94,7 +94,7 @@
       "url": "https://www.southparkcommons.com/companies/goodfire",
       "page": "portfolio",
       "anchor": "Goodfire",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },

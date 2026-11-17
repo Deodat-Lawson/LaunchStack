@@ -1,6 +1,6 @@
 {
   "programId": "startuplab",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.startuplab.no/about",
@@ -59,7 +59,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.startuplab.no/companies",
+      "url": "https://www.startuplab.no/companies-backup",
       "page": "portfolio",
       "anchor": "",
       "fetched": true,
@@ -67,7 +67,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.startuplab.no/companies-backup",
+      "url": "https://www.startuplab.no/companies-spp2026",
       "page": "portfolio",
       "anchor": "",
       "fetched": true,
@@ -110,7 +110,7 @@
       "url": "https://www.startuplab.no/partners",
       "page": "portfolio",
       "anchor": "Strategic partnerships Strategic partnerships Landing a big customer or corporate deal can be a turning point. We connect startups with Norway’s top companies, helping you build cr",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

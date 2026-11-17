@@ -1,6 +1,6 @@
 {
   "programId": "next-canada",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "http://www.nextcanada.com/2021-cohort/",
@@ -37,6 +37,14 @@
     {
       "url": "http://www.nextcanada.com/apply-to-next-ai-venture/",
       "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.nextcanada.com/federal-covid-19-support-programs-demystified-by-a-next-insider/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -85,6 +93,30 @@
     {
       "url": "http://www.nextcanada.com/program-timeline/",
       "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.nextcanada.com/tales-from-two-cities-how-an-accelerator-program-shifted-from-the-physical-world-to-the-digital-amidst-a-pandemic/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.nextcanada.com/voicehero-accepted-to-third-class-of-techstars-amazon-alexa-accelerator/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -142,7 +174,7 @@
       "url": "https://www.nextcanada.com/programs-overview/",
       "page": "details",
       "anchor": "Programs Overview",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

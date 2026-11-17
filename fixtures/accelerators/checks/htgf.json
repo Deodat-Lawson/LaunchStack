@@ -1,6 +1,6 @@
 {
   "programId": "htgf",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.htgf.de/en/venture-capital-investor-2/",
     "https://www.htgf.de/en/development-and-first-clinical-application-of-an-innovative-muscle-stimulator-for-the-treatment-of-the-heart-insufficiency-financially-secured/",
@@ -16,7 +16,12 @@
     "https://www.htgf.de/crossvertise-gmbh-high-tech-grunderfonds-und-investment-konsortium-bambooventures-finanzieren-die-erste-medienubergreifende-buchungsplattform-fur-werbetrager/",
     "https://www.htgf.de/deal-united-gewinnt-das-vertrauen-des-high-tech-grunderfonds/",
     "https://www.htgf.de/deal-united-schliest-finanzierungsrunde-ab-und-treibt-internationalisierung-voran/",
-    "https://www.htgf.de/en/1-5-million-euro-investment-for-start-up-replex/"
+    "https://www.htgf.de/en/1-5-million-euro-investment-for-start-up-replex/",
+    "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+    "https://www.htgf.de/en/a-powerful-motor-for-innovation-and-the-economy-high-tech-grunderfonds-makes-its-500th-investment/",
+    "https://www.htgf.de/en/adtriba-gmbh-receives-seed-investment-to-optimize-advertisers-digital-marketing-campaigns/",
+    "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+    "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/"
   ],
   "evidence": [
     {
@@ -39,6 +44,20 @@
       "title": "High-Tech Gründerfonds — application page",
       "excerpt": "500,000 in the seed stage, with the potential for up to a total of EUR 2 million per portfolio company in follow-on financing. Investors in this",
       "page": "application"
+    },
+    {
+      "id": "check-deal-3caa23b516",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "and to market launch. Typically, High-Tech Gruenderfonds invests EUR 500,000 in the seed stage, with the potential for up to a total of EUR 2",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-5df22a22c6",
+      "url": "https://www.htgf.de/en/adtriba-gmbh-receives-seed-investment-to-optimize-advertisers-digital-marketing-campaigns/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "and to market launch. Typically, High-Tech Gründerfonds invests EUR 600,000 in the seed stage, with the potential for up to a total of EUR 2",
+      "page": "terms"
     },
     {
       "id": "check-deal-66f4a905c8",
@@ -83,6 +102,20 @@
       "page": "application"
     },
     {
+      "id": "check-deal-fabdf9bb0a",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "500,000 in the seed stage, with the potential for up to a total of EUR 2 million per portfolio company in follow-on financing. Investors in this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-fd2be1f822",
+      "url": "https://www.htgf.de/en/adtriba-gmbh-receives-seed-investment-to-optimize-advertisers-digital-marketing-campaigns/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "600,000 in the seed stage, with the potential for up to a total of EUR 2 million per portfolio company in follow-on financing. Investors in this",
+      "page": "terms"
+    },
+    {
       "id": "check-email-1d29e5de29",
       "url": "https://www.htgf.de/berliner-bitcoin-startup-bitwala-bekommt-e800k-als-seed-investment-um-den-globalen-geldtransfer-zu-revolutionieren/",
       "title": "High-Tech Gründerfonds — terms page",
@@ -125,6 +158,13 @@
       "page": "terms"
     },
     {
+      "id": "check-email-fffe8b8c5b",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Bonn Phone: +49 (228) 823 001-00 Fax: +49 (228) 823 000-50 info@htgf.de www.high-tech-gruenderfonds.de Do you want to learn more?",
+      "page": "terms"
+    },
+    {
       "id": "check-format-02b9277c31",
       "url": "https://www.htgf.de/en/innovative-measurement-for-geothermal-probes-and-industrial-applications/",
       "title": "High-Tech Gründerfonds — application page",
@@ -139,10 +179,52 @@
       "page": "application"
     },
     {
+      "id": "check-format-209416e9a8",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Energy raises $50M: Turning millions of households into a virtual power plant zum Artikel News 13 October 2026 Raw material",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-2678122d66",
+      "url": "https://www.htgf.de/en/a-powerful-motor-for-innovation-and-the-economy-high-tech-grunderfonds-makes-its-500th-investment/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Energy raises $50M: Turning millions of households into a virtual power plant News 15 October 2026 Rabot Energy raises $50M:",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-35b40ad419",
+      "url": "https://www.htgf.de/en/adtriba-gmbh-receives-seed-investment-to-optimize-advertisers-digital-marketing-campaigns/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Energy raises $50M: Turning millions of households into a virtual power plant News 15 October 2026 Rabot Energy raises $50M:",
+      "page": "terms"
+    },
+    {
       "id": "check-format-3d1e57af66",
       "url": "https://www.htgf.de/5-millionen-euro-seed-investment-fuer-natif-ai/",
       "title": "High-Tech Gründerfonds — terms page",
       "excerpt": "Sales-Experten ausbauen – am Standort Saarbrücken wie auch remote – und seine Expansion vorantreiben. Natif.ai wird der neue",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-46b78c68e5",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Energy raises $50M: Turning millions of households into a virtual power plant News 15 October 2026 Rabot Energy raises $50M:",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-680a9d46d1",
+      "url": "https://www.htgf.de/en/a-powerful-motor-for-innovation-and-the-economy-high-tech-grunderfonds-makes-its-500th-investment/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Energy raises $50M: Turning millions of households into a virtual power plant zum Artikel News 13 October 2026 Raw material",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6ab6563a29",
+      "url": "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Energy raises $50M: Turning millions of households into a virtual power plant zum Artikel News 13 October 2026 Raw material",
       "page": "terms"
     },
     {
@@ -188,6 +270,13 @@
       "page": "terms"
     },
     {
+      "id": "check-format-98e8fa8469",
+      "url": "https://www.htgf.de/en/adtriba-gmbh-receives-seed-investment-to-optimize-advertisers-digital-marketing-campaigns/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Energy raises $50M: Turning millions of households into a virtual power plant zum Artikel News 13 October 2026 Raw material",
+      "page": "terms"
+    },
+    {
       "id": "check-format-9a40557be7",
       "url": "https://www.htgf.de/en/new-safety-solution-for-industrial-applications-keeper-beeper-collision-sweeper/",
       "title": "High-Tech Gründerfonds — application page",
@@ -209,6 +298,13 @@
       "page": "application"
     },
     {
+      "id": "check-format-a3d983065c",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Energy raises $50M: Turning millions of households into a virtual power plant News 15 October 2026 Rabot Energy raises $50M:",
+      "page": "terms"
+    },
+    {
       "id": "check-format-c7c7f5c359",
       "url": "https://www.htgf.de/en/medtech-radar-live-2019-application-submission-for-start-ups-is-now-open/",
       "title": "High-Tech Gründerfonds — application page",
@@ -221,6 +317,20 @@
       "title": "High-Tech Gründerfonds — application page",
       "excerpt": "Energy raises $50M: Turning millions of households into a virtual power plant zum Artikel News 13 October 2026 Raw material",
       "page": "application"
+    },
+    {
+      "id": "check-format-d46aa1a7b1",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Energy raises $50M: Turning millions of households into a virtual power plant zum Artikel News 13 October 2026 Raw material",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-e45a02c5d8",
+      "url": "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Energy raises $50M: Turning millions of households into a virtual power plant News 15 October 2026 Rabot Energy raises $50M:",
+      "page": "terms"
     },
     {
       "id": "check-format-ee48c45d98",
@@ -279,6 +389,13 @@
       "page": "application"
     },
     {
+      "id": "check-location-f55fd06d6f",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "team of around fifty employees is based in Hamburg’s Speicherstadt. Its Managing",
+      "page": "terms"
+    },
+    {
       "id": "check-name-2b5a11516b",
       "url": "https://www.htgf.de/en/venture-capital-investor-2/",
       "title": "High-Tech Gründerfonds — homepage",
@@ -328,6 +445,13 @@
       "page": "terms"
     },
     {
+      "id": "check-phone-48e0dfb9c7",
+      "url": "https://www.htgf.de/en/a-powerful-motor-for-innovation-and-the-economy-high-tech-grunderfonds-makes-its-500th-investment/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Phone (004922882300121)",
+      "page": "terms"
+    },
+    {
       "id": "check-phone-5078f7fd8f",
       "url": "https://www.htgf.de/en/development-and-first-clinical-application-of-an-innovative-muscle-stimulator-for-the-treatment-of-the-heart-insufficiency-financially-secured/",
       "title": "High-Tech Gründerfonds — application page",
@@ -340,6 +464,13 @@
       "title": "High-Tech Gründerfonds — application page",
       "excerpt": "Phone (004922882300121)",
       "page": "application"
+    },
+    {
+      "id": "check-phone-562a2cb7c5",
+      "url": "https://www.htgf.de/en/adtriba-gmbh-receives-seed-investment-to-optimize-advertisers-digital-marketing-campaigns/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Phone (004922882300121)",
+      "page": "terms"
     },
     {
       "id": "check-phone-67322b98b2",
@@ -367,6 +498,27 @@
       "url": "https://www.htgf.de/crossvertise-gmbh-high-tech-grunderfonds-und-investment-konsortium-bambooventures-finanzieren-die-erste-medienubergreifende-buchungsplattform-fur-werbetrager/",
       "title": "High-Tech Gründerfonds — terms page",
       "excerpt": "anrufen (004922882300121)",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-a44485b2d2",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Phone (004922882300121)",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-b04a0d4b86",
+      "url": "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Phone (004922882300121)",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-c24eedc361",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Phone (004922882300121)",
       "page": "terms"
     },
     {
@@ -433,11 +585,25 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-71fb904a58",
+      "url": "https://www.htgf.de/en/a-powerful-motor-for-innovation-and-the-economy-high-tech-grunderfonds-makes-its-500th-investment/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Portfolio → https://www.htgf.de/en/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-827d59a941",
       "url": "https://www.htgf.de/en/medtech-radar-live-2019-application-submission-for-start-ups-is-now-open/",
       "title": "High-Tech Gründerfonds — application page",
       "excerpt": "Portfolio → https://www.htgf.de/en/portfolio/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-8f6a0c8680",
+      "url": "https://www.htgf.de/en/adtriba-gmbh-receives-seed-investment-to-optimize-advertisers-digital-marketing-campaigns/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Portfolio → https://www.htgf.de/en/portfolio/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-a1c55d23e9",
@@ -459,6 +625,13 @@
       "title": "High-Tech Gründerfonds — application page",
       "excerpt": "Portfolio → https://www.htgf.de/en/portfolio/",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-a763936a82",
+      "url": "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Portfolio → https://www.htgf.de/en/portfolio/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-ac49d2e4bc",
@@ -489,6 +662,13 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-d5ff55417b",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Portfolio → https://www.htgf.de/en/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-d64bc9dbc9",
       "url": "https://www.htgf.de/computer-aided-engineering-im-ki-zeitalter-neural-concept-sa-erhaelt-siebenstelliges-investment-von-constantia-new-business-und-htgf/",
       "title": "High-Tech Gründerfonds — terms page",
@@ -510,6 +690,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-f29005ad08",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "title": "High-Tech Gründerfonds — terms page",
+      "excerpt": "Portfolio → https://www.htgf.de/en/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-54d5e30e92",
       "url": "https://www.htgf.de/en/venture-capital-investor-2/",
       "title": "High-Tech Gründerfonds — homepage",
@@ -522,7 +709,55 @@
       "id": "check-page-945c02f71d",
       "url": "https://www.htgf.de/en/venture-capital-investor-2/",
       "page": "details",
-      "excerpt": "HTGF | Multi-Stage-VC Platform for Tech Startups | High-Tech Gründerfonds Skip to content Portfolio Investors Team News & Events Login My pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About us Career Portfolio Jobs ESG Contact Login We believe in tech. We invest in people . Backing tech founders, building the future, early on. Europe’s Multi-Stage VC Platform for Tech Founders We invest in tech founders building tomorrow’s technologies – Deep Tech, Life Sciences, Digital Tech. As a Multi-Stage VC Platform, we back them from Pre-Seed to Growth: with capital, network, and the conviction to invest where it’s early, complex, or long-term. Our mission goes beyond any single investment: together, we lay the foundation for a New Wirtschaftswunder – turning German and European innovation into global tech champions. about us Igniting a New Wirtschaftswunder learn more The latest at a glance go to news Last update 5 days ago zum Artikel News 9 November 2026 Where venture capital can fix Europe’s grid: HTGF and Vireo publish The European Grid Deep Dive News 9 November 2026 Where venture capital can fix Europe’s grid: HTGF and Vireo publish The European Grid Deep Dive zum Artikel News 15 October 2026 Rabot Energy raises $50M: Turning millions of households into a virtual power plant News 15 October 2026 Rabot Energy raises $50M: Turning millions of households"
+      "excerpt": "HTGF | Multi-Stage-VC Platform for Tech Startups | High-Tech Gründerfonds Skip to content Portfolio Investors Team News & Events Login My pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About us Career Portfolio Jobs ESG Contact Login We believe in tech. We invest in people . Backing tech founders, building the future, early on. Europe’s Multi-Stage VC Platform for Tech Founders We invest in tech founders building tomorrow’s technologies – Deep Tech, Life Sciences, Digital Tech. As a Multi-Stage VC Platform, we back them from Pre-Seed to Growth: with capital, network, and the conviction to invest where it’s early, complex, or long-term. Our mission goes beyond any single investment: together, we lay the foundation for a New Wirtschaftswunder – turning German and European innovation into global tech champions. about us Igniting a New Wirtschaftswunder learn more The latest at a glance go to news Last update 7 days ago zum Artikel News 9 November 2026 Where venture capital can fix Europe’s grid: HTGF and Vireo publish The European Grid Deep Dive News 9 November 2026 Where venture capital can fix Europe’s grid: HTGF and Vireo publish The European Grid Deep Dive zum Artikel News 15 October 2026 Rabot Energy raises $50M: Turning millions of households into a virtual power plant News 15 October 2026 Rabot Energy raises $50M: Turning millions of households"
+    },
+    {
+      "id": "check-page-2301c8c57a",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "page": "details",
+      "excerpt": "Some of Germany’s most innovative companies started with us – and grew with us."
+    },
+    {
+      "id": "check-page-b5ef8c913c",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "page": "details",
+      "excerpt": "Our team combines in-depth tech expertise, startup experience and a wealth of know-how in early-stage investing with a unique network: always with an eye on the technologies of tomorrow and sustainable solutions."
+    },
+    {
+      "id": "check-page-7845af4e38",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "page": "details",
+      "excerpt": "We invest flexibly – depending on your needs."
+    },
+    {
+      "id": "check-page-5a05c38eaf",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "page": "details",
+      "excerpt": "We invest in early-stage companies that are no older than three years."
+    },
+    {
+      "id": "check-page-8d456d2dfb",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "page": "details",
+      "excerpt": "Does my company have to be based in Germany?"
+    },
+    {
+      "id": "check-page-b9aa59ae8c",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "page": "details",
+      "excerpt": "Your startup is headquartered in Germany or – in the case of start-ups from other countries – has a German base of operations."
+    },
+    {
+      "id": "check-page-790d03f585",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "page": "details",
+      "excerpt": "Your startup should be active in the fields of digital tech, industrial tech, life sciences, chemistry or related business areas."
+    },
+    {
+      "id": "check-page-de1d97d4e7",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "page": "details",
+      "excerpt": "Newsletter Stay up to date with the latest news Sign up for the newsletter and get the latest news from our network every month. subscribe now Newsletter My Pitch About HTGF Contact About us ESG Opportunities Career Portfolio Jobs News & Events Family Day Press News Contact Office Bonn Office Berlin Office München Social media Member of: © HTGF, 2026 We love founders Cookies Legal notices"
     },
     {
       "id": "check-page-9f21a190fc",
@@ -531,10 +766,154 @@
       "excerpt": "Development and first clinical application of an innovative muscle stimulator for the treatment of the heart insufficiency financially secured Skip to content Portfolio Investors Team News & Events Login My pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About us Career Portfolio Jobs ESG Contact Login ⟨ Back to overview Press 6 October 2011 Development and first clinical application of an innovative muscle stimulator for the treatment of the heart insufficiency financially secured ⌵ The German state Mecklenburg-Vorpommern, the Technologiefonds MV, the High-Tech-Gruenderfonds and the Fides Finanz-Invest place together 1.5 Mio. EUR into the Wismar, Germany located medical technology company Microstim GmbH. In close collaboration with the Clinic of Cardiac Surgery, Lübeck, Germany of the University Hospital Schleswig-Holstein, Germany, Microstim develops a new, tissue-maintaining and function-preserving implantable muscle stimulator for muscle powered cardiac assistance. “This muscle stimulator might be a milestone in the establishment of a new surgical procedure to treat the widespread disease ”cardiac insufficiency”. In this therapy, an electrically stimulated patient’s own muscle of the back supports the diseased heart muscle. In contrast to the heart transplantation, this operative procedure might be available for a large patient population due to"
     },
     {
+      "id": "check-page-642f36a97d",
+      "url": "https://www.htgf.de/en/development-and-first-clinical-application-of-an-innovative-muscle-stimulator-for-the-treatment-of-the-heart-insufficiency-financially-secured/",
+      "page": "application",
+      "excerpt": "Guldner from the Clinic of Cardiac Surgery, Lübeck, Germany."
+    },
+    {
+      "id": "check-page-62da270c91",
+      "url": "https://www.htgf.de/en/development-and-first-clinical-application-of-an-innovative-muscle-stimulator-for-the-treatment-of-the-heart-insufficiency-financially-secured/",
+      "page": "application",
+      "excerpt": "Only in Europe and the USA, 450.000 people died annually, because their heart was not able to pump blood sufficiently."
+    },
+    {
+      "id": "check-page-9689c646b9",
+      "url": "https://www.htgf.de/en/development-and-first-clinical-application-of-an-innovative-muscle-stimulator-for-the-treatment-of-the-heart-insufficiency-financially-secured/",
+      "page": "application",
+      "excerpt": "Bernd Goergen, Senior Investment Manager of the High-Tech Gruenderfonds comments: “Microstim has made tremendous progress since our seed financing and we are highly excited that this has now been acknowledged and rewarded through this financing round with a growing number of investors."
+    },
+    {
+      "id": "check-page-41f83c8015",
+      "url": "https://www.htgf.de/en/development-and-first-clinical-application-of-an-innovative-muscle-stimulator-for-the-treatment-of-the-heart-insufficiency-financially-secured/",
+      "page": "application",
+      "excerpt": "With the help of all partners, nothing is standing in the way for an appropriate market launch.” About Microstim The medical technology company Microstim develops a tissue-maintaining and function-preserving implantable muscle stimulator for muscle powered cardiac assistance."
+    },
+    {
+      "id": "check-page-3d584d9560",
+      "url": "https://www.htgf.de/en/development-and-first-clinical-application-of-an-innovative-muscle-stimulator-for-the-treatment-of-the-heart-insufficiency-financially-secured/",
+      "page": "application",
+      "excerpt": "The fund invests venture capital into innovative and growth-orientated technology companies in Mecklenburg-Vorpommern particularly within the seed, start-up and expansion phase."
+    },
+    {
+      "id": "check-page-cd19aa4871",
+      "url": "https://www.htgf.de/en/development-and-first-clinical-application-of-an-innovative-muscle-stimulator-for-the-treatment-of-the-heart-insufficiency-financially-secured/",
+      "page": "application",
+      "excerpt": "The fund is managed by the GENIUS Venture Capital GmbH."
+    },
+    {
+      "id": "check-page-f63cc2088a",
+      "url": "https://www.htgf.de/en/development-and-first-clinical-application-of-an-innovative-muscle-stimulator-for-the-treatment-of-the-heart-insufficiency-financially-secured/",
+      "page": "application",
+      "excerpt": "Contact: GENIUS Venture Capital GmbH Uwe Bräuer Hagenower Straße 73, 19061 Schwerin Tel: +49 385-3993-500 Fax: + 49 385-3993-510 E-Mail: braeuer@genius-vc.de Internet: www.technologiefonds-mv.de www.genius-vc.de About the Fides Finanz-Invest GmbH & Co.KG The Fides Finanz-Invest GmbH & Co."
+    },
+    {
+      "id": "check-page-67b2a09614",
+      "url": "https://www.htgf.de/en/development-and-first-clinical-application-of-an-innovative-muscle-stimulator-for-the-treatment-of-the-heart-insufficiency-financially-secured/",
+      "page": "application",
+      "excerpt": "KG belongs to the JASIKA group located in Hamburg, Germany."
+    },
+    {
+      "id": "check-page-26f266f92a",
+      "url": "https://www.htgf.de/en/development-and-first-clinical-application-of-an-innovative-muscle-stimulator-for-the-treatment-of-the-heart-insufficiency-financially-secured/",
+      "page": "application",
+      "excerpt": "With proud we look back on many projects all over Germany."
+    },
+    {
+      "id": "check-page-5f66c90d38",
+      "url": "https://www.htgf.de/en/development-and-first-clinical-application-of-an-innovative-muscle-stimulator-for-the-treatment-of-the-heart-insufficiency-financially-secured/",
+      "page": "application",
+      "excerpt": "These comprise mainly real estate for example business buildings in Berlin, Dresden and Essen."
+    },
+    {
+      "id": "check-page-c29c219a36",
+      "url": "https://www.htgf.de/en/development-and-first-clinical-application-of-an-innovative-muscle-stimulator-for-the-treatment-of-the-heart-insufficiency-financially-secured/",
+      "page": "application",
+      "excerpt": "Contact: JASIKA Holding GmbH Am Kaiserkai 53 20457 Hamburg Tel: +49 40 – 369 017-46 Fax: +49 40 – 369 017-51 E-Mail: ms@jasika.de Internet: www.jasika.de About High-Tech Gründerfonds High-Tech Gründerfonds invests venture capital in promising technology companies that turn innovative concepts into viable businesses."
+    },
+    {
+      "id": "check-page-0fd81fa40d",
+      "url": "https://www.htgf.de/en/development-and-first-clinical-application-of-an-innovative-muscle-stimulator-for-the-treatment-of-the-heart-insufficiency-financially-secured/",
+      "page": "application",
+      "excerpt": "Seed financing aims to help start-ups guide their innovation to the prototype or proof-of-concept stage or to market launch."
+    },
+    {
       "id": "check-page-b50fcf6d33",
       "url": "https://www.htgf.de/en/innovative-measurement-for-geothermal-probes-and-industrial-applications/",
       "page": "application",
       "excerpt": "Innovative measurement for geothermal probes and industrial applications Skip to content Portfolio Investors Team News & Events Login My pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About us Career Portfolio Jobs ESG Contact Login ⟨ Back to overview Press 22 October 2015 Innovative measurement for geothermal probes and industrial applications ⌵ HTGF, LBBW Venture and KIC InnoEnergy invest in enOware GmbH Operators of near-surface geothermal probes can get up-to-the-minute relevant system data with GEOsniff and an app. GEOsniff is a wireless, miniaturized measuring capsule, the first product developed by Karlsruhe startup enOware. The measuring capsule delivers data in real time, creates transparency, and helps with optimum monitoring of existing and new geothermal systems. As part of seed financing, the High-Tech Gründerfonds, LBBW Venture Capital GmbH, and KIC InnoEnergy SE are investing in enOware. The GEOsniff solution will profoundly improve the efficiency, reliability and quality of geothermal systems. The principle behind the innovation is easy to explain. The GEOsniff unit, in the shape of a 20mm sphere, navigates the pipe system of a geothermal probe and records measurements like pressure and temperature along the way. The sensor can be logged on and off the geothermal probe via an automated docking station, the GEOsniff BYPASS for"
+    },
+    {
+      "id": "check-page-fcb778dce3",
+      "url": "https://www.htgf.de/en/innovative-measurement-for-geothermal-probes-and-industrial-applications/",
+      "page": "application",
+      "excerpt": "The sensor can be logged on and off the geothermal probe via an automated docking station, the GEOsniff BYPASS for wireless energy and data transmission."
+    },
+    {
+      "id": "check-page-b8175873e5",
+      "url": "https://www.htgf.de/en/innovative-measurement-for-geothermal-probes-and-industrial-applications/",
+      "page": "application",
+      "excerpt": "In Germany alone, more than 300,000 geothermal probes are currently operating, and 20,000 new systems are built each year."
+    },
+    {
+      "id": "check-page-619ab3f972",
+      "url": "https://www.htgf.de/en/innovative-measurement-for-geothermal-probes-and-industrial-applications/",
+      "page": "application",
+      "excerpt": "“A GEOsniff unit with an app, universally applicable, wireless, self-sufficient in terms of energy supply, and wear-free, is ideally prepared for a long life monitoring the fluid environment of a geothermal probe and pipe system.” Dr."
+    },
+    {
+      "id": "check-page-ed10466576",
+      "url": "https://www.htgf.de/en/innovative-measurement-for-geothermal-probes-and-industrial-applications/",
+      "page": "application",
+      "excerpt": "Jens Ortgiese, Business Creation Officer at KIC InnoEnergy Germany, emphasizes the potential of the team behind enOware: “EnOware is based not only on a high-performing concept, but also combines the necessary talent for successfully positioning their products on the market.” About enOware GmbH EnOware GmbH was founded in July 2014 as a spin-off from Systec & Services GmbH."
+    },
+    {
+      "id": "check-page-a2434dcfaa",
+      "url": "https://www.htgf.de/en/innovative-measurement-for-geothermal-probes-and-industrial-applications/",
+      "page": "application",
+      "excerpt": "The product idea for GEOsniff and YouFootprint gained the current enOware team a nomination for the NEO 2013 innovation award, which led to the excubation of the development idea."
+    },
+    {
+      "id": "check-page-66a2f3df19",
+      "url": "https://www.htgf.de/en/innovative-measurement-for-geothermal-probes-and-industrial-applications/",
+      "page": "application",
+      "excerpt": "As a product company, the organization offers mobile sensor systems and software for fluid environments, focusing on geothermal energy and environmental monitoring, and also provides high-level R&D services in this technological field."
+    },
+    {
+      "id": "check-page-2d1a5d5307",
+      "url": "https://www.htgf.de/en/innovative-measurement-for-geothermal-probes-and-industrial-applications/",
+      "page": "application",
+      "excerpt": "17 76131 Karlsruhe Germany Phone: +49 721 132033-00 sim@enoware.de www.enoware.de About LBBW Venture Capital GmbH LBBW Venture Capital GmbH, a subsidiary of LBBW, is the “Center of Competence” for the bank’s Venture Capital and Technology Investments division."
+    },
+    {
+      "id": "check-page-b5424d0921",
+      "url": "https://www.htgf.de/en/innovative-measurement-for-geothermal-probes-and-industrial-applications/",
+      "page": "application",
+      "excerpt": "It has been offering venture capital financing for technology companies in the industrial technology, IT, and life science sectors since 1998."
+    },
+    {
+      "id": "check-page-fde3f8d0d2",
+      "url": "https://www.htgf.de/en/innovative-measurement-for-geothermal-probes-and-industrial-applications/",
+      "page": "application",
+      "excerpt": "For the early founding and seed phase, LBBW Venture is the regional investment partner of the HTGF in Baden-Württemberg."
+    },
+    {
+      "id": "check-page-4e14d52af7",
+      "url": "https://www.htgf.de/en/innovative-measurement-for-geothermal-probes-and-industrial-applications/",
+      "page": "application",
+      "excerpt": "Investors in the Seedfonds BW include the state of Baden-Württemberg (Ministry of Finance and Economy), L-Bank, MBG Mittelständische Beteiligungsgesellschaft Baden-Württemberg GmbH, and LBBW Venture Capital GmbH."
+    },
+    {
+      "id": "check-page-45f3be1e6b",
+      "url": "https://www.htgf.de/en/innovative-measurement-for-geothermal-probes-and-industrial-applications/",
+      "page": "application",
+      "excerpt": "LBBW Venture further invests in young or quickly growing enterprises of up to €3 million, and sees its function as one of long-term partner and of liaison between the startup scene and established mid-sized companies."
+    },
+    {
+      "id": "check-page-c826a088dd",
+      "url": "https://www.htgf.de/en/innovative-measurement-for-geothermal-probes-and-industrial-applications/",
+      "page": "application",
+      "excerpt": "Contact: Christoph Sagemann Investment Manager LBBW Venture Capital GmbH Königstraße 10c, 70173 Stuttgart Germany P: + 49 711 3058920 – 20 F: + 49 711 3058920 – 99 christoph.sagemann@lbbw-venture.de www.lbbw-venture.de About KIC InnoEnergy SE KIC InnoEnergy is the European company for innovation, business startup, and education in the sustainable energy sector."
     },
     {
       "id": "check-page-2f9a00c156",
@@ -543,10 +922,130 @@
       "excerpt": "MedTech Radar Live 2019: Application submission for start-ups is now open Skip to content Portfolio Investors Team News & Events Login My pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About us Career Portfolio Jobs ESG Contact Login ⟨ Back to overview News 6 March 2019 MedTech Radar Live 2019: Application submission for start-ups is now open ⌵ News Article The German Medical Technology Association (BVMed), venture capitalist Earlybird, insurer BARMER, High-Tech Gründerfonds (HTGF), NRW.Bank and the medical technology magazine Medtech Zwo are organizing the second medtech start-up pitch. The pitch is part of the “MedTech Radar Live 2019” conference, which takes place on 5th June 2019 in Berlin and brings young med-tech founders together with representatives of the medical technology industry and potential investors. Industry representatives will discuss the challenges of developing new medical technology solutions, innovations through start-ups and new cooperation models in healthcare. The conference organizers expect around 150 participants. Start-ups or smaller medtech companies with disruptive and innovative business ideas in health-tech are invited to apply for the “Start-up Pitch” until 17th April 2019 at www.medtechradar.live. The focus is on business ideas dealing with digital health, health services, physical therapies, health care or big"
     },
     {
+      "id": "check-page-b1af5269ae",
+      "url": "https://www.htgf.de/en/medtech-radar-live-2019-application-submission-for-start-ups-is-now-open/",
+      "page": "application",
+      "excerpt": "The focus is on business ideas dealing with digital health, health services, physical therapies, health care or big data in the medical sector."
+    },
+    {
+      "id": "check-page-31cda143ce",
+      "url": "https://www.htgf.de/en/medtech-radar-live-2019-application-submission-for-start-ups-is-now-open/",
+      "page": "application",
+      "excerpt": "The jury, consisting of experts from the med-tech industry, health insurance companies as well as financial and marketing experts, will evaluate the submitted pitch decks."
+    },
+    {
+      "id": "check-page-363d781c94",
+      "url": "https://www.htgf.de/en/medtech-radar-live-2019-application-submission-for-start-ups-is-now-open/",
+      "page": "application",
+      "excerpt": "The ten best business ideas will be chosen to present to an expert audience and the “Start-up Pitch” jury at the “MedTech-Radar Live 2019” conference."
+    },
+    {
+      "id": "check-page-ccb7a88e5e",
+      "url": "https://www.htgf.de/en/medtech-radar-live-2019-application-submission-for-start-ups-is-now-open/",
+      "page": "application",
+      "excerpt": "Visitors will benefit from this wide-spread range of health-tech companies all in one place by networking and seeing the latest most relevant innovations in the medtech sector."
+    },
+    {
+      "id": "check-page-62f043a9e7",
+      "url": "https://www.htgf.de/en/medtech-radar-live-2019-application-submission-for-start-ups-is-now-open/",
+      "page": "application",
+      "excerpt": "In addition, selected start-ups will also be included in the “MedTech Radar” publication, jointly published by BVMed, Earlybird, HTGF and BIOCOM-Verlag."
+    },
+    {
+      "id": "check-page-78d9315725",
+      "url": "https://www.htgf.de/en/medtech-radar-live-2019-application-submission-for-start-ups-is-now-open/",
+      "page": "application",
+      "excerpt": "General participants of the “MedTech Radar Live 2019” conference, may register until 29 th May at the BVMed event website: https://www.bvmed.de/de/bvmed/veranstaltungen/2019-06-05-bvmed The registration is free of charge."
+    },
+    {
+      "id": "check-page-6608c88efe",
+      "url": "https://www.htgf.de/en/medtech-radar-live-2019-application-submission-for-start-ups-is-now-open/",
+      "page": "application",
+      "excerpt": "All further information on the programme can be found at www.medtechradar.live About High-Tech Gründerfonds High-Tech Gründerfonds (HTGF) is a seed investor that finances high-potential, tech-driven startups."
+    },
+    {
+      "id": "check-page-7fa9c3ad3b",
+      "url": "https://www.htgf.de/en/medtech-radar-live-2019-application-submission-for-start-ups-is-now-open/",
+      "page": "application",
+      "excerpt": "HTGF’s focus is on high-tech startups in a range of sectors, including software, media, internet, hardware, automation, health care, chemistry and life sciences."
+    },
+    {
       "id": "check-page-3d908237a4",
       "url": "https://www.htgf.de/en/microstim-successfully-raised-funds-for-the-first-clinical-application-of-their-heart-assist-system/",
       "page": "application",
       "excerpt": "Microstim successfully raised funds for the first clinical application of their heart assist system Skip to content Portfolio Investors Team News & Events Login My pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About us Career Portfolio Jobs ESG Contact Login ⟨ Back to overview Press 17 September 2013 Microstim successfully raised funds for the first clinical application of their heart assist system ⌵ The HCS Beteiligungsgesellschaft, the Technologiefonds MV, the High-TechGruenderfonds and the Fides Finanz-Invest invests about 500.000 EUR for the European CE-approval and the first clinical application of the Microstim muscle stimulator. The HCS Beteiligungsgesellschaft, the Technologiefonds MV, the High-Tech Gruenderfonds and the Fides Finanz-Invest invests about 500.000 EUR for the European CE-approval and the first clinical application of the Microstim muscle stimulator. „This new muscle stimulalor plays a key role in the cardiomyoplasty, a surgical procedure for the treatment of patients with the widespread disease ‘congestive heart failure’. In this therapy, patient’s own broad muscle of the back is wrapped around the sick heart and is stimulated electrically by the Microstim implant. Microstim’s significant advancement of the muscle stimulator addresses the protection of the muscular tissue over many years.” says Prof. Dr. med. Norbert W."
+    },
+    {
+      "id": "check-page-546aabbc82",
+      "url": "https://www.htgf.de/en/microstim-successfully-raised-funds-for-the-first-clinical-application-of-their-heart-assist-system/",
+      "page": "application",
+      "excerpt": "Peter Klapproth, co-founder and managing director of the Microstim GmbH. „We are convinced to establish, together with our partners, this highly needed heart failure therapy.“ „Solely in Germany, approximately 300.000 patients probably suffer from dilated cardiomyopathy, a condition in which the heart becomes weakened and enlarged."
+    },
+    {
+      "id": "check-page-e758fba5f6",
+      "url": "https://www.htgf.de/en/microstim-successfully-raised-funds-for-the-first-clinical-application-of-their-heart-assist-system/",
+      "page": "application",
+      "excerpt": "For this technology, we clearly see not only in Germany and Europe, but also worldwide a great demand.” says Hans-Christian Semmler, managing director of the HCS Beteiligungsgesellschaft."
+    },
+    {
+      "id": "check-page-0bfc26f434",
+      "url": "https://www.htgf.de/en/microstim-successfully-raised-funds-for-the-first-clinical-application-of-their-heart-assist-system/",
+      "page": "application",
+      "excerpt": "Peter Klapproth Alter Holzhafen 17b 23966 Wismar Tel.: +49 3841-3030-966 Fax: +49 3841-3030-963 info@microstim.de www.microstim.de About HCS Beteiligungsgesellschaft mbH HCS invests in promising young technology enterprises, which face the challenges of market entry and subsequent growth and internationalization."
+    },
+    {
+      "id": "check-page-e5c97095f1",
+      "url": "https://www.htgf.de/en/microstim-successfully-raised-funds-for-the-first-clinical-application-of-their-heart-assist-system/",
+      "page": "application",
+      "excerpt": "For many entrepreneurs the competent mentoring and preparedness for long-lasting engagements are compelling reasons to choose HCS’s participation."
+    },
+    {
+      "id": "check-page-f15c5f4667",
+      "url": "https://www.htgf.de/en/microstim-successfully-raised-funds-for-the-first-clinical-application-of-their-heart-assist-system/",
+      "page": "application",
+      "excerpt": "HCS’s area of operations mainly lies within Germany and Austria."
+    },
+    {
+      "id": "check-page-4511705177",
+      "url": "https://www.htgf.de/en/microstim-successfully-raised-funds-for-the-first-clinical-application-of-their-heart-assist-system/",
+      "page": "application",
+      "excerpt": "The fund invests venture capital into innovative and growth-orientated technology companies in Mecklenburg-Vorpommern particularly within the seed, start-up and expansion phase."
+    },
+    {
+      "id": "check-page-28819fa3f9",
+      "url": "https://www.htgf.de/en/microstim-successfully-raised-funds-for-the-first-clinical-application-of-their-heart-assist-system/",
+      "page": "application",
+      "excerpt": "The fund is managed by the GENIUS Venture Capital GmbH."
+    },
+    {
+      "id": "check-page-c03eaddf77",
+      "url": "https://www.htgf.de/en/microstim-successfully-raised-funds-for-the-first-clinical-application-of-their-heart-assist-system/",
+      "page": "application",
+      "excerpt": "Contact: GENIUS Venture Capital GmbH Uwe Bräuer Hagenower Straße 73 19061 Schwerin Tel: +49 385-3993-500 Fax:+ 49 385-3993-510 braeuer@genius-vc.de www.technologiefonds-mv.de www.genius-vc.de About Fides Finanz-Invest The Fides Finanz-Invest GmbH & Co."
+    },
+    {
+      "id": "check-page-470a78d58c",
+      "url": "https://www.htgf.de/en/microstim-successfully-raised-funds-for-the-first-clinical-application-of-their-heart-assist-system/",
+      "page": "application",
+      "excerpt": "KG belongs to the JASIKA group located in Hamburg, Germany."
+    },
+    {
+      "id": "check-page-36fa14149f",
+      "url": "https://www.htgf.de/en/microstim-successfully-raised-funds-for-the-first-clinical-application-of-their-heart-assist-system/",
+      "page": "application",
+      "excerpt": "With proud we look back on many projects all over Germany."
+    },
+    {
+      "id": "check-page-0db4321a08",
+      "url": "https://www.htgf.de/en/microstim-successfully-raised-funds-for-the-first-clinical-application-of-their-heart-assist-system/",
+      "page": "application",
+      "excerpt": "These comprise mainly real estate for example business buildings in Berlin, Dresden and Essen."
+    },
+    {
+      "id": "check-page-561818254d",
+      "url": "https://www.htgf.de/en/microstim-successfully-raised-funds-for-the-first-clinical-application-of-their-heart-assist-system/",
+      "page": "application",
+      "excerpt": "Contact: JASIKA Holding GmbH Am Kaiserkai 53 20457 Hamburg Tel: +49 40 – 369 017-46 Fax: +49 40 – 369 017-51 ms@jasika.de www.jasika.de About High-Tech Gruenderfonds High-Tech Gruenderfonds invests in young, high potential high-tech start-ups."
     },
     {
       "id": "check-page-6b285c7177",
@@ -555,10 +1054,124 @@
       "excerpt": "New safety-solution for industrial applications: Keeper – Beeper – Collision-Sweeper Skip to content Portfolio Investors Team News & Events Login My pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About us Career Portfolio Jobs ESG Contact Login ⟨ Back to overview Press 21 November 2014 New safety-solution for industrial applications: Keeper – Beeper – Collision-Sweeper ⌵ Comnovo GmbH, a spin-off from the Communication Networks Institute at TU Dortmund, develops and distributes innovative warning systems to avoid collisions between humans and mobile vehicles. The wireless technology for precise distance measurement around the vehicle has received several awards, including the ICT Innovation business plan competition and the Health and Safety award of the professional association BG RCI. Today Comnovo announces that it has raised financing from High-Tech Gründerfonds and SeedCapital Dortmund. The funds for this round serve the further development of the distribution network and the technology. Accidents with mobile machines such as wheel loaders or forklifts are regularly the cause of serious or sometimes fatal injuries. Apart from the human harm, lasting financial compensation and pension payments and serious legal consequences for those responsible for the companies are connected with such an event. Comnovo closes the safety gap by a novel"
     },
     {
+      "id": "check-page-c5607be630",
+      "url": "https://www.htgf.de/en/new-safety-solution-for-industrial-applications-keeper-beeper-collision-sweeper/",
+      "page": "application",
+      "excerpt": "Nico Hemmann, Investment Manager of Seed Capital Dortmund, agrees: “Comnovo has already understood to establish their safety solution on the market during the EXIST research transfer project."
+    },
+    {
+      "id": "check-page-f10078e098",
+      "url": "https://www.htgf.de/en/new-safety-solution-for-industrial-applications-keeper-beeper-collision-sweeper/",
+      "page": "application",
+      "excerpt": "13 44227 Dortmund Tel .: +49 (231) 9742-7240 lewandowski@comnovo.de www.comnovo.de About SeedCapital Dortmund SeedCapital Dortmund invests in young, innovative high-tech start-ups companies."
+    },
+    {
+      "id": "check-page-5a26926c88",
+      "url": "https://www.htgf.de/en/new-safety-solution-for-industrial-applications-keeper-beeper-collision-sweeper/",
+      "page": "application",
+      "excerpt": "The seed financing provided is designed to enable start-ups to take an idea through prototyping to market launch."
+    },
+    {
+      "id": "check-page-a627e56ac8",
+      "url": "https://www.htgf.de/en/new-safety-solution-for-industrial-applications-keeper-beeper-collision-sweeper/",
+      "page": "application",
+      "excerpt": "SeedCapital Dortmund invests up to EUR 500,000 in the seed stage, with the potential for up to a total of EUR 1,5 million per portfolio company in follow-on financing."
+    },
+    {
+      "id": "check-page-8d8f7d8714",
+      "url": "https://www.htgf.de/en/new-safety-solution-for-industrial-applications-keeper-beeper-collision-sweeper/",
+      "page": "application",
+      "excerpt": "Contact: Seed Capital Dortmund GmbH & Co."
+    },
+    {
+      "id": "check-page-1cce568ccb",
+      "url": "https://www.htgf.de/en/new-safety-solution-for-industrial-applications-keeper-beeper-collision-sweeper/",
+      "page": "application",
+      "excerpt": "KG Nico Hemmann Freistuhl 2 44137 Dortmund Tel .: +49 (231) 183342-0113 Fax: +49 (231) 183342-99 info@seed-do.de www.seedcapital-dortmund.de About High-Tech Gruenderfonds High-Tech Gruenderfonds invests in young, high potential high-tech start-ups."
+    },
+    {
+      "id": "check-page-d52b0115ba",
+      "url": "https://www.htgf.de/en/new-safety-solution-for-industrial-applications-keeper-beeper-collision-sweeper/",
+      "page": "application",
+      "excerpt": "The seed financing provided is designed to enable start-ups to take an idea through prototyping and to market launch."
+    },
+    {
+      "id": "check-page-aa2a86e7c8",
+      "url": "https://www.htgf.de/en/new-safety-solution-for-industrial-applications-keeper-beeper-collision-sweeper/",
+      "page": "application",
+      "excerpt": "Typically, High-Tech Gruenderfonds invests EUR 500,000 in the seed stage, with the potential for up to a total of EUR 2 million per portfolio company in follow-on financing."
+    },
+    {
+      "id": "check-page-ff2b234ca7",
+      "url": "https://www.htgf.de/en/new-safety-solution-for-industrial-applications-keeper-beeper-collision-sweeper/",
+      "page": "application",
+      "excerpt": "Investors in this public/private partnership include the Federal Ministry of Economics and Energy, the KfW Banking Group, as well as strategic corporate investors including ALTANA, BASF, Bayer, B."
+    },
+    {
+      "id": "check-page-81242be47a",
+      "url": "https://www.htgf.de/en/new-safety-solution-for-industrial-applications-keeper-beeper-collision-sweeper/",
+      "page": "application",
+      "excerpt": "Klaus Schäfer joins Cyclize in an operational role ⟨ Back to overview Newsletter My Pitch About HTGF Contact About us ESG Opportunities Career Portfolio Jobs News & Events Family Day Press News Contact Office Bonn Office Berlin Office München Social media Member of: © HTGF, 2026 We love founders Cookies Legal notices"
+    },
+    {
       "id": "check-page-835926ebc0",
       "url": "https://www.htgf.de/kiwigrid-entwickelt-bsi-konforme-smart-grid-application-plattform-mit-security-loesung-von-gemalto/",
       "page": "application",
       "excerpt": "Kiwigrid entwickelt BSI-konforme Smart Grid Application Plattform mit Security Lösung von Gemalto Zum Inhalt springen Portfolio Investors Team News & Events Login Mein Pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About Career Portfolio Jobs ESG Contact Login ⟨ Zurück zur Übersicht Presse 6. Januar 2015 Kiwigrid entwickelt BSI-konforme Smart Grid Application Plattform mit Security Lösung von Gemalto ⌵ News Artikel Das Dresdner Start Up Kiwigrid kooperiert mit Gemalto bei der Entwicklung und Vermarktung seiner neuartigen Smart Grid Application Plattform. Die Zusammenarbeit zielt auf die Entwicklung einer schlüsselfertigen Smart Grid Plattform ab, welche die Anforderungen an ein Smart Metering Gateway (SMGW) und den Gateway Administrator (SMGWA) nach BSI Schutzprofil erfüllt. Zudem ermöglicht die Plattform individuelle Applikationsentwicklung für zukünftige Mehrwert-Dienstleistungen. Die Zusammenarbeit soll den großflächigen Einsatz hochsicherer Service Management Gateways für den 2015 anstehenden Roll-Out intelligenter Mess-Systeme fördern. Neben den festgeschriebenen Smart Meter Funktionalitäten ermöglicht die Gesamtlösung den Einsatz weiterführender Angebote wie Gebäudemanagement. Ab 2015 soll der deutschlandweite Smart Meter Roll-Out starten. Energieversorger erhalten mit dem Smart Metering Gateway und der schlüsselfertigen Smart Grid"
+    },
+    {
+      "id": "check-page-7d89ca9af9",
+      "url": "https://www.htgf.de/kiwigrid-entwickelt-bsi-konforme-smart-grid-application-plattform-mit-security-loesung-von-gemalto/",
+      "page": "application",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-7d89ca9af9",
+      "url": "https://www.htgf.de/kiwigrid-entwickelt-bsi-konforme-smart-grid-application-plattform-mit-security-loesung-von-gemalto/",
+      "page": "application",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-b584ef130c",
+      "url": "https://www.htgf.de/kiwigrid-entwickelt-bsi-konforme-smart-grid-application-plattform-mit-security-loesung-von-gemalto/",
+      "page": "application",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive News 9."
+    },
+    {
+      "id": "check-page-0f2091f698",
+      "url": "https://www.htgf.de/kiwigrid-entwickelt-bsi-konforme-smart-grid-application-plattform-mit-security-loesung-von-gemalto/",
+      "page": "application",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive zum Artikel News 15."
+    },
+    {
+      "id": "check-page-ae35f18e3e",
+      "url": "https://www.htgf.de/kiwigrid-entwickelt-bsi-konforme-smart-grid-application-plattform-mit-security-loesung-von-gemalto/",
+      "page": "application",
+      "excerpt": "Oktober 2026 Rabot Energy erhält 50 Millionen: Aus Millionen Haushalten wird ein virtuelles Kraftwerk News 15."
+    },
+    {
+      "id": "check-page-4a1d511240",
+      "url": "https://www.htgf.de/kiwigrid-entwickelt-bsi-konforme-smart-grid-application-plattform-mit-security-loesung-von-gemalto/",
+      "page": "application",
+      "excerpt": "Oktober 2026 Rabot Energy erhält 50 Millionen: Aus Millionen Haushalten wird ein virtuelles Kraftwerk zum Artikel News 13."
+    },
+    {
+      "id": "check-page-7a06e53834",
+      "url": "https://www.htgf.de/kiwigrid-entwickelt-bsi-konforme-smart-grid-application-plattform-mit-security-loesung-von-gemalto/",
+      "page": "application",
+      "excerpt": "Oktober 2026 Finches erhält 2 Millionen Euro Pre-Seed für KI-Frühwarnsystem im Agrareinkauf News 8."
+    },
+    {
+      "id": "check-page-5b13513291",
+      "url": "https://www.htgf.de/kiwigrid-entwickelt-bsi-konforme-smart-grid-application-plattform-mit-security-loesung-von-gemalto/",
+      "page": "application",
+      "excerpt": "Oktober 2026 Finches erhält 2 Millionen Euro Pre-Seed für KI-Frühwarnsystem im Agrareinkauf zum Artikel News 8."
+    },
+    {
+      "id": "check-page-0a7cadc4ad",
+      "url": "https://www.htgf.de/kiwigrid-entwickelt-bsi-konforme-smart-grid-application-plattform-mit-security-loesung-von-gemalto/",
+      "page": "application",
+      "excerpt": "Oktober 2026 KI-Agenten für Finanz- und Versicherungsberater: TODAY sichert sich €2,8M Seed-Finanzierung News 8."
     },
     {
       "id": "check-page-55c1ccf78b",
@@ -567,10 +1180,148 @@
       "excerpt": "5 Millionen Euro Seed-Investment für Saarbrücker Startup Natif.ai Zum Inhalt springen Portfolio Investors Team News & Events Login Mein Pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About Career Portfolio Jobs ESG Contact Login ⟨ Zurück zur Übersicht News 9. März 2022 5 Millionen Euro Seed-Investment für Saarbrücker Startup Natif.ai ⌵ News Artikel Das Deep-Tech-Startup gewinnt weitere bekannte Investoren. Seine Zukunftstechnologie auf Basis Künstlicher Intelligenz automatisiert dokumentenbasierte Prozesse und befreit so Mitarbeiter von Papierkram. Saarbrücken, 09.03.2022 – Das Saarbrücker Startup Natif.ai konnte in einer Seed- Finanzierungsrunde weitere Investoren für sich gewinnen: Angeführt wird die Runde der Kapitalgeber von Redalpine, einem führenden europäischen Early-Stage Investor. F-LOG Ventures, ein auf Logistik spezialisierter Fonds, und der Serial-Entrepreneur und Business Angel Phillipp Rechberg vervollständigen die Finanzierungsrunde. Sie ergänzen die bestehenden Pre-Seed-Investoren 468 Capital, den High-Tech Gründerfonds (HTGF) und Premius, die in dieser Runde ebenfalls investieren. Die Gründer von Natif.ai haben eine enorme Marktchance erkannt. Dokumente aller Art sind omnipräsent in der Geschäftskommunikation, und jedes Unternehmen wird diese Prozesse früher oder später automatisieren wollen. Mit seiner führenden KI-Technologie für"
     },
     {
+      "id": "check-page-a826ce4ae5",
+      "url": "https://www.htgf.de/5-millionen-euro-seed-investment-fuer-natif-ai/",
+      "page": "terms",
+      "excerpt": "Zu den typischen Kunden zählen Banken, Versicherungen, Kanzleien, sowie Software-Anbieter und Tech-Firmen. Über Natif.ai Natif.ai ist ein Deep-Tech Startup, im Bereich der Intelligenten Dokumenten Prozessautomation (IDP)."
+    },
+    {
+      "id": "check-page-18e50d4dbe",
+      "url": "https://www.htgf.de/5-millionen-euro-seed-investment-fuer-natif-ai/",
+      "page": "terms",
+      "excerpt": "Der Fokus liegt auf High-Tech Gründungen aus den Bereichen Digital Tech, Industrial-Tech, Life Sciences, Chemie und angrenzende Geschäftsfelder."
+    },
+    {
+      "id": "check-page-a6223d1eed",
+      "url": "https://www.htgf.de/5-millionen-euro-seed-investment-fuer-natif-ai/",
+      "page": "terms",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-a6223d1eed",
+      "url": "https://www.htgf.de/5-millionen-euro-seed-investment-fuer-natif-ai/",
+      "page": "terms",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-bc29eddaf6",
+      "url": "https://www.htgf.de/5-millionen-euro-seed-investment-fuer-natif-ai/",
+      "page": "terms",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive News 9."
+    },
+    {
+      "id": "check-page-d3919fc02a",
+      "url": "https://www.htgf.de/5-millionen-euro-seed-investment-fuer-natif-ai/",
+      "page": "terms",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive zum Artikel News 15."
+    },
+    {
+      "id": "check-page-58dc501d85",
+      "url": "https://www.htgf.de/5-millionen-euro-seed-investment-fuer-natif-ai/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Rabot Energy erhält 50 Millionen: Aus Millionen Haushalten wird ein virtuelles Kraftwerk News 15."
+    },
+    {
+      "id": "check-page-bb73b15112",
+      "url": "https://www.htgf.de/5-millionen-euro-seed-investment-fuer-natif-ai/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Rabot Energy erhält 50 Millionen: Aus Millionen Haushalten wird ein virtuelles Kraftwerk zum Artikel News 13."
+    },
+    {
+      "id": "check-page-dce413f51e",
+      "url": "https://www.htgf.de/5-millionen-euro-seed-investment-fuer-natif-ai/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Finches erhält 2 Millionen Euro Pre-Seed für KI-Frühwarnsystem im Agrareinkauf News 8."
+    },
+    {
+      "id": "check-page-135dfd2d53",
+      "url": "https://www.htgf.de/5-millionen-euro-seed-investment-fuer-natif-ai/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Finches erhält 2 Millionen Euro Pre-Seed für KI-Frühwarnsystem im Agrareinkauf zum Artikel News 8."
+    },
+    {
+      "id": "check-page-ccc71b8434",
+      "url": "https://www.htgf.de/5-millionen-euro-seed-investment-fuer-natif-ai/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 KI-Agenten für Finanz- und Versicherungsberater: TODAY sichert sich €2,8M Seed-Finanzierung News 8."
+    },
+    {
       "id": "check-page-c900d6e119",
       "url": "https://www.htgf.de/berliner-bitcoin-startup-bitwala-bekommt-e800k-als-seed-investment-um-den-globalen-geldtransfer-zu-revolutionieren/",
       "page": "terms",
       "excerpt": "Berliner Bitcoin Startup Bitwala bekommt €800k als Seed Investment, um den globalen Geldtransfer zu revolutionieren Zum Inhalt springen Portfolio Investors Team News & Events Login Mein Pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About Career Portfolio Jobs ESG Contact Login ⟨ Zurück zur Übersicht News 4. April 2016 Berliner Bitcoin Startup Bitwala bekommt €800k als Seed Investment, um den globalen Geldtransfer zu revolutionieren ⌵ News Artikel Bitwala gibt heute bekannt, dass die Firma €800k in ihrer ersten Finanzierungsrunde erhält, um internationale Zahlungen über die Blockchain zu ermöglichen. Die Investoren sind der High-Tech-Gründerfonds (HTGF), der größte deutsche Seed-Investor, und die Digital Currency Group (DCG), der weltweit führende Bitcoin & Blockchain Investor. Traditionelle Banken sind im internationalen Zahlungsverkehr nicht länger wettbewerbsfähig, da ihre internationale Zahlungen langsam, teuer und kompliziert sind. Bitwala bietet seit 2015 die schnellste Lösung an, um Geld zu einem Bruchteil der Kosten global zu versenden. Bitwala basiert auf der Blockchain und erfindet konventionelles Banking neu. Bitwala bietet die besten Wechselkurse am Markt, Überweisungen noch am gleichen Tag und mit 0.5% die weltweit günstigsten Gebühren. Mit der Bitwala Debit Karte vereinfacht und verbessert Bitwala die Art wie Nutzer ihre täglichen"
+    },
+    {
+      "id": "check-page-4b9352a171",
+      "url": "https://www.htgf.de/berliner-bitcoin-startup-bitwala-bekommt-e800k-als-seed-investment-um-den-globalen-geldtransfer-zu-revolutionieren/",
+      "page": "terms",
+      "excerpt": "Sie sind die Gründer von Bitcoins Berlin, dem ersten Bitcoin Startup Incubator Europas."
+    },
+    {
+      "id": "check-page-bc3b59aa4a",
+      "url": "https://www.htgf.de/berliner-bitcoin-startup-bitwala-bekommt-e800k-als-seed-investment-um-den-globalen-geldtransfer-zu-revolutionieren/",
+      "page": "terms",
+      "excerpt": "In der nahen Vergangenheit ist das öffentliche Interesse an Bitcoin und Blockchain seitens der globalen Medien und Investoren drastisch gewachsen."
+    },
+    {
+      "id": "check-page-5eace5badd",
+      "url": "https://www.htgf.de/berliner-bitcoin-startup-bitwala-bekommt-e800k-als-seed-investment-um-den-globalen-geldtransfer-zu-revolutionieren/",
+      "page": "terms",
+      "excerpt": "Die Seed-Finanzierung ermöglicht Fachkräfte für Entwicklung und Marketing einzustellen, gute Partnerschaften zu schließen und das Produkt schnellstmöglich global auf zu stellen."
+    },
+    {
+      "id": "check-page-aa646bafe6",
+      "url": "https://www.htgf.de/berliner-bitcoin-startup-bitwala-bekommt-e800k-als-seed-investment-um-den-globalen-geldtransfer-zu-revolutionieren/",
+      "page": "terms",
+      "excerpt": "Die Blockchain Infrastruktur bietet hierbei eine einfache, sichere und kosteneffiziente Lösung, um Geld international zu transferieren.” sagt Chiara Sommer, Investment Managerin beim High-Tech-Gründerfonds ( HTGF )."
+    },
+    {
+      "id": "check-page-232759a560",
+      "url": "https://www.htgf.de/berliner-bitcoin-startup-bitwala-bekommt-e800k-als-seed-investment-um-den-globalen-geldtransfer-zu-revolutionieren/",
+      "page": "terms",
+      "excerpt": "Barry Silbert ist der aktivste Investor in der Bitcoin und Blockchain Industrie."
+    },
+    {
+      "id": "check-page-416cb22d01",
+      "url": "https://www.htgf.de/berliner-bitcoin-startup-bitwala-bekommt-e800k-als-seed-investment-um-den-globalen-geldtransfer-zu-revolutionieren/",
+      "page": "terms",
+      "excerpt": "Der strategische Investor fördert Teams, die neue Wege mit der Blockchain Technologie gehen und die Bitcoin Währung einer breiten Öffentlichkeit zugänglich machen."
+    },
+    {
+      "id": "check-page-6e8ede9388",
+      "url": "https://www.htgf.de/berliner-bitcoin-startup-bitwala-bekommt-e800k-als-seed-investment-um-den-globalen-geldtransfer-zu-revolutionieren/",
+      "page": "terms",
+      "excerpt": "Für weitere Informationen und Features von Bitwala besuchen Sie bitte: https://bitwa.la. Über Bitwala Bitwala wurde im Frühjahr 2015 in Berlin gegründet."
+    },
+    {
+      "id": "check-page-2ff378615d",
+      "url": "https://www.htgf.de/berliner-bitcoin-startup-bitwala-bekommt-e800k-als-seed-investment-um-den-globalen-geldtransfer-zu-revolutionieren/",
+      "page": "terms",
+      "excerpt": "Kontakt: Jörg von Minckwitz, CEO Bitwala GmbH Ohlauer Strasse 43, 10999 Berlin Office: +49 (0) 30 8939 8563 support@bitwa.la Über Digital Currency Group DCG hat ihren Hauptsitz in New York und ist der aktivste Investor in der Blockchain & Bitcoin Industrie."
+    },
+    {
+      "id": "check-page-c617a792ce",
+      "url": "https://www.htgf.de/berliner-bitcoin-startup-bitwala-bekommt-e800k-als-seed-investment-um-den-globalen-geldtransfer-zu-revolutionieren/",
+      "page": "terms",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-c617a792ce",
+      "url": "https://www.htgf.de/berliner-bitcoin-startup-bitwala-bekommt-e800k-als-seed-investment-um-den-globalen-geldtransfer-zu-revolutionieren/",
+      "page": "terms",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-8d439c79cb",
+      "url": "https://www.htgf.de/berliner-bitcoin-startup-bitwala-bekommt-e800k-als-seed-investment-um-den-globalen-geldtransfer-zu-revolutionieren/",
+      "page": "terms",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive News 9."
+    },
+    {
+      "id": "check-page-ef8a8d32d6",
+      "url": "https://www.htgf.de/berliner-bitcoin-startup-bitwala-bekommt-e800k-als-seed-investment-um-den-globalen-geldtransfer-zu-revolutionieren/",
+      "page": "terms",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive zum Artikel News 15."
     },
     {
       "id": "check-page-ff4c110ef5",
@@ -579,10 +1330,154 @@
       "excerpt": "Computer Aided Engineering im KI-Zeitalter: Neural Concept SA erhält siebenstelliges Investment von Constantia New Business und HTGF Zum Inhalt springen Portfolio Investors Team News & Events Login Mein Pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About Career Portfolio Jobs ESG Contact Login ⟨ Zurück zur Übersicht News 22. Mai 2019 Computer Aided Engineering im KI-Zeitalter: Neural Concept SA erhält siebenstelliges Investment von Constantia New Business und HTGF ⌵ News Artikel Verfahren der Künstlichen Intelligenz (KI) wie Deep Learning haben die Verarbeitung von Bildern, Geräuschen und natürlicher Sprache revolutioniert. Softwarelösungen für Computer-Aided Design (CAD) zur Entwicklung technischer Produkte basieren jedoch immer noch auf traditionellen Technologien. Neural Concept Shape ist die erste Deep-Learning-basierte Software, die speziell für das Thema Computer Assisted Engineering and Design entwickelt wurde. Die cloud-basierte Simulationssoftware ermöglicht es Kunden, Entwicklungszyklen zu verkürzen, die Produktleistung zu verbessern und die Rechenkosten zu senken. Die Marktchance Jeder Ingenieur ist bestrebt, ein Produkt zu entwerfen, das spezifische Anforderungen erfüllt und ein definiertes Ziel mit einem Höchstmaß an Leistung erreicht. Der heutige Standardansatz in Branchen wie Automotive, Luft- und Raumfahrt, Robotik oder Energie"
     },
     {
+      "id": "check-page-75e41c12d0",
+      "url": "https://www.htgf.de/computer-aided-engineering-im-ki-zeitalter-neural-concept-sa-erhaelt-siebenstelliges-investment-von-constantia-new-business-und-htgf/",
+      "page": "terms",
+      "excerpt": "Der heutige Standardansatz in Branchen wie Automotive, Luft- und Raumfahrt, Robotik oder Energie besteht darin, mit CAD-basierter Simulationssoftware, z.B."
+    },
+    {
+      "id": "check-page-3be21caea3",
+      "url": "https://www.htgf.de/computer-aided-engineering-im-ki-zeitalter-neural-concept-sa-erhaelt-siebenstelliges-investment-von-constantia-new-business-und-htgf/",
+      "page": "terms",
+      "excerpt": "CEO Pierre Baqué promovierte in Artificial Intelligence an der EPFL (Lausanne) und hat sein Studium an der Ecole Polytechnique (Paris) abgeschlossen."
+    },
+    {
+      "id": "check-page-c9087b7478",
+      "url": "https://www.htgf.de/computer-aided-engineering-im-ki-zeitalter-neural-concept-sa-erhaelt-siebenstelliges-investment-von-constantia-new-business-und-htgf/",
+      "page": "terms",
+      "excerpt": "CTO Timur Bagautdinov hat ebenfalls einen PhD in Artificial Intelligence der EPFL."
+    },
+    {
+      "id": "check-page-e14d42ad94",
+      "url": "https://www.htgf.de/computer-aided-engineering-im-ki-zeitalter-neural-concept-sa-erhaelt-siebenstelliges-investment-von-constantia-new-business-und-htgf/",
+      "page": "terms",
+      "excerpt": "Er arbeitete als KI-Forscher und Entwickler für Facebook und Yandex an Machine Learning und Virtual Reality-Anwendungen."
+    },
+    {
+      "id": "check-page-223d0df774",
+      "url": "https://www.htgf.de/computer-aided-engineering-im-ki-zeitalter-neural-concept-sa-erhaelt-siebenstelliges-investment-von-constantia-new-business-und-htgf/",
+      "page": "terms",
+      "excerpt": "François Fleuret, Leiter der Machine Learning Group am Forschungsinstitut IDIAP und Deep Learning Dozent an der EPFL, sind ebenfalls Gründungsmitglieder von Neural Concept."
+    },
+    {
+      "id": "check-page-529d98470b",
+      "url": "https://www.htgf.de/computer-aided-engineering-im-ki-zeitalter-neural-concept-sa-erhaelt-siebenstelliges-investment-von-constantia-new-business-und-htgf/",
+      "page": "terms",
+      "excerpt": "Kontakt: Neural Concept Thomas Vontschammer Thomas.vontschammer@neuralconcept.com contact@neuralconcept.com www.neuralconcept.com Über Constantia New Business GmbH Constantia New Business (CNB) ist ein unabhängiger Frühphaseninvestor mit Fokus auf B2B Produktunternehmen, die erste Marktvalidierung erreichen konnten."
+    },
+    {
+      "id": "check-page-5d081b4140",
+      "url": "https://www.htgf.de/computer-aided-engineering-im-ki-zeitalter-neural-concept-sa-erhaelt-siebenstelliges-investment-von-constantia-new-business-und-htgf/",
+      "page": "terms",
+      "excerpt": "Der Fokus liegt auf High-Tech Gründungen aus den Branchen Software, Medien und Internet sowie Hardware, Automation, Healthcare, Chemie und Life Sciences. Über 2 Milliarden Euro Kapital investierten externe Investoren bislang in rund 1.400 Folgefinanzierungsrunden in das HTGF-Portfolio."
+    },
+    {
+      "id": "check-page-6abf192284",
+      "url": "https://www.htgf.de/computer-aided-engineering-im-ki-zeitalter-neural-concept-sa-erhaelt-siebenstelliges-investment-von-constantia-new-business-und-htgf/",
+      "page": "terms",
+      "excerpt": "Kontakt: High-Tech Gründerfonds Management GmbH Gregor Haidl Schlegelstraße 2 53113 Bonn T.: +49 228 82300 125 g.haidl@htgf.de www.htgf.de Über Venture Kick Venture Kick unterstützt Start-up-Projekte in der Seed-Phase, um wissenschaftliche Innovationen in unternehmerische Aktivitäten umzuwandeln – mit dem Ziel, Arbeitsplätze zu schaffen sowie den sozialen und wirtschaftlichen Wohlstand zu fördern."
+    },
+    {
+      "id": "check-page-77ff03a385",
+      "url": "https://www.htgf.de/computer-aided-engineering-im-ki-zeitalter-neural-concept-sa-erhaelt-siebenstelliges-investment-von-constantia-new-business-und-htgf/",
+      "page": "terms",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-77ff03a385",
+      "url": "https://www.htgf.de/computer-aided-engineering-im-ki-zeitalter-neural-concept-sa-erhaelt-siebenstelliges-investment-von-constantia-new-business-und-htgf/",
+      "page": "terms",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-c2e6e252a6",
+      "url": "https://www.htgf.de/computer-aided-engineering-im-ki-zeitalter-neural-concept-sa-erhaelt-siebenstelliges-investment-von-constantia-new-business-und-htgf/",
+      "page": "terms",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive News 9."
+    },
+    {
+      "id": "check-page-d734e56827",
+      "url": "https://www.htgf.de/computer-aided-engineering-im-ki-zeitalter-neural-concept-sa-erhaelt-siebenstelliges-investment-von-constantia-new-business-und-htgf/",
+      "page": "terms",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive zum Artikel News 15."
+    },
+    {
       "id": "check-page-745f0e8fb5",
       "url": "https://www.htgf.de/comydo-smarter-haustueroeffner-fuer-paketboten-sichert-sich-hohes-sechsstelliges-seed-investment/",
       "page": "terms",
       "excerpt": "Comydo: Smarter Haustüröffner für Paketboten sichert sich hohes sechsstelliges Seed-Investment Zum Inhalt springen Portfolio Investors Team News & Events Login Mein Pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About Career Portfolio Jobs ESG Contact Login ⟨ Zurück zur Übersicht Presse 1. Oktober 2019 Comydo: Smarter Haustüröffner für Paketboten sichert sich hohes sechsstelliges Seed-Investment ⌵ News Artikel Comydo bietet ein vernetztes Türöffnungssystem mit Barcode-Scanner, das einen leichteren Zugang zu Mehrfamilienhäusern erlauben soll. Paketzusteller stehen mit Comydo nicht mehr vor verschlossener Haustür oder klingeln wild bei allen Bewohnern. „Wir machen das Paket zum Schlüssel, um den Boten in den Eingangsbereich von Mehrfamilienhäuern zu lassen“, sagt CEO und Co-Founder, Julian Wulf. Comydo nutzt die vorhandenen Sendungsetiketten und Schnittstellen zur Sendungsverfolgung, um die Tür freizugeben. Alle relevanten Logistikdienstleister sind angeschlossen und damit 95% des B2C-Marktes abgedeckt. Die Hausverwaltung kann wiederum Dienstleistern per QR-Code oder Klick aus der Ferne die Tür öffnen. Zusätzlich gibt es viele weitere Anwendungsfälle in Bereichen, in denen ein schneller, flexibler Zugang gefragt ist. Beispiele sind 24/7-Abholung-und-Anlieferung von Waren, der Zugang zu Co-Working-Spaces Parkraummanagement oder spezielle"
+    },
+    {
+      "id": "check-page-717e417053",
+      "url": "https://www.htgf.de/comydo-smarter-haustueroeffner-fuer-paketboten-sichert-sich-hohes-sechsstelliges-seed-investment/",
+      "page": "terms",
+      "excerpt": "Beispiele sind 24/7-Abholung-und-Anlieferung von Waren, der Zugang zu Co-Working-Spaces Parkraummanagement oder spezielle Kundenbereiche, wie Waschräume."
+    },
+    {
+      "id": "check-page-2ce9f046f0",
+      "url": "https://www.htgf.de/comydo-smarter-haustueroeffner-fuer-paketboten-sichert-sich-hohes-sechsstelliges-seed-investment/",
+      "page": "terms",
+      "excerpt": "In der Finanzierungsrunde investieren der High-Tech Gründerfonds, der Innovationsstarter Fonds Hamburg, und Anyon, ein PropTech VC Investor."
+    },
+    {
+      "id": "check-page-07e5b73f10",
+      "url": "https://www.htgf.de/comydo-smarter-haustueroeffner-fuer-paketboten-sichert-sich-hohes-sechsstelliges-seed-investment/",
+      "page": "terms",
+      "excerpt": "Comydo zeigt das enorme Potential, das PropTech Unternehmen für diverse Stakeholder der Immobilienbranche heben.“ Über Comydo Comydo bietet einfaches und flexibles Zugangsmanagement für die Wohnungswirtschaft und Business-Applikationen."
+    },
+    {
+      "id": "check-page-2ca25cc9d3",
+      "url": "https://www.htgf.de/comydo-smarter-haustueroeffner-fuer-paketboten-sichert-sich-hohes-sechsstelliges-seed-investment/",
+      "page": "terms",
+      "excerpt": "Das Unternehmen verfügt über umfassendes Know-How im IoT-Bereich."
+    },
+    {
+      "id": "check-page-f314231275",
+      "url": "https://www.htgf.de/comydo-smarter-haustueroeffner-fuer-paketboten-sichert-sich-hohes-sechsstelliges-seed-investment/",
+      "page": "terms",
+      "excerpt": "Mehr: www.innovationsstarter.com Kontakt IFB Innovationsstarter GmbH Dörte Bunge Besenbinderhof 31 20097 Hamburg T.: +49 40 657980595 bunge@innovationsstarter.com Über Anyon Anyon ist ein Venture Capital Unternehmen mit Büros in Berlin, München und Frankfurt, dessen Team jungen unternehmerischen Geist mit langjähriger Industrieerfahrung vereint."
+    },
+    {
+      "id": "check-page-f26b2f5b33",
+      "url": "https://www.htgf.de/comydo-smarter-haustueroeffner-fuer-paketboten-sichert-sich-hohes-sechsstelliges-seed-investment/",
+      "page": "terms",
+      "excerpt": "Anyon’s Investmentfokus liegt auf early stage PropTech Startups."
+    },
+    {
+      "id": "check-page-c302480a08",
+      "url": "https://www.htgf.de/comydo-smarter-haustueroeffner-fuer-paketboten-sichert-sich-hohes-sechsstelliges-seed-investment/",
+      "page": "terms",
+      "excerpt": "Der Fokus liegt auf High-Tech Gründungen aus den Branchen Software, Medien und Internet sowie Hardware, Automation, Healthcare, Chemie und Life Sciences. Über 2 Milliarden Euro Kapital investierten externe Investoren bislang in mehr als 1.400 Folgefinanzierungsrunden in das HTGF-Portfolio."
+    },
+    {
+      "id": "check-page-3641650bc6",
+      "url": "https://www.htgf.de/comydo-smarter-haustueroeffner-fuer-paketboten-sichert-sich-hohes-sechsstelliges-seed-investment/",
+      "page": "terms",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-3641650bc6",
+      "url": "https://www.htgf.de/comydo-smarter-haustueroeffner-fuer-paketboten-sichert-sich-hohes-sechsstelliges-seed-investment/",
+      "page": "terms",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-a26cb528dc",
+      "url": "https://www.htgf.de/comydo-smarter-haustueroeffner-fuer-paketboten-sichert-sich-hohes-sechsstelliges-seed-investment/",
+      "page": "terms",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive News 9."
+    },
+    {
+      "id": "check-page-7e065d7edd",
+      "url": "https://www.htgf.de/comydo-smarter-haustueroeffner-fuer-paketboten-sichert-sich-hohes-sechsstelliges-seed-investment/",
+      "page": "terms",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive zum Artikel News 15."
+    },
+    {
+      "id": "check-page-a10b0452a6",
+      "url": "https://www.htgf.de/comydo-smarter-haustueroeffner-fuer-paketboten-sichert-sich-hohes-sechsstelliges-seed-investment/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Rabot Energy erhält 50 Millionen: Aus Millionen Haushalten wird ein virtuelles Kraftwerk News 15."
     },
     {
       "id": "check-page-c586522837",
@@ -591,10 +1486,130 @@
       "excerpt": "crossvertise GmbH: High-Tech Gründerfonds und Investment-Konsortium BambooVentures finanzieren die erste medienübergreifende Buchungsplattform für Werbeträger Zum Inhalt springen Portfolio Investors Team News & Events Login Mein Pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About Career Portfolio Jobs ESG Contact Login ⟨ Zurück zur Übersicht Presse 2. Februar 2012 crossvertise GmbH: High-Tech Gründerfonds und Investment-Konsortium BambooVentures finanzieren die erste medienübergreifende Buchungsplattform für Werbeträger ⌵ News Artikel Die Finanzierung durch den High-Tech Gründerfonds und einem Konsortium um BambooMedia – ein Ableger der BambooVentures GmbH- liegt im fast siebenstelligen Bereich und sichert den Launch der weltweit ersten crossmedialen Buchungsplattform für Werbemedien . crossvertise ist ein Online-Marktplatz, auf dem Agenturen und werbetreibende Unternehmen sich umfassend informieren und Werbemedien aller Art erstmals direkt und einfach online buchen können. Der erfolgreiche Abschluss der Finanzierungsrunde fällt mit dem Startschuss zum offenen Betatesting der Buchungsplattform zusammen. Bereits jetzt ist ein Großteil der Werbeträger aus den Bereichen Radio und Außenwerbung direkt online buchbar. Werbeträger der Mediengattungen Print, TV, Kino, Online und Mobile sind derzeit auf Anfrage verfügbar und werden bis zum offiziellen"
     },
     {
+      "id": "check-page-612d476066",
+      "url": "https://www.htgf.de/crossvertise-gmbh-high-tech-grunderfonds-und-investment-konsortium-bambooventures-finanzieren-die-erste-medienubergreifende-buchungsplattform-fur-werbetrager/",
+      "page": "terms",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-612d476066",
+      "url": "https://www.htgf.de/crossvertise-gmbh-high-tech-grunderfonds-und-investment-konsortium-bambooventures-finanzieren-die-erste-medienubergreifende-buchungsplattform-fur-werbetrager/",
+      "page": "terms",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-c2fe727436",
+      "url": "https://www.htgf.de/crossvertise-gmbh-high-tech-grunderfonds-und-investment-konsortium-bambooventures-finanzieren-die-erste-medienubergreifende-buchungsplattform-fur-werbetrager/",
+      "page": "terms",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive News 9."
+    },
+    {
+      "id": "check-page-1c5a924ac4",
+      "url": "https://www.htgf.de/crossvertise-gmbh-high-tech-grunderfonds-und-investment-konsortium-bambooventures-finanzieren-die-erste-medienubergreifende-buchungsplattform-fur-werbetrager/",
+      "page": "terms",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive zum Artikel News 15."
+    },
+    {
+      "id": "check-page-3f5a93c036",
+      "url": "https://www.htgf.de/crossvertise-gmbh-high-tech-grunderfonds-und-investment-konsortium-bambooventures-finanzieren-die-erste-medienubergreifende-buchungsplattform-fur-werbetrager/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Rabot Energy erhält 50 Millionen: Aus Millionen Haushalten wird ein virtuelles Kraftwerk News 15."
+    },
+    {
+      "id": "check-page-08e0652e7c",
+      "url": "https://www.htgf.de/crossvertise-gmbh-high-tech-grunderfonds-und-investment-konsortium-bambooventures-finanzieren-die-erste-medienubergreifende-buchungsplattform-fur-werbetrager/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Rabot Energy erhält 50 Millionen: Aus Millionen Haushalten wird ein virtuelles Kraftwerk zum Artikel News 13."
+    },
+    {
+      "id": "check-page-10079069bb",
+      "url": "https://www.htgf.de/crossvertise-gmbh-high-tech-grunderfonds-und-investment-konsortium-bambooventures-finanzieren-die-erste-medienubergreifende-buchungsplattform-fur-werbetrager/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Finches erhält 2 Millionen Euro Pre-Seed für KI-Frühwarnsystem im Agrareinkauf News 8."
+    },
+    {
+      "id": "check-page-bd76928092",
+      "url": "https://www.htgf.de/crossvertise-gmbh-high-tech-grunderfonds-und-investment-konsortium-bambooventures-finanzieren-die-erste-medienubergreifende-buchungsplattform-fur-werbetrager/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Finches erhält 2 Millionen Euro Pre-Seed für KI-Frühwarnsystem im Agrareinkauf zum Artikel News 8."
+    },
+    {
+      "id": "check-page-dac7811b11",
+      "url": "https://www.htgf.de/crossvertise-gmbh-high-tech-grunderfonds-und-investment-konsortium-bambooventures-finanzieren-die-erste-medienubergreifende-buchungsplattform-fur-werbetrager/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 KI-Agenten für Finanz- und Versicherungsberater: TODAY sichert sich €2,8M Seed-Finanzierung News 8."
+    },
+    {
       "id": "check-page-c6a318673f",
       "url": "https://www.htgf.de/deal-united-gewinnt-das-vertrauen-des-high-tech-grunderfonds/",
       "page": "terms",
       "excerpt": "deal united gewinnt das Vertrauen des High-Tech Gründerfonds Zum Inhalt springen Portfolio Investors Team News & Events Login Mein Pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About Career Portfolio Jobs ESG Contact Login ⟨ Zurück zur Übersicht Presse 29. Juli 2009 deal united gewinnt das Vertrauen des High-Tech Gründerfonds ⌵ News Artikel Das eCommerce Startup deal united aus München hat es trotz der schwierigen wirtschaftlichen Zeiten geschafft, in einer Finanzierungsrunde Gelder des High-Tech Gründerfonds und von sympasis innovation capital zu erhalten. deal united hat sich seit der Gründung Ende 2007 durch kontinuierliches Wachstum zum europäischen Marktführer im Bereich der Konversionssteigerung durch werbefinanzierte Incentivierungen entwickelt. Das Vertrauen, das die Investoren in das junge Unternehmen setzen, zeugt von den guten Erfolgsaussichten des Geschäftsmodells. Das sieht auch Romy Schnelle, Investmentmanagerin des High-Tech Gründerfonds, so: “Wir sind vom Nutzen der Services von deal united überzeugt. Das innovative Angebot, durch das Kunden kostenlose Produkte erhalten können, hat im preissensitiven Onlinehandel sehr großes Potential“. Das in Europa völlig neuartige Geschäftsmodell bietet Onlinehändlern die Möglichkeit, ihren Umsatz und ihre Konversionsraten zu erhöhen, indem sie kostenlose Produkte anbieten – ohne Risiko und ohne"
+    },
+    {
+      "id": "check-page-8ee3363af0",
+      "url": "https://www.htgf.de/deal-united-gewinnt-das-vertrauen-des-high-tech-grunderfonds/",
+      "page": "terms",
+      "excerpt": "65a D-76133 Karlsruhe Tel.: 0721-354804-10 Fax: 0721-354804-19 kresse@sympasis.com www.sympasis.com Über deal united: deal united hat sich darauf spezialisiert, die Konversionsraten von eCommerce-Treibenden zu erhöhen."
+    },
+    {
+      "id": "check-page-c8dbb66165",
+      "url": "https://www.htgf.de/deal-united-gewinnt-das-vertrauen-des-high-tech-grunderfonds/",
+      "page": "terms",
+      "excerpt": "Der Service ist geeignet für jede Art von eCommerce-Treibenden, vom Anbieter von Nischenprodukten über Elektro-Großhändler bis hin zu Softwareherstellern und Gaming-Anbietern. deal united GmbH Dr."
+    },
+    {
+      "id": "check-page-c26f9a52d6",
+      "url": "https://www.htgf.de/deal-united-gewinnt-das-vertrauen-des-high-tech-grunderfonds/",
+      "page": "terms",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-c26f9a52d6",
+      "url": "https://www.htgf.de/deal-united-gewinnt-das-vertrauen-des-high-tech-grunderfonds/",
+      "page": "terms",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-5b0edb6858",
+      "url": "https://www.htgf.de/deal-united-gewinnt-das-vertrauen-des-high-tech-grunderfonds/",
+      "page": "terms",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive News 9."
+    },
+    {
+      "id": "check-page-b890174c91",
+      "url": "https://www.htgf.de/deal-united-gewinnt-das-vertrauen-des-high-tech-grunderfonds/",
+      "page": "terms",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive zum Artikel News 15."
+    },
+    {
+      "id": "check-page-e9c8fe4a72",
+      "url": "https://www.htgf.de/deal-united-gewinnt-das-vertrauen-des-high-tech-grunderfonds/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Rabot Energy erhält 50 Millionen: Aus Millionen Haushalten wird ein virtuelles Kraftwerk News 15."
+    },
+    {
+      "id": "check-page-e5468e51c9",
+      "url": "https://www.htgf.de/deal-united-gewinnt-das-vertrauen-des-high-tech-grunderfonds/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Rabot Energy erhält 50 Millionen: Aus Millionen Haushalten wird ein virtuelles Kraftwerk zum Artikel News 13."
+    },
+    {
+      "id": "check-page-b8ca8f1faf",
+      "url": "https://www.htgf.de/deal-united-gewinnt-das-vertrauen-des-high-tech-grunderfonds/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Finches erhält 2 Millionen Euro Pre-Seed für KI-Frühwarnsystem im Agrareinkauf News 8."
+    },
+    {
+      "id": "check-page-1e1e36a9b8",
+      "url": "https://www.htgf.de/deal-united-gewinnt-das-vertrauen-des-high-tech-grunderfonds/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Finches erhält 2 Millionen Euro Pre-Seed für KI-Frühwarnsystem im Agrareinkauf zum Artikel News 8."
+    },
+    {
+      "id": "check-page-4b2338f552",
+      "url": "https://www.htgf.de/deal-united-gewinnt-das-vertrauen-des-high-tech-grunderfonds/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 KI-Agenten für Finanz- und Versicherungsberater: TODAY sichert sich €2,8M Seed-Finanzierung News 8."
     },
     {
       "id": "check-page-377c915152",
@@ -603,10 +1618,430 @@
       "excerpt": "deal united schließt Finanzierungsrunde ab und treibt Internationalisierung voran Zum Inhalt springen Portfolio Investors Team News & Events Login Mein Pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About Career Portfolio Jobs ESG Contact Login ⟨ Zurück zur Übersicht Presse 20. Mai 2010 deal united schließt Finanzierungsrunde ab und treibt Internationalisierung voran ⌵ News Artikel Außergewöhnlich erfolgreich konnte deal united die letzte Finanzierungsrunde abschließen. Bertelsmann Digital Media Investments und Venture Incubator investieren einen mittleren siebenstelligen Betrag in die Münchner E-Commerce-Plattform. deal united hilft Anbietern von Software, Online-Spielen oder Social Networks sowie Shopbetreibern bei der Monetarisierungsoptimierung. Bereits heute ist deal united Europas führende Online-Marketing-Plattform für Monetarisierung von digitalen und virtuellen Gütern und in vielen europäischen Ländern vertreten. Das Konzept von deal united zielt darauf ab, die Umsätze und Konversionsraten von Online-Anbietern zu steigern. Bei Softwareherstellern kaufen nur etwa ein Prozent der Tester auch wirklich die Vollversion der angebotenen Software – die meisten entscheiden sich für die kostenlose Variante. Bei Premium Features oder virtueller Währung von Online-Spielen oder Social Networks sind die Monetarisierungsraten ähnlich niedrig. Durch die"
     },
     {
+      "id": "check-page-f4e23c6331",
+      "url": "https://www.htgf.de/deal-united-schliest-finanzierungsrunde-ab-und-treibt-internationalisierung-voran/",
+      "page": "terms",
+      "excerpt": "Ermöglicht werden diese Prämien durch eine Kooperation mit Premium Werbepartnern. „Das deal united-Konzept kann bereits deutliche Erfolge vorweisen und ist bei renommierten Partnern im Einsatz“, so Jan Borgstädt, Principal bei Bertelsmann Digital Media Investments. „Der Ansatz hat sich in den Bereichen Software, Gaming, Social Networks und Retail bewährt."
+    },
+    {
+      "id": "check-page-75f357ebb5",
+      "url": "https://www.htgf.de/deal-united-schliest-finanzierungsrunde-ab-und-treibt-internationalisierung-voran/",
+      "page": "terms",
+      "excerpt": "Gerade in diesen Zukunftsmärkten, wo Monetarisierungs-Konzepte stark gefragt sind, liefert deal united Lösungen.“ Auch Daniel Gutenberg, General Partner bei Venture Incubator, sieht eine große Zukunft für deal united: „Durch innovative Marketinglösungen schafft deal united eine Cross Selling-Konstellation, von der alle Beteiligten profitieren – auch der Endkunde."
+    },
+    {
+      "id": "check-page-d63210e881",
+      "url": "https://www.htgf.de/deal-united-schliest-finanzierungsrunde-ab-und-treibt-internationalisierung-voran/",
+      "page": "terms",
+      "excerpt": "Jarg Temme, Geschäftsführer von deal united, freut sich, nach der abgeschlossenen Finanzierungsrunde mit den neuen Investoren die Aktivitäten vor allem auf dem internationalen Markt weiter ausbauen zu können: „Mit Venture Incubator haben wir einen im E-Commerce-Bereich besonders erfahrenen Partner gewonnen, von dessen Expertise wir künftig stark profitieren können."
+    },
+    {
+      "id": "check-page-9b402a5690",
+      "url": "https://www.htgf.de/deal-united-schliest-finanzierungsrunde-ab-und-treibt-internationalisierung-voran/",
+      "page": "terms",
+      "excerpt": "BDMI wird von einem internationalen Managementteam aus den USA und Deutschland geführt."
+    },
+    {
+      "id": "check-page-3a27054500",
+      "url": "https://www.htgf.de/deal-united-schliest-finanzierungsrunde-ab-und-treibt-internationalisierung-voran/",
+      "page": "terms",
+      "excerpt": "Für weitere Infos: www.bdmifund.com Über Venture Incubator Venture Incubator ist eine Schweizer Venture-Capital-Gesellschaft, die Spin-offs von Universitäten und andere viel versprechende Start-up-Firmen mit Kapital, Coaching, Beratung und Netzwerken unterstützt."
+    },
+    {
+      "id": "check-page-df439a36f5",
+      "url": "https://www.htgf.de/deal-united-schliest-finanzierungsrunde-ab-und-treibt-internationalisierung-voran/",
+      "page": "terms",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-df439a36f5",
+      "url": "https://www.htgf.de/deal-united-schliest-finanzierungsrunde-ab-und-treibt-internationalisierung-voran/",
+      "page": "terms",
+      "excerpt": "November 2026 SRTD Biotech sammelt in Seed-Finanzierungsrunde 31,5 Mio."
+    },
+    {
+      "id": "check-page-8e1f7c54af",
+      "url": "https://www.htgf.de/deal-united-schliest-finanzierungsrunde-ab-und-treibt-internationalisierung-voran/",
+      "page": "terms",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive News 9."
+    },
+    {
+      "id": "check-page-4e18e63377",
+      "url": "https://www.htgf.de/deal-united-schliest-finanzierungsrunde-ab-und-treibt-internationalisierung-voran/",
+      "page": "terms",
+      "excerpt": "November 2026 Wo Venture Capital Europas Stromnetz voranbringen kann: HTGF und Vireo veröffentlichen The European Grid Deep Dive zum Artikel News 15."
+    },
+    {
+      "id": "check-page-c8909f8ed8",
+      "url": "https://www.htgf.de/deal-united-schliest-finanzierungsrunde-ab-und-treibt-internationalisierung-voran/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Rabot Energy erhält 50 Millionen: Aus Millionen Haushalten wird ein virtuelles Kraftwerk News 15."
+    },
+    {
+      "id": "check-page-b7fde35930",
+      "url": "https://www.htgf.de/deal-united-schliest-finanzierungsrunde-ab-und-treibt-internationalisierung-voran/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Rabot Energy erhält 50 Millionen: Aus Millionen Haushalten wird ein virtuelles Kraftwerk zum Artikel News 13."
+    },
+    {
+      "id": "check-page-8c8e182ee2",
+      "url": "https://www.htgf.de/deal-united-schliest-finanzierungsrunde-ab-und-treibt-internationalisierung-voran/",
+      "page": "terms",
+      "excerpt": "Oktober 2026 Finches erhält 2 Millionen Euro Pre-Seed für KI-Frühwarnsystem im Agrareinkauf News 8."
+    },
+    {
       "id": "check-page-655731a814",
       "url": "https://www.htgf.de/en/1-5-million-euro-investment-for-start-up-replex/",
       "page": "terms",
       "excerpt": "1.5 Million Euro Investment for Start-up replex Skip to content Portfolio Investors Team News & Events Login My pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About us Career Portfolio Jobs ESG Contact Login ⟨ Back to overview Press 11 May 2017 1.5 Million Euro Investment for Start-up replex ⌵ The software company from Duisburg expands with external capital and enters US market High-Tech Gründerfonds, EnBW New Ventures, eValue as well as Entrepreneurs Investment Fund invest in Seed round The software company replex raises 1.5 million euro. The real-time system to optimize IT infrastructure has gained High-Tech Gründerfonds (HTGF), EnBW New Ventures as well as eValue AG and the US based Entrepreneurs Investment Fund as seed round investors. The new capital is intended for the expansion of the company and the market entry into the US. The Duisburg based start-up replex, funded to date by its founders, has now received 1.5 Million Euros in external funding for its seed round of financing. With their business model, the five founders were able to convince renowned investors. These include High-Tech Gründerfonds (HTGF), EnBW New Ventures, eValue AG, which have a successful international track record, as well as the New York based EIF (Entrepreneurs Investment Fund). The CEO of eValue, Thomas Falk, has already been involved in numerous international"
+    },
+    {
+      "id": "check-page-94ab2c6e22",
+      "url": "https://www.htgf.de/en/1-5-million-euro-investment-for-start-up-replex/",
+      "page": "terms",
+      "excerpt": "The proprietary algorithms automatically generate optimization strategies to increase efficiency of the IT infrastructure and its teams as well as simultaneously lowering costs. replex is a German Accelerator participant and EU Road Show winner."
+    },
+    {
+      "id": "check-page-a837bb569d",
+      "url": "https://www.htgf.de/en/1-5-million-euro-investment-for-start-up-replex/",
+      "page": "terms",
+      "excerpt": "The replex GmbH was founded in early 2016 and is headquartered in Duisburg featuring other locations in Berlin, Leipzig and San Francisco. www.replex.io About EnBW New Ventures GmbH EnBW New Ventures GmbH invests venture capital in innovative new companies during their start-up and growth phase."
+    },
+    {
+      "id": "check-page-ecf831ae94",
+      "url": "https://www.htgf.de/en/1-5-million-euro-investment-for-start-up-replex/",
+      "page": "terms",
+      "excerpt": "The focus is on companies shaping the converging markets of energy, mobility and urban life through new business models and technologies."
+    },
+    {
+      "id": "check-page-44275b2256",
+      "url": "https://www.htgf.de/en/1-5-million-euro-investment-for-start-up-replex/",
+      "page": "terms",
+      "excerpt": "With an investment volume of EUR 100 million, EnBW New Ventures is a significant investor in young start-ups in Germany."
+    },
+    {
+      "id": "check-page-83ddc8ff8a",
+      "url": "https://www.htgf.de/en/1-5-million-euro-investment-for-start-up-replex/",
+      "page": "terms",
+      "excerpt": "Through the new ventures activities, EnBW is expanding its partnerships within the start-up scene, combining these with internal innovation projects. www.enbw.com/newventures About High-Tech Gründerfonds (HTGF) The High-Tech Gründerfonds (HTGF) is Germany’s most active early-stage investor."
+    },
+    {
+      "id": "check-page-a6a8b08bcf",
+      "url": "https://www.htgf.de/en/1-5-million-euro-investment-for-start-up-replex/",
+      "page": "terms",
+      "excerpt": "We are broadly oriented on the subject – from robotics, IoT to energy, from medicine to biotech, from chemistry to software."
+    },
+    {
+      "id": "check-page-605f166d82",
+      "url": "https://www.htgf.de/en/1-5-million-euro-investment-for-start-up-replex/",
+      "page": "terms",
+      "excerpt": "Our investors in the public-private partnership are the German Federal Ministry of Economics and Energy, the KfW Bankengruppe as well as 18 well-known business enterprises. www.high-tech-gruenderfonds.de Contact: High-Tech Gründerfonds Management GmbH Dr."
+    },
+    {
+      "id": "check-page-69f5940e1f",
+      "url": "https://www.htgf.de/en/1-5-million-euro-investment-for-start-up-replex/",
+      "page": "terms",
+      "excerpt": "Klaus Schäfer joins Cyclize in an operational role ⟨ Back to overview Newsletter My Pitch About HTGF Contact About us ESG Opportunities Career Portfolio Jobs News & Events Family Day Press News Contact Office Bonn Office Berlin Office München Social media Member of: © HTGF, 2026 We love founders Cookies Legal notices"
+    },
+    {
+      "id": "check-page-722582a541",
+      "url": "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+      "page": "terms",
+      "excerpt": "5-million-euro seed investment for Saarbrücken-based startup Natif.ai Skip to content Portfolio Investors Team News & Events Login My pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About us Career Portfolio Jobs ESG Contact Login ⟨ Back to overview News 9 March 2022 5-million-euro seed investment for Saarbrücken-based startup Natif.ai ⌵ News Article The deep-tech startup attracts further well-known investors. Its superior technology based on Artificial Intelligence automates document-based processes, freeing employees from paperwork. Saarbrücken, Germany, 09.03.2022 – The Saarbrücken-based startup Natif.ai won further investors in a seed financing round: The round is led by Redalpine, a leading European early-stage investor. F-LOG Ventures, a fund specializing in logistics, and serial entrepreneur and business angel Phillipp Rechberg complete the funding round. They join existing pre-seed investors 468 Capital, High-Tech Gründerfonds (HTGF) and Premius, who also participate in this round. Natif.ai’s founders have identified an enormous market opportunity. Documents of all kinds are omnipresent in business communication, and every company will want to automate document-related processes sooner or later. With its leading AI technology for cognitive data capture, Natif.ai is perfectly positioned to meet this need. Antonius Salis, Redalpine With"
+    },
+    {
+      "id": "check-page-2a7f50dd92",
+      "url": "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+      "page": "terms",
+      "excerpt": "Antonius Salis, Redalpine With Natif.ai, software developers can use the most advanced AI technology for document processing, tailored to solve the demands in their own products, in just a few steps."
+    },
+    {
+      "id": "check-page-2543d8ebc0",
+      "url": "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+      "page": "terms",
+      "excerpt": "Johannes Korves, co-founder of Natif.ai The platform already processes millions of documents every month such as letter mail, invoices, receipts, or insurance contracts."
+    },
+    {
+      "id": "check-page-ca21a9f277",
+      "url": "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+      "page": "terms",
+      "excerpt": "In the process, relevant key information is extracted, documents are classified, and various AI-based process steps are performed via complex workflows."
+    },
+    {
+      "id": "check-page-436db4ad05",
+      "url": "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+      "page": "terms",
+      "excerpt": "Typical customers include banks, insurance companies, law and tax firms, as well as software providers and tech companies."
+    },
+    {
+      "id": "check-page-b6fc32bc79",
+      "url": "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+      "page": "terms",
+      "excerpt": "About Natif.ai NaNatif.ai is a deep-tech startup, in the field of Intelligent Document Process Automation (IDP)."
+    },
+    {
+      "id": "check-page-8ab7fcf0cc",
+      "url": "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+      "page": "terms",
+      "excerpt": "Thanks to high-performance AI models and a self-developed deep OCR, a wide variety of documents can be analyzed extremely quick, accurately, and relevant data be extracted."
+    },
+    {
+      "id": "check-page-aaa234eb28",
+      "url": "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+      "page": "terms",
+      "excerpt": "Natif.ai enables developers to provide complex workflows, state-of-the-art AI technologies and Active Learning via API through its platform."
+    },
+    {
+      "id": "check-page-0c8e0ea957",
+      "url": "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+      "page": "terms",
+      "excerpt": "Founded in 2019 by Manuel Zapp, Johannes Korves, Christophe Hocquet and Berenger Laurent, the company is an official spin-off of the German Research Center for Artificial Intelligence (DFKI)."
+    },
+    {
+      "id": "check-page-fe5414b056",
+      "url": "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+      "page": "terms",
+      "excerpt": "Press contact JDB MEDIA GmbH Alexandra Beck-Berge Schanzenstrasse 70, 20357 Hamburg T.: 040 46 88 32 – 33 Beck-berge@jdb.de Contact natif.ai Natif.ai GmbH Johannes Korves Campus A1 1, 66123, Saarbrücken T.: + 49 172 153 13 76 Johannes.korves@natif.ai About High-Tech Gründerfonds High-Tech Gründerfonds (HTGF) is a seed investor that finances high-potential, tech-driven start-ups."
+    },
+    {
+      "id": "check-page-a10277a2cd",
+      "url": "https://www.htgf.de/en/5-million-euro-seed-investment-for-natif-ai/",
+      "page": "terms",
+      "excerpt": "HTGF’s focus is on high-tech start-ups in the fields of digital tech, industrial technology, life sciences, chemistry and related business areas."
+    },
+    {
+      "id": "check-page-2a553fdc1e",
+      "url": "https://www.htgf.de/en/a-powerful-motor-for-innovation-and-the-economy-high-tech-grunderfonds-makes-its-500th-investment/",
+      "page": "terms",
+      "excerpt": "A powerful motor for innovation and the economy: High-Tech Gründerfonds makes its 500th investment Skip to content Portfolio Investors Team News & Events Login My pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About us Career Portfolio Jobs ESG Contact Login ⟨ Back to overview News 18 June 2018 A powerful motor for innovation and the economy: High-Tech Gründerfonds makes its 500th investment ⌵ News Article • Together with co-investor Thüga, HTGF is investing a 7-figure sum • The 500th startup in the HTGF portfolio is machine-learning company Geospin Shortly after the successful second closing of the third fond and the IPO of NFON – the first flotation in the portfolio – High-Tech Gründerfonds (HTGF) and Thüga AG are making their 500th investment: Geospin develops software solutions for analysing geodata and, just two years after spinning-off from the Albert-Ludwigs University in Freiburg, is receiving a 7-figure cash injection. The fact that HTGF has already reached this third big milestone this year is both motivation and a reason to celebrate. “We aim to use the valuable experience we’ve gained from 500 startup investments more intensively in our day-to-day business in order to expertly support the founders. A very varied network of 885 experts has evolved from the contacts we have made since 2005, and we use these systematically”, reports Dr"
+    },
+    {
+      "id": "check-page-8447883c0f",
+      "url": "https://www.htgf.de/en/a-powerful-motor-for-innovation-and-the-economy-high-tech-grunderfonds-makes-its-500th-investment/",
+      "page": "terms",
+      "excerpt": "“Our 500th investment is further proof that the startup scene in Germany and Europe is yielding terrific ideas."
+    },
+    {
+      "id": "check-page-5352b5a258",
+      "url": "https://www.htgf.de/en/a-powerful-motor-for-innovation-and-the-economy-high-tech-grunderfonds-makes-its-500th-investment/",
+      "page": "terms",
+      "excerpt": "It really illustrates the great innovative energy, visionary technologies and business models the creative heads in our country are producing."
+    },
+    {
+      "id": "check-page-d4be374b67",
+      "url": "https://www.htgf.de/en/a-powerful-motor-for-innovation-and-the-economy-high-tech-grunderfonds-makes-its-500th-investment/",
+      "page": "terms",
+      "excerpt": "We believe in Germany’s founders and that they are strengthening Germany’s economic place in the world”, adds HTGF Managing Director Dr Alex von Frankenberg."
+    },
+    {
+      "id": "check-page-1c1b256745",
+      "url": "https://www.htgf.de/en/a-powerful-motor-for-innovation-and-the-economy-high-tech-grunderfonds-makes-its-500th-investment/",
+      "page": "terms",
+      "excerpt": "Customised offer for startups Since 2005, Germany’s most active early-stage investor HTGF has tested more than 14,500 innovative business models."
+    },
+    {
+      "id": "check-page-5f770f65df",
+      "url": "https://www.htgf.de/en/a-powerful-motor-for-innovation-and-the-economy-high-tech-grunderfonds-makes-its-500th-investment/",
+      "page": "terms",
+      "excerpt": "About High-Tech Gründerfonds Seed investor High-Tech Gründerfonds (HGTF) finances technology startups that show growth potential."
+    },
+    {
+      "id": "check-page-f49d5b0f35",
+      "url": "https://www.htgf.de/en/a-powerful-motor-for-innovation-and-the-economy-high-tech-grunderfonds-makes-its-500th-investment/",
+      "page": "terms",
+      "excerpt": "The focus is upon high-tech startups from the sectors of software, media and internet as well as from hardware, automation, healthcare, chemicals and life sciences."
+    },
+    {
+      "id": "check-page-8a24e1c099",
+      "url": "https://www.htgf.de/en/a-powerful-motor-for-innovation-and-the-economy-high-tech-grunderfonds-makes-its-500th-investment/",
+      "page": "terms",
+      "excerpt": "The investors in the public-private partnership include the German Federal Ministry for Economic Affairs and Energy, KfW, the Fraunhofer-Gesellschaft and the commercial businesses ALTANA, BASF, Bayer, Boehringer Ingelheim, B.Braun, Robert Bosch, BÜFA, CEWE, Deutsche Post DHL, Dräger, Drillisch AG, EVONIK, EWE AG, Haniel, Hettich, Knauf, Körber, LANXESS, media + more venture Beteiligungs GmbH & Co."
+    },
+    {
+      "id": "check-page-37659550e0",
+      "url": "https://www.htgf.de/en/adtriba-gmbh-receives-seed-investment-to-optimize-advertisers-digital-marketing-campaigns/",
+      "page": "terms",
+      "excerpt": "AdTriba GmbH receives Seed-Investment to optimize Advertiser’s Digital Marketing Campaigns Skip to content Portfolio Investors Team News & Events Login My pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About us Career Portfolio Jobs ESG Contact Login ⟨ Back to overview News 24 May 2016 AdTriba GmbH receives Seed-Investment to optimize Advertiser’s Digital Marketing Campaigns ⌵ News Article High-Tech Gründerfonds (HTGF) invests into the marketing technology startup AdTriba. The Hamburg based Saas-company allows Advertisers to track, control and optimize their online marketing activities across all digital marketing channels through data science and user journey analysis. The founders, János Moldvay (CEO) and Ludwig Ostrowski (CTO) have extensive experience in data science and digital marketing. With AdTriba they aim to make marketing data driven, more transparent and thus more efficient. AdTriba allows for an accurate reporting and assessment of every online marketing campaign’s profitability while taking into account the complexity of multi-touch and cross-channel user journeys. AdTriba’s reporting-dashboard delivers a consistent and comprehensive view on all digital marketing activities. This reduces cross-channel marketing complexity and leads to an optimized allocation of online marketing budgets. “Until now digital marketing managers had to"
+    },
+    {
+      "id": "check-page-c551e99ca2",
+      "url": "https://www.htgf.de/en/adtriba-gmbh-receives-seed-investment-to-optimize-advertisers-digital-marketing-campaigns/",
+      "page": "terms",
+      "excerpt": "With this seed-round AdTriba aims to increase marketing activities to push the “single point of marketing truth”-concept into the market and to become the market leader in Germany."
+    },
+    {
+      "id": "check-page-6bf42b5226",
+      "url": "https://www.htgf.de/en/adtriba-gmbh-receives-seed-investment-to-optimize-advertisers-digital-marketing-campaigns/",
+      "page": "terms",
+      "excerpt": "The startup successfully participated in the first batch of the next media accelerators until February 2016 and acquired their first customers in this phase."
+    },
+    {
+      "id": "check-page-f1f602e713",
+      "url": "https://www.htgf.de/en/adtriba-gmbh-receives-seed-investment-to-optimize-advertisers-digital-marketing-campaigns/",
+      "page": "terms",
+      "excerpt": "Contact: AdTriba GmbH János Moldvay Tel: + 49 171 54 24 163 janos.moldvay@adtriba.com www.adtriba.com About High-Tech Gründerfonds High-Tech Gründerfonds invests in young, high potential high-tech start-ups."
+    },
+    {
+      "id": "check-page-b5b81a2035",
+      "url": "https://www.htgf.de/en/adtriba-gmbh-receives-seed-investment-to-optimize-advertisers-digital-marketing-campaigns/",
+      "page": "terms",
+      "excerpt": "The seed financing provided is designed to enable start-ups to take an idea through prototyping and to market launch."
+    },
+    {
+      "id": "check-page-594bd82fc1",
+      "url": "https://www.htgf.de/en/adtriba-gmbh-receives-seed-investment-to-optimize-advertisers-digital-marketing-campaigns/",
+      "page": "terms",
+      "excerpt": "Typically, High-Tech Gründerfonds invests EUR 600,000 in the seed stage, with the potential for up to a total of EUR 2 million per portfolio company in follow-on financing."
+    },
+    {
+      "id": "check-page-cce230d57c",
+      "url": "https://www.htgf.de/en/adtriba-gmbh-receives-seed-investment-to-optimize-advertisers-digital-marketing-campaigns/",
+      "page": "terms",
+      "excerpt": "Investors in this public/private partnership include the Federal Ministry of Economics and Energy, the KfW Banking Group, as well as strategic corporate investors including ALTANA, BASF, Bayer, B."
+    },
+    {
+      "id": "check-page-edb7f6306e",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "page": "terms",
+      "excerpt": "AICA closes a Seed investment round – Bringing real-time intelligence to industrial control Skip to content Portfolio Investors Team News & Events Login My pitch English Portfolio Investors Team News & Events Metanavigation About us Career Portfolio Jobs ESG Contact Login ⟨ Back to overview News 18 March 2025 AICA closes a Seed investment round – Bringing real-time intelligence to industrial control ⌵ News Article AICA, a Swiss innovator transforming industrial automation with Al-powered force adaptation technology, has secured a strategic investment led by Momenta, the leading venture capital firm specializing in Industrial Impact®. This investment, made through Momenta’s Industry 5.0 Fund, will propel AICA’s global expansion and enhance its Al-driven automation capabilities. Existing investors Spicehaus, HTGF, and Schaeffler have reaffirmed their confidence in AICA by participating in this round. Solving a Major Bottleneck in Industrial Automation Robotics programming is complex & costly, often doubling hardware costs. AICA System integrates Al with real-time, sensor-driven control to simplify deployment and reduce development costs. Used by industry leaders like Schaeffler, it enables tasks like assembly, polishing, and battery disassembly. What sets AICA apart? Real-time sensor driven control to bring more flexibility in the way robots are programmed and in how they"
+    },
+    {
+      "id": "check-page-ce36132979",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "page": "terms",
+      "excerpt": "Real-time sensor driven control to bring more flexibility in the way robots are programmed and in how they perceive & interact with the production environment Connection of diverse hardware, sensors, and Al software to bring innovation faster into production."
+    },
+    {
+      "id": "check-page-f4e87ff7c3",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "page": "terms",
+      "excerpt": "Faster deployment from prototyping to production through AICA Studio, AICA’s modular GUI."
+    },
+    {
+      "id": "check-page-3e7385dc39",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "page": "terms",
+      "excerpt": "Bringing Al-Driven Intelligence to Robotics Industrial robotics has long been limited by poor communication interfaces and the lack of standardized programming."
+    },
+    {
+      "id": "check-page-da330de7c7",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "page": "terms",
+      "excerpt": "AICA revolutionizes this space with a real-time control framework that seamlessly integrates impedance control, motion generation, and force compliance, making advanced robotics more accessible."
+    },
+    {
+      "id": "check-page-e137a1bf37",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "page": "terms",
+      "excerpt": "While simulation platforms like Nvidia Omniverse train thousands of agents, deploying these learned models onto real hardware remains a challenge due to the absence of control standards."
+    },
+    {
+      "id": "check-page-7684cf7ea1",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "page": "terms",
+      "excerpt": "AICA bridges this gap by providing a universal control framework that ensures safe, real-time adaptation of Al-trained robotic systems, bringing Al-driven intelligence to industrial robotics."
+    },
+    {
+      "id": "check-page-3f1d964004",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "page": "terms",
+      "excerpt": "“Robotics has been stuck in outdated programming methods for too long."
+    },
+    {
+      "id": "check-page-d4f0f69705",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "page": "terms",
+      "excerpt": "While the company has gained strong traction in the automotive industry, the AICA System is simultaneously hardware, industry, and application agnostic, enabling flexible automation across diverse use cases."
+    },
+    {
+      "id": "check-page-e07d7455a2",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "page": "terms",
+      "excerpt": "For example, in the LAMBDA Project, a Eurostars-backed initiative, AICA applies its expertise to the automated disassembly of electric vehicle (EV) batteries, driving smarter resource recovery and strengthening circular economy efforts in the EV supply chain."
+    },
+    {
+      "id": "check-page-17300ac1a1",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "page": "terms",
+      "excerpt": "Furthermore, in the life sciences and chemical industries, AICA is also seeing a strong appetite for more flexible and autonomous laboratory automation."
+    },
+    {
+      "id": "check-page-0eda739572",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "page": "terms",
+      "excerpt": "Their combined expertise in advanced control systems and machine learning has successfully translated cutting-edge research into scalable industrial solutions, attracting major industry players to AICA’s mission."
+    },
+    {
+      "id": "check-page-441659a708",
+      "url": "https://www.htgf.de/en/aica-closes-a-seed-investment-round-bringing-real-time-intelligence-to-industrial-control/",
+      "page": "terms",
+      "excerpt": "“Momenta invests in disruptive technologies that deliver tangible industrial benefits,” started Miroslav Kriz, Principal Partner at Momenta ."
+    },
+    {
+      "id": "check-page-aae6eab544",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "page": "terms",
+      "excerpt": "Another multi-million-Euro investment for REBELLE Skip to content Portfolio Investors Team News & Events Login My pitch Deutsch English Portfolio Investors Team News & Events Metanavigation About us Career Portfolio Jobs ESG Contact Login ⟨ Back to overview Press 9 March 2015 Another multi-million-Euro investment for REBELLE ⌵ Designer marketplace concludes Series B financing and gains new investors REBELLE , the online marketplace for second-hand designer fashion, has concluded another multi-million-Euro financing round. New investors in the Hamburg start-up are North-East Venture A/S from Copenhagen and Deutsche Balaton AG from Heidelberg. The existing shareholders, consisting of High-Tech Gruenderfonds (HTGF), HCS Beteiligungsgesellschaft, Hanse Ventures and a number of notable private investors, are also making a significant investment as part of the Series B financing. Focus on internationalisation and growth “We’re delighted with the confidence our investors have shown in us. This additional capital will allow us to considerably accelerate our growth and expand into lucrative international markets,” said Cécile Gaulke, founder and managing director of REBELLE. “We are very impressed with REBELLE’s performance. The combination of a smart business model and excellent operational execution leads to exceptionally strong KPIs, and we are therefore delighted to have the"
+    },
+    {
+      "id": "check-page-f11ffd6152",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "page": "terms",
+      "excerpt": "Constant growth since launch REBELLE was founded at the beginning of 2013 by Cécile Gaulke, Max Schönemann and the company builder Hanse Ventures."
+    },
+    {
+      "id": "check-page-68ac1a67c5",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "page": "terms",
+      "excerpt": "HTGF made a seed investment in REBELLE in October 2013."
+    },
+    {
+      "id": "check-page-1cfe5acc36",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "page": "terms",
+      "excerpt": "In August 2014 REBELLE consolidated its market leadership in Germany by acquiring the Munich-based competitor Glamloop."
+    },
+    {
+      "id": "check-page-c99e52f4c0",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "page": "terms",
+      "excerpt": "REBELLE operates in 28 European countries."
+    },
+    {
+      "id": "check-page-1e993ae849",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "page": "terms",
+      "excerpt": "REBELLE is operated by StyleRemains GmbH, which was jointly founded by Cécile Gaulke, Max Schönemann and Hamburg-based company builder Hanse Ventures in spring 2013."
+    },
+    {
+      "id": "check-page-7e588cf5c1",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "page": "terms",
+      "excerpt": "Contact: Sandra Hartwig Public Relations Manager Tel.: +49 (0) 40 30 70 19 18 Fax: +49 (0) 40 30 70 19 29 presse@rebelle.de www.rebelle.de About High-Tech Gruenderfonds High-Tech Gruenderfonds invests in young, high potential high-tech start-ups."
+    },
+    {
+      "id": "check-page-9a1c0ea668",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "page": "terms",
+      "excerpt": "The seed financing provided is designed to enable start-ups to take an idea through prototyping and to market launch."
+    },
+    {
+      "id": "check-page-712f513b16",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "page": "terms",
+      "excerpt": "Typically, High-Tech Gruenderfonds invests EUR 500,000 in the seed stage, with the potential for up to a total of EUR 2 million per portfolio company in follow-on financing."
+    },
+    {
+      "id": "check-page-eac03d70b4",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "page": "terms",
+      "excerpt": "Investors in this public/private partnership include the Federal Ministry of Economics and Energy, the KfW Banking Group, as well as strategic corporate investors including ALTANA, BASF, Bayer, B."
+    },
+    {
+      "id": "check-page-4cff4adda5",
+      "url": "https://www.htgf.de/en/another-multi-million-euro-investment-for-rebelle/",
+      "page": "terms",
+      "excerpt": "Klaus Schäfer joins Cyclize in an operational role ⟨ Back to overview Newsletter My Pitch About HTGF Contact About us ESG Opportunities Career Portfolio Jobs News & Events Family Day Press News Contact Office Bonn Office Berlin Office München Social media Member of: © HTGF, 2026 We love founders Cookies Legal notices"
     }
   ],
   "findings": {
@@ -681,6 +2116,10 @@
       {
         "value": "prototyping to market launch. SeedCapital Dortmund invests up to EUR 500,000 in the seed stage, with the potential for up to a total of EUR 1,5",
         "evidenceId": "check-deal-8ac6e0d5c2"
+      },
+      {
+        "value": "and to market launch. Typically, High-Tech Gründerfonds invests EUR 600,000 in the seed stage, with the potential for up to a total of EUR 2",
+        "evidenceId": "check-deal-5df22a22c6"
       }
     ],
     "dealComponents": [
@@ -719,6 +2158,18 @@
           "condition": "up to"
         },
         "evidenceId": "check-deal-d9fcffb58e"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "600000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-5df22a22c6"
       }
     ],
     "portfolioPages": [

@@ -1,105 +1,17 @@
 {
   "programId": "northzone",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://northzone.com/about",
       "page": "details",
       "anchor": "About",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://northzone.com/insights/annoucing-investment-fubotv",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/insights/announcing-investment-personio",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/insights/announcing-our-investment-in-nested",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/insights/architectural-collaboration-reimagined-our-investment-in-rayon",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/insights/autonomous-truck-company-einride-plans-to-go-public-in-spac-deal",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/insights/backed-by-disney-kahoot-expands-investment-in-new-games",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/insights/barcelona-strike-supponor-virtual-advertising-deal",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/insights/basketball-legend-pau-gasol-joins-healthtech-scaleup-idoven-in-a-new-round-of-investment",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/insights/bringing-more-transparency-to-employee-compensation-our-investment-in-ravio",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/insights/cathay-innovations-first-investment-in-germany-is-healthcare-startup-medwing",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/insights/firstminute-capitals-sam-endacott-joins-northzone-to-lead-early-stage-ai-investment",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/insights/four-ai-unicorns-minted-this-year-more-in-the-making-the-result-of-northzones-deep-conviction-in-ai-underscoring-the-strength-of-our-long-term-ai-investment-strategy",
       "page": "terms",
       "anchor": "",
       "fetched": true,
@@ -223,6 +135,14 @@
       "page": "portfolio",
       "anchor": "Growth · 2026 Xbow Autonomous offensive security",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/responsible-investment-policy",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

@@ -1,20 +1,16 @@
 {
   "programId": "tech-fort-worth",
-  "checkedAt": "2026-11-14T20:04:58.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "http://techfortworth.org",
     "https://www.techfortworth.org/faq",
-    "https://www.techfortworth.org/media/categories/investments",
     "https://www.techfortworth.org/about",
     "https://www.techfortworth.org/fastforward-fastforward-bio",
     "https://www.techfortworth.org/made-manufacturing-accelerator",
-    "https://www.techfortworth.org/post/made-new-dfw-accelerator-aims-to-bolster-manufacturers-amid-reshoring-workforce-pressures",
-    "https://www.techfortworth.org/post/techfw-accepts-six-startups-into-its-thinklab-program",
-    "https://www.techfortworth.org/post/thinklab-startup-accelerator-spring-2021-graduates",
     "https://www.techfortworth.org/programs",
-    "https://www.techfortworth.org/portfolio",
-    "https://www.techfortworth.org/post/emerging-technology-companies-to-be-honored-at-techfw-s-10th-annual-impact-awards",
-    "https://www.techfortworth.org/post/seven-female-founded-companies-were-selected-for-joint-techfw-texas-woman-s-program"
+    "https://www.techfortworth.org/media/categories/investments",
+    "https://www.techfortworth.org/post/made-new-dfw-accelerator-aims-to-bolster-manufacturers-amid-reshoring-workforce-pressures",
+    "https://www.techfortworth.org/post/techfw-accepts-six-startups-into-its-thinklab-program"
   ],
   "evidence": [
     {
@@ -102,76 +98,6 @@
       "page": "details"
     },
     {
-      "id": "check-format-05a75dd078",
-      "url": "https://www.techfortworth.org/portfolio",
-      "title": "TECH Fort Worth — portfolio page",
-      "excerpt": "Unbent Unbent is a company focused on delivering Virtual Reality Soft and Hard Skill assessments that address skill",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-0d99aa71c0",
-      "url": "https://www.techfortworth.org/portfolio",
-      "title": "TECH Fort Worth — portfolio page",
-      "excerpt": "for the beauty industry. By using Desk-Less Reception (or Virtual Assistants) to help salon owners handle day-to-day tasks,",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-12ee0042e5",
-      "url": "https://www.techfortworth.org/portfolio",
-      "title": "TECH Fort Worth — portfolio page",
-      "excerpt": "Ripple Gear makes people feel actions that happen in the virtual world, adjusting audio and lighting to create an immersive",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-4c623d6fd4",
-      "url": "https://www.techfortworth.org/post/seven-female-founded-companies-were-selected-for-joint-techfw-texas-woman-s-program",
-      "title": "TECH Fort Worth — portfolio page",
-      "excerpt": "ThinkLab™ Ruby Bhayani is working on an app that provides remote patient monitoring and nursing management services for",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-4ec9601a5f",
-      "url": "https://www.techfortworth.org/portfolio",
-      "title": "TECH Fort Worth — portfolio page",
-      "excerpt": "virtually anywhere and still maintain the convenience of a remote release roping chute. This product has been tested for 10",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-6115434b5c",
-      "url": "https://www.techfortworth.org/portfolio",
-      "title": "TECH Fort Worth — portfolio page",
-      "excerpt": "on building mobile games that bring people together in person. Inspired by the social magic of Nintendo’s StreetPass and",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-7d2b3c7a0e",
-      "url": "https://www.techfortworth.org/portfolio",
-      "title": "TECH Fort Worth — portfolio page",
-      "excerpt": "the development and delivery of wearable devices employing remote technology. Established in 2008, Medhab has developed",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-b43b61eb96",
-      "url": "https://www.techfortworth.org/portfolio",
-      "title": "TECH Fort Worth — portfolio page",
-      "excerpt": "the need for turbochargers) and the fuel efficiency of a hybrid. Amy Fox Golf Enjoy your golf game and improve your",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-d72a3e5f48",
-      "url": "https://www.techfortworth.org/portfolio",
-      "title": "TECH Fort Worth — portfolio page",
-      "excerpt": "middle school students through fun learning activities, virtual learning, and educational games. ​ https://hypemath.com/",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-location-a309d595b7",
-      "url": "https://www.techfortworth.org/portfolio",
-      "title": "TECH Fort Worth — portfolio page",
-      "excerpt": "is a privately held biotech company based in Dallas–Fort Worth, TX. Founded on the",
-      "page": "portfolio"
-    },
-    {
       "id": "check-location-da7435a910",
       "url": "https://www.techfortworth.org/about",
       "title": "TECH Fort Worth — program page",
@@ -193,25 +119,11 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-0b71c5b2ab",
-      "url": "https://www.techfortworth.org/post/seven-female-founded-companies-were-selected-for-joint-techfw-texas-woman-s-program",
-      "title": "TECH Fort Worth — portfolio page",
-      "excerpt": "Portfolio → https://www.techfortworth.org/portfolio",
-      "page": "portfolio"
-    },
-    {
       "id": "check-portfolio-1beb1ed7fe",
       "url": "https://www.techfortworth.org/faq",
       "title": "TECH Fort Worth — terms page",
       "excerpt": "Portfolio → https://www.techfortworth.org/portfolio",
       "page": "terms"
-    },
-    {
-      "id": "check-portfolio-4103f04365",
-      "url": "https://www.techfortworth.org/post/emerging-technology-companies-to-be-honored-at-techfw-s-10th-annual-impact-awards",
-      "title": "TECH Fort Worth — portfolio page",
-      "excerpt": "Portfolio → https://www.techfortworth.org/portfolio",
-      "page": "portfolio"
     },
     {
       "id": "check-portfolio-680e3db1e1",
@@ -268,20 +180,6 @@
       "title": "TECH Fort Worth — program page",
       "excerpt": "Portfolio → https://www.techfortworth.org/portfolio",
       "page": "details"
-    },
-    {
-      "id": "check-portfolio-f0e3b4d1bb",
-      "url": "https://www.techfortworth.org/post/thinklab-startup-accelerator-spring-2021-graduates",
-      "title": "TECH Fort Worth — program page",
-      "excerpt": "Portfolio → https://www.techfortworth.org/portfolio",
-      "page": "details"
-    },
-    {
-      "id": "check-route-042ad431c6",
-      "url": "https://www.techfortworth.org/post/thinklab-startup-accelerator-spring-2021-graduates",
-      "title": "TECH Fort Worth — program page",
-      "excerpt": "TechFW → http://techfortworth.org",
-      "page": "details"
     }
   ],
   "pageQuotes": [
@@ -292,16 +190,112 @@
       "excerpt": "TechFW | Fort Worth Startup Accelerator & Tech Incubator top of page Contact Us Programs ThinkLab ThinkLab On Demand ThinkLab on Demand Modules SmartStart FastForward & FastForward BIO Cowtown Angels MADE Manufacturing Accelerator About Team Sponsors + Partners Services News + Media Governance Events Portfolio FAQ Contact Submit an Application My Subscriptions Use tab to navigate through the menu items. Got a big idea? Let’s ride. We help North Texas founders blaze new trails. From that spark of an idea to bootstrapping your startup, we've got the guidance, a circle of support, and the grit it takes to build something real. Apply Today Explore Our Programs 300+ Startups Supported Since 1998 $3.2B Exit Dollars from Companies 100% Equity Kept by TechFW Founders Hours of Coaching and Counting 37,000+ Why is TechFW right for your startup? TechFW is a nonprofit startup hub where entrepreneurial grit meets rugged startup strategy. For the last 25 years, we have been helping founders navigate the new frontier for tech. About TechFW TechFW Entrepreneur Support Programs ThinkLab Startup Accelerator Test the waters. Validate your idea. Build a business plan with expert guidance, founder peers, and no wasted motion. Learn More >>> FastForward Startup Growth Program Scale with confidence. You’re already on the trail and we help you chart the path to grow with coaching and tools so you"
     },
     {
+      "id": "check-page-a4bbcf79af",
+      "url": "http://techfortworth.org",
+      "page": "details",
+      "excerpt": "Learn More >>> SmartStart Startup Incubator Program Launch your company."
+    },
+    {
+      "id": "check-page-6c85189645",
+      "url": "http://techfortworth.org",
+      "page": "details",
+      "excerpt": "Learn More >>> Cowtown Angels Investor Network When you're in the saddle to start to raise capital, you have an first-class entry into Fort Worth's leading angel investor network."
+    },
+    {
+      "id": "check-page-8da2ed1a06",
+      "url": "http://techfortworth.org",
+      "page": "details",
+      "excerpt": "Patent Attorney + Mentor \"TechFW is indeed a great platform as it offers an excellent environment for networking, mentorship, and connecting with a variety of experts who can help guide early-stage innovators through the business and funding process."
+    },
+    {
+      "id": "check-page-95464d5a6c",
+      "url": "http://techfortworth.org",
+      "page": "details",
+      "excerpt": "Unlike many similar organizations, TechFW is equity-free, which is a tremendous benefit for founders looking to retain control of their ventures.\" Gerald Schwarz Architect + TechFW Graduate \"My biggest takeaway from the ThinkLab course was the viability of my product."
+    },
+    {
+      "id": "check-page-eb67984f74",
+      "url": "http://techfortworth.org",
+      "page": "details",
+      "excerpt": "Our success has been enhanced by the constant access to mentors, advisors and professionals who have the experience to energize our growth.The goal of the FastForward program is to have a foundation in place, scale up and grow."
+    },
+    {
       "id": "check-page-7684724e9e",
       "url": "https://www.techfortworth.org/faq",
       "page": "terms",
       "excerpt": "FAQ | TECHFW top of page Contact Us Programs ThinkLab ThinkLab On Demand ThinkLab on Demand Modules SmartStart FastForward & FastForward BIO Cowtown Angels MADE Manufacturing Accelerator About Team Sponsors + Partners Services News + Media Governance Events Portfolio FAQ Contact Submit an Application My Subscriptions Use tab to navigate through the menu items. Frequently Asked Questions Every great business starts with a few questions. Explore our answers below and take one step closer to turning your idea into something real. Each of our startup programs (ThinkLab, SmartStart, FastForward) are aimed to support whatever stage you’re in. Learn More About Programs General TechFW Questions Questions and Answers about TechFW Where can I join a tech startup accelerator in Fort Worth? At TechFW we offer resources, mentorship, and funding connections like Cowtown Angels to tech entrepreneurs without taking equity. We run entrepreneur support programs like our ThinkLab Accelerator, SmartStart Incubator, and FastForward Growth programs to support startups at various stages. Join TechFW’s ThinkLab Accelerator Fort Worth’s most practical, no-fluff program for early-stage startup founders. ThinkLab is a 8-week accelerator where entrepreneurs go from idea to action, building real plans, meeting mentors, and validating their value proposition. How do I apply for a startup incubator program"
     },
     {
-      "id": "check-page-9103495dda",
-      "url": "https://www.techfortworth.org/media/categories/investments",
+      "id": "check-page-9705ddbc47",
+      "url": "https://www.techfortworth.org/faq",
       "page": "terms",
-      "excerpt": "Investments top of page Contact Us Programs ThinkLab ThinkLab On Demand ThinkLab on Demand Modules SmartStart FastForward & FastForward BIO Cowtown Angels MADE Manufacturing Accelerator About Team Sponsors + Partners Services News + Media Governance Events Portfolio FAQ Contact Submit an Application My Subscriptions Use tab to navigate through the menu items. News & Insights from TechFW At TechFW, we’re on the ground with founders, researchers, investors, and partners building what’s next for Fort Worth and North Texas. This is where we share news, media coverage, program updates, and insights from across our startup ecosystem from early-stage breakthroughs to scale-stage wins. Learn More All Posts News Members Partnerships Investments Investments Posts Coming Soon Explore other categories in this blog or check back later. Menu Home Programs Services About Contact FAQ Cowtown Angels Follow Us Member Login Log In 1120 South Fwy Fort Worth, TX 76104 tfwadmin@techfortworth.org (817) 339-8968 Contact Us Donate bottom of page"
+      "excerpt": "How do I apply for a startup incubator program in Texas? ​ TechFW’s SmartStart Incubator helps you go from idea to launch."
+    },
+    {
+      "id": "check-page-15e75cc55c",
+      "url": "https://www.techfortworth.org/faq",
+      "page": "terms",
+      "excerpt": "If you’ve got a working product, paying customers, and need strategic coaching to scale effectively, FastForward offers customized executive coaching and access to investors through Cowtown Angels."
+    },
+    {
+      "id": "check-page-08cb7e3014",
+      "url": "https://www.techfortworth.org/faq",
+      "page": "terms",
+      "excerpt": "Where can I find mentorship for tech entrepreneurs in Fort Worth?"
+    },
+    {
+      "id": "check-page-0c26923679",
+      "url": "https://www.techfortworth.org/faq",
+      "page": "terms",
+      "excerpt": "TechFW offers personalized coaching, access to a network of trusted advisors, and one-on-one mentorship through all of our programs."
+    },
+    {
+      "id": "check-page-d76f72a645",
+      "url": "https://www.techfortworth.org/faq",
+      "page": "terms",
+      "excerpt": "Whether you’re in ThinkLab, SmartStart, or FastForward, we match you with mentors who understand what you’re building and want to see you succeed. ​ How to get access to biotech wet labs in Fort Worth?"
+    },
+    {
+      "id": "check-page-0d53c2dd79",
+      "url": "https://www.techfortworth.org/faq",
+      "page": "terms",
+      "excerpt": "TechFW operates wet lab spaces through our partnership with the UNT Health Fort Worth ."
+    },
+    {
+      "id": "check-page-14a848905d",
+      "url": "https://www.techfortworth.org/faq",
+      "page": "terms",
+      "excerpt": "If your biotech or medtech startup needs specialized lab facilities to prototype and grow, we help connect our members to space and support within our innovation ecosystem."
+    },
+    {
+      "id": "check-page-e53ed99d70",
+      "url": "https://www.techfortworth.org/faq",
+      "page": "terms",
+      "excerpt": "What makes TechFW different from other startup incubators in Fort Worth?"
+    },
+    {
+      "id": "check-page-f705bbec36",
+      "url": "https://www.techfortworth.org/faq",
+      "page": "terms",
+      "excerpt": "We also have Fort Worth's leading angel investor program for the last decade, Cowtown Angels , giving critical access to investors and potential funding."
+    },
+    {
+      "id": "check-page-950fb1e192",
+      "url": "https://www.techfortworth.org/faq",
+      "page": "terms",
+      "excerpt": "What kind of support do startup incubators offer in Texas?"
+    },
+    {
+      "id": "check-page-c0e381793f",
+      "url": "https://www.techfortworth.org/faq",
+      "page": "terms",
+      "excerpt": "Since 2012, TechFW and TMAC have partnered through the National Institute of Standards & Technologies (NIST) Manufacturing Extension Partnership (MEP) with the goal of expanding the capacity, efficiency, and innovation of the local economic sector through technology development and acceleration."
+    },
+    {
+      "id": "check-page-a7c468c041",
+      "url": "https://www.techfortworth.org/faq",
+      "page": "terms",
+      "excerpt": "Where can I find a startup accelerator that lets founders keep 100% equity?"
     },
     {
       "id": "check-page-07b844fd60",
@@ -310,16 +304,160 @@
       "excerpt": "About | TECHFW top of page Contact Us Programs ThinkLab ThinkLab On Demand ThinkLab on Demand Modules SmartStart FastForward & FastForward BIO Cowtown Angels MADE Manufacturing Accelerator About Team Sponsors + Partners Services News + Media Governance Events Portfolio FAQ Contact Submit an Application My Subscriptions Use tab to navigate through the menu items. Who We Are We’re here to prove that the next generation of world-changing companies doesn’t have to come from a coast. It begins right here in Cowtown. TechFW is a nonprofit startup incubator and accelerator based in Fort Worth, Texas, helping entrepreneurs turn innovation into reality since 1998. We support founders at every stage through expert-led programs, strategic mentorship, and access to a powerful community. We work with scalable startups in biotech, hardware, AI, clean energy, software, and emerging technologies without taking equity. TechFW Startup Programs We meet founders where they are and help them get where they’re going. Whether you’re validating a brand-new idea, building your first product, or gearing up to scale, our programs are designed to support the real work of entrepreneurship. No shortcuts. No ego. Just the structure, coaching, and community you need to move forward with confidence. ThinkLab Startup Accelerator ThinkLab is our idea-stage accelerator for founders who are ready to stop"
     },
     {
+      "id": "check-page-8918719a64",
+      "url": "https://www.techfortworth.org/about",
+      "page": "details",
+      "excerpt": "ThinkLab Startup Accelerator ThinkLab is our idea-stage accelerator for founders who are ready to stop daydreaming and start building."
+    },
+    {
+      "id": "check-page-bc1f535277",
+      "url": "https://www.techfortworth.org/about",
+      "page": "details",
+      "excerpt": "ThinkLab SmartStart Startup Incubator SmartStart is our incubator for founders who have moved past the idea stage and are ready to get their hands dirty building a real company."
+    },
+    {
+      "id": "check-page-800c2649ed",
+      "url": "https://www.techfortworth.org/about",
+      "page": "details",
+      "excerpt": "SmartStart FastForward Startup Growth Incubator FastForward is our disciplined growth program for founders with traction and higher stakes."
+    },
+    {
+      "id": "check-page-9e46c2defb",
+      "url": "https://www.techfortworth.org/about",
+      "page": "details",
+      "excerpt": "At TechFW, founders, mentors, and partners share knowledge, experience, and connections without keeping score."
+    },
+    {
+      "id": "check-page-6d1cedb38d",
+      "url": "https://www.techfortworth.org/about",
+      "page": "details",
+      "excerpt": "We believe in rolling deep with mentors, peers, and a community that shows up."
+    },
+    {
+      "id": "check-page-32e59efc0e",
+      "url": "https://www.techfortworth.org/about",
+      "page": "details",
+      "excerpt": "2003-2004 TechFW Expands We began with a focus on medical technology."
+    },
+    {
+      "id": "check-page-33c34d4a0c",
+      "url": "https://www.techfortworth.org/about",
+      "page": "details",
+      "excerpt": "A few years later, we added wet lab space in partnership with UNT Health Fort Worth to support biotech startups with specialized needs."
+    },
+    {
       "id": "check-page-9a1a8c2d4e",
       "url": "https://www.techfortworth.org/fastforward-fastforward-bio",
       "page": "details",
       "excerpt": "FastForward & FastForward BIO | TECHFW top of page Contact Us Programs ThinkLab ThinkLab On Demand ThinkLab on Demand Modules SmartStart FastForward & FastForward BIO Cowtown Angels MADE Manufacturing Accelerator About Team Sponsors + Partners Services News + Media Governance Events Portfolio FAQ Contact Submit an Application My Subscriptions Use tab to navigate through the menu items. FastForward and FastForwardBIO Startup Growth Accelerator FastForward is TechFW’s advanced coaching program for growth-stage founders who have real traction and real stakes. This is where companies build the systems, strategy, and leadership required to grow sustainably, raise capital, and operate at the next level. If SmartStart helps you build the machine, FastForward helps you run it at scale. Apply Now Key Components of FastForward 1 Quarterly Milestones Work on achievable, measurable goals every quarter—reviewed in structured check-ins with your coach. 2 Tiered Coaching Access to top-tier coaches and subject matter experts across finance, operations, commercialization, and leadership. 3 Strategic Roadmapping Refine the short-term decisions and long-term vision that will actually get you to scale. 4 Investor Readiness Work through financials, forecasting, and pitch strategy to confidently approach capital. 5 Operational Excellence Build processes, systems, dashboards, and workflows that"
     },
     {
+      "id": "check-page-52dfc8939c",
+      "url": "https://www.techfortworth.org/fastforward-fastforward-bio",
+      "page": "details",
+      "excerpt": "Our success has been enhanced by the constant access to TechFW mentors, advisors and professionals who have the experience to energize our growth."
+    },
+    {
+      "id": "check-page-045cc167f5",
+      "url": "https://www.techfortworth.org/fastforward-fastforward-bio",
+      "page": "details",
+      "excerpt": "FastForward Bio extends the core FastForward program with specialized support for founders in: Life sciences Biotech Medical devices Diagnostics Pharmaceuticals Health innovation Life science companies require different timelines, expertise, and commercialization paths."
+    },
+    {
       "id": "check-page-b8b144cea9",
       "url": "https://www.techfortworth.org/made-manufacturing-accelerator",
       "page": "details",
       "excerpt": "MADE Manufacturing Accelerator | TECHFW top of page Contact Us Programs ThinkLab ThinkLab On Demand ThinkLab on Demand Modules SmartStart FastForward & FastForward BIO Cowtown Angels MADE Manufacturing Accelerator About Team Sponsors + Partners Services News + Media Governance Events Portfolio FAQ Contact Submit an Application My Subscriptions Use tab to navigate through the menu items. ​​Manufacturing Accelerator and Development Engine Made for the companies that are ready to build something for what's next. ​ MADE is TechFW’s new manufacturing accelerator program, launching this fall to help North Texas founders and manufacturers move from innovation to execution. Built in collaboration with TMAC and Workforce Solutions for Tarrant County , MADE is designed to close the gap between promising ideas and scalable production by connecting companies to the tools, expertise, workforce pathways, and operational support they need to grow here. This program is for builders: the companies developing physical products, production processes, and next-generation manufacturing solutions who need more than advice. They need pathways. They need partners. They need infrastructure that can move at the speed of manufacturing. Apply Now What to Expect 🛠 Workforce + Operations Readiness Manufacturing growth depends on having the right people, skills, and systems at the right time. MADE will"
+    },
+    {
+      "id": "check-page-9df2364689",
+      "url": "https://www.techfortworth.org/made-manufacturing-accelerator",
+      "page": "details",
+      "excerpt": "MADE will support workforce credentialing, training pipelines, supply chain integration, and advanced operations support so companies can build stronger teams and more resilient processes as they grow. ⚙️ Prototype-to-Production Support MADE is built to help companies bridge the gap between concept and scalable execution."
+    },
+    {
+      "id": "check-page-8876000e88",
+      "url": "https://www.techfortworth.org/made-manufacturing-accelerator",
+      "page": "details",
+      "excerpt": "Founders and manufacturers will gain access to prototype-to-production pathways, shared manufacturing services, certification readiness support, and practical guidance for both product and process development."
+    },
+    {
+      "id": "check-page-c97d94a3b4",
+      "url": "https://www.techfortworth.org/made-manufacturing-accelerator",
+      "page": "details",
+      "excerpt": "Through TechFW’s startup development experience and TMAC’s technical and operational support, companies will gain structured access to capital pathways, corporate and industry partnerships, mentorship, and collaborative spaces built to move ideas forward."
+    },
+    {
+      "id": "check-page-90c487ef1c",
+      "url": "https://www.techfortworth.org/made-manufacturing-accelerator",
+      "page": "details",
+      "excerpt": "The MADE Manufacturing Accelerator and Development Engine is designed to change that."
+    },
+    {
+      "id": "check-page-3396734ac1",
+      "url": "https://www.techfortworth.org/made-manufacturing-accelerator",
+      "page": "details",
+      "excerpt": "Fort Worth was recognized in 2025 as the “ aviation and defense capital of Texas ” and MADE builds on that momentum with a bigger regional goal: to help position Fort Worth as the applied manufacturing capital of North Texas by creating stronger local production pathways, more agile workforce pipelines, and a connected innovation corridor across Texas."
+    },
+    {
+      "id": "check-page-eabf12b5a8",
+      "url": "https://www.techfortworth.org/made-manufacturing-accelerator",
+      "page": "details",
+      "excerpt": "You're a strong fit if: You’re building in aerospace & defense, reshoring, infrastructure, agritech, or workforce-enabling industries."
+    },
+    {
+      "id": "check-page-d6f7a223b1",
+      "url": "https://www.techfortworth.org/made-manufacturing-accelerator",
+      "page": "details",
+      "excerpt": "You’re developing a physical product, hardware innovation, production process, or advanced manufacturing solution that needs support moving from prototype to scalable execution."
+    },
+    {
+      "id": "check-page-418a6a79e8",
+      "url": "https://www.techfortworth.org/made-manufacturing-accelerator",
+      "page": "details",
+      "excerpt": "You need access to manufacturing capability, certification readiness, workforce pipelines, supply chain integration, or operational support to keep growing."
+    },
+    {
+      "id": "check-page-35c5b29033",
+      "url": "https://www.techfortworth.org/programs",
+      "page": "details",
+      "excerpt": "Programs | TECHFW top of page Contact Us Programs ThinkLab ThinkLab On Demand ThinkLab on Demand Modules SmartStart FastForward & FastForward BIO Cowtown Angels MADE Manufacturing Accelerator About Team Sponsors + Partners Services News + Media Governance Events Portfolio FAQ Contact Submit an Application My Subscriptions Use tab to navigate through the menu items. Programs Built for Pioneers Whether you’re sketching on a napkin or gearing up to pitch the big leagues, TechFW meets you where you are in your journey. We’re here for the dreamers who aren’t afraid of a little dust, and the builders ready to saddle up. With hands-on coaching, straight shooting programming, and a tight knit community of doers, we help tech entrepreneurs chart the course for pioneering progress and innovation in North Texas. ThinkLab Timeline: 8 weeks Cost: $1,000 total Goal: Build solid foundations + walk away with a business plan Modules: Pre-recorded lectures with weekly Q&A and review sessions with facilitator Guinn Campus shared workspace access + TechFW conference rooms Access to member portal + resources Graduation pitch at Startup Bites $250 discount toward first quarter of SmartStart Best for: Founders validating early-stage ideas Learn More SmartStart Timeline: 24 weeks (option to extend) Cost: $1,250/quarter Goal: Develop investor-ready pitch deck and build a strong coaching connections to"
+    },
+    {
+      "id": "check-page-cdfe2758f0",
+      "url": "https://www.techfortworth.org/programs",
+      "page": "details",
+      "excerpt": "ThinkLab is the Dallas and Fort Worth practical startup accelerator."
+    },
+    {
+      "id": "check-page-419f117410",
+      "url": "https://www.techfortworth.org/programs",
+      "page": "details",
+      "excerpt": "This 8-week, non-seed accelerator is designed for early-stage founders with a tech-enabled idea."
+    },
+    {
+      "id": "check-page-4e97367be4",
+      "url": "https://www.techfortworth.org/programs",
+      "page": "details",
+      "excerpt": "Expect weekly workshops, targeted assignments, 1:1 coaching, and real-time feedback from a community of startup experts and mentors."
+    },
+    {
+      "id": "check-page-78aaa0d758",
+      "url": "https://www.techfortworth.org/programs",
+      "page": "details",
+      "excerpt": "How is ThinkLab different from other startup accelerators in Dallas or Fort Worth?"
+    },
+    {
+      "id": "check-page-cab1aafcbe",
+      "url": "https://www.techfortworth.org/programs",
+      "page": "details",
+      "excerpt": "We’re local, embedded in Fort Worth’s innovation scene, and focused on helping you move from idea to execution with practical, step-by-step support through a community of entrepreneurs, mentors, and coaches."
+    },
+    {
+      "id": "check-page-9103495dda",
+      "url": "https://www.techfortworth.org/media/categories/investments",
+      "page": "terms",
+      "excerpt": "Investments top of page Contact Us Programs ThinkLab ThinkLab On Demand ThinkLab on Demand Modules SmartStart FastForward & FastForward BIO Cowtown Angels MADE Manufacturing Accelerator About Team Sponsors + Partners Services News + Media Governance Events Portfolio FAQ Contact Submit an Application My Subscriptions Use tab to navigate through the menu items. News & Insights from TechFW At TechFW, we’re on the ground with founders, researchers, investors, and partners building what’s next for Fort Worth and North Texas. This is where we share news, media coverage, program updates, and insights from across our startup ecosystem from early-stage breakthroughs to scale-stage wins. Learn More All Posts News Members Partnerships Investments Investments Posts Coming Soon Explore other categories in this blog or check back later. Menu Home Programs Services About Contact FAQ Cowtown Angels Follow Us Member Login Log In 1120 South Fwy Fort Worth, TX 76104 tfwadmin@techfortworth.org (817) 339-8968 Contact Us Donate bottom of page"
     },
     {
       "id": "check-page-8cec30fabe",
@@ -332,36 +470,6 @@
       "url": "https://www.techfortworth.org/post/techfw-accepts-six-startups-into-its-thinklab-program",
       "page": "details",
       "excerpt": "TechFW accepts six startups into its ThinkLab program top of page Contact Us Programs ThinkLab ThinkLab On Demand ThinkLab on Demand Modules SmartStart FastForward & FastForward BIO Cowtown Angels MADE Manufacturing Accelerator About Team Sponsors + Partners Services News + Media Governance Events Portfolio FAQ Contact Submit an Application My Subscriptions Use tab to navigate through the menu items. All Posts News Members Partnerships Investments Search TechFW accepts six startups into its ThinkLab program Briana Wucinski Jun 17, 2019 1 min read The nonprofit technology incubator TechFW has accepted six startups with individual ideas into its ThinkLab program. ThinkLab is a12-to-16 weeks, structured program that evaluates the marketability of the business ideas. The program provides skills training on engaging potential stakeholders, professional legal and accounting services and access to TechFW facilities. Read the full story at The Business Press . Recent Posts See All The Fort Worth DAO, TechFW, and Moonshot launch HackFW: MADE Challenge Demo Day The All-In Comeback: How Ken Wimberly Turned an $800K Loss Into a Business Built on Joy TechFW and SATOP Partnership Continues on in 2026 Menu Home Programs Services About Contact FAQ Cowtown Angels Follow Us Member Login Log In 1120 South Fwy Fort Worth, TX 76104 tfwadmin@techfortworth.org (817) 339-8968 Contact Us Donate bottom"
-    },
-    {
-      "id": "check-page-d232a517e3",
-      "url": "https://www.techfortworth.org/post/thinklab-startup-accelerator-spring-2021-graduates",
-      "page": "details",
-      "excerpt": "ThinkLab™ Startup Accelerator Spring 2021 Graduates top of page Contact Us Programs ThinkLab ThinkLab On Demand ThinkLab on Demand Modules SmartStart FastForward & FastForward BIO Cowtown Angels MADE Manufacturing Accelerator About Team Sponsors + Partners Services News + Media Governance Events Portfolio FAQ Contact Submit an Application My Subscriptions Use tab to navigate through the menu items. All Posts News Members Partnerships Investments Search ThinkLab™ Startup Accelerator Spring 2021 Graduates Briana Wucinski May 10, 2021 6 min read This Spring was the first time we have ever run 2 ThinkLab ™ cohorts at once: one at TechFW and one at Pegasus Park. And we are pleased to announce that they were a success! We are beyond impressed by the individuals in our Spring ThinkLab ™ startup accelerator cohorts. They did the hard work of challenging assumptions and diving into their business models. Meet the graduates of the Spring 2021 ThinkLab Startup Accelerator cohorts: Whitney Robinson Whitney Robinson is the current owner of Big Horse Marketing and has experience in all aspects of marketing and brand development. Robinson has a Bachelor of Business Administration in Marketing and is highly skilled in Direct Marketing , Marketing Strategy , Social Media , Email Marketing and more. Her Company - Head to Vegas Our technology will allow users who are planning to travel to Las"
-    },
-    {
-      "id": "check-page-35c5b29033",
-      "url": "https://www.techfortworth.org/programs",
-      "page": "details",
-      "excerpt": "Programs | TECHFW top of page Contact Us Programs ThinkLab ThinkLab On Demand ThinkLab on Demand Modules SmartStart FastForward & FastForward BIO Cowtown Angels MADE Manufacturing Accelerator About Team Sponsors + Partners Services News + Media Governance Events Portfolio FAQ Contact Submit an Application My Subscriptions Use tab to navigate through the menu items. Programs Built for Pioneers Whether you’re sketching on a napkin or gearing up to pitch the big leagues, TechFW meets you where you are in your journey. We’re here for the dreamers who aren’t afraid of a little dust, and the builders ready to saddle up. With hands-on coaching, straight shooting programming, and a tight knit community of doers, we help tech entrepreneurs chart the course for pioneering progress and innovation in North Texas. ThinkLab Timeline: 8 weeks Cost: $1,000 total Goal: Build solid foundations + walk away with a business plan Modules: Pre-recorded lectures with weekly Q&A and review sessions with facilitator Guinn Campus shared workspace access + TechFW conference rooms Access to member portal + resources Graduation pitch at Startup Bites $250 discount toward first quarter of SmartStart Best for: Founders validating early-stage ideas Learn More SmartStart Timeline: 24 weeks (option to extend) Cost: $1,250/quarter Goal: Develop investor-ready pitch deck and build a strong coaching connections to"
-    },
-    {
-      "id": "check-page-d66790f033",
-      "url": "https://www.techfortworth.org/portfolio",
-      "page": "portfolio",
-      "excerpt": "Portfolio | TECHFW top of page Contact Us Programs ThinkLab ThinkLab On Demand ThinkLab on Demand Modules SmartStart FastForward & FastForward BIO Cowtown Angels MADE Manufacturing Accelerator About Team Sponsors + Partners Services News + Media Governance Events Portfolio FAQ Contact Submit an Application My Subscriptions Use tab to navigate through the menu items. Founder Focused Meet the Minds Behind the Tech Our portfolio is a look at the builders behind the buzz: founders turning tough problems into real companies, right here on the Texas startup frontier and beyond. From first prototype to major exit, TechFW walks alongside these teams as they validate ideas, find customers, raise capital, and scale. Explore the innovators, the technologies they’re developing, and the impact they’re making on the region. OUR FOUNDERS ACDET Frank Papa Their mission is to improve diagnostic ability by making diagnostic training a core part of medical education—from year one through clinical practice. NBME and NBOME agree: 80% of test items require a correct diagnosis. Yet misdiagnosis remains a major issue. Most students encounter only a few dozen cases before their third year, delaying meaningful diagnostic practice until residency. Barricade Therapeutics Neil Thapar Barricade Therapeutics is a privately held biotech company based in Dallas–Fort Worth, TX. Founded on the discovery of"
-    },
-    {
-      "id": "check-page-1781ff2610",
-      "url": "https://www.techfortworth.org/post/emerging-technology-companies-to-be-honored-at-techfw-s-10th-annual-impact-awards",
-      "page": "portfolio",
-      "excerpt": "Emerging technology companies to be honored at TechFW's 10th Annual IMPACT Awards top of page Contact Us Programs ThinkLab ThinkLab On Demand ThinkLab on Demand Modules SmartStart FastForward & FastForward BIO Cowtown Angels MADE Manufacturing Accelerator About Team Sponsors + Partners Services News + Media Governance Events Portfolio FAQ Contact Submit an Application My Subscriptions Use tab to navigate through the menu items. All Posts News Members Partnerships Investments Search Emerging technology companies to be honored at TechFW's 10th Annual IMPACT Awards Briana Wucinski Sep 10, 2018 1 min read Two health care technology companies and a product to increase crop yields will be recognized at the 10th annual TechFW IMPACT Awards luncheon on Oct. 9. Read more at The Business Press Recent Posts See All The Fort Worth DAO, TechFW, and Moonshot launch HackFW: MADE Challenge Demo Day The All-In Comeback: How Ken Wimberly Turned an $800K Loss Into a Business Built on Joy TechFW and SATOP Partnership Continues on in 2026 Menu Home Programs Services About Contact FAQ Cowtown Angels Follow Us Member Login Log In 1120 South Fwy Fort Worth, TX 76104 tfwadmin@techfortworth.org (817) 339-8968 Contact Us Donate bottom of page"
-    },
-    {
-      "id": "check-page-8fc4b710a4",
-      "url": "https://www.techfortworth.org/post/seven-female-founded-companies-were-selected-for-joint-techfw-texas-woman-s-program",
-      "page": "portfolio",
-      "excerpt": "Seven female-founded companies were selected for joint TechFW/Texas Woman’s program top of page Contact Us Programs ThinkLab ThinkLab On Demand ThinkLab on Demand Modules SmartStart FastForward & FastForward BIO Cowtown Angels MADE Manufacturing Accelerator About Team Sponsors + Partners Services News + Media Governance Events Portfolio FAQ Contact Submit an Application My Subscriptions Use tab to navigate through the menu items. All Posts News Members Partnerships Investments Search Seven female-founded companies were selected for joint TechFW/Texas Woman’s program Briana Wucinski Aug 22, 2022 4 min read Seven woman-owned, startup businesses have been selected and funded to participate in one of two TechFW programs, courtesy of the Texas Woman’s University - Center for Women Entrepreneurs Education Awards . The Center designated $1,000 and $2,000 awards for female entrepreneurs to participate in TechFW’s ThinkLab startup accelerator or SmartStart business incubator programs. The winners were chosen based on the following criteria: 1) The founder is a female entrepreneur who is a major shareholder and decision-maker2) The founder and business are in the state of Texas3) The business is a for-profit company4) The founder must own, have licensed, or be working on proprietary technology, a trade secret, or an innovative way of doing business. \"Receiving the grant from TWU was a"
     }
   ],
   "findings": {
@@ -373,12 +481,7 @@
       }
     ],
     "routes": [],
-    "applicationUrl": [
-      {
-        "value": "http://techfortworth.org",
-        "evidenceId": "check-route-042ad431c6"
-      }
-    ],
+    "applicationUrl": [],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
@@ -395,36 +498,19 @@
         "evidenceId": "check-duration-6d7c286d2a"
       },
       {
-        "value": "16",
-        "evidenceId": "check-duration-aa56c1a546"
-      },
-      {
         "value": "24",
         "evidenceId": "check-duration-4cadb2a5a6"
-      }
-    ],
-    "format": [
-      {
-        "value": "in-person",
-        "evidenceId": "check-format-6115434b5c"
       },
       {
-        "value": "hybrid",
-        "evidenceId": "check-format-b43b61eb96"
-      },
-      {
-        "value": "remote",
-        "evidenceId": "check-format-4ec9601a5f"
+        "value": "16",
+        "evidenceId": "check-duration-aa56c1a546"
       }
     ],
+    "format": [],
     "location": [
       {
         "value": "Fort Worth",
         "evidenceId": "check-location-da7435a910"
-      },
-      {
-        "value": "Dallas",
-        "evidenceId": "check-location-a309d595b7"
       }
     ],
     "selectivity": [],

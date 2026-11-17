@@ -1,12 +1,12 @@
 {
   "programId": "startup-wise-guys",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://startupwiseguys.com/about/",
       "page": "details",
       "anchor": "About",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -14,7 +14,39 @@
       "url": "https://startupwiseguys.com/all-programs/",
       "page": "details",
       "anchor": "All programs",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/all-programs/fintech-accelerator-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/all-programs/proptech-accelerator-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/all-programs/saas-accelerator-program-africa/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -27,10 +59,50 @@
       "origin": "official"
     },
     {
+      "url": "https://startupwiseguys.com/apply/",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
       "url": "https://startupwiseguys.com/building/",
       "page": "details",
       "anchor": "Building Programs for founders or teams just starting out and looking to validate their MVP.",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/building/fintech-pre-revenue-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/building/pre-accelerator-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/building/sustainability-pre-revenue-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/building/xr-pre-revenue-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -38,68 +110,36 @@
       "url": "https://startupwiseguys.com/growing/",
       "page": "details",
       "anchor": "Growing Acceleration programs for teams building products and taking them to the market.",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/growing/flagship-accelerator/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/growing/proptech-accelerator-program-waitlist/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/growing/sustainability-accelerator-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://startupwiseguys.com/investment-deal/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupwiseguys.com/news/10-teams-to-watch-from-the-second-saas-bilbao-batch/",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupwiseguys.com/news/ai-deep-tech-in-early-stage-investment-evolution-challenges/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupwiseguys.com/news/category/investment/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupwiseguys.com/news/copernic-space-secures-seed-investment-to-democratize-space-economy/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupwiseguys.com/news/fueling-innovation-through-strategic-investment-in-lumian-energy/",
       "page": "terms",
       "anchor": "",
       "fetched": true,
@@ -115,50 +155,10 @@
       "origin": "official"
     },
     {
-      "url": "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://startupwiseguys.com/news/portfolio-company-ready-player-me-raises-56m-led-by-andreessen-horowitz/",
       "page": "portfolio",
       "anchor": "Read more",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://startupwiseguys.com/news/young-entrepreneurs-summer-school-from-an-idea-to-an-investment-proposal/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -174,7 +174,15 @@
       "url": "https://startupwiseguys.com/scaling/",
       "page": "details",
       "anchor": "Scaling Programs for scaleups growing with necessity to expand their market.",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/scaling/growth-program-ukraine/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

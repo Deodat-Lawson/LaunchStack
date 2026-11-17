@@ -1,6 +1,6 @@
 {
   "programId": "three-one-four",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.3one4capital.com/",
     "https://www.3one4capital.com/blogs/3one4-capital-backs-zerocircle-innovative-bio-materials-from-regenerative-resources-designed-for-high-performance-global-applications",
@@ -11,12 +11,17 @@
     "https://www.3one4capital.com/blogs/siddarth-pai-reappointed-to-sebis-alternative-investment-policy-advisory-committee-aipac",
     "https://www.3one4capital.com/blogs/the-black-box-is-losing-the-boardroom-enterprise-ai-on-the-customers-terms-is-the-next-great-opportunity",
     "https://www.3one4capital.com/blogs/the-changing-landscape-of-insurance-investments-convergence-of-tech-and-capital-in-the-sector",
-    "https://www.3one4capital.com/team/anand-batra",
     "https://www.3one4capital.com/terms-and-conditions",
     "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program",
     "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program-building-judgment-through-execution",
     "https://www.3one4capital.com/blogs/why-we-are-optimistic-about-indias-growth-prospects",
-    "https://www.3one4capital.com/platform-and-program"
+    "https://www.3one4capital.com/platform-and-program",
+    "https://www.3one4capital.com/policy/policy-overview-for-responsible-early-stage-investing-and-esg",
+    "https://jobs.3one4capital.com/",
+    "https://www.3one4capital.com/blogs/3one4-capital-portfolio-companies-win-at-the-economic-times-supply-chain-awards-2026",
+    "https://www.3one4capital.com/blogs/budget-2023-tax-rates-need-to-be-on-par-for-listed-companies-start-ups",
+    "https://www.3one4capital.com/blogs/india-must-build-its-space-tech-companies-the-way-nasa-built-spacex",
+    "https://www.3one4capital.com/blogs/nruthya-madappa-recognized-for-driving-portfolio-success-elevated-to-partner-at-3one4-capital"
   ],
   "evidence": [
     {
@@ -46,6 +51,20 @@
       "title": "3one4 Capital — application page",
       "excerpt": "high-performance power devices over the next 24 months, with commercial shipments beginning from",
       "page": "application"
+    },
+    {
+      "id": "check-email-1bd1d4c5e5",
+      "url": "https://www.3one4capital.com/blogs/budget-2023-tax-rates-need-to-be-on-par-for-listed-companies-start-ups",
+      "title": "3one4 Capital — portfolio page",
+      "excerpt": "Write To Us (hello@3one4capital.com)",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-28b2150a77",
+      "url": "https://www.3one4capital.com/blogs/nruthya-madappa-recognized-for-driving-portfolio-success-elevated-to-partner-at-3one4-capital",
+      "title": "3one4 Capital — portfolio page",
+      "excerpt": "Write To Us (hello@3one4capital.com)",
+      "page": "portfolio"
     },
     {
       "id": "check-email-4d2ab89d8f",
@@ -104,6 +123,13 @@
       "page": "application"
     },
     {
+      "id": "check-email-c5e983ce73",
+      "url": "https://www.3one4capital.com/blogs/india-must-build-its-space-tech-companies-the-way-nasa-built-spacex",
+      "title": "3one4 Capital — portfolio page",
+      "excerpt": "Write To Us (hello@3one4capital.com)",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-d4963d15e3",
       "url": "https://www.3one4capital.com/blogs/applying-ai-in-india---early-segments-for-homegrown-innovation",
       "title": "3one4 Capital — application page",
@@ -130,6 +156,13 @@
       "title": "3one4 Capital — program page",
       "excerpt": "Write To Us (hello@3one4capital.com)",
       "page": "details"
+    },
+    {
+      "id": "check-email-f6530644f5",
+      "url": "https://www.3one4capital.com/blogs/3one4-capital-portfolio-companies-win-at-the-economic-times-supply-chain-awards-2026",
+      "title": "3one4 Capital — portfolio page",
+      "excerpt": "Write To Us (hello@3one4capital.com)",
+      "page": "portfolio"
     },
     {
       "id": "check-email-fe698bab20",
@@ -165,6 +198,13 @@
       "title": "3one4 Capital — terms page",
       "excerpt": "companies (Carbon Health). Furthermore, CVS Health's Virtual Primary has extended its telehealth-based mental health",
       "page": "terms"
+    },
+    {
+      "id": "check-format-714a5e7bd7",
+      "url": "https://jobs.3one4capital.com/",
+      "title": "3one4 Capital — portfolio page",
+      "excerpt": "My job alerts Job title, company or keyword On-site & Remote Location Powered by Getro Showing 675 jobs Senior Flight",
+      "page": "portfolio"
     },
     {
       "id": "check-format-a851bfbe88",
@@ -258,6 +298,13 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-36a142b70d",
+      "url": "https://jobs.3one4capital.com/",
+      "title": "3one4 Capital — portfolio page",
+      "excerpt": "Explore companies → https://jobs.3one4capital.com/companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-3a123d8b83",
       "url": "https://www.3one4capital.com/",
       "title": "3one4 Capital — homepage",
@@ -265,11 +312,11 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-498b635b02",
-      "url": "https://www.3one4capital.com/team/anand-batra",
-      "title": "3one4 Capital — terms page",
+      "id": "check-portfolio-4bc4fa8dd0",
+      "url": "https://www.3one4capital.com/blogs/budget-2023-tax-rates-need-to-be-on-par-for-listed-companies-start-ups",
+      "title": "3one4 Capital — portfolio page",
       "excerpt": "Portfolio → https://www.3one4capital.com/portfolio",
-      "page": "terms"
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-4df1be9bcf",
@@ -277,6 +324,20 @@
       "title": "3one4 Capital — program page",
       "excerpt": "Portfolio → https://www.3one4capital.com/portfolio",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-544167b918",
+      "url": "https://www.3one4capital.com/blogs/india-must-build-its-space-tech-companies-the-way-nasa-built-spacex",
+      "title": "3one4 Capital — portfolio page",
+      "excerpt": "Portfolio → https://www.3one4capital.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-6aa4c938e3",
+      "url": "https://www.3one4capital.com/blogs/nruthya-madappa-recognized-for-driving-portfolio-success-elevated-to-partner-at-3one4-capital",
+      "title": "3one4 Capital — portfolio page",
+      "excerpt": "Portfolio → https://www.3one4capital.com/portfolio",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-73edbf8b95",
@@ -335,6 +396,20 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-e2d41e90d2",
+      "url": "https://www.3one4capital.com/blogs/3one4-capital-portfolio-companies-win-at-the-economic-times-supply-chain-awards-2026",
+      "title": "3one4 Capital — portfolio page",
+      "excerpt": "Portfolio → https://www.3one4capital.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-e94b032793",
+      "url": "https://jobs.3one4capital.com/",
+      "title": "3one4 Capital — portfolio page",
+      "excerpt": "Portfolio → https://www.3one4capital.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-rolling-034ad7ecdb",
       "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program-building-judgment-through-execution",
       "title": "3one4 Capital — program page",
@@ -364,10 +439,76 @@
       "excerpt": "Transformative Capital For the New Indian Economy India Consumption Report 2025 - Download Report Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Transformative Capital for the New Indian Economy At 3one4, we are biased towards action and channel the relevant resources to support generational innovation engines out of India. We partner with early-stage companies that are mission-oriented and are setting new standards for inclusive value creation and sustainable growth. Pitch To Us How We Work Through a pragmatic deep-involvement model grounded in consumer behavioural patterns, actionable insights extracted from power-user networks, and by tapping inorganic growth vectors for opportunity capture, we unshackle founders from constraints on the path to market leadership. $570m Committed Capital $2.47b Raised in Follow-on Funding by the Portfolio 5 Unicorns Pitch To Us Licious Scimplify Raise Darwinbox OUR PORTFOLIO Generational Innovation Engines 3one4’s exponential growth has been driven by partnering with generational companies to transform market segments across the country. View Portfolio Focus Areas At 3one4 Capital, we focus on select market categories and on the intersection of adjacencies that are large, growing, and ready for unique products and services. Pitch To Us SaaS New frameworks and"
     },
     {
+      "id": "check-page-7609e38d0c",
+      "url": "https://www.3one4capital.com/",
+      "page": "details",
+      "excerpt": "Abhay Hanjura Co-founder, Licious Jayant Paleti Co-founder, Darwinbox One thing that truly stands out is that they are probably amongst the few Indian VC teams that truly understand tech not just from a macro standpoint but at a highly granular level."
+    },
+    {
+      "id": "check-page-1a6cbe196f",
+      "url": "https://www.3one4capital.com/",
+      "page": "details",
+      "excerpt": "Their inputs to our scale-up have been invaluable."
+    },
+    {
+      "id": "check-page-15c6fd5b53",
+      "url": "https://www.3one4capital.com/",
+      "page": "details",
+      "excerpt": "3one4 Capital ranked among top performing VC funds in India 3one4 Capital has been ranked by Preqin, a global reference database for asset management, as India’s top performer for two of its funds, in the recent Alternative Assets report."
+    },
+    {
+      "id": "check-page-c5fb7eb0e0",
+      "url": "https://www.3one4capital.com/",
+      "page": "details",
+      "excerpt": "The seed and early-stage funds managed by the firm have been recognized for their performance amongst the India-focused venture capital funds in this Asia Pacific-focused report published in 2021."
+    },
+    {
+      "id": "check-page-6ddde75d78",
+      "url": "https://www.3one4capital.com/",
+      "page": "details",
+      "excerpt": "With industry-leading Net IRRs, 3one4 Capital’s Rising I & Fund II are the top two amongst the best performing India-focused VC funds between the vintage years, 2010- 2018."
+    },
+    {
       "id": "check-page-3eaa08e4bc",
       "url": "https://www.3one4capital.com/blogs/3one4-capital-backs-zerocircle-innovative-bio-materials-from-regenerative-resources-designed-for-high-performance-global-applications",
       "page": "application",
       "excerpt": "3one4 Capital Backs Zerocircle: Innovative Bio-Materials From Regenerative Resources Designed for High-Performance Global Applications Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back 3one4 Capital Backs Zerocircle: Innovative Bio-Materials From Regenerative Resources Designed for High-Performance Global Applications January 27, 2026 5 mins Early conversations with Neha Jain, Varun Jain , and the Zerocircle team were grounded in the realities of what it would take to eliminate plastic at scale. Instead of abstract goals, the team spoke about systems, performance, and adoption. From the start, the emphasis was on building materials that work in the real world and can be deployed across global supply chains. This shared commitment to practical and industrial-scale innovation is exactly what led us to partner with the team. Today, we are proud to lead Zerocircle’s latest round, with participation from existing investors including Rainmatter Capital, 1Crowd, LNB Group and 7th Gen , reinforcing their category leadership in regenerative material infrastructure. Why Packaging Needs Real Substitutes Plastic free packaging is no longer ‘a nice to have’. Regulation is tightening across key markets, and enterprises are being pushed to prove end of life outcomes, not just make sustainability claims. At the"
+    },
+    {
+      "id": "check-page-d42e12c6c0",
+      "url": "https://www.3one4capital.com/blogs/3one4-capital-backs-zerocircle-innovative-bio-materials-from-regenerative-resources-designed-for-high-performance-global-applications",
+      "page": "application",
+      "excerpt": "They tested seaweed-coated, plastic-free containers across restaurant networks in Mumbai, Bengaluru and New Delhi."
+    },
+    {
+      "id": "check-page-52897be77c",
+      "url": "https://www.3one4capital.com/blogs/3one4-capital-backs-zerocircle-innovative-bio-materials-from-regenerative-resources-designed-for-high-performance-global-applications",
+      "page": "application",
+      "excerpt": "Building Category-Leading Platform for Plastic Alternatives Zerocircle is building at the intersection of deeptech and meaningful impact at scale, applying material innovation to a problem that is both global and urgent."
+    },
+    {
+      "id": "check-page-d3f53a3098",
+      "url": "https://www.3one4capital.com/blogs/3one4-capital-backs-zerocircle-innovative-bio-materials-from-regenerative-resources-designed-for-high-performance-global-applications",
+      "page": "application",
+      "excerpt": "Zerocircle is now scaling up in markets where regulatory scrutiny and demand for plastic-free packaging are rising, including Europe, the UK, Oceania and India ."
+    },
+    {
+      "id": "check-page-ae0f40ec2a",
+      "url": "https://www.3one4capital.com/blogs/3one4-capital-backs-zerocircle-innovative-bio-materials-from-regenerative-resources-designed-for-high-performance-global-applications",
+      "page": "application",
+      "excerpt": "3one4 Capital ranked among top performing VC funds in India 3one4 Capital has been ranked by Preqin, a global reference database for asset management, as India’s top performer for two of its funds, in the recent Alternative Assets report."
+    },
+    {
+      "id": "check-page-d76606f2bd",
+      "url": "https://www.3one4capital.com/blogs/3one4-capital-backs-zerocircle-innovative-bio-materials-from-regenerative-resources-designed-for-high-performance-global-applications",
+      "page": "application",
+      "excerpt": "The seed and early-stage funds managed by the firm have been recognized for their performance amongst the India-focused venture capital funds in this Asia Pacific-focused report published in 2021."
+    },
+    {
+      "id": "check-page-82da986b76",
+      "url": "https://www.3one4capital.com/blogs/3one4-capital-backs-zerocircle-innovative-bio-materials-from-regenerative-resources-designed-for-high-performance-global-applications",
+      "page": "application",
+      "excerpt": "With industry-leading Net IRRs, 3one4 Capital’s Rising I & Fund II are the top two amongst the best performing India-focused VC funds between the vintage years, 2010- 2018."
     },
     {
       "id": "check-page-ffc903a413",
@@ -376,10 +517,154 @@
       "excerpt": "AGNIT Semiconductors Raises $2.6M in Seed Extension: Building India's First Vertically Integrated GaN Semiconductor Platform for Advanced Radio Frequency and Power Electronics Applications Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back AGNIT Semiconductors Raises $2.6M in Seed Extension: Building India's First Vertically Integrated GaN Semiconductor Platform for Advanced Radio Frequency and Power Electronics Applications March 18, 2026 7 mins At 3one4 Capital , we've long believed that the most defensible technology companies are built on accumulated scientific knowledge that takes years to develop and cannot be replicated by capital alone. The depth of the foundation determines the durability of the moat. We backed AGNIT Semiconductors in 2024, recognising a founding team that had spent more than 18 years at the Indian Institute of Science developing GaN semiconductor technology from the substrate up. Our decision to invest at the seed stage was driven by a core question around what it would take for India to meet a meaningful share of its GaN demand by 2030. When we first met, AGNIT had already grown wafers, developed devices, proven performance, and patented technology, epitaxy processes, and device architectures. Since then, the team has expanded its wafer portfolio, completed first"
     },
     {
+      "id": "check-page-98dd7dbd6e",
+      "url": "https://www.3one4capital.com/blogs/agnit-semiconductors-raises-2-6m-in-seed-extension-building-indias-first-vertically-integrated-gan-semiconductor-platform-for-advanced-radio-frequency-and-power-electronics-applications",
+      "page": "application",
+      "excerpt": "Today, we're proud to continue backing the team as AGNIT announces a $2.6 million seed extension from 3one4 Capital alongside Shastra VC , with continued participation from Zephyr Peacock India ."
+    },
+    {
+      "id": "check-page-165420461f",
+      "url": "https://www.3one4capital.com/blogs/agnit-semiconductors-raises-2-6m-in-seed-extension-building-indias-first-vertically-integrated-gan-semiconductor-platform-for-advanced-radio-frequency-and-power-electronics-applications",
+      "page": "application",
+      "excerpt": "Why This Matters For decades, the global semiconductor industry operated on a division of labour that seemed permanent."
+    },
+    {
+      "id": "check-page-21b332db07",
+      "url": "https://www.3one4capital.com/blogs/agnit-semiconductors-raises-2-6m-in-seed-extension-building-indias-first-vertically-integrated-gan-semiconductor-platform-for-advanced-radio-frequency-and-power-electronics-applications",
+      "page": "application",
+      "excerpt": "Governments across the United States, Europe, Japan, and India are committing serious capital to build domestic semiconductor capability."
+    },
+    {
+      "id": "check-page-2274a55110",
+      "url": "https://www.3one4capital.com/blogs/agnit-semiconductors-raises-2-6m-in-seed-extension-building-indias-first-vertically-integrated-gan-semiconductor-platform-for-advanced-radio-frequency-and-power-electronics-applications",
+      "page": "application",
+      "excerpt": "India has spent decades importing semiconductors."
+    },
+    {
+      "id": "check-page-badb63709f",
+      "url": "https://www.3one4capital.com/blogs/agnit-semiconductors-raises-2-6m-in-seed-extension-building-indias-first-vertically-integrated-gan-semiconductor-platform-for-advanced-radio-frequency-and-power-electronics-applications",
+      "page": "application",
+      "excerpt": "The government's intent to fund domestic semiconductor capability reflects an acknowledgement that this must change."
+    },
+    {
+      "id": "check-page-2141c48b10",
+      "url": "https://www.3one4capital.com/blogs/agnit-semiconductors-raises-2-6m-in-seed-extension-building-indias-first-vertically-integrated-gan-semiconductor-platform-for-advanced-radio-frequency-and-power-electronics-applications",
+      "page": "application",
+      "excerpt": "We believe the most consequential place to begin that effort is in the materials and devices that power strategic electronics and next‑generation wireless infrastructure, where performance requirements have already outgrown what silicon can reliably deliver."
+    },
+    {
+      "id": "check-page-b40efd7e28",
+      "url": "https://www.3one4capital.com/blogs/agnit-semiconductors-raises-2-6m-in-seed-extension-building-indias-first-vertically-integrated-gan-semiconductor-platform-for-advanced-radio-frequency-and-power-electronics-applications",
+      "page": "application",
+      "excerpt": "The global GaN semiconductor market is valued at $32 billion and growing at 6% annually."
+    },
+    {
+      "id": "check-page-478dbc5e97",
+      "url": "https://www.3one4capital.com/blogs/agnit-semiconductors-raises-2-6m-in-seed-extension-building-indias-first-vertically-integrated-gan-semiconductor-platform-for-advanced-radio-frequency-and-power-electronics-applications",
+      "page": "application",
+      "excerpt": "The serviceable market in RF and power electronics is $9.2 billion , growing at 23%."
+    },
+    {
+      "id": "check-page-942c1d4a49",
+      "url": "https://www.3one4capital.com/blogs/agnit-semiconductors-raises-2-6m-in-seed-extension-building-indias-first-vertically-integrated-gan-semiconductor-platform-for-advanced-radio-frequency-and-power-electronics-applications",
+      "page": "application",
+      "excerpt": "Within India, the obtainable market across strategic, telecom and power conversion is $950 million , growing at 40%."
+    },
+    {
+      "id": "check-page-ba2d451f5f",
+      "url": "https://www.3one4capital.com/blogs/agnit-semiconductors-raises-2-6m-in-seed-extension-building-indias-first-vertically-integrated-gan-semiconductor-platform-for-advanced-radio-frequency-and-power-electronics-applications",
+      "page": "application",
+      "excerpt": "AGNIT is building this capability from India."
+    },
+    {
+      "id": "check-page-d1d5864556",
+      "url": "https://www.3one4capital.com/blogs/agnit-semiconductors-raises-2-6m-in-seed-extension-building-indias-first-vertically-integrated-gan-semiconductor-platform-for-advanced-radio-frequency-and-power-electronics-applications",
+      "page": "application",
+      "excerpt": "Building GaN From the Ground Up Gallium Nitride is a wide-bandgap semiconductor that outperforms silicon in exactly the operating conditions demanded by modern strategic and telecom systems."
+    },
+    {
+      "id": "check-page-ddd3ed30fd",
+      "url": "https://www.3one4capital.com/blogs/agnit-semiconductors-raises-2-6m-in-seed-extension-building-indias-first-vertically-integrated-gan-semiconductor-platform-for-advanced-radio-frequency-and-power-electronics-applications",
+      "page": "application",
+      "excerpt": "In 5G base stations, GaN transmitters consume less energy and occupy less physical space."
+    },
+    {
       "id": "check-page-ccfbb16368",
       "url": "https://www.3one4capital.com/blogs/applying-ai-in-india---early-segments-for-homegrown-innovation",
       "page": "application",
       "excerpt": "Applying AI in India – Early Segments for Homegrown Innovation Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back Applying AI in India – Early Segments for Homegrown Innovation September 2, 2025 11 mins The gen AI innovation shift has fundamentally altered the rate of technology development and adoption. What previously required extensive teams of software developers and product managers across multiple sprints can now be achieved by small, agile teams operating from hacker villas in Bangalore’s HSR Layout. This democratisation of development capability has created unprecedented opportunities for Indian entrepreneurs to build regionally-relevant solutions with ultimate global scalability. At 3one4 Capital, our market analysis reveals three distinct areas where Indian AI applications can leverage local market depth to create competitive solutions. These represent not just incremental improvements to existing services, but fundamental reimaginations of how professional expertise, personalised advisory, and ambient intelligence can transform the digital day across the country. 1. Building the Full Stack Home-Grown Version 2.0 of Big 7 Professional Services India's professional services landscape stands at a transformative inflection point. The country's Big 4 consulting firms are the same global Big 4,"
+    },
+    {
+      "id": "check-page-68ad7e9992",
+      "url": "https://www.3one4capital.com/blogs/applying-ai-in-india---early-segments-for-homegrown-innovation",
+      "page": "application",
+      "excerpt": "They reported combined revenues of ₹38,800 crore in FY24 in India, with projections exceeding ₹45,000 crore in FY25."
+    },
+    {
+      "id": "check-page-1843541c0e",
+      "url": "https://www.3one4capital.com/blogs/applying-ai-in-india---early-segments-for-homegrown-innovation",
+      "page": "application",
+      "excerpt": "This growth trajectory, powered significantly by government contracts and public sector engagements, reveals both the market opportunity and the strategic vulnerability of relying entirely on foreign-originated advisory capabilities."
+    },
+    {
+      "id": "check-page-48c92a779e",
+      "url": "https://www.3one4capital.com/blogs/applying-ai-in-india---early-segments-for-homegrown-innovation",
+      "page": "application",
+      "excerpt": "As Sanjeev Sanyal has articulated in various policy discussions, India's inability to produce homegrown consulting giants stems from structural barriers: restrictions on multidisciplinary partnerships (MDPs), outdated procurement norms, and professional body silos that prevent integrated service delivery."
+    },
+    {
+      "id": "check-page-58d13cdcfc",
+      "url": "https://www.3one4capital.com/blogs/applying-ai-in-india---early-segments-for-homegrown-innovation",
+      "page": "application",
+      "excerpt": "These constraints have created a massive arbitrage opportunity for AI-enabled service models."
+    },
+    {
+      "id": "check-page-697aeaf5cd",
+      "url": "https://www.3one4capital.com/blogs/applying-ai-in-india---early-segments-for-homegrown-innovation",
+      "page": "application",
+      "excerpt": "The local teams that have the necessary domain expertise and professional credibility can build radically better organisational efficiencies using AI, while focusing their top human capital on navigating sales and complex GTM."
+    },
+    {
+      "id": "check-page-6bb3d1ee22",
+      "url": "https://www.3one4capital.com/blogs/applying-ai-in-india---early-segments-for-homegrown-innovation",
+      "page": "application",
+      "excerpt": "The AI-First Professional Services Stack Traditional professional services operate on billable hours and human expertise scaling linearly."
+    },
+    {
+      "id": "check-page-a1e5be49e9",
+      "url": "https://www.3one4capital.com/blogs/applying-ai-in-india---early-segments-for-homegrown-innovation",
+      "page": "application",
+      "excerpt": "AI transforms this equation fundamentally."
+    },
+    {
+      "id": "check-page-9c1c1d7f62",
+      "url": "https://www.3one4capital.com/blogs/applying-ai-in-india---early-segments-for-homegrown-innovation",
+      "page": "application",
+      "excerpt": "Within this broader market, India’s corporate legal expenses are set to surpass the ₹60,000-crore mark in FY26, a rise fueled by increasing regulatory compliance demands, heightened deal activity, and frequent dispute resolution."
+    },
+    {
+      "id": "check-page-59dc223146",
+      "url": "https://www.3one4capital.com/blogs/applying-ai-in-india---early-segments-for-homegrown-innovation",
+      "page": "application",
+      "excerpt": "Notably, the corporate segment is the largest and fastest-growing segment of the legal services market in India, reflecting a surge in professional service requirements alongside broader economic growth and formalisation."
+    },
+    {
+      "id": "check-page-5bf5e5502d",
+      "url": "https://www.3one4capital.com/blogs/applying-ai-in-india---early-segments-for-homegrown-innovation",
+      "page": "application",
+      "excerpt": "Startups like Nyayanidhi are bringing new efficiencies to litigation in the country, shifting from simpler systems of record or research to AI-led legal practice management."
+    },
+    {
+      "id": "check-page-39b8893109",
+      "url": "https://www.3one4capital.com/blogs/applying-ai-in-india---early-segments-for-homegrown-innovation",
+      "page": "application",
+      "excerpt": "While established global firms must retrofit AI onto legacy processes and client expectations, new Indian professional services companies can architect entirely around AI-human collaboration models."
+    },
+    {
+      "id": "check-page-0606647173",
+      "url": "https://www.3one4capital.com/blogs/applying-ai-in-india---early-segments-for-homegrown-innovation",
+      "page": "application",
+      "excerpt": "The path forward will involve building full-stack professional services firms that leverage India's regulatory knowledge, technical talent, and cost advantages while delivering AI-enhanced outcomes that rival or exceed traditional Big 4 capabilities."
     },
     {
       "id": "check-page-444b9e54e0",
@@ -388,10 +673,124 @@
       "excerpt": "Booster shot for startups: Indian firms can do angel investment Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back Booster shot for startups: Indian firms can do angel investment March 8, 2019 4 mins read When Uber raised $2 billion to invest in China, Didi went to Tencent & Alibaba for funds. Burning $2 billion in China was a lot for Uber, but it mattered less for Tencent/Alibaba to help win at home. Not since the launch of ‘Start-up India’ in 2016 has a single notification from the government garnered so much praise from Indian entrepreneurs. The recent notification from DPIIT (formerly DIPP) signalled the death knell for the dreaded ‘Angel Tax’ — section 56(2)(viib) of the Income Tax Act, 1961. The section taxed capital receipts from Indian investors as income in the hands of private companies based on “high” share premium, a taxation approach unique only to India. It also applied only to investments from Indians and not foreigners — an act of discrimination which has seen domestic funding shrink 48% from 2015 and had lead many to dub this the ‘Indian Tax’. The notification, borne out of roundtables organised by Ramesh Abhishek of DPIIT on February 4, was a refreshing change of pace as it crowdsourced a solution from Indian entrepreneurs as opposed to deciding what was best for them. Some of the"
     },
     {
+      "id": "check-page-97dfc2395d",
+      "url": "https://www.3one4capital.com/blogs/booster-shot-for-startups-indian-firms-can-do-angel-investment",
+      "page": "terms",
+      "excerpt": "Silicon Valley owes a lot to listed companies like Google , Facebook, Salesforce, Microsoft , etc., who have invested billions of dollars into start-ups and are amongst the largest acquirers of start-ups there."
+    },
+    {
+      "id": "check-page-bc72e1a3a9",
+      "url": "https://www.3one4capital.com/blogs/booster-shot-for-startups-indian-firms-can-do-angel-investment",
+      "page": "terms",
+      "excerpt": "China’s Alibaba, Tencent and Baidu are renowned for creating start-up clusters as well."
+    },
+    {
+      "id": "check-page-3fbe5999f9",
+      "url": "https://www.3one4capital.com/blogs/booster-shot-for-startups-indian-firms-can-do-angel-investment",
+      "page": "terms",
+      "excerpt": "When Uber raised $2 billion to specifically invest in China, Jean Liu, the president of Didi Chuxing, the largest cab-hailing service in China, went straight to Tencent and Baba to get the capital required to take them on."
+    },
+    {
+      "id": "check-page-b9851d5f74",
+      "url": "https://www.3one4capital.com/blogs/booster-shot-for-startups-indian-firms-can-do-angel-investment",
+      "page": "terms",
+      "excerpt": "In the words of Yanbo Wang, Chinese academician who studies start-ups, “for Uber, burning through $2 billion in China was a huge amount."
+    },
+    {
+      "id": "check-page-75d913e688",
+      "url": "https://www.3one4capital.com/blogs/booster-shot-for-startups-indian-firms-can-do-angel-investment",
+      "page": "terms",
+      "excerpt": "The top 10 listed companies in India are sitting on cash and cash equivalents of over `2.7 lakh crore, which is around $38 billion."
+    },
+    {
+      "id": "check-page-e171f06a66",
+      "url": "https://www.3one4capital.com/blogs/booster-shot-for-startups-indian-firms-can-do-angel-investment",
+      "page": "terms",
+      "excerpt": "Make no mistake, India will not become a digital colony unless we have more active participation from domestic pools of capital."
+    },
+    {
+      "id": "check-page-1913b8471c",
+      "url": "https://www.3one4capital.com/blogs/booster-shot-for-startups-indian-firms-can-do-angel-investment",
+      "page": "terms",
+      "excerpt": "Though our listed behemoths never received venture capital funding and bootstrapped themselves till they listed, the rules of the game have changed."
+    },
+    {
+      "id": "check-page-84adb14232",
+      "url": "https://www.3one4capital.com/blogs/booster-shot-for-startups-indian-firms-can-do-angel-investment",
+      "page": "terms",
+      "excerpt": "Several organisations and people who fought for this, including I, are already working towards this actively and the government has promised us support."
+    },
+    {
+      "id": "check-page-d0d1cc6d27",
+      "url": "https://www.3one4capital.com/blogs/booster-shot-for-startups-indian-firms-can-do-angel-investment",
+      "page": "terms",
+      "excerpt": "As much as the media and founders are rejoicing, I hope India Inc will start looking at start-ups more seriously and invest into the ecosystem."
+    },
+    {
+      "id": "check-page-4e670408dc",
+      "url": "https://www.3one4capital.com/blogs/booster-shot-for-startups-indian-firms-can-do-angel-investment",
+      "page": "terms",
+      "excerpt": "3one4 Capital ranked among top performing VC funds in India 3one4 Capital has been ranked by Preqin, a global reference database for asset management, as India’s top performer for two of its funds, in the recent Alternative Assets report."
+    },
+    {
+      "id": "check-page-df24abf831",
+      "url": "https://www.3one4capital.com/blogs/booster-shot-for-startups-indian-firms-can-do-angel-investment",
+      "page": "terms",
+      "excerpt": "The seed and early-stage funds managed by the firm have been recognized for their performance amongst the India-focused venture capital funds in this Asia Pacific-focused report published in 2021."
+    },
+    {
+      "id": "check-page-d6051a8d10",
+      "url": "https://www.3one4capital.com/blogs/booster-shot-for-startups-indian-firms-can-do-angel-investment",
+      "page": "terms",
+      "excerpt": "With industry-leading Net IRRs, 3one4 Capital’s Rising I & Fund II are the top two amongst the best performing India-focused VC funds between the vintage years, 2010- 2018."
+    },
+    {
       "id": "check-page-d229c2bb09",
       "url": "https://www.3one4capital.com/blogs/not-an-angel-tax-its-a-tax-on-investment-from-indians",
       "page": "terms",
       "excerpt": "Not an ‘angel tax’, it’s a tax on investment from Indians! Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back Not an ‘angel tax’, it’s a tax on investment from Indians! April 12, 2019 4 mins read The latest circular has been touted on social media as a major sigh of relief to all Indian start-ups, but it leaves a lot to be desired for. The Angel Tax issue has been an albatross around the neck of Indian start-ups ever since this UPA-era law began being used to target them by the tax department.While the government has made great strides in improving the lot of start-ups on many fronts — corporate compliance, fund raising, FDI, etc, the singular issue that still remains unaddressed has been taxation. While section 56(2)(viib) has been labelled the “Angel Tax”, make no mistake that it discriminates against all Indian investors, whether you’re an individual, public listed company, mutual fund or even LIC! No other country in the world has a policy in this vein against its own citizens. The latest circular has been touted on social media as a major sigh of relief to all Indian start-ups, but it leaves a lot to be desired for. The major points are that it covers only companies who have raised up to Rs 10 crore throughout their lives, only people of a certain financial pedigree — above `50 lakh in income"
+    },
+    {
+      "id": "check-page-4ef6b76087",
+      "url": "https://www.3one4capital.com/blogs/not-an-angel-tax-its-a-tax-on-investment-from-indians",
+      "page": "terms",
+      "excerpt": "Accredited investor is a globally accepted practice of allowing financially sophisticated investors to invest into risky asset classes sans the protection offered to retail investors."
+    },
+    {
+      "id": "check-page-0b8081cf23",
+      "url": "https://www.3one4capital.com/blogs/not-an-angel-tax-its-a-tax-on-investment-from-indians",
+      "page": "terms",
+      "excerpt": "A sum of $1.4 million barely qualifies as a seed round in the US or Singapore, but is supposed to sustain an Indian start-up till they IPO."
+    },
+    {
+      "id": "check-page-0e6dfacd4e",
+      "url": "https://www.3one4capital.com/blogs/not-an-angel-tax-its-a-tax-on-investment-from-indians",
+      "page": "terms",
+      "excerpt": "India’s IT sector grew because we had no laws restraining them”."
+    },
+    {
+      "id": "check-page-bf5fcff97d",
+      "url": "https://www.3one4capital.com/blogs/not-an-angel-tax-its-a-tax-on-investment-from-indians",
+      "page": "terms",
+      "excerpt": "We need PM Modi to step in and address this, lest India becomes a digital colony. ___________________________________________________________________ This article was first published on January 18, 2019 in the Financial Express ."
+    },
+    {
+      "id": "check-page-b787563e13",
+      "url": "https://www.3one4capital.com/blogs/not-an-angel-tax-its-a-tax-on-investment-from-indians",
+      "page": "terms",
+      "excerpt": "3one4 Capital ranked among top performing VC funds in India 3one4 Capital has been ranked by Preqin, a global reference database for asset management, as India’s top performer for two of its funds, in the recent Alternative Assets report."
+    },
+    {
+      "id": "check-page-3ac3e54b5f",
+      "url": "https://www.3one4capital.com/blogs/not-an-angel-tax-its-a-tax-on-investment-from-indians",
+      "page": "terms",
+      "excerpt": "The seed and early-stage funds managed by the firm have been recognized for their performance amongst the India-focused venture capital funds in this Asia Pacific-focused report published in 2021."
+    },
+    {
+      "id": "check-page-4f4afff24d",
+      "url": "https://www.3one4capital.com/blogs/not-an-angel-tax-its-a-tax-on-investment-from-indians",
+      "page": "terms",
+      "excerpt": "With industry-leading Net IRRs, 3one4 Capital’s Rising I & Fund II are the top two amongst the best performing India-focused VC funds between the vintage years, 2010- 2018."
     },
     {
       "id": "check-page-1bd4aa989f",
@@ -400,10 +799,154 @@
       "excerpt": "Siddarth Pai Reappointed to SEBI's Alternative Investment Policy Advisory Committee (AIPAC) Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back Siddarth Pai Reappointed to SEBI's Alternative Investment Policy Advisory Committee (AIPAC) October 17, 2025 5 mins Siddarth Pai's appointment to SEBI's reconstituted Alternative Investment Policy Advisory Committee (AIPAC) places 3one4 Capital at India's most consequential AIF regulatory body – a direct reflection of the firm's decade-long commitment to governance-first investing and policy leadership. This appointment matters because AIPAC's recommendations have driven the major structural reforms in India's ₹15 lakh-crore (₹15 trillion) AIF ecosystem since 2015. AIPAC's Reconstitution Signals A New Phase For India's AIF Ecosystem SEBI reconstituted the AIPAC in 2025 under new chairperson Dr. Janmejaya Sinha (Chairman, Boston Consulting Group India), replacing founding chair N.R. Narayana Murthy after a decade of leadership. The 22-member committee now includes Siddarth alongside senior representatives from SIDBI, NIIF, HDFC Capital, LIC, Union Bank, CRISIL, IVCA, and others. The reconstitution reflects SEBI's intent to bring sharper practitioner perspectives into AIF policymaking at a moment when the industry's committed capital base has grown over 300x"
     },
     {
+      "id": "check-page-70b2401dcf",
+      "url": "https://www.3one4capital.com/blogs/siddarth-pai-reappointed-to-sebis-alternative-investment-policy-advisory-committee-aipac",
+      "page": "terms",
+      "excerpt": "2024–2025 Has Been The Most Active Regulatory Period In India's AIF History The pace of SEBI regulatory reform affecting AIFs has been unprecedented."
+    },
+    {
+      "id": "check-page-d92dcca93a",
+      "url": "https://www.3one4capital.com/blogs/siddarth-pai-reappointed-to-sebis-alternative-investment-policy-advisory-committee-aipac",
+      "page": "terms",
+      "excerpt": "The September 2024 valuation circular — adopting IPEV Guidelines for unlisted securities in place of mutual fund norms — was a landmark AIPAC-driven reform that aligns India with global PE/VC valuation standards."
+    },
+    {
+      "id": "check-page-cff8997120",
+      "url": "https://www.3one4capital.com/blogs/siddarth-pai-reappointed-to-sebis-alternative-investment-policy-advisory-committee-aipac",
+      "page": "terms",
+      "excerpt": "The Third Amendment Regulations (November 2025) introduced light-touch regulation for Accredited Investor-only schemes, reduced the Large Value Fund threshold from ₹70 crore to ₹25 crore, and waived NISM certification requirements for AI-only funds."
+    },
+    {
+      "id": "check-page-40fab98848",
+      "url": "https://www.3one4capital.com/blogs/siddarth-pai-reappointed-to-sebis-alternative-investment-policy-advisory-committee-aipac",
+      "page": "terms",
+      "excerpt": "Siddarth Pai Represents A Decade of Governance in Action Siddarth's AIPAC appointment is the culmination of sustained, institution-building work in Indian VC governance and regulation."
+    },
+    {
+      "id": "check-page-e4f8091458",
+      "url": "https://www.3one4capital.com/blogs/siddarth-pai-reappointed-to-sebis-alternative-investment-policy-advisory-committee-aipac",
+      "page": "terms",
+      "excerpt": "As the youngest-ever Executive Council member of the Indian Venture Capital Association (IVCA) and twice-running co-Chair of its Regulatory Affairs Committee (re-elected for a second term), he has personally authored representations that influenced AIF policy across securities regulation, taxation, foreign exchange, and startup law."
+    },
+    {
+      "id": "check-page-8ef843893e",
+      "url": "https://www.3one4capital.com/blogs/siddarth-pai-reappointed-to-sebis-alternative-investment-policy-advisory-committee-aipac",
+      "page": "terms",
+      "excerpt": "His advocacy was central to the campaign that achieved the abolition of the angel tax (Section 56(2)(viib)) in the Union Budget 2024 — a reform he described as \"a watershed moment in the Indian startup story.\" In October 2021, Siddarth became India's first ESG Officer appointed by a venture capital firm, a role he holds alongside his responsibilities as Founding Partner and CFO."
+    },
+    {
+      "id": "check-page-8b2890217c",
+      "url": "https://www.3one4capital.com/blogs/siddarth-pai-reappointed-to-sebis-alternative-investment-policy-advisory-committee-aipac",
+      "page": "terms",
+      "excerpt": "He is also a founding member and Secretary of the PE/VC CFO Association (PEVCFOA), an expert policy member at iSPIRT, and serves on startup councils of both the Confederation of Indian Industry (CII) and the All India Management Association (AIMA)."
+    },
+    {
+      "id": "check-page-01a8e36031",
+      "url": "https://www.3one4capital.com/blogs/siddarth-pai-reappointed-to-sebis-alternative-investment-policy-advisory-committee-aipac",
+      "page": "terms",
+      "excerpt": "3one4's ESG commitment functions at every operating level: the firm is the first Indian VC signatory to the UN Principles for Responsible Investment (PRI) and the fifth Indian investment firm overall."
+    },
+    {
+      "id": "check-page-279750a968",
+      "url": "https://www.3one4capital.com/blogs/siddarth-pai-reappointed-to-sebis-alternative-investment-policy-advisory-committee-aipac",
+      "page": "terms",
+      "excerpt": "At a moment when India's AIF regulatory framework is evolving, having a founding partner invited to join the advisory body shaping these changes provides us with confidence that 3one4's operational practices are aligned with the highest emerging standards."
+    },
+    {
+      "id": "check-page-f6cafd14d6",
+      "url": "https://www.3one4capital.com/blogs/siddarth-pai-reappointed-to-sebis-alternative-investment-policy-advisory-committee-aipac",
+      "page": "terms",
+      "excerpt": "The firm's decade-long commitment to governance is not ancillary to returns, it is the foundation on which institutional-quality venture investing in India is built."
+    },
+    {
+      "id": "check-page-7ba2275cef",
+      "url": "https://www.3one4capital.com/blogs/siddarth-pai-reappointed-to-sebis-alternative-investment-policy-advisory-committee-aipac",
+      "page": "terms",
+      "excerpt": "3one4 Capital ranked among top performing VC funds in India 3one4 Capital has been ranked by Preqin, a global reference database for asset management, as India’s top performer for two of its funds, in the recent Alternative Assets report."
+    },
+    {
+      "id": "check-page-648cda84da",
+      "url": "https://www.3one4capital.com/blogs/siddarth-pai-reappointed-to-sebis-alternative-investment-policy-advisory-committee-aipac",
+      "page": "terms",
+      "excerpt": "The seed and early-stage funds managed by the firm have been recognized for their performance amongst the India-focused venture capital funds in this Asia Pacific-focused report published in 2021."
+    },
+    {
       "id": "check-page-8e22cdd525",
       "url": "https://www.3one4capital.com/blogs/the-black-box-is-losing-the-boardroom-enterprise-ai-on-the-customers-terms-is-the-next-great-opportunity",
       "page": "terms",
       "excerpt": "The Black Box Is Losing the Boardroom. Enterprise AI on the Customer's Terms Is the Next Great Opportunity. Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back The Black Box Is Losing the Boardroom. Enterprise AI on the Customer's Terms Is the Next Great Opportunity. July 15, 2026 5 mins The first fight in enterprise AI is over per-token pricing. The next is over ownership of data, weights, and competitive advantage, and regulators are already picking a side. The winners of the next phase will deliver outcomes on infrastructure the customer controls, and India is well placed to build them. ‍ The Complaint Has Moved From Boardrooms to Live TV ‍ The next phase of enterprise AI will be decided by control, not just capability. Alex Karp made that case in the most theatrical way possible on CNBC last week. The Palantir CEO said the chief executives he speaks with privately are livid with the leading model developers, arguing that enterprises pay steep fees for AI tools while the providers collect proprietary data that can be used to sharpen their own models, an arrangement he likened to a wealth tax on business. Enterprises, in his telling, are paying for tokens that create little measurable value while handing over the very data and process knowledge that constitutes their competitive edge. Palantir's"
+    },
+    {
+      "id": "check-page-986d21ee7f",
+      "url": "https://www.3one4capital.com/blogs/the-black-box-is-losing-the-boardroom-enterprise-ai-on-the-customers-terms-is-the-next-great-opportunity",
+      "page": "terms",
+      "excerpt": "In a previous piece for Inc42 , I argued that AI billing should move billing from effort to outcomes, because enterprises will not indefinitely fund a meter that charges for activity rather than results."
+    },
+    {
+      "id": "check-page-263877b7cd",
+      "url": "https://www.3one4capital.com/blogs/the-black-box-is-losing-the-boardroom-enterprise-ai-on-the-customers-terms-is-the-next-great-opportunity",
+      "page": "terms",
+      "excerpt": "Even a fairly priced token is a bad trade if the transaction also transfers your data, your workflows, and your accumulated advantage to the counterparty. ‍ New Questions Will Decide Every Enterprise AI Contract ‍ Every serious AI procurement conversation is converging on the same set of questions."
+    },
+    {
+      "id": "check-page-32b8a0c752",
+      "url": "https://www.3one4capital.com/blogs/the-black-box-is-losing-the-boardroom-enterprise-ai-on-the-customers-terms-is-the-next-great-opportunity",
+      "page": "terms",
+      "excerpt": "The trust never forms at the scale that large, multi-year contracts require, and large, multi-year contracts are where enterprise AI revenue lives. ‍ Regulators in Critical Sectors Are Drawing the Perimeter First ‍ India's own regulator has already moved, and earlier than most."
+    },
+    {
+      "id": "check-page-e331ce8ae4",
+      "url": "https://www.3one4capital.com/blogs/the-black-box-is-losing-the-boardroom-enterprise-ai-on-the-customers-terms-is-the-next-great-opportunity",
+      "page": "terms",
+      "excerpt": "The RBI's FREE-AI framework signals a clear preference for indigenous, sector-specific AI models over generic third-party LLMs, naming data sovereignty and vendor concentration as the risks, and anticipates coordinated standards across RBI, SEBI, and IRDAI over time."
+    },
+    {
+      "id": "check-page-eeebfda1fd",
+      "url": "https://www.3one4capital.com/blogs/the-black-box-is-losing-the-boardroom-enterprise-ai-on-the-customers-terms-is-the-next-great-opportunity",
+      "page": "terms",
+      "excerpt": "Certain categories of data legally cannot leave infrastructure the enterprise controls, including protected health information, specific classes of financial data, and defence work."
+    },
+    {
+      "id": "check-page-bbd6e71eb1",
+      "url": "https://www.3one4capital.com/blogs/the-black-box-is-losing-the-boardroom-enterprise-ai-on-the-customers-terms-is-the-next-great-opportunity",
+      "page": "terms",
+      "excerpt": "Zero-retention enterprise tiers reduce the exposure without eliminating it, and the EU AI Act becomes fully applicable on 2 August 2026, with European data residency rules already driving a measurable move toward self-hosting."
+    },
+    {
+      "id": "check-page-2c0659f778",
+      "url": "https://www.3one4capital.com/blogs/the-black-box-is-losing-the-boardroom-enterprise-ai-on-the-customers-terms-is-the-next-great-opportunity",
+      "page": "terms",
+      "excerpt": "Where such rules do not yet exist in banking, insurance, and energy, they are coming, because every serious regulator will follow the same systemic-risk reasoning."
+    },
+    {
+      "id": "check-page-2bed182f74",
+      "url": "https://www.3one4capital.com/blogs/the-black-box-is-losing-the-boardroom-enterprise-ai-on-the-customers-terms-is-the-next-great-opportunity",
+      "page": "terms",
+      "excerpt": "Each new notification shrinks the addressable market for opaque AI in the sectors that spend the most on technology. ‍ The Open Alternatives Have Stopped Being a Compromise ‍ The next runway exists, and it has matured faster than most buyers realise."
+    },
+    {
+      "id": "check-page-4a7d6f1e72",
+      "url": "https://www.3one4capital.com/blogs/the-black-box-is-losing-the-boardroom-enterprise-ai-on-the-customers-terms-is-the-next-great-opportunity",
+      "page": "terms",
+      "excerpt": "Most regulated enterprise workloads do not live in that corner."
+    },
+    {
+      "id": "check-page-537da4a549",
+      "url": "https://www.3one4capital.com/blogs/the-black-box-is-losing-the-boardroom-enterprise-ai-on-the-customers-terms-is-the-next-great-opportunity",
+      "page": "terms",
+      "excerpt": "That symmetry is why the shift is durable rather than temporary. ‍ India Can Supply the Models and the Minds That Deploy It ‍ India has been deploying open-source models, as well as developing its own."
+    },
+    {
+      "id": "check-page-c0801246ce",
+      "url": "https://www.3one4capital.com/blogs/the-black-box-is-losing-the-boardroom-enterprise-ai-on-the-customers-terms-is-the-next-great-opportunity",
+      "page": "terms",
+      "excerpt": "India should read it as a services-shaped opportunity of the kind it has won before."
+    },
+    {
+      "id": "check-page-b114f178d8",
+      "url": "https://www.3one4capital.com/blogs/the-black-box-is-losing-the-boardroom-enterprise-ai-on-the-customers-terms-is-the-next-great-opportunity",
+      "page": "terms",
+      "excerpt": "India built a technology industry of $315 billion (₹30 lakh crore) in annual FY26 revenue, per NASSCOM's Annual Strategic Review 2026, by implementing the world's enterprise software on client terms."
     },
     {
       "id": "check-page-5393772fb7",
@@ -412,10 +955,76 @@
       "excerpt": "Interplay of Tech and Capital in the Evolving Landscape of Insurance Investments Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back Interplay of Tech and Capital in the Evolving Landscape of Insurance Investments August 31, 2023 6 mins The Shift Toward Technological Advancements Private equity firms and various other sources of private capital have been actively seeking new avenues to expand their asset portfolios and increase their AUM. In recent times, the insurance industry has garnered notable attention from investors, as its traditional business models undergo a substantial shift driven by technological advancements with a strong focus on enhancing customer experience. This shift isn't merely operational—it's reshaping how insurance solutions are accessed and engaged with, resulting in a more customer-centric paradigm shift. Analysing investment trends in the InsurTech(insurance technology) landscape provides a glimpse into the changing dynamics of the industry. While 2021 was marked by a surge in funding, it's crucial to consider this as an anomaly within the context of data from preceding years (Fig. below). Running projections based on historical patterns indicates a more accurate prediction of the number of deals and total investment. Despite the anomaly in 2021, the actual figures in 2022"
     },
     {
-      "id": "check-page-7cc6a00181",
-      "url": "https://www.3one4capital.com/team/anand-batra",
+      "id": "check-page-2a85093027",
+      "url": "https://www.3one4capital.com/blogs/the-changing-landscape-of-insurance-investments-convergence-of-tech-and-capital-in-the-sector",
       "page": "terms",
-      "excerpt": "3one4 Capital Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back Anand Batra Investments Investments Anand Batra is a seasoned investment professional and operator with deep expertise in scaling high-growth businesses. Currently part of the investment leadership at 3one4 Capital, Anand brings a unique combination of operational and venture experience to the firm’s high-conviction investment approach. Previously, Anand served as the CFO at Pepperfry, India’s largest furniture retailer, backed by Norwest, Goldman Sachs, Bertelsmann, and General Electric Pension Trust, where he led financial and corporate strategy, fundraising, category management, and performance marketing during key growth phases. His investment roles at Z3Partners and IvyCap saw him work closely with growth-stage startups to build sustainable, scalable models. Anand’s dual perspective as both a builder and backer adds depth to 3one4’s platform as it partners with transformative companies. Anand started his career as an investment banker at Lazard and Avendus Capital and is a graduate of the London School of Economics. About Us Our Team Our Thesis Principle & Culture Platform & Programs UN PRI Policies AIF Registration Details Grievance Redressal Contact Us Resources Blogs Podcasts Reports Portfolio Jobs Programs 3one4 Summit 2022"
+      "excerpt": "Funding for InsurTech experienced a remarkable 37.6% QoQ (quarter-on-quarter) increase, reaching $1.39B."
+    },
+    {
+      "id": "check-page-ef597e0be3",
+      "url": "https://www.3one4capital.com/blogs/the-changing-landscape-of-insurance-investments-convergence-of-tech-and-capital-in-the-sector",
+      "page": "terms",
+      "excerpt": "Even though the deal count remained stable, the average deal size grew by 25.3% QoQ, indicative of the industry's attractiveness for larger investments. ‍ Asia Health Insurance Market In Asia, limited coverage from universal health care schemes and rising consumer demand for better-quality care drive substantial out-of-pocket healthcare spending."
+    },
+    {
+      "id": "check-page-3cb6ae3a1e",
+      "url": "https://www.3one4capital.com/blogs/the-changing-landscape-of-insurance-investments-convergence-of-tech-and-capital-in-the-sector",
+      "page": "terms",
+      "excerpt": "Consequently, there is a significant increase in the demand for health insurance (Fig below) The drive to mitigate economic uncertainties in healthcare has fueled a surge in the popularity of health insurance policies across the region."
+    },
+    {
+      "id": "check-page-d306e10db6",
+      "url": "https://www.3one4capital.com/blogs/the-changing-landscape-of-insurance-investments-convergence-of-tech-and-capital-in-the-sector",
+      "page": "terms",
+      "excerpt": "A noteworthy example of this trend can be observed in India’s growing insurance market, projected to reach $222B by 2026."
+    },
+    {
+      "id": "check-page-e272ad7e20",
+      "url": "https://www.3one4capital.com/blogs/the-changing-landscape-of-insurance-investments-convergence-of-tech-and-capital-in-the-sector",
+      "page": "terms",
+      "excerpt": "With an average annual premium growth rate of 11.3% between 2013-14 and 2021-22, India is poised to become the sixth-largest insurance market globally, within a decade, surpassing the positions of Germany, Canada, Italy and South Korea."
+    },
+    {
+      "id": "check-page-0b89a68107",
+      "url": "https://www.3one4capital.com/blogs/the-changing-landscape-of-insurance-investments-convergence-of-tech-and-capital-in-the-sector",
+      "page": "terms",
+      "excerpt": "As insurers in India adapt to evolving trends, they are moving towards consistent profitability."
+    },
+    {
+      "id": "check-page-bda3324e52",
+      "url": "https://www.3one4capital.com/blogs/the-changing-landscape-of-insurance-investments-convergence-of-tech-and-capital-in-the-sector",
+      "page": "terms",
+      "excerpt": "The IPO of Life Insurance Corporation (LIC) of India, the largest in the nation's history and the sixth-largest globally in 2022, further highlights the industry's significance."
+    },
+    {
+      "id": "check-page-d471fc97f2",
+      "url": "https://www.3one4capital.com/blogs/the-changing-landscape-of-insurance-investments-convergence-of-tech-and-capital-in-the-sector",
+      "page": "terms",
+      "excerpt": "Monthly data from the Life Insurance Council reveals a YoY (year-on-year) growth of 9% in the overall APE (annualised premium equivalent), indicating a healthy trajectory."
+    },
+    {
+      "id": "check-page-43d1b8254e",
+      "url": "https://www.3one4capital.com/blogs/the-changing-landscape-of-insurance-investments-convergence-of-tech-and-capital-in-the-sector",
+      "page": "terms",
+      "excerpt": "“For social upliftment we believe the government should utilise the power of creating a regulatory framework for the private sector to innovate, take risks and deliver rather than spending the money directly."
+    },
+    {
+      "id": "check-page-3fee400f31",
+      "url": "https://www.3one4capital.com/blogs/the-changing-landscape-of-insurance-investments-convergence-of-tech-and-capital-in-the-sector",
+      "page": "terms",
+      "excerpt": "The convergence of factors such as consolidation, digitisation, and specialisation is moulding the trajectory of the health insurance and benefits sector."
+    },
+    {
+      "id": "check-page-adc3582a81",
+      "url": "https://www.3one4capital.com/blogs/the-changing-landscape-of-insurance-investments-convergence-of-tech-and-capital-in-the-sector",
+      "page": "terms",
+      "excerpt": "Their strategic focus now includes preventive care, wellness programs, and value-added services, all aimed at enhancing overall health outcomes. ‍ 1."
+    },
+    {
+      "id": "check-page-d7ed159799",
+      "url": "https://www.3one4capital.com/blogs/the-changing-landscape-of-insurance-investments-convergence-of-tech-and-capital-in-the-sector",
+      "page": "terms",
+      "excerpt": "UnitedHealth Group (NYSE:UNH) : A frontrunner in this transformation, UnitedHealth Group operates UnitedHealthcare, a major health insurer in the U.S."
     },
     {
       "id": "check-page-86646ed5e6",
@@ -424,10 +1033,94 @@
       "excerpt": "Terms and Conditions India Consumption Report 2025 - Download Report Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Terms & Conditions Your use of https://www.3one4capital.com ( “Website” ), including the content, materials and information available on or through this Website is governed by these Terms of Use (these \"Terms\" ) and these Terms are governed by the laws of India. These Terms constitute an electronic record in terms of the Information Technology Act, 2000 and rules thereunder. By accessing or using the Website, the User agrees to be legally bound by these Terms, as amended from time to time. If you do not agree to abide by these Terms for any reason, please do not use the Website. This Website contains material (“ Material ”) produced and managed by or on behalf of 3one4 Capital Advisors LLP (“ 3one4 Capital ”), with input from, as appropriate, the general partners and/or investment managers (as applicable) of 3one4 Capital Scheme I, 3one4 Capital Scheme II, 3one4 Capital Rising I, 3one4 Capital Continuum I, 3one4 Capital Continuum IA, 3one4 Capital Fund III and/or their predecessor and/or successor funds or products and their respective non-discretionary sub-advisers (as appropriate). ‍ 1. No Offer This Website and the Material is available for information purposes only and is intended to"
     },
     {
+      "id": "check-page-145d0cbba4",
+      "url": "https://www.3one4capital.com/terms-and-conditions",
+      "page": "terms",
+      "excerpt": "Nothing on this Website grants any license with respect to such design or content. ‍ 6."
+    },
+    {
+      "id": "check-page-3264de0183",
+      "url": "https://www.3one4capital.com/terms-and-conditions",
+      "page": "terms",
+      "excerpt": "3one4 Capital reserves the right to assume the exclusive defence and control of any matter initiated by a third party, which is subject to indemnification under this provision."
+    },
+    {
+      "id": "check-page-7335236212",
+      "url": "https://www.3one4capital.com/terms-and-conditions",
+      "page": "terms",
+      "excerpt": "In such case, you agree to cooperate with any reasonable requests in assisting 3one4 Capital’s defence of such matter. ‍ 9."
+    },
+    {
+      "id": "check-page-3fa7ff1d28",
+      "url": "https://www.3one4capital.com/terms-and-conditions",
+      "page": "terms",
+      "excerpt": "Governing Law These Terms and the Website shall be governed by and construed in accordance with all applicable laws of India."
+    },
+    {
+      "id": "check-page-db14412781",
+      "url": "https://www.3one4capital.com/terms-and-conditions",
+      "page": "terms",
+      "excerpt": "All disputes arising out of or in connection with these Terms or use of the Website shall be submitted to the exclusive jurisdiction of the courts of Bengaluru, India."
+    },
+    {
       "id": "check-page-59bde9515a",
       "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program",
       "page": "details",
       "excerpt": "The 3one4 Capital Internship Program Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back The 3one4 Capital Internship Program February 7, 2024 4 mins The Internship Program at 3one4 Capital is intentionally crafted to offer students a comprehensive and structured learning journey with defined learning outcomes, contextual industry access and experiences. The program is designed to empower students with critical knowledge, analytical frameworks, and extensive networking opportunities that are essential for successfully navigating and excelling in the dynamic Indian startup ecosystem. Through immersive learning experiences, interns at 3one4 Capital gain a deep understanding of the sector-specific overviews, the firm’s investment thesis, and the unique insights we've garnered from our deep involvement strategy. The internship program is highly selective, attracting over 1500+ applications each year. We offer internships throughout the year on a rolling basis, providing flexibility and continuous opportunities for prospective candidates to join us. ‍ We present the journeys of interns from the past year at 3one4 Capital ‍ Divya Gupta Divya is a final-year undergraduate specialising in materials engineering at IIT Delhi, has a background in interning with startups in the web3 and health tech sectors."
+    },
+    {
+      "id": "check-page-cdafdb914b",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program",
+      "page": "details",
+      "excerpt": "“The dynamic work culture at the firm fostered an engaging and intellectually stimulating learning experience for me, further enriched by the excellent mentorship I received.” ‍ Gautam Marwah Gautam is currently pursuing an MBA at Masters' Union in Gurugram and is the host of the 'Indianaut' podcast, where he engages with prominent figures in the Indian startup ecosystem."
+    },
+    {
+      "id": "check-page-c92c228eb1",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program",
+      "page": "details",
+      "excerpt": "Gautam's focus encompassed digital public infrastructure in India, particularly in emerging areas like EV charging."
+    },
+    {
+      "id": "check-page-ee162eabab",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program",
+      "page": "details",
+      "excerpt": "During his stint at 3one4 Capital, Advik played a key role in crafting comprehensive pitch decks covering diverse themes, including the Content and Influencer Economy, Insurtech, Fintech, and Healthtech."
+    },
+    {
+      "id": "check-page-5bcbd38b2c",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program",
+      "page": "details",
+      "excerpt": "Additionally, he undertook a project on the adoption of AI in radiology within the firm's Digital Health theme."
+    },
+    {
+      "id": "check-page-32f1de1ad7",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program",
+      "page": "details",
+      "excerpt": "It served as an invaluable springboard into the VC world, exceeding any expectations I had for an introductory experience."
+    },
+    {
+      "id": "check-page-a80d154d8d",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program",
+      "page": "details",
+      "excerpt": "Vignesh is currently a Chartered Accountancy student and is pursuing a Bachelor of Commerce degree from Bangalore University."
+    },
+    {
+      "id": "check-page-59e346a9b0",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program",
+      "page": "details",
+      "excerpt": "3one4 Capital ranked among top performing VC funds in India 3one4 Capital has been ranked by Preqin, a global reference database for asset management, as India’s top performer for two of its funds, in the recent Alternative Assets report."
+    },
+    {
+      "id": "check-page-0dbcffd396",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program",
+      "page": "details",
+      "excerpt": "The seed and early-stage funds managed by the firm have been recognized for their performance amongst the India-focused venture capital funds in this Asia Pacific-focused report published in 2021."
+    },
+    {
+      "id": "check-page-c48b1bb6ec",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program",
+      "page": "details",
+      "excerpt": "With industry-leading Net IRRs, 3one4 Capital’s Rising I & Fund II are the top two amongst the best performing India-focused VC funds between the vintage years, 2010- 2018."
     },
     {
       "id": "check-page-6f7a363d56",
@@ -436,16 +1129,226 @@
       "excerpt": "The 3one4 Capital Internship Program: Building Judgment Through Execution Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back The 3one4 Capital Internship Program: Building Judgment Through Execution May 20, 2026 5 mins The next phase of India’s structural transformation requires builders who can parse signals from noise. At 3one4 Capital, our internship program places interns directly inside the work of mapping these shifts. Instead of observing from the periphery, interns take on active roles to execute live investment research, drive portfolio operations, and solve cross-functional problems that lack predetermined answers. The goal is building sound judgment under conditions of genuine ambiguity. By the end of the program, interns leave with sharp analytical thinking and a clear sense of the work they are uniquely built for. ‍ Real Problem Statements Drive the Learning Curve Interns build investment theses, evaluate new sectors, and support portfolio companies through constantly evolving market conditions. Cross-functional collaboration sits at the centre of this work, requiring interns to think like operators and connect insights across different teams and founder goals. They learn to link research directly to investment decisions and portfolio operations. The ability to hold the full picture"
     },
     {
+      "id": "check-page-016ce41c7d",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program-building-judgment-through-execution",
+      "page": "details",
+      "excerpt": "The ability to hold the full picture compounds across every role that follows in venture capital and company building. ‍ Rigorous Rationale Matters More Than the Right Answer ‍ Every intern develops a point of view and learns to defend it."
+    },
+    {
+      "id": "check-page-70f5aa81a2",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program-building-judgment-through-execution",
+      "page": "details",
+      "excerpt": "Vignesh notes that true individual and organisational growth stems from this culture of inquiry. ‍ Advik Jain played a key role in crafting comprehensive pitch decks covering diverse themes, including the Content and Influencer Economy, Insurtech, Fintech, and Healthtech."
+    },
+    {
+      "id": "check-page-18ad09252a",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program-building-judgment-through-execution",
+      "page": "details",
+      "excerpt": "Advik found the pace and caliber of the team to be a constant forcing function for learning. ‍ ‍ Shriya Sahni joined the team to own the end-to-end delivery of an AI event."
+    },
+    {
+      "id": "check-page-aa595a8d32",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program-building-judgment-through-execution",
+      "page": "details",
+      "excerpt": "She highlights the team's genuine investment in mentoring interns as a defining feature of her experience. ‍ ‍ We Back High-Agency Builders The program runs on a rolling basis and receives over 1,500 applications annually."
+    },
+    {
+      "id": "check-page-67d0b086d7",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program-building-judgment-through-execution",
+      "page": "details",
+      "excerpt": "3one4 Capital ranked among top performing VC funds in India 3one4 Capital has been ranked by Preqin, a global reference database for asset management, as India’s top performer for two of its funds, in the recent Alternative Assets report."
+    },
+    {
+      "id": "check-page-8ff15af25c",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program-building-judgment-through-execution",
+      "page": "details",
+      "excerpt": "The seed and early-stage funds managed by the firm have been recognized for their performance amongst the India-focused venture capital funds in this Asia Pacific-focused report published in 2021."
+    },
+    {
+      "id": "check-page-2ae06f6f49",
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program-building-judgment-through-execution",
+      "page": "details",
+      "excerpt": "With industry-leading Net IRRs, 3one4 Capital’s Rising I & Fund II are the top two amongst the best performing India-focused VC funds between the vintage years, 2010- 2018."
+    },
+    {
       "id": "check-page-fdccc6d980",
       "url": "https://www.3one4capital.com/blogs/why-we-are-optimistic-about-indias-growth-prospects",
       "page": "details",
       "excerpt": "Why we are Optimistic about India’s Growth Prospects Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back Why we are Optimistic about India’s Growth Prospects August 16, 2023 5 mins The Indian economy has outperformed most large economies since the 1991 liberalisation. It has grown from a 1991 GDP of Rs 5.3 lakh-crore ($275 billion) to Rs 273 lakh-crore ($3.4 trillion) in FY23. Between 2014 and 2023, GDP grew from Rs 113 lakh-crore to Rs 273 lakh-crore, an addition of Rs 159 lakh-crore. When the NDA completes its second term in 2024, GDP would be around Rs 303 lakh-crore, an increase of Rs 190 lakh-crore over a decade. China is possibly the only large economy to register faster growth over three decades. This unbelievable feat is a testimony to the entrepreneurial and business spirit of the Indian people. It provides a solid foundation for India's goals of growing to $5 trillion on the way to $10 trillion this decade. With this, the nation will grow into the third-largest economy globally from the current fifth. ‍ India’s Growth Story India's 32-year strong growth cycle from 1991 has weathered many global crises like the pandemic, the 2008 global financial crisis, and the 1997 Asian crisis. During the pandemic, the economy declined by 3 percent - a rare event for India followed by a strong rebound of"
     },
     {
+      "id": "check-page-4e4f5e4577",
+      "url": "https://www.3one4capital.com/blogs/why-we-are-optimistic-about-indias-growth-prospects",
+      "page": "details",
+      "excerpt": "During the pandemic, the economy declined by 3 percent - a rare event for India followed by a strong rebound of 18.5 percent nominal growth in FY22."
+    },
+    {
+      "id": "check-page-4a5b1266b6",
+      "url": "https://www.3one4capital.com/blogs/why-we-are-optimistic-about-indias-growth-prospects",
+      "page": "details",
+      "excerpt": "Adding inflation of 4-5 percent, nominal growth could reach 11-12 percent catapulting India's GDP to Rs 303 lakh-crore."
+    },
+    {
+      "id": "check-page-16e4c837b7",
+      "url": "https://www.3one4capital.com/blogs/why-we-are-optimistic-about-indias-growth-prospects",
+      "page": "details",
+      "excerpt": "India's GDP in dollar terms has always been impacted by the declining rupee, a function of the high trade deficit which makes the currency sensitive to foreign currency flows."
+    },
+    {
+      "id": "check-page-d6c94add75",
+      "url": "https://www.3one4capital.com/blogs/why-we-are-optimistic-about-indias-growth-prospects",
+      "page": "details",
+      "excerpt": "When GoI announced India's target of reaching $5 trillion GDP in 2025 back in 2019, it was at a constant conversion of $1 to Rs 75."
+    },
+    {
+      "id": "check-page-818b27a37d",
+      "url": "https://www.3one4capital.com/blogs/why-we-are-optimistic-about-indias-growth-prospects",
+      "page": "details",
+      "excerpt": "India could realistically meet the $5 trillion target by 2026, even at the higher dollar-to-rupee dynamic."
+    },
+    {
+      "id": "check-page-3710cd84be",
+      "url": "https://www.3one4capital.com/blogs/why-we-are-optimistic-about-indias-growth-prospects",
+      "page": "details",
+      "excerpt": "India has steadily built up its capacity to do this."
+    },
+    {
+      "id": "check-page-ff0727bc98",
+      "url": "https://www.3one4capital.com/blogs/why-we-are-optimistic-about-indias-growth-prospects",
+      "page": "details",
+      "excerpt": "Gross Capital Formation – the total quantum of new capital investments in the economy – is at an incredible 31 percent of GDP in FY23."
+    },
+    {
+      "id": "check-page-e2826cf4be",
+      "url": "https://www.3one4capital.com/blogs/why-we-are-optimistic-about-indias-growth-prospects",
+      "page": "details",
+      "excerpt": "The government is investing $250 billion this year, with the balance coming from the private and household sectors."
+    },
+    {
+      "id": "check-page-50fb320b7a",
+      "url": "https://www.3one4capital.com/blogs/why-we-are-optimistic-about-indias-growth-prospects",
+      "page": "details",
+      "excerpt": "This huge investment is propelling India’s growth."
+    },
+    {
+      "id": "check-page-4fb09e6d5f",
+      "url": "https://www.3one4capital.com/blogs/why-we-are-optimistic-about-indias-growth-prospects",
+      "page": "details",
+      "excerpt": "While urban areas do not witness this infrastructure development due to inadequate investment and high corruption rates, it is evident in rural India."
+    },
+    {
+      "id": "check-page-545bd1bb71",
+      "url": "https://www.3one4capital.com/blogs/why-we-are-optimistic-about-indias-growth-prospects",
+      "page": "details",
+      "excerpt": "In China, growth and development is ubiquitous due to a vastly superior public infrastructure."
+    },
+    {
+      "id": "check-page-150694f02f",
+      "url": "https://www.3one4capital.com/blogs/why-we-are-optimistic-about-indias-growth-prospects",
+      "page": "details",
+      "excerpt": "The NDA government has directed massive investments in infrastructure in its 9+ year governance regime, during which time India witnessed the largest development leap since Independence."
+    },
+    {
       "id": "check-page-a89e01424b",
       "url": "https://www.3one4capital.com/platform-and-program",
       "page": "details",
       "excerpt": "Platform and Program | 3one4 Capital India Consumption Report 2025 - Download Report Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch PLATFORM Beyond Capital Transformative outcomes demand more than just capital. In partnership with global brands and technology products, we have leveraged the scale and depth of market-leading digital utilities to build an exclusive platform for the 3one4 portfolio. These alliances are highly curated to support your next growth trajectory. Designed for hassle-free access The platform allows founders to quickly navigate to the list of perks and benefits listed where credits and discounts from AWS, HubSpot, Google, Jupiter Pro, Pazcare and many more can be availed Founder Login PROGRAMS Sessions at 3one4 are designed to enable founders to access leading-edge knowledge, deep domain expertise, and operational frameworks for building generational companies from the ground up. Show All Past Events Upcoming Events Tuesday , Mar 10 9:30 am Past Events Upcoming Events 3one4 Summit - 2026 View More See Details Friday , Mar 14 9:30 am Past Events Upcoming Events 3one4 Summit - 2025 View More See Details Thursday , Mar 14 10:00 am Past Events Upcoming Events 3one4 Summit - 2024 View More See Details Tuesday , May 2 7:00 pm Past Events Upcoming Events 3one4 Summit - 2022 View More"
+    },
+    {
+      "id": "check-page-71bcc263b3",
+      "url": "https://www.3one4capital.com/platform-and-program",
+      "page": "details",
+      "excerpt": "A global community of founders and business leaders to foster collective growth and create opportunities to build enterprises that are resilient and sustainable."
+    },
+    {
+      "id": "check-page-6bd20f5413",
+      "url": "https://www.3one4capital.com/platform-and-program",
+      "page": "details",
+      "excerpt": "Write To Us Let's Connect Our Milestones 3one4 was announced as the first venture capital signatory from India to the global PRI At 3one4 Capital, the team has intentionally built a long-term commitment to responsible investing and to support the evolution of an ecosystem conducive to RI."
+    },
+    {
+      "id": "check-page-1a273f03a8",
+      "url": "https://www.3one4capital.com/platform-and-program",
+      "page": "details",
+      "excerpt": "3one4 Capital ranked among top performing VC funds in India 3one4 Capital has been ranked by Preqin, a global reference database for asset management, as India’s top performer for two of its funds, in the recent Alternative Assets report."
+    },
+    {
+      "id": "check-page-f991d9acb5",
+      "url": "https://www.3one4capital.com/platform-and-program",
+      "page": "details",
+      "excerpt": "The seed and early-stage funds managed by the firm have been recognized for their performance amongst the India-focused venture capital funds in this Asia Pacific-focused report published in 2021."
+    },
+    {
+      "id": "check-page-f12583aa4a",
+      "url": "https://www.3one4capital.com/platform-and-program",
+      "page": "details",
+      "excerpt": "With industry-leading Net IRRs, 3one4 Capital’s Rising I & Fund II are the top two amongst the best performing India-focused VC funds between the vintage years, 2010- 2018."
+    },
+    {
+      "id": "check-page-944f5281a3",
+      "url": "https://www.3one4capital.com/policy/policy-overview-for-responsible-early-stage-investing-and-esg",
+      "page": "details",
+      "excerpt": "Policy Overview for Responsible Early Stage Investing and ESG India Consumption Report 2025 - Download Report 3one4 Capital – Policy Overview for Responsible Early Stage Investing and ESG Mission 3one4 Capital Advisors LLP (“Firm” or “3one4 Capital”) is committed to building generational companies that are sustainable value-accreting businesses. The Firm prioritizes the Principles of Responsible Investing in early-stage venture, across the funds that it manages, to help create socially responsible companies that are mindful of their impact and intentionally inclusive in their growth. ESG in Focus The Firm’s ESG emphasis spans multiple dimensions of its operations, with a commitment to creating an early-stage venture ecosystem that integrates ESG into its ethos. The Firm’s focus on the application of ESG is stated below: Commitment to Responsible Investing Consistent with the fiduciary responsibilities that the Firm has to its investors and stakeholders, the Firm commits to adhere to the following responsible investing frameworks on a good faith basis. Investment Process The Firm shall strive to be a Responsible Investor and commit to incorporating the lens of Environmental, Social and Corporate Governance (ESG) across all stages its investment process, analysis, evaluation, monitoring and decision making. The Firm will maintain an actively-curated negative list of sectors,"
+    },
+    {
+      "id": "check-page-ee1971a1b8",
+      "url": "https://www.3one4capital.com/policy/policy-overview-for-responsible-early-stage-investing-and-esg",
+      "page": "details",
+      "excerpt": "The Firm will maintain an actively-curated negative list of sectors, geographies (as per sanctions lists and government notifications) and business models that do not comply with established ESG principles."
+    },
+    {
+      "id": "check-page-1d59afee59",
+      "url": "https://www.3one4capital.com/policy/policy-overview-for-responsible-early-stage-investing-and-esg",
+      "page": "details",
+      "excerpt": "The Firm is amongst the most deeply involved venture capital organizations in regulatory upgradation as India becomes a destination for investments from global allocators."
+    },
+    {
+      "id": "check-page-2defd2d5bf",
+      "url": "https://www.3one4capital.com/policy/policy-overview-for-responsible-early-stage-investing-and-esg",
+      "page": "details",
+      "excerpt": "ESG and PRI Education The Firm shall strive to educate founders, portfolio company teams, and the wider ecosystem on ESG and their responsibility to all stakeholders across the value chain."
+    },
+    {
+      "id": "check-page-8df982f704",
+      "url": "https://www.3one4capital.com/policy/policy-overview-for-responsible-early-stage-investing-and-esg",
+      "page": "details",
+      "excerpt": "Collaboration and Promotion The Firm shall seek to collaborate with other like-minded investors and stakeholders to highlight the need for Responsible Investing and ESG in early-stage investing at various forums."
+    },
+    {
+      "id": "check-page-012373f047",
+      "url": "https://www.3one4capital.com/policy/policy-overview-for-responsible-early-stage-investing-and-esg",
+      "page": "details",
+      "excerpt": "Signatory of the PRI 3one4 Capital is the first approved Venture Capital signatory of the Principles for Responsible Investment (PRI) from India."
+    },
+    {
+      "id": "check-page-cb80e6637a",
+      "url": "https://jobs.3one4capital.com/",
+      "page": "portfolio",
+      "excerpt": "Jobs | 3one4 Capital Job Board Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Job Board Discover opportunities across our network • jobs · • companies Search jobs Explore companies Join talent network Talent My job alerts Job title, company or keyword On-site & Remote Location Powered by Getro Showing 675 jobs Senior Flight Control Law Engineer The Eplane Company Location: Chennai, Tamil Nadu, India Posted: Today Series B Senior Aerospace Aerospace & Defense Air Automotive Automotive & Transportation Aviation and Aerospace Component Manufacturing Consumer Electronics Consumer Goods Data & Analytics Drones eVTOL Design and eVTOL Manufacturing Hardware Internet Services Location Based Services Navigation and Mapping Science and Engineering Transportation Series B Senior Aerospace Aerospace & Defense Air Automotive Automotive & Transportation Aviation and Aerospace Component Manufacturing Consumer Electronics Consumer Goods Data & Analytics Drones eVTOL Design and eVTOL Manufacturing Hardware Internet Services Location Based Services Navigation and Mapping Science and Engineering Transportation + 99 more View job Flight Control Robustness & Clearance Engineer The Eplane Company Location:"
+    },
+    {
+      "id": "check-page-5c52355399",
+      "url": "https://www.3one4capital.com/blogs/3one4-capital-portfolio-companies-win-at-the-economic-times-supply-chain-awards-2026",
+      "page": "portfolio",
+      "excerpt": "3one4 Capital Portfolio Companies Win at The Economic Times Supply Chain Awards 2026. Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back 3one4 Capital Portfolio Companies Win at The Economic Times Supply Chain Awards 2026. September 16, 2026 5 mins Building durable commercial enterprises requires solving the physical friction points that constrain global supply chains. At 3one4 Capital, our investment conviction remains anchored in backing category creators who combine deep technical innovation with operating discipline. The evolution of global commerce demands a fundamental transformation of physical logistics infrastructure. While software innovation has accelerated front-end consumer experiences, the back-end fulfillment floor, chemical supply network, and cold-chain distribution channels require hard-tech engineering to scale efficiently. The Economic Times Supply Chain Awards 2026 delivered a definitive validation of this thesis, honouring 3one4 Capital portfolio companies across three critical categories. Recognising Unbox Robotics, Scimplify, and Licious proves that Indian deeptech platforms are setting global standards for operational performance. Hard-tech engineering and physical automation are transforming back-end fulfilment floors, specialty chemical manufacturing, and cold-chain"
+    },
+    {
+      "id": "check-page-1820e3c67e",
+      "url": "https://www.3one4capital.com/blogs/budget-2023-tax-rates-need-to-be-on-par-for-listed-companies-start-ups",
+      "page": "portfolio",
+      "excerpt": "Budget 2023: Tax Rates Need To Be On Par For Listed Companies & Start-ups Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back Budget 2023: Tax Rates Need To Be On Par For Listed Companies & Start-ups January 4, 2023 AS THE WORLD LOOKS UP to India to be the engine of growth for the coming decade, showing the highest growth rate amongst G20 nations, for New India — consisting of the innovation economy of start-ups and investors, the budget expectation is two-fold. ‍ ‍ Unlocking Rupee Capital ‍ The Indian stock markets demonstrated resilience during the global bloodbath. Global fund managers left their Indian positions as it was the only island of gains in a sea of despondence, allowing them to offset global losses. Indian indices could only show such resilience due to the \"mutual fund moment\" for Indian capital markets, which can be described as the convergence of factors — TEAM — that deepened retail participation in listed equities. It includes: * Technology (Aadhaar, UPI for verification and frictionless investments) * Economics (liquidity and favourable tax regime) * Access (low ticket size, zero-cost brokerage) * Market (falling stock prices, rising interest post Covid) Contrasted with the annus mirabilis of 2021, 2022 was a painful U-turn, falling 35% year-on-year. There are many theories for this"
+    },
+    {
+      "id": "check-page-85d5410250",
+      "url": "https://www.3one4capital.com/blogs/india-must-build-its-space-tech-companies-the-way-nasa-built-spacex",
+      "page": "portfolio",
+      "excerpt": "India Must Build Its Space Tech Companies the Way NASA Built SpaceX Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back India Must Build Its Space Tech Companies the Way NASA Built SpaceX May 24, 2026 5 mins SpaceX is expected to IPO at over $1.5 trillion later this year. The most consequential fact about the company’s origins is that NASA wrote SpaceX a $278 million development contract in 2006, when the company had under 200 employees, and continued anchoring its revenue base for the next decade through Commercial Resupply Services, Commercial Crew awards, Launch Services, and more projects estimated at $15 billion in total. The reusable rocket was the celebrated technological breakthrough. The state contract was the invisible support system. India today has more than 400 space tech startups, world-class engineering inherited from six decades of ISRO leadership, and a comprehensive policy framework in place since 2023. The ecosystem recently announced India’s first space tech unicorn. What India has not yet built is the procurement infrastructure that turned SpaceX into a category leader. Fixing that gap is essential for Indian space tech to realise its potential. ‍ NASA Built SpaceX As The Anchor Customer NASA's 2006 Commercial Orbital Transportation Services award of $278 million to SpaceX"
+    },
+    {
+      "id": "check-page-ff2297683d",
+      "url": "https://www.3one4capital.com/blogs/nruthya-madappa-recognized-for-driving-portfolio-success-elevated-to-partner-at-3one4-capital",
+      "page": "portfolio",
+      "excerpt": "Nruthya Madappa Recognized For Driving Portfolio Success; Elevated To Partner At 3one4 Capital Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch Back Nruthya Madappa Recognized For Driving Portfolio Success; Elevated To Partner At 3one4 Capital April 26, 2023 We are thrilled to announce the elevation of Nruthya Madappa to the role of Partner at 3one4 Capital. She joins Pranav Pai, Siddarth Pai, and Anurag Ramdasan as Partners at the firm. Nruthya has been a key member of our firm as the lead of the Growth and Capital Development team, and has consistently supported the scale-ups of several initiatives at the firm and across the portfolio. Nruthya Madappa joined 3one4 Capital in 2020 as Principal and Head of Growth and Capital Development and was elevated to Director in 2022, where she continued to lead the Growth and Capital vertical, playing a pivotal role in the firm's expansion. Nruthya has helped guide the firm's impressive portfolio of startups towards sustainable growth and success by securing funding, driving revenue growth, and facilitating successful exits. With her expertise in technology, finance, and corporate development, Nruthya has partnered with some of the most promising companies in India's vibrant startup ecosystem, including Open, BetterPlace, Bugworks, Dozee, and Kapiva to deliver"
     }
   ],
   "findings": {
@@ -557,6 +1460,10 @@
       {
         "value": "https://www.3one4capital.com/portfolio",
         "evidenceId": "check-portfolio-ba68db121a"
+      },
+      {
+        "value": "https://jobs.3one4capital.com/companies",
+        "evidenceId": "check-portfolio-36a142b70d"
       }
     ],
     "name": [

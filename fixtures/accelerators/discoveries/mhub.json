@@ -1,12 +1,12 @@
 {
   "programId": "mhub",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://mhub.org/about",
       "page": "details",
       "anchor": "About",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -14,7 +14,15 @@
       "url": "https://mhub.org/accelerator",
       "page": "details",
       "anchor": "Accelerator Programs",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://mhub.org/accelerator-program-interest",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -22,38 +30,6 @@
       "url": "https://mhub.org/apply-to-be-a-member",
       "page": "application",
       "anchor": "Apply Now",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://mhub.org/blog/17-hardtech-terms-you-need-to-know-for-product-development",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://mhub.org/blog/initial-investment-for-mhub-medtech-accelerator-baxter-edward-elmhurst-health-vc",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://mhub.org/blog/initial-investments-announced-by-mhub-energytech-accelerator-industry-partners",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://mhub.org/blog/investments-by-avnet-and-panduit-into-iiot-cohort",
-      "page": "terms",
-      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -91,24 +67,16 @@
       "origin": "official"
     },
     {
-      "url": "https://mhub.org/blog/no-easy-money-navigating-medtech-investment",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://mhub.org/blog/supply-chain-disruption-an-ideal-industry-40-use-case-",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://mhub.org/blog/top-industrial-iot-applications",
       "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://mhub.org/ecosystem",
+      "page": "other",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -118,38 +86,6 @@
       "url": "https://mhub.org/energy-tech-accelerator",
       "page": "details",
       "anchor": "Energy Tech Accelerator",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://mhub.org/events/apply-to-showcase-at-the-hardtech-summit-73029",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://mhub.org/events/applying-strategy-frameworks-for-business--108336",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://mhub.org/events/capital-connections---consumer-investment-panel-139660",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://mhub.org/events/from-filing-to-grant---understanding-the-patent-application-process-206769",
-      "page": "application",
-      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -158,7 +94,15 @@
       "url": "https://mhub.org/faq",
       "page": "terms",
       "anchor": "FAQ",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://mhub.org/investor-interest",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -166,7 +110,31 @@
       "url": "https://mhub.org/medtech-accelerator-for-startups",
       "page": "details",
       "anchor": "MedTech Accelerator",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://mhub.org/prototyping-lab/programmable-dc-electronic-load-8488",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://mhub.org/startup-accelerator-faq",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://mhub.org/subscribe-to-our-newsletter",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -174,7 +142,7 @@
       "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
       "page": "details",
       "anchor": "Sustainable Manufacturing Accelerator",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -182,7 +150,7 @@
       "url": "https://mhub.org/terms",
       "page": "terms",
       "anchor": "Terms & Conditions",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

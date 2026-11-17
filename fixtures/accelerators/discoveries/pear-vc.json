@@ -1,6 +1,6 @@
 {
   "programId": "pear-vc",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "http://pear.vc/pearx-application",
@@ -27,6 +27,14 @@
       "origin": "official"
     },
     {
+      "url": "https://pear.vc/celebrating-100-hires-for-pear-companies-%f0%9f%a5%b3/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
       "page": "details",
       "anchor": "",
@@ -38,7 +46,7 @@
       "url": "https://pear.vc/companies/",
       "page": "portfolio",
       "anchor": "Companies",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -83,8 +91,32 @@
       "origin": "official"
     },
     {
+      "url": "https://pear.vc/pear-portfolio-company-bioage-labs-announces-oversubscribed-170m-series-d-financing-to-drive-development-of-obesity-and-metabolic-disease-therapeutics/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://pear.vc/pearx-alumni-company-via-acquired-by-justworks/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://pear.vc/pearx-application/",
       "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://pear.vc/pearx-s20-alumni-company-sequel-receives-fda-approval/",
+      "page": "portfolio",
       "anchor": "",
       "fetched": true,
       "blocked": null,

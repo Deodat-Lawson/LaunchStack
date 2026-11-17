@@ -1,44 +1,348 @@
 {
   "programId": "link",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
-    "https://www.sandspringschamber.org/the-link"
+    "https://www.sandspringschamber.org/the-link",
+    "https://sandspringschamber.org/board-application/",
+    "https://sandspringschamber.org/2025-investment-opportunity-guide/",
+    "https://sandspringschamber.org/faqs/",
+    "https://sandspringschamber.org/wp-content/uploads/2026-Investment-Guide-4.pdf",
+    "https://sandspringschamber.org/about-the-chamber/",
+    "https://sandspringschamber.org/product-category/legislative-programs/",
+    "https://sandspringschamber.org/tote-bag-program/"
   ],
   "evidence": [
     {
+      "id": "check-email-008d78b2ca",
+      "url": "https://sandspringschamber.org/tote-bag-program/",
+      "title": "The LINK — program page",
+      "excerpt": "info@sandspringschamber.org",
+      "page": "details"
+    },
+    {
       "id": "check-email-0314cb8d4a",
       "url": "https://www.sandspringschamber.org/the-link",
-      "title": "The LINK — homepage checked by scrape.py",
+      "title": "The LINK — homepage",
       "excerpt": "Ave Sand Springs, OK 74063 Call Us 918-245-3221 Email Us info@sandspringschamber.org Hours of Operation Monday - Thursday: 8:30AM-5:00PM",
+      "page": "details"
+    },
+    {
+      "id": "check-email-036477b94a",
+      "url": "https://sandspringschamber.org/about-the-chamber/",
+      "title": "The LINK — program page",
+      "excerpt": "918-245-3221 109 N Garfield Ave Sand Springs, OK 74063 info@sandspringschamber.org Facebook Become a Member About the Chamber WHO WE ARE",
+      "page": "details"
+    },
+    {
+      "id": "check-email-043bbf53b2",
+      "url": "https://sandspringschamber.org/product-category/legislative-programs/",
+      "title": "The LINK — program page",
+      "excerpt": "918-245-3221 109 N Garfield Ave Sand Springs, OK 74063 info@sandspringschamber.org Facebook Become a Member Great things are on the horizon",
       "page": "details"
     },
     {
       "id": "check-email-08c9adc55b",
       "url": "https://www.sandspringschamber.org/the-link",
-      "title": "The LINK — homepage checked by scrape.py",
+      "title": "The LINK — homepage",
       "excerpt": "info@sandspringschamber.org",
       "page": "details"
     },
     {
+      "id": "check-email-08cd6bd814",
+      "url": "https://sandspringschamber.org/tote-bag-program/",
+      "title": "The LINK — program page",
+      "excerpt": "Ave Sand Springs, OK 74063 Call Us 918-245-3221 Email Us info@sandspringschamber.org Hours of Operation Monday - Thursday: 8:30AM-5:00PM",
+      "page": "details"
+    },
+    {
+      "id": "check-email-0bafe7a4a5",
+      "url": "https://sandspringschamber.org/2025-investment-opportunity-guide/",
+      "title": "The LINK — terms page",
+      "excerpt": "info@sandspringschamber.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-13eca85e8d",
+      "url": "https://sandspringschamber.org/faqs/",
+      "title": "The LINK — terms page",
+      "excerpt": "918-245-3221 109 N Garfield Ave Sand Springs, OK 74063 info@sandspringschamber.org Facebook Become a Member FAQs What is the Sand Springs",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-38da53abc7",
+      "url": "https://sandspringschamber.org/about-the-chamber/",
+      "title": "The LINK — program page",
+      "excerpt": "Ave Sand Springs, OK 74063 Call Us 918-245-3221 Email Us info@sandspringschamber.org Hours of Operation Monday - Thursday: 8:30AM-5:00PM",
+      "page": "details"
+    },
+    {
+      "id": "check-email-4337f93e7b",
+      "url": "https://sandspringschamber.org/product-category/legislative-programs/",
+      "title": "The LINK — program page",
+      "excerpt": "info@sandspringschamber.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-47ee4624b2",
+      "url": "https://sandspringschamber.org/board-application/",
+      "title": "The LINK — application page",
+      "excerpt": "info@sandspringschamber.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-82ace9d639",
+      "url": "https://sandspringschamber.org/faqs/",
+      "title": "The LINK — terms page",
+      "excerpt": "info@sandspringschamber.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-88591a5b12",
+      "url": "https://sandspringschamber.org/product-category/legislative-programs/",
+      "title": "The LINK — program page",
+      "excerpt": "Ave Sand Springs, OK 74063 Call Us 918-245-3221 Email Us info@sandspringschamber.org Hours of Operation Monday - Thursday: 8:30AM-5:00PM",
+      "page": "details"
+    },
+    {
+      "id": "check-email-aa99aa0fdb",
+      "url": "https://sandspringschamber.org/tote-bag-program/",
+      "title": "The LINK — program page",
+      "excerpt": "918-245-3221 109 N Garfield Ave Sand Springs, OK 74063 info@sandspringschamber.org Facebook Become a Member Tote Bag Program What is it? The",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ba92fad507",
+      "url": "https://sandspringschamber.org/faqs/",
+      "title": "The LINK — terms page",
+      "excerpt": "Ave Sand Springs, OK 74063 Call Us 918-245-3221 Email Us info@sandspringschamber.org Hours of Operation Monday - Thursday: 8:30AM-5:00PM",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-d2e88733c7",
+      "url": "https://sandspringschamber.org/about-the-chamber/",
+      "title": "The LINK — program page",
+      "excerpt": "info@sandspringschamber.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d5d12302ff",
+      "url": "https://sandspringschamber.org/2025-investment-opportunity-guide/",
+      "title": "The LINK — terms page",
+      "excerpt": "Ave Sand Springs, OK 74063 Call Us 918-245-3221 Email Us info@sandspringschamber.org Hours of Operation Monday - Thursday: 8:30AM-5:00PM",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-e94eeb7a26",
+      "url": "https://sandspringschamber.org/board-application/",
+      "title": "The LINK — application page",
+      "excerpt": "918-245-3221 109 N Garfield Ave Sand Springs, OK 74063 info@sandspringschamber.org Facebook Become a Member Board Application Name * First",
+      "page": "application"
+    },
+    {
+      "id": "check-email-edba9a39ea",
+      "url": "https://sandspringschamber.org/2025-investment-opportunity-guide/",
+      "title": "The LINK — terms page",
+      "excerpt": "918-245-3221 109 N Garfield Ave Sand Springs, OK 74063 info@sandspringschamber.org Facebook Become a Member 2026 Investment & Opportunity",
+      "page": "terms"
+    },
+    {
       "id": "check-email-f94f834987",
       "url": "https://www.sandspringschamber.org/the-link",
-      "title": "The LINK — homepage checked by scrape.py",
+      "title": "The LINK — homepage",
       "excerpt": "918-245-3221 109 N Garfield Ave Sand Springs, OK 74063 info@sandspringschamber.org Facebook Become a Member The Link The Link is the home of",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f9d938af34",
+      "url": "https://sandspringschamber.org/board-application/",
+      "title": "The LINK — application page",
+      "excerpt": "Ave Sand Springs, OK 74063 Call Us 918-245-3221 Email Us info@sandspringschamber.org Hours of Operation Monday - Thursday: 8:30AM-5:00PM",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c37310ff5e",
+      "url": "https://sandspringschamber.org/about-the-chamber/",
+      "title": "The LINK — program page",
+      "excerpt": "thousands of individuals and businesses each year online, in-person, and in print.  Membership Dedicated to our members’",
       "page": "details"
     },
     {
       "id": "check-name-cf4dd94bf1",
       "url": "https://www.sandspringschamber.org/the-link",
-      "title": "The LINK — homepage checked by scrape.py",
+      "title": "The LINK — homepage",
       "excerpt": "The Link - Sand Springs Chamber of Commerce Chamber About the",
       "page": "details"
     },
     {
-      "id": "check-phone-fca3ee5d85",
-      "url": "https://www.sandspringschamber.org/the-link",
-      "title": "The LINK — homepage checked by scrape.py",
+      "id": "check-phone-1a267cffd3",
+      "url": "https://sandspringschamber.org/about-the-chamber/",
+      "title": "The LINK — program page",
       "excerpt": "918-245-3221",
       "page": "details"
+    },
+    {
+      "id": "check-phone-6bad6ee742",
+      "url": "https://sandspringschamber.org/tote-bag-program/",
+      "title": "The LINK — program page",
+      "excerpt": "918-245-3221",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-6e39bd872e",
+      "url": "https://sandspringschamber.org/board-application/",
+      "title": "The LINK — application page",
+      "excerpt": "918-245-3221",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-97ad749e5a",
+      "url": "https://sandspringschamber.org/product-category/legislative-programs/",
+      "title": "The LINK — program page",
+      "excerpt": "918-245-3221",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-e77458b0cc",
+      "url": "https://sandspringschamber.org/2025-investment-opportunity-guide/",
+      "title": "The LINK — terms page",
+      "excerpt": "918-245-3221",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-fb97c4d36d",
+      "url": "https://sandspringschamber.org/faqs/",
+      "title": "The LINK — terms page",
+      "excerpt": "918-245-3221",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-fca3ee5d85",
+      "url": "https://www.sandspringschamber.org/the-link",
+      "title": "The LINK — homepage",
+      "excerpt": "918-245-3221",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1f0f910776",
+      "url": "https://sandspringschamber.org/about-the-chamber/",
+      "title": "The LINK — program page",
+      "excerpt": "Board Application → https://sandspringschamber.org/board-application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-94aa201614",
+      "url": "https://sandspringschamber.org/tote-bag-program/",
+      "title": "The LINK — program page",
+      "excerpt": "Board Application → https://sandspringschamber.org/board-application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a78a28b3ca",
+      "url": "https://sandspringschamber.org/2025-investment-opportunity-guide/",
+      "title": "The LINK — terms page",
+      "excerpt": "Board Application → https://sandspringschamber.org/board-application/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-bb2be4f035",
+      "url": "https://sandspringschamber.org/faqs/",
+      "title": "The LINK — terms page",
+      "excerpt": "Board Application → https://sandspringschamber.org/board-application/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d8020565ac",
+      "url": "https://www.sandspringschamber.org/the-link",
+      "title": "The LINK — homepage",
+      "excerpt": "Board Application → https://sandspringschamber.org/board-application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e8f261f19d",
+      "url": "https://sandspringschamber.org/product-category/legislative-programs/",
+      "title": "The LINK — program page",
+      "excerpt": "Board Application → https://sandspringschamber.org/board-application/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-851a39aae5",
+      "url": "https://www.sandspringschamber.org/the-link",
+      "page": "details",
+      "excerpt": "The Link - Sand Springs Chamber of Commerce Chamber About the Chamber Meet the Team Board Application Board Nominations FAQs Documents Members Become a Member Get Involved Member Benefits Business Directory Request a Ribbon Cutting Business of the Month Member Login Make a Payment Newsletter Sign-Up Events Chamber Events Member Events Submit Your Event 2026 Investment & Opportunity Guide Annual Award Nominations Tote Bag Program Santa Bucks Photo Gallery Community City of Sand Springs Economic Development Sand Springs Public Schools Tulsa Tech Tulsa Community College Job Openings Latest News Deals & Discounts The Link Contact Select Page Facebook 0 Items 918-245-3221 109 N Garfield Ave Sand Springs, OK 74063 info@sandspringschamber.org Facebook Become a Member The Link The Link is the home of the Sand Springs Chamber of Commerce. Office space is available for small businesses and entrepreneurs to flourish in their work. Office & Desk Space Private Office Space Prices start at $200 (up to 12 available) Square footage ranges from 120 sq ft to 240 sq ft One-year lease required 24/7 access Utilities included (tenant provides all phone services) Reception & mail services during regular business hours Access to kitchen including coffee service Reduced fees for conference room usage All office and desk areas are protected by locked access doors Daily/Monthly Use Desk Space Pricing"
+    },
+    {
+      "id": "check-page-6dae179b37",
+      "url": "https://sandspringschamber.org/board-application/",
+      "page": "application",
+      "excerpt": "Board Application - Sand Springs Chamber of Commerce Chamber About the Chamber Meet the Team Board Application Board Nominations FAQs Documents Members Become a Member Get Involved Member Benefits Business Directory Request a Ribbon Cutting Business of the Month Member Login Make a Payment Newsletter Sign-Up Events Chamber Events Member Events Submit Your Event 2026 Investment & Opportunity Guide Annual Award Nominations Tote Bag Program Santa Bucks Photo Gallery Community City of Sand Springs Economic Development Sand Springs Public Schools Tulsa Tech Tulsa Community College Job Openings Latest News Deals & Discounts The Link Contact Select Page Facebook 0 Items 918-245-3221 109 N Garfield Ave Sand Springs, OK 74063 info@sandspringschamber.org Facebook Become a Member Board Application Name * First Last Email * Chamber Investor Business * Occupation rules the Phone How long have you been involved with Sand Springs as a business or resident? Education Phone Why are you interested in serving on this board? In what civic activities have you been involved during the past 3 years? What skills and/or experience will you contribute? I understand this is a volunteer position appointed by the Sand Springs Chamber of Commerce board of directors. I recognize that a limited number of positions are available at a given time and that application in itself does not guarantee appointment. I"
+    },
+    {
+      "id": "check-page-2ae67461c7",
+      "url": "https://sandspringschamber.org/2025-investment-opportunity-guide/",
+      "page": "terms",
+      "excerpt": "2026 Investment & Opportunity Guide - Sand Springs Chamber of Commerce Chamber About the Chamber Meet the Team Board Application Board Nominations FAQs Documents Members Become a Member Get Involved Member Benefits Business Directory Request a Ribbon Cutting Business of the Month Member Login Make a Payment Newsletter Sign-Up Events Chamber Events Member Events Submit Your Event 2026 Investment & Opportunity Guide Annual Award Nominations Tote Bag Program Santa Bucks Photo Gallery Community City of Sand Springs Economic Development Sand Springs Public Schools Tulsa Tech Tulsa Community College Job Openings Latest News Deals & Discounts The Link Contact Select Page Facebook 0 Items 918-245-3221 109 N Garfield Ave Sand Springs, OK 74063 info@sandspringschamber.org Facebook Become a Member 2026 Investment & Opportunity Guide 2026 OPPORTUNITIES AVAILABLE NOW! The Sand Springs Chamber of Commerce is thrilled to announce sponsorship opportunities for 2026! Connect your brand with a passionate, growing business community by sponsoring one of our premier events or initiatives. This is an ideal way to boost your visibility, expand your network, and show your commitment to local growth and success. With sponsorship packages designed to fit diverse business goals, you’ll find flexible options to showcase your support while enhancing your presence in the community. From our 2026 Signature"
+    },
+    {
+      "id": "check-page-2220b0934b",
+      "url": "https://sandspringschamber.org/faqs/",
+      "page": "terms",
+      "excerpt": "FAQs - Sand Springs Chamber of Commerce Chamber About the Chamber Meet the Team Board Application Board Nominations FAQs Documents Members Become a Member Get Involved Member Benefits Business Directory Request a Ribbon Cutting Business of the Month Member Login Make a Payment Newsletter Sign-Up Events Chamber Events Member Events Submit Your Event 2026 Investment & Opportunity Guide Annual Award Nominations Tote Bag Program Santa Bucks Photo Gallery Community City of Sand Springs Economic Development Sand Springs Public Schools Tulsa Tech Tulsa Community College Job Openings Latest News Deals & Discounts The Link Contact Select Page Facebook 0 Items 918-245-3221 109 N Garfield Ave Sand Springs, OK 74063 info@sandspringschamber.org Facebook Become a Member FAQs What is the Sand Springs Chamber of Commerce? The Sand Springs Chamber of Commerce is a 501(c)(6) organization comprised of the Sand Springs community’s businesses and organizations. The Sand Springs Chamber of Commerce was incorporated in 1946 and has been a leader in business and quality of life developments in the community. Who runs the Chamber? The Board of Directors holds the governance and policy-making responsibilities of the Chamber. The Chamber employs a President who is responsible for general management of staff and coordination of all organizational activities. What is the difference between the Chamber and"
+    },
+    {
+      "id": "check-page-f088ef7878",
+      "url": "https://sandspringschamber.org/faqs/",
+      "page": "terms",
+      "excerpt": "Chambers of Commerce and City Government are two separate entities that work closely together for the benefit of the community, especially in terms of business, economic development issues and legislative affairs."
+    },
+    {
+      "id": "check-page-aeb5b8cb8d",
+      "url": "https://sandspringschamber.org/faqs/",
+      "page": "terms",
+      "excerpt": "The City is a municipal government and responsible for planning the future needs of the community and providing a range of services, such as public safety, quality of life, administrating a court system, roads, parks and sports facilities, community centers, water and sewer services to name a few."
+    },
+    {
+      "id": "check-page-da1fe96dde",
+      "url": "https://sandspringschamber.org/wp-content/uploads/2026-Investment-Guide-4.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.4 %���� 1 0 obj < < /Type /Catalog /Version /1.4 /Pages 2 0 R /StructTreeRoot 3 0 R /MarkInfo 4 0 R /Lang (en) /ViewerPreferences 5 0 R >> endobj 6 0 obj < < /Title (2026 Investment Guide) /Creator (Canva) /Producer (Canva) /CreationDate (D:20251110202026+00'00') /ModDate (D:20251110202008+00'00') /Keywords (DAGmfhkv3NU,BAEklmgdCOg,0) /Author (Sand Springs Chamber) >> endobj 2 0 obj < < /Type /Pages /Kids [7 0 R 8 0 R 9 0 R 10 0 R 11 0 R 12 0 R 13 0 R 14 0 R 15 0 R 16 0 R 17 0 R 18 0 R 19 0 R 20 0 R 21 0 R 22 0 R 23 0 R 24 0 R 25 0 R 26 0 R 27 0 R 28 0 R 29 0 R] /Count 23 >> endobj 3 0 obj < < /Type /StructTreeRoot /K [30 0 R] /ParentTree 31 0 R /ParentTreeNextKey 1 >> endobj 4 0 obj < < /Marked true /Suspects false >> endobj 5 0 obj < < /Type /ViewerPreferences /DisplayDocTitle true >> endobj 7 0 obj < < /Type /Page /Resources < < /ProcSet [/PDF /Text /ImageB /ImageC /ImageI] /ExtGState 32 0 R /XObject < < /X4 33 0 R /X5 34 0 R /X6 35 0 R /X8 36 0 R /X9 37 0 R /X11 38 0 R /X12 39 0 R /X13 40 0 R /X14 41 0 R /X15 42 0 R /X17 43 0 R /X19 44 0 R /X20 45 0 R >> /Font 46 0 R >> /MediaBox [0.0 7.9200063 612.0 799.92] /Contents 47 0 R /StructParents 0 /Tabs /S /Parent 2 0 R /BleedBox [0.0 7.9200063 612.0 799.92] /TrimBox [0.0 7.9200063 612.0 799.92] /CropBox [0.0 7.9200063 612.0 799.92] /Rotate 0 /Annots [] >> endobj 8 0 obj < < /Type /Page /Resources < < /ProcSet [/PDF /Text"
+    },
+    {
+      "id": "check-page-24761e2f74",
+      "url": "https://sandspringschamber.org/about-the-chamber/",
+      "page": "details",
+      "excerpt": "About the Chamber - Sand Springs Chamber of Commerce Chamber About the Chamber Meet the Team Board Application Board Nominations FAQs Documents Members Become a Member Get Involved Member Benefits Business Directory Request a Ribbon Cutting Business of the Month Member Login Make a Payment Newsletter Sign-Up Events Chamber Events Member Events Submit Your Event 2026 Investment & Opportunity Guide Annual Award Nominations Tote Bag Program Santa Bucks Photo Gallery Community City of Sand Springs Economic Development Sand Springs Public Schools Tulsa Tech Tulsa Community College Job Openings Latest News Deals & Discounts The Link Contact Select Page Facebook 0 Items 918-245-3221 109 N Garfield Ave Sand Springs, OK 74063 info@sandspringschamber.org Facebook Become a Member About the Chamber WHO WE ARE Since 1946, the Sand Springs Chamber has been a resource for the Sand Springs business community. The Sand Springs Chamber of Commerce is a nonprofit association of businesses, industries, and engaged individuals working together to drive economic growth and enhance the quality of life in Sand Springs. Our members represent a diverse cross section of the local economy, and together, we provide the resources, connections, and vision to make great things happen in our community. As the leading business organization in Sand Springs, we partner with hundreds of companies and thousands of"
+    },
+    {
+      "id": "check-page-1c89a3cc51",
+      "url": "https://sandspringschamber.org/about-the-chamber/",
+      "page": "details",
+      "excerpt": "Core Values Advocate – The Sand Springs Chamber advocates for your business at all levels of government."
+    },
+    {
+      "id": "check-page-adf152e83a",
+      "url": "https://sandspringschamber.org/about-the-chamber/",
+      "page": "details",
+      "excerpt": "Inform & Educate – Through the Sand Springs Chamber’s programs, publications and newsletter our members are offered opportunities for professional development, information from government and civic leaders to learn best industry practices."
+    },
+    {
+      "id": "check-page-4255691689",
+      "url": "https://sandspringschamber.org/product-category/legislative-programs/",
+      "page": "details",
+      "excerpt": "Legislative Programs Archives - Sand Springs Chamber of Commerce Legislative Programs Archives - Sand Springs Chamber of Commerce Chamber About the Chamber Meet the Team Board Application Board Nominations FAQs Documents Members Become a Member Get Involved Member Benefits Business Directory Request a Ribbon Cutting Business of the Month Member Login Make a Payment Newsletter Sign-Up Events Chamber Events Member Events Submit Your Event 2026 Investment & Opportunity Guide Annual Award Nominations Tote Bag Program Santa Bucks Photo Gallery Community City of Sand Springs Economic Development Sand Springs Public Schools Tulsa Tech Tulsa Community College Job Openings Latest News Deals & Discounts The Link Contact Select Page Facebook 0 Items 918-245-3221 109 N Garfield Ave Sand Springs, OK 74063 info@sandspringschamber.org Facebook Become a Member Great things are on the horizon Something big is brewing! Our store is in the works and will be launching soon! Visit Us 109 N Garfield Ave Sand Springs, OK 74063 Call Us 918-245-3221 Email Us info@sandspringschamber.org Hours of Operation Monday - Thursday: 8:30AM-5:00PM Friday: 8:30AM - 4:00PM Copyright © Sand Springs Chamber. All Rights Reserved. Website by CC-Assist"
+    },
+    {
+      "id": "check-page-2528fcc288",
+      "url": "https://sandspringschamber.org/tote-bag-program/",
+      "page": "details",
+      "excerpt": "Tote Bag Program - Sand Springs Chamber of Commerce Chamber About the Chamber Meet the Team Board Application Board Nominations FAQs Documents Members Become a Member Get Involved Member Benefits Business Directory Request a Ribbon Cutting Business of the Month Member Login Make a Payment Newsletter Sign-Up Events Chamber Events Member Events Submit Your Event 2026 Investment & Opportunity Guide Annual Award Nominations Tote Bag Program Santa Bucks Photo Gallery Community City of Sand Springs Economic Development Sand Springs Public Schools Tulsa Tech Tulsa Community College Job Openings Latest News Deals & Discounts The Link Contact Select Page Facebook 0 Items 918-245-3221 109 N Garfield Ave Sand Springs, OK 74063 info@sandspringschamber.org Facebook Become a Member Tote Bag Program What is it? The Sand Springs Tote Bag Program is a year-long shop local initiative designed to support our local businesses while rewarding shoppers who do the same! By purchasing an official Sand Springs tote bag, customers unlock exclusive deals, discounts, and promotions from participating businesses for an entire year. Whether it’s $1 off your coffee, a free gift with purchase, or 10% off your favorite boutique item — the savings add up fast! These aren’t just tote bags — they’re your passport to local perks and a fun way to support the Sand Springs community. Tote bags are available for $20"
+    },
+    {
+      "id": "check-page-84a728b3f9",
+      "url": "https://sandspringschamber.org/tote-bag-program/",
+      "page": "details",
+      "excerpt": "Buy one-get-one injections to boost your health goals."
     }
   ],
   "findings": {
@@ -54,13 +358,35 @@
         "evidenceId": "check-phone-fca3ee5d85"
       }
     ],
-    "routes": [],
-    "applicationUrl": [],
+    "routes": [
+      {
+        "value": "https://sandspringschamber.org/board-application/",
+        "evidenceId": "check-route-d8020565ac"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://sandspringschamber.org/board-application/",
+        "evidenceId": "check-route-d8020565ac"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-c37310ff5e"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

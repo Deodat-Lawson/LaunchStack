@@ -1,6 +1,6 @@
 {
   "programId": "coastal-bend-business-innovation-center",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.coastalbendinnovation.com"
   ],
@@ -8,9 +8,35 @@
     {
       "id": "check-phone-30f6aba626",
       "url": "https://www.coastalbendinnovation.com",
-      "title": "Coastal Bend Business Innovation Center (CBBIC) at Texas A&M University Corpus Christi \u2014 homepage checked by scrape.py",
+      "title": "Coastal Bend Business Innovation Center (CBBIC) at Texas A&M University Corpus Christi — homepage",
       "excerpt": "361.825.5700",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-81c030f3b0",
+      "url": "https://www.coastalbendinnovation.com",
+      "page": "details",
+      "excerpt": "Home - Coastal Bend Business Innovation Center Go to Sitemap Jump to Header Jump to Main Content Jump to Footer Skip to content What are you looking for? Search Academics Explore Areas of Study Academic Advising and Planning Academic Support Colleges Registrar Faculty Directory Library Admissions Apply Today! Admissions Counselors First-Time Freshmen Returning Students Transfer Students Graduate Students Admitted Students International Students Military & Veterans Visit TAMU-CC Cost & Aid Cost of Attendance Financial Aid Scholarships Net Price Calculator Tool Islander Guarantee Paying Your Bill Student Employment Student Life Get Involved Student Support Campus Safety Islander Housing Dining Campus Resources Sports & Recreation Health & Wellness Spirit & Traditions Research Overview Centers & Institutes Funding Opportunities Sponsored Projects Research Engagement Research Integrity About Us Campus Map Campus Directory Parents & Families Community Leadership The Arts Campus Divisions Campus Facilities Campus Initiatives History Contact Us Current Students Alumni Athletics Calendar Careers News MyTAMU-CC Academic Calendar Campus Store Islander Dining SAIL Banner Blackboard Web Mail Reset Password Faculty and Staff What are you looking for? Search CBBIC Home Coastal Bend Business Innovation Center Coastal Bend Business Innovation Center The Innovation Center is a catalyst for"
+    },
+    {
+      "id": "check-page-95723f3e9f",
+      "url": "https://www.coastalbendinnovation.com",
+      "page": "details",
+      "excerpt": "Search CBBIC Home Coastal Bend Business Innovation Center Coastal Bend Business Innovation Center The Innovation Center is a catalyst for innovative ideas, providing business advice for entrepreneurs and supporting the creation of successful, sustainable Coastal Bend businesses at every stage of development."
+    },
+    {
+      "id": "check-page-ec7df9e386",
+      "url": "https://www.coastalbendinnovation.com",
+      "page": "details",
+      "excerpt": "The Innovation Center plays a major role in promoting cross-disciplinary academic and entrepreneurial programs within the Texas A&M University-Corpus Christi (TAMU-CC) and bringing their benefit to the community."
+    },
+    {
+      "id": "check-page-14636dfc70",
+      "url": "https://www.coastalbendinnovation.com",
+      "page": "details",
+      "excerpt": "About CBBIC About CBBIC Programs Events & News Current Clients Become a Client Contact Us About CBBIC About CBBIC Fostering Economic Growth through Education, Connection, and Empowerment About CBBIC Programs Programs We'll help you build the capabilities and capacity you need to turn your ideas into a successful business."
     }
   ],
   "findings": {
@@ -26,8 +52,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

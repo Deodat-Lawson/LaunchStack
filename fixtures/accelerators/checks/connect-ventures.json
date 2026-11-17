@@ -1,6 +1,6 @@
 {
   "programId": "connect-ventures",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.connectventures.co/",
     "https://www.connectventures.co/opinions/investment-decisions-at-connect",
@@ -11,12 +11,10 @@
     "https://www.connectventures.co/opinions/great-venture-investing-isnt-about-frameworks-you-are-spending-real-time-with-the-people-not-the-decks",
     "https://www.connectventures.co/opinions/opinionated-about-the-problem",
     "https://www.connectventures.co/opinions/venture-is-about-velocity",
+    "https://www.connectventures.co/opinions/building-an-impactful-portfolio",
     "https://www.connectventures.co/companies",
     "https://www.connectventures.co/companies/accelerated-dynamics",
-    "https://www.connectventures.co/companies/accountable",
-    "https://www.connectventures.co/companies/ai-coustics",
-    "https://www.connectventures.co/companies/aikido",
-    "https://www.connectventures.co/companies/ambient"
+    "https://www.connectventures.co/companies/accountable"
   ],
   "evidence": [
     {
@@ -83,20 +81,6 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-041898a56f",
-      "url": "https://www.connectventures.co/companies/ai-coustics",
-      "title": "Connect Ventures — portfolio page",
-      "excerpt": "https://connectventures.co/companies/#all-companies",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-2298c35583",
-      "url": "https://www.connectventures.co/companies/aikido",
-      "title": "Connect Ventures — portfolio page",
-      "excerpt": "https://connectventures.co/companies/#all-companies",
-      "page": "portfolio"
-    },
-    {
       "id": "check-portfolio-3863c5e9b4",
       "url": "https://www.connectventures.co/",
       "title": "Connect Ventures — homepage",
@@ -113,13 +97,6 @@
     {
       "id": "check-portfolio-9970b9e92e",
       "url": "https://www.connectventures.co/companies/accelerated-dynamics",
-      "title": "Connect Ventures — portfolio page",
-      "excerpt": "https://connectventures.co/companies/#all-companies",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-portfolio-cb07065583",
-      "url": "https://www.connectventures.co/companies/ambient",
       "title": "Connect Ventures — portfolio page",
       "excerpt": "https://connectventures.co/companies/#all-companies",
       "page": "portfolio"
@@ -161,16 +138,106 @@
       "excerpt": "Connect Ventures | Home We use cookies to enhance your browsing experience, serve personalized ads or content, and analyze our traffic. By clicking “Accept all”, you consent to our use of cookies. Please see our Cookies Policy . Go to settings Accept all Privacy Preference Center When you visit websites, they may store or retrieve data in your browser. This storage is often necessary for the basic functionality of the website. The storage may be used for marketing, analytics, and personalization of the site, such as storing your preferences. Privacy is important to us, so you have the option of disabling certain types of storage that may not be necessary for the basic functioning of the website. Blocking categories may impact your experience on the website. Reject all cookies Allow all cookies Manage Consent Preferences by Category Essential Always Active These items are required to enable basic website functionality. Marketing Essential These items are used to deliver advertising that is more relevant to you and your interests. They may also be used to limit the number of times you see an advertisement and measure the effectiveness of advertising campaigns. Advertising networks usually place them with the website operator’s permission. Personalization Essential These items allow the website to remember choices you make (such as your user name, language, or the region you are"
     },
     {
+      "id": "check-page-6b682af225",
+      "url": "https://www.connectventures.co/",
+      "page": "details",
+      "excerpt": "Confirm my preferences and close Founders Connect Companies Opinions Built By Few Newsletter Pre-seed specialists backing technical founders from day zero."
+    },
+    {
+      "id": "check-page-5a8734f2c0",
+      "url": "https://www.connectventures.co/",
+      "page": "details",
+      "excerpt": "Co-led Seed in 2023 Aikido Willem Delbare Roeland Delrue Felix Garriau “Right from the start, it was clear that Connect understood that technical depth and product would be at the heart of what we were building, and that conviction has remained constant as Aikido has grown.\" Led the pre-seed in 2025 Nexcade Dan Bailey Tasho Kjosev “Rory, as a person, was the reason we wanted to work with Connect."
+    },
+    {
+      "id": "check-page-03cd47e50a",
+      "url": "https://www.connectventures.co/",
+      "page": "details",
+      "excerpt": "They dig deep to truly understand your vision—once they do, they commit fully.\" Led the pre-seed in 2025 Mosaico Gabriele Lini Francesco Di Corato Federico Cabassi \"For early stage companies, this is the best fund."
+    },
+    {
+      "id": "check-page-9da0b3d25e",
+      "url": "https://www.connectventures.co/",
+      "page": "details",
+      "excerpt": "We were sure about Connect from the very beginning.\" Co-led Seed in 2023 Dust Gabriel Hubert Stanislas Polu \"Your job as a founder is to build something people really want and it’s precious to work with partners who obsess about that like you do."
+    },
+    {
+      "id": "check-page-2b1b47e968",
+      "url": "https://www.connectventures.co/",
+      "page": "details",
+      "excerpt": "Connect has been a partner like that for us, understanding and backing our vision right from the start.” Led Pre-seed in 2016 TrueLayer Francesco Simoneschi Luca Martinetti \"From day zero to unicorn, our top VC."
+    },
+    {
+      "id": "check-page-82e37937a4",
+      "url": "https://www.connectventures.co/",
+      "page": "details",
+      "excerpt": "A venture capital firm that genuinely understands what it takes to build outlier companies is rare.\" High Conviction in Technical Founders We back founders who build what others can't."
+    },
+    {
+      "id": "check-page-22ba8672bb",
+      "url": "https://www.connectventures.co/",
+      "page": "details",
+      "excerpt": "About We’ve been investing in pre-seed and seed stage companies since 2012, from our home in London."
+    },
+    {
+      "id": "check-page-06c67f84a2",
+      "url": "https://www.connectventures.co/",
+      "page": "details",
+      "excerpt": "We’re a partner-only, Europe-wide, high conviction investment team."
+    },
+    {
+      "id": "check-page-cdb82f86f9",
+      "url": "https://www.connectventures.co/",
+      "page": "details",
+      "excerpt": "Stage We are pre-seed specialists since 2012."
+    },
+    {
+      "id": "check-page-29b0b3607b",
+      "url": "https://www.connectventures.co/",
+      "page": "details",
+      "excerpt": "Geo We invest across Europe, from our home in London."
+    },
+    {
+      "id": "check-page-fea402e570",
+      "url": "https://www.connectventures.co/",
+      "page": "details",
+      "excerpt": "Focus We back founders building at the intersection of AI, hardware, and automation."
+    },
+    {
+      "id": "check-page-d377fb0d41",
+      "url": "https://www.connectventures.co/",
+      "page": "details",
+      "excerpt": "We invest with high conviction in a curated set of exceptional founders, and works closely with them from the earliest stage to exit."
+    },
+    {
       "id": "check-page-a90f81bea5",
       "url": "https://www.connectventures.co/opinions/investment-decisions-at-connect",
       "page": "terms",
       "excerpt": "Connect Ventures Opinions - Investment decisions at Connect Back to opinions CATEGORY Fund Investment decisions at Connect 1st April 2021 ∙ Written by Rory Stirling General Partner SHARE 1st April 2021 ∙ Investment decisions at Connect Unpacking what we do and why we do it In the world of venture capital, our success is determined exclusively by the success of the companies we back. It’s as simple as that. The process of investing in a startup differs from almost any other investment category in the sense that it is a two-way street: founders have a choice as to who they raise capital from. As a VC partnership, we need to both decide which companies we want to invest in (‘picking’) and then also successfully invest in those companies (‘winning’). This post is primarily about picking, as it is the single most important thing we do as startup investors. On this same theme we recently wrote about the Connect investment thesis — the lens through which we assess companies. And we also wrote about how we apply this thesis in practice . The post below is a continuation of this theme and unpacks how we actually go about making our final investment decisions as a partnership. Note: the feedback we hear from founders is that VC partnerships are often seen as opaque and their investment processes are a black box. We wrote the below because we believe providing more transparency to you as"
     },
     {
+      "id": "check-page-bc99090d94",
+      "url": "https://www.connectventures.co/opinions/investment-decisions-at-connect",
+      "page": "terms",
+      "excerpt": "We’re ok with that — we’ve designed everything we do at Connect around our high conviction, high support, seed-stage investment model."
+    },
+    {
+      "id": "check-page-390adb2b17",
+      "url": "https://www.connectventures.co/opinions/investment-decisions-at-connect",
+      "page": "terms",
+      "excerpt": "We’re normally buzzing with ideas, energy, and opinions straight after meeting with the founders."
+    },
+    {
       "id": "check-page-b3815738b7",
       "url": "http://www.connectventures.co/opinions/the-connect-ventures-thesis-part-2",
       "page": "application",
       "excerpt": "Connect Ventures Opinions - The Connect Ventures Thesis (part 2) Back to opinions CATEGORY Fund The Connect Ventures Thesis (part 2) 12th January 2021 ∙ Written by Team Connect SHARE 12th January 2021 ∙ The Connect Ventures Thesis (part 2) How we use our thesis to evaluate investments (N.B. This is a continuation of our previous post explaining our investment thesis. We recommend reading the first post before digging in below.) In a typical twelve month period, the partners at Connect evaluate approximately 1,500 companies. Compounding the problem of market size is the fact that we’re a low-volume, high conviction, partner-only fund. This means the three partners at Connect have to sift through these 1,500 opportunities to find the 200–300 we want to meet in person and the 100 we spend significant time with, leading to the 8–10 companies we ultimately invest in. That’s a <1% conversion rate to new investments each year. How do we approach it? Most VCs look at market potential, team, GTM strategy, business model, etc. We look at those things as well — but we also go a step further. At Connect, we want to identify the best product companies in Europe. To do that, we use a filter that is unique to us: our investment thesis. Opinionated products, crafted with love and loved by many. In a previous post , we laid out what our thesis is and why it’s so important in guiding our"
+    },
+    {
+      "id": "check-page-c12727127f",
+      "url": "http://www.connectventures.co/opinions/the-connect-ventures-thesis-part-2",
+      "page": "application",
+      "excerpt": "Do the founders have market fit (industry experience, B2B vs B2C, GTM strategy, etc)?"
     },
     {
       "id": "check-page-5a81f5af49",
@@ -185,10 +252,112 @@
       "excerpt": "Connect Ventures Opinions - The Connect Ventures Thesis Back to opinions CATEGORY Fund The Connect Ventures Thesis 3rd December 2020 ∙ Written by SHARE 3rd December 2020 ∙ The Connect Ventures Thesis What it is and why it matters Connect is a thesis-led venture capital firm. We exist to invest in the best product-led companies in Europe at seed stage. Our investment thesis captures what we believe are the defining ingredients required to create the most valuable product companies. It can be summed up with the following statement: We invest in opinionated products, crafted with love and loved by many. Over the last nine years, our thesis has helped guide our investments in product companies such as Typeform, Citymapper, Soldo, TrueLayer, Curve, Kheiron, and Second Nature. In this post we unpack each part of our thesis statement and describe why it matters to us. ‍ “Opinionated products…” What we invest in and who builds it. Opinionated We love product at Connect, but not all products are created equal. We believe the best products have an opinion. Peter Thiel’s favourite interview question is: “What important truth do very few people agree with you on?” We like to ask this question of products and the founders who create them. The ‘truth’ is a founder’s point of view or insight on something that is broken or missing in the world. We view great founders as time travellers who"
     },
     {
+      "id": "check-page-651ac14629",
+      "url": "http://www.connectventures.co/opinions/the-connect-ventures-thesis",
+      "page": "terms",
+      "excerpt": "SecondNature: The most effective way for people to live healthy lives is to make science-backed habits second nature through a structured system of education, community, and expert support."
+    },
+    {
+      "id": "check-page-5e3206aa91",
+      "url": "http://www.connectventures.co/opinions/the-connect-ventures-thesis",
+      "page": "terms",
+      "excerpt": "Kheiron: The future of cancer detection is radiologists augmented by an AI-based workflow solution."
+    },
+    {
+      "id": "check-page-836c190e88",
+      "url": "http://www.connectventures.co/opinions/the-connect-ventures-thesis",
+      "page": "terms",
+      "excerpt": "We don’t mean hardware, physical products, e-commerce, content, or tech-enabled services."
+    },
+    {
+      "id": "check-page-713d4777b7",
+      "url": "http://www.connectventures.co/opinions/the-connect-ventures-thesis",
+      "page": "terms",
+      "excerpt": "We think Kate Sanborn* would agree that a great product is “1% inspiration, 99% perspiration.” It’s a skill and requires knowledge, experience, education, and rigour."
+    },
+    {
+      "id": "check-page-3766903dda",
+      "url": "http://www.connectventures.co/opinions/the-connect-ventures-thesis",
+      "page": "terms",
+      "excerpt": "There are many other attributes needed for an investment to go from a seed stage company to a sustainable enterprise, but many of those attributes are the same regardless of the type of company."
+    },
+    {
+      "id": "check-page-8a07626050",
+      "url": "http://www.connectventures.co/opinions/the-connect-ventures-thesis",
+      "page": "terms",
+      "excerpt": "What’s more, we don’t make investment decisions on the basis that every company will (or needs to) have these attributes nailed down at seed stage — we believe in a founder’s ability to learn and build these capabilities over time."
+    },
+    {
       "id": "check-page-02ff230060",
       "url": "https://www.connectventures.co/opinions/new-year-new-unicorn-new-product-updates",
       "page": "batches",
       "excerpt": "Connect Ventures Opinions - New year, new unicorn, new product updates Back to opinions CATEGORY Firm New year, new unicorn, new product updates ∙ Written by Claire Walker Head of Marketing SHARE ∙ New year, new unicorn, new product updates We kicked off the year with real momentum and, this January, all roads led to Ghent, Belgium 🇧🇪. 🦄 Aikido was crowned the fastest-ever European cybersecurity unicorn and, at the same time, we hit the road to Aikido’s hometown to host our first international edition of Built by Few: The Product Summit by Connect (more on that below). Outside of Belgium, founders across the Connect community have also been starting 2026 with intent. From new investments to product launches to meaningful milestones, there’s plenty to dive into - so let’s get into it 🚀. Funding news 👊 Crowning a new unicorn and welcoming a new investment Celebrating Aikido 🇧🇪 Europe’s fastest-ever cybersecurity unicorn A huge month for Aikido Security as they announce a $60m Series B led by DST Global, as well as for Connect Ventures as we add another unicorn to our portfolio. When we first met Willem , Roeland , and Felix back in late 2023, everything about Aikido “shouldn’t have worked.” A European team in a Palo Alto / Tel Aviv–dominated market, no traditional cyber pedigree, and a developer-first GTM. But we immediately recognised three exceptional product founders and a"
+    },
+    {
+      "id": "check-page-376b84f5e7",
+      "url": "https://www.connectventures.co/opinions/new-year-new-unicorn-new-product-updates",
+      "page": "batches",
+      "excerpt": "We leaned in with high conviction and won the privilege to co-lead their Seed round."
+    },
+    {
+      "id": "check-page-db5f005246",
+      "url": "https://www.connectventures.co/opinions/new-year-new-unicorn-new-product-updates",
+      "page": "batches",
+      "excerpt": "Fast forward just over two years since the Seed round, and Aikido is the fastest-ever European cybersecurity unicorn - it feels like they’re only scratching the surface of what Aikido can achieve."
+    },
+    {
+      "id": "check-page-a60e8e3402",
+      "url": "https://www.connectventures.co/opinions/new-year-new-unicorn-new-product-updates",
+      "page": "batches",
+      "excerpt": "Dive in with Pietro’s blog post, “Built by few, loved by many: Aikido’s love letter to security, and to Europe”, here ."
+    },
+    {
+      "id": "check-page-b7fbe1e5f9",
+      "url": "https://www.connectventures.co/opinions/new-year-new-unicorn-new-product-updates",
+      "page": "batches",
+      "excerpt": "Leading Mosaico’s 🇮🇹 €1M pre-seed round We’re excited to partner with Mosaico , the open-source, next-generation data management platform built for robotics and physical AI."
+    },
+    {
+      "id": "check-page-57bb9db26c",
+      "url": "https://www.connectventures.co/opinions/new-year-new-unicorn-new-product-updates",
+      "page": "batches",
+      "excerpt": "Robotics teams generate massive, messy, multi-sensor datasets."
+    },
+    {
+      "id": "check-page-9ba402d74f",
+      "url": "https://www.connectventures.co/opinions/new-year-new-unicorn-new-product-updates",
+      "page": "batches",
+      "excerpt": "Portfolio Wins 🤘 Celebrating success, product news and launches TrueLayer 🇬🇧 named in the Sunday Times 100 Tech 2026 TrueLayer was listed as no.34 on the list of 100 of the UK’s fastest-growing software companies in the Sunday Times."
+    },
+    {
+      "id": "check-page-aaf191330c",
+      "url": "https://www.connectventures.co/opinions/new-year-new-unicorn-new-product-updates",
+      "page": "batches",
+      "excerpt": "Ai-coustics 🇩🇪 ventured across the pond Ai-coustics hosted their first Audio Layer event in San Francisco , where builders from across the Voice AI stack shared a clear theme: reliability is the next frontier."
+    },
+    {
+      "id": "check-page-a76222325d",
+      "url": "https://www.connectventures.co/opinions/new-year-new-unicorn-new-product-updates",
+      "page": "batches",
+      "excerpt": "Steep 🇸🇪 API released With AI, B2B software is moving from UI-first tools to API-first infrastructure."
+    },
+    {
+      "id": "check-page-3e66e50f2e",
+      "url": "https://www.connectventures.co/opinions/new-year-new-unicorn-new-product-updates",
+      "page": "batches",
+      "excerpt": "AI-native teams don’t want numbers trapped in dashboards - they want systems they can plug into agents, automations, apps, and LLMs."
+    },
+    {
+      "id": "check-page-cab5e6586f",
+      "url": "https://www.connectventures.co/opinions/new-year-new-unicorn-new-product-updates",
+      "page": "batches",
+      "excerpt": "Cloud Capital 🇬🇧 offers 5% Cash Back on AWS Already trusted by SaaS and AI-native business leaders worldwide, Cloud Capital is now giving new customers 5% cash back on every AWS bill - starting in month one, guaranteed."
+    },
+    {
+      "id": "check-page-be583c22ba",
+      "url": "https://www.connectventures.co/opinions/new-year-new-unicorn-new-product-updates",
+      "page": "batches",
+      "excerpt": "Before the new year, December was a busy one for us in London.Pietro took to the SaaStr AI London stage to speak about ‘ Fundraising in the AI Era ’ and co-hosted an Italians in VC meet-up with friends from Singular and Founders Factory."
     },
     {
       "id": "check-page-ec5645b359",
@@ -197,16 +366,88 @@
       "excerpt": "Connect Ventures Opinions - Great venture investing isn’t about frameworks. You are spending real time with the people, not the decks Back to opinions CATEGORY Firm Great venture investing isn’t about frameworks. You are spending real time with the people, not the decks ∙ Written by Sitar Teli Managing Partner SHARE ∙ Great venture investing isn’t about frameworks. You are spending real time with the people, not the decks Sitar joined Newton Venture Program for a fireside chat. She came with a clear point of view and did not hold back. At the heart of everything she shared was a simple conviction: great venture investing isn’t about frameworks. You are spending real time with the people, not the decks. And that proximity matters, because the differences between founders are radical. Understanding the specific market a founder is going after, deeply and with preparation, is one of the most reliable ways to build momentum as an investor. That preparation is not incidental. It is the job itself. She was direct: it helps to have a prepared mind in venture. Pattern matching sharpens over time, and history is one of the best tools available. The investors who study what came before are better equipped to read what is in front of them now. On Founder-Market Fit, her framing was precise. It is not about sector experience alone. It is about a founder's hypothesis on the problem. The"
     },
     {
+      "id": "check-page-a96332ac4e",
+      "url": "https://www.connectventures.co/opinions/great-venture-investing-isnt-about-frameworks-you-are-spending-real-time-with-the-people-not-the-decks",
+      "page": "details",
+      "excerpt": "First, make sure AI does not replace your thinking."
+    },
+    {
       "id": "check-page-4da319e7ec",
       "url": "https://www.connectventures.co/opinions/opinionated-about-the-problem",
       "page": "details",
       "excerpt": "Connect Ventures Opinions - Opinionated about the problem Back to opinions CATEGORY Portfolio Opinionated about the problem 16th May 2024 ∙ Written by Pietro Bezza Managing Partner SHARE 16th May 2024 ∙ Opinionated about the problem Some founders are cut from a different cloth — those you know you want to back within the first thirty minutes and with whom you aspire to partner over the next decade. They are opinionated about problems: they are the ones with a unique perspective, often solving them in novel ways or identifying issues others have overlooked. They’ve figured out something important and unknown, something hard to do but doable. Their obsession isn’t with solutions, which they understand are never final. They continuously refine their approach to product, striving for new upgrades that are more effective, efficient and elegant. This is the essence of being a Product Founder. ‍ Our Journey with Madeline and John In July 2019, I had the fortune of meeting Madeline and John when they visited our office in Shoreditch, pitching their obsession: solving the problem of unsold inventory by re-inventing e-commerce. Screenshot from their deck. ‍ The company name was originally Peach, quickly changed to Purple Dot. The proposition also changed during their first year of iteration. But the product founder mindset never changed and never will. We partnered with Madeline and"
     },
     {
+      "id": "check-page-2f26df836e",
+      "url": "https://www.connectventures.co/opinions/opinionated-about-the-problem",
+      "page": "details",
+      "excerpt": "We partnered with Madeline and John leading their pre-seed and joined the board."
+    },
+    {
+      "id": "check-page-d8365e7b7a",
+      "url": "https://www.connectventures.co/opinions/opinionated-about-the-problem",
+      "page": "details",
+      "excerpt": "We continued to invest in the seed round led by our friends at Unusual."
+    },
+    {
+      "id": "check-page-80cbeaf7d8",
+      "url": "https://www.connectventures.co/opinions/opinionated-about-the-problem",
+      "page": "details",
+      "excerpt": "We’ve been amazed by their relentless execution, one brand at a time, one building block of their new e-commerce stack at a time."
+    },
+    {
+      "id": "check-page-ec352aaf8a",
+      "url": "https://www.connectventures.co/opinions/opinionated-about-the-problem",
+      "page": "details",
+      "excerpt": "Consumers love Purple Dot."
+    },
+    {
+      "id": "check-page-87a0b325c2",
+      "url": "https://www.connectventures.co/opinions/opinionated-about-the-problem",
+      "page": "details",
+      "excerpt": "Why we invested in Dessn Pietro Bezza Managing Partner 12 May 2026 Portfolio Investing in Zellify: the missing data layer for consumer growth Sitar Teli Managing Partner Portfolio Built by few, loved by many: Aikido’s love letter to security and to Europe Pietro Bezza Managing Partner 14th January 2025 Portfolio Let's get physical."
+    },
+    {
+      "id": "check-page-5e22f5b870",
+      "url": "https://www.connectventures.co/opinions/opinionated-about-the-problem",
+      "page": "details",
+      "excerpt": "Investing in Mosaico, the open-source data management for the robotics ecosystem Pietro Bezza Managing Partner 20th January 2026 Portfolio See all articles We use cookies to enhance your browsing experience, serve personalized ads or content, and analyze our traffic."
+    },
+    {
       "id": "check-page-7ad9afe5c9",
       "url": "https://www.connectventures.co/opinions/venture-is-about-velocity",
       "page": "details",
       "excerpt": "Connect Ventures Opinions - Venture is about Velocity Back to opinions CATEGORY Portfolio Venture is about Velocity 2nd May 2024 ∙ Written by Pietro Bezza Managing Partner SHARE 2nd May 2024 ∙ Venture is about Velocity This is NOT Willem, he commits...code In the venture world, we often obsess about the importance of “scale,” but what about velocity? Velocity isn’t just speed; it’s speed with direction. Direction is the core company strategy. I know that where I’m steering the company is right. Speed is how fast you execute this strategy. I know I am leveraging the speed of software products and internet distribution. In technology businesses that deal with innovation and that are poised to create new markets or transform old ones, velocity is crucial. Product velocity keeps your product one step ahead of the competition and delights your customers. More importantly, velocity accelerates your moats and compounds them. First mover advantage, flagship customers endorsement, credibility, trust and brand, network effect, data learning effect, category leadership, talents follow the best, capital concentrates on the best. With velocity, the venture flywheel spins better and faster. Many founders are ambitious and aim to build impactful, scalable companies. However, they frequently underestimate the importance of velocity as a crucial prerequisite for achieving substantial scale. At"
+    },
+    {
+      "id": "check-page-b888efcdcb",
+      "url": "https://www.connectventures.co/opinions/venture-is-about-velocity",
+      "page": "details",
+      "excerpt": "They first defined the vision of the democratisation of cybersecurity for SMBs."
+    },
+    {
+      "id": "check-page-e3fa832708",
+      "url": "https://www.connectventures.co/opinions/venture-is-about-velocity",
+      "page": "details",
+      "excerpt": "And only 6 months after the Seed that we co-led at Connect Ventures with Notion Capital."
+    },
+    {
+      "id": "check-page-efd565190f",
+      "url": "https://www.connectventures.co/opinions/venture-is-about-velocity",
+      "page": "details",
+      "excerpt": "Why we invested in Dessn Pietro Bezza Managing Partner 12 May 2026 Portfolio Investing in Zellify: the missing data layer for consumer growth Sitar Teli Managing Partner Portfolio Built by few, loved by many: Aikido’s love letter to security and to Europe Pietro Bezza Managing Partner 14th January 2025 Portfolio Let's get physical."
+    },
+    {
+      "id": "check-page-feb722cb40",
+      "url": "https://www.connectventures.co/opinions/venture-is-about-velocity",
+      "page": "details",
+      "excerpt": "Investing in Mosaico, the open-source data management for the robotics ecosystem Pietro Bezza Managing Partner 20th January 2026 Portfolio See all articles We use cookies to enhance your browsing experience, serve personalized ads or content, and analyze our traffic."
+    },
+    {
+      "id": "check-page-e56c465715",
+      "url": "https://www.connectventures.co/opinions/building-an-impactful-portfolio",
+      "page": "portfolio",
+      "excerpt": "Connect Ventures Opinions - Building an Impactful Portfolio Back to opinions CATEGORY Fund Portfolio Building an Impactful Portfolio 3rd October 2023 ∙ Written by Mark Pettit CFO SHARE 3rd October 2023 ∙ Building an Impactful Portfolio Global macro issues like wealth inequality, mental health, obesity and financial inclusion currently loom large in the minds and hearts of consumers, politicians and the media. In the UK and across Europe these areas have all gained greater attention because of events like Covid-19, climate change, energy prices and the cost of living crisis. Societal challenges are unquestionably getting harder for many vulnerable and disadvantaged communities. But against this backdrop, there’s also a collective drive to tackle these issues like never before. The venture world is playing an increasing role, with stronger focus being placed on impact investing and ESG – not least because there’s increasing evidence to suggest that impact-oriented businesses drive superior returns. In this two-part blog post series, we’ll unpack our approach to both these areas, kicking things off with Impact. ‍ Investing in the world we want to live in ‍ Investing in purpose-driven entrepreneurs solving some of the world’s big problems has always been a central part of our thesis. A founder’s purpose creates the motivation for them to build a venture-scale outcome, and our"
     },
     {
       "id": "check-page-8c0bee882e",
@@ -225,24 +466,6 @@
       "url": "https://www.connectventures.co/companies/accountable",
       "page": "portfolio",
       "excerpt": "Connect Ventures Portfolio - Accountable Back to home Accountable Accountable is the digital tax companion for today's self-employed workers. Website http://www.getaccountable.eu Investment year 2018 Location Belgium Category FinTech ∙ Founders Nicolas Quarré Alexis Eggermont Tino Keller We use cookies to enhance your browsing experience, serve personalized ads or content, and analyze our traffic. By clicking “Accept all”, you consent to our use of cookies. Please see our Cookies Policy . Go to settings Accept all Privacy Preference Center When you visit websites, they may store or retrieve data in your browser. This storage is often necessary for the basic functionality of the website. The storage may be used for marketing, analytics, and personalization of the site, such as storing your preferences. Privacy is important to us, so you have the option of disabling certain types of storage that may not be necessary for the basic functioning of the website. Blocking categories may impact your experience on the website. Reject all cookies Allow all cookies Manage Consent Preferences by Category Essential Always Active These items are required to enable basic website functionality. Marketing Essential These items are used to deliver advertising that is more relevant to you and your interests. They may also be used to limit the number of times you see an advertisement and measure"
-    },
-    {
-      "id": "check-page-515d461efc",
-      "url": "https://www.connectventures.co/companies/ai-coustics",
-      "page": "portfolio",
-      "excerpt": "Connect Ventures Portfolio - ai-coustics Back to home ai-coustics ai-coustics builds the audio intelligence layer for Voice AI, an SDK that delivers real-time noise handling, speaker isolation and voice activity detection to condition raw audio into stable, machine-ready input. Website https://ai-coustics.com Investment year 2023 Location Germany Category Deep Tech ∙ Founders Fabian Seipel Corvin Jaedicke Tim Janke Investing in ai|Coustics: Yes, I can hear you now… Sitar Teli Managing Partner 25th March 2025 Consumer We use cookies to enhance your browsing experience, serve personalized ads or content, and analyze our traffic. By clicking “Accept all”, you consent to our use of cookies. Please see our Cookies Policy . Go to settings Accept all Privacy Preference Center When you visit websites, they may store or retrieve data in your browser. This storage is often necessary for the basic functionality of the website. The storage may be used for marketing, analytics, and personalization of the site, such as storing your preferences. Privacy is important to us, so you have the option of disabling certain types of storage that may not be necessary for the basic functioning of the website. Blocking categories may impact your experience on the website. Reject all cookies Allow all cookies Manage Consent Preferences by Category Essential Always Active These items are required to"
-    },
-    {
-      "id": "check-page-ccc47d3fe6",
-      "url": "https://www.connectventures.co/companies/aikido",
-      "page": "portfolio",
-      "excerpt": "Connect Ventures Portfolio - Aikido Back to home Aikido Aikido is the most robust all-in-one security platform, with the best noise reduction. Website https://www.aikido.dev Investment year 2023 Location Belgium Category AI ∙ Enterprise Founders Willem Delbare Roeland Delrue Felix Garriau Fundraising in the AI era: What Founders should focus on Pietro Bezza Managing Partner 3rd December 2025 Enterprise Built By Few Goes International: Kicking Off in Ghent Claire Walker Head of Marketing Firm Why we invested in Aikido. Exceptional technical talent + bundling Cybersecurity Pietro Bezza Managing Partner 14th November 2023 Portfolio Venture is about Velocity Pietro Bezza Managing Partner 2nd May 2024 Portfolio We use cookies to enhance your browsing experience, serve personalized ads or content, and analyze our traffic. By clicking “Accept all”, you consent to our use of cookies. Please see our Cookies Policy . Go to settings Accept all Privacy Preference Center When you visit websites, they may store or retrieve data in your browser. This storage is often necessary for the basic functionality of the website. The storage may be used for marketing, analytics, and personalization of the site, such as storing your preferences. Privacy is important to us, so you have the option of disabling certain types of storage that may not be necessary for the basic functioning of the website."
-    },
-    {
-      "id": "check-page-55464e17c5",
-      "url": "https://www.connectventures.co/companies/ambient",
-      "page": "portfolio",
-      "excerpt": "Connect Ventures Portfolio - Ambient Back to home Ambient Ambient is building a collaborative game engine to make high-performance browser-based multiplayer games and 3D applications, powered by WebAssembly, Rust and WebGPU. Website https://www.ambient.run Investment year 2022 Location Sweden Category Consumer ∙ Founders Tobias Enholm Fredrik Norén We use cookies to enhance your browsing experience, serve personalized ads or content, and analyze our traffic. By clicking “Accept all”, you consent to our use of cookies. Please see our Cookies Policy . Go to settings Accept all Privacy Preference Center When you visit websites, they may store or retrieve data in your browser. This storage is often necessary for the basic functionality of the website. The storage may be used for marketing, analytics, and personalization of the site, such as storing your preferences. Privacy is important to us, so you have the option of disabling certain types of storage that may not be necessary for the basic functioning of the website. Blocking categories may impact your experience on the website. Reject all cookies Allow all cookies Manage Consent Preferences by Category Essential Always Active These items are required to enable basic website functionality. Marketing Essential These items are used to deliver advertising that is more relevant to you and your interests. They may also be used to"
     }
   ],
   "findings": {

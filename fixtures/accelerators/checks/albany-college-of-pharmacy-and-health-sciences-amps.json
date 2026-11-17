@@ -1,10 +1,50 @@
 {
   "programId": "albany-college-of-pharmacy-and-health-sciences-amps",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://cbet.acphs.edu/amps/"
   ],
-  "evidence": [],
+  "evidence": [
+    {
+      "id": "check-location-7bf11175d2",
+      "url": "https://cbet.acphs.edu/amps/",
+      "title": "Albany College of Pharmacy and Health Sciences (AMPS) — homepage",
+      "excerpt": "three-fold: Ecosystem Strategically located in Albany, New York, AMPS sits within walking",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-dd13c7b116",
+      "url": "https://cbet.acphs.edu/amps/",
+      "page": "details",
+      "excerpt": "Incubator - Albany College of Pharmacy and Health Sciences Skip Main Navigation Cookies Our website uses cookies to ensure you get the best experience possible. Accept All Reject All Albany College of Pharmacy and Health Sciences Albany College of Pharmacy and Health Sciences Menu Menu You are here: Home CBET Incubator Incubator Accelerating for Medical and Pharmaceutical Sciences (AMPS) at CBET is a hub for medical and pharmaceutical innovation. Located near key institutions, it fosters collaboration in biotechnology and pharmacy. Skip Sub Navigation In This Section About Contract Research Solutions Professional Education Incubator Donate to CBET In This Section Close incubator About Contract Research Solutions Professional Education Incubator Donate to CBET Accelerating Medical and Pharmaceutical Sciences (AMPS) Business Incubator transforms groundbreaking research into real-world healthcare solutions. As a premier medical, pharmaceutical, and biotechnology incubator, AMPS empowers researchers, entrepreneurs, startups, and life sciences innovators with the resources needed to move from concept to commercialization. Proudly supported by NYSTAR , AMPS provides fully equipped laboratory and office space designed specifically for life sciences companies, along with expert mentorship in business development, strategic planning, regulatory pathways, and capital formation. Our"
+    },
+    {
+      "id": "check-page-808ff96814",
+      "url": "https://cbet.acphs.edu/amps/",
+      "page": "details",
+      "excerpt": "Our hands-on support and industry connections help early-stage and growth-stage companies secure funding, scale operations, and accelerate time to market."
+    },
+    {
+      "id": "check-page-a4066aece4",
+      "url": "https://cbet.acphs.edu/amps/",
+      "page": "details",
+      "excerpt": "Our resources are three-fold: Ecosystem Strategically located in Albany, New York, AMPS sits within walking distance of Albany Medical College, Albany Medical Center, and Albany College of Pharmacy and Health Sciences."
+    },
+    {
+      "id": "check-page-fcc657dbba",
+      "url": "https://cbet.acphs.edu/amps/",
+      "page": "details",
+      "excerpt": "This unique proximity fosters unmatched collaboration between academic researchers, clinicians, healthcare providers, and biotech entrepreneurs, creating a dynamic environment where scientific discovery, clinical insight, and commercial expertise converge."
+    },
+    {
+      "id": "check-page-77944f4370",
+      "url": "https://cbet.acphs.edu/amps/",
+      "page": "details",
+      "excerpt": "With our contract research solutions, workforce training, support through our relationships with Albany Med Health System (Office of Translational Research, Innovation, and Technology Transfer) (OTR) , and our innovative array of programming that will educate and drive you, find your success here."
+    }
+  ],
   "findings": {
     "emails": [],
     "phones": [],
@@ -13,8 +53,20 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [
+      {
+        "value": "Albany",
+        "evidenceId": "check-location-7bf11175d2"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

@@ -1,51 +1,429 @@
 {
   "programId": "economic-growth-business-incubator-egbi",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
-    "https://www.egbi.org"
+    "https://www.egbi.org",
+    "https://egbi.org/terms-of-service/",
+    "https://egbi.org/about/",
+    "https://egbi.org/egbi.org/about/"
   ],
   "evidence": [
     {
+      "id": "check-duration-3b3a9565d5",
+      "url": "https://www.egbi.org",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage",
+      "excerpt": "small business owners. We offer our signature 8-week series and 1-day bootcamps on building a",
+      "page": "details"
+    },
+    {
+      "id": "check-email-1c3a09bbdc",
+      "url": "https://egbi.org/terms-of-service/",
+      "title": "Economic Growth Business Incubator (EGBI) — terms page",
+      "excerpt": "hello@egbi.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-1d967d85a6",
+      "url": "https://egbi.org/terms-of-service/",
+      "title": "Economic Growth Business Incubator (EGBI) — terms page",
+      "excerpt": "Terms of Service | EGBI Business Accelerator (512)928-2594 hello@egbi.org Español English Home About Services Business Coaching",
+      "page": "terms"
+    },
+    {
       "id": "check-email-34ef11ec83",
       "url": "https://www.egbi.org",
-      "title": "Economic Growth Business Incubator (EGBI) — homepage checked by scrape.py",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage",
       "excerpt": "Email: hello@egbi.org",
       "page": "details"
     },
     {
       "id": "check-email-36f136e8da",
       "url": "https://www.egbi.org",
-      "title": "Economic Growth Business Incubator (EGBI) — homepage checked by scrape.py",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage",
       "excerpt": "hello@egbi.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-370bee26a0",
+      "url": "https://egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "Email: hello@egbi.org",
       "page": "details"
     },
     {
       "id": "check-email-510504cb93",
       "url": "https://www.egbi.org",
-      "title": "Economic Growth Business Incubator (EGBI) — homepage checked by scrape.py",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage",
       "excerpt": "| Economic Growth Business Incubator (EGBI) (512)928-2594 hello@egbi.org Español English Home About Services Business Coaching",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7af43090b8",
+      "url": "https://egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "hello@egbi.org",
       "page": "details"
     },
     {
       "id": "check-email-87adb0fae4",
       "url": "https://www.egbi.org",
-      "title": "Economic Growth Business Incubator (EGBI) — homepage checked by scrape.py",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage",
       "excerpt": "TOASTMASTERS CLUB Contact Us Phone: (512)928-2594 Email: hello@egbi.org Address: 1144 Airport Blvd. Suite 260, Austin, Texas 78702",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8daff21a97",
+      "url": "https://egbi.org/egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "About | EGBI Business Accelerator (512)928-2594 hello@egbi.org Español English Home About Services Business Coaching",
+      "page": "details"
+    },
+    {
+      "id": "check-email-97eaa993a8",
+      "url": "https://egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "About | EGBI Business Accelerator (512)928-2594 hello@egbi.org Español English Home About Services Business Coaching",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c0decedbe3",
+      "url": "https://egbi.org/egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "hello@egbi.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d1ef996776",
+      "url": "https://egbi.org/egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "Email: hello@egbi.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-fc33a25957",
+      "url": "https://egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "AMBASSADORS Contact Us Phone: (512)928-2594 Email: hello@egbi.org Address: 1144 Airport Blvd. Suite 260, Austin, Texas 78702",
+      "page": "details"
+    },
+    {
+      "id": "check-email-fda8766707",
+      "url": "https://egbi.org/egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "AMBASSADORS Contact Us Phone: (512)928-2594 Email: hello@egbi.org Address: 1144 Airport Blvd. Suite 260, Austin, Texas 78702",
+      "page": "details"
+    },
+    {
+      "id": "check-format-03653eec5b",
+      "url": "https://egbi.org/egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "financial literacy classes, delivering them in person and virtual platforms. LinkedIn Kitty Bird Owner of Kitty Bird Photo",
+      "page": "details"
+    },
+    {
+      "id": "check-format-159948c8e9",
+      "url": "https://www.egbi.org",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage",
+      "excerpt": "operations. SCHEDULE AN APPOINTMENT TRAINING Virtual and in-person workshops for small business owners. We offer our",
+      "page": "details"
+    },
+    {
+      "id": "check-format-295eb16ef2",
+      "url": "https://www.egbi.org",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage",
+      "excerpt": "EGBI TODAY! NEXT EVENTS OUR SERVICES COACHING Virtual and in-person 1-on-1 business coaching at no cost in both English and",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4c7f31f70a",
+      "url": "https://egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "financial literacy classes, delivering them in person and virtual platforms. LinkedIn Kitty Bird Owner of Kitty Bird Photo",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6a9a0b45ca",
+      "url": "https://www.egbi.org",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage",
+      "excerpt": "WITH EGBI TODAY! NEXT EVENTS OUR SERVICES COACHING Virtual and in-person 1-on-1 business coaching at no cost in both",
+      "page": "details"
+    },
+    {
+      "id": "check-format-89a69e5aee",
+      "url": "https://egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "programs and financial literacy classes, delivering them in person and virtual platforms. LinkedIn Kitty Bird Owner of Kitty",
+      "page": "details"
+    },
+    {
+      "id": "check-format-bc6714ab98",
+      "url": "https://egbi.org/egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "programs and financial literacy classes, delivering them in person and virtual platforms. LinkedIn Kitty Bird Owner of Kitty",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c91dfb7480",
+      "url": "https://www.egbi.org",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage",
+      "excerpt": "to general operations. SCHEDULE AN APPOINTMENT TRAINING Virtual and in-person workshops for small business owners. We",
+      "page": "details"
+    },
+    {
+      "id": "check-location-215158f4f3",
+      "url": "https://egbi.org/terms-of-service/",
+      "title": "Economic Growth Business Incubator (EGBI) — terms page",
+      "excerpt": "of the state and federal courts located in Travis County, Texas. H. THE CLIENT ACKNOWLEDGES",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-2abe69bf93",
+      "url": "https://www.egbi.org",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage",
+      "excerpt": "non-profit business accelerator based in Austin, Texas that helps aspiring and",
+      "page": "details"
+    },
+    {
+      "id": "check-location-322d8a74f0",
+      "url": "https://egbi.org/egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "a prominent personal injury law firm based in Austin, Texas. Specializing in cases",
+      "page": "details"
+    },
+    {
+      "id": "check-location-8df6006157",
+      "url": "https://egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "a prominent personal injury law firm based in Austin, Texas. Specializing in cases",
       "page": "details"
     },
     {
       "id": "check-name-51fc900ee8",
       "url": "https://www.egbi.org",
-      "title": "Economic Growth Business Incubator (EGBI) — homepage checked by scrape.py",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage",
       "excerpt": "EGBI Business Accelerator | Economic Growth Business Incubator (EGBI) (512)928-2594 hello@egbi.org Español English Home About",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-331add493f",
+      "url": "https://egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "Phone: (512)928-2594",
       "page": "details"
     },
     {
       "id": "check-phone-40b18029b3",
       "url": "https://www.egbi.org",
-      "title": "Economic Growth Business Incubator (EGBI) — homepage checked by scrape.py",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage",
       "excerpt": "Phone: (512)928-2594",
       "page": "details"
+    },
+    {
+      "id": "check-phone-b5c9d38b58",
+      "url": "https://egbi.org/egbi.org/about/",
+      "title": "Economic Growth Business Incubator (EGBI) — program page",
+      "excerpt": "Phone: (512)928-2594",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-b43f9bf9a1",
+      "url": "https://www.egbi.org",
+      "page": "details",
+      "excerpt": "EGBI Business Accelerator | Economic Growth Business Incubator (EGBI) (512)928-2594 hello@egbi.org Español English Home About Services Business Coaching Training Plan Series Manage Series Marketing Series Bookkeeping Series Support Build A Business with Mama Childcare Biz Chats From Caregiver 2 CEO Lunch & Learns Resources Tech Summit Small Biz Week Toastmasters Virtual Space Winning Contracts Events Happy Hour Celebrating Success News Donate Contact Us Select Page The Economic Growth Business Incubator (EGBI) is an award winning, 501(c)3 non-profit business accelerator based in Austin, Texas that helps aspiring and existing small business owners in Central Texas to make their Main Street businesses more profitable and sustainable, especially those who face barriers to success. Support our Efforts How does my donation help small business owners? Learn more HERE Our Impact In Numbers Some statistics since 2014, from our impact in the Central Texas community: MORE THAN… Millions in Revenue Reported by EGBI Clients Additional Jobs Created in Central Texas by our Clients Business Coaching Hours at no cost to Business Owners Group Training Hours to Aspiring & Existing Biz Owners CONTINUE TO GROW YOUR BUSINESS WITH EGBI TODAY! NEXT EVENTS OUR SERVICES COACHING Virtual and in-person 1-on-1 business coaching at no cost in both English and Spanish with business coaches. Topics are"
+    },
+    {
+      "id": "check-page-b183172310",
+      "url": "https://www.egbi.org",
+      "page": "details",
+      "excerpt": "Economic Growth Business Incubator is an outstanding nonprofit that truly shows up for small business owners."
+    },
+    {
+      "id": "check-page-f26835c497",
+      "url": "https://www.egbi.org",
+      "page": "details",
+      "excerpt": "OTHER WORKSHOPS: SUPPORT BIZ TECH SUMMIT CHILDCARE BOOTCAMP LUNCH & LEARNS SMALL BUSINESS WEEK MARKETING ROUNDTABLE VIRTUAL SPACE CHATS WITH BUSINESS OWNERS SMALL BUSINESS RESOURCES GUIDE WINNING GOVERNMENT CONTRACTS BUILD A BUSINESS WITH MAMA TOASTMASTERS CLUB Contact Us Phone: (512)928-2594 Email: hello@egbi.org Address: 1144 Airport Blvd."
+    },
+    {
+      "id": "check-page-e928ede68a",
+      "url": "https://egbi.org/terms-of-service/",
+      "page": "terms",
+      "excerpt": "Terms of Service | EGBI Business Accelerator (512)928-2594 hello@egbi.org Español English Home About Services Business Coaching Training Plan Series Manage Series Marketing Series Bookkeeping Series Support Build A Business with Mama Childcare Biz Chats From Caregiver 2 CEO Lunch & Learns Resources Tech Summit Small Biz Week Toastmasters Virtual Space Winning Contracts Events Happy Hour Celebrating Success News Donate Contact Us Select Page Revision: September 9th, 2024 Economic Growth Business Incubator Terms of Service This Terms of Service agreement is enforced with all the individuals seeking business coaching and training from the Economic Growth Business Incubator (hereafter “ EGBI ” and/or the Organization ” ) by any aspiring or existing business owners using our coaching and training services (hereafter the “ Client ”). By scheduling an appointment or getting registered to any of our trainings, the Client accepts the Terms of Service in this agreement (the “ Agreement ”), to retain EGBI as a business trainer, coach, or consultant, the Client must agree to the following terms and conditions: DESCRIPTION OF SERVICES EGBI shall provide The Client with the following services (the “ Services ”): Business and Professional Training Business Coaching Business Support FEES, COSTS & PAYMENTS The Business Coaching and or Support Fee (the “ Coaching Fee ”) is one hundred and"
+    },
+    {
+      "id": "check-page-4388b46375",
+      "url": "https://egbi.org/terms-of-service/",
+      "page": "terms",
+      "excerpt": "Checks shall be made payable to Economic Growth Business Incubator, and mailed to: Economic Growth Business Incubator, 1144 Airport Blvd."
+    },
+    {
+      "id": "check-page-4f03972079",
+      "url": "https://egbi.org/terms-of-service/",
+      "page": "terms",
+      "excerpt": "All notices of cancellation/termination must be written and signed by Clients and sent via mail, facsimile, or email to The Organization at: Economic Growth Business Incubator, 1144 Airport Blvd."
+    },
+    {
+      "id": "check-page-15d5147e9f",
+      "url": "https://egbi.org/terms-of-service/",
+      "page": "terms",
+      "excerpt": "The arbitrator’s decision shall be binding on the Parties and judgment on the award rendered by the arbitrator may be entered in any court having jurisdiction."
+    },
+    {
+      "id": "check-page-5373beb719",
+      "url": "https://egbi.org/about/",
+      "page": "details",
+      "excerpt": "About | EGBI Business Accelerator (512)928-2594 hello@egbi.org Español English Home About Services Business Coaching Training Plan Series Manage Series Marketing Series Bookkeeping Series Support Build A Business with Mama Childcare Biz Chats From Caregiver 2 CEO Lunch & Learns Resources Tech Summit Small Biz Week Toastmasters Virtual Space Winning Contracts Events Happy Hour Celebrating Success News Donate Contact Us Select Page Established in 2003, the Economic Growth Business Incubator (EGBI) was a collaboration project between the Housing Authority of the City of Austin and the Greater Austin Hispanic Chamber of Commerce. Our first cohort enrolled less than 20 participants. In 2004, the project evolved and it incorporated as an independent 501(c)3 non-profit. Initially known as the Hispanic Technology Institute of Austin, in 2010 our board changed its name to the Economic Growth Business Incubator to intentionally serve every community in Central Texas and narrow our focus to assist small businesses become more profitable and sustainable. In 2025, EGBI served a record number of more than 580 participants throughout the year. EGBI provides business coaching in Central Texas to aspiring and existing business owners wanting to start and/or grow a business. We are agnostic about the type of business we serve focusing on business plans, general management, marketing, and cost"
+    },
+    {
+      "id": "check-page-ffe67d585d",
+      "url": "https://egbi.org/about/",
+      "page": "details",
+      "excerpt": "Direct results include increased business acumen, economic mobility, greater generational wealth, and a better quality of life for Central Texans."
+    },
+    {
+      "id": "check-page-9fe58bb1f9",
+      "url": "https://egbi.org/about/",
+      "page": "details",
+      "excerpt": "STAFF SERVICES REPORTS BOARD SPONSORS AMBASSADORS The Economic Growth Business Incubator (EGBI) Mission EGBI provides training, coaching, and support to aspiring and existing business owners who face barriers to growing a successful business."
+    },
+    {
+      "id": "check-page-08e8344a53",
+      "url": "https://egbi.org/about/",
+      "page": "details",
+      "excerpt": "2026 Prosperity Crest Award by Harmony Partners in Education (received May 15, 2026) EGBI Staff We are a small but mighty team of full-time employees, but our secret is in the power of the strong community that we have developed over the years."
+    },
+    {
+      "id": "check-page-3a775dc55b",
+      "url": "https://egbi.org/about/",
+      "page": "details",
+      "excerpt": "Since March 2023, Davila has served as Executive Director of the Economic Growth Business Incubator (EGBI) ."
+    },
+    {
+      "id": "check-page-27c702d7d5",
+      "url": "https://egbi.org/about/",
+      "page": "details",
+      "excerpt": "She has also led Latino Arts, Culture & Education Organization (LACE) and Amhiga Hispana up until 2017 in Austin, Texas."
+    },
+    {
+      "id": "check-page-de272d13d1",
+      "url": "https://egbi.org/about/",
+      "page": "details",
+      "excerpt": "In 2014, she founded BCO Consulting Group , providing strategic planning, budgeting, pricing strategy, market research, marketing services, and bilingual community outreach to businesses, government agencies, and nonprofits."
+    },
+    {
+      "id": "check-page-b5c0b41230",
+      "url": "https://egbi.org/about/",
+      "page": "details",
+      "excerpt": "She launched her company after a decade in corporate roles with corporations including Sony Corporation, FedEx , and Bentoli, specializing in operations, international logistics, and customer support."
+    },
+    {
+      "id": "check-page-ab2a41730b",
+      "url": "https://egbi.org/about/",
+      "page": "details",
+      "excerpt": "As co-founder and social media manager of her first successful family-owned business, she helped the company earn the Austin American-Statesman Social Media Award for community engagement and environmentally conscious practices."
+    },
+    {
+      "id": "check-page-97ef2af9e7",
+      "url": "https://egbi.org/about/",
+      "page": "details",
+      "excerpt": "Deeply committed to economic mobility and the belief that entrepreneurship creates generational opportunity, Monica blends strategic operations, financial stewardship, and partnership leadership to build stronger businesses and more resilient communities."
+    },
+    {
+      "id": "check-page-771ac9a3bf",
+      "url": "https://egbi.org/about/",
+      "page": "details",
+      "excerpt": "His most recent previous experience includes working as a financial advisor at UBS Financial Services, where he focused on sales and enhancing client experiences."
+    },
+    {
+      "id": "check-page-aff38d9770",
+      "url": "https://egbi.org/about/",
+      "page": "details",
+      "excerpt": "With more than 20 years of experience leading complex operations across U.S. and LATAM markets, Freddy brings a rare blend of executive-level business acumen, people-first leadership, and real-world operational insight to his coaching and advisory work."
+    },
+    {
+      "id": "check-page-73d4a3324e",
+      "url": "https://egbi.org/about/",
+      "page": "details",
+      "excerpt": "A United States Marine, ex professional soccer player and coach, and black belt in self-defense, Freddy brings a disciplined yet empathetic perspective to his coaching."
+    },
+    {
+      "id": "check-page-803b496a70",
+      "url": "https://egbi.org/egbi.org/about/",
+      "page": "details",
+      "excerpt": "About | EGBI Business Accelerator (512)928-2594 hello@egbi.org Español English Home About Services Business Coaching Training Plan Series Manage Series Marketing Series Bookkeeping Series Support Build A Business with Mama Childcare Biz Chats From Caregiver 2 CEO Lunch & Learns Resources Tech Summit Small Biz Week Toastmasters Virtual Space Winning Contracts Events Happy Hour Celebrating Success News Donate Contact Us Select Page Established in 2003, the Economic Growth Business Incubator (EGBI) was a collaboration project between the Housing Authority of the City of Austin and the Greater Austin Hispanic Chamber of Commerce. Our first cohort enrolled less than 20 participants. In 2004, the project evolved and it incorporated as an independent 501(c)3 non-profit. Initially known as the Hispanic Technology Institute of Austin, in 2010 our board changed its name to the Economic Growth Business Incubator to intentionally serve every community in Central Texas and narrow our focus to assist small businesses become more profitable and sustainable. In 2025, EGBI served a record number of more than 580 participants throughout the year. EGBI provides business coaching in Central Texas to aspiring and existing business owners wanting to start and/or grow a business. We are agnostic about the type of business we serve focusing on business plans, general management, marketing, and cost"
+    },
+    {
+      "id": "check-page-0b5b7de382",
+      "url": "https://egbi.org/egbi.org/about/",
+      "page": "details",
+      "excerpt": "Direct results include increased business acumen, economic mobility, greater generational wealth, and a better quality of life for Central Texans."
+    },
+    {
+      "id": "check-page-9c5e305a6d",
+      "url": "https://egbi.org/egbi.org/about/",
+      "page": "details",
+      "excerpt": "STAFF SERVICES REPORTS BOARD SPONSORS AMBASSADORS The Economic Growth Business Incubator (EGBI) Mission EGBI provides training, coaching, and support to aspiring and existing business owners who face barriers to growing a successful business."
+    },
+    {
+      "id": "check-page-ae98764180",
+      "url": "https://egbi.org/egbi.org/about/",
+      "page": "details",
+      "excerpt": "2026 Prosperity Crest Award by Harmony Partners in Education (received May 15, 2026) EGBI Staff We are a small but mighty team of full-time employees, but our secret is in the power of the strong community that we have developed over the years."
+    },
+    {
+      "id": "check-page-34b974e0b4",
+      "url": "https://egbi.org/egbi.org/about/",
+      "page": "details",
+      "excerpt": "Since March 2023, Davila has served as Executive Director of the Economic Growth Business Incubator (EGBI) ."
+    },
+    {
+      "id": "check-page-387946db7b",
+      "url": "https://egbi.org/egbi.org/about/",
+      "page": "details",
+      "excerpt": "She has also led Latino Arts, Culture & Education Organization (LACE) and Amhiga Hispana up until 2017 in Austin, Texas."
+    },
+    {
+      "id": "check-page-372610ee88",
+      "url": "https://egbi.org/egbi.org/about/",
+      "page": "details",
+      "excerpt": "In 2014, she founded BCO Consulting Group , providing strategic planning, budgeting, pricing strategy, market research, marketing services, and bilingual community outreach to businesses, government agencies, and nonprofits."
+    },
+    {
+      "id": "check-page-a46b154f49",
+      "url": "https://egbi.org/egbi.org/about/",
+      "page": "details",
+      "excerpt": "She launched her company after a decade in corporate roles with corporations including Sony Corporation, FedEx , and Bentoli, specializing in operations, international logistics, and customer support."
+    },
+    {
+      "id": "check-page-bc045e8e91",
+      "url": "https://egbi.org/egbi.org/about/",
+      "page": "details",
+      "excerpt": "As co-founder and social media manager of her first successful family-owned business, she helped the company earn the Austin American-Statesman Social Media Award for community engagement and environmentally conscious practices."
+    },
+    {
+      "id": "check-page-04c4fcb86f",
+      "url": "https://egbi.org/egbi.org/about/",
+      "page": "details",
+      "excerpt": "Deeply committed to economic mobility and the belief that entrepreneurship creates generational opportunity, Monica blends strategic operations, financial stewardship, and partnership leadership to build stronger businesses and more resilient communities."
+    },
+    {
+      "id": "check-page-bc0c67de0f",
+      "url": "https://egbi.org/egbi.org/about/",
+      "page": "details",
+      "excerpt": "His most recent previous experience includes working as a financial advisor at UBS Financial Services, where he focused on sales and enhancing client experiences."
+    },
+    {
+      "id": "check-page-bb11c4eef8",
+      "url": "https://egbi.org/egbi.org/about/",
+      "page": "details",
+      "excerpt": "With more than 20 years of experience leading complex operations across U.S. and LATAM markets, Freddy brings a rare blend of executive-level business acumen, people-first leadership, and real-world operational insight to his coaching and advisory work."
+    },
+    {
+      "id": "check-page-47c2681016",
+      "url": "https://egbi.org/egbi.org/about/",
+      "page": "details",
+      "excerpt": "A United States Marine, ex professional soccer player and coach, and black belt in self-defense, Freddy brings a disciplined yet empathetic perspective to his coaching."
     }
   ],
   "findings": {
@@ -66,8 +444,38 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "8",
+        "evidenceId": "check-duration-3b3a9565d5"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-6a9a0b45ca"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-295eb16ef2"
+      }
+    ],
+    "location": [
+      {
+        "value": "Austin",
+        "evidenceId": "check-location-2abe69bf93"
+      },
+      {
+        "value": "Travis County",
+        "evidenceId": "check-location-215158f4f3"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

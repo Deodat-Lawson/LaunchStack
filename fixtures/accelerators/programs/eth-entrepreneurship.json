@@ -3,7 +3,7 @@
   "id": "eth-entrepreneurship",
   "name": "ETH Entrepreneurship",
   "logo": {
-    "path": "/accelerators/logos/eth-entrepreneurship.png",
+    "path": "/accelerators/logos/none.png",
     "sourceId": "official-logo"
   },
   "websiteUrl": "https://entrepreneurship.ethz.ch/",
@@ -27,8 +27,8 @@
       "id": "official-logo",
       "url": "https://entrepreneurship.ethz.ch/",
       "title": "ETH Entrepreneurship — no rule-validated official mark",
-      "quote": "https://ethz.ch/etc/designs/ethz/img/icons/ETH-APP-Icons-Theme-white/192-xxxhpdi.png",
-      "checkedAt": "2026-11-14T20:59:02.000Z"
+      "quote": "no-validated-logo",
+      "checkedAt": "2026-11-16T23:23:28.000Z"
     },
     {
       "id": "homepage",

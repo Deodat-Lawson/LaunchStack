@@ -1,131 +1,263 @@
 {
   "programId": "forge",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.tedcnet.com",
-    "https://www.tedcnet.com/about/",
-    "https://www.tedcnet.com/resources/faq/",
-    "https://www.tedcnet.com/apply-now/"
+    "https://www.tedcnet.com/about/testimonials/stemcell-science-shop/",
+    "https://www.tedcnet.com/forward-program-for-entrepreneurs/",
+    "https://www.tedcnet.com/serving-oklahoma-entrepreneurs-ray-fitzgerald-named-director-of-loan-programs/"
   ],
   "evidence": [
     {
-      "id": "check-phone-0db83766ed",
-      "url": "https://www.tedcnet.com/about/",
-      "title": "FORGE — details page checked by scrape.py",
+      "id": "check-phone-2364518035",
+      "url": "https://www.tedcnet.com",
+      "title": "FORGE — homepage",
+      "excerpt": "(918) 585-8332",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-2e8457a33e",
+      "url": "https://www.tedcnet.com/forward-program-for-entrepreneurs/",
+      "title": "FORGE — program page",
+      "excerpt": "\"telephone\": \"(918) 585-8332\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-31616a9b6a",
+      "url": "https://www.tedcnet.com/serving-oklahoma-entrepreneurs-ray-fitzgerald-named-director-of-loan-programs/",
+      "title": "FORGE — program page",
       "excerpt": "(9185858332)",
       "page": "details"
     },
     {
-      "id": "check-phone-2364518035",
-      "url": "https://www.tedcnet.com",
-      "title": "FORGE — homepage checked by scrape.py",
-      "excerpt": "(918) 585-8332",
-      "page": "details"
-    },
-    {
-      "id": "check-phone-35877b695c",
-      "url": "https://www.tedcnet.com/about/",
-      "title": "FORGE — details page checked by scrape.py",
+      "id": "check-phone-4410b5a7e2",
+      "url": "https://www.tedcnet.com/about/testimonials/stemcell-science-shop/",
+      "title": "FORGE — program page",
       "excerpt": "\"telephone\": \"(918) 585-8332\"",
       "page": "details"
     },
     {
-      "id": "check-phone-388a23b0f3",
-      "url": "https://www.tedcnet.com/resources/faq/",
-      "title": "FORGE — terms page checked by scrape.py",
-      "excerpt": "(918) 585-8332",
-      "page": "terms"
+      "id": "check-phone-4de0f21a0f",
+      "url": "https://www.tedcnet.com/forward-program-for-entrepreneurs/",
+      "title": "FORGE — program page",
+      "excerpt": "(9185858332)",
+      "page": "details"
     },
     {
-      "id": "check-phone-8211134afc",
-      "url": "https://www.tedcnet.com/apply-now/",
-      "title": "FORGE — application page checked by scrape.py",
-      "excerpt": "\"telephone\": \"(918) 585-8332\"",
-      "page": "application"
+      "id": "check-phone-7f4db70a3b",
+      "url": "https://www.tedcnet.com/about/testimonials/stemcell-science-shop/",
+      "title": "FORGE — program page",
+      "excerpt": "(918) 585-8332",
+      "page": "details"
     },
     {
       "id": "check-phone-82efa51017",
       "url": "https://www.tedcnet.com",
-      "title": "FORGE — homepage checked by scrape.py",
+      "title": "FORGE — homepage",
       "excerpt": "(9185858332)",
       "page": "details"
     },
     {
-      "id": "check-phone-a3d52e21af",
-      "url": "https://www.tedcnet.com/apply-now/",
-      "title": "FORGE — application page checked by scrape.py",
-      "excerpt": "(9185858332)",
-      "page": "application"
-    },
-    {
-      "id": "check-phone-b20d5455cf",
-      "url": "https://www.tedcnet.com/about/",
-      "title": "FORGE — details page checked by scrape.py",
-      "excerpt": "(918) 585-8332",
-      "page": "details"
-    },
-    {
-      "id": "check-phone-c356c6a2a6",
-      "url": "https://www.tedcnet.com/resources/faq/",
-      "title": "FORGE — terms page checked by scrape.py",
+      "id": "check-phone-9d5f619963",
+      "url": "https://www.tedcnet.com/serving-oklahoma-entrepreneurs-ray-fitzgerald-named-director-of-loan-programs/",
+      "title": "FORGE — program page",
       "excerpt": "\"telephone\": \"(918) 585-8332\"",
-      "page": "terms"
+      "page": "details"
     },
     {
-      "id": "check-phone-d0b631486c",
-      "url": "https://www.tedcnet.com/apply-now/",
-      "title": "FORGE — application page checked by scrape.py",
+      "id": "check-phone-9de9fc5ecc",
+      "url": "https://www.tedcnet.com/forward-program-for-entrepreneurs/",
+      "title": "FORGE — program page",
       "excerpt": "(918) 585-8332",
-      "page": "application"
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c6e23e1f38",
+      "url": "https://www.tedcnet.com/about/testimonials/stemcell-science-shop/",
+      "title": "FORGE — program page",
+      "excerpt": "(9185858332)",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-da273ae5f4",
+      "url": "https://www.tedcnet.com/serving-oklahoma-entrepreneurs-ray-fitzgerald-named-director-of-loan-programs/",
+      "title": "FORGE — program page",
+      "excerpt": "(918) 585-8332",
+      "page": "details"
     },
     {
       "id": "check-phone-f2bceaae90",
       "url": "https://www.tedcnet.com",
-      "title": "FORGE — homepage checked by scrape.py",
+      "title": "FORGE — homepage",
       "excerpt": "\"telephone\": \"(918) 585-8332\"",
       "page": "details"
     },
     {
-      "id": "check-phone-f85c07cb15",
-      "url": "https://www.tedcnet.com/resources/faq/",
-      "title": "FORGE — terms page checked by scrape.py",
-      "excerpt": "(9185858332)",
-      "page": "terms"
+      "id": "check-route-036b0cf910",
+      "url": "https://www.tedcnet.com/about/testimonials/stemcell-science-shop/",
+      "title": "FORGE — program page",
+      "excerpt": "Business Planning Programs → https://tedcnet.com/learning/eden-application/",
+      "page": "details"
     },
     {
-      "id": "check-route-611f560d30",
-      "url": "https://www.tedcnet.com/about/",
-      "title": "FORGE — details page checked by scrape.py",
+      "id": "check-route-04190f76b6",
+      "url": "https://www.tedcnet.com/serving-oklahoma-entrepreneurs-ray-fitzgerald-named-director-of-loan-programs/",
+      "title": "FORGE — program page",
+      "excerpt": "Business Planning Programs → https://tedcnet.com/learning/eden-application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2fcb5c7844",
+      "url": "https://www.tedcnet.com/about/testimonials/stemcell-science-shop/",
+      "title": "FORGE — program page",
+      "excerpt": "APPLY NOW → https://www.tedcnet.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3fa4d2823a",
+      "url": "https://www.tedcnet.com",
+      "title": "FORGE — homepage",
+      "excerpt": "Business Planning Programs → https://tedcnet.com/learning/eden-application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-48cd70e765",
+      "url": "https://www.tedcnet.com/serving-oklahoma-entrepreneurs-ray-fitzgerald-named-director-of-loan-programs/",
+      "title": "FORGE — program page",
+      "excerpt": "APPLY NOW → https://www.tedcnet.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5c21b259ce",
+      "url": "https://www.tedcnet.com/forward-program-for-entrepreneurs/",
+      "title": "FORGE — program page",
       "excerpt": "APPLY NOW → https://www.tedcnet.com/apply-now/",
       "page": "details"
     },
     {
       "id": "check-route-6927c2e3ce",
       "url": "https://www.tedcnet.com",
-      "title": "FORGE — homepage checked by scrape.py",
+      "title": "FORGE — homepage",
       "excerpt": "APPLY NOW → https://www.tedcnet.com/apply-now/",
       "page": "details"
     },
     {
-      "id": "check-route-791d601d84",
-      "url": "https://www.tedcnet.com/resources/faq/",
-      "title": "FORGE — terms page checked by scrape.py",
-      "excerpt": "APPLY NOW → https://www.tedcnet.com/apply-now/",
-      "page": "terms"
+      "id": "check-route-dba8e07485",
+      "url": "https://www.tedcnet.com/forward-program-for-entrepreneurs/",
+      "title": "FORGE — program page",
+      "excerpt": "Business Planning Programs → https://tedcnet.com/learning/eden-application/",
+      "page": "details"
     },
     {
-      "id": "check-route-932a2759d7",
+      "id": "check-status-99b936b388",
+      "url": "https://www.tedcnet.com/forward-program-for-entrepreneurs/",
+      "title": "FORGE — program page",
+      "excerpt": "OBLP APPLY NOW Forward Program for Entrepreneurs March 20, 2019 Ready to start or expand your business? Now accepting applications from potential entrepreneurs or current business owners for the FORWARD Program, which could align you with",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-3f250055e2",
       "url": "https://www.tedcnet.com",
-      "title": "FORGE — homepage checked by scrape.py",
-      "excerpt": "https://www.tedcnet.com",
-      "page": "details"
+      "page": "details",
+      "excerpt": "Home - TEDC Creative Capital Skip to content Lending SSBCI OBLP Microloan Retail Revitalization Revolving Loan Fund SBA 504 Loan Tulsa Business Loan Rates & Fees Learning Business Planning Programs The Power of Real Estate Investing Cash Flow for Entrepreneurs Leading Greenwood Entrepreneurship at Moton The Shoppes on Peoria JW Vann Industrial Park About Board of Directors Staff Testimonials News FAQ Contact SBA 504 SSBCI OBLP APPLY NOW SBA 504 SSBCI OBLP APPLY NOW We Meet you at any point in youR Entrepreneurial Journey While TEDC is first and foremost a road to loan capital for your business, we also provide the necessary resources that empower you to succeed. As advocates for your success, we work alongside you, supporting and guiding your vision. We offer access to capital, business education, and connections to TEDC’s network of experts. Lending Securing Capital for your Next Step TEDC Creative Capital champions visionaries who are ready to create business momentum. Many small companies are ready to take the next steps in the lending process but struggle with securing the money they need. We creatively navigate funding obstacles and work with you to develop a financial roadmap. TEDC offers various loan options to best match your business needs. In today’s economic climate, most small businesses can benefit from TEDC’s menu of loan programs. Special consideration is given"
     },
     {
-      "id": "check-route-c7ddb70007",
-      "url": "https://www.tedcnet.com/apply-now/",
-      "title": "FORGE — application page checked by scrape.py",
-      "excerpt": "Government Debt Schedule → https://www.tedcnet.com/wp-content/uploads/2025/09/Application-Part-6-Previous-Govnt-Debt-Schedule-Certificate-1.xls",
-      "page": "application"
+      "id": "check-page-735a63fac8",
+      "url": "https://www.tedcnet.com",
+      "page": "details",
+      "excerpt": "Today, we navigate funding opportunities and offer education customized to small business needs.Over the last five years, we've provided or located more than $150 million to help nearly 300 small businesses start, expand or sustain."
+    },
+    {
+      "id": "check-page-68557f4fea",
+      "url": "https://www.tedcnet.com",
+      "page": "details",
+      "excerpt": "Her career has followed a much less predictable path, spanning healthcare, retail, manufacturing, software, small business ownership, chamber leadership, economic development and… More Than a Coffee Shop: Liquid Lounge Creates Opportunity One Cup at a Time By TEDC Staff Writer | August 28, 2026 Every morning, customers will walk through the doors of Liquid Lounge expecting a great cup of coffee."
+    },
+    {
+      "id": "check-page-169ad15b09",
+      "url": "https://www.tedcnet.com",
+      "page": "details",
+      "excerpt": "Tracy Smith Owner, Angel Academy Not only have they been a pleasure to work with, but they’re also a great resource to tap into for education and mentorship on starting a business."
+    },
+    {
+      "id": "check-page-850497b2bf",
+      "url": "https://www.tedcnet.com",
+      "page": "details",
+      "excerpt": "Name * Email * Subscribe TEDC is a sub-recipient of the City of Tulsa’s Community Development Block Grant program funded by the U.S."
+    },
+    {
+      "id": "check-page-724687a2c9",
+      "url": "https://www.tedcnet.com/about/testimonials/stemcell-science-shop/",
+      "page": "details",
+      "excerpt": "STEMcell Science Shop - TEDC Creative Capital Skip to content Lending SSBCI OBLP Microloan Retail Revitalization Revolving Loan Fund SBA 504 Loan Tulsa Business Loan Rates & Fees Learning Business Planning Programs The Power of Real Estate Investing Cash Flow for Entrepreneurs Leading Greenwood Entrepreneurship at Moton The Shoppes on Peoria JW Vann Industrial Park About Board of Directors Staff Testimonials News FAQ Contact SBA 504 SSBCI OBLP APPLY NOW SBA 504 SSBCI OBLP APPLY NOW Terry Mudge The STEMcell Science Shop Home » About » Testimonials » STEMcell Science Shop The STEMcell Science Shop 2415 E Admiral Blvd, Tulsa, OK 74110 Terry Mudge Owner https://stemcelltulsa.com/ STEMcell is a science and hobby store specializing in scientific supplies such as telescopes, microscopes and science kits. STEMcell’s focal point is a market of makers, DIYers and students. STEMcell opened in The Boxyard in 2016 and have since relocated to a larger space in the Kendall-Whittier area. “TEDC was very helpful in finding capital for my startup.” – Terry Mudge, Owner Get in Touch Ready for the next step? Tell us a little bit about yourself and how we can help bring your vision to life. \" * \" indicates required fields Name * First Last Email * Personal cell number * Company * Address * City * State * State* Alabama Alaska Arizona Arkansas California Colorado Connecticut Delaware District of"
+    },
+    {
+      "id": "check-page-92583de0ad",
+      "url": "https://www.tedcnet.com/about/testimonials/stemcell-science-shop/",
+      "page": "details",
+      "excerpt": "Tracy Smith Owner, Angel Academy Not only have they been a pleasure to work with, but they’re also a great resource to tap into for education and mentorship on starting a business."
+    },
+    {
+      "id": "check-page-9cde61ddef",
+      "url": "https://www.tedcnet.com/about/testimonials/stemcell-science-shop/",
+      "page": "details",
+      "excerpt": "Name * Email * Subscribe TEDC is a sub-recipient of the City of Tulsa’s Community Development Block Grant program funded by the U.S."
+    },
+    {
+      "id": "check-page-c2a6e5772b",
+      "url": "https://www.tedcnet.com/forward-program-for-entrepreneurs/",
+      "page": "details",
+      "excerpt": "Forward Program for Entrepreneurs - TEDC Creative Capital Skip to content Lending SSBCI OBLP Microloan Retail Revitalization Revolving Loan Fund SBA 504 Loan Tulsa Business Loan Rates & Fees Learning Business Planning Programs The Power of Real Estate Investing Cash Flow for Entrepreneurs Leading Greenwood Entrepreneurship at Moton The Shoppes on Peoria JW Vann Industrial Park About Board of Directors Staff Testimonials News FAQ Contact SBA 504 SSBCI OBLP APPLY NOW SBA 504 SSBCI OBLP APPLY NOW Forward Program for Entrepreneurs March 20, 2019 Ready to start or expand your business? Now accepting applications from potential entrepreneurs or current business owners for the FORWARD Program, which could align you with your ideal franchise or business concept, provide you with resources to increase your knowledge and connect you with financing & retail/office space. Deadline to apply is 5 pm, Friday, April 12, 2019. For more information contact: [email protected] or call 918-445-4457. New schedule this year: FORWARD classes for new businesses will begin April 30 th and conclude May 21 st . FORWARD classes for existing businesses will begin June 4 th and conclude June 25 th . Classes for both sessions will be held Tuesdays from 6-9 pm, Participation in all classes is required. Goodwill Industries of Tulsa 2800 Southwest Blvd. Tulsa, OK 74107 This program was financed in part by funds"
+    },
+    {
+      "id": "check-page-49fe01d18e",
+      "url": "https://www.tedcnet.com/forward-program-for-entrepreneurs/",
+      "page": "details",
+      "excerpt": "Tracy Smith Owner, Angel Academy Not only have they been a pleasure to work with, but they’re also a great resource to tap into for education and mentorship on starting a business."
+    },
+    {
+      "id": "check-page-e65b117a99",
+      "url": "https://www.tedcnet.com/forward-program-for-entrepreneurs/",
+      "page": "details",
+      "excerpt": "Name * Email * Subscribe TEDC is a sub-recipient of the City of Tulsa’s Community Development Block Grant program funded by the U.S."
+    },
+    {
+      "id": "check-page-8a46dc33cd",
+      "url": "https://www.tedcnet.com/serving-oklahoma-entrepreneurs-ray-fitzgerald-named-director-of-loan-programs/",
+      "page": "details",
+      "excerpt": "Ray Fitzgerald, Director of Loan Programs | TEDC Skip to content Lending SSBCI OBLP Microloan Retail Revitalization Revolving Loan Fund SBA 504 Loan Tulsa Business Loan Rates & Fees Learning Business Planning Programs The Power of Real Estate Investing Cash Flow for Entrepreneurs Leading Greenwood Entrepreneurship at Moton The Shoppes on Peoria JW Vann Industrial Park About Board of Directors Staff Testimonials News FAQ Contact SBA 504 SSBCI OBLP APPLY NOW SBA 504 SSBCI OBLP APPLY NOW Serving Oklahoma Entrepreneurs: Ray Fitzgerald Named Director of Loan Programs June 5, 2026 For Ray Fitzgerald, stepping into his new role as Director of Loan Programs at TEDC Creative Capital isn’t just a career milestone; it’s a continuation of a lifelong connection to Tulsa and a deep commitment to the people who call it home. From growing up in the city to serving overseas and returning with a renewed sense of purpose, Ray’s path has always been shaped by service, community, and a desire to create opportunity for others. Rooted in Tulsa Ray’s story begins in Tulsa, but not in just one corner of it. “My experience growing up in Tulsa was unique,” he says. “Living in East Tulsa in the heart of the global district, spending time in North Tulsa schools, and graduating from Jenks, I learned to love the whole city.” That perspective, seeing Tulsa in its entirety, understanding its diversity and its"
+    },
+    {
+      "id": "check-page-f1109302f6",
+      "url": "https://www.tedcnet.com/serving-oklahoma-entrepreneurs-ray-fitzgerald-named-director-of-loan-programs/",
+      "page": "details",
+      "excerpt": "Service That Shaped His Path After high school, Ray enlisted in the United States Marine Corps, where he served two tours in Afghanistan and completed his active-duty service as a Sergeant."
+    },
+    {
+      "id": "check-page-075fbadf4a",
+      "url": "https://www.tedcnet.com/serving-oklahoma-entrepreneurs-ray-fitzgerald-named-director-of-loan-programs/",
+      "page": "details",
+      "excerpt": "That means we can help people start companies they’ve dreamed of, expand operations, purchase equipment or real estate, whatever they need to grow.” His vision is grounded in accessibility, opportunity, and the belief that the right support can change the trajectory of a business and a life."
+    },
+    {
+      "id": "check-page-e77bffaa0b",
+      "url": "https://www.tedcnet.com/serving-oklahoma-entrepreneurs-ray-fitzgerald-named-director-of-loan-programs/",
+      "page": "details",
+      "excerpt": "As a community-focused lending organization, TEDC provides flexible financing and practical business education to help entrepreneurs across Oklahoma start, grow, and strengthen their businesses."
+    },
+    {
+      "id": "check-page-246feb96e0",
+      "url": "https://www.tedcnet.com/serving-oklahoma-entrepreneurs-ray-fitzgerald-named-director-of-loan-programs/",
+      "page": "details",
+      "excerpt": "Tracy Smith Owner, Angel Academy Not only have they been a pleasure to work with, but they’re also a great resource to tap into for education and mentorship on starting a business."
+    },
+    {
+      "id": "check-page-161ec0fa38",
+      "url": "https://www.tedcnet.com/serving-oklahoma-entrepreneurs-ray-fitzgerald-named-director-of-loan-programs/",
+      "page": "details",
+      "excerpt": "Name * Email * Subscribe TEDC is a sub-recipient of the City of Tulsa’s Community Development Block Grant program funded by the U.S."
     }
   ],
   "findings": {
@@ -142,25 +274,37 @@
     ],
     "routes": [
       {
-        "value": "https://www.tedcnet.com/apply-now/",
-        "evidenceId": "check-route-6927c2e3ce"
+        "value": "https://tedcnet.com/learning/eden-application/",
+        "evidenceId": "check-route-3fa4d2823a"
       },
       {
-        "value": "https://www.tedcnet.com/wp-content/uploads/2025/09/Application-Part-6-Previous-Govnt-Debt-Schedule-Certificate-1.xls",
-        "evidenceId": "check-route-c7ddb70007"
+        "value": "https://www.tedcnet.com/apply-now/",
+        "evidenceId": "check-route-6927c2e3ce"
       }
     ],
     "applicationUrl": [
       {
-        "value": "https://www.tedcnet.com",
-        "evidenceId": "check-route-932a2759d7"
+        "value": "https://tedcnet.com/learning/eden-application/",
+        "evidenceId": "check-route-3fa4d2823a"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-99b936b388"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

@@ -1,6 +1,6 @@
 {
   "programId": "contrary",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://applications.contrary.com",
@@ -59,16 +59,16 @@
       "origin": "official"
     },
     {
-      "url": "https://jobs.contrary.com/$/jobs",
-      "page": "other",
+      "url": "https://research.contrary.com/about",
+      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://research.contrary.com/about",
-      "page": "details",
+      "url": "https://research.contrary.com/company",
+      "page": "other",
       "anchor": "",
       "fetched": true,
       "blocked": null,

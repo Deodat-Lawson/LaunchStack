@@ -1,6 +1,6 @@
 {
   "programId": "tenity",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "http://www.tenity.com/programs",
@@ -22,7 +22,7 @@
       "url": "https://www.tenity.com/about/",
       "page": "details",
       "anchor": "About Tenity",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -30,7 +30,7 @@
       "url": "https://www.tenity.com/about/hong-kong/",
       "page": "details",
       "anchor": "Hong Kong",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -75,14 +75,6 @@
       "origin": "official"
     },
     {
-      "url": "https://www.tenity.com/articles/8-fintechs-1-payment-journey-how-the-first-visa-innovation-program-europe-nordics-baltics-cohort-showcased-the-future-of-payments/",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.tenity.com/cases/visa-innovation-program-europe/",
       "page": "details",
       "anchor": "Visa Innovation Program Europe Read more",
@@ -107,6 +99,38 @@
       "origin": "official"
     },
     {
+      "url": "https://www.tenity.com/members/andrea-fritschi/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/members/guillermo-forteza/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/members/maxim-leer/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/members/oliver-sjostedt/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.tenity.com/portfolio/",
       "page": "portfolio",
       "anchor": "Portfolio",
@@ -123,18 +147,18 @@
       "origin": "official"
     },
     {
-      "url": "https://www.tenity.com/program/novartis-turkiye-health-innovation-program/",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.tenity.com/programs/",
       "page": "details",
       "anchor": "Programs",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/programs/xrpl-accelerator-2025",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -149,22 +173,6 @@
     {
       "url": "https://www.tenity.com/services/dealflow-sourcing/",
       "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.tenity.com/stories/applications-open-for-health-innovation-program-with-novartis-turkiye/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.tenity.com/stories/from-applications-to-the-stage-looking-back-at-the-idda-incubation-program/",
-      "page": "application",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -189,6 +197,22 @@
     {
       "url": "https://www.tenity.com/tenity-backs-kapnative-to-enhance-confidence-in-private-market-investments-for-financial-institutions/",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/tenity-strengthens-position-as-leading-fintech-investor-european-startup-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/tenity-welcomes-14-visionary-projects-for-xrpl-accelerator-batch-vii/",
+      "page": "batches",
       "anchor": "",
       "fetched": true,
       "blocked": null,

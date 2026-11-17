@@ -1,6 +1,6 @@
 {
   "programId": "ucla-anderson",
-  "checkedAt": "2026-11-14T21:26:31.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://apply.anderson.ucla.edu/account/login",
@@ -43,6 +43,14 @@
       "origin": "official"
     },
     {
+      "url": "https://apply.anderson.ucla.edu/apply/status",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
       "url": "https://apply.anderson.ucla.edu/portal/EMBA-one-on-one",
       "page": "application",
       "anchor": "",
@@ -51,7 +59,39 @@
       "origin": "official"
     },
     {
+      "url": "https://apply.anderson.ucla.edu/portal/mba-virtual-student-chat",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://apply.anderson.ucla.edu/register/EMBAWebinar",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.anderson.ucla.edu/register/UCLA-EMBA-Am-I-A-Fit",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.anderson.ucla.edu/register/applicant-contact-info-change",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.anderson.ucla.edu/www/documents/EMBA-UCLA-NUS-Comparison-flyer.pdf",
       "page": "application",
       "anchor": "",
       "fetched": true,
@@ -3014,7 +3054,7 @@
       "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/faq",
       "page": "terms",
       "anchor": "FAQ",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -3030,7 +3070,7 @@
       "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admit-central/anderson-onboarding/anderson-onboarding-faq",
       "page": "terms",
       "anchor": "Anderson Onboarding FAQ",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

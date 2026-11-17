@@ -1,6 +1,6 @@
 {
   "programId": "surge",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://surge.peakxv.com/",
     "https://surge.peakxv.com/apply",
@@ -16,7 +16,12 @@
     "https://surge.peakxv.com/cohorts/surge-08",
     "https://surge.peakxv.com/cohorts/surge-09",
     "https://surge.peakxv.com/cohorts/surge-10",
-    "https://surge.peakxv.com/cohorts/surge-11"
+    "https://surge.peakxv.com/cohorts/surge-11",
+    "https://surge.peakxv.com/cohorts/surge-12",
+    "https://surge.peakxv.com/resource/cursor-co-founder-aman-sanger-on-the-journey-from-0-100m-in-12-months-the-future-of-programming",
+    "https://surge.peakxv.com/resource/vercel-s-malte-ubl-on-agent-era-self-driving-infra-and-how-vercel-thinks-about-the-next-decade",
+    "https://surge.peakxv.com/resource/from-sun-microsystems-to-openai-vinod-khosla-on-bold-bets-building-enduring-companies",
+    "https://surge.peakxv.com/resource/gokul-rajaram-on-defensibility-scaling-companies-hiring-for-spikiness"
   ],
   "evidence": [
     {
@@ -67,6 +72,20 @@
       "title": "Surge — terms page",
       "excerpt": "The standard accelerator model is often 12–24 week building window with support ending at demo day.",
       "page": "terms"
+    },
+    {
+      "id": "check-duration-1a2eafbac4",
+      "url": "https://surge.peakxv.com/resource/cursor-co-founder-aman-sanger-on-the-journey-from-0-100m-in-12-months-the-future-of-programming",
+      "title": "Surge — program page",
+      "excerpt": "Aman Sanger on the Journey from 0-$100M in 12 Months & the Future of Programming Cursor co-founder",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-234feb03b2",
+      "url": "https://surge.peakxv.com/resource/cursor-co-founder-aman-sanger-on-the-journey-from-0-100m-in-12-months-the-future-of-programming",
+      "title": "Surge — program page",
+      "excerpt": "Aman Sanger on the Journey from 0-$100M in 12 Months & the Future of Programming Startups How we",
+      "page": "details"
     },
     {
       "id": "check-duration-5bfc183685",
@@ -125,11 +144,32 @@
       "page": "batches"
     },
     {
+      "id": "check-email-0b30293285",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "title": "Surge — batches page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-0e673a6ddc",
+      "url": "https://surge.peakxv.com/resource/from-sun-microsystems-to-openai-vinod-khosla-on-bold-bets-building-enduring-companies",
+      "title": "Surge — portfolio page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-1e238b760f",
       "url": "https://surge.peakxv.com/apply",
       "title": "Surge — application page",
       "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
       "page": "application"
+    },
+    {
+      "id": "check-email-21f42b45aa",
+      "url": "https://surge.peakxv.com/resource/gokul-rajaram-on-defensibility-scaling-companies-hiring-for-spikiness",
+      "title": "Surge — portfolio page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "portfolio"
     },
     {
       "id": "check-email-2c6e5c21d1",
@@ -144,6 +184,13 @@
       "title": "Surge — batches page",
       "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
       "page": "batches"
+    },
+    {
+      "id": "check-email-49bca63997",
+      "url": "https://surge.peakxv.com/resource/vercel-s-malte-ubl-on-agent-era-self-driving-infra-and-how-vercel-thinks-about-the-next-decade",
+      "title": "Surge — program page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "details"
     },
     {
       "id": "check-email-4a8a781787",
@@ -174,11 +221,25 @@
       "page": "terms"
     },
     {
+      "id": "check-email-5a917ce2a2",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "title": "Surge — batches page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "batches"
+    },
+    {
       "id": "check-email-63a51bfbe5",
       "url": "https://surge.peakxv.com/cohorts/surge-02",
       "title": "Surge — batches page",
       "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
       "page": "batches"
+    },
+    {
+      "id": "check-email-697f15e530",
+      "url": "https://surge.peakxv.com/resource/from-sun-microsystems-to-openai-vinod-khosla-on-bold-bets-building-enduring-companies",
+      "title": "Surge — portfolio page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "portfolio"
     },
     {
       "id": "check-email-71a620b892",
@@ -214,6 +275,13 @@
       "title": "Surge — batches page",
       "excerpt": "contactus@peakxv.com",
       "page": "batches"
+    },
+    {
+      "id": "check-email-8aa94873cf",
+      "url": "https://surge.peakxv.com/resource/cursor-co-founder-aman-sanger-on-the-journey-from-0-100m-in-12-months-the-future-of-programming",
+      "title": "Surge — program page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "details"
     },
     {
       "id": "check-email-92f0068e17",
@@ -293,6 +361,13 @@
       "page": "batches"
     },
     {
+      "id": "check-email-c7ed8f0cec",
+      "url": "https://surge.peakxv.com/resource/cursor-co-founder-aman-sanger-on-the-journey-from-0-100m-in-12-months-the-future-of-programming",
+      "title": "Surge — program page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "details"
+    },
+    {
       "id": "check-email-d8dbc29257",
       "url": "https://surge.peakxv.com/cohorts/surge-01",
       "title": "Surge — batches page",
@@ -307,6 +382,13 @@
       "page": "application"
     },
     {
+      "id": "check-email-de35546169",
+      "url": "https://surge.peakxv.com/resource/gokul-rajaram-on-defensibility-scaling-companies-hiring-for-spikiness",
+      "title": "Surge — portfolio page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-eb90010f28",
       "url": "https://surge.peakxv.com/",
       "title": "Surge — homepage",
@@ -319,6 +401,13 @@
       "title": "Surge — terms page",
       "excerpt": "us during the application process? You can write to us at contactus@peakxv.com, or find one of us from the Surge team on LinkedIn and hit",
       "page": "terms"
+    },
+    {
+      "id": "check-email-f3e0cf3e41",
+      "url": "https://surge.peakxv.com/resource/vercel-s-malte-ubl-on-agent-era-self-driving-infra-and-how-vercel-thinks-about-the-next-decade",
+      "title": "Surge — program page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "details"
     },
     {
       "id": "check-email-f835e1bb46",
@@ -412,11 +501,25 @@
       "page": "batches"
     },
     {
+      "id": "check-portfolio-246693d688",
+      "url": "https://surge.peakxv.com/resource/gokul-rajaram-on-defensibility-scaling-companies-hiring-for-spikiness",
+      "title": "Surge — portfolio page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-257c237ddc",
       "url": "https://surge.peakxv.com/reach-out",
       "title": "Surge — application page",
       "excerpt": "Startups → https://surge.peakxv.com/companies",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-2722b28f33",
+      "url": "https://surge.peakxv.com/resource/gokul-rajaram-on-defensibility-scaling-companies-hiring-for-spikiness",
+      "title": "Surge — portfolio page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-294357674a",
@@ -510,8 +613,50 @@
       "page": "batches"
     },
     {
+      "id": "check-portfolio-791138d3b7",
+      "url": "https://surge.peakxv.com/resource/vercel-s-malte-ubl-on-agent-era-self-driving-infra-and-how-vercel-thinks-about-the-next-decade",
+      "title": "Surge — program page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7a1851af9c",
+      "url": "https://surge.peakxv.com/resource/cursor-co-founder-aman-sanger-on-the-journey-from-0-100m-in-12-months-the-future-of-programming",
+      "title": "Surge — program page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7b506f75e2",
+      "url": "https://surge.peakxv.com/resource/vercel-s-malte-ubl-on-agent-era-self-driving-infra-and-how-vercel-thinks-about-the-next-decade",
+      "title": "Surge — program page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-821fd47f0b",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "title": "Surge — batches page",
+      "excerpt": "← Back → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-8e3a961b47",
       "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "title": "Surge — batches page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-8f476a69d2",
+      "url": "https://surge.peakxv.com/resource/from-sun-microsystems-to-openai-vinod-khosla-on-bold-bets-building-enduring-companies",
+      "title": "Surge — portfolio page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-930ba44047",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
       "title": "Surge — batches page",
       "excerpt": "Startups → https://surge.peakxv.com/companies",
       "page": "batches"
@@ -529,6 +674,20 @@
       "title": "Surge — batches page",
       "excerpt": "See our companies → https://surge.peakxv.com/companies",
       "page": "batches"
+    },
+    {
+      "id": "check-portfolio-a7896e37d4",
+      "url": "https://surge.peakxv.com/resource/cursor-co-founder-aman-sanger-on-the-journey-from-0-100m-in-12-months-the-future-of-programming",
+      "title": "Surge — program page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ab9c9fcf49",
+      "url": "https://surge.peakxv.com/resource/from-sun-microsystems-to-openai-vinod-khosla-on-bold-bets-building-enduring-companies",
+      "title": "Surge — portfolio page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-b3327c2001",
@@ -554,6 +713,13 @@
     {
       "id": "check-portfolio-c945754b3d",
       "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "title": "Surge — batches page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-d04664c6fd",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
       "title": "Surge — batches page",
       "excerpt": "See our companies → https://surge.peakxv.com/companies",
       "page": "batches"
@@ -685,6 +851,13 @@
       "page": "batches"
     },
     {
+      "id": "check-route-5a351e2cef",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "batches"
+    },
+    {
       "id": "check-route-60b1b2562d",
       "url": "https://surge.peakxv.com/cohorts/surge-04",
       "title": "Surge — batches page",
@@ -727,6 +900,13 @@
       "page": "batches"
     },
     {
+      "id": "check-route-7405f4a9c0",
+      "url": "https://surge.peakxv.com/resource/vercel-s-malte-ubl-on-agent-era-self-driving-infra-and-how-vercel-thinks-about-the-next-decade",
+      "title": "Surge — program page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "details"
+    },
+    {
       "id": "check-route-83d208cbb2",
       "url": "https://surge.peakxv.com/cohorts/surge-07",
       "title": "Surge — batches page",
@@ -755,11 +935,25 @@
       "page": "batches"
     },
     {
+      "id": "check-route-abfa5493ba",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "batches"
+    },
+    {
       "id": "check-route-aca336a08a",
       "url": "https://surge.peakxv.com/cohorts/surge-01",
       "title": "Surge — batches page",
       "excerpt": "Apply → https://surge.peakxv.com/apply",
       "page": "batches"
+    },
+    {
+      "id": "check-route-b27fdb7e56",
+      "url": "https://surge.peakxv.com/resource/gokul-rajaram-on-defensibility-scaling-companies-hiring-for-spikiness",
+      "title": "Surge — portfolio page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "portfolio"
     },
     {
       "id": "check-route-ba6ab9dcec",
@@ -776,11 +970,46 @@
       "page": "batches"
     },
     {
+      "id": "check-route-bd6b42b15d",
+      "url": "https://surge.peakxv.com/resource/vercel-s-malte-ubl-on-agent-era-self-driving-infra-and-how-vercel-thinks-about-the-next-decade",
+      "title": "Surge — program page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c4b30ef1fb",
+      "url": "https://surge.peakxv.com/resource/gokul-rajaram-on-defensibility-scaling-companies-hiring-for-spikiness",
+      "title": "Surge — portfolio page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-c4b8d7888c",
+      "url": "https://surge.peakxv.com/resource/cursor-co-founder-aman-sanger-on-the-journey-from-0-100m-in-12-months-the-future-of-programming",
+      "title": "Surge — program page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c8cf25f505",
+      "url": "https://surge.peakxv.com/resource/from-sun-microsystems-to-openai-vinod-khosla-on-bold-bets-building-enduring-companies",
+      "title": "Surge — portfolio page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-cd94dfb961",
       "url": "https://surge.peakxv.com/cohorts/surge-04",
       "title": "Surge — batches page",
       "excerpt": "Apply → https://surge.peakxv.com/reach-out",
       "page": "batches"
+    },
+    {
+      "id": "check-route-d357f9df1c",
+      "url": "https://surge.peakxv.com/resource/cursor-co-founder-aman-sanger-on-the-journey-from-0-100m-in-12-months-the-future-of-programming",
+      "title": "Surge — program page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "details"
     },
     {
       "id": "check-route-dc318f69f4",
@@ -832,6 +1061,13 @@
       "page": "batches"
     },
     {
+      "id": "check-route-f7e508ff1e",
+      "url": "https://surge.peakxv.com/resource/from-sun-microsystems-to-openai-vinod-khosla-on-bold-bets-building-enduring-companies",
+      "title": "Surge — portfolio page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "portfolio"
+    },
+    {
       "id": "check-start-971ab45587",
       "url": "https://surge.peakxv.com/faqs",
       "title": "Surge — terms page",
@@ -854,10 +1090,88 @@
       "excerpt": "Surge by Peak XV | Seed Funding for Day-Zero Founders Startups How we partner People Resources Apply Where audacious founders find their Surge . Capital, full-stack support, and a community that builds with you. Apply Where early belief compounds. $ 1 B+ Annual revenue across top 10 Surge companies $ 3 B+ Raised in follow-on funding 95 Net Promoter Score 17 + Nationalities in the founder community The Peak XV stack from day zero. $0.5M Meaningful capital at the earliest stage. We invest from $500k up to $5M in seed capital from Peak XV, with an open architecture that welcomes co-investors. Hiring Product Policy Comms & PR Engineering GTM Global Expansion Operators embedded and in your corner. Hands-on, full-stack support across every function that matters for going from zero to one. 170 + Companies 400 + Founders A network that grows with you. Sector-specific communities, always-on learning, and access to the global leaders shaping the future of technology. Surge startups. Airalo is the world’s first eSIM store that solves the pain of high roaming bills by giving you access to eSIMs (digital SIM cards). Read more Atlan is a modern data collaboration workspace, enabling teams to create a single source of truth for all their data assets, and collaborate across the modern data stack. Read more Global HR platform for hiring, managing, and paying employees worldwide. Read more"
     },
     {
+      "id": "check-page-ea638e5e5c",
+      "url": "https://surge.peakxv.com/",
+      "page": "details",
+      "excerpt": "Read more Arintra is an autonomous medical coding platform that uses AI to code patient charts accurately, helping healthcare providers reduce denials and get paid faster."
+    },
+    {
+      "id": "check-page-ba244dc7b5",
+      "url": "https://surge.peakxv.com/",
+      "page": "details",
+      "excerpt": "Read more Plum is transforming the employee healthcare experience by providing comprehensive group health insurance with seamless digital claims experience."
+    },
+    {
+      "id": "check-page-31699b92b6",
+      "url": "https://surge.peakxv.com/",
+      "page": "details",
+      "excerpt": "Read more Relevance AI is a machine learning startup on a mission to help companies build an AI workforce that automates workflows with no code."
+    },
+    {
+      "id": "check-page-24abe5e72d",
+      "url": "https://surge.peakxv.com/",
+      "page": "details",
+      "excerpt": "Read more Skillmatics is a full stack direct-to-consumer brand that develops innovative educational products and games that build core skills in children through systematic play."
+    },
+    {
+      "id": "check-page-543ed576e7",
+      "url": "https://surge.peakxv.com/",
+      "page": "details",
+      "excerpt": "Read more Khatabook is a digital ledger service for SMBs that offers them an easy, online bookkeeping solution to manage their business."
+    },
+    {
+      "id": "check-page-14763d15e1",
+      "url": "https://surge.peakxv.com/",
+      "page": "details",
+      "excerpt": "Read more Ambak is a home loan marketplace that helps buyers compare options across 50+ lenders and secure the right mortgage with less friction."
+    },
+    {
+      "id": "check-page-c313f454cd",
+      "url": "https://surge.peakxv.com/",
+      "page": "details",
+      "excerpt": "Read more The Health Factory is a direct-to-consumer food brand that makes high-protein, low-carb bread and bakery products for healthier everyday eating."
+    },
+    {
+      "id": "check-page-494fadc3e6",
+      "url": "https://surge.peakxv.com/",
+      "page": "details",
+      "excerpt": "Read more TrueFoundry is a cloud-native platform that helps machine learning teams build, deploy, and scale AI applications quickly, securely, and on their own infrastructure."
+    },
+    {
+      "id": "check-page-f03035eae9",
+      "url": "https://surge.peakxv.com/",
+      "page": "details",
+      "excerpt": "Read more Horizon Quantum Computing is a Singapore-based company building software-development tools to enable the next revolution in computing."
+    },
+    {
+      "id": "check-page-8abb6b8c70",
+      "url": "https://surge.peakxv.com/",
+      "page": "details",
+      "excerpt": "Read more Ethereal Machines is an advanced manufacturing company that produces precision engineering components through its proprietary multi-axis computer numerical control (CNC) machines."
+    },
+    {
+      "id": "check-page-2fb588dd6d",
+      "url": "https://surge.peakxv.com/",
+      "page": "details",
+      "excerpt": "Read more Primetrace is a consumer AI company that builds a portfolio of AI-native apps for everyday use, reaching over 300 million users across India."
+    },
+    {
+      "id": "check-page-81eec6b7be",
+      "url": "https://surge.peakxv.com/",
+      "page": "details",
+      "excerpt": "Read more JustAI is an agentic marketing platform that uses AI to test and optimize lifecycle content, turning channels like email into an autonomous revenue engine."
+    },
+    {
       "id": "check-page-a1c0e37c38",
       "url": "https://surge.peakxv.com/apply",
       "page": "application",
       "excerpt": "Apply to Surge by Peak XV | Startup Funding Application Startups How we partner People Resources Apply Fill in your application . Company About the Founders Description & Metrics Final step question 1 Company Name * Error: Fill in the company name to proceed question 2 Link to your company website Please double-check to ensure this is the correct URL. If you don't have a website yet, please leave this blank. Error: Fill in the company website to proceed question 3 In which country is your company registered? * Country Name Error: Select the country where the company is registered question 4 Which category best applies to your company? AI/ML Augmented Reality/Virtual Reality B2B Biotech Blockchain Community Consumer Crypto DeepTech Developer Tools D2C Brands E-Commerce EdTech Energy Enterprise Tech FinTech Gaming/Entertainment Government Hardware HealthTech/MedTech/Healthcare Life Sciences Marketplaces Media Mobility/Transportation Robotics SaaS Security SpaceTech Other Error: Select the option before proceeding question 5 Where are your customers/users located? * If you have customers in multiple locations, pick the country where you've seen/expect to see most traction Worldwide Country Name Error: Select the customer location before proceeding question 6 Has your company raised any funding already? * Yes No If yes, how much was the total investment? (In USD)* Error: Add the"
+    },
+    {
+      "id": "check-page-fe2c2f2bab",
+      "url": "https://surge.peakxv.com/apply",
+      "page": "application",
+      "excerpt": "For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we partner People Resources Apply Future Founders Fellowship Follow Us X LinkedIn YouTube © 2026 Peak XV."
     },
     {
       "id": "check-page-86154123d8",
@@ -872,10 +1186,154 @@
       "excerpt": "Surge by Peak XV FAQs | Funding, Eligibility, Applications & Evaluation Startups How we partner People Resources Apply FAQs About Surge What is Surge? Surge is how Peak XV backs founders from day zero. We started Surge in 2019 with a simple goal: help early-stage founders build strong foundations for an enduring company. Since then, we've partnered with 400+ founders building in diverse sectors across the globe, from first check through their scale. Alongside capital, you get hands-on support from the Surge team across hiring, GTM, product, fundraising and more - with operators who've seen the playbook and are in your corner to run it with you. Once a year, we also bring the cohort together for an 8-week Immersion - time with the world's most iconic founders and operators, focused sector tracks, and a founder community that sticks around for life. How much funding will my startup receive? Surge invests up to $5 million in seed capital in each company through an equity investment. Our investments range from $500-$5M. How will the Surge team and community help me build my company? Founders will work with Surge team members, mentors, and experts to make tangible progress towards launching or accelerating their companies. Each company has a dedicated investment advisor who will work with you to define actionable 16-week goals. The team will guide you to lay down the overall"
     },
     {
+      "id": "check-page-294cb087a5",
+      "url": "https://surge.peakxv.com/faqs",
+      "page": "terms",
+      "excerpt": "The team will guide you to lay down the overall strategy, track weekly progress, and connect you to mentors and experts."
+    },
+    {
+      "id": "check-page-2e104ffe01",
+      "url": "https://surge.peakxv.com/faqs",
+      "page": "terms",
+      "excerpt": "Build networks, find mentors and form friendships that will stay with you forever."
+    },
+    {
+      "id": "check-page-ca2368311f",
+      "url": "https://surge.peakxv.com/faqs",
+      "page": "terms",
+      "excerpt": "Early-stage journeys evolve, pivots happen, and that’s exactly why it helps to start the conversation sooner."
+    },
+    {
+      "id": "check-page-425d4e2fd1",
+      "url": "https://surge.peakxv.com/faqs",
+      "page": "terms",
+      "excerpt": "We work with founders at the idea stage as well, long before things are set in stone."
+    },
+    {
+      "id": "check-page-2fc395f72f",
+      "url": "https://surge.peakxv.com/faqs",
+      "page": "terms",
+      "excerpt": "Surge is the way Peak XV does seed investing."
+    },
+    {
+      "id": "check-page-70842f3b4c",
+      "url": "https://surge.peakxv.com/faqs",
+      "page": "terms",
+      "excerpt": "Founders receive up to $5M in seed capital, along with access to Peak XV’s network, operating expertise and long-term follow-on support as they scale."
+    },
+    {
+      "id": "check-page-00c06e0137",
+      "url": "https://surge.peakxv.com/faqs",
+      "page": "terms",
+      "excerpt": "I’ve already been to an accelerator, what do I get out of this program?"
+    },
+    {
+      "id": "check-page-02dc6a2465",
+      "url": "https://surge.peakxv.com/faqs",
+      "page": "terms",
+      "excerpt": "The standard accelerator model is often 12–24 week building window with support ending at demo day."
+    },
+    {
+      "id": "check-page-3e8dbf51ad",
+      "url": "https://surge.peakxv.com/faqs",
+      "page": "terms",
+      "excerpt": "Surge does not take board seats at the early stage."
+    },
+    {
+      "id": "check-page-2bccdbd5fd",
+      "url": "https://surge.peakxv.com/faqs",
+      "page": "terms",
+      "excerpt": "Watch Rajan Anandan break down each of the three components above as he describes the elements that make a great Surge application. https://www.youtube.com/watch?v=itRmgACM6Nk Does Surge only invest in AI?"
+    },
+    {
+      "id": "check-page-77a747957e",
+      "url": "https://surge.peakxv.com/faqs",
+      "page": "terms",
+      "excerpt": "We have backed companies that disrupted skincare in India (Minimalist), the world's first and largest eSIM marketplace (Airalo), and quantum computing (Horizon Quantum)."
+    },
+    {
+      "id": "check-page-dfd6564286",
+      "url": "https://surge.peakxv.com/faqs",
+      "page": "terms",
+      "excerpt": "This 8-week journey wraps with an Immersion in San Francisco with other early-stage founders in the Peak XV community, and curated visits to iconic companies like NVIDIA, OpenAI, Google, Notion."
+    },
+    {
       "id": "check-page-effcf8bdee",
       "url": "https://surge.peakxv.com/cohorts/surge-01",
       "page": "batches",
       "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-39a0572580",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "page": "batches",
+      "excerpt": "Ditto is moving dating beyond endless swiping, while Wingit is building a beauty platform for India’s premium consumers."
+    },
+    {
+      "id": "check-page-d50f056067",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "page": "batches",
+      "excerpt": "GameStock is applying the mechanics of competition to financial markets, and Hoola Health is building a child-first paediatric care ecosystem."
+    },
+    {
+      "id": "check-page-940418fc9c",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "page": "batches",
+      "excerpt": "And Tribe Money wants to put personal finances on autopilot, using AI to manage the tracking, research and investing decisions that often fall through the cracks."
+    },
+    {
+      "id": "check-page-07c4bbbd3d",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "page": "batches",
+      "excerpt": "AI is becoming the architecture AI runs through much of Surge 12, but increasingly not as a standalone product or feature."
+    },
+    {
+      "id": "check-page-fd4fb167ae",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "page": "batches",
+      "excerpt": "Alma is rethinking personal computing for an AI-native world."
+    },
+    {
+      "id": "check-page-1d35b9460b",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "page": "batches",
+      "excerpt": "Rosella is redesigning commercial insurance brokerage around AI, while Kindling is building a storytelling operating system for ambitious tech startups."
+    },
+    {
+      "id": "check-page-062bf744f1",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "page": "batches",
+      "excerpt": "Reinforce Labs is building the evaluation, red-teaming and remediation layer for enterprise AI, helping teams make AI systems safer and more reliable in production."
+    },
+    {
+      "id": "check-page-69301dba99",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "page": "batches",
+      "excerpt": "And hiloop is building infrastructure for post-training open-weight models, a research harness that helps application-layer AI companies run, track and improve model experiments at scale."
+    },
+    {
+      "id": "check-page-dd676f687d",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "page": "batches",
+      "excerpt": "Together, these companies reflect a shift we think is becoming increasingly important: AI is moving from being the product itself to becoming part of how the product fundamentally works."
+    },
+    {
+      "id": "check-page-7e607b37bc",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "page": "batches",
+      "excerpt": "From robotics beneath our cities to sensing systems above the Earth, these founders are showing how advances in hardware, software and AI are opening up entirely new categories of problems for startups to tackle."
+    },
+    {
+      "id": "check-page-262de18a9c",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "page": "batches",
+      "excerpt": "Anish Das Sarma , founder of Reinforce Labs, completed a PhD at Stanford, built a company that was acquired by Airbnb and later led AI and machine-learning teams as a Director at Google."
+    },
+    {
+      "id": "check-page-75b137133d",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "page": "batches",
+      "excerpt": "Nischith Shadagopan M N and Vinod Ganesan , founders of Alma, previously worked together at Microsoft Research and became founding engineers at Sarvam AI."
     },
     {
       "id": "check-page-9c497c1a73",
@@ -884,10 +1342,154 @@
       "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
     },
     {
+      "id": "check-page-65fe151dfe",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "page": "batches",
+      "excerpt": "Ditto is moving dating beyond endless swiping, while Wingit is building a beauty platform for India’s premium consumers."
+    },
+    {
+      "id": "check-page-3185cfc70c",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "page": "batches",
+      "excerpt": "GameStock is applying the mechanics of competition to financial markets, and Hoola Health is building a child-first paediatric care ecosystem."
+    },
+    {
+      "id": "check-page-0de8b92c79",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "page": "batches",
+      "excerpt": "And Tribe Money wants to put personal finances on autopilot, using AI to manage the tracking, research and investing decisions that often fall through the cracks."
+    },
+    {
+      "id": "check-page-b08a0659f0",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "page": "batches",
+      "excerpt": "AI is becoming the architecture AI runs through much of Surge 12, but increasingly not as a standalone product or feature."
+    },
+    {
+      "id": "check-page-5cf12fd7ab",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "page": "batches",
+      "excerpt": "Alma is rethinking personal computing for an AI-native world."
+    },
+    {
+      "id": "check-page-821afa13b6",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "page": "batches",
+      "excerpt": "Rosella is redesigning commercial insurance brokerage around AI, while Kindling is building a storytelling operating system for ambitious tech startups."
+    },
+    {
+      "id": "check-page-5e8fc01104",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "page": "batches",
+      "excerpt": "Reinforce Labs is building the evaluation, red-teaming and remediation layer for enterprise AI, helping teams make AI systems safer and more reliable in production."
+    },
+    {
+      "id": "check-page-c1134bcaf7",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "page": "batches",
+      "excerpt": "And hiloop is building infrastructure for post-training open-weight models, a research harness that helps application-layer AI companies run, track and improve model experiments at scale."
+    },
+    {
+      "id": "check-page-1f7244b793",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "page": "batches",
+      "excerpt": "Together, these companies reflect a shift we think is becoming increasingly important: AI is moving from being the product itself to becoming part of how the product fundamentally works."
+    },
+    {
+      "id": "check-page-eed85c123a",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "page": "batches",
+      "excerpt": "From robotics beneath our cities to sensing systems above the Earth, these founders are showing how advances in hardware, software and AI are opening up entirely new categories of problems for startups to tackle."
+    },
+    {
+      "id": "check-page-c58358e00d",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "page": "batches",
+      "excerpt": "Anish Das Sarma , founder of Reinforce Labs, completed a PhD at Stanford, built a company that was acquired by Airbnb and later led AI and machine-learning teams as a Director at Google."
+    },
+    {
+      "id": "check-page-5b57c9ccfc",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "page": "batches",
+      "excerpt": "Nischith Shadagopan M N and Vinod Ganesan , founders of Alma, previously worked together at Microsoft Research and became founding engineers at Sarvam AI."
+    },
+    {
       "id": "check-page-b2a24e3dda",
       "url": "https://surge.peakxv.com/cohorts/surge-03",
       "page": "batches",
       "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-afbe9ef47a",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "page": "batches",
+      "excerpt": "Ditto is moving dating beyond endless swiping, while Wingit is building a beauty platform for India’s premium consumers."
+    },
+    {
+      "id": "check-page-ce9805f205",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "page": "batches",
+      "excerpt": "GameStock is applying the mechanics of competition to financial markets, and Hoola Health is building a child-first paediatric care ecosystem."
+    },
+    {
+      "id": "check-page-0695cd10a9",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "page": "batches",
+      "excerpt": "And Tribe Money wants to put personal finances on autopilot, using AI to manage the tracking, research and investing decisions that often fall through the cracks."
+    },
+    {
+      "id": "check-page-6d72120b7e",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "page": "batches",
+      "excerpt": "AI is becoming the architecture AI runs through much of Surge 12, but increasingly not as a standalone product or feature."
+    },
+    {
+      "id": "check-page-736aa3948e",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "page": "batches",
+      "excerpt": "Alma is rethinking personal computing for an AI-native world."
+    },
+    {
+      "id": "check-page-a5db004472",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "page": "batches",
+      "excerpt": "Rosella is redesigning commercial insurance brokerage around AI, while Kindling is building a storytelling operating system for ambitious tech startups."
+    },
+    {
+      "id": "check-page-14d38de55e",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "page": "batches",
+      "excerpt": "Reinforce Labs is building the evaluation, red-teaming and remediation layer for enterprise AI, helping teams make AI systems safer and more reliable in production."
+    },
+    {
+      "id": "check-page-7749126593",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "page": "batches",
+      "excerpt": "And hiloop is building infrastructure for post-training open-weight models, a research harness that helps application-layer AI companies run, track and improve model experiments at scale."
+    },
+    {
+      "id": "check-page-f268cd0765",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "page": "batches",
+      "excerpt": "Together, these companies reflect a shift we think is becoming increasingly important: AI is moving from being the product itself to becoming part of how the product fundamentally works."
+    },
+    {
+      "id": "check-page-e3b2872d68",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "page": "batches",
+      "excerpt": "From robotics beneath our cities to sensing systems above the Earth, these founders are showing how advances in hardware, software and AI are opening up entirely new categories of problems for startups to tackle."
+    },
+    {
+      "id": "check-page-01276c546e",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "page": "batches",
+      "excerpt": "Anish Das Sarma , founder of Reinforce Labs, completed a PhD at Stanford, built a company that was acquired by Airbnb and later led AI and machine-learning teams as a Director at Google."
+    },
+    {
+      "id": "check-page-0f47996fe1",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "page": "batches",
+      "excerpt": "Nischith Shadagopan M N and Vinod Ganesan , founders of Alma, previously worked together at Microsoft Research and became founding engineers at Sarvam AI."
     },
     {
       "id": "check-page-aee1c7e63d",
@@ -896,10 +1498,154 @@
       "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
     },
     {
+      "id": "check-page-3b15a14f63",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "page": "batches",
+      "excerpt": "Ditto is moving dating beyond endless swiping, while Wingit is building a beauty platform for India’s premium consumers."
+    },
+    {
+      "id": "check-page-b351935180",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "page": "batches",
+      "excerpt": "GameStock is applying the mechanics of competition to financial markets, and Hoola Health is building a child-first paediatric care ecosystem."
+    },
+    {
+      "id": "check-page-e509f2e722",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "page": "batches",
+      "excerpt": "And Tribe Money wants to put personal finances on autopilot, using AI to manage the tracking, research and investing decisions that often fall through the cracks."
+    },
+    {
+      "id": "check-page-e273cf9275",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "page": "batches",
+      "excerpt": "AI is becoming the architecture AI runs through much of Surge 12, but increasingly not as a standalone product or feature."
+    },
+    {
+      "id": "check-page-af0ed33bf7",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "page": "batches",
+      "excerpt": "Alma is rethinking personal computing for an AI-native world."
+    },
+    {
+      "id": "check-page-ffffb27744",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "page": "batches",
+      "excerpt": "Rosella is redesigning commercial insurance brokerage around AI, while Kindling is building a storytelling operating system for ambitious tech startups."
+    },
+    {
+      "id": "check-page-41b781b3a3",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "page": "batches",
+      "excerpt": "Reinforce Labs is building the evaluation, red-teaming and remediation layer for enterprise AI, helping teams make AI systems safer and more reliable in production."
+    },
+    {
+      "id": "check-page-4b5580bb7a",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "page": "batches",
+      "excerpt": "And hiloop is building infrastructure for post-training open-weight models, a research harness that helps application-layer AI companies run, track and improve model experiments at scale."
+    },
+    {
+      "id": "check-page-da5540fc42",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "page": "batches",
+      "excerpt": "Together, these companies reflect a shift we think is becoming increasingly important: AI is moving from being the product itself to becoming part of how the product fundamentally works."
+    },
+    {
+      "id": "check-page-21456f88dc",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "page": "batches",
+      "excerpt": "From robotics beneath our cities to sensing systems above the Earth, these founders are showing how advances in hardware, software and AI are opening up entirely new categories of problems for startups to tackle."
+    },
+    {
+      "id": "check-page-2b2af6f88d",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "page": "batches",
+      "excerpt": "Anish Das Sarma , founder of Reinforce Labs, completed a PhD at Stanford, built a company that was acquired by Airbnb and later led AI and machine-learning teams as a Director at Google."
+    },
+    {
+      "id": "check-page-4341660e45",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "page": "batches",
+      "excerpt": "Nischith Shadagopan M N and Vinod Ganesan , founders of Alma, previously worked together at Microsoft Research and became founding engineers at Sarvam AI."
+    },
+    {
       "id": "check-page-db14c330a5",
       "url": "https://surge.peakxv.com/cohorts/surge-05",
       "page": "batches",
       "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-2a4684215c",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "page": "batches",
+      "excerpt": "Ditto is moving dating beyond endless swiping, while Wingit is building a beauty platform for India’s premium consumers."
+    },
+    {
+      "id": "check-page-2d643e96be",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "page": "batches",
+      "excerpt": "GameStock is applying the mechanics of competition to financial markets, and Hoola Health is building a child-first paediatric care ecosystem."
+    },
+    {
+      "id": "check-page-7e664193e0",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "page": "batches",
+      "excerpt": "And Tribe Money wants to put personal finances on autopilot, using AI to manage the tracking, research and investing decisions that often fall through the cracks."
+    },
+    {
+      "id": "check-page-39c3d90762",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "page": "batches",
+      "excerpt": "AI is becoming the architecture AI runs through much of Surge 12, but increasingly not as a standalone product or feature."
+    },
+    {
+      "id": "check-page-d71fb41012",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "page": "batches",
+      "excerpt": "Alma is rethinking personal computing for an AI-native world."
+    },
+    {
+      "id": "check-page-202f067c0f",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "page": "batches",
+      "excerpt": "Rosella is redesigning commercial insurance brokerage around AI, while Kindling is building a storytelling operating system for ambitious tech startups."
+    },
+    {
+      "id": "check-page-5f6fad1db2",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "page": "batches",
+      "excerpt": "Reinforce Labs is building the evaluation, red-teaming and remediation layer for enterprise AI, helping teams make AI systems safer and more reliable in production."
+    },
+    {
+      "id": "check-page-6c04445372",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "page": "batches",
+      "excerpt": "And hiloop is building infrastructure for post-training open-weight models, a research harness that helps application-layer AI companies run, track and improve model experiments at scale."
+    },
+    {
+      "id": "check-page-db6e3db2e5",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "page": "batches",
+      "excerpt": "Together, these companies reflect a shift we think is becoming increasingly important: AI is moving from being the product itself to becoming part of how the product fundamentally works."
+    },
+    {
+      "id": "check-page-6555041bbf",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "page": "batches",
+      "excerpt": "From robotics beneath our cities to sensing systems above the Earth, these founders are showing how advances in hardware, software and AI are opening up entirely new categories of problems for startups to tackle."
+    },
+    {
+      "id": "check-page-054a38306a",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "page": "batches",
+      "excerpt": "Anish Das Sarma , founder of Reinforce Labs, completed a PhD at Stanford, built a company that was acquired by Airbnb and later led AI and machine-learning teams as a Director at Google."
+    },
+    {
+      "id": "check-page-e6e49c3c99",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "page": "batches",
+      "excerpt": "Nischith Shadagopan M N and Vinod Ganesan , founders of Alma, previously worked together at Microsoft Research and became founding engineers at Sarvam AI."
     },
     {
       "id": "check-page-e92bcaebc1",
@@ -908,10 +1654,154 @@
       "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
     },
     {
+      "id": "check-page-50afd08e41",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "page": "batches",
+      "excerpt": "Ditto is moving dating beyond endless swiping, while Wingit is building a beauty platform for India’s premium consumers."
+    },
+    {
+      "id": "check-page-67234f9b7b",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "page": "batches",
+      "excerpt": "GameStock is applying the mechanics of competition to financial markets, and Hoola Health is building a child-first paediatric care ecosystem."
+    },
+    {
+      "id": "check-page-6cca5ad382",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "page": "batches",
+      "excerpt": "And Tribe Money wants to put personal finances on autopilot, using AI to manage the tracking, research and investing decisions that often fall through the cracks."
+    },
+    {
+      "id": "check-page-16466250c9",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "page": "batches",
+      "excerpt": "AI is becoming the architecture AI runs through much of Surge 12, but increasingly not as a standalone product or feature."
+    },
+    {
+      "id": "check-page-6afc9ba6db",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "page": "batches",
+      "excerpt": "Alma is rethinking personal computing for an AI-native world."
+    },
+    {
+      "id": "check-page-b3cbd85168",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "page": "batches",
+      "excerpt": "Rosella is redesigning commercial insurance brokerage around AI, while Kindling is building a storytelling operating system for ambitious tech startups."
+    },
+    {
+      "id": "check-page-71bedaf1bd",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "page": "batches",
+      "excerpt": "Reinforce Labs is building the evaluation, red-teaming and remediation layer for enterprise AI, helping teams make AI systems safer and more reliable in production."
+    },
+    {
+      "id": "check-page-4fcdbb6e31",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "page": "batches",
+      "excerpt": "And hiloop is building infrastructure for post-training open-weight models, a research harness that helps application-layer AI companies run, track and improve model experiments at scale."
+    },
+    {
+      "id": "check-page-a7c435036c",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "page": "batches",
+      "excerpt": "Together, these companies reflect a shift we think is becoming increasingly important: AI is moving from being the product itself to becoming part of how the product fundamentally works."
+    },
+    {
+      "id": "check-page-490126bf80",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "page": "batches",
+      "excerpt": "From robotics beneath our cities to sensing systems above the Earth, these founders are showing how advances in hardware, software and AI are opening up entirely new categories of problems for startups to tackle."
+    },
+    {
+      "id": "check-page-fb2db97c35",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "page": "batches",
+      "excerpt": "Anish Das Sarma , founder of Reinforce Labs, completed a PhD at Stanford, built a company that was acquired by Airbnb and later led AI and machine-learning teams as a Director at Google."
+    },
+    {
+      "id": "check-page-8d076d4fbd",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "page": "batches",
+      "excerpt": "Nischith Shadagopan M N and Vinod Ganesan , founders of Alma, previously worked together at Microsoft Research and became founding engineers at Sarvam AI."
+    },
+    {
       "id": "check-page-f5a90d1700",
       "url": "https://surge.peakxv.com/cohorts/surge-07",
       "page": "batches",
       "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-c3e65c3c02",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "page": "batches",
+      "excerpt": "Ditto is moving dating beyond endless swiping, while Wingit is building a beauty platform for India’s premium consumers."
+    },
+    {
+      "id": "check-page-6353b08cef",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "page": "batches",
+      "excerpt": "GameStock is applying the mechanics of competition to financial markets, and Hoola Health is building a child-first paediatric care ecosystem."
+    },
+    {
+      "id": "check-page-6d698e52f9",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "page": "batches",
+      "excerpt": "And Tribe Money wants to put personal finances on autopilot, using AI to manage the tracking, research and investing decisions that often fall through the cracks."
+    },
+    {
+      "id": "check-page-7a309d6fd9",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "page": "batches",
+      "excerpt": "AI is becoming the architecture AI runs through much of Surge 12, but increasingly not as a standalone product or feature."
+    },
+    {
+      "id": "check-page-88b51ccd77",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "page": "batches",
+      "excerpt": "Alma is rethinking personal computing for an AI-native world."
+    },
+    {
+      "id": "check-page-5dd7749a2a",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "page": "batches",
+      "excerpt": "Rosella is redesigning commercial insurance brokerage around AI, while Kindling is building a storytelling operating system for ambitious tech startups."
+    },
+    {
+      "id": "check-page-0f48bee119",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "page": "batches",
+      "excerpt": "Reinforce Labs is building the evaluation, red-teaming and remediation layer for enterprise AI, helping teams make AI systems safer and more reliable in production."
+    },
+    {
+      "id": "check-page-18d7345b07",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "page": "batches",
+      "excerpt": "And hiloop is building infrastructure for post-training open-weight models, a research harness that helps application-layer AI companies run, track and improve model experiments at scale."
+    },
+    {
+      "id": "check-page-812fcf0a7a",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "page": "batches",
+      "excerpt": "Together, these companies reflect a shift we think is becoming increasingly important: AI is moving from being the product itself to becoming part of how the product fundamentally works."
+    },
+    {
+      "id": "check-page-2a3ee114cc",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "page": "batches",
+      "excerpt": "From robotics beneath our cities to sensing systems above the Earth, these founders are showing how advances in hardware, software and AI are opening up entirely new categories of problems for startups to tackle."
+    },
+    {
+      "id": "check-page-2b6136d819",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "page": "batches",
+      "excerpt": "Anish Das Sarma , founder of Reinforce Labs, completed a PhD at Stanford, built a company that was acquired by Airbnb and later led AI and machine-learning teams as a Director at Google."
+    },
+    {
+      "id": "check-page-74f78d9bbf",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "page": "batches",
+      "excerpt": "Nischith Shadagopan M N and Vinod Ganesan , founders of Alma, previously worked together at Microsoft Research and became founding engineers at Sarvam AI."
     },
     {
       "id": "check-page-68d4f19b4b",
@@ -920,10 +1810,154 @@
       "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
     },
     {
+      "id": "check-page-87c1425776",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "page": "batches",
+      "excerpt": "Ditto is moving dating beyond endless swiping, while Wingit is building a beauty platform for India’s premium consumers."
+    },
+    {
+      "id": "check-page-b232597f65",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "page": "batches",
+      "excerpt": "GameStock is applying the mechanics of competition to financial markets, and Hoola Health is building a child-first paediatric care ecosystem."
+    },
+    {
+      "id": "check-page-e7a629c91d",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "page": "batches",
+      "excerpt": "And Tribe Money wants to put personal finances on autopilot, using AI to manage the tracking, research and investing decisions that often fall through the cracks."
+    },
+    {
+      "id": "check-page-36fddaeb59",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "page": "batches",
+      "excerpt": "AI is becoming the architecture AI runs through much of Surge 12, but increasingly not as a standalone product or feature."
+    },
+    {
+      "id": "check-page-a523e6ba5b",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "page": "batches",
+      "excerpt": "Alma is rethinking personal computing for an AI-native world."
+    },
+    {
+      "id": "check-page-ca1096e877",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "page": "batches",
+      "excerpt": "Rosella is redesigning commercial insurance brokerage around AI, while Kindling is building a storytelling operating system for ambitious tech startups."
+    },
+    {
+      "id": "check-page-2535ac9bb7",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "page": "batches",
+      "excerpt": "Reinforce Labs is building the evaluation, red-teaming and remediation layer for enterprise AI, helping teams make AI systems safer and more reliable in production."
+    },
+    {
+      "id": "check-page-dd18462ec3",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "page": "batches",
+      "excerpt": "And hiloop is building infrastructure for post-training open-weight models, a research harness that helps application-layer AI companies run, track and improve model experiments at scale."
+    },
+    {
+      "id": "check-page-018b3eb69b",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "page": "batches",
+      "excerpt": "Together, these companies reflect a shift we think is becoming increasingly important: AI is moving from being the product itself to becoming part of how the product fundamentally works."
+    },
+    {
+      "id": "check-page-f49dcfd0b1",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "page": "batches",
+      "excerpt": "From robotics beneath our cities to sensing systems above the Earth, these founders are showing how advances in hardware, software and AI are opening up entirely new categories of problems for startups to tackle."
+    },
+    {
+      "id": "check-page-cb223aef0e",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "page": "batches",
+      "excerpt": "Anish Das Sarma , founder of Reinforce Labs, completed a PhD at Stanford, built a company that was acquired by Airbnb and later led AI and machine-learning teams as a Director at Google."
+    },
+    {
+      "id": "check-page-71fd80bef1",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "page": "batches",
+      "excerpt": "Nischith Shadagopan M N and Vinod Ganesan , founders of Alma, previously worked together at Microsoft Research and became founding engineers at Sarvam AI."
+    },
+    {
       "id": "check-page-b83fa910af",
       "url": "https://surge.peakxv.com/cohorts/surge-09",
       "page": "batches",
       "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-3cc9090e6e",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "page": "batches",
+      "excerpt": "Ditto is moving dating beyond endless swiping, while Wingit is building a beauty platform for India’s premium consumers."
+    },
+    {
+      "id": "check-page-98f029fe46",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "page": "batches",
+      "excerpt": "GameStock is applying the mechanics of competition to financial markets, and Hoola Health is building a child-first paediatric care ecosystem."
+    },
+    {
+      "id": "check-page-78b5d6cc16",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "page": "batches",
+      "excerpt": "And Tribe Money wants to put personal finances on autopilot, using AI to manage the tracking, research and investing decisions that often fall through the cracks."
+    },
+    {
+      "id": "check-page-b8684b48b6",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "page": "batches",
+      "excerpt": "AI is becoming the architecture AI runs through much of Surge 12, but increasingly not as a standalone product or feature."
+    },
+    {
+      "id": "check-page-335d724634",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "page": "batches",
+      "excerpt": "Alma is rethinking personal computing for an AI-native world."
+    },
+    {
+      "id": "check-page-62e2cd2034",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "page": "batches",
+      "excerpt": "Rosella is redesigning commercial insurance brokerage around AI, while Kindling is building a storytelling operating system for ambitious tech startups."
+    },
+    {
+      "id": "check-page-3cd93dd444",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "page": "batches",
+      "excerpt": "Reinforce Labs is building the evaluation, red-teaming and remediation layer for enterprise AI, helping teams make AI systems safer and more reliable in production."
+    },
+    {
+      "id": "check-page-6971741495",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "page": "batches",
+      "excerpt": "And hiloop is building infrastructure for post-training open-weight models, a research harness that helps application-layer AI companies run, track and improve model experiments at scale."
+    },
+    {
+      "id": "check-page-af08e615da",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "page": "batches",
+      "excerpt": "Together, these companies reflect a shift we think is becoming increasingly important: AI is moving from being the product itself to becoming part of how the product fundamentally works."
+    },
+    {
+      "id": "check-page-35c11fb4e2",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "page": "batches",
+      "excerpt": "From robotics beneath our cities to sensing systems above the Earth, these founders are showing how advances in hardware, software and AI are opening up entirely new categories of problems for startups to tackle."
+    },
+    {
+      "id": "check-page-fa38379146",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "page": "batches",
+      "excerpt": "Anish Das Sarma , founder of Reinforce Labs, completed a PhD at Stanford, built a company that was acquired by Airbnb and later led AI and machine-learning teams as a Director at Google."
+    },
+    {
+      "id": "check-page-2336f4b3aa",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "page": "batches",
+      "excerpt": "Nischith Shadagopan M N and Vinod Ganesan , founders of Alma, previously worked together at Microsoft Research and became founding engineers at Sarvam AI."
     },
     {
       "id": "check-page-1068713ba8",
@@ -932,10 +1966,226 @@
       "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
     },
     {
+      "id": "check-page-57b62b915c",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "page": "batches",
+      "excerpt": "Ditto is moving dating beyond endless swiping, while Wingit is building a beauty platform for India’s premium consumers."
+    },
+    {
+      "id": "check-page-ea8eaf7667",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "page": "batches",
+      "excerpt": "GameStock is applying the mechanics of competition to financial markets, and Hoola Health is building a child-first paediatric care ecosystem."
+    },
+    {
+      "id": "check-page-a2012531fc",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "page": "batches",
+      "excerpt": "And Tribe Money wants to put personal finances on autopilot, using AI to manage the tracking, research and investing decisions that often fall through the cracks."
+    },
+    {
+      "id": "check-page-6659fe7ab6",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "page": "batches",
+      "excerpt": "AI is becoming the architecture AI runs through much of Surge 12, but increasingly not as a standalone product or feature."
+    },
+    {
+      "id": "check-page-29a8908acf",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "page": "batches",
+      "excerpt": "Alma is rethinking personal computing for an AI-native world."
+    },
+    {
+      "id": "check-page-5868d976dd",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "page": "batches",
+      "excerpt": "Rosella is redesigning commercial insurance brokerage around AI, while Kindling is building a storytelling operating system for ambitious tech startups."
+    },
+    {
+      "id": "check-page-ee8c0a2a7d",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "page": "batches",
+      "excerpt": "Reinforce Labs is building the evaluation, red-teaming and remediation layer for enterprise AI, helping teams make AI systems safer and more reliable in production."
+    },
+    {
+      "id": "check-page-6de0dad537",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "page": "batches",
+      "excerpt": "And hiloop is building infrastructure for post-training open-weight models, a research harness that helps application-layer AI companies run, track and improve model experiments at scale."
+    },
+    {
+      "id": "check-page-3056c7ba6a",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "page": "batches",
+      "excerpt": "Together, these companies reflect a shift we think is becoming increasingly important: AI is moving from being the product itself to becoming part of how the product fundamentally works."
+    },
+    {
+      "id": "check-page-9501bb2789",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "page": "batches",
+      "excerpt": "From robotics beneath our cities to sensing systems above the Earth, these founders are showing how advances in hardware, software and AI are opening up entirely new categories of problems for startups to tackle."
+    },
+    {
+      "id": "check-page-c6755cca53",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "page": "batches",
+      "excerpt": "Anish Das Sarma , founder of Reinforce Labs, completed a PhD at Stanford, built a company that was acquired by Airbnb and later led AI and machine-learning teams as a Director at Google."
+    },
+    {
+      "id": "check-page-5ebbcc011d",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "page": "batches",
+      "excerpt": "Nischith Shadagopan M N and Vinod Ganesan , founders of Alma, previously worked together at Microsoft Research and became founding engineers at Sarvam AI."
+    },
+    {
       "id": "check-page-8d80226f30",
       "url": "https://surge.peakxv.com/cohorts/surge-11",
       "page": "batches",
       "excerpt": "Surge 11 Startups How we partner People Resources Apply ← Back Surge 11 Reimagining the Future with Peak XV Social media copy AUTHOR Surge Team With Surge, we’ve always aspired to support outlier founders in building the future they see. That journey continues with Surge 11, our newest cohort. On September 25, founders from 23 startups came together in Mumbai to kick off the program This group of ambitious doers and dreamers showcases a remarkable range of sectors: 12 AI startups across consumer, enterprise, and vertical markets; four fintech innovators; four consumer brands; and three infrastructure and developer tools companies. What unites these founders is grit, the courage to tackle tough challenges, and a first-principles mindset. Surge 11 is also special for its eclectic mix, including many second-time founders, a legendary cricketer, and an Olympic swimming medallist. Together, this cohort is reinventing what’s next for consumers, developers, and enterprises across India, APAC, and global markets. Our three-day kickoff included Fireside Chats where leaders like Amrish Rau, Ronnie Screwvala, Adwaita Nayar, and Dheeraj Pandey spoke about what it takes to build an enduring company. Surge founders also heard from legends Sachin Tendulkar and Usain Bolt about the great rewards that come from resilience and discipline. The event brought together founders from past cohorts"
+    },
+    {
+      "id": "check-page-7e09beaef4",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "page": "batches",
+      "excerpt": "Special shout-out to the amazing leaders of our Founder Circles who came to pay it forward by sharing their journeys: Kaushik Mudda (Ethereal Machines): Building a manufacturing powerhouse from India against all odds."
+    },
+    {
+      "id": "check-page-b7e4fbc9c1",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "page": "batches",
+      "excerpt": "Gaurav Baheti (Procol): On landing the first big enterprise win."
+    },
+    {
+      "id": "check-page-49ad658b90",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "page": "batches",
+      "excerpt": "Varun Banka (Atlan): Winning Fortune 500 with product excellence."
+    },
+    {
+      "id": "check-page-c6f18e311d",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "page": "batches",
+      "excerpt": "Vinay Maheshwari (The Health Factory): Scaling 100x on quick commerce."
+    },
+    {
+      "id": "check-page-977eb79938",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "page": "batches",
+      "excerpt": "Shiva Dhawan & Rishabjit Singh (Attentive): Building AI products from the ground up."
+    },
+    {
+      "id": "check-page-abc4b1d5a8",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "page": "batches",
+      "excerpt": "Saurabh Arora (Plum): Reinventing the org with AI across functions."
+    },
+    {
+      "id": "check-page-01a8eb06c0",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "page": "batches",
+      "excerpt": "Apply See our companies For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we partner People Resources Apply Future Founders Fellowship Follow Us X LinkedIn YouTube © 2026 Peak XV."
+    },
+    {
+      "id": "check-page-fbe236b370",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "page": "batches",
+      "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-9099b00cc3",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "page": "batches",
+      "excerpt": "Ditto is moving dating beyond endless swiping, while Wingit is building a beauty platform for India’s premium consumers."
+    },
+    {
+      "id": "check-page-29a20e1227",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "page": "batches",
+      "excerpt": "GameStock is applying the mechanics of competition to financial markets, and Hoola Health is building a child-first paediatric care ecosystem."
+    },
+    {
+      "id": "check-page-3db4404165",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "page": "batches",
+      "excerpt": "And Tribe Money wants to put personal finances on autopilot, using AI to manage the tracking, research and investing decisions that often fall through the cracks."
+    },
+    {
+      "id": "check-page-e283137fd7",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "page": "batches",
+      "excerpt": "AI is becoming the architecture AI runs through much of Surge 12, but increasingly not as a standalone product or feature."
+    },
+    {
+      "id": "check-page-198100b4c9",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "page": "batches",
+      "excerpt": "Alma is rethinking personal computing for an AI-native world."
+    },
+    {
+      "id": "check-page-386ebfcab7",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "page": "batches",
+      "excerpt": "Rosella is redesigning commercial insurance brokerage around AI, while Kindling is building a storytelling operating system for ambitious tech startups."
+    },
+    {
+      "id": "check-page-8cbe9648b1",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "page": "batches",
+      "excerpt": "Reinforce Labs is building the evaluation, red-teaming and remediation layer for enterprise AI, helping teams make AI systems safer and more reliable in production."
+    },
+    {
+      "id": "check-page-d0505030e7",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "page": "batches",
+      "excerpt": "And hiloop is building infrastructure for post-training open-weight models, a research harness that helps application-layer AI companies run, track and improve model experiments at scale."
+    },
+    {
+      "id": "check-page-b70ec9b82d",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "page": "batches",
+      "excerpt": "Together, these companies reflect a shift we think is becoming increasingly important: AI is moving from being the product itself to becoming part of how the product fundamentally works."
+    },
+    {
+      "id": "check-page-dd3fe1a525",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "page": "batches",
+      "excerpt": "From robotics beneath our cities to sensing systems above the Earth, these founders are showing how advances in hardware, software and AI are opening up entirely new categories of problems for startups to tackle."
+    },
+    {
+      "id": "check-page-61a84ac2f1",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "page": "batches",
+      "excerpt": "Anish Das Sarma , founder of Reinforce Labs, completed a PhD at Stanford, built a company that was acquired by Airbnb and later led AI and machine-learning teams as a Director at Google."
+    },
+    {
+      "id": "check-page-304bdf5ace",
+      "url": "https://surge.peakxv.com/cohorts/surge-12",
+      "page": "batches",
+      "excerpt": "Nischith Shadagopan M N and Vinod Ganesan , founders of Alma, previously worked together at Microsoft Research and became founding engineers at Sarvam AI."
+    },
+    {
+      "id": "check-page-c1f522b783",
+      "url": "https://surge.peakxv.com/resource/cursor-co-founder-aman-sanger-on-the-journey-from-0-100m-in-12-months-the-future-of-programming",
+      "page": "details",
+      "excerpt": "Cursor Co-Founder Aman Sanger on the Journey from 0-$100M in 12 Months & the Future of Programming Startups How we partner People Resources Apply ← Back Cursor Co-Founder Aman Sanger on the Journey from 0-$100M in 12 Months & the Future of Programming Cursor co-founder Aman Sanger shares how a lean team, rapid experimentation and a focus on user experience shaped Cursor's growth and vision for AI coding. copy Video summary “A lot of the work for Cursor has been just experimenting with what is possible.” ​ Aman Sanger started coding when he was 14. Fascinated by the potential of AI, Aman co-founded Cursor, scaling it to $100 million in its first year, and making it one of the fastest growing SaaS companies. In this conversation with Peak XV Managing Director Rajan Anandan, Aman shares the origins and DNA of Cursor. He breaks down how a lean team, a relentless shipping culture, and an obsession with user experience gave Cursor its edge. Aman also lays out his bold vision for the future—building the engineer of tomorrow. ​ Are you one of the 0.4%? Apply See our companies For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we partner People Resources Apply Future Founders Fellowship Follow Us X LinkedIn YouTube © 2026 Peak XV. All rights reserved. Legal Cookies Settings"
+    },
+    {
+      "id": "check-page-ada419e5b9",
+      "url": "https://surge.peakxv.com/resource/vercel-s-malte-ubl-on-agent-era-self-driving-infra-and-how-vercel-thinks-about-the-next-decade",
+      "page": "details",
+      "excerpt": "Vercel's Malte Ubl on Agent Era, Self-Driving Infra, and How Vercel Thinks About the Next Decade Startups How we partner People Resources Apply ← Back Vercel's Malte Ubl on Agent Era, Self-Driving Infra, and How Vercel Thinks About the Next Decade Vercel CTO Malte Ubl shares lessons on AI agents, engineering teams and product-market fit from building the platform behind Next.js and v0. copy Video summary Malte Ubl is the CTO of ‪Vercel‬, the infrastructure and developer experience platform behind Next.js and V0. In this session from Peak XV & Surge Immersion 2026, he covers how Vercel organizes engineering across multiple products, why internal product-market fit is the first filter before anything ships, and why agent security architecture is being widely mishandled. If you are building developer tools or agent infrastructure, this conversation has the tactical depth to transform how you think about what you are building. Are you one of the 0.4%? Apply See our companies For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we partner People Resources Apply Future Founders Fellowship Follow Us X LinkedIn YouTube © 2026 Peak XV. All rights reserved. Legal Cookies Settings"
+    },
+    {
+      "id": "check-page-fa0591fb7a",
+      "url": "https://surge.peakxv.com/resource/from-sun-microsystems-to-openai-vinod-khosla-on-bold-bets-building-enduring-companies",
+      "page": "portfolio",
+      "excerpt": "From Sun Microsystems to OpenAI: Vinod Khosla on Bold Bets & Building Enduring Companies Startups How we partner People Resources Apply ← Back From Sun Microsystems to OpenAI: Vinod Khosla on Bold Bets & Building Enduring Companies Sun Microsystems co-founder Vinod Khosla discusses backing OpenAI, taking contrarian bets and building enduring companies with exceptional founding teams. copy Video summary Vinod Khosla, Founder of Khosla Ventures and Co-founder of Sun Microsystems, champions contrarian thinking and urges founders to challenge conventional wisdom in order to build enduring companies. In this chat with Rajan Anandan, Managing Director at Peak XV, Vinod shares his investment philosophy, emphasising the importance of bold ideas and exceptional founding teams. ​ Vinod dives into investments such as Juniper, OpenAI, and Impossible Foods, highlighting his journey on backing emerging categories and founders with a clear vision. The discussion further explores the role of failure in innovation, and his perspectives on the future of AI. Are you one of the 0.4%? Apply See our companies For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we partner People Resources Apply Future Founders Fellowship Follow Us X LinkedIn YouTube © 2026 Peak XV. All rights reserved. Legal"
+    },
+    {
+      "id": "check-page-74dbb42b54",
+      "url": "https://surge.peakxv.com/resource/gokul-rajaram-on-defensibility-scaling-companies-hiring-for-spikiness",
+      "page": "portfolio",
+      "excerpt": "Gokul Rajaram on Defensibility, Scaling Companies & Hiring for “Spikiness\" Startups How we partner People Resources Apply ← Back Gokul Rajaram on Defensibility, Scaling Companies & Hiring for “Spikiness\" Gokul Rajaram shares lessons on scaling startups in the AI era and the six core innovations that help build enduring companies. copy Video summary “Capital is no longer a moat in AI.” ​ Gokul Rajaram—an investor, company builder, and product leader behind multiple unicorns—believes startups need a culture of constant innovation to thrive in the AI era. In this deep-dive conversation, he shares his perspective on scaling businesses and explains the six core innovations that help transform startups into lasting, resilient companies. Watch for practical insights on building and growing companies in a rapidly evolving technology landscape. Are you one of the 0.4%? Apply See our companies For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we partner People Resources Apply Future Founders Fellowship Follow Us X LinkedIn YouTube © 2026 Peak XV. All rights reserved. Legal Cookies Settings"
     }
   ],
   "findings": {
@@ -1004,6 +2254,10 @@
       {
         "value": "24",
         "evidenceId": "check-duration-02dc6a2465"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-234feb03b2"
       }
     ],
     "format": [

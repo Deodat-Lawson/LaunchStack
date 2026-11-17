@@ -1,61 +1,2283 @@
 {
   "programId": "rev-ithaca-startup-works",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://revithaca.com/",
-    "https://www.revithaca.com/about-rev/",
     "https://www.revithaca.com/join-rev/",
-    "https://www.revithaca.com/event/entrepreneurship-essentials-filing-tax/"
+    "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+    "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+    "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+    "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+    "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+    "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+    "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+    "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+    "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+    "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+    "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+    "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+    "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+    "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+    "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+    "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+    "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+    "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/"
   ],
   "evidence": [
     {
+      "id": "check-announced-596bea8584",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Events Apply Introducing the 2021 Manufacturing Hardware Accelerator Cohort 19 Nov Introducing the 2021 Manufacturing Hardware Accelerator Cohort by",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-7f0262b134",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Apply Rev Welcomes the Inaugural Protofacturing Hardware Accelerator Cohort 03 Oct Rev Welcomes the Inaugural Protofacturing Hardware Accelerator",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-8660d833ba",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Apply Rev Welcomes Largest Protofacturing Hardware Accelerator Cohort to Date 23 Sep Rev Welcomes Largest Protofacturing Hardware Accelerator Cohort to",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-a5ca1ebcde",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Events Apply Introducing the 5th Manufacturing Hardware Accelerator Cohort 06 Feb Introducing the 5th Manufacturing Hardware Accelerator Cohort by",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-d0663e8c0b",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Events Apply Introducing the 6th Manufacturing Hardware Accelerator Cohort 29 Jan Introducing the 6th Manufacturing Hardware Accelerator Cohort by",
+      "page": "batches"
+    },
+    {
+      "id": "check-deal-0d90736f32",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "economically viable. All tracks and teams receive a stipend of up to $2,000 to advance their prototype throughout the course of the program. Upon",
+      "page": "batches"
+    },
+    {
+      "id": "check-deal-1b87a2cd9c",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "launch our first official pitch competition for this group. With a $10K stipend and added engineering resources, this cohort benefits from a",
+      "page": "batches"
+    },
+    {
+      "id": "check-deal-b166301251",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "six-month extension of Rev mentorship and engineering support, and a $10,000 stipend to further develop their product. Program leads will provide",
+      "page": "batches"
+    },
+    {
+      "id": "check-deal-b87cf14e04",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "economically viable. All tracks and teams receive a stipend of up to $2,000 to advance their prototype throughout the course of the program. Upon",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-023e9de59a",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "title": "Rev Ithaca Startup Works — application page",
+      "excerpt": "teams get the unique opportunity to spend 11 weeks taking a deep dive into prototyping and customer",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-192a50a05a",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "summer’s Prototyping Hardware Accelerator. Over 10 weeks, Rev’s Prototyping Hardware Accelerator guides",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-30ea0ecbce",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "invites entrepreneurs across all industries on a 60-week journey to bring their working prototypes into",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-366a6cbd92",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "summer’s Prototyping Hardware Accelerator. This 10-week program helps teams move from a “back of the",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-641497ae71",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "pilots and/or initial launch in the next 6 to 12 months!” said Deanna Kocher, Associate Director of",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-ca9ff164af",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "for three in-person weekend workshops over the 14 month period. Additionally, they receive personalized",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-d48e353b94",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "summer’s Prototyping Hardware Accelerator. Over 10 weeks, Rev’s Prototyping Hardware Accelerator guides",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-d61e1ca797",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "content with occasional guest speakers over the 12-month program. Workshop topics range from SBIR,",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-d97052b85d",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Hardware Accelerator. Each track of the 11-week program provides startup teams the opportunity",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-26851c26c3",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "around the country,” shared co-founder Verena Gonzalez. Virtual Fencing: Hannah, Becky, and Jamison are creating a",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-283f938d7a",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "electric, remote operated pruning tool, with optional remote viewing camera. Allowing users to cut vegetation without",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-29b39e2fc3",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "for a low-cost virtual fencing solution aims to make virtual fencing accessible in low- and middle-income countries by",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-35c9e62625",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "engineering and hardware prototyping assistance, with remote lab access and the option for in-person sessions at Rev",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-384c17e6b4",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "that records and digitizes heart and lung data for remote access by professionals. “With Rev, we aim to refine our",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-474905bf82",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "level is consistently high, despite the transition to virtual content, and the founders that have joined in are picking",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-5a75bbabe5",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "prototyping assistance from Rev’s hardware team, with remote lab access and the option for in-person sessions at Rev",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-62ca548238",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "and distribution to sales and pitching. The primarily virtual program will include one week of in-person workshops and",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-63f4e00e96",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "hardware team, with remote lab access and the option for in-person sessions at Rev for regional teams. The Protofacturing",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-6c3755125b",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "who can be based anywhere in the United States, attend two virtual sessions per month and travel to Ithaca for three",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-7f05e99fc7",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "virtual sessions per month and travel to Ithaca for three in-person weekend workshops over the 14 month period. Additionally,",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-8b331ce5ae",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": ": Brady Haugo has developed on a lightweight, electric, remote operated pruning tool, with optional remote viewing",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-9efef1b408",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "physicians to analyze physical therapy metrics for virtual care. Port Align: Hilario Castillo and Sasha Logunov ‘25",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-ab71ebdd8d",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "assistance, with remote lab access and the option for in-person sessions at Rev for regional teams. The Protofacturing",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-b284488009",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "James, Ph.D ’27, is developing a ruggedized, low-cost virtual fencing ear tag to make digital agriculture more",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-b41482927f",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "title": "Rev Ithaca Startup Works — application page",
+      "excerpt": ". Rev is hosting a virtual information session about the program March 20, 4:00 –",
+      "page": "application"
+    },
+    {
+      "id": "check-format-bb4ae23a01",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "for SUNY startups and entrepreneurial teams to compete in person for an investment of up to $50,000 to achieve development",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c17a541585",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Becky, and Jamison are creating a prototype for a low-cost virtual fencing solution aims to make virtual fencing accessible",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-e324c9ad8e",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "The primarily virtual program will include one week of in-person workshops and manufacturing facility site visits. The 2025",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-f4fab82222",
+      "url": "https://www.revithaca.com/join-rev/",
+      "title": "Rev Ithaca Startup Works — application page",
+      "excerpt": "and submit first month’s member dues. Membership Types Virtual Membership $100/month Mentorship from experienced",
+      "page": "application"
+    },
+    {
+      "id": "check-format-fff3ced5a3",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Hannah James, Ph.D. ’27, created a ruggedized, low-cost virtual fencing ear tag to make digital agriculture more",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-145f4a0606",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-729d01853c",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "title": "Rev Ithaca Startup Works — application page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "application"
+    },
+    {
+      "id": "check-location-72a6d8d589",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-7c7550d84e",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-7da28a481d",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-82d48d9aad",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-83593c5dfd",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-83c0abfa8b",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-9830362b47",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-a28e0fb339",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-b7c904e076",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "title": "Rev Ithaca Startup Works — application page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "application"
+    },
+    {
+      "id": "check-location-bfe4c27853",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-c895446307",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-c9a6f7d1d8",
+      "url": "https://www.revithaca.com/join-rev/",
+      "title": "Rev Ithaca Startup Works — application page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "application"
+    },
+    {
+      "id": "check-location-d4db9f72af",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-dff0179e5e",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-f48cdaf616",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-f730e8c673",
+      "url": "https://revithaca.com/",
+      "title": "Rev Ithaca Startup Works — homepage",
+      "excerpt": "Startup Works is a business incubator located in Ithaca, NY. Through mentorship, accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-location-fc2465b46e",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-fcf12128a1",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "is an attorney and strategic advisor based in Ithaca and New York City, with over 20 years",
+      "page": "batches"
+    },
+    {
       "id": "check-name-ca862ee7a7",
       "url": "https://revithaca.com/",
-      "title": "Rev Ithaca Startup Works — homepage checked by scrape.py",
+      "title": "Rev Ithaca Startup Works — homepage",
       "excerpt": "Ryan Nadeau is currently the Operations Assistant at Rev Ithaca Startup Works. He oversees daily Rev operations along with its",
       "page": "details"
     },
     {
+      "id": "check-route-06f3856885",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-09c66a53ec",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-0e6701ea7b",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-0ec06085b7",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1e21234d1f",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "title": "Rev Ithaca Startup Works — application page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-24e8efad5a",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-25481423e8",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-25838c2df1",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-2901ca0558",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-2f0d686b9e",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-32bb814b05",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-32c64b7c3a",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3dbcc9d339",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "title": "Rev Ithaca Startup Works — application page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-43065320b2",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "title": "Rev Ithaca Startup Works — application page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4b6d5078ea",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-599f9c5e84",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-5d25c024fa",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-62c5481c5f",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-62cc954836",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-6f16244805",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-709e11b933",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
       "id": "check-route-74496f676b",
       "url": "https://revithaca.com/",
-      "title": "Rev Ithaca Startup Works — homepage checked by scrape.py",
+      "title": "Rev Ithaca Startup Works — homepage",
       "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
       "page": "details"
     },
     {
-      "id": "check-route-7569d06e80",
-      "url": "https://www.revithaca.com/about-rev/",
-      "title": "Rev Ithaca Startup Works — details page checked by scrape.py",
-      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
-      "page": "details"
+      "id": "check-route-8302f03f07",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "terms"
     },
     {
-      "id": "check-route-a1ddad2f53",
-      "url": "https://www.revithaca.com/event/entrepreneurship-essentials-filing-tax/",
-      "title": "Rev Ithaca Startup Works — batches page checked by scrape.py",
+      "id": "check-route-8a39c8ed48",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "title": "Rev Ithaca Startup Works — application page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8bb8d90aba",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
       "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
       "page": "batches"
     },
     {
-      "id": "check-route-a39498ffb1",
-      "url": "https://www.revithaca.com/event/entrepreneurship-essentials-filing-tax/",
-      "title": "Rev Ithaca Startup Works — batches page checked by scrape.py",
+      "id": "check-route-8ef429faa8",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-9b6a4f34cd",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-a7e5b5b903",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-aa3e195967",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-b2a627fea8",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "title": "Rev Ithaca Startup Works — terms page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-c03e7a1902",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-db88dd2c13",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
       "excerpt": "Apply → https://www.revithaca.com/join-rev/",
       "page": "batches"
     },
     {
-      "id": "check-route-ec1ca24d7b",
-      "url": "https://www.revithaca.com/about-rev/",
-      "title": "Rev Ithaca Startup Works — details page checked by scrape.py",
+      "id": "check-route-e64e0c0c98",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "title": "Rev Ithaca Startup Works — batches page",
       "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
-      "page": "details"
+      "page": "batches"
     },
     {
       "id": "check-route-eeae128acf",
       "url": "https://revithaca.com/",
-      "title": "Rev Ithaca Startup Works — homepage checked by scrape.py",
+      "title": "Rev Ithaca Startup Works — homepage",
       "excerpt": "Apply → https://www.revithaca.com/join-rev/",
       "page": "details"
+    },
+    {
+      "id": "check-route-f020cf9725",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-f051f61660",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-f9ec4130b9",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-ffc2953899",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "title": "Rev Ithaca Startup Works — batches page",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-status-8b1339a5d7",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "title": "Rev Ithaca Startup Works — application page",
+      "excerpt": "by a new MedTech track and increased capacity to support entrepreneurs, Rev: Ithaca Startup Works is now accepting applications for its free Prototyping Hardware Accelerator . The program is open to anyone with a physical product idea",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-830b65e3de",
+      "url": "https://revithaca.com/",
+      "page": "details",
+      "excerpt": "Rev: Ithaca Startup Works – Business incubator space in Ithaca, NY About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Ursa Space Secures $27.9 Million in New Equity Financing READ MORE Growing More Than Açai: Madeira Trading on Tariffs, Trust and the Future READ MORE A Year of Momentum for Rev’s Members and Makers READ MORE Rev: Ithaca Startup Works Helping companies scale and succeed Rev: Ithaca Startup Works is a business incubator located in Ithaca, NY. Through mentorship, accelerator programs, resources, co-working space, events, and networking,"
+    },
+    {
+      "id": "check-page-bd48396766",
+      "url": "https://revithaca.com/",
+      "page": "details",
+      "excerpt": "Through mentorship, accelerator programs, resources, co-working space, events, and networking, companies in any field will gain the tools they need to scale."
+    },
+    {
+      "id": "check-page-4192d8f190",
+      "url": "https://revithaca.com/",
+      "page": "details",
+      "excerpt": "State of the art co-working facility Networking events Accelerator programs Entrepreneur Mentorship Hardware prototyping machinery Connections to funding resources Entrepreneurship Content Sessions Headshot and product photography Social media amplification Become a Rev Member Rev is more than just a house for entrepreneurship."
+    },
+    {
+      "id": "check-page-2583a9967f",
+      "url": "https://revithaca.com/",
+      "page": "details",
+      "excerpt": "The members, mentors, and program participants make it a home. – Ken Rother, Rev Director 10th Anniversary Events@Rev A major part of Rev’s mission is to convene the startup community in our region."
+    },
+    {
+      "id": "check-page-30347d9121",
+      "url": "https://revithaca.com/",
+      "page": "details",
+      "excerpt": "By providing a space that can act as a hub and home for entrepreneurship events, Rev is more than just a business incubator – we are a destination for discussion, collaboration, and education within the entrepreneurial ecosystem."
+    },
+    {
+      "id": "check-page-65b9987f14",
+      "url": "https://revithaca.com/",
+      "page": "details",
+      "excerpt": "He works closely in supporting entrepreneurs in residence across various programs and assists with program coordination of the Southern Tier Startup Alliance (STSA), Hardware Accelerator Program, and Rev:Ithaca Startup Works."
+    },
+    {
+      "id": "check-page-46ec0edd19",
+      "url": "https://revithaca.com/",
+      "page": "details",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-9a5afd60b7",
+      "url": "https://revithaca.com/",
+      "page": "details",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-bcc8c98078",
+      "url": "https://revithaca.com/",
+      "page": "details",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Gregory Ray Greg is a Program Lead and Entrepreneur in Residence at the Center for Regional Economic Advancement and an instructor at the Johnson Graduate School of Management."
+    },
+    {
+      "id": "check-page-015a19cb1c",
+      "url": "https://revithaca.com/",
+      "page": "details",
+      "excerpt": "Previously, Greg served in a number of roles for Creative Destruction Lab (CDL), a program for early-stage technology-based companies."
+    },
+    {
+      "id": "check-page-2d3944a4e8",
+      "url": "https://revithaca.com/",
+      "page": "details",
+      "excerpt": "During his time at CDL, Greg worked on expansion, pedagogy, operations, recruiting, and partnerships while based out of Toronto, New York, and Atlanta."
+    },
+    {
+      "id": "check-page-474604a11e",
+      "url": "https://revithaca.com/",
+      "page": "details",
+      "excerpt": "Before CDL, Greg served as project manager for the launch of a private hospital in Kuwait and worked on strategy for a Dubai-based agriculture start-up."
+    },
+    {
+      "id": "check-page-e8e0bd8add",
+      "url": "https://revithaca.com/",
+      "page": "details",
+      "excerpt": "Greg holds a BA (Biochemistry) from Hamilton College, an MBA (Strategy) from the University of Toronto, and a Ph.D."
+    },
+    {
+      "id": "check-page-21ebc4d40c",
+      "url": "https://www.revithaca.com/join-rev/",
+      "page": "application",
+      "excerpt": "How to Apply – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply How to Apply How to Apply Rev is proud to support startups across a wide range of industries, from space tech to consumer packaged goods. Our incubator model is designed to support “scalable” businesses, meaning companies that will grow to serve customers across a wide geographic region. We’re domain agnostic, as scalable businesses can range from service providers and food companies to high-tech software and hardware startups. Members receive business"
+    },
+    {
+      "id": "check-page-c56ab3adaf",
+      "url": "https://www.revithaca.com/join-rev/",
+      "page": "application",
+      "excerpt": "Members receive business mentorship, a workspace, and startup resources that benefit any new or growing scalable business."
+    },
+    {
+      "id": "check-page-c3c41d4b6b",
+      "url": "https://www.revithaca.com/join-rev/",
+      "page": "application",
+      "excerpt": "There are three primary criteria for applying 1 Your company must be a legal entity, profit or nonprofit (This can include LLCs, C-Corps, certified B-Corps, and more) 2 Members are required to maintain general liability insurance with a limit of $1M You can find a list of business insurance providers on our Startup Resources page ."
+    },
+    {
+      "id": "check-page-6b9e1e5cd7",
+      "url": "https://www.revithaca.com/join-rev/",
+      "page": "application",
+      "excerpt": "Reach out today to set up a free meeting with one of our Entrepreneurs in Residence!"
+    },
+    {
+      "id": "check-page-76a8e8326c",
+      "url": "https://www.revithaca.com/join-rev/",
+      "page": "application",
+      "excerpt": "3 Get general liability insurance with product coverage (if applicable) to protect your business from another person or business’s claims of bodily injury, associated medical costs, and damage to property."
+    },
+    {
+      "id": "check-page-ec5af2b25c",
+      "url": "https://www.revithaca.com/join-rev/",
+      "page": "application",
+      "excerpt": "He works closely in supporting entrepreneurs in residence across various programs and assists with program coordination of the Southern Tier Startup Alliance (STSA), Hardware Accelerator Program, and Rev:Ithaca Startup Works."
+    },
+    {
+      "id": "check-page-1e4ed81e7c",
+      "url": "https://www.revithaca.com/join-rev/",
+      "page": "application",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-b8b14639cf",
+      "url": "https://www.revithaca.com/join-rev/",
+      "page": "application",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-4e67b3e205",
+      "url": "https://www.revithaca.com/join-rev/",
+      "page": "application",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Gregory Ray Greg is a Program Lead and Entrepreneur in Residence at the Center for Regional Economic Advancement and an instructor at the Johnson Graduate School of Management."
+    },
+    {
+      "id": "check-page-bd268b3098",
+      "url": "https://www.revithaca.com/join-rev/",
+      "page": "application",
+      "excerpt": "Previously, Greg served in a number of roles for Creative Destruction Lab (CDL), a program for early-stage technology-based companies."
+    },
+    {
+      "id": "check-page-1fb3ce9f70",
+      "url": "https://www.revithaca.com/join-rev/",
+      "page": "application",
+      "excerpt": "During his time at CDL, Greg worked on expansion, pedagogy, operations, recruiting, and partnerships while based out of Toronto, New York, and Atlanta."
+    },
+    {
+      "id": "check-page-05d26be146",
+      "url": "https://www.revithaca.com/join-rev/",
+      "page": "application",
+      "excerpt": "Before CDL, Greg served as project manager for the launch of a private hospital in Kuwait and worked on strategy for a Dubai-based agriculture start-up."
+    },
+    {
+      "id": "check-page-ff6b10e410",
+      "url": "https://www.revithaca.com/join-rev/",
+      "page": "application",
+      "excerpt": "Greg holds a BA (Biochemistry) from Hamilton College, an MBA (Strategy) from the University of Toronto, and a Ph.D."
+    },
+    {
+      "id": "check-page-c703df62d9",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "page": "application",
+      "excerpt": "Rev Hardware Accelerator 2018 Applications Open – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Rev Hardware Accelerator 2018 Applications Open 15 Nov Rev Hardware Accelerator 2018 Applications Open by Admin in Hardware Accelerators Comments Applications for the Rev Hardware Accelerator 2018 cohort are now open! Innovators and inventors with ideas for solving a real-world problem with a hardware product should apply now. Accepted teams get the unique opportunity to spend 11 weeks taking a deep dive into prototyping and"
+    },
+    {
+      "id": "check-page-2ca0290d1e",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "page": "application",
+      "excerpt": "Accepted teams get the unique opportunity to spend 11 weeks taking a deep dive into prototyping and customer discovery."
+    },
+    {
+      "id": "check-page-3dea8e130e",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "page": "application",
+      "excerpt": "With guidance from experienced entrepreneurship mentors and a team of technical instructors, teams will use Rev’s purpose-build prototyping lab to create a minimum viable prototype."
+    },
+    {
+      "id": "check-page-a73ff68a91",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "page": "application",
+      "excerpt": "The results will be shared at Hardware Demo Day 2018, where teams can network with the regional startup community to share technologically viable, economically feasible prototypes."
+    },
+    {
+      "id": "check-page-2eb874bff9",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "page": "application",
+      "excerpt": "Upon completion of our program, Hardware Alums are positioned to recruit team members, bring on partners, work with contract manufacturers, and pitch to investors."
+    },
+    {
+      "id": "check-page-de6681aacd",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "page": "application",
+      "excerpt": "Apply here for Rev’s Hardware Accelerator 2018."
+    },
+    {
+      "id": "check-page-e4c0dd4bfa",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "page": "application",
+      "excerpt": "For more information on the Hardware Accelerator, application, or finding a team, contact Director Ken Rother at [email protected] Read about the 2017 Hardware Teams here , and check out other Hardware Accelerator blog stories for more."
+    },
+    {
+      "id": "check-page-58355a5234",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "page": "application",
+      "excerpt": "He works closely in supporting entrepreneurs in residence across various programs and assists with program coordination of the Southern Tier Startup Alliance (STSA), Hardware Accelerator Program, and Rev:Ithaca Startup Works."
+    },
+    {
+      "id": "check-page-139074c6a5",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "page": "application",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-dd2ed1952f",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "page": "application",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-2b16a6868f",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "page": "application",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Gregory Ray Greg is a Program Lead and Entrepreneur in Residence at the Center for Regional Economic Advancement and an instructor at the Johnson Graduate School of Management."
+    },
+    {
+      "id": "check-page-f1a5444620",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "page": "application",
+      "excerpt": "Previously, Greg served in a number of roles for Creative Destruction Lab (CDL), a program for early-stage technology-based companies."
+    },
+    {
+      "id": "check-page-d9f8a28ac6",
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "page": "application",
+      "excerpt": "During his time at CDL, Greg worked on expansion, pedagogy, operations, recruiting, and partnerships while based out of Toronto, New York, and Atlanta."
+    },
+    {
+      "id": "check-page-9554287a73",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "page": "application",
+      "excerpt": "Rev: Ithaca Startup Works Launches Applications for Expanded Prototyping Hardware Accelerator – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Rev: Ithaca Startup Works Launches Applications for Expanded Prototyping Hardware Accelerator 16 Feb Rev: Ithaca Startup Works Launches Applications for Expanded Prototyping Hardware Accelerator by wpengine in About Rev , Hardware Accelerators , Prototyping Comments Ithaca, NY (February 16, 2024) – Bolstered by a new MedTech track and increased capacity to support entrepreneurs, Rev:"
+    },
+    {
+      "id": "check-page-702b21fbc0",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "page": "application",
+      "excerpt": "Administered by the Center for Regional Economic Advancement at Cornell University, Rev has been a leading resource for hardware startups since 2014."
+    },
+    {
+      "id": "check-page-da125feca0",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "page": "application",
+      "excerpt": "This year’s upgrades to the accelerator follow an influx of funding."
+    },
+    {
+      "id": "check-page-f991bb72ff",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "page": "application",
+      "excerpt": "The MedTech track will leverage the new funding and partnerships across Cornell to provide tailored support to innovators developing medical devices."
+    },
+    {
+      "id": "check-page-4aa577e77f",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "page": "application",
+      "excerpt": "Program participants will have access to design resources, equipment, and faculty in the university’s Meinig School of Biomedical Engineering and College of Human Ecology ; Weill Cornell Medicine will serve as a source of applicants and industry expertise for the track."
+    },
+    {
+      "id": "check-page-5b18219a65",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "page": "application",
+      "excerpt": "Key benefits of the MedTech track include specialized mentorship from professionals with insight into the intricacies of medical device development, and targeted training on regulations and legislation pertinent to the medical sector."
+    },
+    {
+      "id": "check-page-4e0d549e4c",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "page": "application",
+      "excerpt": "The program also offers two other industry-specific tracks, ClimateTech and AgTech, along with an Open track for entrepreneurs in any field."
+    },
+    {
+      "id": "check-page-9c39ccbc19",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "page": "application",
+      "excerpt": "Participants have access to a purpose-built prototyping shop—also set to expand this year — featuring state-of-the-art equipment including printers, laser cutters, and more."
+    },
+    {
+      "id": "check-page-e830dfbdff",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "page": "application",
+      "excerpt": "The Prototyping accelerator feeds into Rev’s Manufacturing Hardware Accelerator , which helps participants advance from the prototyping stage into production."
+    },
+    {
+      "id": "check-page-d8d9dd3e11",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "page": "application",
+      "excerpt": "Also new this year, a “Protofacturing” accelerator will bridge the gap between the two current programs."
+    },
+    {
+      "id": "check-page-f5e04da31b",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "page": "application",
+      "excerpt": "The hardware accelerators stimulate the local entrepreneurship ecosystem and economy, and they have spawned a vast alumni network."
+    },
+    {
+      "id": "check-page-c733db6d5e",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "page": "application",
+      "excerpt": "Program alumni have raised more than $26 million in venture capital to date, and 40% of participants have gone on to participate in other entrepreneurship programs across upstate New York."
+    },
+    {
+      "id": "check-page-070986bf66",
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "page": "application",
+      "excerpt": "“The hardware accelerators support anyone with a product idea, from lab researchers to workers in the field to everyday consumers who notice opportunities in the market,” said Ken Rother , director of Rev and the Hardware Accelerators."
+    },
+    {
+      "id": "check-page-00ac801c71",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "page": "terms",
+      "excerpt": "Dimensional Energy Receives $50K IAED Investment – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Dimensional Energy Receives $50K IAED Investment 16 Sep Dimensional Energy Receives $50K IAED Investment by Admin in In the News , Rev Member Companies Comments Dimensional Energy , a Rev member company on a mission to transform carbon dioxide into fuel, received funding from Ithaca Area Economic Development this summer. The $50,000 convertible debt investment was made through the Opportunity Fund, part of IAED’s Revolving Loan"
+    },
+    {
+      "id": "check-page-e95206889d",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "page": "terms",
+      "excerpt": "The $50,000 convertible debt investment was made through the Opportunity Fund, part of IAED’s Revolving Loan Fund Program, and part of a $1.5 million bridge funding round led by Yellowdog, a South Korean venture fund that invests in startups that address environmental and social problems."
+    },
+    {
+      "id": "check-page-43bc08829d",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "page": "terms",
+      "excerpt": "Using proprietary technology developed at Cornell University, Dimensional Energy takes carbon dioxide from the atmosphere and converts it into liquid fuel using sunlight."
+    },
+    {
+      "id": "check-page-8598bef468",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "page": "terms",
+      "excerpt": "Dimensional Energy was recently one of two finalists in the $20M CarbonXPrize competition this spring, wherein companies competed to see which could convert the most carbon dioxide into products with the highest value."
+    },
+    {
+      "id": "check-page-d4642c0bf2",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "page": "terms",
+      "excerpt": "With the investment from IAED and others, Dimensional Energy projects the creation of 57 new jobs over the next four years."
+    },
+    {
+      "id": "check-page-cbdc667e5c",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "page": "terms",
+      "excerpt": "“We are grateful that a local economic-development organization like IAED can financially support early-stage technology companies like Dimensional Energy,” Jason Salfi, CEO of Dimensional Energy, said in a statement."
+    },
+    {
+      "id": "check-page-37cf8d6c81",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "page": "terms",
+      "excerpt": "“Their willingness to invest in high-growth ventures encourages innovation in our community and helps folks like us to grow and thrive at a critical stage of our maturation.” Read more about IAED’s investment and Dimensional Energy’s economic impact on the region here ."
+    },
+    {
+      "id": "check-page-a7fdd7bf08",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "page": "terms",
+      "excerpt": "He works closely in supporting entrepreneurs in residence across various programs and assists with program coordination of the Southern Tier Startup Alliance (STSA), Hardware Accelerator Program, and Rev:Ithaca Startup Works."
+    },
+    {
+      "id": "check-page-e4355a28c7",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "page": "terms",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-7004ef7eac",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "page": "terms",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-a832096072",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "page": "terms",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Gregory Ray Greg is a Program Lead and Entrepreneur in Residence at the Center for Regional Economic Advancement and an instructor at the Johnson Graduate School of Management."
+    },
+    {
+      "id": "check-page-9aff4d534a",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "page": "terms",
+      "excerpt": "Previously, Greg served in a number of roles for Creative Destruction Lab (CDL), a program for early-stage technology-based companies."
+    },
+    {
+      "id": "check-page-ab734b744e",
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "page": "terms",
+      "excerpt": "During his time at CDL, Greg worked on expansion, pedagogy, operations, recruiting, and partnerships while based out of Toronto, New York, and Atlanta."
+    },
+    {
+      "id": "check-page-3d21cafc8d",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "page": "terms",
+      "excerpt": "Dimensional Energy Secures Deal with Boom Supersonic – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Dimensional Energy Secures Deal with Boom Supersonic 06 Jun Dimensional Energy Secures Deal with Boom Supersonic by wpengine in Alumni Stardom , In the News Comments Dimensional Energy , a Rev Alumni Stardom member company, recently secured an offtake agreement with Boom Supersonic , the company building the world’s fastest airliner. Dimensional Energy is a production leader in sustainable aviation fuel (SAF) and will be"
+    },
+    {
+      "id": "check-page-67d74b8d72",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "page": "terms",
+      "excerpt": "Dimensional Energy is a production leader in sustainable aviation fuel (SAF) and will be the source of up to 5 million gallons of SAF per year for Boom’s Overture flight test program."
+    },
+    {
+      "id": "check-page-8a4e101e92",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "page": "terms",
+      "excerpt": "Jason Salfi, CEO and co-founder of Dimensional Energy, believes that Overture “has the potential to completely transform how we experience the world” and that Boom and Dimensional Energy share a vision for the future of sustainable aviation."
+    },
+    {
+      "id": "check-page-0bfbfe0ab0",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "page": "terms",
+      "excerpt": "Dimensional Energy reimagines carbon dioxide as an untapped resource ready to replace fossil carbon."
+    },
+    {
+      "id": "check-page-8b07f82598",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "page": "terms",
+      "excerpt": "The company’s technology center in Tucson, Arizona sees to the production of net zero carbon SAF and expects to rapidly bring power to liquid SAF to market through partnerships with companies like Boom Supersonic."
+    },
+    {
+      "id": "check-page-d6aba5cf45",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "page": "terms",
+      "excerpt": "In 2016, the founders of Dimensional Energy were connected by NEXUS-NY, a green technology business accelerator, and joined Rev: Ithaca Startup Works later that year."
+    },
+    {
+      "id": "check-page-1c759e483d",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "page": "terms",
+      "excerpt": "In 2021, Dimensional Energy was a finalist in the Carbon XPRIZE competition and accepted into Cohort X of prestigious CleanTech incubator Elemental Excelerator ."
+    },
+    {
+      "id": "check-page-a3ff8ec03c",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "page": "terms",
+      "excerpt": "A year later, the company secured a partnership with United Airlines , who promised to buy at least 300 million gallons of SAF from Dimensional Energy in the next 20 years."
+    },
+    {
+      "id": "check-page-619c23ca0f",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "page": "terms",
+      "excerpt": "In tandem with the Boom Supersonic agreement, Dimensional Energy also secured a tri-party agreement with Lafarge Canada Inc. and Svante Technologies Inc ."
+    },
+    {
+      "id": "check-page-905b4b87c6",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "page": "terms",
+      "excerpt": "The partnership aims to decarbonize large industries in British Columbia, Canada through the utilization of Carbon Dioxide that is captured at the Richmond Cement Plant."
+    },
+    {
+      "id": "check-page-b42905dc35",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "page": "terms",
+      "excerpt": "Learn more about the Dimensional Energy and Boom Supersonic agreement ."
+    },
+    {
+      "id": "check-page-309d15a922",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "page": "terms",
+      "excerpt": "He works closely in supporting entrepreneurs in residence across various programs and assists with program coordination of the Southern Tier Startup Alliance (STSA), Hardware Accelerator Program, and Rev:Ithaca Startup Works."
+    },
+    {
+      "id": "check-page-0dd1b4e98a",
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "page": "terms",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-27e6ee3df4",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "page": "terms",
+      "excerpt": "Dimensional Energy Wins $50K Investment at TAF MVP CleanTech Competition – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Dimensional Energy Wins $50K Investment at TAF MVP CleanTech Competition 07 Jan Dimensional Energy Wins $50K Investment at TAF MVP CleanTech Competition by wpengine in Rev Member Companies , Southern Tier Startup Alliance Comments Dimensional Energy won a $50,000 investment at the Technology Accelerator Fund (TAF) Most Valuable Pitch (MVP) CleanTech Competition held at the University at Albany on"
+    },
+    {
+      "id": "check-page-9814eac5d6",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "page": "terms",
+      "excerpt": "The startup, which is a member of both Rev: Ithaca Startup Works and the Koffman Southern Tier Incubator at Binghamton University, will use the funding to advance its “artificial photosynthesis” technology that combines sunlight and CO2 to make fuel."
+    },
+    {
+      "id": "check-page-4e24187568",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "page": "terms",
+      "excerpt": "Read more about the most recent TAF MVP CleanTech Competition."
+    },
+    {
+      "id": "check-page-db31acdda4",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "page": "terms",
+      "excerpt": "He works closely in supporting entrepreneurs in residence across various programs and assists with program coordination of the Southern Tier Startup Alliance (STSA), Hardware Accelerator Program, and Rev:Ithaca Startup Works."
+    },
+    {
+      "id": "check-page-3bcacef9ee",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "page": "terms",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-3f2d84a013",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "page": "terms",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-9afb558adb",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "page": "terms",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Gregory Ray Greg is a Program Lead and Entrepreneur in Residence at the Center for Regional Economic Advancement and an instructor at the Johnson Graduate School of Management."
+    },
+    {
+      "id": "check-page-f0b583d6ec",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "page": "terms",
+      "excerpt": "Previously, Greg served in a number of roles for Creative Destruction Lab (CDL), a program for early-stage technology-based companies."
+    },
+    {
+      "id": "check-page-dc0757d162",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "page": "terms",
+      "excerpt": "During his time at CDL, Greg worked on expansion, pedagogy, operations, recruiting, and partnerships while based out of Toronto, New York, and Atlanta."
+    },
+    {
+      "id": "check-page-798cba53c6",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "page": "terms",
+      "excerpt": "Before CDL, Greg served as project manager for the launch of a private hospital in Kuwait and worked on strategy for a Dubai-based agriculture start-up."
+    },
+    {
+      "id": "check-page-5a5890d3ff",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "page": "terms",
+      "excerpt": "Greg holds a BA (Biochemistry) from Hamilton College, an MBA (Strategy) from the University of Toronto, and a Ph.D."
+    },
+    {
+      "id": "check-page-95bfec3ae3",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "page": "terms",
+      "excerpt": "He holds a Bachelor of Science in Integrated Marketing and Communications from Ithaca College. × Bennett Thomas Bennett Thomas is Co-Founder and General Parter of Triple Impact Capital, an early-stage venture capital fund investing in startups creating products and services driving financial, environmental and social impact."
+    },
+    {
+      "id": "check-page-6f70918c65",
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "page": "terms",
+      "excerpt": "Previously, he served as a Senior Vice President of Finance & Sustainability with Hersha Hotels & Resorts, a publicly traded (NYSE: HT) investment firm with a portfolio of upscale, luxury and lifestyle hotels in urban U.S. markets."
+    },
+    {
+      "id": "check-page-4770fa9e35",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "page": "terms",
+      "excerpt": "Inbound Investment Drives Southern Tier’s Startup Success in 2017 – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Inbound Investment Drives Southern Tier’s Startup Success in 2017 01 Dec Inbound Investment Drives Southern Tier’s Startup Success in 2017 by Admin in Southern Tier Startup Alliance Comments Below, we are happy to feature a guest blog from our good friends at the Southern Tier Startup Alliance . Hard though it is to believe, 2017 is swiftly drawing to a close. With December now here, we at the Southern Tier"
+    },
+    {
+      "id": "check-page-af4f416201",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "page": "terms",
+      "excerpt": "At STSA, our work centers on the support we provide to people starting and growing companies in the Southern Tier region of New York State through workshops, mentoring, and programming."
+    },
+    {
+      "id": "check-page-0c12b25cf4",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "page": "terms",
+      "excerpt": "Benefiting from the presence of several quality institutions of higher education, the Southern Tier continues to emerge as an area ripe for economic growth and capital investment ."
+    },
+    {
+      "id": "check-page-dfdb2576d3",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "page": "terms",
+      "excerpt": "The firm has raised $3.6 million since the start of 2017, and was accepted into the competitive Chobani Food Incubator ."
+    },
+    {
+      "id": "check-page-a8b51a348b",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "page": "terms",
+      "excerpt": "STSA’s mentors worked closely with Jan Pajerski, the company’s president and co-founder, to provide general mentorship and specific advice on the process of company valuation."
+    },
+    {
+      "id": "check-page-d37fb0a659",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "page": "terms",
+      "excerpt": "The firm has had a banner year, winning $25,000 in Pillsbury Institute’s Cornell Hospitality Business Plan Competition in March, and $50,000 in the Cornell Venture Challenge in April."
+    },
+    {
+      "id": "check-page-cf0021297b",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "page": "terms",
+      "excerpt": "The company also placed first in the advanced technology track of the New York State Business Plan Competition that same month, and re-branded to its current company name in September."
+    },
+    {
+      "id": "check-page-b89a69a82a",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "page": "terms",
+      "excerpt": "Farther Farms also received a $25,000 investment from Launch New York in October, clearing an in-depth due diligence process that should pave the way for additional investors to take a look at the company in the coming months."
+    },
+    {
+      "id": "check-page-b2a8eab86e",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "page": "terms",
+      "excerpt": "STSA entrepreneurship mentors worked with Farther Farms to manage all aspects of the Launch NY application process, develop a broader fundraising strategy, and begin work on a key licensing deal."
+    },
+    {
+      "id": "check-page-04b2ccc843",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "page": "terms",
+      "excerpt": "Finally, STSA’s mentors helped the founders of Kingsley Quality Woodworking, Inc. a WBE certified company specializing in architectural millwork, custom wood components and lumber sales, to design a complex deal to acquire Edie & Trapper Millwork in neighboring Tioga County."
+    },
+    {
+      "id": "check-page-04020c4493",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "page": "terms",
+      "excerpt": "Kingsley acquired the firm’s customer base, and specialized equipment to increase manufacturing capacity and continue expanding the products and services available for Southern Tier contractors & builders."
+    },
+    {
+      "id": "check-page-e195ef0693",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "page": "terms",
+      "excerpt": "This purchase prevents the dissolution of 30 years of business and manufacturing expertise as Kingsley adds it to the high skill custom work they are known for."
+    },
+    {
+      "id": "check-page-fcc3828103",
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "page": "terms",
+      "excerpt": "“Thanks to the STSA mentors, I had peace of mind in unknown territories entering into new relationships with lawyers, bankers and a myriad of fund managers,” said Chelsey Kingsley, founder and CEO."
+    },
+    {
+      "id": "check-page-351b2652fc",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "page": "terms",
+      "excerpt": "Rev Member Farther Farms Receives Investment from Launch NY – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Rev Member Farther Farms Receives Investment from Launch NY 17 Oct Rev Member Farther Farms Receives Investment from Launch NY by Admin in Uncategorized Comments Farther Farms , a sustainable food processing company founded by Mike Annunziata (ILR ‘11, MBA ‘17) and Vipul Saran (Master of Food Science ‘17), has received a $25,000 investment from Launch New York (Launch NY), a venture development organization promoting"
+    },
+    {
+      "id": "check-page-75e3468f9f",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "page": "terms",
+      "excerpt": "Launch NY, a non-profit founded in 2012, provides seed capital to investment-ready companies which have the promise to create economic impact and jobs in New York State."
+    },
+    {
+      "id": "check-page-8d38e0236b",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "page": "terms",
+      "excerpt": "Launch NY’s announcement cited Farther Farms’ potential to “transform food processing with an innovative technology developed in Cornell’s Food Science department.” Farther Farms, a ‘16-‘17 alum of Cornell’s eLab student startup accelerator and now a member of local business incubator Rev: Ithaca Startup Works, uses a patented food processing technology to extend produce shelf life."
+    },
+    {
+      "id": "check-page-131bb8b5a5",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "page": "terms",
+      "excerpt": "On the strength of that original potato product, Annunziata and Saran won the Pillsbury Institute’s Cornell Hospitality Business Plan Competition in March, and placed first in the advanced technology track of the New York State Business Plan Competition."
+    },
+    {
+      "id": "check-page-99ef0ce324",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "page": "terms",
+      "excerpt": "Rev’s entrepreneurship mentors worked with the Farther Farms team in recent months to help develop a fundraising strategy and review Launch NY submission paperwork, said Brad Treat, Entrepreneur in Residence at Rev and the Southern Tier Startup Alliance ."
+    },
+    {
+      "id": "check-page-df751be8b2",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "page": "terms",
+      "excerpt": "“The rigor of the process has helped these companies not only to prepare for an investment from the Launch NY Seed Fund, but it also signals to other investors that these companies are investment-ready,” he said."
+    },
+    {
+      "id": "check-page-97866dace8",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "page": "terms",
+      "excerpt": "“Working with our mentors and supporters at Rev has given us the professional guidance needed to push forward in this challenging endeavor,” added Annunziata."
+    },
+    {
+      "id": "check-page-fa82f63441",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "page": "terms",
+      "excerpt": "By increasing access to fruits and vegetables, Farther Farms hopes to address the challenges of food waste and malnutrition, while reducing costs throughout the food system in processing, distribution, and retail."
+    },
+    {
+      "id": "check-page-ee5c8e0df9",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "page": "terms",
+      "excerpt": "He works closely in supporting entrepreneurs in residence across various programs and assists with program coordination of the Southern Tier Startup Alliance (STSA), Hardware Accelerator Program, and Rev:Ithaca Startup Works."
+    },
+    {
+      "id": "check-page-f86eb46336",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "page": "terms",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-233286f3b3",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "page": "terms",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-f48f914815",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "page": "terms",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Gregory Ray Greg is a Program Lead and Entrepreneur in Residence at the Center for Regional Economic Advancement and an instructor at the Johnson Graduate School of Management."
+    },
+    {
+      "id": "check-page-8d9e15d39e",
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "page": "terms",
+      "excerpt": "Previously, Greg served in a number of roles for Creative Destruction Lab (CDL), a program for early-stage technology-based companies."
+    },
+    {
+      "id": "check-page-42a650a418",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "Region’s Key Resources Offer Dividends for Entrepreneurs – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Region’s Key Resources Offer Dividends for Entrepreneurs 23 Oct Region’s Key Resources Offer Dividends for Entrepreneurs by Admin in Uncategorized Comments In the first post of this series, we discussed several factors that have made it easier for startups to access investors and customers far from their geographic location: improving communications technology, the proliferation of trade shows, and an increasingly"
+    },
+    {
+      "id": "check-page-871f5d1910",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "Despite increasing connectivity, geographic location remains critical for entrepreneurs when it comes to key business resources, says Brad Treat, Entrepreneur in Residence at Rev: Ithaca Startup Works and mentor with the Southern Tier Startup Alliance ."
+    },
+    {
+      "id": "check-page-23780aeb8b",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "The key resources that led to Silicon Valley’s startup boom were proximity to software engineers graduating from top technology programs and a slew of companies manufacturing computer chips."
+    },
+    {
+      "id": "check-page-6d356611db",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "So, what are the key resources that Ithaca and the Southern Tier of New York state have to offer?"
+    },
+    {
+      "id": "check-page-1a197dfa18",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "Indeed, the Southern Tier has the highest number of STEM Graduate students per capita in New York State, and the region’s universities have the highest R&D expenditures per capita in New York—$1.6 billion in 2015, compared to New York City’s $340 million."
+    },
+    {
+      "id": "check-page-feacc1d039",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "For example, Hillside Hydro (pictured above, with mentor Brian Bauer, at the Cornell University DeFrees Hydraulics Lab )—a participant in Rev’s 2016 summer Hardware Accelerator program that makes portable, steam-driven generators—benefited from access to Rev’s 3D printers."
+    },
+    {
+      "id": "check-page-ccf0e7ae1c",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "Second, being located near universities allows entrepreneurs to establish relationships with researchers and professors for mentorship and advice, or to offer them positions on their boards."
+    },
+    {
+      "id": "check-page-39a264a1bd",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "In addition to its use of Rev’s 3D printers, Hillside Hydro also profited from the mentorship found at Rev and in the broader Ithaca community."
+    },
+    {
+      "id": "check-page-09904bbbdc",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "In connecting with people like Bauer, the Program Director for clean energy programs with Cornell’s Center for Regional Economic Advancement , White and Hartshorne have gained access to valuable facilities, such as the DeFrees lab."
+    },
+    {
+      "id": "check-page-08b945c5b8",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "In fact, Ithaca, NY was highlighted in a recent article in Bloomberg Businessweek for being one of the towns in the United States most likely to emerge as a technology hub in the coming years."
+    },
+    {
+      "id": "check-page-6037d2aa33",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "I couldn’t control whether there’s traffic and crime, or proximity to universities, which Ithaca is great for.” Meanwhile, the winter weather, sometimes ascribed as one of Upstate New York’s negative qualities, can be tamed, notes Treat."
+    },
+    {
+      "id": "check-page-4e069410ef",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "“When I had the luxury of choosing where I wanted to live, this is where I came.” Finally, in Ithaca, there’s the advantage of being connected to a thriving startup community of innovative thinkers, supported by strong programs and facilities to propel the city’s growing entrepreneurial success."
+    },
+    {
+      "id": "check-page-b01852e7ce",
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "Reach out to us at [email protected] to connect to an entrepreneur in residence, or attend one of our open networking events."
+    },
+    {
+      "id": "check-page-2c194761d1",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "page": "batches",
+      "excerpt": "2025 Prototyping Cohort Launches with Momentum – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply 2025 Prototyping Cohort Launches with Momentum 10 Jun 2025 Prototyping Cohort Launches with Momentum by Katharine Downey in Hardware Accelerators , Prototyping Comments Rev: Ithaca Startup Works is excited to welcome the newest entrepreneurs joining this summer’s Prototyping Hardware Accelerator. Over 10 weeks, Rev’s Prototyping Hardware Accelerator guides product teams from a “back of the napkin idea” to a fully-fledged startup."
+    },
+    {
+      "id": "check-page-d7a82f3497",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "page": "batches",
+      "excerpt": "Teams participate in either the Classic, ClimateTech, AgTech, or MedTech tracks, where they gain access to experts in their industry’s field."
+    },
+    {
+      "id": "check-page-10c74df816",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "page": "batches",
+      "excerpt": "And – perhaps more than in other years – everyone is already up to their elbows bringing the first iteration of their prototypes to life,” said Deanna Kocher, Assistant Director of Hardware Programs."
+    },
+    {
+      "id": "check-page-98196573b7",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "page": "batches",
+      "excerpt": "23 teams will explore the fundamentals of early-stage startup development, from customer discovery to formal pitch training."
+    },
+    {
+      "id": "check-page-15456942ce",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "page": "batches",
+      "excerpt": "Each startup in the Prototyping Hardware Accelerator has been paired with an experienced entrepreneur and gain access to a team of hardware engineers to assist with developing physical products."
+    },
+    {
+      "id": "check-page-23948bf6b5",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "page": "batches",
+      "excerpt": "Every day, including weekends, Rev is buzzing with activity as participants have begun the prototyping process."
+    },
+    {
+      "id": "check-page-b5f7749580",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "page": "batches",
+      "excerpt": "Classic Track Hardware Accelerator Open to all innovators in any field since 2014, Rev’s classic track provides foundational training across industries."
+    },
+    {
+      "id": "check-page-8174561856",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "page": "batches",
+      "excerpt": "Meet the startup teams from the Classic Track: Cerebrush : Megan Guturi, MBA ’26 is developing a smart toothbrush that transforms brushing into an engaging micro-experience that promotes daily consistency, mood-boosting rituals, and better oral health habits."
+    },
+    {
+      "id": "check-page-4854b33d03",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "page": "batches",
+      "excerpt": "The atmosphere and inspiring participants created an energy that was both dynamic and unforgettable,” said founder Angela Martinez."
+    },
+    {
+      "id": "check-page-924d17b1fc",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "page": "batches",
+      "excerpt": "Pourtrait : Lauren Greene ‘ 25 and Marina Rosolem are using AI to analyze a quick photo of you and generate a custom cocktail recipe, printed on a thermal slip as a fun keepsake to remember the night."
+    },
+    {
+      "id": "check-page-e654ed2a18",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "page": "batches",
+      "excerpt": "The Deticktives : Sahana Vrinda Kakarla, Ehlaam Imran, Nilabha Mukherjea, Amy Salim, and Vivian Hu are developing a hardware-based tick detection tool for animals that helps owners and vets spot ticks early, before they cause infections or diseases."
+    },
+    {
+      "id": "check-page-ae936f5492",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "page": "batches",
+      "excerpt": "ClimateTech Prototyping Hardware Accelerator After three successful years of ClimateTech Tracks, Rev is looking forward to supporting another batch of clean energy startups."
+    },
+    {
+      "id": "check-page-b97f492978",
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "page": "batches",
+      "excerpt": "The ClimateTech Prototyping accelerator trains innovators working to support the decarbonization of the economy."
+    },
+    {
+      "id": "check-page-0536dc10f3",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "page": "batches",
+      "excerpt": "COVID-19 Updates for Rev Members and Friends – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply COVID-19 Updates for Rev Members and Friends 20 May COVID-19 Updates for Rev Members and Friends by Bridget Hagen in Uncategorized Comments Current Operating Status (Updated March 14, 2022) As you may know, Rev: Ithaca Startup Works follows the COVID-19 public health guidance established by Cornell University. Effective March 14, 2022, Cornell University is initiating a phased approach to relaxing its mask requirements (read"
+    },
+    {
+      "id": "check-page-262ffc6987",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "page": "batches",
+      "excerpt": "He works closely in supporting entrepreneurs in residence across various programs and assists with program coordination of the Southern Tier Startup Alliance (STSA), Hardware Accelerator Program, and Rev:Ithaca Startup Works."
+    },
+    {
+      "id": "check-page-b75dc42cc5",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "page": "batches",
+      "excerpt": "As SVP of Strategic Accounts at Dataminr, Amy is part of the leadership team that is accelerating growth at one of the leading companies in A.I. and Machine Learning Technology."
+    },
+    {
+      "id": "check-page-0ed54d90b4",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "page": "batches",
+      "excerpt": "Amy was previously the Global Head of Sales and Business Development for Bloomberg Vault, a SaaS compliance data solution that she co-launched and grew to a profitable business."
+    },
+    {
+      "id": "check-page-5d1e29c1b4",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "page": "batches",
+      "excerpt": "She holds a professional coaching certification from IPEC. × Gregory Ray Greg is a Program Lead and Entrepreneur in Residence at the Center for Regional Economic Advancement and an instructor at the Johnson Graduate School of Management."
+    },
+    {
+      "id": "check-page-c662a11f88",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "page": "batches",
+      "excerpt": "Previously, Greg served in a number of roles for Creative Destruction Lab (CDL), a program for early-stage technology-based companies."
+    },
+    {
+      "id": "check-page-8477dc5e7b",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "page": "batches",
+      "excerpt": "During his time at CDL, Greg worked on expansion, pedagogy, operations, recruiting, and partnerships while based out of Toronto, New York, and Atlanta."
+    },
+    {
+      "id": "check-page-ccd94f9feb",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "page": "batches",
+      "excerpt": "Before CDL, Greg served as project manager for the launch of a private hospital in Kuwait and worked on strategy for a Dubai-based agriculture start-up."
+    },
+    {
+      "id": "check-page-58965de03c",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "page": "batches",
+      "excerpt": "Greg holds a BA (Biochemistry) from Hamilton College, an MBA (Strategy) from the University of Toronto, and a Ph.D."
+    },
+    {
+      "id": "check-page-5249942315",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "page": "batches",
+      "excerpt": "He holds a Bachelor of Science in Integrated Marketing and Communications from Ithaca College. × Bennett Thomas Bennett Thomas is Co-Founder and General Parter of Triple Impact Capital, an early-stage venture capital fund investing in startups creating products and services driving financial, environmental and social impact."
+    },
+    {
+      "id": "check-page-6bd057f6c8",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "page": "batches",
+      "excerpt": "Previously, he served as a Senior Vice President of Finance & Sustainability with Hersha Hotels & Resorts, a publicly traded (NYSE: HT) investment firm with a portfolio of upscale, luxury and lifestyle hotels in urban U.S. markets."
+    },
+    {
+      "id": "check-page-4fcda7e3fd",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "page": "batches",
+      "excerpt": "Prior to Hersha, Thomas served as Senior Manager in mergers & acquisitions with Medco, a Fortune 50 healthcare company, as a Senior Technology consultant with Ernest & Young, and as a Fund Manger with BR Ventures, Cornell’s student-run venture fund."
+    },
+    {
+      "id": "check-page-fb38e1eba7",
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "page": "batches",
+      "excerpt": "Frontera is an Entrepreneur in Residence for the Southern Tier Startup Alliance, a member organization of business incubators, whose purpose is to provide support to entrepreneurs starting and growing businesses in the Southern Tier of NY."
+    },
+    {
+      "id": "check-page-d0353be444",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Introducing the 2021 Manufacturing Hardware Accelerator Cohort – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Introducing the 2021 Manufacturing Hardware Accelerator Cohort 19 Nov Introducing the 2021 Manufacturing Hardware Accelerator Cohort by Admin in About Rev , Hardware Accelerators , Manufacturing Comments From smart food storage lids to low-cost air quality sensors, the startups taking part in Rev: Ithaca Startup Works’ Manufacturing Hardware Accelerator are creating innovative solutions to problems facing"
+    },
+    {
+      "id": "check-page-e4a2022f0a",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Funded by the Economic Development Administration , the accelerator invites entrepreneurs across all industries on a 60-week journey to bring their working prototypes into production."
+    },
+    {
+      "id": "check-page-67f12e0d50",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "The program was founded to aid founders in developing the skills needed to move into the manufacturing stage — a critical moment for startups, and one that can often present challenges."
+    },
+    {
+      "id": "check-page-5bc9cd3ca4",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Participants, who can be based anywhere in the United States, attend two virtual sessions per month and travel to Ithaca for three in-person weekend workshops over the 14 month period."
+    },
+    {
+      "id": "check-page-a04e5dbb03",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Additionally, they receive personalized mentorship from Entrepreneurs-in-Residence , introductions to investors and local manufacturers, and full access to Rev’s networking events and opportunities."
+    },
+    {
+      "id": "check-page-5b1b4221a7",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "“What we learned during this year’s recruitment process was the need for exactly this type of program,” said Ken Rother , Director of Rev and its hardware programs."
+    },
+    {
+      "id": "check-page-cb891c5087",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "“Rev’s Manufacturing Hardware Accelerator is providing the Bird Listener team with a roadmap for navigating the process of finding and working with a Contract Manufacturer, which we need to do in order to get our product produced,” said Ehrenkrantz."
+    },
+    {
+      "id": "check-page-0d9a63df6b",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Perseverance and hard work will get us there!” FocusFlag: Created by Adam Yormark, FocusFlag is an adhesive mechanical focus tool that allows individuals to indicate their availability to others in a co-working space."
+    },
+    {
+      "id": "check-page-90bd0d0474",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "The caliber of the mentors we have the opportunity to work with is extraordinary,” said Yormark."
+    },
+    {
+      "id": "check-page-8a113ce245",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Iontik: Founded by Nick Aflitto and Margaret Nicoll, Iontik ’s SemioSmart is a refillable semiochemical dispensing platform that disperses high concentrations of customized pheromone blends to sustainably and conveniently manage agriculture pests without the use of harmful pesticides."
+    },
+    {
+      "id": "check-page-ecb20ee642",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "“Through the accelerator, we hope to identify manufacturing partners and learn more about the pros and cons of in-house manufacturing, contract manufacturing, and licensing.” Mechanismic Inc.: Founded by Anurag Purwar and Ameya Kale, Mechanismic Inc. is creating SnappyXO Design, a turn-key, authentic, and affordable STEM/Robotics education product that scales K-12 and beyond."
+    },
+    {
+      "id": "check-page-f323c2076f",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "One of the challenges facing this demographic is the desire to independently maintain personal hygiene despite increasingly limited mobility."
+    },
+    {
+      "id": "check-page-04fbe6976f",
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "This is the startup’s second venture working with Rev to further their development, after completing the CleanTech Prototyping Accelerator this past summer."
+    },
+    {
+      "id": "check-page-3b2801362e",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Introducing the 2022 Prototyping Hardware Accelerator Cohorts – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Introducing the 2022 Prototyping Hardware Accelerator Cohorts 16 Jun Introducing the 2022 Prototyping Hardware Accelerator Cohorts by Admin in Hardware Accelerators , Prototyping Comments Rev: Ithaca Startup Works is excited to welcome the newest startup cohorts to participate in the summer Prototyping Hardware Accelerator , the ClimateTech Prototyping Hardware Accelerator and the inaugural AgTech Prototyping"
+    },
+    {
+      "id": "check-page-91cea9af03",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Prototyping Hardware Accelerator Offered annually since 2014, entrepreneurs across all industries are invited to take part in the Classic Track of the accelerator."
+    },
+    {
+      "id": "check-page-c38f30468d",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "The program consists of three “sprints” — feasibility, proof of concept, and prototype and pitch — where founders attend content sessions at Rev and take a deep dive into the fundamentals of early-stage startup development."
+    },
+    {
+      "id": "check-page-47263a0ff5",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "The Prototyping Hardware Accelerator also provides prototyping lab space with access to state-of-the-art equipment and materials to build multiple rounds of prototypes, entrepreneurship training, workshops, one-on-one coaching, and pitch training."
+    },
+    {
+      "id": "check-page-647add0fa4",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "“We had a diverse pool of applicants, and we’re thrilled with the cohort we were able to recruit for the 2022 Prototyping Hardware Accelerator,” said Ken Rother , director of Rev: Ithaca Startup Works."
+    },
+    {
+      "id": "check-page-4c02057a35",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "InCase Technologies : Founded by Andrew Schwalm , InCase Technologies makes “smart” iPhone and Android cases that include high tech hardware for builders in the construction industry."
+    },
+    {
+      "id": "check-page-b88a90759f",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Supported by the New York State Energy Research and Development Authority (NYSERDA) , the ClimateTech Prototyping accelerator supports startups innovating in the climate technology or cleantech space — defined as innovation that supports the decarbonization of the economy."
+    },
+    {
+      "id": "check-page-1f82ac556e",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "In addition to the resources offered to the Classic Track, ClimateTech accelerator teams also receive specialized ClimateTech workshops and resources, as well as access to industry experts and mentors."
+    },
+    {
+      "id": "check-page-63cdbe21c7",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Meet the 2022 startup teams from the ClimateTech Track: AgGen : Founded by Amir Salehzadeh and Rosh Ho , AgGen is a biological systems company that processes agricultural food waste, upcycling it into nutrition for pets, livestock, people, and other products."
+    },
+    {
+      "id": "check-page-06f060aba9",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "ReVert Technologies, Inc.: Ryan Li and Joseph Lybik are launching a smart power extender that uses AI and behavior analytics to optimize power delivery and guide consumers towards energy conservation in buying and recycling eco-friendly electronics."
+    },
+    {
+      "id": "check-page-f7a1b03ba3",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "During the accelerator this summer, we hope to build our first prototype, and complete customer discovery interviews,” said Piyush Jain of Jalavant."
+    },
+    {
+      "id": "check-page-8b92bf49de",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "AgTech Prototyping Hardware Accelerator New to the Prototyping Hardware Accelerator, Rev: Ithaca Startup Works is pleased to introduce the inaugural cohort of the new AgTech Prototyping Hardware Accelerator track."
+    },
+    {
+      "id": "check-page-287b52997e",
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Economic Development Administration’s University Center program, the entrepreneurs taking part in this program will work in tandem with the Classic and ClimateTech tracks, and receive additional training and mentorship tailored to the AgTech industry."
+    },
+    {
+      "id": "check-page-206ede00ee",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Introducing the 2023 Prototyping Hardware Accelerator Cohorts – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Introducing the 2023 Prototyping Hardware Accelerator Cohorts 12 Jun Introducing the 2023 Prototyping Hardware Accelerator Cohorts by wpengine in Hardware Accelerators , Prototyping Comments Rev: Ithaca Startup Works is excited to welcome the newest entrepreneurs joining this summer’s Prototyping Hardware Accelerator. This 10-week program helps teams move from a “back of the napkin” idea to launching a"
+    },
+    {
+      "id": "check-page-f4ba4eb34b",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Teams participate in either the Classic, ClimateTech, or AgTech Track, where they gain access to industry experts and test if their ideas are commercially desirable, technologically feasible, and economically viable."
+    },
+    {
+      "id": "check-page-e67edb588b",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Teams explore the fundamentals of early-stage startup development through customer discovery, prototype development, and formal pitch training."
+    },
+    {
+      "id": "check-page-e744619234",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Docfully Healthcare: Jacques Stroud is creating a wearable device that alerts users when they suffer from a mentally distressful episode such as anxiety or depression."
+    },
+    {
+      "id": "check-page-6dc7b3d7d4",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "ReviMo : Aleksandr Malashchenko is developing a robotic mobility device to enable people with self-care disabilities to move around their house and use the bathroom independently."
+    },
+    {
+      "id": "check-page-a40285bf7b",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "At Prototyping Hardware Accelerator, I want to improve my customer discovery skills, clarify device features important for users and create a prototype of ReviMo to conduct customer tests,” said founder Aleksandr Malashchenko."
+    },
+    {
+      "id": "check-page-425052dad1",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "ClimateTech Prototyping Hardware Accelerator After two successful years of ClimateTech Tracks, Rev is looking forward to supporting another batch of clean energy startups."
+    },
+    {
+      "id": "check-page-748c61cbda",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Supported by the New York State Energy Research and Development Authority (NYSERDA) , the ClimateTech Prototyping accelerator trains innovators working to support the decarbonization of the economy."
+    },
+    {
+      "id": "check-page-55c535da82",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "ClimateTech startups are matched with experienced clean energy and clean tech mentors and provided access to industry-leading guest speakers."
+    },
+    {
+      "id": "check-page-b8cc40907a",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Meet the startup teams from the Climate Track: AirVitalize Innovations: Serena Allen is the inventor of Particul8r, a scaled-down and decentralized industrial technology that captures airborne particulate matter pollution."
+    },
+    {
+      "id": "check-page-8b1476c8fd",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Aruna Revolution: Co-founders Rashmi Prakash and Lanna Last are revolutionizing the way people manage menstrual health by creating compostable menstrual pads locally made of natural fibers from local food and crop waste."
+    },
+    {
+      "id": "check-page-71b0b25b15",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Konekted.me: This team is developing a loT device that enables landlords to provide backup and solar power to tenants on a paygo service, thus turning buildings into their own clean energy utilities."
+    },
+    {
+      "id": "check-page-7a949e0a22",
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "NextMed: Emily Roos is creating reusable IV bags called NextIV to provide an eco-friendly alternative to single-use bags, diverting up to 44,000T of plastic annually from landfills in the US and Canada."
+    },
+    {
+      "id": "check-page-72a8acb8ad",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Rev Welcomes the Inaugural Protofacturing Hardware Accelerator Cohort – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Rev Welcomes the Inaugural Protofacturing Hardware Accelerator Cohort 03 Oct Rev Welcomes the Inaugural Protofacturing Hardware Accelerator Cohort by wpengine in About Rev , Hardware Accelerators , In the News , Protofacturing Comments Rev: Ithaca Startup Works is excited to announce the inaugural cohort of its Protofacturing Hardware Accelerator . Piloted in the summer of 2023 and now running the first"
+    },
+    {
+      "id": "check-page-c6f6b3d171",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Piloted in the summer of 2023 and now running the first full cohort, the program is tailored for physical product startups with proof-of-concept prototypes and focused on helping entrepreneurs transition to initial manufacturing."
+    },
+    {
+      "id": "check-page-ac3e41a4a8",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Throughout the accelerator, participants will engage in customer discovery, secure manufacturing funding, and refine their prototypes to achieve “design freeze”—the final stage before production."
+    },
+    {
+      "id": "check-page-a366c56ced",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "“ Protofacturing is one of my favorite programs – it’s the cleanup between the scrappy garage build and the rigor of quality control and large manufacturing runs,” said Deanna Kocher, Associate Director of Hardware Programs."
+    },
+    {
+      "id": "check-page-9714bd573c",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Content-Only participants access all curriculum, workshops, and mentorship, while Development Support participants receive engineering and hardware prototyping assistance, with remote lab access and the option for in-person sessions at Rev for regional teams."
+    },
+    {
+      "id": "check-page-e523d80b6a",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "The Protofacturing Hardware Accelerator offers four specialized tracks tailored to different sectors: AgTech, ClimateTech, MedTech, and the Classic Track (open to any field)."
+    },
+    {
+      "id": "check-page-008bba090e",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Each track provides sector-specific mentorship, funding resources, and networking opportunities to prepare participants for the challenges of scaling their hardware products."
+    },
+    {
+      "id": "check-page-5a7049637f",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Classic Track Hardware Accelerator Open to all innovators in any field since 2014, Rev’s classic track provides foundational training across industries."
+    },
+    {
+      "id": "check-page-d0ed79d169",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Golf Swing AI: Christopher Cilip, Antonio Johnson, Ryan Taylor, and Sasha Logunov ‘25 are developing an on-camera artificial intelligence golf training solution that measures and tracks the repeatability of your golf swing."
+    },
+    {
+      "id": "check-page-d72255d680",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "GoRaqt Inc: Rio Lu, John Missale, and Alex Eagan ‘24 are offering a courtside solar-powered smart kiosk and a connected app for sports-as-a-service gear rentals and AI-powered coaching."
+    },
+    {
+      "id": "check-page-58aabe0472",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Plateful: Malvina De Salvo is leveraging AI and ML capabilities to foster nutrition literacy and develop healthy eating habits in children with their comprehensive nutrition platform."
+    },
+    {
+      "id": "check-page-570f0b877c",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "“We are hoping to reach a stage in development of our hardware that enables us to complete robust pilot testing and be manufacture ready to reach the market making Plateful available for consumers,” said Malvina De Salvo, founder of Plateful."
+    },
+    {
+      "id": "check-page-a7235486f0",
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "ClimateTech Prototyping Hardware Accelerator This track trains innovators working to support the economy’s decarbonization."
+    },
+    {
+      "id": "check-page-65476490b1",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Introducing the 2024 Prototyping Hardware Accelerator Cohorts – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Introducing the 2024 Prototyping Hardware Accelerator Cohorts 18 Jun Introducing the 2024 Prototyping Hardware Accelerator Cohorts by Katharine Downey in About Rev , Hardware Accelerators , In the News , Prototyping Comments Rev: Ithaca Startup Works is excited to welcome the newest entrepreneurs joining this summer’s Prototyping Hardware Accelerator. Over 10 weeks, Rev’s Prototyping Hardware Accelerator guides"
+    },
+    {
+      "id": "check-page-d1baaa57b0",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Over 10 weeks, Rev’s Prototyping Hardware Accelerator guides product teams from a “back of the napkin idea” to a fully-fledged startup."
+    },
+    {
+      "id": "check-page-9059a50ed2",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Teams participate in either the Classic, ClimateTech, AgTech, or MedTech tracks, where they gain access to experts in their industry’s field."
+    },
+    {
+      "id": "check-page-f449c4ae4b",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "“Supporting early-stage entrepreneurs is one of the most exciting times in development, as prototypes and products can move very quickly when they are first coming to life."
+    },
+    {
+      "id": "check-page-cf4a184cf6",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "It is one of the most rewarding stages of hardware, particularly with this year’s diverse cohort of passionate and innovative entrepreneurs,” said Deanna Kocher, Assistant Director of Hardware Programs."
+    },
+    {
+      "id": "check-page-eda9f63a01",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "22 teams will explore the fundamentals of early-stage startup development, from customer discovery to formal pitch training."
+    },
+    {
+      "id": "check-page-876c4f954e",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Each startup in the Prototyping Hardware Accelerator has been paired with an experienced entrepreneur and gain access to a team of hardware engineers to assist with developing physical products."
+    },
+    {
+      "id": "check-page-f816e39631",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Notably, this is also the inaugural year for our MedTech track, and we are thrilled to have nine MedTech teams participating."
+    },
+    {
+      "id": "check-page-c1f69727a4",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Classic Track Hardware Accelerator Open to all innovators in any field since 2014, Rev’s classic track provides foundational training across industries."
+    },
+    {
+      "id": "check-page-1730722cbe",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Their technology has applications in sports and motion Artificial Intelligence, and is built for instant feedback."
+    },
+    {
+      "id": "check-page-003e80e60b",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "AutomaTea: Current Cornell mechanical engineering students Heisen Kong ‘25 and Isabella Ma ‘25 are seeking to bring loose leaf tea consumers convenience, quality, and control by automating the entire brewing process to 2 simple steps—add water, add tea leaves!"
+    },
+    {
+      "id": "check-page-413f4c6c2d",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "I aim to better understand the nuanced needs of our 1st core customers and make strong design choices around the core technology during the rapid prototyping phase!” said founder Heisen Kong."
+    },
+    {
+      "id": "check-page-ed68767278",
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "ClimateTech Prototyping Hardware Accelerator After three successful years of ClimateTech Tracks, Rev is looking forward to supporting another batch of clean energy startups."
+    },
+    {
+      "id": "check-page-382f45b85d",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Rev Welcomes Largest Protofacturing Hardware Accelerator Cohort to Date – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Rev Welcomes Largest Protofacturing Hardware Accelerator Cohort to Date 23 Sep Rev Welcomes Largest Protofacturing Hardware Accelerator Cohort to Date by Admin in About Rev , Hardware Accelerators , In the News , Protofacturing Comments Rev: Ithaca Startup Works is excited to announce its second cohort of the Protofacturing Hardware Accelerator . Consisting of 28 teams and over 50 individuals, this cohort"
+    },
+    {
+      "id": "check-page-991b2c1edd",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Consisting of 28 teams and over 50 individuals, this cohort brings together inventors and entrepreneurs from a wide variety of industries, from pet health to urban hydroponic agriculture."
+    },
+    {
+      "id": "check-page-41cddd5abb",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Participants will refine their business model, secure initial funds for manufacturing, and refine their prototypes to achieve a commercially reproducible version of their product."
+    },
+    {
+      "id": "check-page-31b32ba361",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Over 50% of this new cohort were also participants of the 2025 Prototyping Hardware Accelerator, where they brought concepts of new inventions to reality."
+    },
+    {
+      "id": "check-page-2b51f3b067",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "The Protofacturing Hardware Accelerator will give them the opportunity to re-evaluate and improve upon their designs until reaching a design freeze – the final stage before production."
+    },
+    {
+      "id": "check-page-78ccbf65f6",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "“Our Prototyping founders didn’t miss a step transitioning into Protofacturing."
+    },
+    {
+      "id": "check-page-3735d71758",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "The energy level is consistently high, despite the transition to virtual content, and the founders that have joined in are picking up and contributing that same energy as well,” said Deanna Kocher, Associate Director of Hardware Programs."
+    },
+    {
+      "id": "check-page-91f3c35e2e",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Advising level participants access all curriculum, workshops, and mentorship, including Entrepreneurs in Residence."
+    },
+    {
+      "id": "check-page-085b5fdcc0",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Development Support participants receive engineering and hardware prototyping assistance from Rev’s hardware team, with remote lab access and the option for in-person sessions at Rev for regional teams."
+    },
+    {
+      "id": "check-page-7afe2ca322",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "The Protofacturing Hardware Accelerator offers four specialized tracks tailored to different sectors: AgTech, ClimateTech, MedTech, and the Classic Track (open to any field)."
+    },
+    {
+      "id": "check-page-b63082bb5e",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Each track provides sector-specific mentorship, tailored access to regional resources, and informed technical support to prepare to scale the production of their products."
+    },
+    {
+      "id": "check-page-a4a78adb3e",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "Classic Track Hardware Accelerator Open to all innovators in any field since 2014, Rev’s classic track provides foundational training across industries."
+    },
+    {
+      "id": "check-page-ef2c3aa166",
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "excerpt": "AskQuerida focuses on preventing health issues by monitoring indoor pollutant levels and removing dust mites."
+    },
+    {
+      "id": "check-page-e3bc2db476",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Introducing the 5th Manufacturing Hardware Accelerator Cohort – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Introducing the 5th Manufacturing Hardware Accelerator Cohort 06 Feb Introducing the 5th Manufacturing Hardware Accelerator Cohort by wpengine in Hardware Accelerators , Manufacturing Comments Rev: Ithaca Startup Works is delighted to introduce 21 physical product companies to the fifth Manufacturing Hardware Accelerator cohort. The Manufacturing Hardware Accelerator is designed to help teams move from an advanced"
+    },
+    {
+      "id": "check-page-5b356596fb",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "The Manufacturing Hardware Accelerator is designed to help teams move from an advanced prototype to a manufactured product."
+    },
+    {
+      "id": "check-page-0a926c96ac",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "The program gives participants access to business mentorship, connections to local manufacturers, and introductions to investors, enabling their products to become market-ready."
+    },
+    {
+      "id": "check-page-4b4a8e6270",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "“This year’s cohort is queued up for launch – they have a critical mix of funding and customer traction, and I’m excited to see many of them move to commercial pilots and/or initial launch in the next 6 to 12 months!” said Deanna Kocher, Associate Director of Hardware Programs."
+    },
+    {
+      "id": "check-page-50217af3cb",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "The primarily virtual program will include one week of in-person workshops and manufacturing facility site visits."
+    },
+    {
+      "id": "check-page-7edc515a61",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "These tracks include: Classic, Climate Tech, or AgTech, each giving insights from industry experts in relative areas."
+    },
+    {
+      "id": "check-page-12a3d9183c",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "The Classic Track is open to innovators in any field, Rev’s Classic Track provides manufacturing programming and mentorship across all industries."
+    },
+    {
+      "id": "check-page-878fc301e5",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Plateful : Founder Malvina De Salvo is working on an AI-powered nutrition platform that gamifies healthy eating."
+    },
+    {
+      "id": "check-page-eacf07d588",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Canoeist Carrier: Terry Kent has created a canoe mobility product, a wheel system that attaches to the rear of a canoe or kayak, removing the burden of carrying."
+    },
+    {
+      "id": "check-page-b9234819e7",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "The AgTech track gives participants access to specialized industry programming and connected to experts and potential partners within the agriculture technology industry."
+    },
+    {
+      "id": "check-page-aea64111ee",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "The 2025 AgTech track has 10 teams, including: Frost Methane Labs : Co-leads Olya Irzak & Angela Mitcham are working with Elizabeth Hillstrom to develop a methane emission reduction startup."
+    },
+    {
+      "id": "check-page-c8c887f6bc",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Reducing methane emissions from agriculture and coal mining sectors making a positive impact on climate change."
+    },
+    {
+      "id": "check-page-bc100b69c7",
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "excerpt": "Steward: Hannah James, Ph.D. ’27, created a ruggedized, low-cost virtual fencing ear tag to make digital agriculture more accessible to low-income countries."
+    },
+    {
+      "id": "check-page-b44d6ae0fc",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "page": "batches",
+      "excerpt": "Introducing the 6th Manufacturing Hardware Accelerator Cohort – Rev: Ithaca Startup Works About Mentors & Team Startup Resources Rev Support Network Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni Hardware Resources Startup Jobs Events How to Apply Search for: Search: Contact Us For Members News About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply About Mentors & Team Startup Resources Rev’s 10th Annivesary Members Hardware Accelerators Prototyping Hardware Accelerator Protofacturing Hardware Accelerator Manufacturing Hardware Accelerator Hardware Accelerator Alumni and Participants Hardware Resources Startup Jobs Events Apply Introducing the 6th Manufacturing Hardware Accelerator Cohort 29 Jan Introducing the 6th Manufacturing Hardware Accelerator Cohort by Admin in Hardware Accelerators , Manufacturing Comments Rev: Ithaca Startup Works is excited to announce the 20 startups making up the sixth Manufacturing Hardware Accelerator cohort. The accelerator helps teams turn their advanced prototypes into manufactured products. Participants"
+    },
+    {
+      "id": "check-page-f12784841f",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "page": "batches",
+      "excerpt": "Participants gain access to business mentorship, connections to local manufacturers, and introductions to investors."
+    },
+    {
+      "id": "check-page-6c1f8700cb",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "page": "batches",
+      "excerpt": "“This year’s teams include SBIR recipients, award winners, and teams with both open and closed funding rounds."
+    },
+    {
+      "id": "check-page-61877aca7b",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "page": "batches",
+      "excerpt": "We’re especially excited to launch our first official pitch competition for this group."
+    },
+    {
+      "id": "check-page-745a01ae30",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "page": "batches",
+      "excerpt": "With a $10K stipend and added engineering resources, this cohort benefits from a diverse range of resources,” said Deanna Kocher, Associate Director of Hardware Programs."
+    },
+    {
+      "id": "check-page-2523f8c2a8",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "page": "batches",
+      "excerpt": "Participants of the cohort will be able to enter the Manufacturing Pitch competition at the end of the accelerator."
+    },
+    {
+      "id": "check-page-d1e0a9c4c6",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "page": "batches",
+      "excerpt": "The finalist receives a six-month extension of Rev mentorship and engineering support, and a $10,000 stipend to further develop their product."
+    },
+    {
+      "id": "check-page-46e7033bb2",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "page": "batches",
+      "excerpt": "Program leads will provide weekly sessions with periodic guest speakers throughout the 9‑month curriculum, covering topics from SBIR and funding to packaging, distribution, sales, and pitching, with one in‑person week of workshops and manufacturing site visits."
+    },
+    {
+      "id": "check-page-33c2c12cb3",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "page": "batches",
+      "excerpt": "These tracks include Classic, Climate Tech, and AgTech each offering insights from industry experts in their respective areas."
+    },
+    {
+      "id": "check-page-d5ca85b3d6",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "page": "batches",
+      "excerpt": "Rev’s Classic Track provides manufacturing programming and mentorship across all industries."
+    },
+    {
+      "id": "check-page-f496c7a736",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "page": "batches",
+      "excerpt": "The AgTech track gives participants access to specialized industry programming and connected to experts and potential partners within the agriculture technology industry."
+    },
+    {
+      "id": "check-page-1ab60883ab",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "page": "batches",
+      "excerpt": "The 2026 AgTech track has 7 teams, including: Arden Ag: The team led by Ben Provan has developed a modular AI camera system that brings accessible, real‑time agricultural intelligence to existing machinery."
+    },
+    {
+      "id": "check-page-ebe6365d06",
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "page": "batches",
+      "excerpt": "City Greens Farms: Jen Levy and Susan Kimura have engineered a modular, energy‑efficient urban hydroponics system that brings fresh produce directly to communities while creating jobs and strengthening local supply chains."
     }
   ],
   "findings": {
@@ -67,12 +2289,123 @@
         "evidenceId": "check-route-74496f676b"
       }
     ],
-    "applicationUrl": [],
-    "applicationsOpen": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.revithaca.com/join-rev/",
+        "evidenceId": "check-route-74496f676b"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-8b1339a5d7"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "Nov",
+        "evidenceId": "check-announced-596bea8584"
+      },
+      {
+        "value": "Oct",
+        "evidenceId": "check-announced-7f0262b134"
+      },
+      {
+        "value": "Sep",
+        "evidenceId": "check-announced-8660d833ba"
+      },
+      {
+        "value": "Feb",
+        "evidenceId": "check-announced-a5ca1ebcde"
+      },
+      {
+        "value": "Jan",
+        "evidenceId": "check-announced-d0663e8c0b"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "11",
+        "evidenceId": "check-duration-023e9de59a"
+      },
+      {
+        "value": "10",
+        "evidenceId": "check-duration-192a50a05a"
+      },
+      {
+        "value": "60",
+        "evidenceId": "check-duration-30ea0ecbce"
+      },
+      {
+        "value": "14 months",
+        "evidenceId": "check-duration-ca9ff164af"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-641497ae71"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-f4fab82222"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-bb4ae23a01"
+      }
+    ],
+    "location": [
+      {
+        "value": "Ithaca",
+        "evidenceId": "check-location-f730e8c673"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "economically viable. All tracks and teams receive a stipend of up to $2,000 to advance their prototype throughout the course of the program. Upon",
+        "evidenceId": "check-deal-b87cf14e04"
+      },
+      {
+        "value": "launch our first official pitch competition for this group. With a $10K stipend and added engineering resources, this cohort benefits from a",
+        "evidenceId": "check-deal-1b87a2cd9c"
+      },
+      {
+        "value": "six-month extension of Rev mentorship and engineering support, and a $10,000 stipend to further develop their product. Program leads will provide",
+        "evidenceId": "check-deal-b166301251"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "2000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-b87cf14e04"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "10000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-1b87a2cd9c"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

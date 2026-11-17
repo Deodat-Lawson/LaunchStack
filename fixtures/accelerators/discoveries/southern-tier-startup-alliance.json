@@ -1,11 +1,35 @@
 {
   "programId": "southern-tier-startup-alliance",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
-      "url": "https://www.ststartup.com/what-we-offer/",
-      "page": "details",
-      "anchor": "About",
+      "url": "https://www.ststartup.com/2024/07/08/2023-investment-report/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/2024/07/08/q1-2024-investment-report-2/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/2024/10/11/q2-2024-investment-report/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/investment-report/",
+      "page": "terms",
+      "anchor": "Investment Reports",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -14,6 +38,110 @@
       "url": "https://www.ststartup.com/news-updates/",
       "page": "batches",
       "anchor": "News",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/news-updates/page/2/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/news-updates/page/3/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/news-updates/page/4/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/news-updates/page/5/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/news-updates/page/6/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/news-updates/page/7/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/nys-benefits-you-could-qualify-for/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/portfolio-item/incubatorworks-corning/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/portfolio-item/koffman-southern-tier-incubator/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/portfolio-item/mcgovern-center-at-cornell-university/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/portfolio-item/rev-ithaca-startup-works/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/portfolio-item/start-up-suite-at-binghamton-university/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "page": "details",
+      "anchor": "About",
       "fetched": true,
       "blocked": null,
       "origin": "official"

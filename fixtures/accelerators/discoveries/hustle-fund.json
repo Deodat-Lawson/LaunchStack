@@ -1,10 +1,18 @@
 {
   "programId": "hustle-fund",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.hustlefund.vc/angel-squad-investments",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/angel-squad-story",
+      "page": "other",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -19,8 +27,24 @@
       "origin": "official"
     },
     {
+      "url": "https://www.hustlefund.vc/blog-categories-investors/dealflow?26b02536_page=2",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.hustlefund.vc/deal-framework",
       "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/event-recordings/portfolio-construction-for-early-stage-investors",
+      "page": "portfolio",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -38,7 +62,7 @@
       "url": "https://www.hustlefund.vc/founders",
       "page": "portfolio",
       "anchor": "Meet the Portfolio",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -67,48 +91,16 @@
       "origin": "official"
     },
     {
-      "url": "https://www.hustlefund.vc/post/an-angel-investors-blueprint-for-seeing-winning-the-best-deals",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.hustlefund.vc/post/angel-investment-tax-credit",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.hustlefund.vc/post/angel-squad--what-cyan-banister-investments-reveal-about-pattern-recognition-and-why-her-story-should-change-how-you-think-about-deal-evaluatio",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.hustlefund.vc/post/angel-squad-7-best-angel-investor-networks-for-your-first-10k-investment",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.hustlefund.vc/post/angel-squad-aaron-levie-investments-what-boxs-co-founder-looks-for-when-writing-checks",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.hustlefund.vc/squad",
       "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/squad/investments",
+      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,

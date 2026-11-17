@@ -1,22 +1,14 @@
 {
   "programId": "injini",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.injini.africa/",
-    "https://www.injini.africa/post/applications-for-the-2024-injini-mastercard-foundation-edtech-fellowship-are-open",
-    "https://www.injini.africa/post/strengthening-investment-in-the-african-education-ecosystem",
-    "https://www.injini.africa/post/what-edtech-founders-learn-when-ideal-assumptions-meet-real-world-friction",
-    "https://www.injini.africa/post/accelerating-edtech-solutions-injini-announces-second-cohort-for-the-mastercard-foundation-edtech-fellowship",
-    "https://www.injini.africa/post/meet-the-2026-cohort-advantage-learn",
-    "https://www.injini.africa/post/meet-the-2026-cohort-dalza",
-    "https://www.injini.africa/post/meet-the-2026-cohort-included",
-    "https://www.injini.africa/post/meet-the-2026-cohort-tangible-leva-foundation",
-    "https://www.injini.africa/post/prioritising-inclusion-injini-announces-fourth-cohort-for-the-mastercard-foundation-edtech-fellowship",
     "https://www.injini.africa/about",
     "https://www.injini.africa/edtech-fellowship",
-    "https://www.injini.africa/post/building-the-future-of-african-edtech-inside-injinis-ai-venture-builder",
-    "https://www.injini.africa/post/meet-the-fellows-of-injinis-inaugural-mastercard-foundation-edtech-fellowship-program",
-    "https://www.injini.africa/post/pitch-perfect-best-practices-for-acing-your-pitch-for-an-edtech-fellowship-program"
+    "https://www.injini.africa/edtech-catalogue",
+    "https://www.injini.africa/post/applications-for-the-2024-injini-mastercard-foundation-edtech-fellowship-are-open",
+    "https://www.injini.africa/post/strengthening-investment-in-the-african-education-ecosystem",
+    "https://www.injini.africa/post/what-edtech-founders-learn-when-ideal-assumptions-meet-real-world-friction"
   ],
   "evidence": [
     {
@@ -27,13 +19,6 @@
       "page": "details"
     },
     {
-      "id": "check-duration-563f389f46",
-      "url": "https://www.injini.africa/post/building-the-future-of-african-edtech-inside-injinis-ai-venture-builder",
-      "title": "Injini — program page",
-      "excerpt": "two structured phases: Phase 1: Venture Build (5 Months | Nov 2026 to Mar 2027): 12 selected teams",
-      "page": "details"
-    },
-    {
       "id": "check-duration-7d4eb98b84",
       "url": "https://www.injini.africa/edtech-fellowship",
       "title": "Injini — program page",
@@ -41,11 +26,11 @@
       "page": "details"
     },
     {
-      "id": "check-duration-c198f99406",
-      "url": "https://www.injini.africa/post/building-the-future-of-african-edtech-inside-injinis-ai-venture-builder",
-      "title": "Injini — program page",
-      "excerpt": "testing in Johannesburg. Phase 2: Incubation (3 Months | Apr to Jun 2027): The top 5 ventures refine",
-      "page": "details"
+      "id": "check-email-01d7943b88",
+      "url": "https://www.injini.africa/edtech-catalogue",
+      "title": "Injini — portfolio page",
+      "excerpt": "Portfolio Support Our Impact Careers Contact Us Contact: info@injini.africa Address Innovation City, Darter Studios, Longkloof",
+      "page": "portfolio"
     },
     {
       "id": "check-email-08eca76064",
@@ -55,39 +40,11 @@
       "page": "details"
     },
     {
-      "id": "check-email-0c130528e6",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-advantage-learn",
-      "title": "Injini — batches page",
-      "excerpt": "Portfolio Support Our Impact Careers Contact Us Contact: info@injini.africa Address Innovation City, Darter Studios, Longkloof",
-      "page": "batches"
-    },
-    {
-      "id": "check-email-0f62693522",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-tangible-leva-foundation",
-      "title": "Injini — batches page",
-      "excerpt": "Portfolio Support Our Impact Careers Contact Us Contact: info@injini.africa Address Innovation City, Darter Studios, Longkloof",
-      "page": "batches"
-    },
-    {
       "id": "check-email-10c55ef3e2",
       "url": "https://www.injini.africa/post/what-edtech-founders-learn-when-ideal-assumptions-meet-real-world-friction",
       "title": "Injini — terms page",
       "excerpt": "info@injini.africa",
       "page": "terms"
-    },
-    {
-      "id": "check-email-17a466d16a",
-      "url": "https://www.injini.africa/post/building-the-future-of-african-edtech-inside-injinis-ai-venture-builder",
-      "title": "Injini — program page",
-      "excerpt": "info@injini.africa",
-      "page": "details"
-    },
-    {
-      "id": "check-email-2417e23046",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-dalza",
-      "title": "Injini — batches page",
-      "excerpt": "info@injini.africa",
-      "page": "batches"
     },
     {
       "id": "check-email-3060afe46f",
@@ -104,48 +61,6 @@
       "page": "terms"
     },
     {
-      "id": "check-email-36cf6cbc15",
-      "url": "https://www.injini.africa/post/prioritising-inclusion-injini-announces-fourth-cohort-for-the-mastercard-foundation-edtech-fellowship",
-      "title": "Injini — batches page",
-      "excerpt": "info@injini.africa",
-      "page": "batches"
-    },
-    {
-      "id": "check-email-37ef2bae69",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-included",
-      "title": "Injini — batches page",
-      "excerpt": "info@injini.africa",
-      "page": "batches"
-    },
-    {
-      "id": "check-email-44136be350",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-dalza",
-      "title": "Injini — batches page",
-      "excerpt": "Portfolio Support Our Impact Careers Contact Us Contact: info@injini.africa Address Innovation City, Darter Studios, Longkloof",
-      "page": "batches"
-    },
-    {
-      "id": "check-email-48e396bbf4",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-tangible-leva-foundation",
-      "title": "Injini — batches page",
-      "excerpt": "info@injini.africa",
-      "page": "batches"
-    },
-    {
-      "id": "check-email-5da2d1ad82",
-      "url": "https://www.injini.africa/post/accelerating-edtech-solutions-injini-announces-second-cohort-for-the-mastercard-foundation-edtech-fellowship",
-      "title": "Injini — batches page",
-      "excerpt": "info@injini.africa",
-      "page": "batches"
-    },
-    {
-      "id": "check-email-5e35d95519",
-      "url": "https://www.injini.africa/post/accelerating-edtech-solutions-injini-announces-second-cohort-for-the-mastercard-foundation-edtech-fellowship",
-      "title": "Injini — batches page",
-      "excerpt": "Portfolio Support Our Impact Careers Contact Us Contact: info@injini.africa Address Innovation City, Darter Studios, Longkloof",
-      "page": "batches"
-    },
-    {
       "id": "check-email-6554491b31",
       "url": "https://www.injini.africa/edtech-fellowship",
       "title": "Injini — program page",
@@ -158,13 +73,6 @@
       "title": "Injini — program page",
       "excerpt": "Portfolio Support Our Impact Careers Contact Us Contact: info@injini.africa Address Innovation City, Darter Studios, Longkloof",
       "page": "details"
-    },
-    {
-      "id": "check-email-704dbc9950",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-included",
-      "title": "Injini — batches page",
-      "excerpt": "Portfolio Support Our Impact Careers Contact Us Contact: info@injini.africa Address Innovation City, Darter Studios, Longkloof",
-      "page": "batches"
     },
     {
       "id": "check-email-79e539cde0",
@@ -181,31 +89,10 @@
       "page": "details"
     },
     {
-      "id": "check-email-7d3d417611",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-advantage-learn",
-      "title": "Injini — batches page",
-      "excerpt": "info@injini.africa",
-      "page": "batches"
-    },
-    {
-      "id": "check-email-7d80bdddde",
-      "url": "https://www.injini.africa/post/meet-the-fellows-of-injinis-inaugural-mastercard-foundation-edtech-fellowship-program",
-      "title": "Injini — program page",
-      "excerpt": "info@injini.africa",
-      "page": "details"
-    },
-    {
       "id": "check-email-803095126a",
       "url": "https://www.injini.africa/about",
       "title": "Injini — program page",
       "excerpt": "info@injini.africa",
-      "page": "details"
-    },
-    {
-      "id": "check-email-89f2b56720",
-      "url": "https://www.injini.africa/post/pitch-perfect-best-practices-for-acing-your-pitch-for-an-edtech-fellowship-program",
-      "title": "Injini — program page",
-      "excerpt": "Portfolio Support Our Impact Careers Contact Us Contact: info@injini.africa Address Innovation City, Darter Studios, Longkloof",
       "page": "details"
     },
     {
@@ -230,27 +117,6 @@
       "page": "terms"
     },
     {
-      "id": "check-email-c5086011d2",
-      "url": "https://www.injini.africa/post/building-the-future-of-african-edtech-inside-injinis-ai-venture-builder",
-      "title": "Injini — program page",
-      "excerpt": "Portfolio Support Our Impact Careers Contact Us Contact: info@injini.africa Address Innovation City, Darter Studios, Longkloof",
-      "page": "details"
-    },
-    {
-      "id": "check-email-c7a0034d5a",
-      "url": "https://www.injini.africa/post/prioritising-inclusion-injini-announces-fourth-cohort-for-the-mastercard-foundation-edtech-fellowship",
-      "title": "Injini — batches page",
-      "excerpt": "Portfolio Support Our Impact Careers Contact Us Contact: info@injini.africa Address Innovation City, Darter Studios, Longkloof",
-      "page": "batches"
-    },
-    {
-      "id": "check-email-ce8e78b44e",
-      "url": "https://www.injini.africa/post/pitch-perfect-best-practices-for-acing-your-pitch-for-an-edtech-fellowship-program",
-      "title": "Injini — program page",
-      "excerpt": "info@injini.africa",
-      "page": "details"
-    },
-    {
       "id": "check-email-e0f6d7748d",
       "url": "https://www.injini.africa/post/what-edtech-founders-learn-when-ideal-assumptions-meet-real-world-friction",
       "title": "Injini — terms page",
@@ -258,24 +124,17 @@
       "page": "terms"
     },
     {
+      "id": "check-email-e6863096ee",
+      "url": "https://www.injini.africa/edtech-catalogue",
+      "title": "Injini — portfolio page",
+      "excerpt": "info@injini.africa",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-eeb1e21464",
       "url": "https://www.injini.africa/edtech-fellowship",
       "title": "Injini — program page",
       "excerpt": "info@injini.africa",
-      "page": "details"
-    },
-    {
-      "id": "check-email-f96982592a",
-      "url": "https://www.injini.africa/post/meet-the-fellows-of-injinis-inaugural-mastercard-foundation-edtech-fellowship-program",
-      "title": "Injini — program page",
-      "excerpt": "Portfolio Support Our Impact Careers Contact Us Contact: info@injini.africa Address Innovation City, Darter Studios, Longkloof",
-      "page": "details"
-    },
-    {
-      "id": "check-format-0123a65189",
-      "url": "https://www.injini.africa/post/pitch-perfect-best-practices-for-acing-your-pitch-for-an-edtech-fellowship-program",
-      "title": "Injini — program page",
-      "excerpt": "The program has a rigorous selection process, including an in-person Selection Day where founders pitch to judges. While many",
       "page": "details"
     },
     {
@@ -307,11 +166,25 @@
       "page": "details"
     },
     {
-      "id": "check-format-762a2f378c",
-      "url": "https://www.injini.africa/post/accelerating-edtech-solutions-injini-announces-second-cohort-for-the-mastercard-foundation-edtech-fellowship",
-      "title": "Injini — batches page",
+      "id": "check-format-ab37e4749d",
+      "url": "https://www.injini.africa/edtech-catalogue",
+      "title": "Injini — portfolio page",
+      "excerpt": "Incubation Program Lightbulb EdTech Lightbulb EdTech is a Virtual Learning Environment providing online education and",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-c990182575",
+      "url": "https://www.injini.africa/edtech-catalogue",
+      "title": "Injini — portfolio page",
       "excerpt": "for any industry, including content, marketing tools, remote learning features, user profiles, quizzes, and live class",
-      "page": "batches"
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-d77ae8c4d3",
+      "url": "https://www.injini.africa/edtech-catalogue",
+      "title": "Injini — portfolio page",
+      "excerpt": "that combine engaging lessons from top teachers, in-person support, and smart technology. Visit Website South Africa",
+      "page": "portfolio"
     },
     {
       "id": "check-format-f52e42ab7a",
@@ -321,24 +194,10 @@
       "page": "details"
     },
     {
-      "id": "check-format-f6e73d574a",
-      "url": "https://www.injini.africa/post/meet-the-fellows-of-injinis-inaugural-mastercard-foundation-edtech-fellowship-program",
-      "title": "Injini — program page",
-      "excerpt": "Injini program, which aims to bring the Bamba Learn App to remote and rural areas of South Africa. In these areas, many",
-      "page": "details"
-    },
-    {
       "id": "check-location-bc8a0c581a",
       "url": "https://www.injini.africa/about",
       "title": "Injini — program page",
       "excerpt": "and Public Benefit Organisation based in Cape Town, South Africa with the purpose of",
-      "page": "details"
-    },
-    {
-      "id": "check-location-dbe403d638",
-      "url": "https://www.injini.africa/post/building-the-future-of-african-edtech-inside-injinis-ai-venture-builder",
-      "title": "Injini — program page",
-      "excerpt": "teams (2+ co-founders) must be based in South Africa, Zambia, Zimbabwe, Botswana, Namibia,",
       "page": "details"
     },
     {
@@ -377,32 +236,11 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-45c160698b",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-tangible-leva-foundation",
-      "title": "Injini — batches page",
-      "excerpt": "Our Portfolio → https://www.injini.africa/edtech-catalogue",
-      "page": "batches"
-    },
-    {
       "id": "check-portfolio-49b35d1176",
       "url": "https://www.injini.africa/post/applications-for-the-2024-injini-mastercard-foundation-edtech-fellowship-are-open",
       "title": "Injini — application page",
       "excerpt": "Our Portfolio → https://www.injini.africa/edtech-catalogue",
       "page": "application"
-    },
-    {
-      "id": "check-portfolio-834642c97f",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-dalza",
-      "title": "Injini — batches page",
-      "excerpt": "Our Portfolio → https://www.injini.africa/edtech-catalogue",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-8e631fc65d",
-      "url": "https://www.injini.africa/post/building-the-future-of-african-edtech-inside-injinis-ai-venture-builder",
-      "title": "Injini — program page",
-      "excerpt": "Our Portfolio → https://www.injini.africa/edtech-catalogue",
-      "page": "details"
     },
     {
       "id": "check-portfolio-97b7bea3f0",
@@ -412,50 +250,8 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-a06c2efad9",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-included",
-      "title": "Injini — batches page",
-      "excerpt": "Our Portfolio → https://www.injini.africa/edtech-catalogue",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-ad965b468a",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-advantage-learn",
-      "title": "Injini — batches page",
-      "excerpt": "Our Portfolio → https://www.injini.africa/edtech-catalogue",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-e4166ba787",
-      "url": "https://www.injini.africa/post/accelerating-edtech-solutions-injini-announces-second-cohort-for-the-mastercard-foundation-edtech-fellowship",
-      "title": "Injini — batches page",
-      "excerpt": "Our Portfolio → https://www.injini.africa/edtech-catalogue",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-e6938e8265",
-      "url": "https://www.injini.africa/post/pitch-perfect-best-practices-for-acing-your-pitch-for-an-edtech-fellowship-program",
-      "title": "Injini — program page",
-      "excerpt": "Our Portfolio → https://www.injini.africa/edtech-catalogue",
-      "page": "details"
-    },
-    {
       "id": "check-portfolio-eef7210d0c",
       "url": "https://www.injini.africa/edtech-fellowship",
-      "title": "Injini — program page",
-      "excerpt": "Our Portfolio → https://www.injini.africa/edtech-catalogue",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-f7e705fe3f",
-      "url": "https://www.injini.africa/post/prioritising-inclusion-injini-announces-fourth-cohort-for-the-mastercard-foundation-edtech-fellowship",
-      "title": "Injini — batches page",
-      "excerpt": "Our Portfolio → https://www.injini.africa/edtech-catalogue",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-ffde666ffe",
-      "url": "https://www.injini.africa/post/meet-the-fellows-of-injinis-inaugural-mastercard-foundation-edtech-fellowship-program",
       "title": "Injini — program page",
       "excerpt": "Our Portfolio → https://www.injini.africa/edtech-catalogue",
       "page": "details"
@@ -483,6 +279,192 @@
       "excerpt": "Injini | Africa's EdTech Accelerator & Think Tank | South Africa What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat Improving education in Africa through innovation, entrepreneurship, research, and collaboration. EdTech Acceleration Ecosystem Development We believe education is the engine for growth in Africa. This is what drives us to help unlock the continent’s development through our programmes, events and research About Injini Featured Africa’s First EdTech Product Map Discover Africa’s EdTech innovators. Built for funders, educators, and policymakers, this EdTech Product Map makes it easy to explore solutions, connect with changemakers, and back the ideas impacting education across the continent. Explore the map According to UNESCO, Sub-Saharan Africa has the highest rate of education exclusion in the world. Let’s address that. EdTech Acceleration We support the growth of the most impactful EdTech startups in Africa. Learn More Ecosystem Development We orchestrate relevant events across the"
     },
     {
+      "id": "check-page-20b48c8468",
+      "url": "https://www.injini.africa/",
+      "page": "details",
+      "excerpt": "Learn More Ecosystem Development We orchestrate relevant events across the African education innovation landscape."
+    },
+    {
+      "id": "check-page-cd996f9ac8",
+      "url": "https://www.injini.africa/",
+      "page": "details",
+      "excerpt": "Learn More Research and insights We conduct localised industry research for education innovation stakeholders."
+    },
+    {
+      "id": "check-page-da28ef9664",
+      "url": "https://www.injini.africa/",
+      "page": "details",
+      "excerpt": "Learn More Our Impact 19 African Countries We work with founders across the continent."
+    },
+    {
+      "id": "check-page-7f3a5def2c",
+      "url": "https://www.injini.africa/",
+      "page": "details",
+      "excerpt": "4,000+ Education Innovators We unite stakeholders through Ecosystem Development initiatives."
+    },
+    {
+      "id": "check-page-8d879acb42",
+      "url": "https://www.injini.africa/",
+      "page": "details",
+      "excerpt": "90 African EdTech Startups We accelerate and incubate businesses at various stages."
+    },
+    {
+      "id": "check-page-eb59a3239b",
+      "url": "https://www.injini.africa/",
+      "page": "details",
+      "excerpt": "6.9M+ Learners and teachers We reach millions of people across Africa."
+    },
+    {
+      "id": "check-page-e9d6a4e83d",
+      "url": "https://www.injini.africa/",
+      "page": "details",
+      "excerpt": "Your support contributes to improved learning outcomes and better access to quality education."
+    },
+    {
+      "id": "check-page-eb95f2c4ff",
+      "url": "https://www.injini.africa/",
+      "page": "details",
+      "excerpt": "Read more View all The best AI for African classrooms starts with context, not The best AI for African classrooms starts with context, not code."
+    },
+    {
+      "id": "check-page-7b49d678cc",
+      "url": "https://www.injini.africa/",
+      "page": "details",
+      "excerpt": "True EdTech success comes from removing friction and designing backwards from human outcomes."
+    },
+    {
+      "id": "check-page-7feaf367fc",
+      "url": "https://www.injini.africa/",
+      "page": "details",
+      "excerpt": "Read more South African EdTech Week 2026: Highlights South African EdTech Week 2026 united leaders to advance educator-centered digital solutions that simplify teaching across Africa."
+    },
+    {
+      "id": "check-page-baf00381f3",
+      "url": "https://www.injini.africa/",
+      "page": "details",
+      "excerpt": "Read more South African EdTech Week 2026 | Insights Part 1 and 2 South African EdTech Week brought us closer to the voices and experiences of teachers, reminding us why they must remain central to conversations about education innovation."
+    },
+    {
+      "id": "check-page-fe574b5fd5",
+      "url": "https://www.injini.africa/",
+      "page": "details",
+      "excerpt": "Read more Building the Future of African EdTech: Inside Injini’s AI Ve An overview of Injini’s AI for Education Venture Builder (supported by Coefficient Giving), covering its structure, eligibility, core themes, equity-free seed funding, and 100% IP retention."
+    },
+    {
+      "id": "check-page-bb0d20fc98",
+      "url": "https://www.injini.africa/about",
+      "page": "details",
+      "excerpt": "About | Injini What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat About Injini’s story, impact, team and mission. Who We Are We support the people who are changing education in Africa Injini EdTech Acceleration NPC is a registered Non-Profit Company (2017/193849/08) and Public Benefit Organisation based in Cape Town, South Africa with the purpose of improving educational outcomes in sub-Saharan Africa. Founded in 2017, Injini remains the only EdTech specialised accelerator in Africa. Injini was established on the belief that innovation and technology - developed by Africa, for Africa - can help solve the continent’s most pressing education challenges. Our Work Read The Blog Our team Get to know the diverse and experienced individuals behind Injini. Krista Davidson Executive Director Larry Leyden Chief Operating Officer Kelly Fisher Marketing & Communications Head Alexei McGregor MEL & Research Head Kumbula Xego Senior MEL Associate Gigi Ngcobo Venture Scale Lead Kelly Gifford Programmes &"
+    },
+    {
+      "id": "check-page-4a03ecfb61",
+      "url": "https://www.injini.africa/about",
+      "page": "details",
+      "excerpt": "Open positions Board Members Brendan Hughes Chanel Oldfiel Fabian White Fiona Tabraham Jamie Martin Joshin Raghubar Krista Davidson Suraya Humdulay UVU Africa Group Injini is a member of the UVU Africa Group."
+    },
+    {
+      "id": "check-page-c885ebf3e1",
+      "url": "https://www.injini.africa/about",
+      "page": "details",
+      "excerpt": "UVU Africa is a Non-Profit Company with a mission to build future-fit, inclusive societies through technology and innovation."
+    },
+    {
+      "id": "check-page-d559167b64",
+      "url": "https://www.injini.africa/about",
+      "page": "details",
+      "excerpt": "UVU Africa, formerly known as CiTi, was established in 1999 and operates at the intersection of business, government and society to positively shape the future of the economy and society through the use of innovation and technology."
+    },
+    {
+      "id": "check-page-cc7e2d6d6a",
+      "url": "https://www.injini.africa/about",
+      "page": "details",
+      "excerpt": "UVU Africa Our ecosystem partners Follow the latest updates in African Education Innovation Subscribe Here By joining, you agree to our Terms and Conditions."
+    },
+    {
+      "id": "check-page-a1a4f42417",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "page": "details",
+      "excerpt": "Mastercard Fdn EdTech Fellowship Program | Injini What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat EdTech Fellowship A program in partnership with the Mastercard Foundation About the Fellowship The Mastercard Foundation EdTech Fellowship Program is a six-month, equity-free acceleration program for high-impact companies using technology and innovation to address challenges in South African education. For 2026, there is a strategic emphasis on reaching Young women, People with Disabilities (PWD), Refugees and Displaced Persons (RDP), and Rural Youth ensuring that innovative EdTech solutions bridge the digital divide in areas traditionally overlooked by mainstream venture ecosystems. This focus is crucial for driving systemic change and ensuring quality education access across all parts of South Africa, beyond the major urban hubs. The 2026 applications are now closed. Meet the new cohort here . ‍ ‍ Sign up to our newsletter to be notified about program updates. Sign up Program Objectives Create"
+    },
+    {
+      "id": "check-page-7ae53b63db",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "page": "details",
+      "excerpt": "Detailed the Program Brief Fellow's Impact April 2023 - December 2025 300,000+ Total teachers reached 3 million+ Total learners reached $14 million+ External funding secured Fellowship Benefits Receive specialised support worth over R2,500,000 Benefits include networking, knowledge-sharing, and learning opportunities with industry experts."
+    },
+    {
+      "id": "check-page-8e3e165bf2",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "page": "details",
+      "excerpt": "Importantly, participants contribute to a growing body of evidence documenting \"what works\" in African EdTech, furthering EdTech research in the region."
+    },
+    {
+      "id": "check-page-56d0e05257",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "page": "details",
+      "excerpt": "Detailed Program Brief Meet the fellows Specialised Support Hands-on support from specialists in education innovation, fundraising, impact M&E, linguistics, inclusive user design, assistive technology, gender & intersectional inclusion, and policy & refugee inclusion."
+    },
+    {
+      "id": "check-page-223e1f59c0",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "page": "details",
+      "excerpt": "Pedagogical Evaluation Pedagogical evaluation and certification by EdTech Impact and Education Alliance Finland."
+    },
+    {
+      "id": "check-page-17e6b660fa",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "page": "details",
+      "excerpt": "Course Access Access to a selection of courses and office hours from faculty members at Carnegie Mellon University's Human-Computer Interaction Institute."
+    },
+    {
+      "id": "check-page-cf4079eed5",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "page": "details",
+      "excerpt": "Venture Funding Includes equity-free venture funding of over R1,000,000 Testimonials Hear from the Fellows Don’t take our word for it - listen to what some of the founders say about their experience of the Fellowship ."
+    },
+    {
+      "id": "check-page-1108d1c6de",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "page": "details",
+      "excerpt": "\"The mentorship, resources, and networking opportunities have accelerated our growth and provided invaluable insights."
+    },
+    {
+      "id": "check-page-42e9e31e25",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "page": "details",
+      "excerpt": "If you're an EdTech company looking to scale and thrive, I highly recommend applying."
+    },
+    {
+      "id": "check-page-101b9c1102",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "page": "details",
+      "excerpt": "It's a transformative experience that will take your business to new heights!\" Ambani Africa Meet the 2025 fellows Program Process Pre- Acceleration We select 10 companies, onboard them, understand their specific needs, and set milestones accordingly."
+    },
+    {
+      "id": "check-page-759c236d24",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "page": "details",
+      "excerpt": "Starting Apr 2026 Acceleration Program ‍ We assist each company with impact measurement, market access, investment readiness, and financial sustainability."
+    },
+    {
+      "id": "check-page-e1d5e0fc1e",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "page": "details",
+      "excerpt": "Apr – Oct 2026 Post- Acceleration ‍ Fellows gain ongoing access to networking events, receive monitoring and evaluation support, and receive two additional grant funding disbursements linked to ongoing reporting."
+    },
+    {
+      "id": "check-page-5f773fd5a8",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "page": "details",
+      "excerpt": "In addition to this thematic focus, participating EdTech companies should meet the following criteria: Has a tech-enabled solution designed to increase access and improve educational outcomes in South Africa."
+    },
+    {
+      "id": "check-page-a482b3a0b5",
+      "url": "https://www.injini.africa/edtech-catalogue",
+      "page": "portfolio",
+      "excerpt": "EdTech Catalogue | Injini What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat EdTech Catalogue Learn about the innovative EdTech companies we have worked with. Expand their impact Reach out to partner with, or learn more about our alumni. Contact Us Important: This component uses Transforms (Move Down 100%) to hide and show modal (on Tablet) so that filters apply once the user hits the apply button (optimal UX). Using the display: hidden will prevent the apply button from working. To show and hide the modal for editing purposes on Tablet: Select the filters1_filters-wrapper inside the parent div filters1_layout div. Hit the Hide button and it will show (yes this is counterintuitive). Filters Clear all Search Country of operation Select Programme Select Incubation Program EdTech Fellowship Acceleration Partnership Area of focus Select Early Childhood Development Basic Education (K - 12) Post-secondary and adult learning Financial Literacy Teacher professional development All Clear all Thank you!"
+    },
+    {
       "id": "check-page-b0e4c38d82",
       "url": "https://www.injini.africa/post/applications-for-the-2024-injini-mastercard-foundation-edtech-fellowship-are-open",
       "page": "application",
@@ -499,72 +481,6 @@
       "url": "https://www.injini.africa/post/what-edtech-founders-learn-when-ideal-assumptions-meet-real-world-friction",
       "page": "terms",
       "excerpt": "What EdTech Founders Learn When Ideal Assumptions Meet Real-World Friction What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat All Posts What EdTech Founders Learn When Ideal Assumptions Meet Real-World Friction Written by: Injini Published on: September 2, 2026 EdTech founders tend to build for an idealised user: a fast connection, a modern device, and someone who already knows their way around a browser. Real classrooms rarely match that picture. To find out where the gap actually sits, we watched real users test EdTech products on their own entry-level mobile devices, in field studies across Kenya, South Africa, and Rwanda. We found that an EdTech product can look good on a fully charged demo laptop, but real-world deployment tells a radically different story. In our observations, up to 75% of participants struggled with foundational web mechanics, such as multi-tab navigation or copy-pasting text, before ever interacting with the instructional material. Pre-Setup Devices vs. Native User"
-    },
-    {
-      "id": "check-page-c650b39484",
-      "url": "https://www.injini.africa/post/accelerating-edtech-solutions-injini-announces-second-cohort-for-the-mastercard-foundation-edtech-fellowship",
-      "page": "batches",
-      "excerpt": "Accelerating EdTech solutions: Injini announces second cohort for the Mastercard Foundation EdTech Fellowship What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat All Posts Accelerating EdTech solutions: Injini announces second cohort for the Mastercard Foundation EdTech Fellowship Written by: Injini Published on: April 12, 2024 After a rigorous application and interview process, Injini is pleased to announce its second cohort of 12 EdTech companies participating in the Mastercard Foundation EdTech Fellowship with the EdTech accelerator and think tank. \"Drawing on insights gained from our inaugural cohort, we are looking forward to collaborating with these 12 companies to enhance educational outcomes in South Africa,\" says Krista Davidson, Executive Director at Injini. \"Through meaningful dialogues with the Department of Basic Education and provincial education departments last year, we gained valuable understanding of the most pressing needs of South African schools, learners, teachers, and"
-    },
-    {
-      "id": "check-page-20897e8f48",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-advantage-learn",
-      "page": "batches",
-      "excerpt": "Meet the 2026 Cohort: Advantage Learn What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat All Posts Meet the 2026 Cohort: Advantage Learn Written by: Injini Published on: May 18, 2026 Consistent support is the key to student success. After seeing s students facing their matric year without teachers, Advantage Learn developed a solution to help bridge that gap. By blending textbooks and offline digital resources, Advantage Learn provides students with access to quality support anytime, even without internet or a physical classroom. As part of the Mastercard Foundation EdTech Fellowship 2026, they are working to make learning more accessible and reliable for students who need it most. ‍ Find out more about Advantage Learn here: https://www.advantagelearn.com #AdvantageLearn #YoungAfricaWorks #InclusiveEducation. ‍ ‍ ‍ ‍ Discover More Blog Posts Artificial Intelligence (AI) The best AI for African classrooms starts with context, not The best AI for African classrooms starts with context, not code."
-    },
-    {
-      "id": "check-page-c9bcf87028",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-dalza",
-      "page": "batches",
-      "excerpt": "Meet the 2026 Cohort: Dalza What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat All Posts Meet the 2026 Cohort: Dalza Written by: Injini Published on: Dalza founder Robby shares his personal journey with learning challenges, both as a child and as a father to a child facing similar needs, giving him a deep understanding of what families supporting children with learning challenges go through. Through the Mastercard Foundation EdTech Fellowship 2026, he is building Dalza, a platform designed to support children with special needs by helping parents, teachers, and specialists work together in one place, making it easier to manage support, share responsibility, and ensure no child’s needs fall through the cracks. , 🔗 Find more about Dalza, here: https://www.dalza.com/ ‍ #AfricanEdTech #Injini #Dalza #YoungAfricaWorks #InclusiveEdTech Discover More Blog Posts Artificial Intelligence (AI) The best AI for African classrooms starts with context, not The best AI for African classrooms starts with"
-    },
-    {
-      "id": "check-page-6c9bcc0223",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-included",
-      "page": "batches",
-      "excerpt": "Meet the 2026 Cohort: IncludED What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat All Posts Meet the 2026 Cohort: IncludED Written by: Injini Published on: July 1, 2026 The spark for IncludEDU began with a critical challenge during the COVID-19 pandemic. A special needs institution urgently needed a way to support its students remotely using technology. Out of that crisis, the IncludED platform was born. Special education faces a systemic shortage of tailored content, and teachers rarely have the time to create unique lessons for every single student in a class. IncludED bridges that gap. Their platform takes existing curriculum and transforms it into personalised content at the touch of a button, allowing schools, universities, and TVET colleges to deliver individualised support at scale. 🚀As part of the Mastercard Foundation EdTech Fellowship 2026, IncludEDU is continuing to scale this vital work. This fellowship is entirely focused on advancing inclusive learning solutions, and we are excited"
-    },
-    {
-      "id": "check-page-3a96ad10c9",
-      "url": "https://www.injini.africa/post/meet-the-2026-cohort-tangible-leva-foundation",
-      "page": "batches",
-      "excerpt": "Meet the 2026 Cohort: Tangible (Leva Foundation) What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat All Posts Meet the 2026 Cohort: Tangible (Leva Foundation) Written by: Injini Published on: Not every EdTech solution starts with a device or a data connection. Leva Foundation's Tangible Africa starts with a different question: what does a learning tool look like when it is built for the classrooms that actually exist across the continent? The answer is offline games, designed so that teachers without programming experience can walk in and use them immediately. The focus is on group problem-solving and classroom collaboration, not individual screen time. Accessible by design. Intentional from the start. Jackson Tshabalala, Event Manager at Leva Foundation, is part of the Mastercard Foundation EdTech Fellowship 2026. ‍ Find out more about Tangible: https://tangible.levafoundation.org/ Follow our page to meet the rest of the 2026 cohort. ‍ ‍ Discover More Blog Posts Artificial Intelligence (AI) The"
-    },
-    {
-      "id": "check-page-af9e5d6246",
-      "url": "https://www.injini.africa/post/prioritising-inclusion-injini-announces-fourth-cohort-for-the-mastercard-foundation-edtech-fellowship",
-      "page": "batches",
-      "excerpt": "Prioritising inclusion: Injini announces fourth cohort for the Mastercard Foundation EdTech Fellowship What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat All Posts Prioritising inclusion: Injini announces fourth cohort for the Mastercard Foundation EdTech Fellowship Written by: Injini Published on: April 17, 2026 ‍ Injini, Africa’s leading EdTech Accelerator and Think Tank, has selected its fourth cohort for the Mastercard Foundation EdTech Fellowship. This year’s intake marks a significant milestone with a dedicated focus on enhancing accessibility and fostering inclusive learning environments across the continent. ‍ April 16, 2026, CAPE TOWN: Following a comprehensive selection process, Injini is pleased to announce the ten EdTech companies joining the 2026 Mastercard Foundation EdTech Fellowship. These growth-stage ventures will participate in a specialised six-month acceleration program designed to scale their impact and improve educational outcomes for all learners. \"As we enter our fourth"
-    },
-    {
-      "id": "check-page-bb0d20fc98",
-      "url": "https://www.injini.africa/about",
-      "page": "details",
-      "excerpt": "About | Injini What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat About Injini’s story, impact, team and mission. Who We Are We support the people who are changing education in Africa Injini EdTech Acceleration NPC is a registered Non-Profit Company (2017/193849/08) and Public Benefit Organisation based in Cape Town, South Africa with the purpose of improving educational outcomes in sub-Saharan Africa. Founded in 2017, Injini remains the only EdTech specialised accelerator in Africa. Injini was established on the belief that innovation and technology - developed by Africa, for Africa - can help solve the continent’s most pressing education challenges. Our Work Read The Blog Our team Get to know the diverse and experienced individuals behind Injini. Krista Davidson Executive Director Larry Leyden Chief Operating Officer Kelly Fisher Marketing & Communications Head Alexei McGregor MEL & Research Head Kumbula Xego Senior MEL Associate Gigi Ngcobo Venture Scale Lead Kelly Gifford Programmes &"
-    },
-    {
-      "id": "check-page-a1a4f42417",
-      "url": "https://www.injini.africa/edtech-fellowship",
-      "page": "details",
-      "excerpt": "Mastercard Fdn EdTech Fellowship Program | Injini What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat EdTech Fellowship A program in partnership with the Mastercard Foundation About the Fellowship The Mastercard Foundation EdTech Fellowship Program is a six-month, equity-free acceleration program for high-impact companies using technology and innovation to address challenges in South African education. For 2026, there is a strategic emphasis on reaching Young women, People with Disabilities (PWD), Refugees and Displaced Persons (RDP), and Rural Youth ensuring that innovative EdTech solutions bridge the digital divide in areas traditionally overlooked by mainstream venture ecosystems. This focus is crucial for driving systemic change and ensuring quality education access across all parts of South Africa, beyond the major urban hubs. The 2026 applications are now closed. Meet the new cohort here . ‍ ‍ Sign up to our newsletter to be notified about program updates. Sign up Program Objectives Create"
-    },
-    {
-      "id": "check-page-575e31f812",
-      "url": "https://www.injini.africa/post/building-the-future-of-african-edtech-inside-injinis-ai-venture-builder",
-      "page": "details",
-      "excerpt": "Building the Future of African EdTech: Inside Injini’s AI Venture Builder What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat All Posts Building the Future of African EdTech: Inside Injini’s AI Venture Builder Written by: Injini Published on: September 29, 2026 Artificial intelligence is reshaping education globally, but solving Africa's unique challenges requires context-driven innovation. To power this transformation, Injini (supported by Coefficient Giving ) is launching the AI for Education Venture Builder & Incubation Program . This eight-month initiative supports African founding teams in taking early-stage ideas from concept to tested, market-ready AI solutions. The program unfolds in two structured phases: Phase 1: Venture Build (5 Months | Nov 2026 to Mar 2027): 12 selected teams validate education challenges, build prototypes, and complete live user testing in Johannesburg. Phase 2: Incubation (3 Months | Apr to Jun 2027): The top 5 ventures refine their products, solidify go-to-market"
-    },
-    {
-      "id": "check-page-cf87eb2ebd",
-      "url": "https://www.injini.africa/post/meet-the-fellows-of-injinis-inaugural-mastercard-foundation-edtech-fellowship-program",
-      "page": "details",
-      "excerpt": "Meet the Fellows of Injini’s inaugural Mastercard Foundation EdTech Fellowship Program What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat All Posts Meet the Fellows of Injini’s inaugural Mastercard Foundation EdTech Fellowship Program Written by: Kelly Fisher Published on: April 14, 2023 Injini and the Mastercard Foundation recently joined forces to launch the Mastercard Foundation EdTech Fellowship Program . This specialised venture support program is uniquely designed for high-growth and high-impact companies addressing pressing challenges in education in South Africa through technology and innovation. This initiative provides selected startups with direct, product quality evaluation and certification, coaching and mentorship, bespoke market research and market access through Injini’s network of stakeholders across the education innovation landscape. After a rigorous selection process, the 12 most promising growth-stage, impact-driven EdTech companies have been selected. Here are the 12"
-    },
-    {
-      "id": "check-page-af0e5f7dd4",
-      "url": "https://www.injini.africa/post/pitch-perfect-best-practices-for-acing-your-pitch-for-an-edtech-fellowship-program",
-      "page": "details",
-      "excerpt": "Pitch perfect: Best practices for acing your pitch for an EdTech Fellowship Program What We Do Programs & Projects EdTech Acceleration Ecosystem Development AI for Education New EdTech Week 2026 EdTech for Employment New Other Projects Ecosystem Development Knowledge & Insights Research & Insights Resource Hub EdTech Map Blog Ecosystem Development About the EdTech Accelerator SA EdTech Week Explore the Resource Hub Ecosystem Development SA EdTech Week About Injini Our Portfolio Support Our Impact Let's Chat Let's Chat All Posts Pitch perfect: Best practices for acing your pitch for an EdTech Fellowship Program Written by: Kelly Fisher Published on: March 30, 2023 The Global Education Market is expected to reach $10 trillion by 2030 , with developing regions such as Asia and Africa driving the expansion. Locally, South Africa, EdTech is predicted to grow over 16% annually between 2021-2026, according to GlobalData . Innovation in education is crucial to level the playing field for learners. Our EdTech Fellowship Program, in partnership with the Mastercard Foundation, aims to support exceptional EdTech companies that improve educational outcomes in South Africa. The program has a rigorous selection process, including an in-person Selection Day where founders pitch to judges. While many companies may have had pitching experience, the stakes are high, and competition is always"
     }
   ],
   "findings": {
@@ -597,20 +513,12 @@
       {
         "value": "24 months",
         "evidenceId": "check-duration-019ba033ae"
-      },
-      {
-        "value": "5 months",
-        "evidenceId": "check-duration-563f389f46"
-      },
-      {
-        "value": "3 months",
-        "evidenceId": "check-duration-c198f99406"
       }
     ],
     "format": [
       {
         "value": "remote",
-        "evidenceId": "check-format-5f16ca68a7"
+        "evidenceId": "check-format-14b4a01bca"
       },
       {
         "value": "in-person",

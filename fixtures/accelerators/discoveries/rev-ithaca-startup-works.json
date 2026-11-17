@@ -1,12 +1,20 @@
 {
   "programId": "rev-ithaca-startup-works",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://www.revithaca.com/2025-prototyping-cohort-launches-with-momentum/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.revithaca.com/about-rev/",
       "page": "details",
       "anchor": "About",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -14,6 +22,78 @@
       "url": "https://www.revithaca.com/about-rev/people/",
       "page": "details",
       "anchor": "Mentors & Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/category/alumni-stardom/",
+      "page": "portfolio",
+      "anchor": "Alumni Stardom",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/category/rev-member-companies/",
+      "page": "portfolio",
+      "anchor": "Rev Member Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/coronavirus-updates-for-rev-members-and-friends/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/dimensional-energy-receives-50k-iaed-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/dimensional-energy-secures-deal-with-boom-supersonic/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/dimensional-energy-wins-50k-investment-at-taf-mvp-cleantech-competition/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/event/entrepreneurship-essentials-filing-tax/",
+      "page": "batches",
+      "anchor": "Rev Entrepreneurship Essentials: Filing Deadlines, Tax, and Regulatory Obligations",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/event/prototyping-info-session-27-2/",
+      "page": "details",
+      "anchor": "Prototyping Hardware Accelerator Information Session",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/event/prototyping-info-session-27/",
+      "page": "details",
+      "anchor": "Prototyping Hardware Accelerator Information Session",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -27,6 +107,94 @@
       "origin": "official"
     },
     {
+      "url": "https://www.revithaca.com/hardware/",
+      "page": "details",
+      "anchor": "Hardware Accelerators",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/inbound-investment-drives-southern-tiers-startup-success-in-2017/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/introducing-the-2021-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/introducing-the-2022-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/introducing-the-2023-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/introducing-the-2024-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/introducing-the-2024-prototyping-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/introducing-the-2025-protofacturing-hardware-accelerator-cohorts/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/introducing-the-5th-manufacturing-hardware-accelerator-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/introducing-the-6th-manufacturing-hardware-accelerator-cohort-2026/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/ithacas-key-resources-offer-dividends-for-entrepreneurs/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.revithaca.com/join-rev/",
       "page": "application",
       "anchor": "How to Apply",
@@ -35,26 +203,50 @@
       "origin": "official"
     },
     {
-      "url": "https://www.revithaca.com/event/entrepreneurship-essentials-filing-tax/",
-      "page": "batches",
-      "anchor": "Rev Entrepreneurship Essentials: Filing Deadlines, Tax, and Regulatory Obligations",
+      "url": "https://www.revithaca.com/manufacturing-hardware-accelerator/",
+      "page": "details",
+      "anchor": "Manufacturing Hardware Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/protofacturing-hardware-accelerator/",
+      "page": "details",
+      "anchor": "Protofacturing Hardware Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/prototyping-hardware-accelerator/",
+      "page": "details",
+      "anchor": "Prototyping Hardware Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/rev-hardware-accelerator-2018-applications-open/",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.revithaca.com/category/rev-member-companies/",
-      "page": "portfolio",
-      "anchor": "Rev Member Companies",
-      "fetched": false,
+      "url": "https://www.revithaca.com/rev-ithaca-startup-works-launches-applications-for-expanded-prototyping-hardware-accelerator/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.revithaca.com/category/alumni-stardom/",
-      "page": "portfolio",
-      "anchor": "Alumni Stardom",
-      "fetched": false,
+      "url": "https://www.revithaca.com/rev-member-farther-farms-receives-investment-from-launch-ny/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

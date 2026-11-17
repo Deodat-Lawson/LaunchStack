@@ -1,6 +1,6 @@
 {
   "programId": "500-global",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://500.co/",
     "https://500.co/500-georgia-apply",
@@ -16,15 +16,48 @@
     "https://500.co/accelerators/apply-georgia",
     "https://500.co/accelerators/join-the-waitlist-taiwan-form-apply",
     "https://500.co/angel-investing-unlocked-2024-sanabil-application-form",
-    "https://500.co/apply-for-an-accelerator"
+    "https://500.co/apply-for-an-accelerator",
+    "https://500.co/bam-application",
+    "https://500.co/founders/alberta/accelerator/apply",
+    "https://500.co/korea-apply",
+    "https://500.co/korea-apply-kr",
+    "https://500.co/sanabil-vc-unlocked-by-500-global-application"
   ],
   "evidence": [
+    {
+      "id": "check-duration-fdc8bad981",
+      "url": "https://500.co/korea-apply",
+      "title": "500 Global — application page",
+      "excerpt": "Series A program in the heart of South Korea for 8-weeks of growth and strategy. LEARN MORE → SEED V 500",
+      "page": "application"
+    },
     {
       "id": "check-name-8e6f0be0dc",
       "url": "https://500.co/",
       "title": "500 Global — homepage",
       "excerpt": "500 Global | 500 Global We invest in the world's potential 500 Global",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-03b40b7bc0",
+      "url": "https://500.co/korea-apply-kr",
+      "title": "500 Global — application page",
+      "excerpt": "PORTFOLIO → https://500.co/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-0ba2d63f41",
+      "url": "https://500.co/korea-apply",
+      "title": "500 Global — application page",
+      "excerpt": "PORTFOLIO → https://500.co/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-14b3a26d0a",
+      "url": "https://500.co/founders/alberta/accelerator/apply",
+      "title": "500 Global — application page",
+      "excerpt": "PORTFOLIO → https://500.co/portfolio",
+      "page": "application"
     },
     {
       "id": "check-portfolio-207c2b9ffa",
@@ -69,6 +102,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-3102b393b2",
+      "url": "https://500.co/sanabil-vc-unlocked-by-500-global-application",
+      "title": "500 Global — application page",
+      "excerpt": "Portfolio → https://500.co/portfolio",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-38f54fc254",
       "url": "https://500.co/",
       "title": "500 Global — homepage",
@@ -83,8 +123,29 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-43092bc9f2",
+      "url": "https://500.co/sanabil-vc-unlocked-by-500-global-application",
+      "title": "500 Global — application page",
+      "excerpt": "PORTFOLIO → https://500.co/portfolio",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-5290276a97",
       "url": "https://500.co/500-global-accelerator-program-in-georgia-application-form",
+      "title": "500 Global — application page",
+      "excerpt": "Portfolio → https://500.co/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-540a3f4102",
+      "url": "https://500.co/founders/alberta/accelerator/apply",
+      "title": "500 Global — application page",
+      "excerpt": "Portfolio → https://500.co/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5a8ac2d791",
+      "url": "https://500.co/korea-apply",
       "title": "500 Global — application page",
       "excerpt": "Portfolio → https://500.co/portfolio",
       "page": "application"
@@ -181,6 +242,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-aa0b1c9bb3",
+      "url": "https://500.co/bam-application",
+      "title": "500 Global — application page",
+      "excerpt": "PORTFOLIO → https://500.co/portfolio",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-b1a1ae718d",
       "url": "https://500.co/accelerators/accelerate-aichi/seed-bootcamp-apply",
       "title": "500 Global — application page",
@@ -197,6 +265,13 @@
     {
       "id": "check-portfolio-ba5c9dd44e",
       "url": "https://500.co/accelerators/accelerate-aichi/thank-you-for-applying-the-seed-bootcamp",
+      "title": "500 Global — application page",
+      "excerpt": "Portfolio → https://500.co/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-be64386340",
+      "url": "https://500.co/korea-apply-kr",
       "title": "500 Global — application page",
       "excerpt": "Portfolio → https://500.co/portfolio",
       "page": "application"
@@ -265,6 +340,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-f40aa34113",
+      "url": "https://500.co/bam-application",
+      "title": "500 Global — application page",
+      "excerpt": "Portfolio → https://500.co/portfolio",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-f93fd2f691",
       "url": "https://500.co/500-global-accelerator-program-in-georgia-application-form",
       "title": "500 Global — application page",
@@ -313,6 +395,12 @@
       "url": "https://500.co/",
       "page": "details",
       "excerpt": "500 Global | 500 Global We invest in the world's potential 500 Global is a VC firm with $2.0B ¹ in AUM investing in globally ambitious founders building fast-growing technology companies. We focus on the U.S. and global markets where innovation, capital, and ecosystems can propel startups and unlock long-term value. See our full portfolio → Talent lives everywhere. Capital and opportunity does not. We invest in founders and empower investors with a global mindset across sectors, geographies, and markets where our capital, global networks, and resources can unlock their potential to drive uncommon outcomes. Leveraging our deep local expertise in the US and nascent ecosystems, we provide mentorship and resources that founders and investors need to navigate and scale across diverse markets worldwide. US/Global FOR INVESTORS Flagship Strategy FOR INVESTORS US/Global FOR FOUNDERS Flagship Accelerator FOR FOUNDERS US/Global PROGRAM FOR INVESTORS VC Unlocked: Silicon Valley PROGRAM FOR INVESTORS Global FOR ENABLERS Sustainable Growth Strategy FOR ENABLERS US/Global ↓ US/Global Latin America Middle East/North Africa Eurasia Southeast Asia East Asia US/Global FOR INVESTORS Flagship Strategy FOR INVESTORS US/Global FOR FOUNDERS Flagship Accelerator FOR FOUNDERS US/Global PROGRAM FOR INVESTORS VC Unlocked: Silicon Valley PROGRAM FOR INVESTORS US/Global PROGRAM FOR FOUNDERS Alberta"
+    },
+    {
+      "id": "check-page-c2c4cb9559",
+      "url": "https://500.co/",
+      "page": "details",
+      "excerpt": "PORTFOLIO + FOR FOUNDERS Founder Programs FOR INVESTORS Strategy Education Programs FOR ENABLERS Sustainable Growth INSIGHTS Content Hub Rise Report Press NETWORK Community Partnerships ABOUT People Ethos History Contact Careers Content Hub Portfolio Partnerships LP Portal Strategy Directory Legal Privacy Policy Do Not Sell/Share My Info Copyright © 2026."
     },
     {
       "id": "check-page-acd5d02a60",
@@ -397,6 +485,60 @@
       "url": "https://500.co/apply-for-an-accelerator",
       "page": "application",
       "excerpt": "Apply for a Tech Startup Accelerator | 500 Global Which Accelerator are you applying for? PORTFOLIO + FOR FOUNDERS Founder Programs FOR INVESTORS Strategy Education Programs FOR ENABLERS Sustainable Growth INSIGHTS Content Hub Rise Report Press NETWORK Community Partnerships ABOUT People Ethos History Contact Careers Content Hub Portfolio Partnerships LP Portal Strategy Directory Legal Privacy Policy Do Not Sell/Share My Info Copyright © 2026. 500 Global All rights reserved. Copyright © 2026. 500 Global All rights reserved."
+    },
+    {
+      "id": "check-page-83f6aa5164",
+      "url": "https://500.co/bam-application",
+      "page": "application",
+      "excerpt": "BAM Application: Accelerator Managers | 500 Global Submit an application Disclaimer You have been invited to submit this application by 500 Startups Incubator, L.L.C or its affiliates (500, we, us, or our). Your completion of this application is entirely voluntary. Some personal information may be collected about you if you choose to complete the application. Where you choose to disclose this information, you consent to 500 using this data for the purposes outlined below. The purpose of collecting the personal data set out in this application is for our legitimate interests in selecting participants for Bootcamp For Accelerator Managers (the “Program”) . The information provided by you in this application will be used to assess eligibility for acceptance into the Program, for purposes of processing your application and delivery of the Program. The personal data may be used for marketing purposes including to contact you with newsletters and related messages. The information you provide in this application may be aggregated with other responses in order to conduct research into the BAM community. This aggregated data may be shared with third parties in our marketing and educational materials. Your personal data may be stored and processed in the United States or any other country where 500 or its affiliates, subsidiaries, or service providers maintain facilities in accordance"
+    },
+    {
+      "id": "check-page-fdcbd43955",
+      "url": "https://500.co/bam-application",
+      "page": "application",
+      "excerpt": "Your personal data may be stored and processed in the United States or any other country where 500 or its affiliates, subsidiaries, or service providers maintain facilities in accordance with our Privacy Policy ."
+    },
+    {
+      "id": "check-page-5898b773c8",
+      "url": "https://500.co/bam-application",
+      "page": "application",
+      "excerpt": "PORTFOLIO + FOR FOUNDERS Founder Programs FOR INVESTORS Strategy Education Programs FOR ENABLERS Sustainable Growth INSIGHTS Content Hub Rise Report Press NETWORK Community Partnerships ABOUT People Ethos History Contact Careers Content Hub Portfolio Partnerships LP Portal Strategy Directory Legal Privacy Policy Do Not Sell/Share My Info Copyright © 2026."
+    },
+    {
+      "id": "check-page-77bc3c11f1",
+      "url": "https://500.co/founders/alberta/accelerator/apply",
+      "page": "application",
+      "excerpt": "Apply to Alberta Innovates Accelerator powered by 500 Global | 500 Global Submit your application PORTFOLIO + FOR FOUNDERS Founder Programs FOR INVESTORS Strategy Education Programs FOR ENABLERS Sustainable Growth INSIGHTS Content Hub Rise Report Press NETWORK Community Partnerships ABOUT People Ethos History Contact Careers Content Hub Portfolio Partnerships LP Portal Strategy Directory Legal Privacy Policy Do Not Sell/Share My Info Copyright © 2026. 500 Global All rights reserved. Copyright © 2026. 500 Global All rights reserved."
+    },
+    {
+      "id": "check-page-641694b67e",
+      "url": "https://500.co/korea-apply",
+      "page": "application",
+      "excerpt": "Apply - 500 Korea | 500 Global OUR ACCELERATOR Build your startup and learn from the best. Our seed accelerators are some of the most highly-sought after startup programs globally. SERIES A 500 Korea’s Series A Program Our Series A program in the heart of South Korea for 8-weeks of growth and strategy. LEARN MORE → SEED V 500 Korea’s Seed Program Seed Program is an accelerator program that selects early-stage startups and provides 500's growth support. Selected teams may receive seed investment... LEARN MORE → Jaeseong Lee COMMENTO, SERIES A PROGRAM 2018 \"Comento has transformed into a new company upon the completion of the Series A Program. Our monthly application rate has increased from around 10% to over 50% in just two months. This result has not only inspired us with new ideas for product optimization but most importantly, with our new goals and directions.\" Neil Choi SPOONRADIO, SERIES A PROGRAM 2017 \"After experiencing the 50% increase in revenue throughout the program, our team has become more confident than ever before. This positive change throughout the team is worth every penny of the program fee.\" Jaeseong Lee COMMENTO, SERIES A PROGRAM 2018 \"Comento has transformed into a new company upon the completion of the Series A Program. Our monthly application rate has increased from around 10% to over 50% in just two months. This result has not only inspired us with new"
+    },
+    {
+      "id": "check-page-e1c665ec05",
+      "url": "https://500.co/korea-apply",
+      "page": "application",
+      "excerpt": "Mentorship Our in-house experts on growth and distribution, corporate partnerships and B2B customer acquisition, media and PR work with you hand-in-hand to grow your business."
+    },
+    {
+      "id": "check-page-39f5775865",
+      "url": "https://500.co/korea-apply",
+      "page": "application",
+      "excerpt": "READ THE INTERVIEW PORTFOLIO + FOR FOUNDERS Founder Programs FOR INVESTORS Strategy Education Programs FOR ENABLERS Sustainable Growth INSIGHTS Content Hub Rise Report Press NETWORK Community Partnerships ABOUT People Ethos History Contact Careers Content Hub Portfolio Partnerships LP Portal Strategy Directory Legal Privacy Policy Do Not Sell/Share My Info Copyright © 2026."
+    },
+    {
+      "id": "check-page-939af93c77",
+      "url": "https://500.co/korea-apply-kr",
+      "page": "application",
+      "excerpt": "Apply - 500 Korea | 500 Global OUR ACCELERATOR Build your startup and learn from the best. 500코리아의 엑셀러레이팅 프로그램은 전 세계적으로 가장 수준 높은 커리큘럼을 운영하고 있습니다. SERIES A 500 코리아의 시리즈 A 프로그램 시리즈 A 프로그램은 한국에서 진행되는 8주 간의 그로스핵킹 커리큘럼입니다. 더 알아보기 → 시드프로그램 V 500코리아 시드프로그램 시드프로그램은 초기 단계 스타트업을 대상으로 성장을 지원해주는 액셀러레이팅 프로그램입니다. 선발된 팀은 시드 투자와 함꼐 글로벌 멘토가 이끄는 3주간의 프로그램에 참가하게 됩니다. 더 알아보기 → 이재성 대표 코멘토, SERIES A PROGRAM 2018 \"시리즈A 프로그램을 통해 코멘토는 비로소 회사다운 회사가 되 었다고 생각합니다. 두 달 사이에 채용 지원율은 10% 미만에서 50% 이상으로 오르는 성과를 얻으며 제품 개선뿐만 아니라 사 업적 방향성과 목표까지 더욱 확대되었습니다\" 최혁재 대표 SPOONRADIO, SERIES A PROGRAM 2017 \"일처리 방식도 빨리지고, 프로그램 전후를 비교해서 매출도 50% 정도 오르다 보니 멤버들의 자신감도 높아졌습니다. '지금 여기에서 얼마큼 더 성장하면 그다음 단계의 펀드레이징이 가 능하겠구나'라는 계획도 생겼어요. 이런 긍정적인 팀 분위기 때 문에 프로그램 참가 비용의 값어치를 충분히 얻었다고 생각해 요.\" 이재성 대표 코멘토, SERIES A PROGRAM 2018 \"시리즈A 프로그램을 통해 코멘토는 비로소 회사다운 회사가 되 었다고 생각합니다. 두 달 사이에 채용 지원율은 10% 미만에서 50% 이상으로 오르는 성과를 얻으며 제품 개선뿐만 아니라 사 업적 방향성과 목표까지 더욱 확대되었습니다\" 최혁재 대표 SPOONRADIO, SERIES A PROGRAM 2017 \"일처리 방식도 빨리지고, 프로그램 전후를 비교해서 매출도 50% 정도 오르다 보니 멤버들의 자신감도 높아졌습니다. '지금 여기에서 얼마큼 더 성장하면 그다음 단계의 펀드레이징이 가 능하겠구나'라는 계획도 생겼어요. 이런 긍정적인 팀 분위기 때 문에 프로그램 참가 비용의 값어치를 충분히 얻었다고 생각해 요.\" 이재성 대표 코멘토, SERIES A PROGRAM 2018 \"시리즈A 프로그램을 통해 코멘토는 비로소 회사다운 회사가 되 었다고 생각합니다. 두 달 사이에 채용 지원율은 10% 미만에서 50% 이상으로 오르는 성과를 얻으며 제품 개선뿐만 아니라 사 업적 방향성과 목표까지 더욱 확대되었습니다\" 1 2 프로그램 혜택 커뮤니티 스타트업을 시작하다 보면 생각보다 외롭고 지치는 순간들이 굉장히 많습니다. 같은 고민을 하고 있는 다른 창업가들과 함께 일하며 공감대를 형성하는 것은 성장에 큰 도움이"
+    },
+    {
+      "id": "check-page-0b8f991a09",
+      "url": "https://500.co/sanabil-vc-unlocked-by-500-global-application",
+      "page": "application",
+      "excerpt": "Apply: Sanabil VC Unlocked | 500 Global Submit an Application Submit your application for Sanabil VC Unlocked by 500 Global. PORTFOLIO + FOR FOUNDERS Founder Programs FOR INVESTORS Strategy Education Programs FOR ENABLERS Sustainable Growth INSIGHTS Content Hub Rise Report Press NETWORK Community Partnerships ABOUT People Ethos History Contact Careers Content Hub Portfolio Partnerships LP Portal Strategy Directory Legal Privacy Policy Do Not Sell/Share My Info Copyright © 2026. 500 Global All rights reserved. Copyright © 2026. 500 Global All rights reserved."
     }
   ],
   "findings": {
@@ -430,7 +572,12 @@
     ],
     "announcedIntake": [],
     "cohortStarts": [],
-    "durationWeeks": [],
+    "durationWeeks": [
+      {
+        "value": "8",
+        "evidenceId": "check-duration-fdc8bad981"
+      }
+    ],
     "format": [],
     "location": [],
     "selectivity": [],

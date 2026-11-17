@@ -1,6 +1,6 @@
 {
   "programId": "one-eight-seven-one",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://1871.com/about/",
@@ -29,22 +29,6 @@
     {
       "url": "https://1871.com/event/blktech-founders-cohort-5-info-sessions/",
       "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://1871.com/event/taxing-times-what-you-need-to-know-about-recent-tax-changes-those-on-the-horizon/",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://1871.com/event/tech-talk-chatting-about-chatgpt-effects-of-ai/",
-      "page": "details",
       "anchor": "",
       "fetched": true,
       "blocked": null,

@@ -1,6 +1,6 @@
 {
   "programId": "connect-ventures",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "http://www.connectventures.co/opinions/the-connect-ventures-thesis",
@@ -46,7 +46,7 @@
       "url": "https://www.connectventures.co/companies/ai-coustics",
       "page": "portfolio",
       "anchor": "ai-coustics ∙ Deep Tech ∙ Germany ∙ ∙ Active Active AI-driven speech enhancement.",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -54,15 +54,7 @@
       "url": "https://www.connectventures.co/companies/aikido",
       "page": "portfolio",
       "anchor": "Aikido ∙ AI ∙ Belgium ∙ ∙ Active Active Software security platform.",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.connectventures.co/companies/ambient",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -119,6 +111,14 @@
       "page": "portfolio",
       "anchor": "Zellify ∙ Consumer ∙ Sweden ∙ ∙ Active Active The Web2App growth platform — onboard, convert, and monetize users on the web before they hit the app.",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/opinions/building-an-impactful-portfolio",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

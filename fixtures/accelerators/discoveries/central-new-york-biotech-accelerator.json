@@ -1,5 +1,78 @@
 {
   "programId": "central-new-york-biotech-accelerator",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
-  "pages": []
+  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "pages": [
+    {
+      "url": "https://cnybac.com/about-the-accelerator/",
+      "page": "details",
+      "anchor": "About CNYBAC",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cnybac.com/about-the-accelerator/advisory-board-members/",
+      "page": "details",
+      "anchor": "Advisory Board Members",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cnybac.com/about-the-accelerator/contact-us/",
+      "page": "details",
+      "anchor": "Contact Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cnybac.com/about-the-accelerator/location/",
+      "page": "details",
+      "anchor": "Location",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cnybac.com/about-the-accelerator/staff/",
+      "page": "details",
+      "anchor": "Staff",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cnybac.com/client-information/client-accelerator-application/",
+      "page": "application",
+      "anchor": "Client Accelerator Application",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cnybac.com/client-information/ubv-investment-fund/",
+      "page": "terms",
+      "anchor": "UBV Investment Fund",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cnybac.com/medical-device-innovation-challenge-in-the-national-grid-creation-garage/mdic-application/",
+      "page": "application",
+      "anchor": "2026 Medical Device Innovation Challenge (MDIC) Application",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cnybac.com/resources-2/mentor-network/mentor-application/",
+      "page": "application",
+      "anchor": "Mentor Application",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

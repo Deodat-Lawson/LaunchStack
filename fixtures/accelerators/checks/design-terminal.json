@@ -1,6 +1,6 @@
 {
   "programId": "design-terminal",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://civitta.com/hu",
     "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
@@ -16,7 +16,12 @@
     "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
     "https://civitta.com/our-work/ohtuleht-codebase-updates/",
     "https://civitta.com/about-us/",
-    "https://civitta.com/career/partner-development-program/"
+    "https://civitta.com/career/partner-development-program/",
+    "https://civitta.com/ee/laanemere-piirkonna-2014-2020-programmi-lopphindamine/",
+    "https://civitta.com/ee/rahastusvoimalused/rakendusuuringute-programm/",
+    "https://civitta.com/ee/rahastusvoimalused/rakendusuuringute-programmi-vaikeprojektide-taotlusvoor/",
+    "https://civitta.com/fi/rahoitusmahdollisuudet/deep-tech-accelerator-dta/",
+    "https://civitta.com/funding-programs/agile-programme-for-agile-and-rapid-defence-innovation/"
   ],
   "evidence": [
     {
@@ -111,6 +116,41 @@
       "page": "details"
     },
     {
+      "id": "check-phone-1286f45f24",
+      "url": "https://civitta.com/ee/rahastusvoimalused/rakendusuuringute-programmi-vaikeprojektide-taotlusvoor/",
+      "title": "Design Terminal — program page",
+      "excerpt": "+372 5816 1353",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-573d381493",
+      "url": "https://civitta.com/fi/rahoitusmahdollisuudet/deep-tech-accelerator-dta/",
+      "title": "Design Terminal — program page",
+      "excerpt": "+358 505 261 694",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-d1973c5d75",
+      "url": "https://civitta.com/ee/rahastusvoimalused/rakendusuuringute-programm/",
+      "title": "Design Terminal — program page",
+      "excerpt": "+372 5816 1353",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-e5bfde7f9d",
+      "url": "https://civitta.com/funding-programs/agile-programme-for-agile-and-rapid-defence-innovation/",
+      "title": "Design Terminal — program page",
+      "excerpt": "+372 5816 1353",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-f2ccbb7e6e",
+      "url": "https://civitta.com/funding-programs/agile-programme-for-agile-and-rapid-defence-innovation/",
+      "title": "Design Terminal — program page",
+      "excerpt": "+46 73 73 59 522",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-0fe3550b93",
       "url": "https://civitta.com/our-work/ohtuleht-codebase-updates/",
       "title": "Design Terminal — batches page",
@@ -174,6 +214,13 @@
       "page": "details"
     },
     {
+      "id": "check-portfolio-e1ad96a045",
+      "url": "https://civitta.com/funding-programs/agile-programme-for-agile-and-rapid-defence-innovation/",
+      "title": "Design Terminal — program page",
+      "excerpt": "Startups → https://civitta.com/startups/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-ee23b880e9",
       "url": "https://civitta.com/global-funding-opportunities/interregional-innovation-investments-instrument-i3/",
       "title": "Design Terminal — terms page",
@@ -210,10 +257,76 @@
       "excerpt": "Civitta Magyarország: Vállalkozásfejlesztés, forrásszerzési tanácsadás, digitális megoldások Ügyfeleink Szolgáltatásaink Aktív programok Csapatunk Karrier Kapcsolat Központi Civitta Kapcsolatfelvétel Ügyfeleink Szolgáltatásaink Aktív programok Csapatunk Karrier Kapcsolat Központi Civitta Vállalkozásfejlesztés, forrásszerzési tanácsadás, digitális megoldások A Civitta Közép- és Kelet-Európából indult, és büszkék vagyunk arra, hogy mára a legnagyobb e régióban alapított tanácsadó céggé váltunk, miközben világszerte valósítunk meg projekteket. Tehetséggondozás Vállalkozásfejlesztő programokat tervezünk és valósítunk meg, a legfiatalabbak pedig oktatási programokon keresztül ösztönözzük vállalkozás indításra. Közszektor tanácsadás Hazai és nemzetközi szinten is támogatunk intézményeket szakpolitika-alkotásban, gazdasági növekedés előmozdításában és transzformációs programok megvalósításában. Tanácsadás Stratégia, elemzések, fenntarthatóság, AI- és adatmegoldásokkal segítjük a szervezeteket. Az intézményeket szakpolitika-alkotásban és transzformációs programok megvalósításában támogatjuk. Forrásszerzési támogatás Támogatjuk ügyfeleinket a nemzetközi és hazai finanszírozási programokból származó források megszerzésében és kezelésében. Digitális megoldások Digitális termékeket, platformokat és élményeket tervezünk és fejlesztünk, beleértve a szoftverfejlesztést, a UX/UI design-t és a"
     },
     {
+      "id": "check-page-cad47736fc",
+      "url": "https://civitta.com/hu",
+      "page": "details",
+      "excerpt": "Fiatalokat és vidéki régiókat célzó nemzetközi programunkban mentorálással és az üzletben használható AI eszközök oktatásával segítjük a magyar, szlovák és észt vállalkozókat."
+    },
+    {
+      "id": "check-page-1049cc30a1",
+      "url": "https://civitta.com/hu",
+      "page": "details",
+      "excerpt": "VAT HU25717002 Péter Palasics Head of Operations in Central Europe Region, Budapest, Hungary [email protected] Adatvédelmi szabályzat Etika Fenntarthatóság Központi Civitta Iratkozzon fel hírlevelünkre Kapcsolatfelvétel"
+    },
+    {
       "id": "check-page-916cf03586",
       "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
       "page": "application",
       "excerpt": "Civitta | Preparing for a Successful Funding Application Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development & e-commerce"
+    },
+    {
+      "id": "check-page-553b6b0244",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "page": "application",
+      "excerpt": "While each funding program has its own specific requirements, the most common key success factors include: EU-wide impact & strategic importance EU funding prioritizes projects that bring added value at the European level, not just at a national or regional scale."
+    },
+    {
+      "id": "check-page-d1c84bd61e",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "page": "application",
+      "excerpt": "EU programs fund: New technologies, deep-tech innovations, or disruptive solutions Breakthrough research transforming industries First-in-the-market applications of innovative products Tip : If your innovation has been proven in your local market, you can apply for funding to scale it across Europe or enhance it further (e.g., through programs like LIFE and Digital Europe)."
+    },
+    {
+      "id": "check-page-89dab2fa34",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "page": "application",
+      "excerpt": "Conversely, programs like EIC Accelerator and Horizon Europe are designed to fund high-risk, high-reward innovations."
+    },
+    {
+      "id": "check-page-07a33424df",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "page": "application",
+      "excerpt": "Clear commercialization & scalability potential EU funding isn’t just about research—it’s also about bringing innovations to market and ensuring they can scale across Europe."
+    },
+    {
+      "id": "check-page-76f3223b46",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "page": "application",
+      "excerpt": "Your project should show: A clear business model & commercialization strategy Scalability beyond national borders (e.g., entry into EU/global markets) Potential to attract additional investment after EU funding Example : If you are applying for EIC Accelerator, you must prove your product has strong commercial viability and is ready for market entry."
+    },
+    {
+      "id": "check-page-a6df849f96",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "page": "application",
+      "excerpt": "Collaboration & international partnerships (for some grants) Many EU programs require or prioritize projects that involve multiple European partners."
+    },
+    {
+      "id": "check-page-adbf4c567c",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "page": "application",
+      "excerpt": "Strong consortiums often include: SMEs, large enterprises, universities, and research institutions working together Cross-border partnerships that boost knowledge-sharing and impact Example : Horizon Europe R&D projects typically require at least three independent entities from three different EU/associated countries."
+    },
+    {
+      "id": "check-page-ba01d122ba",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "page": "application",
+      "excerpt": "Market Analysis & Commercialization Strategy If you are applying for innovation-focused grants (e.g., EIC Accelerator, Horizon Europe), you need to prove your idea has market potential."
+    },
+    {
+      "id": "check-page-4628724c44",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "page": "application",
+      "excerpt": "While smaller grants can be obtained within a few months, large-scale R&D or infrastructure projects may take over a year before funding is disbursed."
     },
     {
       "id": "check-page-b204f2b384",
@@ -228,10 +341,88 @@
       "excerpt": "Civitta | Optimising car dealership network in Estonia Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development & e-commerce"
     },
     {
+      "id": "check-page-705dd99260",
+      "url": "https://civitta.com/our-work/optimising-car-dealership-network-in-estonia/",
+      "page": "terms",
+      "excerpt": "Over the past five years, vehicle sales in Estonia have steadily declined, driven by factors such as COVID-19, the global semiconductor shortage, and broader economic pressures."
+    },
+    {
+      "id": "check-page-731d5fb8fb",
+      "url": "https://civitta.com/our-work/optimising-car-dealership-network-in-estonia/",
+      "page": "terms",
+      "excerpt": "Our goal was to identify the optimal sales network structure in Estonia and deliver future-oriented strategic recommendations."
+    },
+    {
+      "id": "check-page-256fc58bc9",
+      "url": "https://civitta.com/our-work/optimising-car-dealership-network-in-estonia/",
+      "page": "terms",
+      "excerpt": "These included: customer strategy insights, as well as guidance on showroom positioning and the optimal structure of the sales network in Estonia."
+    },
+    {
+      "id": "check-page-d2496d5d13",
+      "url": "https://civitta.com/our-work/optimising-car-dealership-network-in-estonia/",
+      "page": "terms",
+      "excerpt": "Applicability to other clients/industries The approach is highly relevant across the Baltics and Europe, where companies often focus on growth but overlook productivity as a strategic lever."
+    },
+    {
+      "id": "check-page-6872434df9",
+      "url": "https://civitta.com/our-work/optimising-car-dealership-network-in-estonia/",
+      "page": "terms",
+      "excerpt": "Retail, FMCG, and banking face similar challenges: physical networks remain important, but they are costly and risk becoming oversized relative to demand."
+    },
+    {
       "id": "check-page-4c7b95f796",
       "url": "https://civitta.com/our-work/releaf-paper-attracting-e10-5m-investment-for-innovation/",
       "page": "terms",
       "excerpt": "Civitta | ReLeaf Paper: attracting €10.5m investment for innovation Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development &"
+    },
+    {
+      "id": "check-page-c7994ec225",
+      "url": "https://civitta.com/our-work/releaf-paper-attracting-e10-5m-investment-for-innovation/",
+      "page": "terms",
+      "excerpt": "Additionally, we have supported them in drafting the funding application and preparing for the interview phase in one of the most competitive European funding programs."
+    },
+    {
+      "id": "check-page-4c692c1a56",
+      "url": "https://civitta.com/our-work/releaf-paper-attracting-e10-5m-investment-for-innovation/",
+      "page": "terms",
+      "excerpt": "The selection process lasted over seven months and included two rounds of validation and a final interview with five experts representing Western European VCs."
+    },
+    {
+      "id": "check-page-d61f9accfb",
+      "url": "https://civitta.com/our-work/releaf-paper-attracting-e10-5m-investment-for-innovation/",
+      "page": "terms",
+      "excerpt": "The total cost of the submitted project was €3.5M, which the European Commission agreed to finance €2.5M through a grant."
+    },
+    {
+      "id": "check-page-3576424080",
+      "url": "https://civitta.com/our-work/releaf-paper-attracting-e10-5m-investment-for-innovation/",
+      "page": "terms",
+      "excerpt": "“Each year, thousands of startups and representatives of small and medium-sized businesses from all EU countries apply for funding from the EIC Accelerator."
+    },
+    {
+      "id": "check-page-65237e902b",
+      "url": "https://civitta.com/our-work/releaf-paper-attracting-e10-5m-investment-for-innovation/",
+      "page": "terms",
+      "excerpt": "In addition to the ReLeaf team, consultants from Civitta, a leading management consulting company in Central and Eastern Europe with headquarters in Estonia, also joined the project team."
+    },
+    {
+      "id": "check-page-636badaf61",
+      "url": "https://civitta.com/our-work/releaf-paper-attracting-e10-5m-investment-for-innovation/",
+      "page": "terms",
+      "excerpt": "Assisting in writing the funding application and preparing for the interview stage in one of the most competitive European funding programs."
+    },
+    {
+      "id": "check-page-7b5207c703",
+      "url": "https://civitta.com/our-work/releaf-paper-attracting-e10-5m-investment-for-innovation/",
+      "page": "terms",
+      "excerpt": "Project result: Since 2021, ReLeaf Paper has become a significant and unique player in the European paper manufacturing arena."
+    },
+    {
+      "id": "check-page-e4da5ec524",
+      "url": "https://civitta.com/our-work/releaf-paper-attracting-e10-5m-investment-for-innovation/",
+      "page": "terms",
+      "excerpt": "To this date, they have raised €2,8 M in funding, opened offices in Kyiv and Paris, registered five Patents, and successfully obtained customers in 20 European countries."
     },
     {
       "id": "check-page-46a608940a",
@@ -240,10 +431,118 @@
       "excerpt": "Civitta | USAID Nigeria Agribusiness Investment Activity: Collaborative Policy Development and Implementation Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform"
     },
     {
+      "id": "check-page-718c912385",
+      "url": "https://civitta.com/our-work/usaid-nigeria-agribusiness-investment-activity-collaborative-policy-development-and-implementation/",
+      "page": "terms",
+      "excerpt": "Austin Associates (JAA), since 2025 part of Civitta, served as key subcontractor to CNFA on the USAID Feed the Future Nigeria Agribusiness Investment Activity (NAIA) – a five-year programme (2018-2023) operating across seven Nigerian states."
+    },
+    {
+      "id": "check-page-794a00e940",
+      "url": "https://civitta.com/our-work/usaid-nigeria-agribusiness-investment-activity-collaborative-policy-development-and-implementation/",
+      "page": "terms",
+      "excerpt": "The Challenge: Nigeria’s agribusiness sector was constrained by an outdated, fragmented policy and regulatory environment that limited private investment and sector growth."
+    },
+    {
+      "id": "check-page-146865085a",
+      "url": "https://civitta.com/our-work/usaid-nigeria-agribusiness-investment-activity-collaborative-policy-development-and-implementation/",
+      "page": "terms",
+      "excerpt": "Working alongside 22 federal and state MDAs, the team was embedded in technical working committees as official members – not external advisors – co-creating reform agendas with government counterparts to ensure institutional ownership."
+    },
+    {
+      "id": "check-page-1d47c80da5",
+      "url": "https://civitta.com/our-work/usaid-nigeria-agribusiness-investment-activity-collaborative-policy-development-and-implementation/",
+      "page": "terms",
+      "excerpt": "Implementation support Our experts developed and deployed a Policy Implementation Monitoring Tool – an 8-stage framework helping government partners assess their implementation readiness, identify gaps, and co-create action plans."
+    },
+    {
+      "id": "check-page-333e910458",
+      "url": "https://civitta.com/our-work/usaid-nigeria-agribusiness-investment-activity-collaborative-policy-development-and-implementation/",
+      "page": "terms",
+      "excerpt": "Sustainability To sustain reforms beyond project closure, our team facilitated the establishment of Public-Private Dialogue (PPD) forums , creating lasting mechanisms for ongoing government-private sector collaboration."
+    },
+    {
+      "id": "check-page-ebc51f7f4e",
+      "url": "https://civitta.com/our-work/usaid-nigeria-agribusiness-investment-activity-collaborative-policy-development-and-implementation/",
+      "page": "terms",
+      "excerpt": "Embed into government processes, not alongside them: Joining technical working committees as official members ensured reform agendas reflected government priorities and carried institutional ownership from the start."
+    },
+    {
       "id": "check-page-764ee757e5",
       "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
       "page": "terms",
       "excerpt": "Civitta | WeVenture: Strengthening Investment Readiness of Women Entrepreneurs Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web"
+    },
+    {
+      "id": "check-page-9580dca9c7",
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "It combined structured training, tailored mentorship, peer exchange, networking, and investor-facing activities."
+    },
+    {
+      "id": "check-page-75ae8fee37",
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "The selected cohort was highly diverse: it included scalable, innovation- and technology-oriented startups, as well as traditional product- and service-based small and medium enterprises (SMEs)."
+    },
+    {
+      "id": "check-page-6ec4881c39",
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "The program combined country kick-offs, online training, group and one-to-one mentorship, practical assignments, networking, pitch preparation, semi-final selection, Demo Days, startup showcases and investor and stakeholder engagement."
+    },
+    {
+      "id": "check-page-48b90af959",
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "The program culminated in Demo Days , during which women entrepreneurs pitched directly to investors, development partners, accelerators, impact funds, financial institutions, and other ecosystem players from across three countries The invited juries assessed participants’ pitches and awarded grants to the top three businesses."
+    },
+    {
+      "id": "check-page-360b0747a5",
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "A total of USD 28,500 in grants was awarded to nine women entrepreneurs ."
+    },
+    {
+      "id": "check-page-a722db5c18",
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "These grants were distributed as follows: Armenia: HogaTAR; RegTechFlow; and SoftGuardian."
+    },
+    {
+      "id": "check-page-8dc9601bd1",
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "In addition to these grants, four program participants secured a total of USD 131,000 in external funding ."
+    },
+    {
+      "id": "check-page-eee069f22a",
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "Selected businesses also benefited from various forms of in-kind support , as outlined below: Armenia Following the completion of the program, participants received advisory support, vouchers, and access to an acceleration program: EcoSchool and N.Unique received advisory sessions with Civitta."
+    },
+    {
+      "id": "check-page-0bbbbb3a05",
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "SofiLuxe, Hoviv, SoftGuardian, RegTechFlow, and HogaTAR received partner prizes linked to participation in the Enterprise Incubator Foundation’s Impact Acceleration Program, with the opportunity to compete for equity funding of USD 30,000–100,000 upon completion."
+    },
+    {
+      "id": "check-page-d3eedf45e1",
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "Georgia Georgian participants gained access to advisory sessions, accelerator scholarships, and networking opportunities: Social Concept Store ESKI, GIORGO Biani, and TvirTTaro received advisory sessions with Civitta."
+    },
+    {
+      "id": "check-page-fbe87f48fb",
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "Suphra.ge, Packaging Cluster in Georgia, Dasi, AIIA, and Skill Lynk were accepted into the Founder Institute CEE Core Program with 50% scholarships."
+    },
+    {
+      "id": "check-page-9aa7a9fb3c",
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "500 Eurasia invited WeVenture participants to a Demo Day in Tbilisi."
     },
     {
       "id": "check-page-367f3e9558",
@@ -252,16 +551,100 @@
       "excerpt": "Civitta | Morning Health Talks Bratislava: Exploring healthcare innovation and investment Klienti Práca Tím Kariéra Kontakty Globálny web Kontaktujte nás Klienti Práca Tím Kariéra Kontakty Globálny web Morning Health Talks Bratislava: Exploring healthcare innovation and investment Insights Read time 3 min. Back to all news and insights On October 10, 2024, Civitta hosted the latest edition of EIT Health Morning Health Talks in Bratislava, bringing together healthcare leaders, investors, and startups. Keynote speaker Zuzana Kasanová from KU Leuven shared insights into building successful biomedical startups. She highlighted key factors like market validation, regulatory compliance, and team strength. KU Leuven’s accelerator program has supported 44 impactful projects, with 12 spin-offs expected by 2024. Investing in healthcare innovation in Central Eastern Europe Michal Nešpor from Crowdberry addressed the challenges of attracting investments to the region. Slovakia lags behind in healthcare investments compared to other EU countries, with limited access to foreign investors. He emphasized the importance of private capital in driving local healthcare startups forward. Abigail Sidibé, HICEE project coordinator, discussed a gap analysis revealing barriers in market validation, legal support, and a lack of business acumen in researchers. Investor panel discussion The event’s panel"
     },
     {
+      "id": "check-page-51393d1619",
+      "url": "https://civitta.com/sk/morning-health-talks-bratislava-exploring-healthcare-innovation-and-investment/",
+      "page": "terms",
+      "excerpt": "Investor panel discussion The event’s panel featured prominent investors discussing the startup ecosystem in Central Eastern Europe."
+    },
+    {
+      "id": "check-page-a9a32c55c0",
+      "url": "https://civitta.com/sk/morning-health-talks-bratislava-exploring-healthcare-innovation-and-investment/",
+      "page": "terms",
+      "excerpt": "Investors also emphasized the importance of long-term business models and market readiness, particularly in the health sector, which faces stricter regulations and longer development cycles compared to other industries."
+    },
+    {
+      "id": "check-page-139f771f27",
+      "url": "https://civitta.com/sk/morning-health-talks-bratislava-exploring-healthcare-innovation-and-investment/",
+      "page": "terms",
+      "excerpt": "How startups finance their innovations The event concluded with a showcase of prominent Slovak healthcare startups."
+    },
+    {
+      "id": "check-page-68d2cc0a5d",
+      "url": "https://civitta.com/sk/morning-health-talks-bratislava-exploring-healthcare-innovation-and-investment/",
+      "page": "terms",
+      "excerpt": "Featuring Blažena Ambroz Sedrovičová from AI Dental, Martin Vavrinčík from Novuma and Alan Böhm from Seerlinq."
+    },
+    {
+      "id": "check-page-b671b4ff18",
+      "url": "https://civitta.com/sk/morning-health-talks-bratislava-exploring-healthcare-innovation-and-investment/",
+      "page": "terms",
+      "excerpt": "Ambroz shared her experience navigating the certification process for AI-driven dental solutions, while Böhm showcased Seerlinq’s breakthrough telemedicine technology, which has already secured significant investment and clinical validation."
+    },
+    {
+      "id": "check-page-119c4d0369",
+      "url": "https://civitta.com/sk/morning-health-talks-bratislava-exploring-healthcare-innovation-and-investment/",
+      "page": "terms",
+      "excerpt": "We discussed funding strategies for healthcare startups and shared our know-how in attracting investment in healthcare innovation."
+    },
+    {
+      "id": "check-page-7470aa0186",
+      "url": "https://civitta.com/sk/morning-health-talks-bratislava-exploring-healthcare-innovation-and-investment/",
+      "page": "terms",
+      "excerpt": "Looking forward The Morning Health Talks provided insights into healthcare innovation and investment, helping bridge gaps between startups, investors, and academic institutions."
+    },
+    {
+      "id": "check-page-04b191cef2",
+      "url": "https://civitta.com/sk/morning-health-talks-bratislava-exploring-healthcare-innovation-and-investment/",
+      "page": "terms",
+      "excerpt": "The discussions underlined the importance of fostering collaboration to unlock the full potential of healthcare innovations in Central Eastern Europe."
+    },
+    {
       "id": "check-page-a2d671109c",
       "url": "https://civitta.com/sk/news-insights/the-future-of-healthcare-investments-and-innovation/",
       "page": "terms",
       "excerpt": "Civitta | The future of healthcare: Investments and innovation Klienti Práca Tím Kariéra Kontakty Globálny web Kontaktujte nás Klienti Práca Tím Kariéra Kontakty Globálny web The future of healthcare: Investments and innovation Insights Read time 2 min. Back to all news and insights Civitta Slovakia, as the EIT Health Hub in Slovakia, is organizing another EIT Health Morning Health Talks , which will return to Bratislava on October 10, 2024. This event will bring together key players from Slovakia’s healthcare innovation ecosystem to discuss the latest trends and foster collaboration in the sector. This edition will focus on exploring investments and financing for innovative healthcare projects within the CEE region. As part of the ongoing Morning Health Talks series, this event will allow attendees to network and engage with experts, investors, and innovators shaping the future of healthcare in the region. Key Focus Areas & Agenda Together with our guests, we will analyze the current state of venture capital investments in healthcare startups across Central and Eastern Europe (CEE), with a particular emphasis on Slovakia. This will be followed by a panel discussion with investors and VC funds. In the next part, several Slovak startups will present their projects and their path to funding. Finally, we will explore different funding opportunities for innovative healthcare"
     },
     {
+      "id": "check-page-078f88cf93",
+      "url": "https://civitta.com/sk/news-insights/the-future-of-healthcare-investments-and-innovation/",
+      "page": "terms",
+      "excerpt": "Finally, we will explore different funding opportunities for innovative healthcare projects and provide participants with practical advice on how to get funding."
+    },
+    {
+      "id": "check-page-0b0653a493",
+      "url": "https://civitta.com/sk/news-insights/the-future-of-healthcare-investments-and-innovation/",
+      "page": "terms",
+      "excerpt": "The EIT Health Morning Health Talks have been a crucial platform for knowledge-sharing and innovation across Europe since 2019."
+    },
+    {
+      "id": "check-page-e64c1353ea",
+      "url": "https://civitta.com/sk/news-insights/the-future-of-healthcare-investments-and-innovation/",
+      "page": "terms",
+      "excerpt": "This year’s event promises to be an excellent opportunity to explore the future of healthcare, with a focus on the role of investments and innovations in driving forward the industry in Slovakia and beyond."
+    },
+    {
+      "id": "check-page-2f4a6dc454",
+      "url": "https://civitta.com/sk/news-insights/the-future-of-healthcare-investments-and-innovation/",
+      "page": "terms",
+      "excerpt": "If you have any questions about the Morning Health Talks, please contact: [email protected] Partners: Zásady ochrany osobných údajov Etika Udržateľnosť Globálny web Odoberať newsletter Kontaktujte nás"
+    },
+    {
       "id": "check-page-ebe0900a93",
       "url": "https://civitta.com/topics/investment-readiness/",
       "page": "terms",
       "excerpt": "Civitta | Investment Readiness Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development & e-commerce Online campaigns, WordPress"
+    },
+    {
+      "id": "check-page-c2b95b4be6",
+      "url": "https://civitta.com/topics/investment-readiness/",
+      "page": "terms",
+      "excerpt": "Civitta helps growth-stage companies and research-intensive startups prepare for fundraising, develop investor materials and connect with the right capital sources across Europe."
+    },
+    {
+      "id": "check-page-8cbcc6e52a",
+      "url": "https://civitta.com/topics/investment-readiness/",
+      "page": "terms",
+      "excerpt": "Our work All work Techemerge: tackling world problems digitally Polar Light Technologies: a strategic path to EU grants Get in touch Email name E-mail Message Send By pressing the “Send” button, you accept that you have read and agree to the processing of your data as outlined in our Privacy Policy and relevant data privacy laws in order to address your inquiry."
     },
     {
       "id": "check-page-2d0ab3b8e8",
@@ -276,10 +659,100 @@
       "excerpt": "Civitta | WeVenture — Empowering Women Entrepreneurs to grow, scale and attract investment Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native"
     },
     {
+      "id": "check-page-24ac163df6",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "page": "terms",
+      "excerpt": "Over 12 weeks, the program combines practical training, one-on-one advisory, mentorship, and structured market testing to accelerate growth, strengthen investor readiness, and boost fundraising efforts."
+    },
+    {
+      "id": "check-page-8748494a67",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "page": "terms",
+      "excerpt": "Offering an innovative product or service that has moved beyond the idea or concept stage.* Committed to active participation in training, mentorship, and investor engagement sessions."
+    },
+    {
+      "id": "check-page-5a3066aa2b",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "page": "terms",
+      "excerpt": "The innovation should have progressed beyond the idea stage, showing early signs of validation-such as user feedback, pilot results, or first sales."
+    },
+    {
+      "id": "check-page-d7f65aab01",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "page": "terms",
+      "excerpt": "The training blends entrepreneurial mindset, product testing, business modeling and finance, investor communication, mentorship, and networking."
+    },
+    {
+      "id": "check-page-26bed05e52",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "page": "terms",
+      "excerpt": "Scaling strategies & international market entry Advanced product analytics (behavioral data, A/B testing) Investor readiness: term sheets & negotiations Financial modeling for growth High-level mentorship and pitch preparation Track B — Medium Readiness For early-stage startups, refining their model and preparing for investment."
+    },
+    {
+      "id": "check-page-6f7e767e3c",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "page": "terms",
+      "excerpt": "MVP testing with target customers Customer discovery and market segmentation (TAM) Foundational business modeling and projections Storytelling for early-stage investors Simulated investor Q&A and pitch day Program Timeline Total duration of training ~12 weeks."
+    },
+    {
+      "id": "check-page-539f769156",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "page": "terms",
+      "excerpt": "The CCS4CEE project: Improved knowledge and awareness of carbon capture and storage opportunities in Central and Eastern Europe Turn your ideas into impact with Innovation Fund Large company, are you ready to report your sustainability under CSRD?"
+    },
+    {
+      "id": "check-page-7e44a0c952",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "page": "terms",
+      "excerpt": "The silent climate catastrophe in war-torn Ukraine: CCS deployment potential in the country Unlocking environmental benefits for your company by creating an Environmental Product Declaration (EPD) Personalisation and lifetime value Possibilities and risks of carbon offsetting GRI standards – what is the fuzz about?"
+    },
+    {
+      "id": "check-page-6dcb713675",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "page": "terms",
+      "excerpt": "The much-needed introduction to “do no significant harm” and climate-proofing assessments The client hates your design."
+    },
+    {
+      "id": "check-page-a4e438f00e",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "page": "terms",
+      "excerpt": "Your new eCommerce product page How Can You Improve Your UX with Micro-interactions?"
+    },
+    {
+      "id": "check-page-539f769156",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "page": "terms",
+      "excerpt": "The CCS4CEE project: Improved knowledge and awareness of carbon capture and storage opportunities in Central and Eastern Europe Turn your ideas into impact with Innovation Fund Large company, are you ready to report your sustainability under CSRD?"
+    },
+    {
+      "id": "check-page-7e44a0c952",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "page": "terms",
+      "excerpt": "The silent climate catastrophe in war-torn Ukraine: CCS deployment potential in the country Unlocking environmental benefits for your company by creating an Environmental Product Declaration (EPD) Personalisation and lifetime value Possibilities and risks of carbon offsetting GRI standards – what is the fuzz about?"
+    },
+    {
       "id": "check-page-6f1a59fbd8",
       "url": "https://civitta.com/our-work/ohtuleht-codebase-updates/",
       "page": "batches",
       "excerpt": "Civitta | Ohtuleht: codebase updates Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development & e-commerce Online campaigns,"
+    },
+    {
+      "id": "check-page-d12575484d",
+      "url": "https://civitta.com/our-work/ohtuleht-codebase-updates/",
+      "page": "batches",
+      "excerpt": "Known for its tabloid format, Õhtuleht delivers news, entertainment, and political analysis to a broad audience both in print and online."
+    },
+    {
+      "id": "check-page-3fa9a1b893",
+      "url": "https://civitta.com/our-work/ohtuleht-codebase-updates/",
+      "page": "batches",
+      "excerpt": "Working with one of Estonia’s most prominent media outlets was an exciting challenge for our team."
+    },
+    {
+      "id": "check-page-a1e94f8394",
+      "url": "https://civitta.com/our-work/ohtuleht-codebase-updates/",
+      "page": "batches",
+      "excerpt": "Our partnership with Õhtuleht is ongoing, as we continue to work daily on optimizing their digital infrastructure and providing innovative solutions that keep them at the forefront of Estonia’s media industry."
     },
     {
       "id": "check-page-6d0f811423",
@@ -288,15 +761,118 @@
       "excerpt": "Civitta | About us Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development & e-commerce Online campaigns, WordPress landing"
     },
     {
+      "id": "check-page-976bf0cf93",
+      "url": "https://civitta.com/about-us/",
+      "page": "details",
+      "excerpt": "We started in Central and Eastern Europe and we are proud to be the largest consultancy emerging from our region."
+    },
+    {
+      "id": "check-page-ba069c12be",
+      "url": "https://civitta.com/about-us/",
+      "page": "details",
+      "excerpt": "02 Expansion From its roots in the Baltics, we expanded in a puzzle-like fashion through organic growth, mergers and acquisitions covering the map in CEE and expanding towards the Nordics and Central Asia."
+    },
+    {
       "id": "check-page-f59f497edc",
       "url": "https://civitta.com/career/partner-development-program/",
       "page": "details",
       "excerpt": "Civitta | Partner Development Program Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development & e-commerce Online campaigns,"
+    },
+    {
+      "id": "check-page-209f1d4396",
+      "url": "https://civitta.com/career/partner-development-program/",
+      "page": "details",
+      "excerpt": "Join Civitta – the largest consultancy rooted in Central and Eastern Europe, with 800+ colleagues across 30+ countries."
+    },
+    {
+      "id": "check-page-b87a0e391f",
+      "url": "https://civitta.com/career/partner-development-program/",
+      "page": "details",
+      "excerpt": "The program is open to candidates across all Civitta geographies, with a particular focus on Greece, the Baltics, Hungary, Slovakia, Poland, the Czech Republic, Romania, Croatia, and Slovenia."
+    },
+    {
+      "id": "check-page-166d08f157",
+      "url": "https://civitta.com/ee/laanemere-piirkonna-2014-2020-programmi-lopphindamine/",
+      "page": "details",
+      "excerpt": "Civitta | Läänemere piirkonna 2014-2020 programmi lõpphindamine Kliendid Töö Tiim Karjäär Kontaktid Globaalne veebisait Võta ühendust Kliendid Töö Tiim Karjäär Kontaktid Globaalne veebisait Läänemere piirkonna 2014-2020 programmi lõpphindamine Klient Läänemere piirkonna korraldusasutus Teenused Avalik poliitika ja uuringud Tööstus Avalik sektor ja mittetulundusühingud Projekti taust Interregi Läänemere piirkonna (BSR) programm on ELi rahastatud algatus, kus on integreeritud territoriaalne arengu ja koostöö tugevdamine, et tagada uuenduslikum, paremini juurdepääsetav ja jätkusuutlikum Läänemere piirkond. BSR programm keskendus 2014–2020 rahastusperioodil innovatsioonivõimekusele, loodusvarade tõhusale majandamisele ja säästvale transpordile. Meie meeskonnal oli võimalus hinnata, kas ja kuidas Interreg BSR programm tervikuna seatud eesmärgid saavutas, milline oli programmi mõju ning kuidas rahastatud projektid oma eesmärke täitsid. Projekti sisu Interreg on Euroopa Liidu ühtekuuluvuspoliitika tööriist, mille eesmärk on lahendada piiriüleseid probleeme ning arendada ühiselt erinevate territooriumide potentsiaali olla rohelisem, targem ja paremini ühendatud. Programm käsitleb riske ja probleeme, mida riik üksi lahendada ei suuda ja mille puhul on vajalik riikidevaheline koostöö. Programm kaasrahastas ligikaudu 200 projekti Läänemerd ümbritsevates riikides. Igal projektil oli"
+    },
+    {
+      "id": "check-page-42209f53e1",
+      "url": "https://civitta.com/ee/rahastusvoimalused/rakendusuuringute-programm/",
+      "page": "details",
+      "excerpt": "Rakendusuuringute programm | Civitta Kliendid Töö Tiim Karjäär Kontaktid Globaalne veebisait Võta ühendust Kliendid Töö Tiim Karjäär Kontaktid Globaalne veebisait Rakendusuuringute programm Kandideeri kohe Laadi alla EISi Rakendusuuringute programmi üldvoor on suunatud Eesti ettevõtetele, kes soovivad töötada välja innovaatilisi tehnoloogiaid, protsesse, tooteid või teenuseid ning katsetada uusi materjale või koguda teadmisi tehnoloogilise teostatavuse kohta. Ettevõtja saab osaleda kas iseseisvalt või koostöös teiste Eesti või välismaa ettevõtete, teadusasutuste, katselaborite või intellektuaalomandi ekspertidega. Programmis saavad osaleda kõik Eesti äriregistrisse kantud ettevõtted, sõltumata ettevõtte suurusest ning tegutsemisajast. Toetuse suurus on kuni 2 miljonit eurot ning toetusmäär jääb vahemikku 25–80%, sõltuvalt ettevõtte suurusest ja koostööpartneritest. Suletud Tähtaeg Järgmine voor on avatud alates 03.08.2026 Kategooria T&A, Innovatsioon Rahastamine Rakendusuuring, eksperimentaalne tootearendus, teostatavusuuring, IO esmakaitse. Maksimaalne toetussumma 2 000 000 € Ettevõtte suurus Väikeettevõtted, Keskmise suurusega ettevõtted, Suurettevõtted Asukoht Eesti Kestus Kuni 36 kuud Tulemus – Läbi teadusarendustegevuse ja tootearenduse kasvab müügitulu – Kasvab rahvusvaheline konkurentsivõime – Suureneb TA tegevusega tegelevate töötajate arv Potentsiaalsed taotlejad –"
+    },
+    {
+      "id": "check-page-d33098ab36",
+      "url": "https://civitta.com/ee/rahastusvoimalused/rakendusuuringute-programmi-vaikeprojektide-taotlusvoor/",
+      "page": "details",
+      "excerpt": "Rakendusuuringute programmi väikeprojektide taotlusvoor | Civitta Kliendid Töö Tiim Karjäär Kontaktid Globaalne veebisait Võta ühendust Kliendid Töö Tiim Karjäär Kontaktid Globaalne veebisait Rakendusuuringute programmi väikeprojektide taotlusvoor Kandideeri kohe Laadi alla EISi Rakendusuuringute programmi üldvoor on suunatud Eesti ettevõtetele, kes soovivad töötada välja innovaatilisi tehnoloogiaid, protsesse, tooteid või teenuseid ning katsetada uusi materjale või koguda teadmisi tehnoloogilise teostatavuse kohta. Ettevõtja saab osaleda kas iseseisvalt või koostöös teiste Eesti või välismaa ettevõtete, teadusasutuste, katselaborite või intellektuaalomandi ekspertidega. Programmis saavad osaleda kõik Eesti äriregistrisse kantud ettevõtted, sõltumata ettevõtte suurusest ning tegutsemisajast. Toetuse suurus on 100 000 kuni 250 000 eurot ning toetusmäär jääb vahemikku 25–80%, sõltuvalt ettevõtte suurusest ja koostööpartneritest. Avatud Tähtaeg Avatud Kategooria T&A, Innovatsioon Rahastamine Rakendusuuring, eksperimentaalne tootearendus, teostatavusuuring, IO esmakaitse. Maksimaalne toetussumma 250 000 € Ettevõtte suurus Väikeettevõtted, Keskmise suurusega ettevõtted, Suurettevõtted Asukoht Eesti Kestus Kuni 36 kuud Tulemus – Läbi teadusarendustegevuse ja tootearenduse kasvab müügitulu – Kasvab rahvusvaheline konkurentsivõime – Suureneb TA tegevusega tegelevate töötajate arv"
+    },
+    {
+      "id": "check-page-c1c2864f93",
+      "url": "https://civitta.com/fi/rahoitusmahdollisuudet/deep-tech-accelerator-dta/",
+      "page": "details",
+      "excerpt": "Deep Tech Accelerator (DTA) | Civitta Asiakkaat Projektit Tiimi Urat Yhteystiedot Globaali verkkosivusto Ota yhteyttä Asiakkaat Projektit Tiimi Urat Yhteystiedot Globaali verkkosivusto Deep Tech Accelerator (DTA) Hae nyt Lataa Deep Tech Accelerator -rahoitus on tarkoitettu alle viisivuotiaille jo toimintansa käynnistäneille deep tech -startupeille, jotka on perustettu kaupallistamaan uusimpia tutkimustuloksia, teknologiaa ja immateriaalioikeuksia. Rahoituksen tavoitteena on nopeuttaa markkinoille menoa ja skaalautuvan kansainvälisen liiketoiminnan käynnistämistä. Rahoitusta voi käyttää esimerkiksi: asiakas- ja markkinaymmärryksen kasvattamiseen ratkaisun soveltuvuuden todentamiseen asiakkaiden kanssa liiketoiminnan kehittämiseen ja myyntikelpoisuuden varmistamiseen tiimin vahvistamiseen myynnin, markkinoinnin ja liiketoiminnan osaajilla IPR-strategian, hyväksyntöjen ja lisärahoituksen valmisteluun DTA-rahoitus ei ole ensisijaisesti tuotekehitysrahoitusta, mutta projektiin voi sisältyä vähäisessä määrin jakson tavoitteiden kannalta välttämätöntä kehitystyötä Hakuaika päättyy Määräaika 11.5.-16.8.2026 Kategoria Deep tech | Startupit | Kaupallistaminen | Kansainvälinen kasvu Rahoitus Palkat, henkilösivukustannukset (enintään 30 %), matkakustannukset, aine- ja tarvikekustannukset, ostopalvelut, laiteostot, laitepoistot ja -vuokrat sekä yleiskustannukset Avustuksen enimmäismäärä"
+    },
+    {
+      "id": "check-page-d81a0e2a2a",
+      "url": "https://civitta.com/funding-programs/agile-programme-for-agile-and-rapid-defence-innovation/",
+      "page": "details",
+      "excerpt": "AGILE (Programme for Agile and Rapid Defence Innovation) | Civitta Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development &"
+    },
+    {
+      "id": "check-page-d7e1a9b711",
+      "url": "https://civitta.com/funding-programs/agile-programme-for-agile-and-rapid-defence-innovation/",
+      "page": "details",
+      "excerpt": "Coming soon… Deadline Open soon Category Defence R&D and innovation Funding Grants covering up to 100% of eligible costs; total budget of 115 million EUR for 20-30 projects."
+    },
+    {
+      "id": "check-page-bf156f511a",
+      "url": "https://civitta.com/funding-programs/agile-programme-for-agile-and-rapid-defence-innovation/",
+      "page": "details",
+      "excerpt": "Max grant amount 1 – 5 million EUR per project Company size SME Location EU, EEA-EFTA countries and Ukraine Duration 1-3 years Purpose Accelerate the development and testing of disruptive defence innovations and their market uptake, supporting SMEs, including start-ups and scale-ups, in moving from prototype to operational capability so that technologies reach defence forces within 1–3 years."
+    },
+    {
+      "id": "check-page-03efc1c100",
+      "url": "https://civitta.com/funding-programs/agile-programme-for-agile-and-rapid-defence-innovation/",
+      "page": "details",
+      "excerpt": "Potential applicants SMEs, including start-ups and scale-ups “New defence” players and tech innovators SMEs, start-ups and scale-ups working on emerging and disruptive defence products, including the adaptation of civil technologies for defence applications."
+    },
+    {
+      "id": "check-page-403e16e67a",
+      "url": "https://civitta.com/funding-programs/agile-programme-for-agile-and-rapid-defence-innovation/",
+      "page": "details",
+      "excerpt": "Open EU Member States and LIFE-associated countries Large, SME LIFE Programme 2026 EU funding for environment, climate action, biodiversity, circular economy, and clean energy transition projects."
+    },
+    {
+      "id": "check-page-e5073fce6b",
+      "url": "https://civitta.com/funding-programs/agile-programme-for-agile-and-rapid-defence-innovation/",
+      "page": "details",
+      "excerpt": "Deadline Expired Entities established in EU Member States and EDF Associated Countries Large, SME European Defence Fund (EDF) 2026 Funding collaborative defence research and innovation."
+    },
+    {
+      "id": "check-page-86b37346e7",
+      "url": "https://civitta.com/funding-programs/agile-programme-for-agile-and-rapid-defence-innovation/",
+      "page": "details",
+      "excerpt": "In 2026, it supports projects across 16 areas, including AI, cyber, space, defence technologies, air and naval systems, energy resilience, and disruptive innovations."
     }
   ],
   "findings": {
     "emails": [],
-    "phones": [],
+    "phones": [
+      {
+        "value": "+372 5816 1353",
+        "evidenceId": "check-phone-d1973c5d75"
+      },
+      {
+        "value": "+358 505 261 694",
+        "evidenceId": "check-phone-573d381493"
+      },
+      {
+        "value": "+46 73 73 59 522",
+        "evidenceId": "check-phone-f2ccbb7e6e"
+      }
+    ],
     "routes": [],
     "applicationUrl": [
       {

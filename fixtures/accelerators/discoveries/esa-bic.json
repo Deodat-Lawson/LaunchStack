@@ -1,6 +1,6 @@
 {
   "programId": "esa-bic",
-  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://commercialisation.esa.int/about",
@@ -60,6 +60,46 @@
     },
     {
       "url": "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/esa-comm-faq/6136/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-10/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-11/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-12/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/esa-comm-faq/auto-draft-13/",
       "page": "terms",
       "anchor": "",
       "fetched": true,

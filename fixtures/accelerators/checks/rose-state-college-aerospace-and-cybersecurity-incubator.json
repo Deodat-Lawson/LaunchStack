@@ -1,61 +1,362 @@
 {
   "programId": "rose-state-college-aerospace-and-cybersecurity-incubator",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
-    "https://www.workforce.rose.edu/aopa-program",
     "https://www.workforce.rose.edu/s/RSC-Incubator-Application-Form_Fillable.pdf",
-    "https://www.workforce.rose.edu/faqs"
+    "https://www.workforce.rose.edu/faqs",
+    "https://www.workforce.rose.edu/about-us",
+    "https://www.workforce.rose.edu/ai-ml-program",
+    "https://www.workforce.rose.edu/aopa-program",
+    "https://www.workforce.rose.edu/k12-programs",
+    "https://www.workforce.rose.edu/sbdc"
   ],
   "evidence": [
     {
+      "id": "check-duration-be07df64c0",
+      "url": "https://www.workforce.rose.edu/faqs",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — terms page",
+      "excerpt": "card refunds post back to your card within 1-2 weeks. Please also allow 4-6 weeks for reimbursement",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-cae4b2b426",
+      "url": "https://www.workforce.rose.edu/faqs",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — terms page",
+      "excerpt": "your card within 1-2 weeks. Please also allow 4-6 weeks for reimbursement of payments made by cash or",
+      "page": "terms"
+    },
+    {
       "id": "check-name-6b2028b076",
       "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
-      "title": "Rose State College Aerospace and Cybersecurity Incubator — homepage checked by scrape.py",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — homepage",
       "excerpt": "Incubator Incubator Mission Statement The mission of the Rose State College Aerospace and Cybersecurity Incubator is to bridge the gap between small businesses and key",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0ec143d4dd",
+      "url": "https://www.workforce.rose.edu/k12-programs",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — program page",
+      "excerpt": "\"telephone\": \"405-733-7488\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-25a406c0d5",
+      "url": "https://www.workforce.rose.edu/sbdc",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — program page",
+      "excerpt": "\"telephone\": \"405-733-7488\"",
       "page": "details"
     },
     {
       "id": "check-phone-3a5286d583",
       "url": "https://www.workforce.rose.edu/aopa-program",
-      "title": "Rose State College Aerospace and Cybersecurity Incubator — details page checked by scrape.py",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — program page",
       "excerpt": "\"telephone\": \"405-733-7488\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-4ba49d9ebe",
+      "url": "https://www.workforce.rose.edu/about-us",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — program page",
+      "excerpt": "\"telephone\": \"405-733-7488\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-6f6dc4753c",
+      "url": "https://www.workforce.rose.edu/sbdc",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — program page",
+      "excerpt": "(405) 733-7483",
       "page": "details"
     },
     {
       "id": "check-phone-91f89c6ded",
       "url": "https://www.workforce.rose.edu/faqs",
-      "title": "Rose State College Aerospace and Cybersecurity Incubator — terms page checked by scrape.py",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — terms page",
       "excerpt": "\"telephone\": \"405-733-7488\"",
       "page": "terms"
     },
     {
       "id": "check-phone-c2a1a655f4",
       "url": "https://www.workforce.rose.edu/faqs",
-      "title": "Rose State College Aerospace and Cybersecurity Incubator — terms page checked by scrape.py",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — terms page",
       "excerpt": "405-733-7488",
       "page": "terms"
     },
     {
+      "id": "check-phone-c5ef76fa92",
+      "url": "https://www.workforce.rose.edu/ai-ml-program",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — program page",
+      "excerpt": "\"telephone\": \"405-733-7488\"",
+      "page": "details"
+    },
+    {
       "id": "check-phone-f4d045464b",
       "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
-      "title": "Rose State College Aerospace and Cybersecurity Incubator — homepage checked by scrape.py",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — homepage",
       "excerpt": "\"telephone\": \"405-733-7488\"",
       "page": "details"
     },
     {
       "id": "check-route-5a10e411d7",
       "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
-      "title": "Rose State College Aerospace and Cybersecurity Incubator — homepage checked by scrape.py",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — homepage",
       "excerpt": "RSC Aerospace and Cybersecurity Incubator → https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
       "page": "details"
     },
     {
       "id": "check-route-78b994b25f",
       "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
-      "title": "Rose State College Aerospace and Cybersecurity Incubator — homepage checked by scrape.py",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — homepage",
       "excerpt": "Apply Now → https://www.workforce.rose.edu/s/RSC-Incubator-Application-Form_Fillable.pdf",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-03b5b66144",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "page": "details",
+      "excerpt": "Rose State College's Aerospace and Cybersecurity Incubator — Rose State College Workforce Development 0 Join us for Parent’s Night Out! Enroll Now Skip to Content Academic Degrees Professional Development Microcredentials Environmental Training Career Development Institute K-12 Programs Kids College - Summer AOPA Program SBDC About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Stay Connected News Events Contact ENROLL Open Menu Close Menu Academic Degrees Professional Development Microcredentials Environmental Training Career Development Institute K-12 Programs Kids College - Summer AOPA Program SBDC About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Stay Connected News Events Contact ENROLL Open Menu Close Menu Academic Degrees Folder: Professional Development Back Microcredentials Environmental Training Career Development Institute Folder: K-12 Programs Back Kids College - Summer AOPA Program Folder: SBDC Back About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Folder: Stay Connected Back News Events Contact ENROLL Rose State College's Aerospace and Cybersecurity Incubator Incubator Mission Statement The mission of the Rose State College Aerospace and Cybersecurity Incubator is to bridge the gap"
+    },
+    {
+      "id": "check-page-e5aad47d5c",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "page": "details",
+      "excerpt": "The incubator aims to increase the number of small business suppliers serving these sectors, fostering growth and innovation."
+    },
+    {
+      "id": "check-page-7fa66623d0",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "page": "details",
+      "excerpt": "Additionally, its broader objectives focus on strengthening the local economy by supporting small businesses in Midwest City, Oklahoma City, and throughout the state of Oklahoma, ensuring long-term success and economic impact."
+    },
+    {
+      "id": "check-page-db593b47c0",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "page": "details",
+      "excerpt": "Service area: The incubator serves the Midwest City and Greater Oklahoma City metro area, focusing primarily on aerospace and cybersecurity."
+    },
+    {
+      "id": "check-page-301c0beb93",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "page": "details",
+      "excerpt": "Some cities included in the service area (not a comprehensive list): Midwest City Oklahoma City Edmond Norman Moore Del City Yukon Mustang Choctaw Harrah Rose State College Aerospace and Cybersecurity Incubator - Programming Information The Rose State College Aerospace and Cybersecurity Incubator offers a robust range of programming designed to support the growth and success of small businesses."
+    },
+    {
+      "id": "check-page-8b45391c0e",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "page": "details",
+      "excerpt": "In addition to this one-on-one support, the incubator organizes regular lunch-and-learn sessions with resource partners, offering businesses access to industry insights and networking opportunities."
+    },
+    {
+      "id": "check-page-957abfde34",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "page": "details",
+      "excerpt": "Participants also benefit from peer collaboration through monthly touchpoints with fellow incubator occupants, fostering a collaborative environment where ideas and challenges can be openly shared."
+    },
+    {
+      "id": "check-page-ec9be63e50",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "page": "details",
+      "excerpt": "The incubator provides specialized training in areas such as legal assistance, marketing strategy, and connecting businesses with research centers to further innovation and competitiveness in the aerospace and cybersecurity industries."
+    },
+    {
+      "id": "check-page-88d8435131",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "page": "details",
+      "excerpt": "Room Information The incubator is located in the Tannenbaum building, remodeled to house three office spaces dedicated to the incubator."
+    },
+    {
+      "id": "check-page-7203081215",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "page": "details",
+      "excerpt": "Tenants have access to a co-working space for up to five people."
+    },
+    {
+      "id": "check-page-511b155a6d",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "page": "details",
+      "excerpt": "Facility Information The incubator operates within Rose State College’s Aerospace and Cybersecurity Incubator ."
+    },
+    {
+      "id": "check-page-0fea7a2946",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "page": "details",
+      "excerpt": "The Tannenbaum building offers ample parking , conference room access, and co-working areas."
+    },
+    {
+      "id": "check-page-070380325e",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "page": "details",
+      "excerpt": "Intake Pipeline Eligibility : Open to start-ups, existing businesses, and those in the ideation phase."
+    },
+    {
+      "id": "check-page-7e0a011aee",
+      "url": "https://www.workforce.rose.edu/s/RSC-Incubator-Application-Form_Fillable.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.7 %���� 430 0 obj < > endobj 489 0 obj < >/Filter/FlateDecode/ID[ < 18CD7D26118E144BA533F03E01C5AD32> < 377CDB5EF25BE4468444472AE18FD188>]/Index[430 191]/Info 429 0 R/Length 190/Prev 439795/Root 431 0 R/Size 621/Type/XRef/W[1 3 1]>>stream h�bbd` ``b`�p �,: �I D2� � � l �U8Ԭ¡k sp�h �H v �| Lv��v L��E��� �I5�� � �`� 2� H2�I �b�-�`�80; D�'��~ ��� �i� � � ��`�s�$X=� 0{ X6 �n ��$c&�� 2��T ��q # c �F �Qr��&�8w���? ӫ� � )4 endstream endobj startxref 0 %%EOF 620 0 obj < >stream hތ� PTU ��{�ط� g�} 1� ���Gbk� �@ p� 3YC~�5P�`� a� N�� a �)���H ƙ6B �ܑ� �i B�� j�� fS�p�x���}���9�� B ����\"`�Q�@ �� 4 * �iL�u ��� ,� �W�m��}}���u� N͞x��\\^ C �� ?�� g*\\�QW����e��� ���| �}�$#���� �� � � �1m Ѫ��}�4ew?����R^�y懁�� �:� r W��+!Z��� �W��M� -jc휃����1 _�#_7& S � oj�;=w�� ޸����[9�S/&�I\\f��+�6��� u�DJ�9�ԛ��]��� e�b�����܊�� < �\"�zj��d7 z�+���ާ��WnN t�� �� < ���; Ϻ�°�� ���o�����1��r[���� �a�� �l�^�ͣ���88T �5 � i'/�#L! 1&�B� A� ���׃1� �*�_�_ �B h ,�xA2QCL ���b}[e�O � [{�@Ƴ/�Ҝ��Y�8�� %��H� ��B&� �� �L���� ~P jP�0`M�.�J $�� �0�k =f �X�@,�X� �} ~� 9``% � �h�0a��+~� *���9 ���_�e�R��B�0� K� ��O�� Nb� �,B � �@r �� g� 6!�g�� YX � ��\"�B p r 9��� @ < � 9X�X��L �J\\V� �*fz�,�;mŶR�H$X$�0P� �M��2���X�� � � %�����YE\"����� q�Ĳ걢`-R)�� J�q l�` �ՖB ��� { \\�fJ[�\"��&F O����i 6�l� _��x� 1� ���o��� msK� ߑ:\"�Ji��*���� ^��hh�GF �Z �� d�� �� ��|C�q�/풋��ץ�ˌ˷� �& �&�'^��1&u���T�x�FFj�|d&�� }�6������q]�[l;�Q��}Þ�KR�Hm��~��㡡c��7�K"
+    },
+    {
+      "id": "check-page-0944d3e41c",
+      "url": "https://www.workforce.rose.edu/faqs",
+      "page": "terms",
+      "excerpt": "FAQs — Rose State College Workforce Development 0 Join us for Parent’s Night Out! Enroll Now Skip to Content Academic Degrees Professional Development Microcredentials Environmental Training Career Development Institute K-12 Programs Kids College - Summer AOPA Program SBDC About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Stay Connected News Events Contact ENROLL Open Menu Close Menu Academic Degrees Professional Development Microcredentials Environmental Training Career Development Institute K-12 Programs Kids College - Summer AOPA Program SBDC About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Stay Connected News Events Contact ENROLL Open Menu Close Menu Academic Degrees Folder: Professional Development Back Microcredentials Environmental Training Career Development Institute Folder: K-12 Programs Back Kids College - Summer AOPA Program Folder: SBDC Back About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Folder: Stay Connected Back News Events Contact ENROLL FAQs What if not enough people enroll in a course? Rose State College reserves the right to change any schedule or cancel any course that does not meet minimum enrollment requirements. If a cancellation or change occurs, our staff will"
+    },
+    {
+      "id": "check-page-3d29568458",
+      "url": "https://www.workforce.rose.edu/about-us",
+      "page": "details",
+      "excerpt": "About Us — Rose State College Workforce Development 0 Join us for Parent’s Night Out! Enroll Now Skip to Content Academic Degrees Professional Development Microcredentials Environmental Training Career Development Institute K-12 Programs Kids College - Summer AOPA Program SBDC About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Stay Connected News Events Contact ENROLL Open Menu Close Menu Academic Degrees Professional Development Microcredentials Environmental Training Career Development Institute K-12 Programs Kids College - Summer AOPA Program SBDC About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Stay Connected News Events Contact ENROLL Open Menu Close Menu Academic Degrees Folder: Professional Development Back Microcredentials Environmental Training Career Development Institute Folder: K-12 Programs Back Kids College - Summer AOPA Program Folder: SBDC Back About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Folder: Stay Connected Back News Events Contact ENROLL Center for Workforce Excellence Oklahoma’s first Aerospace and Cybersecurity Center of Workforce Excellence at Rose State College Rose State College is host to Oklahoma’s first Aerospace and Cybersecurity Center of Workforce Excellence"
+    },
+    {
+      "id": "check-page-88c8d14a8b",
+      "url": "https://www.workforce.rose.edu/about-us",
+      "page": "details",
+      "excerpt": "Exercise: Operation Alpha Community Learning Folder: Stay Connected Back News Events Contact ENROLL Center for Workforce Excellence Oklahoma’s first Aerospace and Cybersecurity Center of Workforce Excellence at Rose State College Rose State College is host to Oklahoma’s first Aerospace and Cybersecurity Center of Workforce Excellence (CWE)."
+    },
+    {
+      "id": "check-page-040566b2d9",
+      "url": "https://www.workforce.rose.edu/about-us",
+      "page": "details",
+      "excerpt": "The program, established in late 2019, brought together groups from across the state to work hand in hand with business leaders, public education, higher education, economic developers, state agencies and CareerTech to devise a replicable workforce model that can be deployed statewide."
+    },
+    {
+      "id": "check-page-2de9c71990",
+      "url": "https://www.workforce.rose.edu/about-us",
+      "page": "details",
+      "excerpt": "The program, established in late 2019, brought together groups from across the state to work hand-in-hand with business leaders, public education, higher education, economic developers, state agencies and CareerTech to devise a replicable workforce model that can be deployed statewide."
+    },
+    {
+      "id": "check-page-47bc29a734",
+      "url": "https://www.workforce.rose.edu/about-us",
+      "page": "details",
+      "excerpt": "“This framework facilitates the integration of resources within Oklahoma’s workforce and education system to ultimately launch a highly-effective and visible program that businesses can trust to support their growth and expansion,” said David Stewart, chair of the Oklahoma Workforce Committee and CEO of MidAmerica Industrial Park."
+    },
+    {
+      "id": "check-page-aeb2c3a58a",
+      "url": "https://www.workforce.rose.edu/about-us",
+      "page": "details",
+      "excerpt": "The CWEs align educational pathways from K-12, CareerTech and Higher Education providing articulation opportunities."
+    },
+    {
+      "id": "check-page-b6401bd6ad",
+      "url": "https://www.workforce.rose.edu/about-us",
+      "page": "details",
+      "excerpt": "“Oklahoma Works Together is yet another great marketing asset for Commerce when working with businesses prospects seeking to expand or relocate.” “Oklahoma has a robust education system that provides opportunity for all levels of workforce and career development options,” Stewart said."
+    },
+    {
+      "id": "check-page-30bb6d53ae",
+      "url": "https://www.workforce.rose.edu/ai-ml-program",
+      "page": "details",
+      "excerpt": "AI/ML Program — Rose State College Workforce Development 0 Join us for Parent’s Night Out! Enroll Now Skip to Content Academic Degrees Professional Development Microcredentials Environmental Training Career Development Institute K-12 Programs Kids College - Summer AOPA Program SBDC About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Stay Connected News Events Contact ENROLL Open Menu Close Menu Academic Degrees Professional Development Microcredentials Environmental Training Career Development Institute K-12 Programs Kids College - Summer AOPA Program SBDC About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Stay Connected News Events Contact ENROLL Open Menu Close Menu Academic Degrees Folder: Professional Development Back Microcredentials Environmental Training Career Development Institute Folder: K-12 Programs Back Kids College - Summer AOPA Program Folder: SBDC Back About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Folder: Stay Connected Back News Events Contact ENROLL Artificial Intelligence & Machine Learning Technologies Overview The Artificial Intelligence & Machine Learning Technologies program at Rose State College is designed to equip students with essential skills in deploying artificial"
+    },
+    {
+      "id": "check-page-9b698356d3",
+      "url": "https://www.workforce.rose.edu/ai-ml-program",
+      "page": "details",
+      "excerpt": "Graduates will be prepared to enter the workforce in AI-related fields."
+    },
+    {
+      "id": "check-page-b66a939a2c",
+      "url": "https://www.workforce.rose.edu/ai-ml-program",
+      "page": "details",
+      "excerpt": "Program Goals and Outcomes Students will deploy artificial intelligence principles or methodologies."
+    },
+    {
+      "id": "check-page-83d09b9ac0",
+      "url": "https://www.workforce.rose.edu/ai-ml-program",
+      "page": "details",
+      "excerpt": "Students will apply fundamental machine learning algorithms and techniques."
+    },
+    {
+      "id": "check-page-6e6673075f",
+      "url": "https://www.workforce.rose.edu/ai-ml-program",
+      "page": "details",
+      "excerpt": "Degree Plan The degree consists of 64 credit hours, including general education and program-specific courses: General Education Requirements (37 hours minimum) English Composition (9 hours): ENGL 1113, ENGL 1213, ENGL 2053 U.S."
+    },
+    {
+      "id": "check-page-e59ec479aa",
+      "url": "https://www.workforce.rose.edu/aopa-program",
+      "page": "details",
+      "excerpt": "AOPA Program — Rose State College Workforce Development 0 Join us for Parent’s Night Out! Enroll Now Skip to Content Academic Degrees Professional Development Microcredentials Environmental Training Career Development Institute K-12 Programs Kids College - Summer AOPA Program SBDC About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Stay Connected News Events Contact ENROLL Open Menu Close Menu Academic Degrees Professional Development Microcredentials Environmental Training Career Development Institute K-12 Programs Kids College - Summer AOPA Program SBDC About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Stay Connected News Events Contact ENROLL Open Menu Close Menu Academic Degrees Folder: Professional Development Back Microcredentials Environmental Training Career Development Institute Folder: K-12 Programs Back Kids College - Summer AOPA Program Folder: SBDC Back About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Folder: Stay Connected Back News Events Contact ENROLL Launch Your Aviation Journey with Rose State College! Take Flight with Academic and Career Opportunities in Aviation Rose State College, in partnership with select high schools and homeschool groups, offers students the chance to"
+    },
+    {
+      "id": "check-page-92d700049d",
+      "url": "https://www.workforce.rose.edu/aopa-program",
+      "page": "details",
+      "excerpt": "Take Flight with Academic and Career Opportunities in Aviation Rose State College, in partnership with select high schools and homeschool groups, offers students the chance to explore aviation while earning college credit."
+    },
+    {
+      "id": "check-page-84f25a7ac5",
+      "url": "https://www.workforce.rose.edu/aopa-program",
+      "page": "details",
+      "excerpt": "Through the Aircraft Owners and Pilots Association (AOPA) curriculum, students gain a head start in the field of aviation, setting the stage for a rewarding career."
+    },
+    {
+      "id": "check-page-8e641f5bac",
+      "url": "https://www.workforce.rose.edu/aopa-program",
+      "page": "details",
+      "excerpt": "Launch Your Aviation Career : Build a strong foundation in aviation with transferable credits and industry-relevant skills."
+    },
+    {
+      "id": "check-page-2d45d63f0c",
+      "url": "https://www.workforce.rose.edu/aopa-program",
+      "page": "details",
+      "excerpt": "Prepare for dynamic career opportunities in aviation."
+    },
+    {
+      "id": "check-page-4cb27b25f9",
+      "url": "https://www.workforce.rose.edu/k12-programs",
+      "page": "details",
+      "excerpt": "Kids College - Summer — Rose State College Workforce Development 0 Join us for Parent’s Night Out! Enroll Now Skip to Content Academic Degrees Professional Development Microcredentials Environmental Training Career Development Institute K-12 Programs Kids College - Summer AOPA Program SBDC About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Stay Connected News Events Contact ENROLL Open Menu Close Menu Academic Degrees Professional Development Microcredentials Environmental Training Career Development Institute K-12 Programs Kids College - Summer AOPA Program SBDC About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Stay Connected News Events Contact ENROLL Open Menu Close Menu Academic Degrees Folder: Professional Development Back Microcredentials Environmental Training Career Development Institute Folder: K-12 Programs Back Kids College - Summer AOPA Program Folder: SBDC Back About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Folder: Stay Connected Back News Events Contact ENROLL Explore, Learn, and Dream with Rose State College’s STEM K-12 Camps Inspiring the Next Generation of Innovators and Problem-Solvers! At Rose State College, we believe in nurturing curiosity and building the foundation for"
+    },
+    {
+      "id": "check-page-cd7961d12d",
+      "url": "https://www.workforce.rose.edu/sbdc",
+      "page": "details",
+      "excerpt": "Small Business Development Center — Rose State College Workforce Development 0 Join us for Parent’s Night Out! Enroll Now Skip to Content Academic Degrees Professional Development Microcredentials Environmental Training Career Development Institute K-12 Programs Kids College - Summer AOPA Program SBDC About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Stay Connected News Events Contact ENROLL Open Menu Close Menu Academic Degrees Professional Development Microcredentials Environmental Training Career Development Institute K-12 Programs Kids College - Summer AOPA Program SBDC About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Stay Connected News Events Contact ENROLL Open Menu Close Menu Academic Degrees Folder: Professional Development Back Microcredentials Environmental Training Career Development Institute Folder: K-12 Programs Back Kids College - Summer AOPA Program Folder: SBDC Back About SBDC RSC Aerospace and Cybersecurity Incubator R.A.I.D.E.R. Exercise: Operation Alpha Community Learning Folder: Stay Connected Back News Events Contact ENROLL Small Business Development Center What is the Small Business Development Center? Whether you need business coaching, help starting your businesses, developing a business plan, or need help selling to the"
+    },
+    {
+      "id": "check-page-82ef896d47",
+      "url": "https://www.workforce.rose.edu/sbdc",
+      "page": "details",
+      "excerpt": "Whether you need business coaching, help starting your businesses, developing a business plan, or need help selling to the government, we can help."
+    },
+    {
+      "id": "check-page-5b7c1cda8d",
+      "url": "https://www.workforce.rose.edu/sbdc",
+      "page": "details",
+      "excerpt": "Whether you need business coaching, help starting your business, developing a business plan or need help selling to the government, the Rose State SBDC consultants, can help."
+    },
+    {
+      "id": "check-page-f0b4ee5147",
+      "url": "https://www.workforce.rose.edu/sbdc",
+      "page": "details",
+      "excerpt": "Assistance is provided in the following areas: Business Plan Development Marketing Assessments Cost Analysis Financial Analysis Capital Resources, Financial Packaging & Forecasting Accounting and Bookkeeping Assistance is also provided in specialty areas such as Government Procurement Assistance."
+    },
+    {
+      "id": "check-page-c18e24f333",
+      "url": "https://www.workforce.rose.edu/sbdc",
+      "page": "details",
+      "excerpt": "Rose State College's Aerospace and Cybersecurity Incubator The Rose State College Aerospace and Cybersecurity Incubator bridges the gap between small businesses and industry leaders."
+    },
+    {
+      "id": "check-page-2b2ba68459",
+      "url": "https://www.workforce.rose.edu/sbdc",
+      "page": "details",
+      "excerpt": "By offering tailored support, collaborative opportunities, and strategic resources, the incubator empowers businesses to scale, innovate, and succeed."
+    },
+    {
+      "id": "check-page-27f03e0cdb",
+      "url": "https://www.workforce.rose.edu/sbdc",
+      "page": "details",
+      "excerpt": "Located in the newly remodeled Tannenbaum building, this program provides access to office spaces, co-working facilities, and expert guidance, making it a hub for growth and economic impact in the Greater Oklahoma City area."
+    },
+    {
+      "id": "check-page-0c48cffc75",
+      "url": "https://www.workforce.rose.edu/sbdc",
+      "page": "details",
+      "excerpt": "Learn more about the Incubator Contact the Small Business Development Center."
     }
   ],
   "findings": {
@@ -68,6 +369,10 @@
       {
         "value": "4057337488",
         "evidenceId": "check-phone-c2a1a655f4"
+      },
+      {
+        "value": "4057337483",
+        "evidenceId": "check-phone-6f6dc4753c"
       }
     ],
     "routes": [
@@ -85,8 +390,24 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "2",
+        "evidenceId": "check-duration-be07df64c0"
+      },
+      {
+        "value": "6",
+        "evidenceId": "check-duration-cae4b2b426"
+      }
+    ],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

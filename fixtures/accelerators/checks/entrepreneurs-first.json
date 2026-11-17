@@ -1,6 +1,6 @@
 {
   "programId": "entrepreneurs-first",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.joinef.com/",
     "https://apply.joinef.com",
@@ -14,9 +14,11 @@
     "https://www.joinef.com/faqs/europe/",
     "https://www.joinef.com/faqs/london/",
     "https://www.joinef.com/faqs/us/",
+    "https://www.joinef.com/about-us/",
+    "https://www.joinef.com/about/",
     "https://www.joinef.com/posts/updating-our-global-pre-seed-investment-offer/",
     "https://www.joinef.com/posts/category/updates/",
-    "https://www.joinef.com/about-us/"
+    "https://www.joinef.com/about/careers/"
   ],
   "evidence": [
     {
@@ -209,6 +211,13 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-2dd7448aff",
+      "url": "https://www.joinef.com/about/careers/",
+      "title": "Entrepreneurs First — program page",
+      "excerpt": "We try to respond to all applicants within 1-2 weeks. If we think your profile may be a fit for the",
+      "page": "details"
+    },
+    {
       "id": "check-duration-37846f7159",
       "url": "https://apply.joinef.com",
       "title": "Entrepreneurs First — application page",
@@ -342,6 +351,13 @@
       "page": "terms"
     },
     {
+      "id": "check-duration-fecda1fa1a",
+      "url": "https://www.joinef.com/about/careers/",
+      "title": "Entrepreneurs First — program page",
+      "excerpt": "& at the UN Yugoslav Tribunal in the Hague. In 6 months I have worked with over 30 founders , many of",
+      "page": "details"
+    },
+    {
       "id": "check-format-141e02f6c8",
       "url": "https://www.joinef.com/faqs/",
       "title": "Entrepreneurs First — terms page",
@@ -370,6 +386,13 @@
       "page": "terms"
     },
     {
+      "id": "check-format-8ecfc857ca",
+      "url": "https://www.joinef.com/about/careers/",
+      "title": "Entrepreneurs First — program page",
+      "excerpt": "where to find the exceptionally talented, then meet them in person and draw them to the path of founding. [02] Advising —",
+      "page": "details"
+    },
+    {
       "id": "check-format-aa93130490",
       "url": "https://apply.joinef.com",
       "title": "Entrepreneurs First — application page",
@@ -389,6 +412,13 @@
       "title": "Entrepreneurs First — application page",
       "excerpt": "and commitment to founding right now. This works best in person, where ideas and relationships can be quickly forged and",
       "page": "application"
+    },
+    {
+      "id": "check-format-b1d19928d1",
+      "url": "https://www.joinef.com/about/careers/",
+      "title": "Entrepreneurs First — program page",
+      "excerpt": "next generation. This will involve a mixture of online and in person activities, mapping talent clusters from university",
+      "page": "details"
     },
     {
       "id": "check-format-b24e40ddb5",
@@ -431,6 +461,13 @@
       "title": "Entrepreneurs First — application page",
       "excerpt": "Where should I apply? If you're based in Europe, we recommend you apply to either the",
       "page": "application"
+    },
+    {
+      "id": "check-location-9dc4c91501",
+      "url": "https://www.joinef.com/about/",
+      "title": "Entrepreneurs First — program page",
+      "excerpt": "Bridge Julia is a Principal Investor based in Paris. Since joining EF in September 2024,",
+      "page": "details"
     },
     {
       "id": "check-location-a80cdc458e",
@@ -510,6 +547,27 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-d6bff63c67",
+      "url": "https://www.joinef.com/about/",
+      "title": "Entrepreneurs First — program page",
+      "excerpt": "https://www.joinef.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d803130d56",
+      "url": "https://www.joinef.com/about/careers/",
+      "title": "Entrepreneurs First — program page",
+      "excerpt": "Portfolio → https://www.joinef.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-dcb22727fc",
+      "url": "https://www.joinef.com/about/",
+      "title": "Entrepreneurs First — program page",
+      "excerpt": "Portfolio → https://www.joinef.com/portfolio/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-dfcb529e76",
       "url": "https://www.joinef.com/posts/category/updates/",
       "title": "Entrepreneurs First — batches page",
@@ -564,6 +622,20 @@
       "title": "Entrepreneurs First — terms page",
       "excerpt": "Apply → https://apply.joinef.com",
       "page": "terms"
+    },
+    {
+      "id": "check-route-0be5967821",
+      "url": "https://www.joinef.com/about/careers/",
+      "title": "Entrepreneurs First — program page",
+      "excerpt": "[START] → https://apply.joinef.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-12f4ad5128",
+      "url": "https://www.joinef.com/about/careers/",
+      "title": "Entrepreneurs First — program page",
+      "excerpt": "Apply now → https://apply.joinef.com",
+      "page": "details"
     },
     {
       "id": "check-route-13e52b7901",
@@ -846,6 +918,20 @@
       "page": "application"
     },
     {
+      "id": "check-route-99bc6ffdf5",
+      "url": "https://www.joinef.com/about/",
+      "title": "Entrepreneurs First — program page",
+      "excerpt": "Apply now → https://apply.joinef.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9bc7055823",
+      "url": "https://www.joinef.com/about/",
+      "title": "Entrepreneurs First — program page",
+      "excerpt": "[START] → https://apply.joinef.com",
+      "page": "details"
+    },
+    {
       "id": "check-route-9c8efbc713",
       "url": "https://apply.joinef.com/retrieve-saved-application/",
       "title": "Entrepreneurs First — application page",
@@ -865,6 +951,13 @@
       "title": "Entrepreneurs First — batches page",
       "excerpt": "Apply → https://apply.joinef.com",
       "page": "batches"
+    },
+    {
+      "id": "check-route-a17ea56b85",
+      "url": "https://www.joinef.com/about/",
+      "title": "Entrepreneurs First — program page",
+      "excerpt": "Apply → https://apply.joinef.com",
+      "page": "details"
     },
     {
       "id": "check-route-a889ff8d60",
@@ -928,6 +1021,13 @@
       "title": "Entrepreneurs First — application page",
       "excerpt": "Apply → https://apply.joinef.com",
       "page": "application"
+    },
+    {
+      "id": "check-route-c047a053c3",
+      "url": "https://www.joinef.com/about/careers/",
+      "title": "Entrepreneurs First — program page",
+      "excerpt": "Apply → https://apply.joinef.com",
+      "page": "details"
     },
     {
       "id": "check-route-c647bc87ea",
@@ -1064,10 +1164,82 @@
       "excerpt": "Found, don't follow | Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers FOUND, DON'T FOLLOW We turn exceptional individuals into funded founders. We back you first, then give you a bridge to Silicon Valley. You might have an early idea, or be testing a cofounder. You might have nothing. What we’re most interested in is you and your potential. \\\\ Joining EF was a life-changing decision. Joe Root , founder of Permutive, backed by SoftBank We build unicorn cofounding teams from scratch. We help you find your optimal cofounder through our unique matching process. If you’re selected to join EF, you’ll: Gain access to a pool of exceptional cofounders screened for their skills and behaviour Attend our weekend residential retreat to kickstart your founding journey Receive expert advice on who to pair with and how to test potential cofounders Join a cohort of peers you’ll work alongside at one of our global offices Participate in community talent events such as our Build Retreats and Hackathons, in partnership with the likes of Hugging Face, Lovable and Mistral See more about who you could cofound with here . \\\\ Without Entrepreneurs First there would be no Sonantic, as I wouldn’t have met Zeena. Eternally grateful. John Flynn , cofounder of Sonantic, exited to Spotify We"
     },
     {
+      "id": "check-page-a73edad56a",
+      "url": "https://www.joinef.com/",
+      "page": "details",
+      "excerpt": "We give you everything you need to move super fast and, by Demo Day, the top performing founders will be generating hundreds of thousands of revenue."
+    },
+    {
+      "id": "check-page-df0b8d68f5",
+      "url": "https://www.joinef.com/",
+      "page": "details",
+      "excerpt": "Treat Girish Mathrubootham , founder of Freshworks Cyan Bannister , founder of Zivity, founding GP of Long Journey Ventures We’re backed by Silicon Valley’s elite founders and investors."
+    },
+    {
+      "id": "check-page-81e9093e1e",
+      "url": "https://www.joinef.com/",
+      "page": "details",
+      "excerpt": "Founders Fund, Sequoia, a16z, Index Ventures, Initialized, AI Grant, Emergence, Khosla Ventures, Susa Ventures, SignalFire, NfX, Abstract Ventures, Bessemer, Plural, Pear, Gradient and many more have invested in our companies after Demo Day."
+    },
+    {
+      "id": "check-page-edf99ab681",
+      "url": "https://www.joinef.com/",
+      "page": "details",
+      "excerpt": "We invest early, fast, and on founder-friendly terms."
+    },
+    {
       "id": "check-page-ad12b65d3b",
       "url": "https://apply.joinef.com",
       "page": "application",
       "excerpt": "Home | Apply | Entrepreneurs First [Application Hub] [Back to JoinEF.com] Entrepreneurs First Application Hub Apply to Entrepreneurs First Create New View Saved Apply now and take the first step towards building your startup. We turn exceptional individuals into funded founders. We back you first, then give you a bridge to Silicon Valley. You might have an early idea, or be testing a cofounder. You might have nothing. What we’re most interested in is you and your potential. Learn more about EF. Ready to apply? The programs below are full-time and in person. You can find out more about our upcoming hackathons, bootcamps, and other 1-2 day events here . BASED IN THE REST OF THE WORLD? > XF2: Experienced Founders Program in London | Fall 2026 Start: Fall 2026 Register here if you have 7+ years experience and have either founded a startup before or been a key part of its inception. Register Interest > The Bridge Residency in San Francisco | Winter 2027 Start: February 2027 Start your journey in a residency in San Francisco for an 8-week program for young Europeans. Apply Now > London Program | Spring 2027 Start: April 2027 Start your journey in London. After 12 weeks, move to San Francisco for the last 3 months of the program. Register Interest > The Bridge Residency in San Francisco | Spring 2027 Start: April 2027 Start your journey in a residency in San Francisco for an 8-week"
+    },
+    {
+      "id": "check-page-2206d32a0e",
+      "url": "https://apply.joinef.com",
+      "page": "application",
+      "excerpt": "Register Interest > The Bridge Residency in San Francisco | Spring 2027 Start: April 2027 Start your journey in a residency in San Francisco for an 8-week program for young Europeans."
+    },
+    {
+      "id": "check-page-ac3f71e153",
+      "url": "https://apply.joinef.com",
+      "page": "application",
+      "excerpt": "Apply Now BASED IN THE U.S.? > Funding & Fellowships Start: 2026 Whether you’re ready to go all in or still exploring ideas, our residencies in San Francisco give you 3 months to build, experiment, and find the right cofounder."
+    },
+    {
+      "id": "check-page-e631dc57d3",
+      "url": "https://apply.joinef.com",
+      "page": "application",
+      "excerpt": "Top performers are considered for our US fellowships and investments."
+    },
+    {
+      "id": "check-page-c4b2196fba",
+      "url": "https://apply.joinef.com",
+      "page": "application",
+      "excerpt": "Top performers are considered for our residential fellowships and investments."
+    },
+    {
+      "id": "check-page-1ecccafac3",
+      "url": "https://apply.joinef.com",
+      "page": "application",
+      "excerpt": "Apply now BASED IN INDIA? > Bangalore Program | Winter 2027 Start: February 2027 Apply by: 04 December 2026 Start your journey in Bangalore."
+    },
+    {
+      "id": "check-page-bd27d8197c",
+      "url": "https://apply.joinef.com",
+      "page": "application",
+      "excerpt": "If you're based in Europe, we recommend you apply to either the London program or The Bridge Residency."
+    },
+    {
+      "id": "check-page-daf879da89",
+      "url": "https://apply.joinef.com",
+      "page": "application",
+      "excerpt": "If you're based in the U.S., we recommend you apply for our U.S. funding and fellowships."
+    },
+    {
+      "id": "check-page-2d20102362",
+      "url": "https://apply.joinef.com",
+      "page": "application",
+      "excerpt": "If you're based in India, we recommend you apply to the Bangalore program."
     },
     {
       "id": "check-page-3d3213c9a7",
@@ -1106,10 +1278,70 @@
       "excerpt": "Frequently Asked Questions | Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers GENERAL FAQS We run programs in our hub cities across North America, Europe and Asia. General London Europe U.S. Bangalore Program What is Talent Investing? At Entrepreneurs First, we believe today’s founders have the opportunity to shape mankind’s future in profound ways. It not only matters what companies get started. But it matters who starts them. We believe that for many of these talented future founders, entrepreneurship is not an obvious or entirely legible career path. We therefore exist to identify and invest in these exceptional individuals. Individuals with enormous potential, insatiable curiosity, and an impatience for impact. We back these individuals to become the founders of tomorrow’s exceptional businesses. We call this Talent Investing; every founder on our programs will work with a Talent Investor to maximize their chances of success during the program. What does EF offer? Cofounder matching A tried and tested, systematic cofounder matching process to help you find a compatible CEO/CTO. Exposure to a peer-group of exceptional, like-minded talent. We curate our batches from leading academic institutions and tech communities around the world, bringing people together to"
     },
     {
+      "id": "check-page-c2137f84e7",
+      "url": "https://www.joinef.com/faqs/",
+      "page": "terms",
+      "excerpt": "Access to a shared office space in a prime location for the duration of the 12 week FORM program in your local hub and subsequent 12 week LAUNCH program in San Francisco."
+    },
+    {
+      "id": "check-page-accee9b94e",
+      "url": "https://www.joinef.com/faqs/",
+      "page": "terms",
+      "excerpt": "Exposure to the world’s best investors in the Bay Area and across Europe through our in-person Demo Days in San Francisco and online investor platform."
+    },
+    {
+      "id": "check-page-73b52fe8f8",
+      "url": "https://www.joinef.com/faqs/",
+      "page": "terms",
+      "excerpt": "Additional resources to help you build, including compute, lab access, and hardware partners. *Please see local program investment terms ( U.S. , London , Europe , Bangalore ) for specific details."
+    },
+    {
+      "id": "check-page-a89f51fcdd",
+      "url": "https://www.joinef.com/faqs/",
+      "page": "terms",
+      "excerpt": "Community Exclusive access to the Bay Area startup ecosystem through our series of invite-only, fireside chats with world class founders and leading Silicon Valley investors."
+    },
+    {
+      "id": "check-page-920403f987",
+      "url": "https://www.joinef.com/faqs/",
+      "page": "terms",
+      "excerpt": "If you’re based in Europe, you can apply to our London programs or to our residency programs for Europeans."
+    },
+    {
+      "id": "check-page-6a0479f058",
+      "url": "https://www.joinef.com/faqs/",
+      "page": "terms",
+      "excerpt": "If you’re based in the US, you can apply for funding and fellowships ."
+    },
+    {
+      "id": "check-page-000fb59db9",
+      "url": "https://www.joinef.com/faqs/",
+      "page": "terms",
+      "excerpt": "If you’re based in India, you can apply for our Bangalore programs."
+    },
+    {
       "id": "check-page-8c080b09a9",
       "url": "https://www.joinef.com/faqs/bangalore/",
       "page": "terms",
       "excerpt": "Bangalore | FAQs | Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers Bangalore FAQs General London Europe U.S. Bangalore Do I need a visa? You may need a visa to relocate to Bangalore. We do not provide visas for the EF program. However, in many circumstances, we can offer support to help you apply for a visa, if required. This is dependent on your circumstance and background. Do I need to relocate to Bangalore? Yes, founders who pass our selection process relocate to join us from all over the world. FORM, the first 12 weeks of our program, takes place in our Bangalore office. Teams that receive funding from our Investment Committee then relocate to San Francisco for LAUNCH, the final 12 weeks of our program. What financial support do I receive on the program? Upon joining the program*, you will receive an INR 360,000 Talent Investment. Under Indian regulations, the payment will be subject to a tax deduction at source (10% as of April 2026), and the net amount after tax deduction will be credited to your bank account. You can use this money towards your living costs or any company costs during FORM. If you later don’t form a company or we choose not to invest further, we don’t take any equity and you don’t owe us anything. *Subject to you completing all required"
+    },
+    {
+      "id": "check-page-1eaa093aaf",
+      "url": "https://www.joinef.com/faqs/bangalore/",
+      "page": "terms",
+      "excerpt": "As part of our offer, we invest up to $250,000 on common founder friendly terms."
+    },
+    {
+      "id": "check-page-b8d7aefd5e",
+      "url": "https://www.joinef.com/faqs/bangalore/",
+      "page": "terms",
+      "excerpt": "The advantage of using a post-money convertible note such as the EF SAFE is that the amount of equity sold is immediately transparent and calculable for both founders and investors."
+    },
+    {
+      "id": "check-page-f7e4c0814a",
+      "url": "https://www.joinef.com/faqs/bangalore/",
+      "page": "terms",
+      "excerpt": "As such, post-money SAFEs are common across the early stage investing market."
     },
     {
       "id": "check-page-eed9ee2297",
@@ -1124,10 +1356,244 @@
       "excerpt": "London | FAQs | Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers London FAQs General London Europe U.S. Bangalore Do I need a visa? You may need a visa to relocate to London. We do not provide visas for the EF program. However, in many circumstances, we can offer support to help you apply for a visa, if required. This is dependent on your circumstance and background. Do I need to relocate to London? Yes, founders who pass our selection process relocate to join us from all over the world. FORM, the first 12 weeks of our program, takes place in our London office. Teams that receive funding from our Investment Committee then relocate to San Francisco for LAUNCH, the final 12 weeks of our program. What financial support do I receive on the program? Upon signing your offer to join the program*, you will receive a £6,000 Talent Investment. You can use this money towards your living costs or any company costs during FORM. If you later don’t form a company or we choose not to invest further, we don’t take any equity and you don’t owe us anything. * Subject to you completing all required KYC screenings and, if applicable, having obtained the appropriate visa to attend the full program. What are the investment terms? Our program has supported hundreds of founders to build"
     },
     {
+      "id": "check-page-3b20e4ac05",
+      "url": "https://www.joinef.com/faqs/london/",
+      "page": "terms",
+      "excerpt": "As part of our offer, we invest up to $250,000 on common founder friendly terms."
+    },
+    {
+      "id": "check-page-f937ecd50d",
+      "url": "https://www.joinef.com/faqs/london/",
+      "page": "terms",
+      "excerpt": "The advantage of using a post-money convertible note such as the EF SAFE is that the amount of equity sold is immediately transparent and calculable for both founders and investors."
+    },
+    {
+      "id": "check-page-2aed52da64",
+      "url": "https://www.joinef.com/faqs/london/",
+      "page": "terms",
+      "excerpt": "As such, post-money SAFEs are common across the early stage investing market."
+    },
+    {
       "id": "check-page-f0c6c9f4cc",
       "url": "https://www.joinef.com/faqs/us/",
       "page": "terms",
       "excerpt": "U.S. | FAQs | Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers U.S. FAQs General London Europe U.S. Bangalore We offer two ways to partner with EF in the U.S., depending on where you are in your journey. Apply for up to $250K funding now For founders who are ready to go all in today. We invest up to $250K on day one, putting you in the best ecosystem to build from zero to one. You’ll live in our SF residency and work in San Francisco for your first three months, surrounded by other world-class founders. Together, we’ll uncover what you should spend the next decade of your life building, help you find the right cofounder, and position you to raise from the world’s best investors when you’re ready. The Fellowship Residency – $10K to explore and experiment For exceptional individuals who aren’t yet ready to commit full-time but want to immerse themselves in our founder community. Fellows live alongside other founders, receiving a $10K grant to cover their stay while exploring ideas and potential cofounders. The fellowship gives you three months, depending on your goals, which might look like some of the following: to explore starting points, build a team, or even to see how fast you can build in three months. Whichever path you choose, we’ll work with you to build"
+    },
+    {
+      "id": "check-page-c3fcacfa55",
+      "url": "https://www.joinef.com/faqs/us/",
+      "page": "terms",
+      "excerpt": "Throughout the program, you’ll have a house to live in, dedicated 1:1 and team coaching, and guidance from EF partners, advisors and mentors as you refine your idea, find your cofounder, and prepare to raise from top investors."
+    },
+    {
+      "id": "check-page-4a377c4cf7",
+      "url": "https://www.joinef.com/faqs/us/",
+      "page": "terms",
+      "excerpt": "Your journey culminates in an exclusive Demo Day where you’ll pitch to EF’s network of Tier 1 US investors."
+    },
+    {
+      "id": "check-page-bcf05cfc77",
+      "url": "https://www.joinef.com/faqs/us/",
+      "page": "terms",
+      "excerpt": "You’ll have access to the same residency, mentorship, and coaching as our high-commitment founders – with the goal of progressing to EF’s full $250K investment and eventually a pathway to Demo Day once you’re ready to build full-time."
+    },
+    {
+      "id": "check-page-a33278f3d2",
+      "url": "https://www.joinef.com/faqs/us/",
+      "page": "terms",
+      "excerpt": "For the $250K pathway – for founders ready to build now We invest up to $250K on simple, founder-friendly terms: $125K via a post-money SAFE for 8% of your company (from EF) $125K via an uncapped MFN SAFE (from us and our partner, Transpose Platform)."
+    },
+    {
+      "id": "check-page-996b29396f",
+      "url": "https://www.joinef.com/faqs/us/",
+      "page": "terms",
+      "excerpt": "This second investment is optional and available if you relocate to San Francisco and incorporate as a Delaware C-Corp This structure gives you transparency and flexibility – the amount of equity sold is immediately clear, and post-money SAFEs are the standard across early-stage investing."
+    },
+    {
+      "id": "check-page-082e175b52",
+      "url": "https://www.joinef.com/faqs/us/",
+      "page": "terms",
+      "excerpt": "For the $10K Fellowship – for founders still exploring what to build For individuals who are earlier in their journey, EF provides an equity-free $10K grant This grant is designed to give you the freedom to explore ideas, meet potential cofounders, and test directions before pitching to raise EF’s full $250K investment (if that’s the right path)."
+    },
+    {
+      "id": "check-page-110a319832",
+      "url": "https://www.joinef.com/faqs/us/",
+      "page": "terms",
+      "excerpt": "Whilst residency isn’t mandatory, we strongly encourage it – immersion is a huge unlock."
+    },
+    {
+      "id": "check-page-fd5e98fe47",
+      "url": "https://www.joinef.com/faqs/us/",
+      "page": "terms",
+      "excerpt": "The residency gives you focus, meaning , and instant access to equally ambitious people on the same journey."
+    },
+    {
+      "id": "check-page-8898331cf0",
+      "url": "https://www.joinef.com/faqs/us/",
+      "page": "terms",
+      "excerpt": "Our portfolio spans deep tech, robotics, consumer gaming, and more."
+    },
+    {
+      "id": "check-page-f6097a828a",
+      "url": "https://www.joinef.com/faqs/us/",
+      "page": "terms",
+      "excerpt": "Have a look at Icarus Robotics , Peripheral Labs and ZeroEntropy to get a sense of the range."
+    },
+    {
+      "id": "check-page-5c2df17824",
+      "url": "https://www.joinef.com/about-us/",
+      "page": "details",
+      "excerpt": "Investing in Talent | Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers About Us Founded by Alice Bentinck and Matt Clifford, Entrepreneurs First is a category-defining global investor in entrepreneurial talent. Our portfolio companies are backed by world-leading investors, including Sequoia, Andreessen Horowitz, Softbank, and Khosla Ventures. Together they are worth over $24B and include a number of unicorns and successful exits. We have offices in London, Paris, Bangalore, and San Francisco; enabling EF to be the bridge to Silicon Valley that connects global talent to the richest startup ecosystem. Pioneers of global talent investing We started Entrepreneurs First over a decade ago, after seeing many talented future founders become lost to the status quo. Outside of Silicon Valley, entrepreneurship is rarely seen as a viable route for ambitious individuals. Instead the ambitions of the talented are constrained by the current social currencies of success; high status jobs, citation counts, promotion cycles. Our goal at EF is to liberate you from these artificial limits. To reframe what’s possible and help you shape the world in more profound ways. We do this by building cohorts of exceptional peers, curated from leading academic institutions and tech communities"
+    },
+    {
+      "id": "check-page-ceb3b51380",
+      "url": "https://www.joinef.com/about-us/",
+      "page": "details",
+      "excerpt": "Matt is Chair of ARIA, the UK’s Advanced Research and Invention Agency, which funds breakthrough R&D."
+    },
+    {
+      "id": "check-page-e95a84ae8a",
+      "url": "https://www.joinef.com/about-us/",
+      "page": "details",
+      "excerpt": "In 2023 he was appointed the UK Prime Minister’s Lead Representative for the inaugural AI Safety Summit hosted by the UK at Bletchley Park."
+    },
+    {
+      "id": "check-page-86ecbc3732",
+      "url": "https://www.joinef.com/about-us/",
+      "page": "details",
+      "excerpt": "In 2025 he was appointed the UK Prime Minister’s Adviser on AI Opportunities."
+    },
+    {
+      "id": "check-page-de2f821773",
+      "url": "https://www.joinef.com/about-us/",
+      "page": "details",
+      "excerpt": "He was awarded a CBE for services to AI in 2024."
+    },
+    {
+      "id": "check-page-d987977bb1",
+      "url": "https://www.joinef.com/about-us/",
+      "page": "details",
+      "excerpt": "He was also named in the 2024 TIME100 list of most influential people in AI."
+    },
+    {
+      "id": "check-page-7f613c064f",
+      "url": "https://www.joinef.com/about-us/",
+      "page": "details",
+      "excerpt": "Tom joined EF from the UK Civil Service, having served on the main board of two departments - as Director of Strategy at the Department for Education, and for the last three years as the director at DExEU coordinating the UK Government's domestic policy and technical implementation of Brexit."
+    },
+    {
+      "id": "check-page-7bc26915f0",
+      "url": "https://www.joinef.com/about-us/",
+      "page": "details",
+      "excerpt": "Tom founded a school in South London and now is the Chair of Trustees."
+    },
+    {
+      "id": "check-page-63da8af151",
+      "url": "https://www.joinef.com/about-us/",
+      "page": "details",
+      "excerpt": "Tom started his career at McKinsey & Co., serving in the London and Middle East offices."
+    },
+    {
+      "id": "check-page-8aaab84546",
+      "url": "https://www.joinef.com/about-us/",
+      "page": "details",
+      "excerpt": "He studied at the University of Oxford, where he was shortlisted for the All Souls prize fellowship."
+    },
+    {
+      "id": "check-page-6a0435b033",
+      "url": "https://www.joinef.com/about-us/",
+      "page": "details",
+      "excerpt": "Jonny Clifford Partner and General Manager, London Jonny is a Partner in London."
+    },
+    {
+      "id": "check-page-8cdc4bfcd2",
+      "url": "https://www.joinef.com/about-us/",
+      "page": "details",
+      "excerpt": "He previously ran the sales team for a Series A funded edtech startup in the UK, having joined them as one of their first employees."
+    },
+    {
+      "id": "check-page-f7a11c33b1",
+      "url": "https://www.joinef.com/about-us/",
+      "page": "details",
+      "excerpt": "Rahul Samat Partner and General Manager, Bangalore Rahul is a Partner in Bangalore."
+    },
+    {
+      "id": "check-page-0447771dfb",
+      "url": "https://www.joinef.com/about/",
+      "page": "details",
+      "excerpt": "Investing in Talent | Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers About Us Founded by Alice Bentinck and Matt Clifford, Entrepreneurs First is a category-defining global investor in entrepreneurial talent. Our portfolio companies are backed by world-leading investors, including Sequoia, Andreessen Horowitz, Softbank, and Khosla Ventures. Together they are worth over $24B and include a number of unicorns and successful exits. We have offices in London, Paris, Bangalore, and San Francisco; enabling EF to be the bridge to Silicon Valley that connects global talent to the richest startup ecosystem. Pioneers of global talent investing We started Entrepreneurs First over a decade ago, after seeing many talented future founders become lost to the status quo. Outside of Silicon Valley, entrepreneurship is rarely seen as a viable route for ambitious individuals. Instead the ambitions of the talented are constrained by the current social currencies of success; high status jobs, citation counts, promotion cycles. Our goal at EF is to liberate you from these artificial limits. To reframe what’s possible and help you shape the world in more profound ways. We do this by building cohorts of exceptional peers, curated from leading academic institutions and tech communities"
+    },
+    {
+      "id": "check-page-74883e5478",
+      "url": "https://www.joinef.com/about/",
+      "page": "details",
+      "excerpt": "Matt is Chair of ARIA, the UK’s Advanced Research and Invention Agency, which funds breakthrough R&D."
+    },
+    {
+      "id": "check-page-d21afe9a53",
+      "url": "https://www.joinef.com/about/",
+      "page": "details",
+      "excerpt": "In 2023 he was appointed the UK Prime Minister’s Lead Representative for the inaugural AI Safety Summit hosted by the UK at Bletchley Park."
+    },
+    {
+      "id": "check-page-cceaba0d77",
+      "url": "https://www.joinef.com/about/",
+      "page": "details",
+      "excerpt": "In 2025 he was appointed the UK Prime Minister’s Adviser on AI Opportunities."
+    },
+    {
+      "id": "check-page-de0b995628",
+      "url": "https://www.joinef.com/about/",
+      "page": "details",
+      "excerpt": "He was awarded a CBE for services to AI in 2024."
+    },
+    {
+      "id": "check-page-41a321c16a",
+      "url": "https://www.joinef.com/about/",
+      "page": "details",
+      "excerpt": "He was also named in the 2024 TIME100 list of most influential people in AI."
+    },
+    {
+      "id": "check-page-32cd385565",
+      "url": "https://www.joinef.com/about/",
+      "page": "details",
+      "excerpt": "Tom joined EF from the UK Civil Service, having served on the main board of two departments - as Director of Strategy at the Department for Education, and for the last three years as the director at DExEU coordinating the UK Government's domestic policy and technical implementation of Brexit."
+    },
+    {
+      "id": "check-page-cb58a51be6",
+      "url": "https://www.joinef.com/about/",
+      "page": "details",
+      "excerpt": "Tom founded a school in South London and now is the Chair of Trustees."
+    },
+    {
+      "id": "check-page-81859bb66b",
+      "url": "https://www.joinef.com/about/",
+      "page": "details",
+      "excerpt": "Tom started his career at McKinsey & Co., serving in the London and Middle East offices."
+    },
+    {
+      "id": "check-page-9651e60ec4",
+      "url": "https://www.joinef.com/about/",
+      "page": "details",
+      "excerpt": "He studied at the University of Oxford, where he was shortlisted for the All Souls prize fellowship."
+    },
+    {
+      "id": "check-page-01e91dbecf",
+      "url": "https://www.joinef.com/about/",
+      "page": "details",
+      "excerpt": "Jonny Clifford Partner and General Manager, London Jonny is a Partner in London."
+    },
+    {
+      "id": "check-page-eed916f7d1",
+      "url": "https://www.joinef.com/about/",
+      "page": "details",
+      "excerpt": "He previously ran the sales team for a Series A funded edtech startup in the UK, having joined them as one of their first employees."
+    },
+    {
+      "id": "check-page-c9def585ee",
+      "url": "https://www.joinef.com/about/",
+      "page": "details",
+      "excerpt": "Rahul Samat Partner and General Manager, Bangalore Rahul is a Partner in Bangalore."
     },
     {
       "id": "check-page-7c741f3879",
@@ -1142,10 +1608,10 @@
       "excerpt": "Updates Archives | Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers Updates Updates Introducing The Bridge Introducing The Bridge Updates Updating our global pre-seed investment offer to up to $250k Updating our global pre-seed investment offer to up to $250k Talent Investing Updates Introducing def/acc at EF Introducing def/acc at EF Updates Launching our new hub in San Francisco Launching our new hub in San Francisco WE BACK YOU FIRST Apply now Contact Privacy Policy Regulatory Disclaimer ESG Policy Cookie Policy Cookie Settings Substack YouTube X Instagram LinkedIn Apply now Site by Alchemy © Copyright 2025 Entrepreneurs First"
     },
     {
-      "id": "check-page-5c2df17824",
-      "url": "https://www.joinef.com/about-us/",
+      "id": "check-page-22984e9551",
+      "url": "https://www.joinef.com/about/careers/",
       "page": "details",
-      "excerpt": "Investing in Talent | Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers About Us Founded by Alice Bentinck and Matt Clifford, Entrepreneurs First is a category-defining global investor in entrepreneurial talent. Our portfolio companies are backed by world-leading investors, including Sequoia, Andreessen Horowitz, Softbank, and Khosla Ventures. Together they are worth over $24B and include a number of unicorns and successful exits. We have offices in London, Paris, Bangalore, and San Francisco; enabling EF to be the bridge to Silicon Valley that connects global talent to the richest startup ecosystem. Pioneers of global talent investing We started Entrepreneurs First over a decade ago, after seeing many talented future founders become lost to the status quo. Outside of Silicon Valley, entrepreneurship is rarely seen as a viable route for ambitious individuals. Instead the ambitions of the talented are constrained by the current social currencies of success; high status jobs, citation counts, promotion cycles. Our goal at EF is to liberate you from these artificial limits. To reframe what’s possible and help you shape the world in more profound ways. We do this by building cohorts of exceptional peers, curated from leading academic institutions and tech communities"
+      "excerpt": "Careers | Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio Careers Shape the future. Join EF. A small number of people will have an outsized impact on the world, by identifying and enabling those that create technologies to shape our future. We call this Talent Investing. Our mission is backed by renowned investors, with an agile team operating globally. At EF you will unlock both your own potential and the founders’ you work with by becoming a Talent Investor or part of the team that supports them. View open roles at EF WHO YOU ARE We’re looking for the next generation of Talent Investors to join us. We want those that are: [01] Intellectually curious — with a deep and persistent desire to increase your understanding of the world. Are you constantly updating your knowledge and beliefs through self-directed learning? [02] Innately driven — to achieve the most ambitious goals agentically. Are you restless in your pursuit of excellence and won’t take no for an answer? You will need to run through walls and find creative ways to achieve your desired outcomes, often within ambiguous frameworks and feedback loops. [03] Strong network builders — able to build meaningful connections with exceptional people and meet them at their level. You should already have your own network"
     }
   ],
   "findings": {
@@ -1232,6 +1698,10 @@
       {
         "value": "6 months",
         "evidenceId": "check-duration-b957ca01f5"
+      },
+      {
+        "value": "2",
+        "evidenceId": "check-duration-2dd7448aff"
       }
     ],
     "format": [

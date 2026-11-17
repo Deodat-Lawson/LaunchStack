@@ -1,7 +1,71 @@
 {
   "programId": "xleratehealth",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "http://xleratehealth.com/about",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://xleratehealth.com/accelerator/louisville/",
+      "page": "details",
+      "anchor": "Louisville",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://xleratehealth.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/about-temp/advisors_2/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/about-temp/coaches/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/about-temp/contact/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/about-temp/partners/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/about-temp/sponsors/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.xleratehealth.com/about/",
       "page": "details",
@@ -14,7 +78,7 @@
       "url": "https://www.xleratehealth.com/about/founders/",
       "page": "details",
       "anchor": "Founders",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -27,10 +91,98 @@
       "origin": "official"
     },
     {
+      "url": "https://www.xleratehealth.com/accelerator-locations/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/accelerator/",
+      "page": "details",
+      "anchor": "Accelerator",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/accelerator/investor-partners/",
+      "page": "details",
+      "anchor": "Investor Partners",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/apply-now-1-copy/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/apply-to-be-a-mentor/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/mentors-form/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.xleratehealth.com/portfolio/",
       "page": "portfolio",
       "anchor": "Our Portfolio",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/xlerate-healths-batch-pitch-demo-day/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/xleratehealth-selects-nine-healthcare-startups-for-2019-accelerator-cohort-in-louisville-ky-3/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/xleratehealth-third-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/xleratehealth-welcomes-2014-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/xleratehealths-2016-cohort-news/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

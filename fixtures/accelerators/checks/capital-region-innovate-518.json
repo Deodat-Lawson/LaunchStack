@@ -1,29 +1,1111 @@
 {
   "programId": "capital-region-innovate-518",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
-    "https://www.albany.edu/innovate518/"
+    "https://www.albany.edu/innovate518/",
+    "https://www.albany.edu/graduate-bulletin/africana-studies-graduate-program-curriculum.php",
+    "https://www.albany.edu/admissions-aid",
+    "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+    "https://www.albany.edu/graduate-bulletin/anthropology-graduate-program-curricula.php",
+    "https://www.albany.edu/graduate-bulletin/art-graduate-program-curricula.php",
+    "https://www.albany.edu/graduate-bulletin/childhood-education-combined-program.php",
+    "https://www.albany.edu/graduate-bulletin/combined-baccalaureate-programs.php",
+    "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+    "https://www.albany.edu/graduate-bulletin/digital-forensics-cybersecurity-ms-combined-program.php",
+    "https://www.albany.edu/graduate-bulletin/dual-masters-degree-programs.php",
+    "https://www.albany.edu/graduate-bulletin/early-childhood-education-combined-program.php",
+    "https://www.albany.edu/graduate-bulletin/faculty-eligibility-teach.php",
+    "https://www.albany.edu/graduate-bulletin/history-ma-information-science-ms-dual-program.php",
+    "https://www.albany.edu/graduate-bulletin/information-science-school-library-combined-program.php",
+    "https://www.albany.edu/graduate-bulletin/international-affairs-combined-program.php",
+    "https://www.albany.edu/graduate-bulletin/literacy-combined-program.php",
+    "https://www.albany.edu/graduate-bulletin/program-classics.php",
+    "https://www.albany.edu/graduate-bulletin/program-liberal-studies.php",
+    "https://www.albany.edu/graduate-bulletin/program-linguistics.php"
   ],
   "evidence": [
     {
+      "id": "check-format-04f7de9252",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "title": "Innovate 518 — application page",
+      "excerpt": "directly to Student Financial Services or you drop it off in person. When a scholarship check is made payable to the student",
+      "page": "application"
+    },
+    {
+      "id": "check-format-4c995fcca3",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "title": "Innovate 518 — application page",
+      "excerpt": "to the annual Celebration of Scholarships dinner and/or a virtual gathering to meet their donor. UAlbany Alumni Association",
+      "page": "application"
+    },
+    {
       "id": "check-name-96043f5782",
       "url": "https://www.albany.edu/innovate518/",
-      "title": "Innovate 518 — homepage checked by scrape.py",
+      "title": "Innovate 518 — homepage",
       "excerpt": "Innovate 518 | Capital Region Incubator | Startups and Entrepreneurs",
       "page": "details"
+    },
+    {
+      "id": "check-phone-03ef2b842f",
+      "url": "https://www.albany.edu/graduate-bulletin/childhood-education-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0cef82f726",
+      "url": "https://www.albany.edu/graduate-bulletin/international-affairs-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-10c70ef0b6",
+      "url": "https://www.albany.edu/admissions-aid",
+      "title": "Innovate 518 — application page",
+      "excerpt": "518-442-3300",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-224b9430a3",
+      "url": "https://www.albany.edu/graduate-bulletin/africana-studies-graduate-program-curriculum.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-277c0f9c46",
+      "url": "https://www.albany.edu/graduate-bulletin/digital-forensics-cybersecurity-ms-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-2f0bddfc65",
+      "url": "https://www.albany.edu/graduate-bulletin/program-linguistics.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-3648c91333",
+      "url": "https://www.albany.edu/graduate-bulletin/dual-masters-degree-programs.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-4acd6762ee",
+      "url": "https://www.albany.edu/graduate-bulletin/early-childhood-education-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-62ca214fe3",
+      "url": "https://www.albany.edu/graduate-bulletin/information-science-school-library-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-746267a777",
+      "url": "https://www.albany.edu/graduate-bulletin/program-liberal-studies.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-8d7bbed3f2",
+      "url": "https://www.albany.edu/graduate-bulletin/program-classics.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-a1b0c57f75",
+      "url": "https://www.albany.edu/graduate-bulletin/literacy-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b2ad2e22e8",
+      "url": "https://www.albany.edu/graduate-bulletin/art-graduate-program-curricula.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b4c898be80",
+      "url": "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c50329a07b",
+      "url": "https://www.albany.edu/graduate-bulletin/history-ma-information-science-ms-dual-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c9628beca4",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "title": "Innovate 518 — application page",
+      "excerpt": "518-442-3300",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-c9c25905c5",
+      "url": "https://www.albany.edu/graduate-bulletin/combined-baccalaureate-programs.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-e161155185",
+      "url": "https://www.albany.edu/graduate-bulletin/anthropology-graduate-program-curricula.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-e62b6134f9",
+      "url": "https://www.albany.edu/graduate-bulletin/faculty-eligibility-teach.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "518-442-3300",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1638371e9a",
+      "url": "https://www.albany.edu/graduate-bulletin/program-linguistics.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-19cac51825",
+      "url": "https://www.albany.edu/graduate-bulletin/digital-forensics-cybersecurity-ms-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1be19d26cc",
+      "url": "https://www.albany.edu/graduate-bulletin/childhood-education-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1e115cfb8e",
+      "url": "https://www.albany.edu/graduate-bulletin/literacy-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-338af844d6",
+      "url": "https://www.albany.edu/admissions-aid",
+      "title": "Innovate 518 — application page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3c444f9a5c",
+      "url": "https://www.albany.edu/graduate-bulletin/anthropology-graduate-program-curricula.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3d52d7b460",
+      "url": "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-51f7af7891",
+      "url": "https://www.albany.edu/graduate-bulletin/history-ma-information-science-ms-dual-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-76d2f4edc6",
+      "url": "https://www.albany.edu/graduate-bulletin/dual-masters-degree-programs.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9a60561c22",
+      "url": "https://www.albany.edu/graduate-bulletin/art-graduate-program-curricula.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a0cd7419dd",
+      "url": "https://www.albany.edu/graduate-bulletin/combined-baccalaureate-programs.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a62a38638d",
+      "url": "https://www.albany.edu/graduate-bulletin/international-affairs-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-afe5f4b3d9",
+      "url": "https://www.albany.edu/graduate-bulletin/program-liberal-studies.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b4dc627f13",
+      "url": "https://www.albany.edu/graduate-bulletin/africana-studies-graduate-program-curriculum.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d5be180968",
+      "url": "https://www.albany.edu/graduate-bulletin/faculty-eligibility-teach.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-de00ea4989",
+      "url": "https://www.albany.edu/graduate-bulletin/early-childhood-education-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e32b55221e",
+      "url": "https://www.albany.edu/graduate-bulletin/program-classics.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e4c7619c2b",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "title": "Innovate 518 — application page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f8720443f0",
+      "url": "https://www.albany.edu/graduate-bulletin/information-science-school-library-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Alumni → https://www.albany.edu/alumni-association",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0361842b3b",
+      "url": "https://www.albany.edu/graduate-bulletin/anthropology-graduate-program-curricula.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1f13909740",
+      "url": "https://www.albany.edu/graduate-bulletin/digital-forensics-cybersecurity-ms-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-28849a5d12",
+      "url": "https://www.albany.edu/graduate-bulletin/faculty-eligibility-teach.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-29d2df5a9d",
+      "url": "https://www.albany.edu/graduate-bulletin/program-liberal-studies.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2ad0253750",
+      "url": "https://www.albany.edu/admissions-aid",
+      "title": "Innovate 518 — application page",
+      "excerpt": "Transfer → https://www.albany.edu/admissions/how-apply-transfer-student",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2ff5b578a8",
+      "url": "https://www.albany.edu/graduate-bulletin/history-ma-information-science-ms-dual-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3741036c3f",
+      "url": "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3a963c3aef",
+      "url": "https://www.albany.edu/graduate-bulletin/childhood-education-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3d56b7dc2f",
+      "url": "https://www.albany.edu/graduate-bulletin/faculty-eligibility-teach.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3e363b8c78",
+      "url": "https://www.albany.edu/graduate-bulletin/program-liberal-studies.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3e7152d7d2",
+      "url": "https://www.albany.edu/graduate-bulletin/program-linguistics.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-42197c9e96",
+      "url": "https://www.albany.edu/graduate-bulletin/literacy-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-485bf3af8a",
+      "url": "https://www.albany.edu/graduate-bulletin/combined-baccalaureate-programs.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4a529b07bc",
+      "url": "https://www.albany.edu/graduate-bulletin/anthropology-graduate-program-curricula.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5e62e1b0f9",
+      "url": "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5fb105a80d",
+      "url": "https://www.albany.edu/graduate-bulletin/art-graduate-program-curricula.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7022878bd2",
+      "url": "https://www.albany.edu/admissions-aid",
+      "title": "Innovate 518 — application page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "application"
+    },
+    {
+      "id": "check-route-70a1455e05",
+      "url": "https://www.albany.edu/admissions-aid",
+      "title": "Innovate 518 — application page",
+      "excerpt": "Non-degree Graduate Study → https://www.albany.edu/graduate/admissions/apply-non-degree-program",
+      "page": "application"
+    },
+    {
+      "id": "check-route-724753029a",
+      "url": "https://www.albany.edu/graduate-bulletin/program-linguistics.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-76bff3e4a1",
+      "url": "https://www.albany.edu/graduate-bulletin/early-childhood-education-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-83537f4c04",
+      "url": "https://www.albany.edu/graduate-bulletin/digital-forensics-cybersecurity-ms-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-84f59ef5d7",
+      "url": "https://www.albany.edu/graduate-bulletin/dual-masters-degree-programs.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-951a849d77",
+      "url": "https://www.albany.edu/graduate-bulletin/combined-baccalaureate-programs.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-98432078d3",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "title": "Innovate 518 — application page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a291f6e18b",
+      "url": "https://www.albany.edu/graduate-bulletin/early-childhood-education-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a98fbb67bd",
+      "url": "https://www.albany.edu/graduate-bulletin/international-affairs-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-aedccf2843",
+      "url": "https://www.albany.edu/graduate-bulletin/international-affairs-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b351a7af73",
+      "url": "https://www.albany.edu/graduate-bulletin/dual-masters-degree-programs.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b41b8941e9",
+      "url": "https://www.albany.edu/graduate-bulletin/history-ma-information-science-ms-dual-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bdcfdf8512",
+      "url": "https://www.albany.edu/graduate-bulletin/childhood-education-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cd9a9ac3ec",
+      "url": "https://www.albany.edu/admissions-aid",
+      "title": "Innovate 518 — application page",
+      "excerpt": "The Graduate School → https://www.albany.edu/graduate/admissions/apply-degree-or-certificate-program",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ce8546b526",
+      "url": "https://www.albany.edu/graduate-bulletin/literacy-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-de33373bc7",
+      "url": "https://www.albany.edu/admissions-aid",
+      "title": "Innovate 518 — application page",
+      "excerpt": "First-Year → https://www.albany.edu/admissions/how-apply-first-year-student",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e3373514f4",
+      "url": "https://www.albany.edu/graduate-bulletin/program-classics.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e4b11b1ee9",
+      "url": "https://www.albany.edu/graduate-bulletin/information-science-school-library-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f30228d338",
+      "url": "https://www.albany.edu/graduate-bulletin/information-science-school-library-combined-program.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f8acaf8821",
+      "url": "https://www.albany.edu/graduate-bulletin/art-graduate-program-curricula.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f9e47c9f17",
+      "url": "https://www.albany.edu/graduate-bulletin/program-classics.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f9f3258188",
+      "url": "https://www.albany.edu/graduate-bulletin/africana-studies-graduate-program-curriculum.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Scholarships → https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fbfe5ea455",
+      "url": "https://www.albany.edu/graduate-bulletin/africana-studies-graduate-program-curriculum.php",
+      "title": "Innovate 518 — program page",
+      "excerpt": "Apply → https://www.albany.edu/admissions-aid#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fe56878a20",
+      "url": "https://www.albany.edu/admissions-aid",
+      "title": "Innovate 518 — application page",
+      "excerpt": "Undergraduate International → https://www.albany.edu/international-admissions/apply-international-undergraduate-student",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-82d8f9b797",
+      "url": "https://www.albany.edu/innovate518/",
+      "page": "details",
+      "excerpt": "Innovate 518 | Capital Region Incubator | Startups and Entrepreneurs .full-width-banner { width: 100%; background: #186E3E; color: white; text-align: center; padding: 20px 0; } 0 Skip to Content About Collaboration Incubators and Accelerators Advisory Committee Events Programs Innovation Hot Spot Venture Readiness STARTUP-NY Resources Lunch and Learn Videos Where Do You Fit? Funding Resources SBIR vs STTR Corporation in a Box InvestNY Sign Up! Inquire Today Open Menu Close Menu About Collaboration Incubators and Accelerators Advisory Committee Events Programs Innovation Hot Spot Venture Readiness STARTUP-NY Resources Lunch and Learn Videos Where Do You Fit? Funding Resources SBIR vs STTR Corporation in a Box InvestNY Sign Up! Inquire Today Open Menu Close Menu Folder: About Back Collaboration Incubators and Accelerators Advisory Committee Events Folder: Programs Back Innovation Hot Spot Venture Readiness STARTUP-NY Folder: Resources Back Lunch and Learn Videos Where Do You Fit? Funding Resources SBIR vs STTR Corporation in a Box InvestNY Sign Up! Inquire Today Tech Starts Here. The Capital Region Innovation Hot Spot Start Here Drive-Connect-Lead-Support UAlbany Innovation Center Fostering Innovation and Entrepreneurship across the University at Albany and the Capital Region. NY-BEST Resources for storage-related companies and organizations seeking assistance to grow their"
+    },
+    {
+      "id": "check-page-7964dcfc85",
+      "url": "https://www.albany.edu/innovate518/",
+      "page": "details",
+      "excerpt": "The Innovation Center at Saratoga The Innovation Center at Saratoga, Inc. is a makerspace and community collaboration space supporting inventors, creators, and the innovators of the future."
+    },
+    {
+      "id": "check-page-a914db3521",
+      "url": "https://www.albany.edu/innovate518/",
+      "page": "details",
+      "excerpt": "Incubators In The Capital Region Innovate 518 is a collaborative effort of incubators from New York's Capital Region, including Albany, Columbia, Greene, Rensselaer, Saratoga, Schenectady, Warren, and Washington counties, managed by the University at Albany."
+    },
+    {
+      "id": "check-page-09f5e25fad",
+      "url": "https://www.albany.edu/innovate518/",
+      "page": "details",
+      "excerpt": "If you are a company looking for an incubator, click HERE to learn more!"
+    },
+    {
+      "id": "check-page-af79ec3a2b",
+      "url": "https://www.albany.edu/graduate-bulletin/africana-studies-graduate-program-curriculum.php",
+      "page": "details",
+      "excerpt": "Africana, Latin American, Caribbean and Latinx Studies Graduate Program Curriculum | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research"
+    },
+    {
+      "id": "check-page-17a648ff29",
+      "url": "https://www.albany.edu/graduate-bulletin/africana-studies-graduate-program-curriculum.php",
+      "page": "details",
+      "excerpt": "Degree Program Latin American, Caribbean and Latina/o/x Studies Graduate Certificate Program Graduate Bulletin Schools & Colleges College of Arts & Sciences Massry School of Business School of Criminal Justice School of Education College of Emergency Preparedness, Homeland Security and Cybersecurity College of Integrated Health Sciences College of Nanotechnology, Science, and Engineering Nelson A."
+    },
+    {
+      "id": "check-page-37efcd69de",
+      "url": "https://www.albany.edu/admissions-aid",
+      "page": "application",
+      "excerpt": "Admissions & Aid | University at Albany Skip to main content About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics Apply Give MyUAlbany Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics"
+    },
+    {
+      "id": "check-page-34fb6e9e23",
+      "url": "https://www.albany.edu/admissions-aid",
+      "page": "application",
+      "excerpt": "Online Programs Microcredentials Our Professional and Continuing Education (PaCE) program offers career-focused learning designed for working professionals, organizations and lifelong learners."
+    },
+    {
+      "id": "check-page-736d8084e4",
+      "url": "https://www.albany.edu/admissions-aid",
+      "page": "application",
+      "excerpt": "Admissions Partnership Programs Costs & Financial Aid We believe that a world-class education should be accessible and affordable—regardless of your financial situation."
+    },
+    {
+      "id": "check-page-dfd4ad3312",
+      "url": "https://www.albany.edu/admissions-aid",
+      "page": "application",
+      "excerpt": "Financial Aid Scholarships Tuition & Costs Financing Graduate Studies \"Best College Value\" Forbes \"Top 100 Public Universities in the U.S.\" Times Higher Education \"Best Colleges in the U.S.\" U.S."
+    },
+    {
+      "id": "check-page-10325a15b7",
+      "url": "https://www.albany.edu/admissions-aid",
+      "page": "application",
+      "excerpt": "News & World Report Not Just a Pretty Place… As the capital of New York state, Albany has so much to offer : engaging communities, wide-ranging opportunities in government agencies, business, startups and more; arts and culture; and easy access to outdoor adventure."
+    },
+    {
+      "id": "check-page-21907a6703",
+      "url": "https://www.albany.edu/admissions-aid",
+      "page": "application",
+      "excerpt": "Not to mention, we are conveniently seated just a few hours’ drive from major cities including New York City, Boston, Montreal and more."
+    },
+    {
+      "id": "check-page-6bbc8be4b7",
+      "url": "https://www.albany.edu/admissions-aid",
+      "page": "application",
+      "excerpt": "Working collaboratively with others across diverse academic disciplines and backgrounds at UAlbany contributed to my success and shaped who I am.” Christian Vitek ’22 BA Political Science Deputy Press Secretary, New York State Executive Chamber Join the UAlbany Family Portal Stay informed and connected throughout your student’s college journey—from application to graduation."
+    },
+    {
+      "id": "check-page-cb07680728",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "application",
+      "excerpt": "Apply for additional scholarships | University at Albany Skip to main content About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics Apply Give MyUAlbany Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs"
+    },
+    {
+      "id": "check-page-a3174dde31",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "application",
+      "excerpt": "All accepted students are considered for these awards, so an application is not necessary."
+    },
+    {
+      "id": "check-page-6b26bd62eb",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "application",
+      "excerpt": "As such, other tuition-based awards, including most New York State grants and scholarships, will affect your award amount."
+    },
+    {
+      "id": "check-page-d108d56276",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "application",
+      "excerpt": "Graduate Student Awards For information on graduate student tuition scholarships, assistantships and fellowships, as well as funding programs that support our diversity, please visit the Graduate School's Funding Graduate Studies page ."
+    },
+    {
+      "id": "check-page-92e5843b3a",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "application",
+      "excerpt": "University at Albany Foundation Scholarships The University at Albany Foundation offers hundreds of endowed scholarships — many of which are administered by Student Financial Services."
+    },
+    {
+      "id": "check-page-6595257938",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "application",
+      "excerpt": "UUP Awards SUNY students are invited to apply for annual scholarships of $3,000 offered by United University Professions (UUP), the union that represents academic and professional faculty at the State University of New York."
+    },
+    {
+      "id": "check-page-007e0cab0e",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "application",
+      "excerpt": "Therefore, students who receive scholarships from sources outside the University should notify the Student Financial Services as soon as possible."
+    },
+    {
+      "id": "check-page-1f250a57b5",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "application",
+      "excerpt": "Scholarships from external sources can be paid out in a few ways: When a scholarship check is made payable to the University, we credit the funds to your student account as soon as we receive the check — regardless if the donor sends it directly to Student Financial Services or you drop it off in person."
+    },
+    {
+      "id": "check-page-8f3d1c997e",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "application",
+      "excerpt": "When a scholarship check is made payable to the student but sent to the University, we send out a postcard asking you to come to the Student Financial Services center to sign the check so we can apply the amount to your account."
+    },
+    {
+      "id": "check-page-dfffa82421",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "application",
+      "excerpt": "When a scholarship check is made payable to the student and sent directly to the student, it is not credited as anticipated aid and you may use the money for any education-related expense."
+    },
+    {
+      "id": "check-page-e1206aaf2c",
+      "url": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+      "page": "application",
+      "excerpt": "You can also speak with: your high school guidance counselor your or your parents’ employers organizations and professional associations related to your field of study private foundations, service organizations, religious groups and local businesses You may also want to use the New York State Higher Education Services Corporation website or the U.S."
+    },
+    {
+      "id": "check-page-ca8dbf179d",
+      "url": "https://www.albany.edu/graduate-bulletin/anthropology-graduate-program-curricula.php",
+      "page": "details",
+      "excerpt": "Anthropology Graduate Program Curricula | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics"
+    },
+    {
+      "id": "check-page-acd7713de9",
+      "url": "https://www.albany.edu/graduate-bulletin/art-graduate-program-curricula.php",
+      "page": "details",
+      "excerpt": "Art and Art History Graduate Program Curricula | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts"
+    },
+    {
+      "id": "check-page-c571556a74",
+      "url": "https://www.albany.edu/graduate-bulletin/art-graduate-program-curricula.php",
+      "page": "details",
+      "excerpt": "Degree Program Graduate Bulletin Schools & Colleges College of Arts & Sciences Massry School of Business School of Criminal Justice School of Education College of Emergency Preparedness, Homeland Security and Cybersecurity College of Integrated Health Sciences College of Nanotechnology, Science, and Engineering Nelson A."
+    },
+    {
+      "id": "check-page-22ed3dba6d",
+      "url": "https://www.albany.edu/graduate-bulletin/childhood-education-combined-program.php",
+      "page": "details",
+      "excerpt": "Childhood Education Combined Undergraduate-Graduate Degree Program | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes, Centers &"
+    },
+    {
+      "id": "check-page-3b4db6fe90",
+      "url": "https://www.albany.edu/graduate-bulletin/childhood-education-combined-program.php",
+      "page": "details",
+      "excerpt": "Early Childhood/Childhood Education B.S."
+    },
+    {
+      "id": "check-page-b0670dd379",
+      "url": "https://www.albany.edu/graduate-bulletin/childhood-education-combined-program.php",
+      "page": "details",
+      "excerpt": "Graduate Bulletin Schools & Colleges College of Arts & Sciences Massry School of Business School of Criminal Justice School of Education College of Emergency Preparedness, Homeland Security and Cybersecurity College of Integrated Health Sciences College of Nanotechnology, Science, and Engineering Nelson A."
+    },
+    {
+      "id": "check-page-9dea74b4ec",
+      "url": "https://www.albany.edu/graduate-bulletin/combined-baccalaureate-programs.php",
+      "page": "details",
+      "excerpt": "Combined Baccalaureate-Graduate Degree Programs | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts"
+    },
+    {
+      "id": "check-page-7d878e2e7f",
+      "url": "https://www.albany.edu/graduate-bulletin/combined-baccalaureate-programs.php",
+      "page": "details",
+      "excerpt": "Standards and Requirements In qualifying for the baccalaureate, students will meet all University and school requirements, including the second field requirement, the minimum liberal arts and sciences credit-hour requirement, and residency requirements."
+    },
+    {
+      "id": "check-page-992bdaa158",
+      "url": "https://www.albany.edu/graduate-bulletin/combined-baccalaureate-programs.php",
+      "page": "details",
+      "excerpt": "A minimum GPA of 3.0 or higher and three supportive letters of recommendation from faculty are required."
+    },
+    {
+      "id": "check-page-164ba25573",
+      "url": "https://www.albany.edu/graduate-bulletin/combined-baccalaureate-programs.php",
+      "page": "details",
+      "excerpt": "Once a student is qualified to receive the bachelor's degree or enrolls in the 13th credit of graduate course work, the student will be considered a graduate student for tuition billing, financial aid and enrollment identification, and will be eligible for graduate assistantships, fellowships, and loans."
+    },
+    {
+      "id": "check-page-401b2cd442",
+      "url": "https://www.albany.edu/graduate-bulletin/combined-baccalaureate-programs.php",
+      "page": "details",
+      "excerpt": "Students’ progress through the combined program will be reviewed in the Office of the Vice Provost for Undergraduate Education to ensure timely completion of the undergraduate degree."
+    },
+    {
+      "id": "check-page-11f1fd031b",
+      "url": "https://www.albany.edu/graduate-bulletin/combined-baccalaureate-programs.php",
+      "page": "details",
+      "excerpt": "Once a student is qualified to receive the second bachelor's degree or enrolls in the 13th credit of graduate course work, the student will be considered a graduate student for tuition billing, financial aid and enrollment identification, and will be eligible for graduate assistantships, fellowships, and loans."
+    },
+    {
+      "id": "check-page-e07c6615ed",
+      "url": "https://www.albany.edu/graduate-bulletin/combined-baccalaureate-programs.php",
+      "page": "details",
+      "excerpt": "Graduate Bulletin Schools & Colleges College of Arts & Sciences Massry School of Business School of Criminal Justice School of Education College of Emergency Preparedness, Homeland Security and Cybersecurity College of Integrated Health Sciences College of Nanotechnology, Science, and Engineering Nelson A."
+    },
+    {
+      "id": "check-page-e243f176e8",
+      "url": "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+      "page": "details",
+      "excerpt": "Degrees and Programs Index | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics Apply Give"
+    },
+    {
+      "id": "check-page-1a87b768f7",
+      "url": "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+      "page": "details",
+      "excerpt": "Degree Program Art (Studio) Master of Arts Degree Program Artificial Intelligence for Business Master of Science Degree Program Atmospheric Science Combined B.S. - M.S."
+    },
+    {
+      "id": "check-page-888cec6549",
+      "url": "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+      "page": "details",
+      "excerpt": "Degree Program Curriculum & Instruction Certificate of Advanced Study Curriculum & Instruction Doctor of Philosophy Degree Curriculum Development and Instructional Technology (CDIT) Master of Science Degree Program Cybersecurity and Risk Combined Undergraduate-Graduate Program Cybersecurity and Risk Master of Science Degree Program Return to top D Data Science Combined B.S./M.S. and B.A./M.S."
+    },
+    {
+      "id": "check-page-ad68bd5e02",
+      "url": "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+      "page": "details",
+      "excerpt": "Dual Master's Degree Program Higher Education Combined Baccalaureate-Master's Degree Program Higher Education Master of Science Degree Program History (M.A.) and Information Science (M.S.) Dual Degree Program History Combined B.A. - M.A."
+    },
+    {
+      "id": "check-page-bc859f8562",
+      "url": "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+      "page": "details",
+      "excerpt": "Dual Master's Program Social Work M.S.W. and Health Policy and Management M.P.H."
+    },
+    {
+      "id": "check-page-380ee83972",
+      "url": "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+      "page": "details",
+      "excerpt": "Degree Program Spanish Doctor of Philosophy Degree Program Spanish Master of Arts Degree Program Special Education & Literacy I M.S."
+    },
+    {
+      "id": "check-page-7928208108",
+      "url": "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+      "page": "details",
+      "excerpt": "Degree Program Special Education & Literacy II Combined Baccalaureate-Master's Program Special Education & Literacy II M.S."
+    },
+    {
+      "id": "check-page-6235a86b94",
+      "url": "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+      "page": "details",
+      "excerpt": "Degree Program Special Education M.S."
+    },
+    {
+      "id": "check-page-c76e553ff0",
+      "url": "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+      "page": "details",
+      "excerpt": "Combined Undergraduate-Graduate Degree Program Special Education M.S."
+    },
+    {
+      "id": "check-page-b0be7cce3e",
+      "url": "https://www.albany.edu/graduate-bulletin/degrees-and-programs-index.php",
+      "page": "details",
+      "excerpt": "Degree Program (Inclusion and Special Education) Special Education M.S."
+    },
+    {
+      "id": "check-page-65002e6d79",
+      "url": "https://www.albany.edu/graduate-bulletin/digital-forensics-cybersecurity-ms-combined-program.php",
+      "page": "details",
+      "excerpt": "Digital Forensics and Cybersecurity Combined Undergraduate-Graduate Degree Program | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research"
+    },
+    {
+      "id": "check-page-d007ec6d27",
+      "url": "https://www.albany.edu/graduate-bulletin/digital-forensics-cybersecurity-ms-combined-program.php",
+      "page": "details",
+      "excerpt": "Graduate Bulletin Schools & Colleges College of Arts & Sciences Massry School of Business School of Criminal Justice School of Education College of Emergency Preparedness, Homeland Security and Cybersecurity College of Integrated Health Sciences College of Nanotechnology, Science, and Engineering Nelson A."
+    },
+    {
+      "id": "check-page-6a0f60469d",
+      "url": "https://www.albany.edu/graduate-bulletin/dual-masters-degree-programs.php",
+      "page": "details",
+      "excerpt": "Dual Master's Degree Programs | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics Apply Give"
+    },
+    {
+      "id": "check-page-8bf046dbb0",
+      "url": "https://www.albany.edu/graduate-bulletin/dual-masters-degree-programs.php",
+      "page": "details",
+      "excerpt": "A minimum GPA of 3.0 and three supportive letters of recommendation from faculty are required."
+    },
+    {
+      "id": "check-page-8995a4dd6e",
+      "url": "https://www.albany.edu/graduate-bulletin/dual-masters-degree-programs.php",
+      "page": "details",
+      "excerpt": "Faculty from both participating academic units will form the admission committee for each dual master's degrees program."
+    },
+    {
+      "id": "check-page-59802a6b3e",
+      "url": "https://www.albany.edu/graduate-bulletin/dual-masters-degree-programs.php",
+      "page": "details",
+      "excerpt": "Graduate Bulletin Schools & Colleges College of Arts & Sciences Massry School of Business School of Criminal Justice School of Education College of Emergency Preparedness, Homeland Security and Cybersecurity College of Integrated Health Sciences College of Nanotechnology, Science, and Engineering Nelson A."
+    },
+    {
+      "id": "check-page-707c015635",
+      "url": "https://www.albany.edu/graduate-bulletin/early-childhood-education-combined-program.php",
+      "page": "details",
+      "excerpt": "Early Childhood Education Combined Undergraduate-Graduate Degree Program | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes,"
+    },
+    {
+      "id": "check-page-fc0ec10ac9",
+      "url": "https://www.albany.edu/graduate-bulletin/early-childhood-education-combined-program.php",
+      "page": "details",
+      "excerpt": "Graduate Bulletin Schools & Colleges College of Arts & Sciences Massry School of Business School of Criminal Justice School of Education College of Emergency Preparedness, Homeland Security and Cybersecurity College of Integrated Health Sciences College of Nanotechnology, Science, and Engineering Nelson A."
+    },
+    {
+      "id": "check-page-f1d643be0b",
+      "url": "https://www.albany.edu/graduate-bulletin/faculty-eligibility-teach.php",
+      "page": "details",
+      "excerpt": "Faculty Eligibility to Teach Graduate Courses | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts"
+    },
+    {
+      "id": "check-page-0a778e4211",
+      "url": "https://www.albany.edu/graduate-bulletin/faculty-eligibility-teach.php",
+      "page": "details",
+      "excerpt": "Graduate Bulletin Schools & Colleges College of Arts & Sciences Massry School of Business School of Criminal Justice School of Education College of Emergency Preparedness, Homeland Security and Cybersecurity College of Integrated Health Sciences College of Nanotechnology, Science, and Engineering Nelson A."
+    },
+    {
+      "id": "check-page-83ec3b6c36",
+      "url": "https://www.albany.edu/graduate-bulletin/history-ma-information-science-ms-dual-program.php",
+      "page": "details",
+      "excerpt": "History (M.A.) and Information Science (M.S.) Dual Degree Program | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes, Centers &"
+    },
+    {
+      "id": "check-page-2e6f3fffe1",
+      "url": "https://www.albany.edu/graduate-bulletin/history-ma-information-science-ms-dual-program.php",
+      "page": "details",
+      "excerpt": "However, faculty responsible for concentrations in both programs may require additional course work."
+    },
+    {
+      "id": "check-page-c94b010afe",
+      "url": "https://www.albany.edu/graduate-bulletin/history-ma-information-science-ms-dual-program.php",
+      "page": "details",
+      "excerpt": "Graduate Bulletin Schools & Colleges College of Arts & Sciences Massry School of Business School of Criminal Justice School of Education College of Emergency Preparedness, Homeland Security and Cybersecurity College of Integrated Health Sciences College of Nanotechnology, Science, and Engineering Nelson A."
+    },
+    {
+      "id": "check-page-27674a4a97",
+      "url": "https://www.albany.edu/graduate-bulletin/information-science-school-library-combined-program.php",
+      "page": "details",
+      "excerpt": "Information Science School Library Combined Undergraduate-Graduate Degree Program | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research"
+    },
+    {
+      "id": "check-page-360924442e",
+      "url": "https://www.albany.edu/graduate-bulletin/information-science-school-library-combined-program.php",
+      "page": "details",
+      "excerpt": "(18 graduate credits can double count) Childhood and Special Education B.S."
+    },
+    {
+      "id": "check-page-d424fe4206",
+      "url": "https://www.albany.edu/graduate-bulletin/information-science-school-library-combined-program.php",
+      "page": "details",
+      "excerpt": "(15 graduate credits can double count) Early Childhood/Childhood Education B.S."
+    },
+    {
+      "id": "check-page-fc58a512eb",
+      "url": "https://www.albany.edu/graduate-bulletin/information-science-school-library-combined-program.php",
+      "page": "details",
+      "excerpt": "Graduate Bulletin Schools & Colleges College of Arts & Sciences Massry School of Business School of Criminal Justice School of Education College of Emergency Preparedness, Homeland Security and Cybersecurity College of Integrated Health Sciences College of Nanotechnology, Science, and Engineering Nelson A."
+    },
+    {
+      "id": "check-page-c448c77c4c",
+      "url": "https://www.albany.edu/graduate-bulletin/international-affairs-combined-program.php",
+      "page": "details",
+      "excerpt": "International Affairs Combined Undergraduate-Graduate Program | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs"
+    },
+    {
+      "id": "check-page-f62742973e",
+      "url": "https://www.albany.edu/graduate-bulletin/international-affairs-combined-program.php",
+      "page": "details",
+      "excerpt": "Graduate Bulletin Schools & Colleges College of Arts & Sciences Massry School of Business School of Criminal Justice School of Education College of Emergency Preparedness, Homeland Security and Cybersecurity College of Integrated Health Sciences College of Nanotechnology, Science, and Engineering Nelson A."
+    },
+    {
+      "id": "check-page-60e3b55435",
+      "url": "https://www.albany.edu/graduate-bulletin/literacy-combined-program.php",
+      "page": "details",
+      "excerpt": "Literacy Combined Undergraduate-Graduate Degree Program | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs"
+    },
+    {
+      "id": "check-page-b84160d257",
+      "url": "https://www.albany.edu/graduate-bulletin/literacy-combined-program.php",
+      "page": "details",
+      "excerpt": "Childhood and Special Education B.S."
+    },
+    {
+      "id": "check-page-ab828cf565",
+      "url": "https://www.albany.edu/graduate-bulletin/literacy-combined-program.php",
+      "page": "details",
+      "excerpt": "Early Childhood/Childhood Education B.S."
+    },
+    {
+      "id": "check-page-e7fac4d00f",
+      "url": "https://www.albany.edu/graduate-bulletin/literacy-combined-program.php",
+      "page": "details",
+      "excerpt": "Graduate Bulletin Schools & Colleges College of Arts & Sciences Massry School of Business School of Criminal Justice School of Education College of Emergency Preparedness, Homeland Security and Cybersecurity College of Integrated Health Sciences College of Nanotechnology, Science, and Engineering Nelson A."
+    },
+    {
+      "id": "check-page-14a83b3983",
+      "url": "https://www.albany.edu/graduate-bulletin/program-classics.php",
+      "page": "details",
+      "excerpt": "Program in Classics | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics Apply Give MyUAlbany"
+    },
+    {
+      "id": "check-page-f7aa25c663",
+      "url": "https://www.albany.edu/graduate-bulletin/program-liberal-studies.php",
+      "page": "details",
+      "excerpt": "Program in Liberal Studies | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics Apply Give"
+    },
+    {
+      "id": "check-page-b41bac6c80",
+      "url": "https://www.albany.edu/graduate-bulletin/program-linguistics.php",
+      "page": "details",
+      "excerpt": "Program in Linguistics | University at Albany Skip to main content Apply Give MyUAlbany Search Search UAlbany websites Academics Schools & Colleges Undergraduate Majors Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics About Leadership Alumni Public Engagement News Events Jobs Inclusive Excellence Staff Directory A-Z Index Academics Schools & Colleges Undergraduate Programs Graduate Programs Professional & Continuing Education Online Learning Academic Advising Academic Calendar Libraries Admissions & Aid First-Year Transfer Graduate International Partnership Programs Non-degree Study Tuition & Cost Financial Aid Scholarships Visit Campus Life Residential Life Parking Maps Dining Clubs Career Services Arts Student Life Research Division for Research & Economic Development Undergraduate Research Institutes, Centers & Labs Experts Athletics Apply Give MyUAlbany"
     }
   ],
   "findings": {
     "emails": [],
-    "phones": [],
-    "routes": [],
-    "applicationUrl": [],
+    "phones": [
+      {
+        "value": "5184423300",
+        "evidenceId": "check-phone-224b9430a3"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://www.albany.edu/admissions-aid#apply",
+        "evidenceId": "check-route-fbfe5ea455"
+      },
+      {
+        "value": "https://www.albany.edu/cost-aid/apply-additional-scholarships",
+        "evidenceId": "check-route-f9f3258188"
+      },
+      {
+        "value": "https://www.albany.edu/admissions/how-apply-first-year-student",
+        "evidenceId": "check-route-de33373bc7"
+      },
+      {
+        "value": "https://www.albany.edu/admissions/how-apply-transfer-student",
+        "evidenceId": "check-route-2ad0253750"
+      },
+      {
+        "value": "https://www.albany.edu/international-admissions/apply-international-undergraduate-student",
+        "evidenceId": "check-route-fe56878a20"
+      },
+      {
+        "value": "https://www.albany.edu/graduate/admissions/apply-degree-or-certificate-program",
+        "evidenceId": "check-route-cd9a9ac3ec"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.albany.edu/admissions-aid#apply",
+        "evidenceId": "check-route-fbfe5ea455"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-4c995fcca3"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-04f7de9252"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
-    "portfolioPages": [],
+    "dealComponents": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.albany.edu/alumni-association",
+        "evidenceId": "check-portfolio-b4dc627f13"
+      }
+    ],
     "name": [
       {
         "value": "Innovate 518",

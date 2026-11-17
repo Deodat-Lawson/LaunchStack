@@ -1,11 +1,11 @@
 {
   "programId": "idea-works-fw-fort-worth",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
-      "url": "https://ideaworksfw.org/about/",
+      "url": "http://ideaworksfw.org/about/",
       "page": "details",
-      "anchor": "About",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -19,10 +19,18 @@
       "origin": "official"
     },
     {
+      "url": "https://ideaworksfw.org/about/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://ideaworksfw.org/membership/",
       "page": "application",
       "anchor": "Apply Now",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

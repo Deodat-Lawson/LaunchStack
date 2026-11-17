@@ -1,6 +1,6 @@
 {
   "programId": "sebrae",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://sebrae.com.br/",
     "https://sebrae.com.br/empreendedores/conteudos/gerenciar/estoque-ideal-para-a-black-friday-quanto-comprar-e-quando-repor",
@@ -16,7 +16,12 @@
     "https://sebrae.com.br/empreendedores/conteudos/gerenciar/kit-programa-fidelidade-indicacao",
     "https://sebrae.com.br/empreendedores/conteudos/gerenciar/programa-fidelidade-cliente-bairro",
     "https://sebrae.com.br/mg/subsites/programas/rede-aqui-tem-sebrae",
-    "https://sebrae.com.br/ms/subsites/programas/programa-peiex-ms"
+    "https://sebrae.com.br/ms/subsites/programas/programa-peiex-ms",
+    "https://sebrae.com.br/ms/subsites/programas/sebrae-moda-ms0",
+    "https://sebrae.com.br/mt/subsites/programa-peiex",
+    "https://sebrae.com.br/pb/conteudos/programa-peiex",
+    "https://sebrae.com.br/sp/subsites/programas/programa-de-internacionalizacao-sebraesp",
+    "https://sebrae.com.br/sp/subsites/programas/programa-loja-do-futuro"
   ],
   "evidence": [
     {
@@ -120,10 +125,46 @@
       "excerpt": "Rede Aqui Tem Sebrae Onde você está? Ative a localização e descubra destaques do Sebrae no seu estado. Ativar localização Empreendedores Estudantes e Professores Agentes Públicos Alto contraste Mostrar novidades Localização Entrar Início Guia do MEI Tudo para o mei O que é MEI Quero ser MEI Criadores de conteúdo Venda online e e-commerce Agronegócio e Rural Jornada MEI Empreenda Regularize Profissionalize TransforME Descubra o seu momento Mais populares Emitir Nota Fiscal Emitir boleto DAS MEI Declaração Anual MEI DASN Regularizar DAS atrasados Marketing Digital para MEI Explorar Guia do MEI Semana do MEI 2026 Confira como foi Decola MEI Participar do próximo App Sebrae para iOS e Android Baixar grátis Pro seu negócio Comece Encontre ideias de negócio Como abrir uma empresa Habilidades empreendedoras Mostrar tudo Gerencie Emitir Nota Fiscal - Produto Emitir Nota Fiscal - Serviço Crie seu Fluxo de Caixa Mostrar tudo Expanda Como conseguir crédito no banco Como vender mais Tenha mais engajamento nas redes sociais Venda online Mostrar tudo Crie seu plano de negócios Criar meu plano Sebrae Startups Explorar soluções Sebrae na sua empresa Conhecer Conteúdos Cursos e Eventos Cursos online - EAD Assista no seu computador, tablet ou celular Cursos e eventos locais Confira a programação no seu estado Soluções ALI - Agentes de inovação Capital empreendedor ESG - Sustentabilidade FAMPE -"
     },
     {
+      "id": "check-page-1827aadfe2",
+      "url": "https://sebrae.com.br/mg/subsites/programas/rede-aqui-tem-sebrae",
+      "page": "details",
+      "excerpt": "Plataforma exclusiva com informações e capacitações online da Rede."
+    },
+    {
       "id": "check-page-a201745363",
       "url": "https://sebrae.com.br/ms/subsites/programas/programa-peiex-ms",
       "page": "details",
       "excerpt": "Alinhamento Metodológico: Monitoramento e Aplicação Núcleo PEIEX-MS Alinhamento Metodológico: Monitoramento e Aplicação Núcleo PEIEX-MS O Sebrae/MS publica Chamada Pública para Habilitação de Pessoas Jurídicas para atuação no Programa de Qualificação em Exportação- PEIEX."
+    },
+    {
+      "id": "check-page-a41491ff17",
+      "url": "https://sebrae.com.br/ms/subsites/programas/sebrae-moda-ms0",
+      "page": "details",
+      "excerpt": "Estratégia para quem faz da moda um negócio: o Sebrae/MS é pra você! Estratégia para quem faz da moda um negócio: o Sebrae/MS é pra você! Consultorias, cursos, eventos e uma comunidade inteira dedicada a quem vive de moda em MS. Comece agora com uma consultoria online e 100% gratuita."
+    },
+    {
+      "id": "check-page-15d49ec9d0",
+      "url": "https://sebrae.com.br/mt/subsites/programa-peiex",
+      "page": "details",
+      "excerpt": "Programa PEIEX Programa PEIEX O PEIEX (Programa de Qualificação para Exportação) é uma iniciativa da ApexBrasil , realizada em parceria com o Sebrae MT"
+    },
+    {
+      "id": "check-page-6618eaf8ac",
+      "url": "https://sebrae.com.br/pb/conteudos/programa-peiex",
+      "page": "details",
+      "excerpt": "Programa PEIEX Programa PEIEX O PEIEX (Programa de Qualificação para Exportação) é um evento promovido pelo Sebrae em parceira com APEX Brasil, voltado para empresários e empreendedores interessados em iniciar ou expandir suas atividades no exterior."
+    },
+    {
+      "id": "check-page-25e66af394",
+      "url": "https://sebrae.com.br/sp/subsites/programas/programa-de-internacionalizacao-sebraesp",
+      "page": "details",
+      "excerpt": "Programa de Internacionalização Sebrae-SP Programa de Internacionalização Sebrae-SP Conheça o programa destinado a conduzir as micro e pequenas empresas ao comércio internacional."
+    },
+    {
+      "id": "check-page-6c84a4b813",
+      "url": "https://sebrae.com.br/sp/subsites/programas/programa-loja-do-futuro",
+      "page": "details",
+      "excerpt": "Programa Loja do Futuro Programa Loja do Futuro O futuro do seu negócio começa agora. Prepare sua empresa para competir em um mercado cada vez mais digital.&nbsp;O Programa Loja do Futuro, uma iniciativa do Sebrae-SP e da Fecomercio-SP, conecta você às principais tendências, tecnologias e soluções para aumentar a competitividade do seu negócio."
     }
   ],
   "findings": {

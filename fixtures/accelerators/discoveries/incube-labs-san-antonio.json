@@ -1,7 +1,39 @@
 {
   "programId": "incube-labs-san-antonio",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://www.incubelabs.com/2011/01/venture-investment-up-in-s-a",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.incubelabs.com/2011/08/top-10-medical-device-venture-capital-deals-h1-2011",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.incubelabs.com/2012/09/taxpayers-investment-is-almost-10m",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.incubelabs.com/about-mir",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.incubelabs.com/chief-innovator",
       "page": "details",
@@ -11,10 +43,18 @@
       "origin": "official"
     },
     {
+      "url": "https://www.incubelabs.com/leadership",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.incubelabs.com/our-portfolio",
       "page": "portfolio",
       "anchor": "Portfolio",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -22,15 +62,7 @@
       "url": "https://www.incubelabs.com/our-story",
       "page": "details",
       "anchor": "About InCube Labs",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.incubelabs.com/leadership",
-      "page": "details",
-      "anchor": "About Us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

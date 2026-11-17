@@ -1,109 +1,419 @@
 {
   "programId": "lifesciky",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://LifeSciKY.com",
+    "https://lifesciky.com/apply-for-residency/",
     "https://lifesciky.com/apply/",
-    "https://lifesciky.com/about-us/"
+    "https://lifesciky.com/terms-and-disclaimer/",
+    "https://lifesciky.com/about-us-2/",
+    "https://lifesciky.com/about-us/",
+    "https://lifesciky.com/kentucky-gets-serious-about-life-sciences-growth/"
   ],
   "evidence": [
     {
       "id": "check-email-1cf4bdcf96",
       "url": "https://lifesciky.com/about-us/",
-      "title": "LifeSciKY — details page checked by scrape.py",
+      "title": "LifeSciKY — program page",
       "excerpt": "info@lifesciky.com",
       "page": "details"
     },
     {
       "id": "check-email-379808285c",
       "url": "https://LifeSciKY.com",
-      "title": "LifeSciKY — homepage checked by scrape.py",
+      "title": "LifeSciKY — homepage",
       "excerpt": "info@lifesciky.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-415c2833ba",
+      "url": "https://lifesciky.com/about-us-2/",
+      "title": "LifeSciKY — program page",
+      "excerpt": "SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a",
       "page": "details"
     },
     {
       "id": "check-email-4f35ccf706",
       "url": "https://LifeSciKY.com",
-      "title": "LifeSciKY — homepage checked by scrape.py",
+      "title": "LifeSciKY — homepage",
       "excerpt": "SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a",
       "page": "details"
     },
     {
       "id": "check-email-695e085a4e",
       "url": "https://lifesciky.com/apply/",
-      "title": "LifeSciKY — application page checked by scrape.py",
+      "title": "LifeSciKY — application page",
       "excerpt": "info@lifesciky.com",
       "page": "application"
     },
     {
+      "id": "check-email-6cdfc4418d",
+      "url": "https://lifesciky.com/terms-and-disclaimer/",
+      "title": "LifeSciKY — terms page",
+      "excerpt": "SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a",
+      "page": "terms"
+    },
+    {
       "id": "check-email-91e617cb36",
       "url": "https://lifesciky.com/about-us/",
-      "title": "LifeSciKY — details page checked by scrape.py",
+      "title": "LifeSciKY — program page",
+      "excerpt": "SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b230070d04",
+      "url": "https://lifesciky.com/kentucky-gets-serious-about-life-sciences-growth/",
+      "title": "LifeSciKY — program page",
       "excerpt": "SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a",
       "page": "details"
     },
     {
       "id": "check-email-c86a398578",
       "url": "https://lifesciky.com/apply/",
-      "title": "LifeSciKY — application page checked by scrape.py",
+      "title": "LifeSciKY — application page",
+      "excerpt": "SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a",
+      "page": "application"
+    },
+    {
+      "id": "check-email-d98451b3be",
+      "url": "https://lifesciky.com/terms-and-disclaimer/",
+      "title": "LifeSciKY — terms page",
+      "excerpt": "info@lifesciky.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f0e1d56191",
+      "url": "https://lifesciky.com/about-us-2/",
+      "title": "LifeSciKY — program page",
+      "excerpt": "info@lifesciky.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f245a73ccd",
+      "url": "https://lifesciky.com/apply-for-residency/",
+      "title": "LifeSciKY — application page",
+      "excerpt": "info@lifesciky.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-f5a8db5f04",
+      "url": "https://lifesciky.com/kentucky-gets-serious-about-life-sciences-growth/",
+      "title": "LifeSciKY — program page",
+      "excerpt": "info@lifesciky.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-feff4cb26a",
+      "url": "https://lifesciky.com/apply-for-residency/",
+      "title": "LifeSciKY — application page",
       "excerpt": "SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a",
       "page": "application"
     },
     {
       "id": "check-name-0de45ccb02",
       "url": "https://LifeSciKY.com",
-      "title": "LifeSciKY — homepage checked by scrape.py",
+      "title": "LifeSciKY — homepage",
       "excerpt": "Home - LifeSciKY Skip to content Apply Now Home About Us Lab Residency",
       "page": "details"
     },
     {
       "id": "check-phone-1df881e3d3",
       "url": "https://lifesciky.com/about-us/",
-      "title": "LifeSciKY — details page checked by scrape.py",
+      "title": "LifeSciKY — program page",
       "excerpt": "859-500-1229",
       "page": "details"
     },
     {
+      "id": "check-phone-27bf36c5f5",
+      "url": "https://lifesciky.com/kentucky-gets-serious-about-life-sciences-growth/",
+      "title": "LifeSciKY — program page",
+      "excerpt": "859-500-1229",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-8de19909a2",
+      "url": "https://lifesciky.com/apply-for-residency/",
+      "title": "LifeSciKY — application page",
+      "excerpt": "859-500-1229",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-a6b0023412",
+      "url": "https://lifesciky.com/terms-and-disclaimer/",
+      "title": "LifeSciKY — terms page",
+      "excerpt": "859-500-1229",
+      "page": "terms"
+    },
+    {
       "id": "check-phone-a768e87c6f",
       "url": "https://lifesciky.com/apply/",
-      "title": "LifeSciKY — application page checked by scrape.py",
+      "title": "LifeSciKY — application page",
       "excerpt": "859-500-1229",
       "page": "application"
     },
     {
       "id": "check-phone-affbd4797b",
       "url": "https://LifeSciKY.com",
-      "title": "LifeSciKY — homepage checked by scrape.py",
+      "title": "LifeSciKY — homepage",
       "excerpt": "859-500-1229",
       "page": "details"
     },
     {
+      "id": "check-phone-e22dfaef0b",
+      "url": "https://lifesciky.com/about-us-2/",
+      "title": "LifeSciKY — program page",
+      "excerpt": "859-500-1229",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0a69212e96",
+      "url": "https://lifesciky.com/apply-for-residency/",
+      "title": "LifeSciKY — application page",
+      "excerpt": "Apply Now → https://lifesciky.com/apply/",
+      "page": "application"
+    },
+    {
       "id": "check-route-0e176de4cc",
       "url": "https://LifeSciKY.com",
-      "title": "LifeSciKY — homepage checked by scrape.py",
+      "title": "LifeSciKY — homepage",
       "excerpt": "Apply for Lab Space → https://lifesciky.com/apply-for-residency/",
       "page": "details"
     },
     {
       "id": "check-route-4d355240c3",
       "url": "https://LifeSciKY.com",
-      "title": "LifeSciKY — homepage checked by scrape.py",
+      "title": "LifeSciKY — homepage",
       "excerpt": "Start at LifeSciKY → https://lifesciky.com/apply-for-residency/",
       "page": "details"
     },
     {
       "id": "check-route-658b366177",
       "url": "https://lifesciky.com/about-us/",
-      "title": "LifeSciKY — details page checked by scrape.py",
+      "title": "LifeSciKY — program page",
       "excerpt": "Apply Now → https://lifesciky.com/apply/",
       "page": "details"
     },
     {
-      "id": "check-route-ec3c0b0e4d",
-      "url": "https://LifeSciKY.com",
-      "title": "LifeSciKY — homepage checked by scrape.py",
+      "id": "check-route-790885de19",
+      "url": "https://lifesciky.com/about-us-2/",
+      "title": "LifeSciKY — program page",
       "excerpt": "Apply Now → https://lifesciky.com/apply/",
       "page": "details"
+    },
+    {
+      "id": "check-route-8a0b6bf763",
+      "url": "https://lifesciky.com/kentucky-gets-serious-about-life-sciences-growth/",
+      "title": "LifeSciKY — program page",
+      "excerpt": "Apply Now → https://lifesciky.com/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a963ac8bbc",
+      "url": "https://lifesciky.com/terms-and-disclaimer/",
+      "title": "LifeSciKY — terms page",
+      "excerpt": "Apply Now → https://lifesciky.com/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-ec3c0b0e4d",
+      "url": "https://LifeSciKY.com",
+      "title": "LifeSciKY — homepage",
+      "excerpt": "Apply Now → https://lifesciky.com/apply/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-39dd486386",
+      "url": "https://LifeSciKY.com",
+      "page": "details",
+      "excerpt": "Home - LifeSciKY Skip to content Apply Now Home About Us Lab Residency Education News & Events Contact Us Apply Now Kentucky's Life Sciences Hub The Front Door for Life Sciences LifeSciKY is where companies start, scale, and stay — powered by lab infrastructure, people, and a statewide innovation network. Start at LifeSciKY Explore Lab Space $1.7 M+ Shared Equipment BSL -2 Certified Facility Day 1 Move-In Ready 501 (c)3 Nonprofit Mission Who We Serve Built for Builders of Science Whether you’re starting a company, supporting innovation, or exploring a future in science — LifeSciKY is built for you. For Founders Start & Scale Your Company Start and scale your company Access fully equipped lab space Plug into resources and a statewide network Apply for Lab Space For Partners Invest in Innovation Sponsor innovation and emerging companies Access startup deal flow Build presence in Kentucky's life sciences ecosystem Partner With Us For Students Explore Science Careers Hands-on lab experiences Career pathways in biotech and research Fellowships and training programs Explore Progams Kentucky Why Build Here? Build faster. Spend less. Grow here. 01 Capital Efficiency Build and scale at a fraction of the cost compared to coastal markets. Kentucky’s infrastructure lets your runway go further. 02 Talent & Institutions Access leading universities, clinicians, and researchers driving"
+    },
+    {
+      "id": "check-page-3460cbe9bb",
+      "url": "https://LifeSciKY.com",
+      "page": "details",
+      "excerpt": "03 Public-Private Momentum Backed by state investment and aligned partners committed to growing Kentucky’s life sciences economy — building it together with you."
+    },
+    {
+      "id": "check-page-83f85a7cd3",
+      "url": "https://LifeSciKY.com",
+      "page": "details",
+      "excerpt": "04 Infrastructure to Build and Scale Access lab space, equipment, and an ecosystem designed to support company growth from day one to Series A and beyond."
+    },
+    {
+      "id": "check-page-54b6737fd4",
+      "url": "https://LifeSciKY.com",
+      "page": "details",
+      "excerpt": "Explore Lab Space ⚗️ Fully Equipped from Day One Over $1.7M of shared equipment on site so you can start immediately — not months from now."
+    },
+    {
+      "id": "check-page-b8350910a7",
+      "url": "https://LifeSciKY.com",
+      "page": "details",
+      "excerpt": "Contact Us Nonprofit · 501(c)(3) BSL-2 Certified Move-In Ready Flexible Terms Sign Up For Our Newsletter Subscription Form SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a 501(c)(3) tax-exempt nonprofit corporation organized under Kentucky law, doing business as LifeSciKY."
+    },
+    {
+      "id": "check-page-70f2c2a8c3",
+      "url": "https://LifeSciKY.com",
+      "page": "details",
+      "excerpt": "All references to LifeSciKY pertain to the operations, initiatives and programs of Covington Life Sciences Partners."
+    },
+    {
+      "id": "check-page-4d0a957023",
+      "url": "https://lifesciky.com/apply-for-residency/",
+      "page": "application",
+      "excerpt": "Apply for Residency | LifeSciKY Skip to content Apply Now Home About Us Lab Residency Education News & Events Contact Us Apply Now Apply for LifeSciKY Residency Innovators Welcome At LifeSciKY, residents have access to flexible and fully equipped lab space, state-of-the-art equipment and a wide range of additional benefits to help bring their innovative work to life. Learn more by visiting our lab residency page . If you’re ready to start the application process, please fill out the form below. Apply for LifeSciKY Residency Step 1 Step 2 Step 1: General Information First Name Last Name Email Phone/Mobile Job Title How did you hear about us? – Select an option – Website Search Engine Event Referral Other Previous Next Step 2: Company Information Company Name Company Location Country Select Country Afghanistan Aland Islands Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Saint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory British Virgin Islands Brunei Bulgaria Burkina Faso Burundi Cabo Verde Cambodia Cameroon Canada Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos (Keeling) Islands Colombia Comoros Cook"
+    },
+    {
+      "id": "check-page-e40428d0b9",
+      "url": "https://lifesciky.com/apply-for-residency/",
+      "page": "application",
+      "excerpt": "When would you like to start your residency?"
+    },
+    {
+      "id": "check-page-82767360b8",
+      "url": "https://lifesciky.com/apply-for-residency/",
+      "page": "application",
+      "excerpt": "Previous Submit Application Sign Up For Our Newsletter Subscription Form SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a 501(c)(3) tax-exempt nonprofit corporation organized under Kentucky law, doing business as LifeSciKY."
+    },
+    {
+      "id": "check-page-2446ebaeca",
+      "url": "https://lifesciky.com/apply-for-residency/",
+      "page": "application",
+      "excerpt": "All references to LifeSciKY pertain to the operations, initiatives and programs of Covington Life Sciences Partners."
+    },
+    {
+      "id": "check-page-0ed80dc2b3",
+      "url": "https://lifesciky.com/apply/",
+      "page": "application",
+      "excerpt": "Apply - LifeSciKY Skip to content Apply Now Home About Us Lab Residency Education News & Events Contact Us Apply Now apply Now Become a LifeSciKY Resident Join Kentucky’s premier life sciences innovation community and gain access to world-class laboratory space, shared scientific resources, and a collaborative ecosystem designed to help your company grow. Apply for LifeSciKY Residency Step 1 Step 2 Step 1: General Information First Name Last Name Email Phone/Mobile Job Title How did you hear about us? - Select an option - Website Search Engine Event Referral Other Previous Next Step 2: Company Information Company Name Company Location Country Select Country Afghanistan Aland Islands Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Saint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory British Virgin Islands Brunei Bulgaria Burkina Faso Burundi Cabo Verde Cambodia Cameroon Canada Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos (Keeling) Islands Colombia Comoros Cook Islands Costa Rica Croatia Cuba Curaçao Cyprus Czech Republic Democratic Republic of the Congo (Kinshasa) Denmark Djibouti Dominica Dominican"
+    },
+    {
+      "id": "check-page-73556e210b",
+      "url": "https://lifesciky.com/apply/",
+      "page": "application",
+      "excerpt": "When would you like to start your residency?"
+    },
+    {
+      "id": "check-page-6da80dae3a",
+      "url": "https://lifesciky.com/apply/",
+      "page": "application",
+      "excerpt": "Previous Submit Application Sign Up For Our Newsletter Subscription Form SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a 501(c)(3) tax-exempt nonprofit corporation organized under Kentucky law, doing business as LifeSciKY."
+    },
+    {
+      "id": "check-page-811dd90de9",
+      "url": "https://lifesciky.com/apply/",
+      "page": "application",
+      "excerpt": "All references to LifeSciKY pertain to the operations, initiatives and programs of Covington Life Sciences Partners."
+    },
+    {
+      "id": "check-page-1fec4bd615",
+      "url": "https://lifesciky.com/terms-and-disclaimer/",
+      "page": "terms",
+      "excerpt": "Terms and Disclaimer - LifeSciKY Skip to content Apply Now Home About Us Lab Residency Education News & Events Contact Us Apply Now Terms and Disclaimer Covington Life Science Partners, Inc. (“LifeSciKY”) offers this site for informational purposes only, as a service for our clients and friends. The contents of this site are not intended as legal advice for any purpose, and you should not consider them as such advice or as legal opinion on any matters. The contents of this site do not necessarily reflect the views of LifeSciKY as to any particular matter or those of its clients. The information on this site is subject to change without notice, and you may not rely upon any such information with regard to a particular matter or set of facts. You should not take any action with regard to any matter based upon the information on this website. We make no warranties of any kind regarding the accuracy or completeness of any information on this site, and we make no representations regarding whether such information is reliable, up-to-date, or applicable to any particular situation. The following statement is required by many states, including Kentucky: “THIS IS AN ADVERTISEMENT. LifeSciKY does not intend to endorse any of the sites for which we provide informational links on this website. The links are for information only. We will remove any individual link if properly requested by"
+    },
+    {
+      "id": "check-page-0f7b817500",
+      "url": "https://lifesciky.com/terms-and-disclaimer/",
+      "page": "terms",
+      "excerpt": "Sign Up For Our Newsletter Subscription Form SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a 501(c)(3) tax-exempt nonprofit corporation organized under Kentucky law, doing business as LifeSciKY."
+    },
+    {
+      "id": "check-page-aa2ce5431c",
+      "url": "https://lifesciky.com/terms-and-disclaimer/",
+      "page": "terms",
+      "excerpt": "All references to LifeSciKY pertain to the operations, initiatives and programs of Covington Life Sciences Partners."
+    },
+    {
+      "id": "check-page-bfd5a436ce",
+      "url": "https://lifesciky.com/about-us-2/",
+      "page": "details",
+      "excerpt": "About Us - LifeSciKY Skip to content Apply Now Home About Us Lab Residency Education News & Events Contact Us Apply Now About Us Fostering Innovation in Life Sci﻿ences Science has the power to change everything We are LifeSciKY: a lab incubator accelerating science, entrepreneurism, education and economic development. From affordable lab space and state-of-the-art equipment to collaborative partnerships and networking opportunities, LifeSciKY empowers innovators with the critical resources and connections they need to bring their work to life. WHERE LIFE SCIENCES THRIVE Welcome to Northern Kentucky and Greater Cincinnati, a vibrant region where innovation meets opportunity. $4.7B contributed to life sciences GDP in 2023 6.4% growth in life sciences 1,548 life sciences establishments 19,089 life sciences employees $573M Kentucky R&D expenditures $456M venture capital funding raised by life sciences startups in Kentucky 13,660 STEM degrees awarded annually, within a 75-mile drive 3 of the top 20 global contract research organizations in the region (CTI, MedPace and PPD) Home to leading institutions like Cincinnati Children’s Hospital, UC Health and St. Elizabeth Healthcare Facts provided by BE NKY Growth Partnership A one-of-a-kind place to call home Here in historic Covington, Kentucky, aspiring entrepreneurs enjoy access to exceptional talent, capital connections and lower"
+    },
+    {
+      "id": "check-page-fe8dda5acd",
+      "url": "https://lifesciky.com/about-us-2/",
+      "page": "details",
+      "excerpt": "Elizabeth Healthcare Facts provided by BE NKY Growth Partnership A one-of-a-kind place to call home Here in historic Covington, Kentucky, aspiring entrepreneurs enjoy access to exceptional talent, capital connections and lower living costs."
+    },
+    {
+      "id": "check-page-c566a9c8d5",
+      "url": "https://lifesciky.com/about-us-2/",
+      "page": "details",
+      "excerpt": "Photo Credit: Sam Greenhill A Culinary Destination Covington’s food scene is celebrated for its diverse offerings, from farm-to-table restaurants to award-winning breweries and distilleries, making it a hotspot for food enthusiasts."
+    },
+    {
+      "id": "check-page-262a4da46a",
+      "url": "https://lifesciky.com/about-us-2/",
+      "page": "details",
+      "excerpt": "Photo Credit: Rhine Media Discover More Meet the LifeSciKY Team LifeSciKY, formerly Covington Life Sciences Partners, Inc., is a non-profit corporation founded in November 2022 to advance science, education, entrepreneurism and job creation in the Northern Kentucky and Greater Cincinnati region."
+    },
+    {
+      "id": "check-page-8577ff98ba",
+      "url": "https://lifesciky.com/about-us-2/",
+      "page": "details",
+      "excerpt": "All references to LifeSciKY pertain to the operations, initiatives and programs of Covington Life Sciences Partners."
+    },
+    {
+      "id": "check-page-7d8ad46c2a",
+      "url": "https://lifesciky.com/about-us/",
+      "page": "details",
+      "excerpt": "About Us - LifeSciKY Skip to content Apply Now Home About Us Lab Residency Education News & Events Contact Us Apply Now About Us Building Kentucky's Life Sciences Future Accelerating scientific discovery, entrepreneurship, workforce development, and economic growth across the Commonwealth. Connect With Us Who We Are Science. Innovation. Kentucky. LifeSciKY is Kentucky’s nonprofit life sciences innovation organization dedicated to helping researchers, entrepreneurs, and companies turn scientific discoveries into products and technologies that improve lives. We provide shared laboratory space, scientific equipment, strategic partnerships, workforce development programs, and statewide initiatives that help innovators launch companies, create jobs, strengthen Kentucky’s economy, and build healthier communities. $1.7M+ Shared Equipment Available on site, day one Our Mission To accelerate life sciences innovation by supporting entrepreneurs, advancing scientific research, promoting science communication, developing Kentucky’s workforce, and strengthening the Commonwealth’s economy. Our Vision To make Kentucky a nationally recognized destination where life sciences innovators choose to discover, build, and grow. What We Do Four pillars driving Kentucky forward Innovation Infrastructure Providing state-of-the-art laboratory space, shared scientific equipment, and research resources"
+    },
+    {
+      "id": "check-page-db035e347f",
+      "url": "https://lifesciky.com/about-us/",
+      "page": "details",
+      "excerpt": "What We Do Four pillars driving Kentucky forward Innovation Infrastructure Providing state-of-the-art laboratory space, shared scientific equipment, and research resources that lower barriers to scientific discovery, company formation, and commercialization."
+    },
+    {
+      "id": "check-page-b6f4ac3e68",
+      "url": "https://lifesciky.com/about-us/",
+      "page": "details",
+      "excerpt": "Lab Space · Shared Equipment · Research Resources Entrepreneurship Supporting startups and innovators from concept to company through laboratory access, mentorship, strategic partnerships, and resources that accelerate the path from idea to product."
+    },
+    {
+      "id": "check-page-624a7c3153",
+      "url": "https://lifesciky.com/about-us/",
+      "page": "details",
+      "excerpt": "Startups · Mentorship · Strategic Partnerships Workforce Development Preparing Kentucky’s next generation of life sciences professionals through STEM education, fellowships, internships, experiential learning, and industry partnerships."
+    },
+    {
+      "id": "check-page-f240f77786",
+      "url": "https://lifesciky.com/about-us/",
+      "page": "details",
+      "excerpt": "STEM Education · Fellowships · Industry Pathways Advancing Biosciences Statewide Strengthening Kentucky’s life sciences ecosystem by recruiting companies, fostering strategic partnerships, supporting innovation statewide, and driving economic growth through collaboration."
+    },
+    {
+      "id": "check-page-be8538b460",
+      "url": "https://lifesciky.com/about-us/",
+      "page": "details",
+      "excerpt": "Students Explore fellowships, programs, and hands-on lab career experiences."
+    },
+    {
+      "id": "check-page-1f9bb8e7fa",
+      "url": "https://lifesciky.com/about-us/",
+      "page": "details",
+      "excerpt": "Organizations Collaborate to grow Kentucky’s life sciences ecosystem statewide."
+    },
+    {
+      "id": "check-page-3742ffa244",
+      "url": "https://lifesciky.com/about-us/",
+      "page": "details",
+      "excerpt": "Sign Up For Our Newsletter Subscription Form SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a 501(c)(3) tax-exempt nonprofit corporation organized under Kentucky law, doing business as LifeSciKY."
+    },
+    {
+      "id": "check-page-7fd8d2e7e3",
+      "url": "https://lifesciky.com/about-us/",
+      "page": "details",
+      "excerpt": "All references to LifeSciKY pertain to the operations, initiatives and programs of Covington Life Sciences Partners."
+    },
+    {
+      "id": "check-page-73fc68da32",
+      "url": "https://lifesciky.com/kentucky-gets-serious-about-life-sciences-growth/",
+      "page": "details",
+      "excerpt": "Kentucky Gets Serious About Life Sciences Growth - LifeSciKY Skip to content Apply Now Home About Us Lab Residency Education News & Events Contact Us Apply Now March 13, 2026 Kentucky Gets Serious About Life Sciences Growth Summary Kentucky is strategically growing its life sciences sector through increased investment, infrastructure, and collaboration across public and private organizations. The state is working to attract biotech companies and support startups by expanding lab space, funding opportunities, and workforce development initiatives. LifeSciKY is an important contributor to this effort, helping position Northern Kentucky as an emerging life science hub. Read The Full Article Back to news & events Sign Up For Our Newsletter Subscription Form SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a 501(c)(3) tax-exempt nonprofit corporation organized under Kentucky law, doing business as LifeSciKY. All references to LifeSciKY pertain to the operations, initiatives and programs of Covington Life Sciences Partners. Privacy Policy Terms and Disclaimer Copyright 2026 LifeSciKY"
     }
   ],
   "findings": {
@@ -129,12 +439,24 @@
         "evidenceId": "check-route-4d355240c3"
       }
     ],
-    "applicationUrl": [],
+    "applicationUrl": [
+      {
+        "value": "https://lifesciky.com/apply/",
+        "evidenceId": "check-route-ec3c0b0e4d"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

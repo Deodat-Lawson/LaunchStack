@@ -1,6 +1,6 @@
 {
   "programId": "murud",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.telstra.com.au/business-enterprise/muru-d",
     "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications",
@@ -11,20 +11,718 @@
     "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/cisco-webex-teams",
     "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/office-365-enterprise",
     "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/virtual-meeting-room",
-    "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
     "https://www.telstra.com.au/exchange/how-to-apply-for-telstra-footy-country-grants",
     "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services",
     "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services/messagebank",
     "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
-    "https://www.telstra.com.au/careers/how-we-hire"
+    "https://www.telstra.com.au/connected/deals",
+    "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+    "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+    "https://www.telstra.com.au/connected/lifestyle/telstra-plus-black-friday-deals",
+    "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+    "https://www.telstra.com.au/customer-terms",
+    "https://www.telstra.com.au/customer-terms/business-government"
   ],
   "evidence": [
+    {
+      "id": "check-deal-05a10ecba5",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "$700 off Samsung Galaxy S25 Edge Ring in big savings. Was $2049, now $1349. Grab one while stock lasts. Get $1000 bonus value on Google Pixel 11",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-08541ef4a9",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Match? Even better. Get $1000 bonus value on motorola razr fold $1000 bonus value Bag $500 off. Now $2299. Plus, get $500 bonus credit when",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-0c95bfd3af",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "while stock lasts. Get $1000 bonus value on Google Pixel 11 Pro Fold $500 off on repayment, plus $500 bonus trade-in credit. Eligibility",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-0db4336c64",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "by Assurant. Eligible device and Telstra service required. Get $700 off Samsung Galaxy S25 Edge Ring in big savings. Was $2049, now",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-0e4f751b84",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "required. Get up to $1000 bonus value on motorola signature Up to $600 off, plus $400 bonus trade-in credit. Trade-In powered by Assurant.",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-14ba401403",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "big savings. Was $2049, now $1349. Grab one while stock lasts. Get $1000 bonus value on Google Pixel 11 Pro Fold $500 off on repayment, plus",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-161279950d",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "up to $1000 bonus value on motorola signature Up to $600 off, plus $400 bonus trade-in credit. Trade-In powered by Assurant. Eligible device",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-19a688f92b",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Match? Even better. Get $1000 bonus value on motorola razr fold $1000 bonus value Bag $500 off. Now $2299. Plus, get $500 bonus credit when",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-1b847ee008",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Galaxy S26 Ultra Get up to $1200 bonus value on Pixel 11 Series $1200 bonus value Trade in for a big Pixel deal at a small price. Plus 7",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-203852b5da",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Galaxy S26 Ultra Get up to $1200 bonus value on Pixel 11 Series $1200 bonus value Trade in for a big Pixel deal at a small price. Plus 7",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-20d9c9cf4d",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Upfront Mobile Plans are on a big sale. Excludes bundle plans. Get $300 off iPhone 17 Pro & iPhone 17 Pro Max Buy on repayment with",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-2293c0dd4b",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "bonus value on Google Pixel 11 A big $500 off on repayment, plus $400 bonus trade-in credit. Eligibility criteria apply. Trade-In powered",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-244b6c02c9",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "value on motorola razr fold $1000 bonus value Bag $500 off. Now $2299. Plus, get $500 bonus credit when you trade in. Android deals Ends 30",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-261b52aa95",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Get $700 off Samsung Galaxy S25 Edge Ring in big savings. Was $2049, now $1349. Grab one while stock lasts. Get $1000 bonus value on",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-2b0390e738",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "by Assurant. Eligible device and Telstra service required. Get $700 off Samsung Galaxy S25 Edge Ring in big savings. Was $2049, now",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-38427fbc1c",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "deals Ends 30 Nov. Get $900 bonus value on Google Pixel 11 A big $500 off on repayment, plus $400 bonus trade-in credit. Eligibility",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-3d0f543868",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "value on motorola razr fold $1000 bonus value Bag $500 off. Now $2299. Plus, get $500 bonus credit when you trade in. Android deals Ends 30",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-40f17dcd5e",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "bonus value on Google Pixel 11 Pro Fold $500 off on repayment, plus $500 bonus trade-in credit. Eligibility criteria apply. Trade-In powered",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-463550aa9f",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "bonus value on Google Pixel 11 Pro Fold $500 off on repayment, plus $500 bonus trade-in credit. Eligibility criteria apply. Trade-In powered",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-4d39cb8eae",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "while stock lasts. Get $1000 bonus value on Google Pixel 11 Pro Fold $500 off on repayment, plus $500 bonus trade-in credit. Eligibility",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-4fa64bcb0b",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "$500 bonus credit when you trade in. Android deals Ends 30 Nov. Get $900 bonus value on Google Pixel 11 A big $500 off on repayment, plus $400",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-56a3718124",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "by Assurant. Eligible device and Telstra service required. Get up to $1000 bonus value on motorola signature Up to $600 off, plus $400 bonus",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-5ced749769",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "deal at a small price. Plus 7 Day Price Match? Even better. Get $1000 bonus value on motorola razr fold $1000 bonus value Bag $500 off. Now",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-5cf51d65e3",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "$700 off Samsung Galaxy S25 Edge Ring in big savings. Was $2049, now $1349. Grab one while stock lasts. Get $1000 bonus value on Google Pixel 11",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-5ea33b7c37",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Upfront Mobile Plans are on a big sale. Excludes bundle plans. Get $300 off iPhone 17 Pro & iPhone 17 Pro Max Buy on repayment with",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6366aad20b",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "razr fold $1000 bonus value Bag $500 off. Now $2299. Plus, get $500 bonus credit when you trade in. Android deals Ends 30 Nov. Get $900",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-654f632eac",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "big savings. Was $2049, now $1349. Grab one while stock lasts. Get $1000 bonus value on Google Pixel 11 Pro Fold $500 off on repayment, plus",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6f3575a308",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "bonus value on Google Pixel 11 A big $500 off on repayment, plus $400 bonus trade-in credit. Eligibility criteria apply. Trade-In powered",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-71e75bfbec",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "deals Ends 30 Nov. Get $900 bonus value on Google Pixel 11 A big $500 off on repayment, plus $400 bonus trade-in credit. Eligibility",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-7722e9980b",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Galaxy S26 Ultra Get up to $1200 bonus value on Pixel 11 Series $1200 bonus value Trade in for a big Pixel deal at a small price. Plus 7",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-79f6e83215",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "deal at a small price. Plus 7 Day Price Match? Even better. Get $1000 bonus value on motorola razr fold $1000 bonus value Bag $500 off. Now",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-7b5d09a58d",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "required. Get up to $1000 bonus value on motorola signature Up to $600 off, plus $400 bonus trade-in credit. Trade-In powered by Assurant.",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-85faea6062",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "device. Get fast, free delivery. Explore Galaxy S26 Ultra Get up to $1200 bonus value on Pixel 11 Series $1200 bonus value Trade in for a big",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-89069cec31",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "by Assurant. Eligible device and Telstra service required. Get up to $1000 bonus value on motorola signature Up to $600 off, plus $400 bonus",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-8a58811621",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "razr fold $1000 bonus value Bag $500 off. Now $2299. Plus, get $500 bonus credit when you trade in. Android deals Ends 30 Nov. Get $900",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-8cd05f685f",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "device. Get fast, free delivery. Explore Galaxy S26 Ultra Get up to $1200 bonus value on Pixel 11 Series $1200 bonus value Trade in for a big",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-9af5a13238",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Match? Even better. Get $1000 bonus value on motorola razr fold $1000 bonus value Bag $500 off. Now $2299. Plus, get $500 bonus credit when",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-9b086a07d6",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "$500 bonus credit when you trade in. Android deals Ends 30 Nov. Get $900 bonus value on Google Pixel 11 A big $500 off on repayment, plus $400",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-9dedab69b8",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "big savings. Was $2049, now $1349. Grab one while stock lasts. Get $1000 bonus value on Google Pixel 11 Pro Fold $500 off on repayment, plus",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-9ef37b5132",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "razr fold $1000 bonus value Bag $500 off. Now $2299. Plus, get $500 bonus credit when you trade in. Android deals Ends 30 Nov. Get $900",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a465e27000",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "deals Ends 30 Nov. Get $900 bonus value on Google Pixel 11 A big $500 off on repayment, plus $400 bonus trade-in credit. Eligibility",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a6149777df",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Get $1000 bonus value on motorola razr fold $1000 bonus value Bag $500 off. Now $2299. Plus, get $500 bonus credit when you trade in.",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a8c5e21cb3",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Get $1000 bonus value on motorola razr fold $1000 bonus value Bag $500 off. Now $2299. Plus, get $500 bonus credit when you trade in.",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a9d41ff131",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Get $1000 bonus value on motorola razr fold $1000 bonus value Bag $500 off. Now $2299. Plus, get $500 bonus credit when you trade in.",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-aa085da17b",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "bonus value on Google Pixel 11 Pro Fold $500 off on repayment, plus $500 bonus trade-in credit. Eligibility criteria apply. Trade-In powered",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-aa2b5721f2",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "$500 bonus credit when you trade in. Android deals Ends 30 Nov. Get $900 bonus value on Google Pixel 11 A big $500 off on repayment, plus $400",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-acd2dc9c3f",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Get $700 off Samsung Galaxy S25 Edge Ring in big savings. Was $2049, now $1349. Grab one while stock lasts. Get $1000 bonus value on",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ad36487e43",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "bonus value on Google Pixel 11 A big $500 off on repayment, plus $400 bonus trade-in credit. Eligibility criteria apply. Trade-In powered",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-af924e4ca2",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "$700 off Samsung Galaxy S25 Edge Ring in big savings. Was $2049, now $1349. Grab one while stock lasts. Get $1000 bonus value on Google Pixel 11",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-b0938fc1b5",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "device. Get fast, free delivery. Explore Galaxy S26 Ultra Get up to $1200 bonus value on Pixel 11 Series $1200 bonus value Trade in for a big",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-b16e560336",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "up to $1000 bonus value on motorola signature Up to $600 off, plus $400 bonus trade-in credit. Trade-In powered by Assurant. Eligible device",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-bb1108c410",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "value on motorola razr fold $1000 bonus value Bag $500 off. Now $2299. Plus, get $500 bonus credit when you trade in. Android deals Ends 30",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-bbbd9f460e",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "by Assurant. Eligible device and Telstra service required. Get $700 off Samsung Galaxy S25 Edge Ring in big savings. Was $2049, now",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-cf21d83e82",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Get $700 off Samsung Galaxy S25 Edge Ring in big savings. Was $2049, now $1349. Grab one while stock lasts. Get $1000 bonus value on",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-d055386238",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "by Assurant. Eligible device and Telstra service required. Get up to $1000 bonus value on motorola signature Up to $600 off, plus $400 bonus",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-d225ffea8c",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "up to $1000 bonus value on motorola signature Up to $600 off, plus $400 bonus trade-in credit. Trade-In powered by Assurant. Eligible device",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-eb15c3b54c",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "while stock lasts. Get $1000 bonus value on Google Pixel 11 Pro Fold $500 off on repayment, plus $500 bonus trade-in credit. Eligibility",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f81b4a9337",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Upfront Mobile Plans are on a big sale. Excludes bundle plans. Get $300 off iPhone 17 Pro & iPhone 17 Pro Max Buy on repayment with",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-fa2d6c0d41",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "required. Get up to $1000 bonus value on motorola signature Up to $600 off, plus $400 bonus trade-in credit. Trade-In powered by Assurant.",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-fae020ab45",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "deal at a small price. Plus 7 Day Price Match? Even better. Get $1000 bonus value on motorola razr fold $1000 bonus value Bag $500 off. Now",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0c9fcac08a",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "now or later Pay in full or pay over 12, 24 or 36 months with 0% interest. Big deals, small repayments.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-16603ed935",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "nbn® and 5G Internet plans. Save up to $280 over 4 months. Explore Home Internet deals Home Internet",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-178340acc0",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Business Internet 50% off Up to $352 off over 4 months on new nbn and 5G Internet plans. Save big as",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-278cf4b45c",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Ends 30 Nov. Bag 50% off Upfront Data Plans for 4 months Add a new Small or Medium Data Plan, with 24/7",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-35398fbfc3",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "off eero range and 50% off Device Security for 4 months. Extra big savings in the bag. Device Security",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-37a0d73f7b",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Save on Internet and Upfront Mobile Plans for 4 months with no lock-in contracts. Excludes bundle",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3acde7fda2",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "hero. Secure 50% off Device Security 50% off For 4 months of big protection for your devices. Device",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-40a5f8943e",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "off all new nbn and 5G home internet plans for 4 months. 5G plans available in select areas and to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-42e4837fe4",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "voice or to a different tech type, within 24 months, simply return your modem or pay a $200",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-432dbd24c3",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Business Internet 50% off Up to $352 off over 4 months on new nbn and 5G Internet plans. Save big as",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-44a626a728",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Save on Internet and Upfront Mobile Plans for 4 months with no lock-in contracts. Excludes bundle",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-48fcedeef8",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Business Internet 50% off Up to $352 off over 4 months on new nbn and 5G Internet plans. Save big as",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-520ca8380f",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Home Internet 50% off Save up to $300 over 4 months, plus free delivery across Australia. The stars",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-55a3276b74",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "If you cancel or change tech type within 24 months, your modem must be returned via our eParcel",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-615fbb3faa",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Ends 30 Nov. Bag 50% off Upfront Data Plans for 4 months Add a new Small or Medium Data Plan, with 24/7",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6fc1ec65b4",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Ends 30 Nov. Bag 50% off Upfront Data Plans for 4 months Add a new Small or Medium Data Plan, with 24/7",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6fcc29202b",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "off all new nbn and 5G home internet plans for 4 months. 5G plans available in select areas and to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-710e6970c3",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Plus. Get 50% off Upfront Mobile Plans for 4 months 50% off Add a new Basic, Essential or Premium",
+      "page": "terms"
+    },
     {
       "id": "check-duration-72e0ef4382",
       "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services/messagebank",
       "title": "Muru-D — application page",
       "excerpt": "is available on all Business Fleet Connect 24-month and Casual plans, $55 and above Easy Share",
       "page": "application"
+    },
+    {
+      "id": "check-duration-7b6a5b9b3c",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "If you cancel or change tech type within 24 months, your modem must be returned via our eParcel",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8a52e8db86",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Internet from space 50% off Up to $300 off over 4 months on Satellite Internet straight from the stars.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-960e93f293",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "If you cancel or change tech type within 24 months, your modem must be returned via our eParcel",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-97a7a1dea9",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "nbn® and 5G Internet plans. Save up to $280 over 4 months. Explore Home Internet deals Home Internet",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-9a2375244e",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "off eero range and 50% off Device Security for 4 months. Extra big savings in the bag. Device Security",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a0dbbe8e43",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Internet from space 50% off Up to $300 off over 4 months on Satellite Internet straight from the stars.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b13430f334",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "off all new nbn and 5G home internet plans for 4 months. 5G plans available in select areas and to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-bf35ba0f5f",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Plus. Get 50% off Upfront Mobile Plans for 4 months 50% off Add a new Basic, Essential or Premium",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c499d8a344",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "voice or to a different tech type, within 24 months, simply return your modem or pay a $200",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c880abd7f6",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "now or later Pay in full or pay over 12, 24 or 36 months with 0% interest. Big deals, small repayments.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-cdadf90f09",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Plus. Get 50% off Upfront Mobile Plans for 4 months 50% off Add a new Basic, Essential or Premium",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d11de963d6",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "voice or to a different tech type, within 24 months, simply return your modem or pay a $200",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d12934bf44",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "hero. Secure 50% off Device Security 50% off For 4 months of big protection for your devices. Device",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-da216257c0",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "nbn® and 5G Internet plans. Save up to $280 over 4 months. Explore Home Internet deals Home Internet",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-db9d90f795",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Home Internet 50% off Save up to $300 over 4 months, plus free delivery across Australia. The stars",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-de14a76817",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Internet from space 50% off Up to $300 off over 4 months on Satellite Internet straight from the stars.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e501175349",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "hero. Secure 50% off Device Security 50% off For 4 months of big protection for your devices. Device",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ec36fec407",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "now or later Pay in full or pay over 12, 24 or 36 months with 0% interest. Big deals, small repayments.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f19b736de7",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Save on Internet and Upfront Mobile Plans for 4 months with no lock-in contracts. Excludes bundle",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f22df6df3b",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Home Internet 50% off Save up to $300 over 4 months, plus free delivery across Australia. The stars",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f54c96970e",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "off eero range and 50% off Device Security for 4 months. Extra big savings in the bag. Device Security",
+      "page": "terms"
     },
     {
       "id": "check-duration-f5e6b7c769",
@@ -34,67 +732,151 @@
       "page": "application"
     },
     {
-      "id": "check-format-1ac9661bcc",
-      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
-      "title": "Muru-D — application page",
-      "excerpt": "Nailing the virtual graduate application process at Telstra - Telstra",
-      "page": "application"
+      "id": "check-format-0361a3a867",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "emergency responders directly. If you intend to visit remote regions, it is always recommended to plan ahead and take",
+      "page": "terms"
     },
     {
-      "id": "check-format-2882c5cbb8",
-      "url": "https://www.telstra.com.au/careers/how-we-hire",
-      "title": "Muru-D — application page",
-      "excerpt": "the opportunity to meet with our current graduates in a virtual setting to get to know more about life at Telstra and ask",
-      "page": "application"
+      "id": "check-format-08e7fe06af",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "VPN, Call Plan and Worldsource VNS 801.28 KB | PDF Telstra Virtual Private Network – Corporate VPN, Call Plan and Worldsource",
+      "page": "terms"
     },
     {
-      "id": "check-format-4f4b99787d",
-      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
-      "title": "Muru-D — application page",
-      "excerpt": "been moving our final stage in the interview process to a virtual setting. Typically, once candidates completed an online",
-      "page": "application"
+      "id": "check-format-133a3afae0",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "the Australian Radio Quiet Zone in Western Australia and remote offshore territories and islands of Australia. Telstra",
+      "page": "terms"
     },
     {
-      "id": "check-format-646ec4a8fe",
-      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
-      "title": "Muru-D — application page",
-      "excerpt": "Sign in Telstra Better Connected Careers Nailing the virtual graduate application process at Telstra We've had to make",
-      "page": "application"
+      "id": "check-format-1d0a5f07f6",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "KB | DOCX Telstra Business Smart Modem Data Service – Hybrid Modem 173.5 KB | PDF Data Service – Hybrid Modem 42.37 KB",
+      "page": "terms"
     },
     {
-      "id": "check-format-6911ce618b",
-      "url": "https://www.telstra.com.au/careers/how-we-hire",
-      "title": "Muru-D — application page",
-      "excerpt": "recruitment process, you’ll be asked to participate in a virtual interview. This is a three stage process: Graduate",
-      "page": "application"
+      "id": "check-format-2e22470cc5",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "Data Service – Hybrid Modem 173.5 KB | PDF Data Service – Hybrid Modem 42.37 KB | DOCX Telstra Dark Fibre Telstra Dark",
+      "page": "terms"
     },
     {
-      "id": "check-format-905b142900",
-      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
-      "title": "Muru-D — application page",
-      "excerpt": "a few other tips on how you can successfully navigate our virtual application process. Before the video interview",
-      "page": "application"
+      "id": "check-format-3d2548c19d",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "KB | PDF Telstra Unified Contact Centre 77.88 KB | DOCX Virtual Private Network Telstra Virtual Private Network –",
+      "page": "terms"
     },
     {
-      "id": "check-format-9a1de8ef39",
-      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
-      "title": "Muru-D — application page",
-      "excerpt": "at Telstra - Telstra Publisher: Telstra Name: Nailing the virtual graduate application process at Telstra - Telstra",
-      "page": "application"
+      "id": "check-format-42ba72594f",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "Telemetry – from 1 October 2019 279.38 KB | PDF Telstra Remote Telemetry – from 1 October 2019 95.09 KB | DOCX Telstra",
+      "page": "terms"
     },
     {
-      "id": "check-format-9bf19262a6",
-      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
-      "title": "Muru-D — application page",
-      "excerpt": "processes at Telstra recently as we move to a more virtual application and onboarding experience for our grads.",
-      "page": "application"
+      "id": "check-format-48eb96f7ba",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "Remote Telemetry – on or after 1 October 2019 Telstra Remote Telemetry – from 1 October 2019 279.38 KB | PDF Telstra",
+      "page": "terms"
     },
     {
-      "id": "check-format-f7b453ad5a",
-      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
-      "title": "Muru-D — application page",
-      "excerpt": "deadline. Dress appropriately, just as you would for an in-person interview. Have good lighting and keep your background as",
-      "page": "application"
+      "id": "check-format-5e6087f0ca",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "Telemetry – before 1 October 2019 246.59 KB | PDF Telstra Remote Telemetry – before 1 October 2019 99.48 KB | DOCX Internet",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7bea6df3c6",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Telstra’s mobile network area. If you intend to visit remote regions, it's always recommended to plan ahead and take",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-954e789367",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "Telemetry – from 1 October 2019 95.09 KB | DOCX Telstra Remote Telemetry – before 1 October 2019 Telstra Remote Telemetry",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-bd3967a8e2",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "the Australian Radio Quiet Zone in Western Australia and remote offshore territories and islands of Australia. Telstra",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c06b903e7a",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "emergency responders directly. If you intend to visit remote regions, it is always recommended to plan ahead and take",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c2e4403dcd",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Telstra’s mobile network area. If you intend to visit remote regions, it's always recommended to plan ahead and take",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d7644e13c6",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "the Australian Radio Quiet Zone in Western Australia and remote offshore territories and islands of Australia. Telstra",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-db3960af56",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "emergency responders directly. If you intend to visit remote regions, it is always recommended to plan ahead and take",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ea3b8f9bba",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "Telstra Remote Telemetry – before 1 October 2019 Telstra Remote Telemetry – before 1 October 2019 246.59 KB | PDF Telstra",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ecddb51094",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "title": "Muru-D — terms page",
+      "excerpt": "Telstra’s mobile network area. If you intend to visit remote regions, it's always recommended to plan ahead and take",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ee6d2a1cce",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "to Machine 162.67 KB | DOCX Remote Telemetry Telstra Remote Telemetry – on or after 1 October 2019 Telstra Remote",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-f6de1e64aa",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "and Telstra Wireless Machine to Machine 162.67 KB | DOCX Remote Telemetry Telstra Remote Telemetry – on or after 1 October",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-fc2de60dd3",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "Centre 77.88 KB | DOCX Virtual Private Network Telstra Virtual Private Network – Corporate VPN, Call Plan and Worldsource",
+      "page": "terms"
     },
     {
       "id": "check-location-d8d83fb924",
@@ -111,11 +893,32 @@
       "page": "details"
     },
     {
-      "id": "check-route-4347719c86",
-      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
-      "title": "Muru-D — application page",
-      "excerpt": "You can learn more about our application process here. → https://www.telstra.com.au/careers/how-we-hire",
-      "page": "application"
+      "id": "check-route-2d84c157b3",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "Cloud Services – Applications: Entag Go Cloud Kits 111.71 KB | DOCX → https://www.telstra.com.au/content/dam/tcom/personal/consumer-advice/doc/business-gov/cloud/entag-go-cloud-kits.docx",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-4cff2a8b93",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "Cloud Services – Enterprise Applications 106.48 KB | PDF → https://www.telstra.com.au/content/dam/tcom/personal/consumer-advice/pdf/business-a-full/cloud-c.pdf",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-c9f0403050",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "Cloud Services – Applications: Entag Go Cloud Kits 164.51 KB | PDF → https://www.telstra.com.au/content/dam/tcom/personal/consumer-advice/pdf/business-gov/cloud/entag-go-cloud-kits.pdf",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-cf539aeddc",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "title": "Muru-D — terms page",
+      "excerpt": "Cloud Services – Enterprise Applications 62.28 KB | DOCX → https://www.telstra.com.au/content/dam/tcom/personal/consumer-advice/doc/business-b/cloud-c.docx",
+      "page": "terms"
     },
     {
       "id": "check-status-6a5392114d",
@@ -133,10 +936,88 @@
       "excerpt": "muru-D - Telstra Enterprise Publisher: Telstra Name: muru-D - Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Show the previous links Welcome Overview Strategic pillars Current projects Events Get in touch Show next links muru-D Innovation happens here At muru-D, we turn 'what if' into 'what's next' by co-creating with our strategic partners and customers through exploration and incubation of new products, services and technologies. Overview We're tackling some of the biggest problems the world faces today, one idea at a time. muru-D is Telstra's hub for incubating ideas, products, and technologies. The name muru-D has a meaningful origin rooted in the Sydney Aboriginal Eora language. The word 'muru' means path, symbolising a journey or direction. The 'D' stands for digital, representing the focus on digital innovation. Together, muru-D signifies a pathway to digital innovation. We explore new technologies and rapidly prototype solutions, drawing on our expertise in 5G, IoT, connectivity, edge computing, and applied AI. Partnering with industry, experts, and universities, we develop real-world solutions for real-world problems. Our"
     },
     {
+      "id": "check-page-1960866907",
+      "url": "https://www.telstra.com.au/business-enterprise/muru-d",
+      "page": "details",
+      "excerpt": "Our process includes prototyping, proof-of-concepts, customer trials, and human-centred design workshops."
+    },
+    {
+      "id": "check-page-9a02d55593",
+      "url": "https://www.telstra.com.au/business-enterprise/muru-d",
+      "page": "details",
+      "excerpt": "We also support founders driving social technological impact and innovation in AI, VR, AR, drones, satellites, and robotics."
+    },
+    {
+      "id": "check-page-b3d3a1d407",
+      "url": "https://www.telstra.com.au/business-enterprise/muru-d",
+      "page": "details",
+      "excerpt": "We achieve this with our partners and experts through iterative prototyping, POCs, customer trials, and the Labs Application Testing Environment to achieve market readiness."
+    },
+    {
+      "id": "check-page-331e4640c2",
+      "url": "https://www.telstra.com.au/business-enterprise/muru-d",
+      "page": "details",
+      "excerpt": "Support more start-ups through their growth journeys We aim to accelerate, support and grow our start-up portfolio – which includes over 80 start-ups across Australia, Asia, and USA."
+    },
+    {
+      "id": "check-page-2013464a7e",
+      "url": "https://www.telstra.com.au/business-enterprise/muru-d",
+      "page": "details",
+      "excerpt": "Fibre sen﻿sing We’ve turned existing optical fibre runs into continuous passive acoustic sensors, implementing AI and Machine Learning on the sensor data to generate a range of composition statistics."
+    },
+    {
+      "id": "check-page-831dc0e468",
+      "url": "https://www.telstra.com.au/business-enterprise/muru-d",
+      "page": "details",
+      "excerpt": "Agritech We've invested in the Agritech industry, including through active trials and Commonwealth grant participation with Zetifi and Farmbot."
+    },
+    {
+      "id": "check-page-8d0a79ba54",
+      "url": "https://www.telstra.com.au/business-enterprise/muru-d",
+      "page": "details",
+      "excerpt": "Autonomous robotics We test different robotics platforms such as Unitree, investigate how our network can be the conduit to enable autonomous mining and workplace of the future use cases."
+    },
+    {
+      "id": "check-page-81a0bbc0a3",
+      "url": "https://www.telstra.com.au/business-enterprise/muru-d",
+      "page": "details",
+      "excerpt": "Apple Vision Pro We develop applications using the visionOS ecosystem, such as testing how residential wireless coverage can be enhanced with augmented reality."
+    },
+    {
+      "id": "check-page-9de74a76a8",
+      "url": "https://www.telstra.com.au/business-enterprise/muru-d",
+      "page": "details",
+      "excerpt": "Wiliot Bluetooth tracking In collaboration with a global IoT solution provider specialising in battery-less Bluetooth tagging technology, we are showcasing the most advanced innovations in asset tracking."
+    },
+    {
+      "id": "check-page-f70b11b658",
+      "url": "https://www.telstra.com.au/business-enterprise/muru-d",
+      "page": "details",
+      "excerpt": "We commit to working together to build a prosperous and inclusive Australia ."
+    },
+    {
       "id": "check-page-1011d4d3fb",
       "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications",
       "page": "application",
       "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
+    },
+    {
+      "id": "check-page-f9d233f540",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications",
+      "page": "application",
+      "excerpt": "More about TIPT Webex Calling Webex Calling is a cloud calling solution that delivers enterprise-grade calling and enables customers to replace costly on-premises infrastructure."
+    },
+    {
+      "id": "check-page-6761816b59",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications",
+      "page": "application",
+      "excerpt": "Keep up with the latest innovation Our accredited team and award-winning industry partners invest in innovation to make sure you benefit from the latest thinking."
+    },
+    {
+      "id": "check-page-3d1ea57541",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications",
+      "page": "application",
+      "excerpt": "We commit to working together to build a prosperous and inclusive Australia ."
     },
     {
       "id": "check-page-876d22c1e2",
@@ -145,10 +1026,46 @@
       "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
     },
     {
+      "id": "check-page-493c48985f",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/cisco-webex-teams",
+      "page": "application",
+      "excerpt": "More about TIPT Webex Calling Webex Calling is a cloud calling solution that delivers enterprise-grade calling and enables customers to replace costly on-premises infrastructure."
+    },
+    {
+      "id": "check-page-aaa9b417ae",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/cisco-webex-teams",
+      "page": "application",
+      "excerpt": "Keep up with the latest innovation Our accredited team and award-winning industry partners invest in innovation to make sure you benefit from the latest thinking."
+    },
+    {
+      "id": "check-page-0bf84f5a82",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/cisco-webex-teams",
+      "page": "application",
+      "excerpt": "We commit to working together to build a prosperous and inclusive Australia ."
+    },
+    {
       "id": "check-page-d55f945ff2",
       "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/office-365-enterprise",
       "page": "application",
       "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
+    },
+    {
+      "id": "check-page-3c62aa0dbb",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/office-365-enterprise",
+      "page": "application",
+      "excerpt": "More about TIPT Webex Calling Webex Calling is a cloud calling solution that delivers enterprise-grade calling and enables customers to replace costly on-premises infrastructure."
+    },
+    {
+      "id": "check-page-06573023e0",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/office-365-enterprise",
+      "page": "application",
+      "excerpt": "Keep up with the latest innovation Our accredited team and award-winning industry partners invest in innovation to make sure you benefit from the latest thinking."
+    },
+    {
+      "id": "check-page-034b8d0d79",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/office-365-enterprise",
+      "page": "application",
+      "excerpt": "We commit to working together to build a prosperous and inclusive Australia ."
     },
     {
       "id": "check-page-713b0ab766",
@@ -157,10 +1074,46 @@
       "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
     },
     {
+      "id": "check-page-f19e6a8350",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/virtual-meeting-room",
+      "page": "application",
+      "excerpt": "More about TIPT Webex Calling Webex Calling is a cloud calling solution that delivers enterprise-grade calling and enables customers to replace costly on-premises infrastructure."
+    },
+    {
+      "id": "check-page-9cf5285488",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/virtual-meeting-room",
+      "page": "application",
+      "excerpt": "Keep up with the latest innovation Our accredited team and award-winning industry partners invest in innovation to make sure you benefit from the latest thinking."
+    },
+    {
+      "id": "check-page-20eddf2260",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/virtual-meeting-room",
+      "page": "application",
+      "excerpt": "We commit to working together to build a prosperous and inclusive Australia ."
+    },
+    {
       "id": "check-page-6eec177551",
       "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications",
       "page": "application",
       "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
+    },
+    {
+      "id": "check-page-e3e04fd2b9",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications",
+      "page": "application",
+      "excerpt": "More about TIPT Webex Calling Webex Calling is a cloud calling solution that delivers enterprise-grade calling and enables customers to replace costly on-premises infrastructure."
+    },
+    {
+      "id": "check-page-0330318a02",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications",
+      "page": "application",
+      "excerpt": "Keep up with the latest innovation Our accredited team and award-winning industry partners invest in innovation to make sure you benefit from the latest thinking."
+    },
+    {
+      "id": "check-page-ddf67273af",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications",
+      "page": "application",
+      "excerpt": "We commit to working together to build a prosperous and inclusive Australia ."
     },
     {
       "id": "check-page-37090b26b4",
@@ -169,10 +1122,46 @@
       "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
     },
     {
+      "id": "check-page-b936e55e26",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/cisco-webex-teams",
+      "page": "application",
+      "excerpt": "More about TIPT Webex Calling Webex Calling is a cloud calling solution that delivers enterprise-grade calling and enables customers to replace costly on-premises infrastructure."
+    },
+    {
+      "id": "check-page-ff2dbf44f8",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/cisco-webex-teams",
+      "page": "application",
+      "excerpt": "Keep up with the latest innovation Our accredited team and award-winning industry partners invest in innovation to make sure you benefit from the latest thinking."
+    },
+    {
+      "id": "check-page-ed20cbc28b",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/cisco-webex-teams",
+      "page": "application",
+      "excerpt": "We commit to working together to build a prosperous and inclusive Australia ."
+    },
+    {
       "id": "check-page-e53037de9c",
       "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/office-365-enterprise",
       "page": "application",
       "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
+    },
+    {
+      "id": "check-page-d5644fc1df",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/office-365-enterprise",
+      "page": "application",
+      "excerpt": "More about TIPT Webex Calling Webex Calling is a cloud calling solution that delivers enterprise-grade calling and enables customers to replace costly on-premises infrastructure."
+    },
+    {
+      "id": "check-page-cb7ddd3925",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/office-365-enterprise",
+      "page": "application",
+      "excerpt": "Keep up with the latest innovation Our accredited team and award-winning industry partners invest in innovation to make sure you benefit from the latest thinking."
+    },
+    {
+      "id": "check-page-61d4e4f6dd",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/office-365-enterprise",
+      "page": "application",
+      "excerpt": "We commit to working together to build a prosperous and inclusive Australia ."
     },
     {
       "id": "check-page-fd92c2ce56",
@@ -181,10 +1170,22 @@
       "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
     },
     {
-      "id": "check-page-63afe10321",
-      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
+      "id": "check-page-4d0d5b7a77",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/virtual-meeting-room",
       "page": "application",
-      "excerpt": "Nailing the virtual graduate application process at Telstra - Telstra Publisher: Telstra Name: Nailing the virtual graduate application process at Telstra - Telstra Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Better Connected Careers Nailing the virtual graduate application process at Telstra We've had to make quite a few changes to our recruitment processes at Telstra recently as we move to a more virtual application and onboarding experience for our grads. Evelyn Crowe · 22 March 2021 · 4 minute read It’s not all change, though. The fundamental attributes we look for in our graduates remain the same. Candidates still need to do their research and be prepared. They still need to be their authentic selves and apply for jobs that are right for them, so we can help them develop and thrive with us. It’s important you stand out and make a good impression throughout the online application process as this can help you to get your foot in the door and kickstart what we hope will be a very successful career here at Telstra. Here’s a bit of advice on how you can do just that. What we’re looking for in our grads Here at Telstra, we recruit for a mix of technical and corporate pathways"
+      "excerpt": "More about TIPT Webex Calling Webex Calling is a cloud calling solution that delivers enterprise-grade calling and enables customers to replace costly on-premises infrastructure."
+    },
+    {
+      "id": "check-page-4e4f4ab71c",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/virtual-meeting-room",
+      "page": "application",
+      "excerpt": "Keep up with the latest innovation Our accredited team and award-winning industry partners invest in innovation to make sure you benefit from the latest thinking."
+    },
+    {
+      "id": "check-page-ea8c8ae44c",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/virtual-meeting-room",
+      "page": "application",
+      "excerpt": "We commit to working together to build a prosperous and inclusive Australia ."
     },
     {
       "id": "check-page-427ed86f27",
@@ -193,10 +1194,106 @@
       "excerpt": "How to apply for Telstra Footy Country Grants Publisher: Telstra Name: How to apply for Telstra Footy Country Grants Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Telstra Exchange How to apply for Telstra Footy Country Grants In 2023, we announced with our friends at the AFL that we’d be backing footy in a big way through the Telstra Footy Country Grants program. Applications are now open. Here’s how to apply for your local AFL footy club. Luke Hopewell · 05 February 2024 · 5 minute read What are Telstra Footy Country Grants? If you’re a member of a local AFL footy club, you probably know how hard it is to keep your club running and growing. You need money for equipment, coaching, and programs. You need volunteers to help out with everything from umpiring to fundraising. You need to attract and retain players of all ages and backgrounds, especially young girls who are the future of our game. That’s where the Telstra Footy Country Grants come in: an opportunity for footy clubs across Australia to get some extra funding and support from us and the AFL. Clubs can apply for up to $20,000 with a total of $8 million to be distributed over the next four years. That’s a lot of money"
     },
     {
+      "id": "check-page-a663ba59eb",
+      "url": "https://www.telstra.com.au/exchange/how-to-apply-for-telstra-footy-country-grants",
+      "page": "application",
+      "excerpt": "The grants program opened in February 2024, and can be found on the AFL’s website ."
+    },
+    {
+      "id": "check-page-a5b8e220f7",
+      "url": "https://www.telstra.com.au/exchange/how-to-apply-for-telstra-footy-country-grants",
+      "page": "application",
+      "excerpt": "Remember, the grant program’s advisory board will receive hundreds of applications from clubs around the country, so you need to make yours stand out."
+    },
+    {
+      "id": "check-page-05b97e0135",
+      "url": "https://www.telstra.com.au/exchange/how-to-apply-for-telstra-footy-country-grants",
+      "page": "application",
+      "excerpt": "Make sure you understand what the grant program is looking for and what you need to provide."
+    },
+    {
+      "id": "check-page-780ffa9e49",
+      "url": "https://www.telstra.com.au/exchange/how-to-apply-for-telstra-footy-country-grants",
+      "page": "application",
+      "excerpt": "He was previously the head of editorial at Twitter Australia and the editor of cult tech site Gizmodo."
+    },
+    {
+      "id": "check-page-4c98c78364",
+      "url": "https://www.telstra.com.au/exchange/how-to-apply-for-telstra-footy-country-grants",
+      "page": "application",
+      "excerpt": "In another life he was a cyber security specialist where he sought to educate people about how to stay safe online."
+    },
+    {
+      "id": "check-page-49141a372b",
+      "url": "https://www.telstra.com.au/exchange/how-to-apply-for-telstra-footy-country-grants",
+      "page": "application",
+      "excerpt": "We commit to working together to build a prosperous and inclusive Australia ."
+    },
+    {
       "id": "check-page-4f16df7576",
       "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services",
       "page": "application",
       "excerpt": "Mobile Features and Services for you | Telstra Publisher: Telstra Name: Mobile Features and Services for you | Telstra Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Telstra personal Mobile phones Payment method not available This item can’t be purchased outright. However, it can be purchased on an HRO. OK Payment option selected not available This item is not available on an HRO. Please purchase it outright to continue. OK Payment option selected not available OK Not eligible for upfront plans The customer can’t purchase an upfront plan. OK Not eligible for bundle plans The customer can’t purchase a bundle plan. OK OK Your service is not eligible This service is not eligible for the action you’ve requested. OK Can’t add to cart You can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase. Ok You can’t sell this product or service You can view this page, but you can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase Cancel Ok Cart limit reached You can have a maximum of"
+    },
+    {
+      "id": "check-page-504fa35c6b",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services",
+      "page": "application",
+      "excerpt": "See the list of services Calling Number Display Calling Number Display shows the number of the person calling your mobile phone (unless their number is blocked) if they’re calling from Australia."
+    },
+    {
+      "id": "check-page-26958e837c",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services",
+      "page": "application",
+      "excerpt": "MessageBank details Standard Message storage 60 x 5 min messages Monthly access fee $0 Message retrieval rate If you are on a plan: 30c per 30 secs (or part thereof) If you are on pre-paid: please refer to the Critical Information Summary for pricing Call forwarding No change You can also use MessageBank while travelling, as you would in Australia."
+    },
+    {
+      "id": "check-page-8e2daf9f5a",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services",
+      "page": "application",
+      "excerpt": "Within Australia data usage associated with MessageBank Plus is not rated so no charges apply and it does not count towards your monthly usage."
+    },
+    {
+      "id": "check-page-c2d215a99d",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services",
+      "page": "application",
+      "excerpt": "You can send Picture and Video Messages to any MMS-capable mobile phone in Australia, any email address worldwide and to selected international mobile destinations ."
+    },
+    {
+      "id": "check-page-8ba16f6e7a",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services",
+      "page": "application",
+      "excerpt": "If you can send within Australia then you can send overseas."
+    },
+    {
+      "id": "check-page-38d211759c",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services",
+      "page": "application",
+      "excerpt": "Pricing The cost of a 160-character text message originating in Australia and sent to an international number is 50c (incl GST)."
+    },
+    {
+      "id": "check-page-a8d8f54c97",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services",
+      "page": "application",
+      "excerpt": "If you're set-up to make international calls while overseas you can still send to friends and family in Australia and to overseas destinations if their carrier and country are participating."
+    },
+    {
+      "id": "check-page-8c7672d08a",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services",
+      "page": "application",
+      "excerpt": "This feature is only available for calls made from Australia."
+    },
+    {
+      "id": "check-page-4edb76b763",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services",
+      "page": "application",
+      "excerpt": "In other coverage areas around Australia, you’ll automatically switch to our fastest available 4G."
+    },
+    {
+      "id": "check-page-23043b25b0",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services",
+      "page": "application",
+      "excerpt": "We commit to working together to build a prosperous and inclusive Australia . ﻿"
     },
     {
       "id": "check-page-cc14617bda",
@@ -205,16 +1302,406 @@
       "excerpt": "MessageBank® Publisher: Telstra Name: MessageBank® Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Payment method not available There are no payment options for this purchase. OK Payment option selected not available This item is not available on an HRO. Please purchase it outright to continue. OK Payment option selected not available OK Not eligible for upfront plans The customer can’t purchase an upfront plan. OK Not eligible for bundle plans The customer can’t purchase a bundle plan. OK OK Your service is not eligible This service is not eligible for the action you’ve requested. OK Go back View only Cart limit reached You can have a maximum of [maxLimitMessage] in one order. You already have [existingCartMessage]. You can add [addMoreMessage] now. If you'd like to add more, start a new order after you check out. Close Limited stock available Reduce the quantity to continue. Close Low income plan limit reached You can add [maxAllowedLowIncomePlan] more Low Income plans now. Close Account limit reached You can have a maximum of [maxConnectionAllowed] services on one account. Close Looks like this offer isn’t available This offer has expired or is currently unavailable. OK"
     },
     {
+      "id": "check-page-9055edc470",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services/messagebank",
+      "page": "application",
+      "excerpt": "Customers connecting to eligible Business Fleet Connect or Easy Share Business plans will not pay for MessageBank connection, diversion and retrieval in Australia."
+    },
+    {
+      "id": "check-page-21a2f563ce",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services/messagebank",
+      "page": "application",
+      "excerpt": "MessageBank Plus MessageBank Plus offers Apple iPhone™ customers an easier way to check their voice messages within Australia - without the hassle of dialling 101."
+    },
+    {
+      "id": "check-page-93b9bc138d",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services/messagebank",
+      "page": "application",
+      "excerpt": "Free MessageBank on eligible Business Mobile plans You will not pay for MessageBank connection, diversion and retrieval in Australia."
+    },
+    {
+      "id": "check-page-f037c9ab7d",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services/messagebank",
+      "page": "application",
+      "excerpt": "We commit to working together to build a prosperous and inclusive Australia . ﻿"
+    },
+    {
       "id": "check-page-25c5376eb9",
       "url": "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
       "page": "application",
       "excerpt": "How to find and apply for small business grants – Telstra Publisher: Telstra Name: How to find and apply for small business grants – Telstra Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Smarter Business Planning and strategy How to find and apply for small business grants Run a small business? You could be eligible for support. Learn how to find and apply for grants and funding programs, from government to start-up grants. 24 March 2022 · 6 minute read How can funding help my business? It may seem like we’re stating the obvious, but before you start a business, or launch a new idea, it’s important to know how you’ll fund your project. According to AustraliaStartups.org, lack of funding is one of the most common reasons new businesses don't make it past the development stage. The same rule could arguably be applied to new projects you’d like to undertake, even as an established small business. What you’re about to start a business or you want help to grow your brand further, it pays to find out what funding may be available to you. What amount of funding is available in Australia? As reported by AustraliaStartups.org, as an Australian small business owner, you are in luck. Why?"
     },
     {
-      "id": "check-page-1411896af1",
-      "url": "https://www.telstra.com.au/careers/how-we-hire",
+      "id": "check-page-7390d43368",
+      "url": "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
       "page": "application",
-      "excerpt": "How we hire - Telstra Publisher: Telstra Name: How we hire - Telstra Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Telstra personal Careers at Telstra Payment method not available This item can’t be purchased outright. However, it can be purchased on an HRO. OK Payment option selected not available This item is not available on an HRO. Please purchase it outright to continue. OK Payment option selected not available OK Not eligible for upfront plans The customer can’t purchase an upfront plan. OK Not eligible for bundle plans The customer can’t purchase a bundle plan. OK OK Your service is not eligible This service is not eligible for the action you’ve requested. OK Can’t add to cart You can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase. Ok You can’t sell this product or service You can view this page, but you can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase Cancel Ok Cart limit reached You can have a maximum of [maxLimitMessage] in one order. You already have"
+      "excerpt": "Because the Australian government allocates billions of dollars each year to support small businesses across the country."
+    },
+    {
+      "id": "check-page-8853eab965",
+      "url": "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
+      "page": "application",
+      "excerpt": "As a small business owner in Australia, you may also have access to hundreds of private funding sources, such as angel investors, venture capitalists and banks."
+    },
+    {
+      "id": "check-page-c77711f86e",
+      "url": "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
+      "page": "application",
+      "excerpt": "Funding may be granted in the following forms: grants loans tax credits, and private investments."
+    },
+    {
+      "id": "check-page-925807be47",
+      "url": "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
+      "page": "application",
+      "excerpt": "Who is eligible for grants in Australia?"
+    },
+    {
+      "id": "check-page-c13c16ed3f",
+      "url": "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
+      "page": "application",
+      "excerpt": "Grants are often designed for specific industries and purposes, and many are suitable for small businesses."
+    },
+    {
+      "id": "check-page-d5ee4f4424",
+      "url": "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
+      "page": "application",
+      "excerpt": "Look for Government grants The federal and state governments of Australian offer over 500 grants and programs."
+    },
+    {
+      "id": "check-page-1d7b697963",
+      "url": "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
+      "page": "application",
+      "excerpt": "You can browse opportunities by visiting the grants and programs finder ."
+    },
+    {
+      "id": "check-page-5e88465d13",
+      "url": "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
+      "page": "application",
+      "excerpt": "You can apply the following filters to the to the finder tool to help your search: Location Industry Business structure Support type Objectives Business stage Grant status Indigenous businesses The grants and programs finder also provides information on the kinds of support you may be eligible for."
+    },
+    {
+      "id": "check-page-15a0ed9940",
+      "url": "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
+      "page": "application",
+      "excerpt": "Types of support state and federal governments may offer could include: Business advice and mentoring programs Funding Loans Sponsorships Subsidies and rebates Tax benefits."
+    },
+    {
+      "id": "check-page-8fb90d17b6",
+      "url": "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
+      "page": "application",
+      "excerpt": "Tip: Check your council website for funding opportunities that may be available in your local government area."
+    },
+    {
+      "id": "check-page-8fa3575a9a",
+      "url": "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
+      "page": "application",
+      "excerpt": "Search for grants that apply to specific industries and start-ups If you’re a start-up or are looking for support specific to your field, it’s worth searching for grants designed for your business stage or industry."
+    },
+    {
+      "id": "check-page-a9a526d3da",
+      "url": "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
+      "page": "application",
+      "excerpt": "As defined by The Grants Hub , an auspice is an organisation who manages grant funding on your behalf."
+    },
+    {
+      "id": "check-page-32158686ca",
+      "url": "https://www.telstra.com.au/connected/deals",
+      "page": "terms",
+      "excerpt": "Articles on deals - Telstra Better Connected Blog Publisher: Telstra Name: Articles on deals - Telstra Better Connected Blog Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Better Connected Deals Latest articles about deals At Telstra we recognise and acknowledge the existing, original, and ancient connection Aboriginal and Torres Strait Islander peoples have to the lands, waterways, and sky country across the Australian continent. We pay our respects to their Elders past and present. We commit to working together to build a prosperous and inclusive Australia ."
+    },
+    {
+      "id": "check-page-e8d19720ec",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "page": "terms",
+      "excerpt": "Telstra Black Friday Sale 2026 | Telstra Publisher: Telstra Name: Telstra Black Friday Sale 2026 | Telstra Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Telstra personal All Deals Payment method not available This item can’t be purchased outright. However, it can be purchased on an HRO. OK Payment option selected not available This item is not available on an HRO. Please purchase it outright to continue. OK Payment option selected not available OK Not eligible for upfront plans The customer can’t purchase an upfront plan. OK Not eligible for bundle plans The customer can’t purchase a bundle plan. OK OK Your service is not eligible This service is not eligible for the action you’ve requested. OK Can’t add to cart You can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase. Ok You can’t sell this product or service You can view this page, but you can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase Cancel Ok Cart limit reached You can have a maximum of [maxLimitMessage] in"
+    },
+    {
+      "id": "check-page-cb80a28b02",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "page": "terms",
+      "excerpt": "Get 50% off Upfront Mobile Plans for 4 months 50% off Add a new Basic, Essential or Premium Mobile Plan on Australia’s best mobile network."
+    },
+    {
+      "id": "check-page-462d43c43c",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "page": "terms",
+      "excerpt": "Get $300 off iPhone 17 Pro & iPhone 17 Pro Max Buy on repayment with Australia’s best mobile network."
+    },
+    {
+      "id": "check-page-57813191f7",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "page": "terms",
+      "excerpt": "Explore Home Internet deals Home Internet Business Internet Home Internet Business Internet Get 50% off Satellite Home Internet 50% off Save up to $300 over 4 months, plus free delivery across Australia."
+    },
+    {
+      "id": "check-page-94c5732a3f",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "page": "terms",
+      "excerpt": "Get more information about unlocking your phone. $44 Pre-Paid Mobile Plan, now $13 A little price goes a long way on Australia’s biggest mobile network."
+    },
+    {
+      "id": "check-page-502a0351c2",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "page": "terms",
+      "excerpt": "Get a quick quote FREE DELIVERY Bag to doorstep Enjoy free, safe and fast delivery within Australia."
+    },
+    {
+      "id": "check-page-d82afe17f8",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "page": "terms",
+      "excerpt": "Our Black Friday Sale this year offers big savings on a range of products and services, such as: mobiles internet Pre-Paid accessories watches and wearables entertainment & gaming tablets, and more."
+    },
+    {
+      "id": "check-page-77f65500ca",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "page": "terms",
+      "excerpt": "To be eligible for this offer you must have an eligible health care card, department of veteran affairs gold card or pensioner concession card."
+    },
+    {
+      "id": "check-page-d35be28551",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "page": "terms",
+      "excerpt": "By proceeding with this application, and providing us your details, you authorise us to use these details electronically to check your concession card status with the relevant government body to determine your eligibility for the concession card holder offer."
+    },
+    {
+      "id": "check-page-ff1d0f8412",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "page": "terms",
+      "excerpt": "Our satellite network will extend beyond the range of our mobile network to most outdoor areas on mainland Australia and Tasmania, excluding the Australian Radio Quiet Zone in Western Australia and remote offshore territories and islands of Australia."
+    },
+    {
+      "id": "check-page-44c572b6e3",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "page": "terms",
+      "excerpt": "In other coverage areas around Australia, you’ll automatically switch to our fastest available 4G."
+    },
+    {
+      "id": "check-page-fa539f11ee",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "page": "terms",
+      "excerpt": "Speeds vary for reasons like location, distance from base stations, terrain, user numbers, hardware/software configuration, download source and upload destination."
+    },
+    {
+      "id": "check-page-2979c76b53",
+      "url": "https://www.telstra.com.au/connected/lifestyle/all-the-eofy-deals",
+      "page": "terms",
+      "excerpt": "Plan speeds Speeds may vary due to factors such as location, distance from the base station, local conditions, concurrent users, hardware and software configuration and download/upload destination."
+    },
+    {
+      "id": "check-page-78e455982e",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "page": "terms",
+      "excerpt": "Telstra Black Friday Sale 2026 | Telstra Publisher: Telstra Name: Telstra Black Friday Sale 2026 | Telstra Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Telstra personal All Deals Payment method not available This item can’t be purchased outright. However, it can be purchased on an HRO. OK Payment option selected not available This item is not available on an HRO. Please purchase it outright to continue. OK Payment option selected not available OK Not eligible for upfront plans The customer can’t purchase an upfront plan. OK Not eligible for bundle plans The customer can’t purchase a bundle plan. OK OK Your service is not eligible This service is not eligible for the action you’ve requested. OK Can’t add to cart You can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase. Ok You can’t sell this product or service You can view this page, but you can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase Cancel Ok Cart limit reached You can have a maximum of [maxLimitMessage] in"
+    },
+    {
+      "id": "check-page-e14a94da42",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "page": "terms",
+      "excerpt": "Get 50% off Upfront Mobile Plans for 4 months 50% off Add a new Basic, Essential or Premium Mobile Plan on Australia’s best mobile network."
+    },
+    {
+      "id": "check-page-67061f8fe2",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "page": "terms",
+      "excerpt": "Get $300 off iPhone 17 Pro & iPhone 17 Pro Max Buy on repayment with Australia’s best mobile network."
+    },
+    {
+      "id": "check-page-86ab7bdc9d",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "page": "terms",
+      "excerpt": "Explore Home Internet deals Home Internet Business Internet Home Internet Business Internet Get 50% off Satellite Home Internet 50% off Save up to $300 over 4 months, plus free delivery across Australia."
+    },
+    {
+      "id": "check-page-0eb6f3a566",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "page": "terms",
+      "excerpt": "Get more information about unlocking your phone. $44 Pre-Paid Mobile Plan, now $13 A little price goes a long way on Australia’s biggest mobile network."
+    },
+    {
+      "id": "check-page-735434bafc",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "page": "terms",
+      "excerpt": "Get a quick quote FREE DELIVERY Bag to doorstep Enjoy free, safe and fast delivery within Australia."
+    },
+    {
+      "id": "check-page-3ae2361e83",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "page": "terms",
+      "excerpt": "Our Black Friday Sale this year offers big savings on a range of products and services, such as: mobiles internet Pre-Paid accessories watches and wearables entertainment & gaming tablets, and more."
+    },
+    {
+      "id": "check-page-9cf57c694f",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "page": "terms",
+      "excerpt": "To be eligible for this offer you must have an eligible health care card, department of veteran affairs gold card or pensioner concession card."
+    },
+    {
+      "id": "check-page-1a9deacc5a",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "page": "terms",
+      "excerpt": "By proceeding with this application, and providing us your details, you authorise us to use these details electronically to check your concession card status with the relevant government body to determine your eligibility for the concession card holder offer."
+    },
+    {
+      "id": "check-page-c095b2bee8",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "page": "terms",
+      "excerpt": "Our satellite network will extend beyond the range of our mobile network to most outdoor areas on mainland Australia and Tasmania, excluding the Australian Radio Quiet Zone in Western Australia and remote offshore territories and islands of Australia."
+    },
+    {
+      "id": "check-page-91ca1ce097",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "page": "terms",
+      "excerpt": "In other coverage areas around Australia, you’ll automatically switch to our fastest available 4G."
+    },
+    {
+      "id": "check-page-e72f2863f9",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "page": "terms",
+      "excerpt": "Speeds vary for reasons like location, distance from base stations, terrain, user numbers, hardware/software configuration, download source and upload destination."
+    },
+    {
+      "id": "check-page-172476a563",
+      "url": "https://www.telstra.com.au/connected/lifestyle/eofy-top-deals",
+      "page": "terms",
+      "excerpt": "Plan speeds Speeds may vary due to factors such as location, distance from the base station, local conditions, concurrent users, hardware and software configuration and download/upload destination."
+    },
+    {
+      "id": "check-page-c2c93e4c12",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-black-friday-deals",
+      "page": "terms",
+      "excerpt": "The best Telstra Plus Black Friday deals | Telstra Publisher: Telstra Name: The best Telstra Plus Black Friday deals | Telstra Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Better Connected Lifestyle Black Friday. Even better with points. Use your points to bag deals on tech and more. If it's your first Rewards Store purchase, you'll get 10,000 bonus points. Ends 30 Nov. 3 minute read Get 10,000 bonus points Make your first Rewards Store purchase in the My Telstra app and get 10,000 bonus Telstra Plus points. Ends 30 Nov. One bonus per account. Bonus points will be applied to your account within 14 days of purchase. Not compatible with other offers. Eligibility criteria apply to join Telstra Plus. Take me to the Rewards Store Join Telstra Plus Jump to section All offers Exclusive Member deals Big deals on all the little things that make life easier A world of incredible rewards awaits in our brand new Telstra Rewards Store, now exclusively in the My Telstra app. Big Black Friday Sale is dedicated to coffee lovers, cooks, beauty enthusiasts, music lovers, fitness enthusiasts, gamers, avid readers, photographers and anyone who likes having their home smartly secured. Join Telstra"
+    },
+    {
+      "id": "check-page-2364e49ba4",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-black-friday-deals",
+      "page": "terms",
+      "excerpt": "Excludes Telstra Enterprise and Corporate accounts."
+    },
+    {
+      "id": "check-page-c587a4e1f9",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-black-friday-deals",
+      "page": "terms",
+      "excerpt": "We commit to working together to build a prosperous and inclusive Australia ."
+    },
+    {
+      "id": "check-page-840254dd9b",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "page": "terms",
+      "excerpt": "Telstra Black Friday Sale 2026 | Telstra Publisher: Telstra Name: Telstra Black Friday Sale 2026 | Telstra Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Telstra personal All Deals Payment method not available This item can’t be purchased outright. However, it can be purchased on an HRO. OK Payment option selected not available This item is not available on an HRO. Please purchase it outright to continue. OK Payment option selected not available OK Not eligible for upfront plans The customer can’t purchase an upfront plan. OK Not eligible for bundle plans The customer can’t purchase a bundle plan. OK OK Your service is not eligible This service is not eligible for the action you’ve requested. OK Can’t add to cart You can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase. Ok You can’t sell this product or service You can view this page, but you can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase Cancel Ok Cart limit reached You can have a maximum of [maxLimitMessage] in"
+    },
+    {
+      "id": "check-page-1e49c0eaaa",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "page": "terms",
+      "excerpt": "Get 50% off Upfront Mobile Plans for 4 months 50% off Add a new Basic, Essential or Premium Mobile Plan on Australia’s best mobile network."
+    },
+    {
+      "id": "check-page-320cf29ae5",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "page": "terms",
+      "excerpt": "Get $300 off iPhone 17 Pro & iPhone 17 Pro Max Buy on repayment with Australia’s best mobile network."
+    },
+    {
+      "id": "check-page-94887b3721",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "page": "terms",
+      "excerpt": "Explore Home Internet deals Home Internet Business Internet Home Internet Business Internet Get 50% off Satellite Home Internet 50% off Save up to $300 over 4 months, plus free delivery across Australia."
+    },
+    {
+      "id": "check-page-859dff1293",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "page": "terms",
+      "excerpt": "Get more information about unlocking your phone. $44 Pre-Paid Mobile Plan, now $13 A little price goes a long way on Australia’s biggest mobile network."
+    },
+    {
+      "id": "check-page-3456f36764",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "page": "terms",
+      "excerpt": "Get a quick quote FREE DELIVERY Bag to doorstep Enjoy free, safe and fast delivery within Australia."
+    },
+    {
+      "id": "check-page-809482016f",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "page": "terms",
+      "excerpt": "Our Black Friday Sale this year offers big savings on a range of products and services, such as: mobiles internet Pre-Paid accessories watches and wearables entertainment & gaming tablets, and more."
+    },
+    {
+      "id": "check-page-9ed059c582",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "page": "terms",
+      "excerpt": "To be eligible for this offer you must have an eligible health care card, department of veteran affairs gold card or pensioner concession card."
+    },
+    {
+      "id": "check-page-97192dd615",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "page": "terms",
+      "excerpt": "By proceeding with this application, and providing us your details, you authorise us to use these details electronically to check your concession card status with the relevant government body to determine your eligibility for the concession card holder offer."
+    },
+    {
+      "id": "check-page-b9537bf572",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "page": "terms",
+      "excerpt": "Our satellite network will extend beyond the range of our mobile network to most outdoor areas on mainland Australia and Tasmania, excluding the Australian Radio Quiet Zone in Western Australia and remote offshore territories and islands of Australia."
+    },
+    {
+      "id": "check-page-4d637c06ae",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "page": "terms",
+      "excerpt": "In other coverage areas around Australia, you’ll automatically switch to our fastest available 4G."
+    },
+    {
+      "id": "check-page-987f4727d0",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "page": "terms",
+      "excerpt": "Speeds vary for reasons like location, distance from base stations, terrain, user numbers, hardware/software configuration, download source and upload destination."
+    },
+    {
+      "id": "check-page-a39b237949",
+      "url": "https://www.telstra.com.au/connected/lifestyle/telstra-plus-eofy-deals",
+      "page": "terms",
+      "excerpt": "Plan speeds Speeds may vary due to factors such as location, distance from the base station, local conditions, concurrent users, hardware and software configuration and download/upload destination."
+    },
+    {
+      "id": "check-page-adcea9cc19",
+      "url": "https://www.telstra.com.au/customer-terms",
+      "page": "terms",
+      "excerpt": "Our Customer Terms | Telstra Publisher: Telstra Name: Our Customer Terms | Telstra Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Telstra personal Payment method not available This item can’t be purchased outright. However, it can be purchased on an HRO. OK Payment option selected not available This item is not available on an HRO. Please purchase it outright to continue. OK Payment option selected not available OK Not eligible for upfront plans The customer can’t purchase an upfront plan. OK Not eligible for bundle plans The customer can’t purchase a bundle plan. OK OK Your service is not eligible This service is not eligible for the action you’ve requested. OK Can’t add to cart You can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase. Ok You can’t sell this product or service You can view this page, but you can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase Cancel Ok Cart limit reached You can have a maximum of [maxLimitMessage] in one order. You already have"
+    },
+    {
+      "id": "check-page-932326f1e9",
+      "url": "https://www.telstra.com.au/customer-terms",
+      "page": "terms",
+      "excerpt": "OK Our Customer Terms Our Customer Terms set out terms and conditions on which we provide products and services to Consumer or Personal, Business and Government and Telstra Wholesale customers."
+    },
+    {
+      "id": "check-page-1fc5a5e618",
+      "url": "https://www.telstra.com.au/customer-terms",
+      "page": "terms",
+      "excerpt": "Consumer or Personal Terms Business & Government Terms Enterprise & Government Digital Terms Telstra FairPlay Policy Telstra FairPlay Policy (PDF, 114KB) Telstra FairPlay Policy (Word, 40KB) Important Warranty Information This information relates to the warranties referred to in Our Customer Terms."
+    },
+    {
+      "id": "check-page-159f5c7406",
+      "url": "https://www.telstra.com.au/customer-terms",
+      "page": "terms",
+      "excerpt": "We commit to working together to build a prosperous and inclusive Australia . ﻿"
+    },
+    {
+      "id": "check-page-fc52793bcf",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "page": "terms",
+      "excerpt": "Our Customer Terms - Telstra Publisher: Telstra Name: Our Customer Terms - Telstra Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Telstra personal Our Customer Terms Payment method not available This item can’t be purchased outright. However, it can be purchased on an HRO. OK Payment option selected not available This item is not available on an HRO. Please purchase it outright to continue. OK Payment option selected not available OK Not eligible for upfront plans The customer can’t purchase an upfront plan. OK Not eligible for bundle plans The customer can’t purchase a bundle plan. OK OK Your service is not eligible This service is not eligible for the action you’ve requested. OK Can’t add to cart You can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase. Ok You can’t sell this product or service You can view this page, but you can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase Cancel Ok Cart limit reached You can have a maximum of [maxLimitMessage] in one order. You"
+    },
+    {
+      "id": "check-page-e827df07c9",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "page": "terms",
+      "excerpt": "OK Business and Government Terms Our Customer Terms You’ll find all of Our Customer Terms for your service or solution listed here."
+    },
+    {
+      "id": "check-page-be5c37d304",
+      "url": "https://www.telstra.com.au/customer-terms/business-government",
+      "page": "terms",
+      "excerpt": "We commit to working together to build a prosperous and inclusive Australia . ﻿"
     }
   ],
   "findings": {
@@ -222,14 +1709,26 @@
     "phones": [],
     "routes": [
       {
-        "value": "https://www.telstra.com.au/careers/how-we-hire",
-        "evidenceId": "check-route-4347719c86"
+        "value": "https://www.telstra.com.au/content/dam/tcom/personal/consumer-advice/pdf/business-a-full/cloud-c.pdf",
+        "evidenceId": "check-route-4cff2a8b93"
+      },
+      {
+        "value": "https://www.telstra.com.au/content/dam/tcom/personal/consumer-advice/doc/business-b/cloud-c.docx",
+        "evidenceId": "check-route-cf539aeddc"
+      },
+      {
+        "value": "https://www.telstra.com.au/content/dam/tcom/personal/consumer-advice/pdf/business-gov/cloud/entag-go-cloud-kits.pdf",
+        "evidenceId": "check-route-c9f0403050"
+      },
+      {
+        "value": "https://www.telstra.com.au/content/dam/tcom/personal/consumer-advice/doc/business-gov/cloud/entag-go-cloud-kits.docx",
+        "evidenceId": "check-route-2d84c157b3"
       }
     ],
     "applicationUrl": [
       {
-        "value": "https://www.telstra.com.au/careers/how-we-hire",
-        "evidenceId": "check-route-4347719c86"
+        "value": "https://www.telstra.com.au/content/dam/tcom/personal/consumer-advice/pdf/business-a-full/cloud-c.pdf",
+        "evidenceId": "check-route-4cff2a8b93"
       }
     ],
     "applicationsOpen": [
@@ -247,16 +1746,24 @@
       {
         "value": "24 months",
         "evidenceId": "check-duration-72e0ef4382"
+      },
+      {
+        "value": "4 months",
+        "evidenceId": "check-duration-f19b736de7"
+      },
+      {
+        "value": "36 months",
+        "evidenceId": "check-duration-0c9fcac08a"
       }
     ],
     "format": [
       {
         "value": "remote",
-        "evidenceId": "check-format-1ac9661bcc"
+        "evidenceId": "check-format-d7644e13c6"
       },
       {
-        "value": "in-person",
-        "evidenceId": "check-format-f7b453ad5a"
+        "value": "hybrid",
+        "evidenceId": "check-format-1d0a5f07f6"
       }
     ],
     "location": [
@@ -266,8 +1773,106 @@
       }
     ],
     "selectivity": [],
-    "dealText": [],
-    "dealComponents": [],
+    "dealText": [
+      {
+        "value": "device. Get fast, free delivery. Explore Galaxy S26 Ultra Get up to $1200 bonus value on Pixel 11 Series $1200 bonus value Trade in for a big",
+        "evidenceId": "check-deal-85faea6062"
+      },
+      {
+        "value": "Galaxy S26 Ultra Get up to $1200 bonus value on Pixel 11 Series $1200 bonus value Trade in for a big Pixel deal at a small price. Plus 7",
+        "evidenceId": "check-deal-7722e9980b"
+      },
+      {
+        "value": "deal at a small price. Plus 7 Day Price Match? Even better. Get $1000 bonus value on motorola razr fold $1000 bonus value Bag $500 off. Now",
+        "evidenceId": "check-deal-5ced749769"
+      },
+      {
+        "value": "Match? Even better. Get $1000 bonus value on motorola razr fold $1000 bonus value Bag $500 off. Now $2299. Plus, get $500 bonus credit when",
+        "evidenceId": "check-deal-19a688f92b"
+      },
+      {
+        "value": "Get $1000 bonus value on motorola razr fold $1000 bonus value Bag $500 off. Now $2299. Plus, get $500 bonus credit when you trade in.",
+        "evidenceId": "check-deal-a9d41ff131"
+      },
+      {
+        "value": "value on motorola razr fold $1000 bonus value Bag $500 off. Now $2299. Plus, get $500 bonus credit when you trade in. Android deals Ends 30",
+        "evidenceId": "check-deal-bb1108c410"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1200",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-85faea6062"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-5ced749769"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "500",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-a9d41ff131"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "2299",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-bb1108c410"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "900",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-9b086a07d6"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "400",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-ad36487e43"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

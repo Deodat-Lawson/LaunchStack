@@ -1,12 +1,28 @@
 {
   "programId": "station-f",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://fai-apply.stationf.co",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://landingzone-apply.stationf.co",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://stationf.co/about",
       "page": "details",
       "anchor": "About",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -35,14 +51,6 @@
       "origin": "official"
     },
     {
-      "url": "https://stationf.co/news/angel-investing-vc-and-scout-programs-how-is-investment-taught",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://stationf.co/news/applications-for-fighters-program-season-5-open-today",
       "page": "application",
       "anchor": "",
@@ -53,30 +61,6 @@
     {
       "url": "https://stationf.co/news/applications-of-blockchain-technology-beyond-cryptocurrencies",
       "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://stationf.co/news/batch3-founders",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://stationf.co/news/covid-19-updates-regarding-station-f",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://stationf.co/news/diversity-in-investment-with-joshua-olusanya-notion-capital-and-daisy-onubogu-backed-vc",
-      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -95,54 +79,6 @@
       "page": "batches",
       "anchor": "Sep 23, 2026 STATION F’s F/ai Program kicks off batch 2 with new partners Cohere, Notion, Replit & Legora",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://stationf.co/news/founders-program-season-9-useful-tips-for-a-successful-application",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://stationf.co/news/founders-programs-applications-for-season-9-open-today",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://stationf.co/news/how-covid-19-is-impacting-startup-applications-trends",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://stationf.co/news/leeway-future-40-2020-raises-42m-to-build-its-modern-and-collaborative-application-for-contract-management",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://stationf.co/news/saul-klein-localglobe-there-will-be-a-lot-of-investment-activity-in-the-coming-months",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://stationf.co/news/station-f-opens-applications-for-founders-program-and-fighters-program-next-seasons",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -174,7 +110,7 @@
       "url": "https://stationf.co/programs",
       "page": "details",
       "anchor": "Programs",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -182,7 +118,7 @@
       "url": "https://stationf.co/programs/in-house",
       "page": "details",
       "anchor": "Join our In-house Programs",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -190,7 +126,7 @@
       "url": "https://stationf.co/programs/resources",
       "page": "details",
       "anchor": "View more",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

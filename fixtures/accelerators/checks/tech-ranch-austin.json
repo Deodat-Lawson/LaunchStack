@@ -1,28 +1,207 @@
 {
   "programId": "tech-ranch-austin",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
-    "https://www.techranchaustin.com"
+    "https://www.techranchaustin.com",
+    "https://techranchaustin.com/aboutus/",
+    "https://techranchaustin.com/programs/",
+    "https://techranchaustin.com/programs/ventureoutfitter/",
+    "https://techranchaustin.com/programs/vra/",
+    "http://techranchaustin.com/contact",
+    "https://techranchaustin.com/global-bridges/",
+    "https://techranchaustin.com/vra"
   ],
   "evidence": [
     {
+      "id": "check-duration-66cf333d21",
+      "url": "https://techranchaustin.com/global-bridges/",
+      "title": "Tech Ranch Austin — program page",
+      "excerpt": "Program. 4 entrepreneurs from Italy will spend 3 months in Tech Ranch’s accelerator program developing",
+      "page": "details"
+    },
+    {
+      "id": "check-email-02b5258c59",
+      "url": "http://techranchaustin.com/contact",
+      "title": "Tech Ranch Austin — program page",
+      "excerpt": "info@techranchaustin.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-4f8172c8b7",
+      "url": "http://techranchaustin.com/contact",
+      "title": "Tech Ranch Austin — program page",
+      "excerpt": "one day (depending on time zones). You can also email info@techranchaustin.com with general questions. Looking forward to connecting with",
+      "page": "details"
+    },
+    {
+      "id": "check-format-36931ddf64",
+      "url": "https://techranchaustin.com/programs/",
+      "title": "Tech Ranch Austin — program page",
+      "excerpt": "who are available for insight and support Participate in a virtual and online events and webinars Access to mentoring and",
+      "page": "details"
+    },
+    {
       "id": "check-name-bb248d5207",
       "url": "https://www.techranchaustin.com",
-      "title": "Tech Ranch Austin — homepage checked by scrape.py",
+      "title": "Tech Ranch Austin — homepage",
       "excerpt": "Home - Tech Ranch Austin Tech Ranch Austin Programs Entrepreneurs Global Bridges",
       "page": "details"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-fce5b8b72b",
+      "url": "https://www.techranchaustin.com",
+      "page": "details",
+      "excerpt": "Home - Tech Ranch Austin Tech Ranch Austin Programs Entrepreneurs Global Bridges Corporations Investors Events Blog About Us Contact Us Trailhead Changing The World Through Accelerating Entrepreneur Success Changing The World Through Accelerating Entrepreneur Success Changing The World Through Accelerating Entrepreneur Success Changing The World Through Accelerating Entrepreneur Success Tech Ranch helps innovators, startups, and scaleups gain access to markets to drive global impact through enabling relationships, resources, and practices. Engage with us through: – Accelerate your market entry to Texas. – Access our Austin-based network and global ecosystem. . – Connect your region into Texas. – Get on our newsletter for announcements of special programs and connections. Through the Tech Ranch community and our programs we accelerate your success, changing the world for the better. GOING GLOBAL? Most international scaleups lose months — sometimes years — trying to “figure it out” alone. Watch our free masterclass to learn how you can move beyond guesswork and position yourself for smart, supported U.S. expansion without wasting capital, time, or momentum. WATCH THE FREE U.S. MARKET ENTRY MASTERCLASS DON’T JUST TAKE IT FROM US, HEAR WHAT THE TECH RANCH COMMUNITY HAS TO SAY. Rafael Paez “Great week with our friends of Tech Ranch®. We leave Austin with great contacts, valuable"
+    },
+    {
+      "id": "check-page-e6196d014f",
+      "url": "https://www.techranchaustin.com",
+      "page": "details",
+      "excerpt": "We leave Austin with great contacts, valuable insights and a well defined strategy to bring our business proposal to USA, especially Texas…."
+    },
+    {
+      "id": "check-page-6502a91070",
+      "url": "https://www.techranchaustin.com",
+      "page": "details",
+      "excerpt": "I came up with ideas I never would have without Kevin’s mentoring and the feedback… Srini “Venture Forth® by Tech Ranch® helped me to critically review every aspect of my business."
+    },
+    {
+      "id": "check-page-b8d266f543",
+      "url": "https://techranchaustin.com/aboutus/",
+      "page": "details",
+      "excerpt": "About Tech Ranch Tech Ranch Austin Programs Entrepreneurs Global Bridges Corporations Investors Events Blog About Us Contact Us Trailhead You are here: Home / About Us About Us About Tech Ranch ® Tech Ranch® is a venture accelerator comprised of a global ecosystem of entrepreneurs, businesses, investors and community leaders. We equip entrepreneurs and ecosystems with insights, proven techniques, tools and processes that develop the business, their community and their global impact. We provide the social capital, personal development, professional knowledge and communal support necessary for entrepreneurs around the world to create companies that positively impact their local communities and solve pervasive global social challenges. We believe that innovative entrepreneurs who are well-supported can create a positive impact not only locally but also globally. We provide that support by helping them acquire the relationships, resources, and knowledge they need to succeed. Our mission is to support entrepreneurs to gain access to the markets, resources, and relationships so that they may solve local problems with global insight. We prepare pioneers to take on global challenges together. Tech Ranch® has been recognized as a Top 3 Social Impact Incubator by UBI Global and Top 20 US/Canada Accelerators by Gust’s Global Report. From our offices in Austin, Texas, our programs have"
+    },
+    {
+      "id": "check-page-7628e24afb",
+      "url": "https://techranchaustin.com/aboutus/",
+      "page": "details",
+      "excerpt": "With connections from Japan to Mexico to Australia we facilitate cross-collaboration between entrepreneurs across borders."
+    },
+    {
+      "id": "check-page-ae2429615f",
+      "url": "https://techranchaustin.com/programs/",
+      "page": "details",
+      "excerpt": "incubation and Entrepreneur Development Programs Tech Ranch Austin Programs Entrepreneurs Global Bridges Corporations Investors Events Blog About Us Contact Us Trailhead You are here: Home / Programs Programs Tech Ranch® programs are designed to extend beyond knowledge transfer by evoking and developing a critical entrepreneurial mindset, fostering communal support, leveraging social capital, and cultivating the local ecosystem. Our programs enable the entrepreneur and the ecosystem to go further to reach their goals and expand opportunities. With a unique focus on the development of the entrepreneurs Tech Ranch®’s intensive programs provide operational and tactical insight, and the communal support needed to spur innovation to address local and global challenges. Entrepreneurs gain the following advantages: Join a strong robust global ecosystem of entrepreneurs who are available for insight and support Participate in a virtual and online events and webinars Access to mentoring and coaching opportunities Match with funding opportunities when the business reaches that level of maturity Venture Outfitter ™ The Venture Outfitter program helps entrepreneurs and business leaders confidently enter new markets, especially in Texas, by offering expert guidance, a supportive community, and essential resources. Participants will overcome cultural barriers, establish a strong presence,"
+    },
+    {
+      "id": "check-page-27c78a11d2",
+      "url": "https://techranchaustin.com/programs/",
+      "page": "details",
+      "excerpt": "Learn More About Venture Bridges™ Venture Relationship Accelerator Entering the U.S. market doesn’t have to mean guessing, cold outreach, or stalled momentum."
+    },
+    {
+      "id": "check-page-34dc94b497",
+      "url": "https://techranchaustin.com/programs/ventureoutfitter/",
+      "page": "details",
+      "excerpt": "Venture Outfitter - Tech Ranch Austin Tech Ranch Austin Programs Entrepreneurs Global Bridges Corporations Investors Events Blog About Us Contact Us Trailhead You are here: Home / Programs / Venture Outfitter Venture Outfitter A community of practice for entrepreneurs building through disruption. Build the entrepreneur. Strengthen the venture. Venture Outfitter is Tech Ranch’s entrepreneur development and venture readiness community of practice, combining structured frameworks, entrepreneurial practice, trusted relationships, collective intelligence, and cross-border connection to help entrepreneurs navigate growth in a rapidly changing world. In a world defined by rapid change, entrepreneurs need more than information. They need community, clarity, accountability, and people who will help them navigate complexity without carrying the burden alone. Join the founding cohort Community of practice Build alongside entrepreneurs facing similar challenges. Learn together, contribute together, and create opportunities through trusted relationships—not transactional networking. Entrepreneur development The venture cannot outgrow the entrepreneur leading it. We focus on leadership capacity, resilience, decision-making, and the inner patterns that shape business outcomes. Venture readiness Clarify your customer, sharpen your value proposition, strengthen your systems, and identify the"
+    },
+    {
+      "id": "check-page-aa1b06320f",
+      "url": "https://techranchaustin.com/programs/ventureoutfitter/",
+      "page": "details",
+      "excerpt": "Venture Outfitter combines community learning, AI-enabled tools, and shared insights so founders can adapt faster and make better decisions."
+    },
+    {
+      "id": "check-page-02c2215bbd",
+      "url": "https://techranchaustin.com/programs/ventureoutfitter/",
+      "page": "details",
+      "excerpt": "Real Results: What Our Members Achieve Temprify (Austria → U.S.) joined our ecosystem and, within weeks, discovered new market applications and secured high-value business connections for industries ranging from wine distribution to medical specimen transportation."
+    },
+    {
+      "id": "check-page-5cd9f488b4",
+      "url": "https://techranchaustin.com/programs/vra/",
+      "page": "details",
+      "excerpt": "Venture Relationship Accelerator - Tech Ranch Austin Tech Ranch Austin Programs Entrepreneurs Global Bridges Corporations Investors Events Blog About Us Contact Us Trailhead You are here: Home / Programs / Venture Relationship Accelerator Venture Relationship Accelerator You didn’t build your company to guess your way into the U.S. market. Expanding into the United States is one of the most powerful growth moves a venture can make — and one of the easiest ways to lose time, capital, and confidence if done wrong. Tech Ranch changes that experience entirely. When you enter a Venture Relationship Accelerator , you’re no longer navigating the U.S. alone. You have a team on the ground — connected, credible, and proactive — working on your behalf every day so you can stay focused on building and scaling your solution. If This Sounds Familiar, You’re in the Right Place: You know your solution creates real value, but U.S. buyers don’t “get it” yet You’re having conversations, but they aren’t turning into opportunities You hear “you should network more,” but no one opens the right doors You’re unsure how to position yourself for U.S. customers, investors, or partners You feel momentum slipping because you don’t know what your next best move is The cost isn’t just frustration. It’s missed windows of opportunity. Inquire about VRA Break into the U.S. market with clarity, credibility, and"
+    },
+    {
+      "id": "check-page-ac921d1c0b",
+      "url": "http://techranchaustin.com/contact",
+      "page": "details",
+      "excerpt": "Contact Us - Tech Ranch Austin Tech Ranch Austin Programs Entrepreneurs Global Bridges Corporations Investors Events Blog About Us Contact Us Trailhead You are here: Home / Contact Us Contact Us TECH RANCH Austin, TX Get in touch with our team using the below form to let us know how best to serve you, or what you are looking for. We’ll have someone get back to you by email or phone within about one day (depending on time zones). You can also email info@techranchaustin.com with general questions. Looking forward to connecting with you and hearing more about your business! Read our privacy policy statement . Entrepreneurs Global Bridges Corporations Investors Twitter LinkedIn Facebook Join the Team RSS Copyright © 2026 · TECH RANCH® AUSTIN Join our Mailing List [gravityform id=”5″ title=”false” description=”false” tabindex=”222″] ×"
+    },
+    {
+      "id": "check-page-1a5356dcc3",
+      "url": "https://techranchaustin.com/global-bridges/",
+      "page": "details",
+      "excerpt": "Tech Ranch International - Tech Ranch Tech Ranch Austin Programs Entrepreneurs Global Bridges Corporations Investors Events Blog About Us Contact Us Trailhead You are here: Home / Global Bridges Global Bridges Program Impact & Recognition Top 3 Social Impact Incubator in the US, 2015 by UBI Global Top 20 US/Canada Accelerators 2015, Gust’s Global Report Over 750 solutions deployed 6000+ business leaders, representing 42 Countries Programs presented in 8 countries around the world. How Entrepreneurs Can Build Global Bridges The Venture Bridges program is Tech Ranch’s flagship initiative for ecosystem leaders — governments, innovation hubs, and business organizations — who want to move beyond fragmented efforts and build founder-centered systems that scale globally. It’s not just about helping startups grow; it’s about designing the infrastructure where impact innovators can thrive and ensuring entire regions expand their reach and relevance in the global market. Through strategic partnerships, cross-border connectivity, and execution frameworks, Venture Bridges equips ecosystems with the tools to align, collaborate, and scale innovation-led impact. By forging pathways that connect venture builders, solutions, and markets, the program empowers entrepreneurs to maximize their impact while enabling institutions to create long-term economic and social transformation. This is more"
+    },
+    {
+      "id": "check-page-4f68babb8c",
+      "url": "https://techranchaustin.com/global-bridges/",
+      "page": "details",
+      "excerpt": "Global Programs Chihuahua – Texas Bridge Tech Ranch is excited to be kicking off it’s international bridge in conjunction with the Chihuahua government, we will be focusing on some of the best and brightest ventures from the state of Chihuahua, and helping them connect to their American counterparts."
+    },
+    {
+      "id": "check-page-0949cf8c99",
+      "url": "https://techranchaustin.com/global-bridges/",
+      "page": "details",
+      "excerpt": "Learn More Texas – Hungary Bridge TechRanch is excited to be kicking off it’s international bridge in conjunction with the Hungarian government, we will be focusing on some of the best and brightest ventures from Hungary, and helping them connect to their American counterparts."
+    },
+    {
+      "id": "check-page-48b0c717fa",
+      "url": "https://techranchaustin.com/global-bridges/",
+      "page": "details",
+      "excerpt": "Learn More Innovation Bridge Mexico-Austin The Innovation Bridge Mexico-Austin launched in Spring 2019 to amplify 10 Impact Innovation startups from Mexico by giving them access to resources, introductions, and entrepreneur education necessary to grow their ventures and solve global issues."
+    },
+    {
+      "id": "check-page-9ffb54fb8d",
+      "url": "https://techranchaustin.com/global-bridges/",
+      "page": "details",
+      "excerpt": "4 entrepreneurs from Italy will spend 3 months in Tech Ranch’s accelerator program developing their innovative startup companies for growth in the U.S. market."
+    },
+    {
+      "id": "check-page-f982d355f4",
+      "url": "https://techranchaustin.com/global-bridges/",
+      "page": "details",
+      "excerpt": "Learn More Global Partnerships Watch this video to learn how Tech Ranch® and New Ventures Institute in Adelaide, Australia, are creating ecosystems that provide international opportunities for entrepreneurs."
+    },
+    {
+      "id": "check-page-28224c75a7",
+      "url": "https://techranchaustin.com/global-bridges/",
+      "page": "details",
+      "excerpt": "Entrepreneurs Experience Global Growth with Tech Ranch® Entrepreneurs from South Korea share their experience with Tech Ranch’s Venture Forth® program and how it has helped them explore the U.S."
+    },
+    {
+      "id": "check-page-256265b4f9",
+      "url": "https://techranchaustin.com/vra",
+      "page": "details",
+      "excerpt": "Venture Relationship Accelerator - Tech Ranch Austin Tech Ranch Austin Programs Entrepreneurs Global Bridges Corporations Investors Events Blog About Us Contact Us Trailhead You are here: Home / Programs / Venture Relationship Accelerator Venture Relationship Accelerator You didn’t build your company to guess your way into the U.S. market. Expanding into the United States is one of the most powerful growth moves a venture can make — and one of the easiest ways to lose time, capital, and confidence if done wrong. Tech Ranch changes that experience entirely. When you enter a Venture Relationship Accelerator , you’re no longer navigating the U.S. alone. You have a team on the ground — connected, credible, and proactive — working on your behalf every day so you can stay focused on building and scaling your solution. If This Sounds Familiar, You’re in the Right Place: You know your solution creates real value, but U.S. buyers don’t “get it” yet You’re having conversations, but they aren’t turning into opportunities You hear “you should network more,” but no one opens the right doors You’re unsure how to position yourself for U.S. customers, investors, or partners You feel momentum slipping because you don’t know what your next best move is The cost isn’t just frustration. It’s missed windows of opportunity. Inquire about VRA Break into the U.S. market with clarity, credibility, and"
+    }
+  ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "info@techranchaustin.com",
+        "evidenceId": "check-email-02b5258c59"
+      }
+    ],
     "phones": [],
     "routes": [],
     "applicationUrl": [],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-66cf333d21"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-36931ddf64"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

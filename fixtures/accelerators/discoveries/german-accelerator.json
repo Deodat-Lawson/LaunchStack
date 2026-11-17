@@ -1,6 +1,6 @@
 {
   "programId": "german-accelerator",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.germanaccelerator.com/about-us",
@@ -38,87 +38,7 @@
       "url": "https://www.germanaccelerator.com/blog",
       "page": "details",
       "anchor": "Blog Blog Get insights and strategy tips.",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/blog/5-reasons-for-german-startups-to-expand-to-singapore",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/blog/5-reasons-why-india-is-a-promising-market-for-german-startups",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/blog/beyond-data-how-crelora-found-its-next-growth-market-in-india",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/blog/building-circular-supply-chains-from-munich-to-south-africa",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/blog/dream-big-5-reasons-startups-should-think-about-internationalization-early",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/blog/from-aachen-to-fukuoka-how-fibrecoat-cracked-the-japanese-market",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/blog/from-founder-to-ecosystem-architect-how-one-exit-shaped-a-new-vision-for-europes-deep-tech-future-copy-9lsma",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/blog/from-munich-to-asia-how-irubis-is-transforming-bioprocessing-through-global-expansion",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/blog/germany-and-brazil-strengthen-startup-collaboration-at-hannover-messe-2026",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/blog/how-greyd-turned-a-working-product-into-a-scalable-business",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -126,7 +46,7 @@
       "url": "https://www.germanaccelerator.com/check-your-eligibility",
       "page": "details",
       "anchor": "Check Eligibility Check Eligibility",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -134,7 +54,7 @@
       "url": "https://www.germanaccelerator.com/contact-us",
       "page": "details",
       "anchor": "Contact Us Contact Us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -147,11 +67,51 @@
       "origin": "official"
     },
     {
+      "url": "https://www.germanaccelerator.com/exclusive-consultation-ticket",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/global-connections",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/globals",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/go-global",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
       "url": "https://www.germanaccelerator.com/imprint",
       "page": "details",
       "anchor": "Imprint",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/join-the-movement",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -159,7 +119,7 @@
       "page": "details",
       "anchor": "Markets Markets",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -167,7 +127,7 @@
       "page": "details",
       "anchor": "Asia Asia Unlock growth in the world’s fastest-evolving economies.",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -175,7 +135,7 @@
       "page": "details",
       "anchor": "China China",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -183,7 +143,7 @@
       "page": "details",
       "anchor": "India India",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -191,7 +151,7 @@
       "page": "details",
       "anchor": "Japan Japan",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -199,7 +159,7 @@
       "page": "details",
       "anchor": "South Korea South Korea",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -207,7 +167,7 @@
       "page": "details",
       "anchor": "Southeast Asia Southeast Asia",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -215,7 +175,7 @@
       "page": "details",
       "anchor": "Europe Europe",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -223,7 +183,7 @@
       "page": "details",
       "anchor": "South Africa South Africa",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -231,7 +191,7 @@
       "page": "details",
       "anchor": "Latin America Latin America Tap into the rising opportunities of dynamic emerging markets.",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -239,7 +199,7 @@
       "page": "details",
       "anchor": "U.S. U.S. Scale into the world’s largest and most competitive market.",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -247,7 +207,7 @@
       "page": "details",
       "anchor": "Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators.",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -255,7 +215,7 @@
       "page": "details",
       "anchor": "Partners Partners Leverage the power of a global network and unlock exclusive partner benefits.",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -263,6 +223,14 @@
       "page": "details",
       "anchor": "Programs Programs",
       "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -270,7 +238,7 @@
       "url": "https://www.germanaccelerator.com/our-programs/africa/south-africa-market-discovery-life-sciences-healthtech",
       "page": "details",
       "anchor": "Life Sciences South Africa Life Sciences South Africa",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -278,7 +246,7 @@
       "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
       "page": "details",
       "anchor": "Asia Market Discovery",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -286,7 +254,7 @@
       "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
       "page": "details",
       "anchor": "China Market Discovery",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -294,7 +262,7 @@
       "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
       "page": "details",
       "anchor": "India Market Access",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -302,7 +270,7 @@
       "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
       "page": "details",
       "anchor": "India Market Discovery",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -310,7 +278,7 @@
       "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
       "page": "details",
       "anchor": "Japan Market Access",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -318,7 +286,7 @@
       "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
       "page": "details",
       "anchor": "Japan Market Discovery",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -326,7 +294,7 @@
       "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
       "page": "details",
       "anchor": "South Korea Market Access",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -334,7 +302,7 @@
       "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
       "page": "details",
       "anchor": "South Korea Market Discovery",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -342,7 +310,7 @@
       "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
       "page": "details",
       "anchor": "Southeast Asia Market Access",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

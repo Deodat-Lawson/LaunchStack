@@ -1,109 +1,1889 @@
 {
   "programId": "shipley-center-for-innovation-at-clarkson-university",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.clarkson.edu/academics/research/labs-centers/shipley",
-    "https://www.clarkson.edu/academics/majors-minors",
-    "https://www.clarkson.edu/apply"
+    "https://www.clarkson.edu/academics/honors/how-apply-clarkson-honors-program",
+    "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+    "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+    "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student/clarkson-school-admissions-policy-and-procedures",
+    "https://www.clarkson.edu/admissions-aid/graduate/how-to-apply",
+    "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+    "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+    "https://www.clarkson.edu/apply",
+    "http://gradapp.clarkson.edu/apply/",
+    "https://undergrad.clarkson.edu/apply",
+    "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+    "https://www.clarkson.edu/international-admissions-requirements",
+    "https://www.clarkson.edu/node/10568",
+    "https://www.clarkson.edu/node/10577",
+    "https://www.clarkson.edu/about/shared-community/non-discrimination/faqs",
+    "https://www.clarkson.edu/academics/research/labs-centers/stem-education/inspire-video-collection/inspire-faqs",
+    "https://www.clarkson.edu/admissions-aid/undergraduate/deposited-undergraduate-students-welcome/new-undergraduate-student-faqs",
+    "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+    "https://www.clarkson.edu/admissions-financial-aid/sas/faqs"
   ],
   "evidence": [
     {
+      "id": "check-announced-100e8999cf",
+      "url": "https://www.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Submit your application by the December 1 Early Decision Admissions deadline or by January 15, the Regular Decision deadline. Students who are applying for",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-15d7c95ad2",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "into account your financial need, as well as your potential. The deadline to file the FAFSA® is February 1, but it is recommended that you file it as early as possible.",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-6157ea247b",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student/clarkson-school-admissions-policy-and-procedures",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "an ACT or SAT test the student is scheduled to take. The application deadline is June 1 and we typically will review a completed application portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-657a5ac461",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "to Clarkson! Transfer Students What is the Transfer application deadline? Our application deadlines are December 1 for Spring entry and July 1 for Fall entry. We review applications",
+      "page": "terms"
+    },
+    {
+      "id": "check-announced-7ad20c799b",
+      "url": "https://www.clarkson.edu/academics/honors/how-apply-clarkson-honors-program",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "18th. TCS student applications will be reviewed on a rolling basis. Applications open every Fall. Deadlines The final date to submit an Honors application, as well",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-81511401e4",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "into account your financial need, as well as your potential. The deadline to file the FAFSA® is February 1, but it is recommended that you file it as early as possible.",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-8d9482f1ff",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "by January 15. If you are applying for early decision, the deadline is December 1. Scholarships, Grants and Loans Find Your Admissions Counselor",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-d7918f2003",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "by January 15. If you are applying for early decision, the deadline is December 1. Scholarships, Grants and Loans Find Your Admissions Counselor",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-df0669e5c6",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Admissions Counselor so that we can follow up. What is the Deposit Deadline? Clarkson’s Deposit Deadline is May 1! However, we understand the challenges that students may face when",
+      "page": "terms"
+    },
+    {
+      "id": "check-deadline-6f21413d6c",
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Search for ASET REU program and then Apply. Application deadline is 11:59 p.m. (EST) February 15, 2027. How To Apply Program Information How To Apply Research",
+      "page": "application"
+    },
+    {
+      "id": "check-deadline-b14e59b1b3",
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "schedule conflicts with these dates. Application deadline is 11:59 p.m. (EST) February 15, 2027. Check Eligibility Be sure you meet the requirements for",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-f95b4392d7",
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "after considering: Financial Package. Participants will receive: $7000 stipend Round trip travel (we arrange) to and from Potsdam, New York.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-19f3e16a29",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "J status (including J-2 status) in any of the 12 months prior to the intended program start date. The",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-2014efd344",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "has two exceptions – you are not subject to the 12-month bar if you are a J-1 transfer or you were in J-1",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-25a534fa0a",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "a week. Mail overseas is estimated to take 4-6 weeks for delivery. Method 2 Send by express mail -",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-27dd9d5d45",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "special skills. Length of stay – up to 6-months Student Intern Student pursuing a degree outside",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-380240b996",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "with any questions or concerns regarding the 24-month bar on repeat participation. Short-Term Scholar",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-5b3798cc34",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "may subject the exchange visitor to the ’24-month bar’ on repeat participation 24-Month Repeat",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6a25f4ddcc",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "exchange visitor to the ’12-month bar’ 12-Month Bar – any individual will not be eligible to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6dab0bcbcf",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "of Financial Support Passport with at least 6-months validity into the future 2x2 inch photographs",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-915fa7c8de",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "These categories co-mingle. Length of stay 3 weeks up to 5 years. Short-Term Scholar - A Professor,",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-a0799dec98",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "These categories co-mingle. Length of Stay - 3 weeks to 5 years Special Conditions Visiting scholar",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-a7f585378e",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "scholar’ category and spent less than 6 months in J status. Please contact ISSS with any",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-b1168d3c07",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "program at home institution'. Length of Stay – 3 weeks up to 1-year. The first step is working with a",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-b937eaf6ff",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "must be able to start your program at CU within 5-months of your OPT end date, program end date or the",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-ccc5879453",
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "are available. Program Expectations Engage in 10-week residential immersive programmatic activities.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-cd568da8a1",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "subject the prospective exchange visitor to the ’12-month bar’ 12-Month Bar – any individual will not be",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d7614240f5",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "to the ’24-month bar’ on repeat participation 24-Month Repeat Participation Bar – upon completion of an",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d7d19a85ee",
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "On campus housing (with kitchenette) for the 10-week program period Note: Minimal food is provided",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e2a7719cc8",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "with any questions or concerns regarding the 12-month bar Prior participation in the Professor or",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e585058baa",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "prior to the intended program start date. The 12-month bar has two exceptions – you are not subject to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f0058dfa7e",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "special skills. Length of Stay – up to 6-months. Student Intern - Student pursuing a degree",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f3c0c12a99",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "program at home institution’. Length of Stay – 3 weeks up to 1-year Special Conditions Internship may",
+      "page": "application"
+    },
+    {
+      "id": "check-email-0a35acaee4",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "admissions@clarkson.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-email-0df59dcadc",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "admissions@clarkson.edu",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-1122cefdbe",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "of Undergraduate Admissions Phone: 315-268-6480 Email: admissions@clarkson.edu CTA Block Keep Exploring More Information Visit Apply",
+      "page": "application"
+    },
+    {
       "id": "check-email-34ea9a4884",
       "url": "https://www.clarkson.edu/apply",
-      "title": "Shipley Center for Innovation at Clarkson University — application page checked by scrape.py",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
       "excerpt": "Aid Office Email Phone Office of Undergraduate Admissions admissions@clarkson.edu 315-268-6480 Office of Undergraduate Transfer Admissions",
+      "page": "application"
+    },
+    {
+      "id": "check-email-49ad5f766f",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "admissions@clarkson.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-email-5bec62fd2d",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Ave. Box 5605 Phone: 315-268-6480 Fax: 315-268-7647 Email: admissions@clarkson.edu Step 4: Additional Requirements Review additional",
+      "page": "application"
+    },
+    {
+      "id": "check-email-b224fe98cf",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "of Undergraduate Admissions Phone: 315-268-6480 Email: admissions@clarkson.edu CTA Block Keep Exploring More Information Visit Apply",
+      "page": "application"
+    },
+    {
+      "id": "check-email-d20bf764d1",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Ave. Box 5605 Phone: 315-268-6480 Fax: 315-268-7647 Email: admissions@clarkson.edu Step 4: Additional Requirements Review additional",
+      "page": "application"
+    },
+    {
+      "id": "check-email-f6ad3226c0",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "to help in the college search process? Email ( admissions@clarkson.edu ) Ask your admissions counselor . Check out our virtual",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-595e5cead4",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "of reasons. With that, we encourage you to: check out our Virtual Viewbook and Interactive Map to learn more about Clarkson.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c984f9a143",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/deposited-undergraduate-students-welcome/new-undergraduate-student-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "from the assignment. Do you need to be on campus in person to select a room or is this done virtually? Room selection",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d81412acbd",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "and Interactive Map to learn more about Clarkson. set up a virtual guided tour with one of our Student Ambassadors, chat with",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ec2a173695",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "of Undergraduate Admissions is open Monday - Saturday for in-person visits for prospective students and family members on our",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-038a79754c",
+      "url": "http://gradapp.clarkson.edu/apply/",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-0669994f21",
+      "url": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-0c9a399c28",
+      "url": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-0dfa7b1707",
+      "url": "https://www.clarkson.edu/admissions-aid/graduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-0f29ed7c1a",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-10ea4fc123",
+      "url": "https://www.clarkson.edu/academics/honors/how-apply-clarkson-honors-program",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-1733cd1196",
+      "url": "https://www.clarkson.edu/admissions-financial-aid/sas/faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-1e0470ee5f",
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/stem-education/inspire-video-collection/inspire-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-21c138771a",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student/clarkson-school-admissions-policy-and-procedures",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-2549d3fc57",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/deposited-undergraduate-students-welcome/new-undergraduate-student-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-2c73deb2f4",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 315-268-6400",
       "page": "application"
     },
     {
       "id": "check-phone-35fc61348e",
       "url": "https://www.clarkson.edu/academics/research/labs-centers/shipley",
-      "title": "Shipley Center for Innovation at Clarkson University — homepage checked by scrape.py",
+      "title": "Shipley Center for Innovation at Clarkson University — homepage",
       "excerpt": "Phone: 315-268-6400",
       "page": "details"
     },
     {
       "id": "check-phone-36a1fef56a",
       "url": "https://www.clarkson.edu/apply",
-      "title": "Shipley Center for Innovation at Clarkson University — application page checked by scrape.py",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
       "excerpt": "Phone: 518-631-9831",
       "page": "application"
     },
     {
+      "id": "check-phone-420356daa3",
+      "url": "http://gradapp.clarkson.edu/apply/",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-4e6cc11348",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student/clarkson-school-admissions-policy-and-procedures",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-50ebc73917",
+      "url": "https://www.clarkson.edu/admissions-financial-aid/sas/faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "terms"
+    },
+    {
       "id": "check-phone-5cf6e74c0e",
       "url": "https://www.clarkson.edu/apply",
-      "title": "Shipley Center for Innovation at Clarkson University — application page checked by scrape.py",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
       "excerpt": "Phone: 315-268-6400",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-6291e4be4c",
+      "url": "https://undergrad.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-67d7fc019f",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "1-800-574-4425",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-6a649eb8ea",
+      "url": "https://undergrad.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-766858c792",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-7aca5e26ed",
+      "url": "https://www.clarkson.edu/academics/honors/how-apply-clarkson-honors-program",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-7e6271af82",
+      "url": "https://www.clarkson.edu/node/10577",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 518-631-9831",
       "page": "application"
     },
     {
       "id": "check-phone-807cf86fbf",
       "url": "https://www.clarkson.edu/academics/research/labs-centers/shipley",
-      "title": "Shipley Center for Innovation at Clarkson University — homepage checked by scrape.py",
+      "title": "Shipley Center for Innovation at Clarkson University — homepage",
       "excerpt": "Phone: 518-631-9831",
       "page": "details"
     },
     {
-      "id": "check-phone-958343fbb3",
-      "url": "https://www.clarkson.edu/academics/majors-minors",
-      "title": "Shipley Center for Innovation at Clarkson University — details page checked by scrape.py",
+      "id": "check-phone-8ca9bd403c",
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/stem-education/inspire-video-collection/inspire-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-95a5bb54b1",
+      "url": "https://www.clarkson.edu/about/shared-community/non-discrimination/faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
       "excerpt": "Phone: 315-268-6400",
-      "page": "details"
+      "page": "terms"
     },
     {
-      "id": "check-phone-dceb906109",
-      "url": "https://www.clarkson.edu/academics/majors-minors",
-      "title": "Shipley Center for Innovation at Clarkson University — details page checked by scrape.py",
+      "id": "check-phone-995f45dbe5",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
       "excerpt": "Phone: 518-631-9831",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-a4225bccd6",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-a6918f1905",
+      "url": "https://www.clarkson.edu/node/10577",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-b3438c0645",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-b562e7f9b8",
+      "url": "https://www.clarkson.edu/admissions-aid/graduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-b97f825b56",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-bfd7cd05cb",
+      "url": "https://www.clarkson.edu/international-admissions-requirements",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-ceb59ca739",
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-d18dbf5b1f",
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-d21dd7e8b3",
+      "url": "https://www.clarkson.edu/international-admissions-requirements",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-d3ea1d9e41",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-d97f017648",
+      "url": "https://www.clarkson.edu/about/shared-community/non-discrimination/faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-e677984425",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/deposited-undergraduate-students-welcome/new-undergraduate-student-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-fab64ec952",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-fb9da97039",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-049dfa39b1",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-0617415d32",
+      "url": "https://www.clarkson.edu/admissions-financial-aid/sas/faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-089036715f",
+      "url": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-10239627ee",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-13c4756dbd",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/deposited-undergraduate-students-welcome/new-undergraduate-student-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-13cb78d435",
+      "url": "https://www.clarkson.edu/admissions-aid/graduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-157ee2d48a",
+      "url": "https://www.clarkson.edu/academics/honors/how-apply-clarkson-honors-program",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-1994d8046b",
+      "url": "https://www.clarkson.edu/international-admissions-requirements",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-245c8a3623",
+      "url": "https://www.clarkson.edu/international-admissions-requirements",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-329151d2b7",
+      "url": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5a911218c2",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5e9e23cfc3",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-60cac50e50",
+      "url": "https://www.clarkson.edu/about/shared-community/non-discrimination/faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-656b4696bb",
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/shipley",
+      "title": "Shipley Center for Innovation at Clarkson University — homepage",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
       "page": "details"
     },
     {
-      "id": "check-route-2e945a93b6",
+      "id": "check-portfolio-743acd31aa",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-777593bbf6",
+      "url": "https://www.clarkson.edu/academics/honors/how-apply-clarkson-honors-program",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-833104161b",
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/stem-education/inspire-video-collection/inspire-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8467937fd7",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-897e60d87f",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9188f6db08",
+      "url": "https://www.clarkson.edu/admissions-financial-aid/sas/faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-91c005b81c",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-939ddc06c9",
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/stem-education/inspire-video-collection/inspire-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-991ac73bbe",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/deposited-undergraduate-students-welcome/new-undergraduate-student-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9fac30c24e",
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a2535c9aee",
+      "url": "https://www.clarkson.edu/node/10577",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-af43c5017c",
+      "url": "https://www.clarkson.edu/about/shared-community/non-discrimination/faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b0ec4ae5f1",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b2647dcceb",
+      "url": "https://www.clarkson.edu/admissions-aid/graduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-c92fb3d714",
+      "url": "https://www.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cbcd6c8d13",
       "url": "https://www.clarkson.edu/academics/research/labs-centers/shipley",
-      "title": "Shipley Center for Innovation at Clarkson University — homepage checked by scrape.py",
-      "excerpt": "The Shipley Center for Innovation → https://www.clarkson.edu/academics/research/labs-centers/shipley",
+      "title": "Shipley Center for Innovation at Clarkson University — homepage",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-cd6701669e",
+      "url": "https://www.clarkson.edu/node/10577",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e37edfd074",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student/clarkson-school-admissions-policy-and-procedures",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e80a656b6e",
+      "url": "https://www.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ead44fca21",
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-eeea5f1065",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student/clarkson-school-admissions-policy-and-procedures",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f12e5361c8",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Alumni → https://engage.clarkson.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-0485c1a54e",
+      "url": "https://www.clarkson.edu/international-admissions-requirements",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "credit, you should apply as a transfer student. Transfer admission is done on a rolling basis; there are no deadlines. Step One: Start an Application Complete one of these",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-0b34747c2f",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student/clarkson-school-admissions-policy-and-procedures",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "below for eligibility and application process. The Clarkson School adopts a rolling admissions procedure, which means that once a student’s folder is determined complete,",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-388ec41886",
+      "url": "https://www.clarkson.edu/admissions-aid/graduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "are no set deadlines for graduate admissions. Instead, we review applications on a rolling basis. Contact Graduate Admissions Interested in learning more about graduate",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-3ebd679d42",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "of the applicant. Deadline Once completed, applications are reviewed on a rolling basis and decision letters are mailed within 5-7 business days. Please note, during",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-467d67ff27",
+      "url": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "at Clarkson begins with the application process. Transfer admissions are done on a rolling basis. Understand how to complete your application, apply for financial aid and",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-7611d1275a",
+      "url": "https://www.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "attended a two- or four-year school, Clarkson accepts transfer applications on a rolling basis. Application Requirements Review all documentation to include with your",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-7ed7efc814",
+      "url": "https://www.clarkson.edu/academics/honors/how-apply-clarkson-honors-program",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "to be submitted by January 18th. TCS student applications will be reviewed on a rolling basis. Applications open every Fall. Deadlines The final date to submit an Honors",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-80b998fb7e",
+      "url": "https://www.clarkson.edu/node/10577",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "at Clarkson begins with the application process. Transfer admissions are done on a rolling basis. Understand how to complete your application, apply for financial aid and",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-e1905735cf",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "December 1 for Spring entry and July 1 for Fall entry. We review applications on a rolling basis so please reach out if you need an extension on these dates. My school is",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-05b45dd010",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Clarkson School Admissions Policy and Procedures → https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student/clarkson-school-admissions-policy-and-procedures",
+      "page": "application"
+    },
+    {
+      "id": "check-route-05d900905a",
+      "url": "https://www.clarkson.edu/academics/honors/how-apply-clarkson-honors-program",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-06f26e3f22",
+      "url": "https://www.clarkson.edu/admissions-aid/graduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Graduate School Online Application Form → http://gradapp.clarkson.edu/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0e0fca7027",
+      "url": "https://www.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Clarkson University Freshman Application → https://undergrad.clarkson.edu/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0e433d7560",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Clarkson University First-Year Student Application → https://undergrad.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-112113a298",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Clarkson University First-Year Student Application → https://undergrad.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-112c3bd71e",
+      "url": "https://www.clarkson.edu/node/10577",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "How to Apply as an International Student → https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-118a392ef5",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "How to Apply as Transfer Student → https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1a66d25e23",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "How to Apply as an International Student → https://www.clarkson.edu/international-admissions-requirements",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1a6dbd1f6d",
+      "url": "https://www.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Clarkson School Application → https://undergrad.clarkson.edu/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2cff8c846a",
+      "url": "https://www.clarkson.edu/academics/honors/how-apply-clarkson-honors-program",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "apply for admission to Clarkson University → https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-32eb2f7039",
+      "url": "https://www.clarkson.edu/international-admissions-requirements",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Clarkson Transfer Application → https://undergrad.clarkson.edu/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-355b5ae65d",
+      "url": "https://www.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Graduate School Application → http://gradapp.clarkson.edu/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-35bcc5686d",
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-367aa7ba9d",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student/clarkson-school-admissions-policy-and-procedures",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3c993e367c",
+      "url": "https://www.clarkson.edu/international-admissions-requirements",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Graduate School Online Application Form → http://gradapp.clarkson.edu/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3d3edd59ab",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Skip to main content → https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3d79ad4172",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Clarkson University First-Year Student Application (online) → https://undergrad.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3da680cc35",
+      "url": "https://www.clarkson.edu/admissions-financial-aid/sas/faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3e1d263f7b",
+      "url": "http://gradapp.clarkson.edu/apply/",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Apply → https://gradapp.clarkson.edu/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-43293873d5",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student/clarkson-school-admissions-policy-and-procedures",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "How to Apply to TCS → https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+      "page": "application"
+    },
+    {
+      "id": "check-route-447a739b2b",
+      "url": "http://gradapp.clarkson.edu/apply/",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Create an account → https://gradapp.clarkson.edu/account/register?r=https%3a%2f%2fgradapp.clarkson.edu%2fapply%2f",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4aa300c35c",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "How to Apply → https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-520e8197fc",
+      "url": "https://www.clarkson.edu/admissions-aid/graduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5af2d45fbc",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6008cafefb",
+      "url": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6a8835bd45",
+      "url": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "How to Apply as an International Student → https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6c0d5657b0",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "How to Apply → https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-723f36b1ab",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/deposited-undergraduate-students-welcome/new-undergraduate-student-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "terms"
     },
     {
       "id": "check-route-7495261c24",
       "url": "https://www.clarkson.edu/academics/research/labs-centers/shipley",
-      "title": "Shipley Center for Innovation at Clarkson University — homepage checked by scrape.py",
+      "title": "Shipley Center for Innovation at Clarkson University — homepage",
       "excerpt": "Apply → https://www.clarkson.edu/apply",
       "page": "details"
     },
     {
       "id": "check-route-76328ebe2b",
       "url": "https://www.clarkson.edu/apply",
-      "title": "Shipley Center for Innovation at Clarkson University — application page checked by scrape.py",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
       "excerpt": "Application Requirements → https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+      "page": "application"
+    },
+    {
+      "id": "check-route-78c0026657",
+      "url": "https://www.clarkson.edu/node/10577",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7d156e67af",
+      "url": "http://gradapp.clarkson.edu/apply/",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Create an account → http://gradapp.clarkson.edu/account/register?r=https%3a%2f%2fgradapp.clarkson.edu%2fapply%2f",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7e355a8ae1",
+      "url": "http://gradapp.clarkson.edu/apply/",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Applicant User Guide → https://gradapp.clarkson.edu/www/documents/How%20to%20fill%20out%20an%20application%2012_9_2025.pdf",
       "page": "application"
     },
     {
       "id": "check-route-801871bff3",
       "url": "https://www.clarkson.edu/apply",
-      "title": "Shipley Center for Innovation at Clarkson University — application page checked by scrape.py",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
       "excerpt": "Application Requirements → https://www.clarkson.edu/node/10568",
       "page": "application"
     },
     {
-      "id": "check-route-c75596e76c",
-      "url": "https://www.clarkson.edu/academics/majors-minors",
-      "title": "Shipley Center for Innovation at Clarkson University — details page checked by scrape.py",
+      "id": "check-route-81434ee358",
+      "url": "https://www.clarkson.edu/about/shared-community/non-discrimination/faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
       "excerpt": "Apply → https://www.clarkson.edu/apply",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-route-81f77a4cf1",
+      "url": "https://www.clarkson.edu/admissions-aid/graduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "How to Apply as an International Student → https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8f8faafefa",
+      "url": "https://www.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Clarkson University Transfer Application → https://undergrad.clarkson.edu/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-92bde9dae4",
+      "url": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Clarkson Transfer Application → https://undergrad.clarkson.edu/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-99ada3b02a",
+      "url": "https://www.clarkson.edu/node/10577",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Apply Now → https://www.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9b609d3054",
+      "url": "https://www.clarkson.edu/node/10577",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Clarkson Transfer Application → https://undergrad.clarkson.edu/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a0289335c6",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-aaaa3a07b2",
+      "url": "https://www.clarkson.edu/node/10577",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Skip to main content → https://www.clarkson.edu/admissions-aid/transfer/how-to-apply#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b30ae2c17d",
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/stem-education/inspire-video-collection/inspire-faqs",
+      "title": "Shipley Center for Innovation at Clarkson University — terms page",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b41d5f3807",
+      "url": "https://www.clarkson.edu/international-admissions-requirements",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Clarkson University Freshman Application → https://undergrad.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b4ffd4d5da",
+      "url": "https://undergrad.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Create an account → https://undergrad.clarkson.edu/account/register?r=https%3a%2f%2fundergrad.clarkson.edu%2fapply%2f",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b5b745f453",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "How to Apply as a Transfer Student → https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b880c1b696",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "How to Apply as First-Year Student → https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d2255c647b",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "How to Apply as an International Undergraduate Student → https://www.clarkson.edu/international-admissions-requirements",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d653303c1c",
+      "url": "https://www.clarkson.edu/academics/honors/how-apply-clarkson-honors-program",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "apply for admission to Clarkson University → https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dc9cb93cfc",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-df9abb43d0",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e6242cda2d",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "How to Apply as an International Student → https://www.clarkson.edu/international-admissions-requirements",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e7508c301a",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "How to Apply as an International Undergraduate Student → https://www.clarkson.edu/international-admissions-requirements",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e8d4f030ea",
+      "url": "http://gradapp.clarkson.edu/apply/",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Log in → https://gradapp.clarkson.edu/account/login?r=https%3a%2f%2fgradapp.clarkson.edu%2fapply%2f",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e938302f46",
+      "url": "https://undergrad.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Log in → https://undergrad.clarkson.edu/account/login?r=https%3a%2f%2fundergrad.clarkson.edu%2fapply%2f",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ea8dd996c7",
+      "url": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Apply Now → https://www.clarkson.edu/apply",
+      "page": "application"
     },
     {
       "id": "check-route-eb0df8181d",
       "url": "https://www.clarkson.edu/apply",
-      "title": "Shipley Center for Innovation at Clarkson University — application page checked by scrape.py",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
       "excerpt": "Application Requirements → https://www.clarkson.edu/node/10577",
       "page": "application"
+    },
+    {
+      "id": "check-route-efa43b0604",
+      "url": "https://www.clarkson.edu/international-admissions-requirements",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f2b47b7481",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f3f6e90e13",
+      "url": "http://gradapp.clarkson.edu/apply/",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "log in → https://gradapp.clarkson.edu/account/login?r=https%3a%2f%2fgradapp.clarkson.edu%2fapply%2f",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fc7f0b38ea",
+      "url": "https://www.clarkson.edu/node/10577",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "How to Apply as a Transfer → https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fd1accf0b3",
+      "url": "https://www.clarkson.edu/node/10568",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "How to Apply as a Transfer Student → https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fe0c13f985",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "title": "Shipley Center for Innovation at Clarkson University — application page",
+      "excerpt": "How to Apply to Graduate Program → https://www.clarkson.edu/admissions-aid/graduate/how-to-apply",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-5199a3a2c2",
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/shipley",
+      "page": "details",
+      "excerpt": "Shipley Center for Innovation | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners Request Info"
+    },
+    {
+      "id": "check-page-2ba750fc49",
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/shipley",
+      "page": "details",
+      "excerpt": "What We Offer Our services include: Business formation Customer development Ignition grants Incubator spaces Investor connections Marketing and branding Networking NYS tax incentives Prototyping Provisional patent filing Workshops Ready to get Started?"
+    },
+    {
+      "id": "check-page-f0a5db9536",
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/shipley",
+      "page": "details",
+      "excerpt": "The Shipley Center continues to play an important role in startup culture across northern New York."
+    },
+    {
+      "id": "check-page-a25cd1f0cc",
+      "url": "https://www.clarkson.edu/academics/honors/how-apply-clarkson-honors-program",
+      "page": "application",
+      "excerpt": "How to Apply - Clarkson Honors Program | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners Request"
+    },
+    {
+      "id": "check-page-f12a690279",
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "page": "application",
+      "excerpt": "ASET REU: How To Apply | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners Request Info Visit"
+    },
+    {
+      "id": "check-page-0414083a19",
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "page": "application",
+      "excerpt": "Check Eligibility Be sure you meet the requirements for the program: Applicants must be citizens or permanent residents of the United States or an eligible non-citizen (i.e."
+    },
+    {
+      "id": "check-page-415f492369",
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "page": "application",
+      "excerpt": "Participants will receive: $7000 stipend Round trip travel (we arrange) to and from Potsdam, New York."
+    },
+    {
+      "id": "check-page-fe1f751450",
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "page": "application",
+      "excerpt": "Identify Potential ASET-REU Research Mentors/Projects Prior to applying, go to the “ Research Topics ” page and review potential projects."
+    },
+    {
+      "id": "check-page-0ea803a714",
+      "url": "https://www.clarkson.edu/academics/research/research-experience-undergraduate-students/aset-research-experience-undergrads-reu/aset-reu-how-apply",
+      "page": "application",
+      "excerpt": "In the application form, you will need to identify three research mentors or topics from our “ Research Topics ” page."
+    },
+    {
+      "id": "check-page-417ddfd6f1",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+      "page": "application",
+      "excerpt": "How to Apply as a Clarkson School Student | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners"
+    },
+    {
+      "id": "check-page-3f6e296c21",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+      "page": "application",
+      "excerpt": "After The Clarkson School, I continued my journey at Clarkson University, where I pursued mechanical engineering, conducted research, and eventually interned with GE Aerospace and as an Engineer at The Walt Disney Company."
+    },
+    {
+      "id": "check-page-6cb73e3644",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student/clarkson-school-admissions-policy-and-procedures",
+      "page": "application",
+      "excerpt": "Clarkson School Admissions Policy and Procedures | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers &"
+    },
+    {
+      "id": "check-page-41746fff3e",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student/clarkson-school-admissions-policy-and-procedures",
+      "page": "application",
+      "excerpt": "In addition, to be admitted to the Clarkson School they must have completed secondary education in a home school environment and they must provide documentary evidence of the curriculum followed and grades received."
+    },
+    {
+      "id": "check-page-9f56ebc97f",
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student/clarkson-school-admissions-policy-and-procedures",
+      "page": "application",
+      "excerpt": "Please note that the average GPA of incoming Clarkson School students is 94 on a 100 scale (unweighted) or 3.7 on a 4.0 scale (unweighted) Please note that in order to receive Federal financial aid, students must be beyond the age of compulsory education, which is 16 years old in the state of New York."
+    },
+    {
+      "id": "check-page-297792f5a9",
+      "url": "https://www.clarkson.edu/admissions-aid/graduate/how-to-apply",
+      "page": "application",
+      "excerpt": "Graduate Admission Requirements | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners Request Info"
+    },
+    {
+      "id": "check-page-2ed713561b",
+      "url": "https://www.clarkson.edu/admissions-aid/graduate/how-to-apply",
+      "page": "application",
+      "excerpt": "The contact information for two or three current or former faculty members or supervisors, who can send us a recommendation letter on your academic and/or professional performance and motivation."
+    },
+    {
+      "id": "check-page-6fe39b0f35",
+      "url": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "page": "application",
+      "excerpt": "Transfer Admission Requirements | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners Request Info"
+    },
+    {
+      "id": "check-page-efce9d5aa8",
+      "url": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "page": "application",
+      "excerpt": "(If you attended college outside of New York State, please provide course descriptions.) Letters of recommendation."
+    },
+    {
+      "id": "check-page-ebd07c7e61",
+      "url": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "page": "application",
+      "excerpt": "If you attended college outside of New York State, please provide course descriptions."
+    },
+    {
+      "id": "check-page-31530b17cc",
+      "url": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "page": "application",
+      "excerpt": "Financial Aid and Scholarships for Transfer Students Students come to Clarkson University because we offer a high-quality, affordable education through a robust financial aid program."
+    },
+    {
+      "id": "check-page-3306767bf2",
+      "url": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+      "page": "application",
+      "excerpt": "As a transfer student, you are eligible for merit-based scholarships, including awards that are specifically geared toward transfer students."
+    },
+    {
+      "id": "check-page-e78a79039b",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "page": "application",
+      "excerpt": "Undergraduate Admission Requirements | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners Request"
+    },
+    {
+      "id": "check-page-5e9b5dc419",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "page": "application",
+      "excerpt": "With the information you provide, we can check your eligibility for federal, state and institutional need-based programs, as well as Clarkson grants."
+    },
+    {
+      "id": "check-page-2265635092",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "page": "application",
+      "excerpt": "Federal Student Aid Video Financial Aid Applying for Scholarships Our goal is to offer an excellent, affordable education with a high return on investment."
+    },
+    {
+      "id": "check-page-265bf16c45",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "page": "application",
+      "excerpt": "We have a robust list of merit-based scholarships, alumni-connection awards, special application-based funding, tuition exchanges and other programs that make Clarkson within reach to talented students."
+    },
+    {
+      "id": "check-page-30af47af86",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "page": "application",
+      "excerpt": "To be eligible for merit scholarships and grants, we need to receive your admission application and any additional scholarship submissions by January 15."
+    },
+    {
+      "id": "check-page-a8f40fe368",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+      "page": "application",
+      "excerpt": "Scholarships, Grants and Loans Find Your Admissions Counselor Have questions about the admissions process?"
+    },
+    {
+      "id": "check-page-5964b2f951",
+      "url": "https://www.clarkson.edu/apply",
+      "page": "application",
+      "excerpt": "Apply — Start Your Application | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners Request Info"
+    },
+    {
+      "id": "check-page-e80eaaf7b2",
+      "url": "https://www.clarkson.edu/apply",
+      "page": "application",
+      "excerpt": "Maybe you’re interested in engineering or see yourself making discoveries in the healthcare or business sphere."
+    },
+    {
+      "id": "check-page-94d86a61b8",
+      "url": "https://www.clarkson.edu/apply",
+      "page": "application",
+      "excerpt": "In all contexts, your education here serves as a stepping stone toward success."
+    },
+    {
+      "id": "check-page-2100418310",
+      "url": "https://www.clarkson.edu/apply",
+      "page": "application",
+      "excerpt": "Keep on top of deadlines to be eligible for grants and merit scholarships."
+    },
+    {
+      "id": "check-page-40a8879be8",
+      "url": "https://www.clarkson.edu/apply",
+      "page": "application",
+      "excerpt": "Learn more about the financial aid process, from completing your FAFSA® to scholarships, grants and other forms of assistance."
+    },
+    {
+      "id": "check-page-7290c546f1",
+      "url": "https://www.clarkson.edu/apply",
+      "page": "application",
+      "excerpt": "In addition to loans, grants and work-study, Clarkson extends specific scholarships and awards to transfer students."
+    },
+    {
+      "id": "check-page-9aa0673679",
+      "url": "https://www.clarkson.edu/apply",
+      "page": "application",
+      "excerpt": "Tuition and Financial Aid Find program-specific tuition rates and fees, and explore financial aid awards available to graduate students, including scholarships and assistantships."
+    },
+    {
+      "id": "check-page-6f50ba6c14",
+      "url": "https://www.clarkson.edu/apply",
+      "page": "application",
+      "excerpt": "Tuition and Financial Aid Clarkson School students are eligible for merit- and need-based awards."
+    },
+    {
+      "id": "check-page-cf9702b21b",
+      "url": "http://gradapp.clarkson.edu/apply/",
+      "page": "application",
+      "excerpt": "Application Instructions This website uses resources that are being blocked by your network. Contact your network administrator for more information. Toggle menu About Programs Admissions Locations Application Instructions Step One: Create an account to start a new application or log in to continue an application you already started. Step Two: Complete the online application form. It should take less than an hour and there’s no application fee! Step Three: Submit the following supporting materials: Personal Statement/Essay (250-500 words) Resume/CV 2 or 3 letters of recommendation from a faculty member or professional reference (number varies by program) All post-secondary transcripts GRE or GMAT Test Scores (not required for all programs) English proficiency test scores (if applicable). Accepted tests with minimum acceptable scores are: TOEFL (80), TOEFL Essentials (8.5), IELTS (6.5), PTE (56) and Duolingo English Test (115). We do not automatically waive this based on language of instruction, nor do we accept university certificates. The IELTS General Edition is not accepted. Additional Application-Related Information: GRE® Institution Code - 2084 TOEFL® Institution Code - 2084 GMAT Institution Code (Full-time) - V1G-53-52 GMAT Institution Code (Part-time) - V1G-53-77 IELTS - You must provide a scanned score report. No institutional code is needed. Please send official"
+    },
+    {
+      "id": "check-page-421b1ce514",
+      "url": "http://gradapp.clarkson.edu/apply/",
+      "page": "application",
+      "excerpt": "Please send official transcripts and test scores to: Clarkson University 8 Clarkson Ave Box 5605 Potsdam, NY 13699 USA Attn: Mia Wicke Need Help?"
+    },
+    {
+      "id": "check-page-926163265e",
+      "url": "https://undergrad.clarkson.edu/apply",
+      "page": "application",
+      "excerpt": "Undergraduate Applications This website uses resources that are being blocked by your network. Contact your network administrator for more information. Undergraduate Applications Returning users: Log in to continue an application. First-time users: Create an account to start a new application. University Libraries News & Events Academic Calendar Human Resources Sustainability Book Store Diversity, Equity & Inclusion Intranet Organizational Chart Potsdam Campus 8 Clarkson Ave Potsdam, NY 13699 Phone: 315-268-6400 Capital Region Campus 40 British American Boulevard Latham, NY 12110 Phone: 518-631-9831 Contact Us © Copyright 2025 Clarkson University CARES Act Report & Consumer Information Disclosure (HEOA) Act on Legal & Moral Concerns Web Accessibility Assistance facebook twitter Instagram Youtube"
+    },
+    {
+      "id": "check-page-811692c649",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "page": "application",
+      "excerpt": "New Students and Visitors | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners Request Info Visit"
+    },
+    {
+      "id": "check-page-6120f60e0a",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "page": "application",
+      "excerpt": "We invite students from our exchange colleges & universities to study for a semester or a full-year at our Potsdam, New York campus."
+    },
+    {
+      "id": "check-page-1c5e41438c",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "page": "application",
+      "excerpt": "J-1 Exchange Visitors The J-1 Exchange Visitor Program (EVP) was developed by the Department of State to \"increase mutual understanding between the people of the United States and the people of other countries by means of educational and cultural exchanges\"."
+    },
+    {
+      "id": "check-page-d4beda05c0",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "page": "application",
+      "excerpt": "Short-Term Scholar - A Professor, research scholar or person with similar education or accomplishments coming to the US on a short-term visit for the purpose of lecturing – observing – training – or demonstrating special skills."
+    },
+    {
+      "id": "check-page-8fdd0c73b2",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "page": "application",
+      "excerpt": "The first step is working with a Department or Faculty Sponsor to identify your proposed activity at Clarkson University."
+    },
+    {
+      "id": "check-page-cc66d87860",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "page": "application",
+      "excerpt": "Once this has been identified, your Department/Faculty Sponsor will provide you the 'J-1 Scholar/Professor Application' to complete and return with other supporting documentation."
+    },
+    {
+      "id": "check-page-4a8626ebb8",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "page": "application",
+      "excerpt": "In addition, your department or faculty sponsor at CU will provide you the J-1 Scholar/Professor Application to complete and return with supporting documentation."
+    },
+    {
+      "id": "check-page-21c62b9088",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "page": "application",
+      "excerpt": "Short-Term Scholar A Professor, research scholar or person with similar education or accomplishments coming to the US on a short-term visit for the purpose of lecturing – observing – training – or demonstrating special skills."
+    },
+    {
+      "id": "check-page-2e6ab121e6",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "page": "application",
+      "excerpt": "Internships cannot place a student intern in any position that involved the following: Unskilled or casual labor Child or elder care Aviation Clinical positions Any \"position, occupation, or business that could bring the Exchange Visitor Program or the Department of State into notoriety or disrepute\" [22 C.F.R."
+    },
+    {
+      "id": "check-page-79f9e62785",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "page": "application",
+      "excerpt": "A visiting scholar (faculty or researcher) may visit for up to 90 days to engage in lectures – conferences – seminars – or – independent research Note – If the research is collaborative in nature and/or advances the student’s program at the home institution – J EV visa should be used."
+    },
+    {
+      "id": "check-page-06f774a8ee",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "page": "application",
+      "excerpt": "At Clarkson University, the sponsoring department or faculty member will work with Human Resources on documentation necessary for H-1B processing."
+    },
+    {
+      "id": "check-page-88ec2b4cc0",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "page": "application",
+      "excerpt": "The TN category allows admission of Canadian or Mexican citizens for the purpose of: Working in the U.S as a professional or Working for a foreign employer to provide professional services to a U.S. employer The TN Visa is limited to occupations specified in the NAFTA treaty and must be located within the 50 states – Puerto Rico – or – D.C."
+    },
+    {
+      "id": "check-page-638cf0d954",
+      "url": "https://www.clarkson.edu/about/departments/international-center/international-students-and-scholars/new-students-and-visitors",
+      "page": "application",
+      "excerpt": "Visa Waiver Program (VWP) The Visa Waiver Program (VWP) enables most citizens or nationals of participating countries to travel to the United States for tourism or business without first obtaining a visa."
+    },
+    {
+      "id": "check-page-0bb1d806b3",
+      "url": "https://www.clarkson.edu/international-admissions-requirements",
+      "page": "application",
+      "excerpt": "International Admissions Requirements | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners Request"
+    },
+    {
+      "id": "check-page-6b9a6344be",
+      "url": "https://www.clarkson.edu/international-admissions-requirements",
+      "page": "application",
+      "excerpt": "This includes WASSCE (West Africa), CAPE (Caribbean), Grade 12 boards (South Asia), etc."
+    },
+    {
+      "id": "check-page-d70f33299a",
+      "url": "https://www.clarkson.edu/international-admissions-requirements",
+      "page": "application",
+      "excerpt": "If you attended college outside of New York State, please provide course descriptions."
+    },
+    {
+      "id": "check-page-2a176aedbe",
+      "url": "https://www.clarkson.edu/international-admissions-requirements",
+      "page": "application",
+      "excerpt": "GRE Institution Code: 2084 Two to three letters of recommendation from a faculty member or professional reference."
+    },
+    {
+      "id": "check-page-389c8aad2e",
+      "url": "https://www.clarkson.edu/node/10568",
+      "page": "application",
+      "excerpt": "Undergraduate Admission Requirements | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners Request"
+    },
+    {
+      "id": "check-page-ce5493a0b4",
+      "url": "https://www.clarkson.edu/node/10568",
+      "page": "application",
+      "excerpt": "With the information you provide, we can check your eligibility for federal, state and institutional need-based programs, as well as Clarkson grants."
+    },
+    {
+      "id": "check-page-28bb489f21",
+      "url": "https://www.clarkson.edu/node/10568",
+      "page": "application",
+      "excerpt": "Federal Student Aid Video Financial Aid Applying for Scholarships Our goal is to offer an excellent, affordable education with a high return on investment."
+    },
+    {
+      "id": "check-page-ca66b37bed",
+      "url": "https://www.clarkson.edu/node/10568",
+      "page": "application",
+      "excerpt": "We have a robust list of merit-based scholarships, alumni-connection awards, special application-based funding, tuition exchanges and other programs that make Clarkson within reach to talented students."
+    },
+    {
+      "id": "check-page-eaf21e7555",
+      "url": "https://www.clarkson.edu/node/10568",
+      "page": "application",
+      "excerpt": "To be eligible for merit scholarships and grants, we need to receive your admission application and any additional scholarship submissions by January 15."
+    },
+    {
+      "id": "check-page-78ca954e4f",
+      "url": "https://www.clarkson.edu/node/10568",
+      "page": "application",
+      "excerpt": "Scholarships, Grants and Loans Find Your Admissions Counselor Have questions about the admissions process?"
+    },
+    {
+      "id": "check-page-020b5c4099",
+      "url": "https://www.clarkson.edu/node/10577",
+      "page": "application",
+      "excerpt": "Transfer Admission Requirements | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners Request Info"
+    },
+    {
+      "id": "check-page-ad3b7806fe",
+      "url": "https://www.clarkson.edu/node/10577",
+      "page": "application",
+      "excerpt": "(If you attended college outside of New York State, please provide course descriptions.) Letters of recommendation."
+    },
+    {
+      "id": "check-page-762674f3f6",
+      "url": "https://www.clarkson.edu/node/10577",
+      "page": "application",
+      "excerpt": "If you attended college outside of New York State, please provide course descriptions."
+    },
+    {
+      "id": "check-page-11bef588af",
+      "url": "https://www.clarkson.edu/node/10577",
+      "page": "application",
+      "excerpt": "Financial Aid and Scholarships for Transfer Students Students come to Clarkson University because we offer a high-quality, affordable education through a robust financial aid program."
+    },
+    {
+      "id": "check-page-b8ee6fb743",
+      "url": "https://www.clarkson.edu/node/10577",
+      "page": "application",
+      "excerpt": "As a transfer student, you are eligible for merit-based scholarships, including awards that are specifically geared toward transfer students."
+    },
+    {
+      "id": "check-page-d1983d882f",
+      "url": "https://www.clarkson.edu/about/shared-community/non-discrimination/faqs",
+      "page": "terms",
+      "excerpt": "Frequently Asked Questions - Non-discrimination | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers &"
+    },
+    {
+      "id": "check-page-d1867a6900",
+      "url": "https://www.clarkson.edu/about/shared-community/non-discrimination/faqs",
+      "page": "terms",
+      "excerpt": "You may elect our internal process while maintaining your right to pursue options with external law enforcement agencies, which may include local law enforcement or the District Attorney’s office, Equal Employment Opportunity Commission, The New York State Division of Human Rights, or the United States Department of Educations’ Office of Civil Rights (OCR)."
+    },
+    {
+      "id": "check-page-a509509552",
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/stem-education/inspire-video-collection/inspire-faqs",
+      "page": "terms",
+      "excerpt": "Inspire! FAQs | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners Request Info Visit Apply Give"
+    },
+    {
+      "id": "check-page-08bfdbb833",
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/stem-education/inspire-video-collection/inspire-faqs",
+      "page": "terms",
+      "excerpt": "Our short documentary (19:18 minutes), Trailblazers: The Untold Stories of Six Women Engineers , which received an Award of Merit from The Impact DOCS Awards Competition, would be appropriate to use with older high school students."
+    },
+    {
+      "id": "check-page-a6e39b3882",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/deposited-undergraduate-students-welcome/new-undergraduate-student-faqs",
+      "page": "terms",
+      "excerpt": "New Undergraduate Student FAQs | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners Request Info"
+    },
+    {
+      "id": "check-page-8cb3b99f63",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/deposited-undergraduate-students-welcome/new-undergraduate-student-faqs",
+      "page": "terms",
+      "excerpt": "Below, we've compiled our most frequently asked questions around housing, dining, orientation, student life, health and counseling, academics and textbooks and schedules."
+    },
+    {
+      "id": "check-page-a98e2a279e",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/deposited-undergraduate-students-welcome/new-undergraduate-student-faqs",
+      "page": "terms",
+      "excerpt": "Your Medicat Student Health Portal username and password should be the same as what you use to log in elsewhere to Clarkson."
+    },
+    {
+      "id": "check-page-7d683a8be6",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/deposited-undergraduate-students-welcome/new-undergraduate-student-faqs",
+      "page": "terms",
+      "excerpt": "Academics, Textbooks and Transfer Credits When do students take placement tests?"
+    },
+    {
+      "id": "check-page-557d72a162",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "page": "terms",
+      "excerpt": "Undergraduate Admissions FAQs | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners Request Info"
+    },
+    {
+      "id": "check-page-4746192e5a",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "page": "terms",
+      "excerpt": "The Office of Undergraduate Admissions is open Monday - Saturday for in-person visits for prospective students and family members on our Potsdam, New York campus."
+    },
+    {
+      "id": "check-page-6c07f2b966",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "page": "terms",
+      "excerpt": "They will also be happy to connect you with other faculty and staff."
+    },
+    {
+      "id": "check-page-daf7cac7a0",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "page": "terms",
+      "excerpt": "They will be happy to answer any questions that you have regarding the financial aid award that you received, what your next steps are, and anything else you may have questions on!"
+    },
+    {
+      "id": "check-page-9aa6ec6016",
+      "url": "https://www.clarkson.edu/admissions-aid/undergraduate/undergraduate-admissions-faqs",
+      "page": "terms",
+      "excerpt": "We also recommend reading over the Financing Plan Information Packet that you received with your Financial Aid Award earlier this Spring - this is a great tool that will help you navigate your options in regards to your remaining invoice."
+    },
+    {
+      "id": "check-page-1ddfca3b83",
+      "url": "https://www.clarkson.edu/admissions-financial-aid/sas/faqs",
+      "page": "terms",
+      "excerpt": "SAS FAQ's | Clarkson University Skip to main content Toggle menu Academics & Research Toggle submenu Find Your Program Schools, Institutes & Centers Research Graduate Education Professional Development Honors Program Global & Immersion Experiences University Libraries Admissions & Financial Aid Toggle submenu Financial Aid For High School Guidance Counselors Undergraduate Admissions & Aid Graduate Admissions & Aid Transfer Admissions & Aid International Admissions & Aid The Clarkson School: Early College Program Student Achievement Services Student Life Toggle submenu Clubs & Activities Housing & Dining Health & Wellness The Surrounding Region Student Support and Services Graduate Student Life Clarkson Ignite Dean of Students Get Outside Office of Information Technology Resources for Parents and Families Annual University Events Student Health and Counseling Services Athletics Toggle submenu Game Schedules Purchase Hockey Tickets Intramural Sports About Toggle submenu Accreditation Bertrand H. Snell Awards History News & Events Clarkson at a Glance University Leadership Our Shared Community Visit Clarkson The Clarkson Brand News & Events Toggle search Search Submit Resources For Prospective Students Current Students Parents & Families Employers & Partners Alumni Information for Alumni Current Students Parents & Families Employers & Partners Request Info Visit Apply Give Toggle"
     }
   ],
   "findings": {
     "emails": [
       {
         "value": "admissions@clarkson.edu",
-        "evidenceId": "check-email-34ea9a4884"
+        "evidenceId": "check-email-0a35acaee4"
       }
     ],
     "phones": [
@@ -114,6 +1894,10 @@
       {
         "value": "518-631-9831",
         "evidenceId": "check-phone-807cf86fbf"
+      },
+      {
+        "value": "1-800-574-4425",
+        "evidenceId": "check-phone-67d7fc019f"
       }
     ],
     "routes": [
@@ -122,30 +1906,141 @@
         "evidenceId": "check-route-7495261c24"
       },
       {
-        "value": "https://www.clarkson.edu/node/10568",
-        "evidenceId": "check-route-801871bff3"
+        "value": "https://www.clarkson.edu/admissions-aid/undergraduate/how-to-apply",
+        "evidenceId": "check-route-2cff8c846a"
       },
       {
-        "value": "https://www.clarkson.edu/node/10577",
-        "evidenceId": "check-route-eb0df8181d"
+        "value": "https://www.clarkson.edu/admissions-aid/transfer/how-to-apply",
+        "evidenceId": "check-route-d653303c1c"
+      },
+      {
+        "value": "https://undergrad.clarkson.edu/apply",
+        "evidenceId": "check-route-3d79ad4172"
+      },
+      {
+        "value": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student/clarkson-school-admissions-policy-and-procedures",
+        "evidenceId": "check-route-05b45dd010"
       },
       {
         "value": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
-        "evidenceId": "check-route-76328ebe2b"
+        "evidenceId": "check-route-43293873d5"
       }
     ],
     "applicationUrl": [
       {
-        "value": "https://www.clarkson.edu/academics/research/labs-centers/shipley",
-        "evidenceId": "check-route-2e945a93b6"
+        "value": "https://www.clarkson.edu/apply",
+        "evidenceId": "check-route-7495261c24"
       }
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
-    "deadlines": [],
+    "deadlines": [
+      {
+        "value": "2027-02-15",
+        "evidenceId": "check-deadline-b14e59b1b3"
+      }
+    ],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-7ed7efc814"
+      }
+    ],
+    "announcedIntake": [
+      {
+        "value": "Fall",
+        "evidenceId": "check-announced-7ad20c799b"
+      },
+      {
+        "value": "June",
+        "evidenceId": "check-announced-6157ea247b"
+      },
+      {
+        "value": "February",
+        "evidenceId": "check-announced-15d7c95ad2"
+      },
+      {
+        "value": "December",
+        "evidenceId": "check-announced-8d9482f1ff"
+      },
+      {
+        "value": "January",
+        "evidenceId": "check-announced-100e8999cf"
+      },
+      {
+        "value": "May",
+        "evidenceId": "check-announced-df0669e5c6"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "10",
+        "evidenceId": "check-duration-d7d19a85ee"
+      },
+      {
+        "value": "5 months",
+        "evidenceId": "check-duration-b937eaf6ff"
+      },
+      {
+        "value": "3",
+        "evidenceId": "check-duration-915fa7c8de"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-f0058dfa7e"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-cd568da8a1"
+      },
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-5b3798cc34"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-c984f9a143"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-595e5cead4"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
-    "portfolioPages": [],
+    "dealText": [
+      {
+        "value": "after considering: Financial Package. Participants will receive: $7000 stipend Round trip travel (we arrange) to and from Potsdam, New York.",
+        "evidenceId": "check-deal-f95b4392d7"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "7000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-f95b4392d7"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://engage.clarkson.edu",
+        "evidenceId": "check-portfolio-656b4696bb"
+      },
+      {
+        "value": "https://engage.clarkson.edu/",
+        "evidenceId": "check-portfolio-cbcd6c8d13"
+      }
+    ],
     "name": [],
     "examplePages": []
   }

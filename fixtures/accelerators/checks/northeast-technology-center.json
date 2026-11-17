@@ -1,75 +1,437 @@
 {
   "programId": "northeast-technology-center",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.netech.edu",
-    "https://www.netech.edu/page/about-us",
+    "https://www.netech.edu/documents/district/northeast-tech-foundation/foundation-scholarship-application/717528",
+    "https://www.netech.edu/o/ntc/page/apply-now",
+    "https://www.netech.edu/page/apply-now",
+    "https://www.netech.edu/documents/district/school-board/board-meeting-dates/717500",
     "https://www.netech.edu/page/board-meeting-dates",
-    "https://www.netech.edu/page/apply-now"
+    "https://www.netech.edu/documents/classes/full-time-programs/717485",
+    "https://www.netech.edu/documents/classes/full-time-programs/claremore-campus-/717705",
+    "https://www.netech.edu/documents/classes/full-time-programs/claremore-campus-/cnc-machining/717706",
+    "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/717744",
+    "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/frequently-asked-questions/717745",
+    "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/mandatory-prospective-student-orientation-and-financial-aid-information---online-version/717747",
+    "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/oklahoma-board-of-nursing-rules-for-individuals-with-a-criminal-history/717780",
+    "https://www.netech.edu/documents/district/about-us/717418",
+    "https://www.netech.edu/documents/district/about-us/cares-act-grant/717425",
+    "https://www.netech.edu/documents/district/about-us/cares-act-grant/overview/717426",
+    "https://www.netech.edu/documents/district/about-us/cares-act-grant/reports/717428",
+    "https://www.netech.edu/documents/district/about-us/consumer-information/717626",
+    "https://www.netech.edu/documents/district/about-us/district-strategic-plan/717430",
+    "https://www.netech.edu/documents/district/about-us/human-resources/717432"
   ],
   "evidence": [
     {
+      "id": "check-phone-00a5e30f05",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/717485",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-026ccbcee1",
+      "url": "https://www.netech.edu/documents/district/about-us/cares-act-grant/overview/717426",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0c660f78c3",
+      "url": "https://www.netech.edu/documents/district/about-us/cares-act-grant/reports/717428",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
       "id": "check-phone-1346fad389",
       "url": "https://www.netech.edu",
-      "title": "Northeast Technology Center — homepage checked by scrape.py",
+      "title": "Northeast Technology Center — homepage",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-2558d3d15a",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/oklahoma-board-of-nursing-rules-for-individuals-with-a-criminal-history/717780",
+      "title": "Northeast Technology Center — program page",
       "excerpt": "(918) 825-7040",
       "page": "details"
     },
     {
       "id": "check-phone-2eca7a1bc5",
       "url": "https://www.netech.edu/page/apply-now",
-      "title": "Northeast Technology Center — application page checked by scrape.py",
+      "title": "Northeast Technology Center — application page",
       "excerpt": "(918) 825-7040",
       "page": "application"
     },
     {
-      "id": "check-phone-6ea75a89a4",
-      "url": "https://www.netech.edu/page/about-us",
-      "title": "Northeast Technology Center — details page checked by scrape.py",
-      "excerpt": "(918) 825-7040",
-      "page": "details"
-    },
-    {
-      "id": "check-phone-7f9332ab41",
-      "url": "https://www.netech.edu/page/board-meeting-dates",
-      "title": "Northeast Technology Center — batches page checked by scrape.py",
+      "id": "check-phone-31ac26c3d1",
+      "url": "https://www.netech.edu/documents/district/school-board/board-meeting-dates/717500",
+      "title": "Northeast Technology Center — batches page",
       "excerpt": "(918) 825-7040",
       "page": "batches"
     },
     {
+      "id": "check-phone-678f91b2fc",
+      "url": "https://www.netech.edu/documents/district/about-us/cares-act-grant/717425",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-6ece2d3092",
+      "url": "https://www.netech.edu/documents/district/about-us/human-resources/717432",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-6f6be02c9b",
+      "url": "https://www.netech.edu/documents/district/northeast-tech-foundation/foundation-scholarship-application/717528",
+      "title": "Northeast Technology Center — application page",
+      "excerpt": "(918) 825-7040",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-7f9332ab41",
+      "url": "https://www.netech.edu/page/board-meeting-dates",
+      "title": "Northeast Technology Center — batches page",
+      "excerpt": "(918) 825-7040",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-8ac9d1be88",
+      "url": "https://www.netech.edu/documents/district/about-us/717418",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-96cd86e531",
+      "url": "https://www.netech.edu/documents/district/about-us/consumer-information/717626",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-9c3029084e",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/mandatory-prospective-student-orientation-and-financial-aid-information---online-version/717747",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-9f6c262bfd",
+      "url": "https://www.netech.edu/o/ntc/page/apply-now",
+      "title": "Northeast Technology Center — application page",
+      "excerpt": "(918) 825-7040",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-a5e8633da9",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/claremore-campus-/cnc-machining/717706",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-ae49ced5f9",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/frequently-asked-questions/717745",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-d638fb8ccf",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/claremore-campus-/717705",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-d877b31fe7",
+      "url": "https://www.netech.edu/documents/district/about-us/district-strategic-plan/717430",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-e5f9544e3c",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/717744",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
+      "id": "check-route-02034f3709",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/claremore-campus-/cnc-machining/717706",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "details"
+    },
+    {
       "id": "check-route-083ed5c59b",
       "url": "https://www.netech.edu",
-      "title": "Northeast Technology Center — homepage checked by scrape.py",
+      "title": "Northeast Technology Center — homepage",
       "excerpt": "Northeast Tech - → https://www.netech.edu/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-09fb985806",
+      "url": "https://www.netech.edu/documents/district/about-us/district-strategic-plan/717430",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
       "page": "details"
     },
     {
       "id": "check-route-15dadcb75f",
       "url": "https://www.netech.edu/page/board-meeting-dates",
-      "title": "Northeast Technology Center — batches page checked by scrape.py",
+      "title": "Northeast Technology Center — batches page",
       "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
       "page": "batches"
     },
     {
+      "id": "check-route-198a0edcfe",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/oklahoma-board-of-nursing-rules-for-individuals-with-a-criminal-history/717780",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2b37bcc516",
+      "url": "https://www.netech.edu/documents/district/about-us/cares-act-grant/reports/717428",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "details"
+    },
+    {
       "id": "check-route-2f278e016f",
       "url": "https://www.netech.edu",
-      "title": "Northeast Technology Center — homepage checked by scrape.py",
+      "title": "Northeast Technology Center — homepage",
       "excerpt": "apply now → https://www.netech.edu/o/ntc/page/apply-now",
       "page": "details"
     },
     {
-      "id": "check-route-4397814cd2",
-      "url": "https://www.netech.edu",
-      "title": "Northeast Technology Center — homepage checked by scrape.py",
+      "id": "check-route-39e7347189",
+      "url": "https://www.netech.edu/documents/district/about-us/consumer-information/717626",
+      "title": "Northeast Technology Center — program page",
       "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
       "page": "details"
     },
     {
-      "id": "check-route-5febb7f56b",
-      "url": "https://www.netech.edu/page/about-us",
-      "title": "Northeast Technology Center — details page checked by scrape.py",
+      "id": "check-route-41cf2748ee",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/claremore-campus-/717705",
+      "title": "Northeast Technology Center — program page",
       "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
       "page": "details"
+    },
+    {
+      "id": "check-route-4366f269a2",
+      "url": "https://www.netech.edu/documents/district/school-board/board-meeting-dates/717500",
+      "title": "Northeast Technology Center — batches page",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-4397814cd2",
+      "url": "https://www.netech.edu",
+      "title": "Northeast Technology Center — homepage",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4aea5cadf1",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/mandatory-prospective-student-orientation-and-financial-aid-information---online-version/717747",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-582e22eace",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/717744",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5e724b51fd",
+      "url": "https://www.netech.edu/documents/district/northeast-tech-foundation/foundation-scholarship-application/717528",
+      "title": "Northeast Technology Center — application page",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "application"
+    },
+    {
+      "id": "check-route-685e684376",
+      "url": "https://www.netech.edu/documents/district/about-us/717418",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7750357d39",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/frequently-asked-questions/717745",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c19bedd724",
+      "url": "https://www.netech.edu/documents/district/about-us/human-resources/717432",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cc5aced71c",
+      "url": "https://www.netech.edu/documents/district/about-us/cares-act-grant/717425",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e86e832d83",
+      "url": "https://www.netech.edu/documents/district/about-us/cares-act-grant/overview/717426",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-eee68b4136",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/717485",
+      "title": "Northeast Technology Center — program page",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f8f28ab8d7",
+      "url": "https://www.netech.edu/o/ntc/page/apply-now",
+      "title": "Northeast Technology Center — application page",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-d43382d820",
+      "url": "https://www.netech.edu",
+      "page": "details",
+      "excerpt": "Northeast Tech| Home Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go Adult"
+    },
+    {
+      "id": "check-page-08b1f1aa0d",
+      "url": "https://www.netech.edu/documents/district/northeast-tech-foundation/foundation-scholarship-application/717528",
+      "page": "application",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-619a947a30",
+      "url": "https://www.netech.edu/o/ntc/page/apply-now",
+      "page": "application",
+      "excerpt": "Apply Now | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-83827a43e4",
+      "url": "https://www.netech.edu/page/apply-now",
+      "page": "application",
+      "excerpt": "Apply Now | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-649e1c8929",
+      "url": "https://www.netech.edu/documents/district/school-board/board-meeting-dates/717500",
+      "page": "batches",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-f1ae0ef553",
+      "url": "https://www.netech.edu/page/board-meeting-dates",
+      "page": "batches",
+      "excerpt": "Board Meeting Dates | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses"
+    },
+    {
+      "id": "check-page-8f3f9a1bff",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/717485",
+      "page": "details",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-cd4f09e590",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/claremore-campus-/717705",
+      "page": "details",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-20c8730cad",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/claremore-campus-/cnc-machining/717706",
+      "page": "details",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-aa48a6be8d",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/717744",
+      "page": "details",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-22ad78ea9a",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/frequently-asked-questions/717745",
+      "page": "details",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-bce360ec3c",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/mandatory-prospective-student-orientation-and-financial-aid-information---online-version/717747",
+      "page": "details",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-483ecb0cb6",
+      "url": "https://www.netech.edu/documents/classes/full-time-programs/practical-nursing/oklahoma-board-of-nursing-rules-for-individuals-with-a-criminal-history/717780",
+      "page": "details",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-13b3288f46",
+      "url": "https://www.netech.edu/documents/district/about-us/717418",
+      "page": "details",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-7a05255320",
+      "url": "https://www.netech.edu/documents/district/about-us/cares-act-grant/717425",
+      "page": "details",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-10d9af7d09",
+      "url": "https://www.netech.edu/documents/district/about-us/cares-act-grant/overview/717426",
+      "page": "details",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-ff6a0e2dd5",
+      "url": "https://www.netech.edu/documents/district/about-us/cares-act-grant/reports/717428",
+      "page": "details",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-8961975f26",
+      "url": "https://www.netech.edu/documents/district/about-us/consumer-information/717626",
+      "page": "details",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-e960b0d732",
+      "url": "https://www.netech.edu/documents/district/about-us/district-strategic-plan/717430",
+      "page": "details",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
+    },
+    {
+      "id": "check-page-7a72b40391",
+      "url": "https://www.netech.edu/documents/district/about-us/human-resources/717432",
+      "page": "details",
+      "excerpt": "Documents | Northeast Tech Skip to content Search site Northeast Tech - Search site Explore Explore Translate Explore Translate Northeast Tech - About Show submenu for About About About Us Show submenu for About Us Consumer Information Financial Reporting District Strategic Plan School Calendar Staff Directory Administration Office Business & Industry Services at MidAmerica Business & Industry Services at Grand Lake Afton Campus Claremore Campus Kansas Campus Pryor Campus Human Resources Show submenu for Human Resources Job Opportunities Employee Resources Workforce Training Hub Northeast Tech Foundation Show submenu for Northeast Tech Foundation Foundation Board Members Foundation Scholarship Application Donate to the Foundation School Board Show submenu for School Board Board Meeting Dates Board Meeting Agendas & Minutes Board Members Board Policies Subscribe to Notifications Contact Us NT Insider (Employees Only) High School Show submenu for High School High School Full-Time Programs Show submenu for Full-Time Programs Afton Campus Claremore Campus Kansas Campus Pryor Campus Full-Time Course Catalog Apply Now Driver Education Adults Show submenu for Adults Adults Short-Term Classes Show submenu for Short-Term Classes Adult Education Course Catalog Adult Education Short-Term Classes Online Registration Short-term Courses through Ed2Go Career Training Courses through Ed2Go"
     }
   ],
   "findings": {
@@ -99,8 +461,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

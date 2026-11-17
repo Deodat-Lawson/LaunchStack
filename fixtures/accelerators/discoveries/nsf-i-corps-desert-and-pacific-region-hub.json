@@ -1,11 +1,59 @@
 {
   "programId": "nsf-i-corps-desert-and-pacific-region-hub",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
+    {
+      "url": "https://desertpacificicorps.org/10-years-of-i-corps-nsf-entrepreneurship-training-program-impacts-the-economy-and-shapes-careers/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://desertpacificicorps.org/about-us/",
       "page": "details",
       "anchor": "About Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://desertpacificicorps.org/apply/",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://desertpacificicorps.org/event/boise-state-university-i-corps-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://desertpacificicorps.org/event/boise-state-university-semiconductor-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://desertpacificicorps.org/event/idealaunch-cohort-en-espanol/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://desertpacificicorps.org/fail-fast-companies-that-pivoted-after-i-corps-aspire-customer-discovery/",
+      "page": "portfolio",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -19,10 +67,42 @@
       "origin": "official"
     },
     {
-      "url": "https://desertpacificicorps.org/apply/",
-      "page": "application",
-      "anchor": "Apply",
-      "fetched": false,
+      "url": "https://desertpacificicorps.org/latest-nsf-i-corps-cohort-bridges-the-gap-between-social-innovation-and-social-impact/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://desertpacificicorps.org/national-science-foundations-innovation-corps-to-launch-new-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://desertpacificicorps.org/research-based-innovation-and-entrepreneurship-in-the-nsf-i-corps-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://desertpacificicorps.org/triton-alumni-shine-on-2025-forbes-30-under-30-list/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://desertpacificicorps.org/what-is-nsf-i-corps-a-new-entrepreneurs-guide-to-this-game-changing-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

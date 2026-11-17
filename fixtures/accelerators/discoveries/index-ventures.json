@@ -1,6 +1,6 @@
 {
   "programId": "index-ventures",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "https://www.indexventures.com/companies/",
@@ -188,6 +188,46 @@
     },
     {
       "url": "https://www.indexventures.com/perspectives/built-technologies-announces-series-b-financing-led-by-goldman-sachs-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/compute-is-king-our-investment-in-phaidra/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/contracts-at-the-speed-of-business-our-investment-in-crosby/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/creating-data-masterpieces-our-investment-in-deepnote/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/delivering-energy-to-planet-earth-our-investment-in-aetherflux/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/doubling-down-in-data-our-series-a-investment-in-xata/",
       "page": "terms",
       "anchor": "",
       "fetched": true,

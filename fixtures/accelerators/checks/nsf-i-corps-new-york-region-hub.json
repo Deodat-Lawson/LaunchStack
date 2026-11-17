@@ -1,21 +1,381 @@
 {
   "programId": "nsf-i-corps-new-york-region-hub",
-  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pagesRead": [
     "https://www.newyorkicorps.org/",
-    "https://www.newyorkicorps.org/about-us"
+    "https://www.newyorkicorps.org/about-i-corps",
+    "https://www.newyorkicorps.org/about-us",
+    "https://www.newyorkicorps.org/event-details/innovation-corps-i-corps-101-regional-and-national-commercialization-programs",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-1",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-1-1",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-1-2",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2-1",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-09-19-12-00",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-10-14-10-00",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-11-11-10-00",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-12-09-10-00",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2023-01-27-10-00",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2023-03-17-10-00",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2024-01-25-11-00",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2024-02-22-11-00",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2024-03-28-11-00",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2024-04-25-11-00",
+    "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2024-05-23-11-00"
   ],
   "evidence": [
     {
+      "id": "check-duration-7ef2d3e7ce",
+      "url": "https://www.newyorkicorps.org/about-i-corps",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "School of Medicine at Mount Sinai Affiliate The 12-week program for who are interested in learning how",
+      "page": "details"
+    },
+    {
+      "id": "check-email-afacb1c187",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-11-11-10-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "before the date of the accommodation need. Please email info@newyorkicorps.org for assistance. Show More Tickets Ticket type Virtual",
+      "page": "details"
+    },
+    {
+      "id": "check-format-02d98de6a7",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "type Virtual Attendee More info Reservation for one to a virtual I-Corps informational session via Zoom Price $0.00 Sale",
+      "page": "details"
+    },
+    {
+      "id": "check-format-05a7228523",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-1",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "type Virtual Attendee More info Reservation for one to a virtual I-Corps informational session via Zoom Price $0.00 Sale",
+      "page": "details"
+    },
+    {
+      "id": "check-format-10eb532c0b",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2024-01-25-11-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "at Hubs around the country. Show More Tickets Ticket type Virtual Attendee Price $0.00 Sale ended Share this event © 2026 by",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1ce0b8223e",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-09-19-12-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "great opportunities to ask… Show More Tickets Ticket type Virtual Attendee More info Reservation for one to a virtual",
+      "page": "details"
+    },
+    {
+      "id": "check-format-34a6c145fb",
+      "url": "https://www.newyorkicorps.org/about-i-corps",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "Join a select group of entrepreneurs for a two-week virtual program designed to build your successful startup. Visit",
+      "page": "details"
+    },
+    {
+      "id": "check-format-38eb0310cb",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2023-03-17-10-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "- 11 AM EST and are great… Show More Tickets Ticket type Virtual Attendee More info Reservation for one to a virtual",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3b71bd9fb0",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-10-14-10-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "type Virtual Attendee More info Reservation for one to a virtual I-Corps informational session via Zoom Price $0.00 Sale",
+      "page": "details"
+    },
+    {
+      "id": "check-format-47082f06a0",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2-1",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "monthly at 10 - 11 AM EST… Show More Tickets Ticket type Virtual Attendee More info Reservation for one to a virtual",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4f29fd6277",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "monthly at 10 - 11 AM EST… Show More Tickets Ticket type Virtual Attendee More info Reservation for one to a virtual",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6153efee7e",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-11-11-10-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "for assistance. Show More Tickets Ticket type Virtual Attendee More info Reservation for one to a virtual",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6221a6b292",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-1-2",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "at Hubs around the country. Show More Tickets Ticket type Virtual Attendee More info Zoom link in the ticket attachment",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6aad919ce6",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-12-09-10-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "monthly at 10 - 11 AM EST… Show More Tickets Ticket type Virtual Attendee More info Reservation for one to a virtual",
+      "page": "details"
+    },
+    {
+      "id": "check-format-711ed93d4b",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2023-01-27-10-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "monthly at 10 - 11 AM EST… Show More Tickets Ticket type Virtual Attendee More info Reservation for one to a virtual",
+      "page": "details"
+    },
+    {
+      "id": "check-format-7648535df2",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2024-03-28-11-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "at Hubs around the country. Show More Tickets Ticket type Virtual Attendee Price $0.00 Sale ended Share this event © 2026 by",
+      "page": "details"
+    },
+    {
+      "id": "check-format-8533e0e67e",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2023-03-17-10-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "type Virtual Attendee More info Reservation for one to a virtual I-Corps informational session via Zoom Price $0.00 Sale",
+      "page": "details"
+    },
+    {
+      "id": "check-format-8e1eec462e",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2024-04-25-11-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "at Hubs around the country. Show More Tickets Ticket type Virtual Attendee Price $0.00 Sale ended Share this event © 2026 by",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ac9d529d40",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2023-01-27-10-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "type Virtual Attendee More info Reservation for one to a virtual I-Corps informational session via Zoom Price $0.00 Sale",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b219b3b4bf",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2-1",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "type Virtual Attendee More info Reservation for one to a virtual I-Corps informational session via Zoom Price $0.00 Sale",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b3b434f9c6",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-1",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "monthly at 10 - 11 AM EST… Show More Tickets Ticket type Virtual Attendee More info Reservation for one to a virtual",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b4ddb7ebbb",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-09-19-12-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "type Virtual Attendee More info Reservation for one to a virtual I-Corps informational session via Zoom Price $0.00 Sale",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c92ca439d4",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-11-11-10-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "type Virtual Attendee More info Reservation for one to a virtual I-Corps informational session via Zoom Price $0.00 Sale",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d5322e40de",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-12-09-10-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "type Virtual Attendee More info Reservation for one to a virtual I-Corps informational session via Zoom Price $0.00 Sale",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d5d97b40cb",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2024-05-23-11-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "at Hubs around the country. Show More Tickets Ticket type Virtual Attendee Price $0.00 Sale ended Share this event © 2026 by",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d6ba9f113e",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-10-14-10-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "monthly at 10 - 11 AM EST… Show More Tickets Ticket type Virtual Attendee More info Reservation for one to a virtual",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f2b6988286",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-1-1",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "type Virtual Attendee More info Reservation for one to a virtual I-Corps informational session via Zoom Price $0.00 Sale",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f9deaa71a6",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-1-1",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "monthly at 10 - 11 AM EST… Show More Tickets Ticket type Virtual Attendee More info Reservation for one to a virtual",
+      "page": "details"
+    },
+    {
+      "id": "check-format-fab69e9ab7",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2024-02-22-11-00",
+      "title": "NSF I-Corps New York Region Hub — program page",
+      "excerpt": "at Hubs around the country. Show More Tickets Ticket type Virtual Attendee Price $0.00 Sale ended Share this event © 2026 by",
+      "page": "details"
+    },
+    {
       "id": "check-route-69ed0d2509",
       "url": "https://www.newyorkicorps.org/",
-      "title": "NSF I-Corps New York Region Hub — homepage checked by scrape.py",
+      "title": "NSF I-Corps New York Region Hub — homepage",
       "excerpt": "Home → https://www.newyorkicorps.org",
       "page": "details"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-df2a128438",
+      "url": "https://www.newyorkicorps.org/",
+      "page": "details",
+      "excerpt": "Home | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. New York I-Corps From experiential education to successful entrepreneurship Learn More To play, press and hold the enter key. To stop, release the enter key. © 2026 by NY I-Corps Hub. This material is based upon work supported by the National Science Foundation under grant number 2048498. Any opinions, findings, and conclusions or recommendations expressed in the material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation. Subscribe to receive updates from the NY I-Corps Hub I want to subscribe to the newsletter. Submit Thanks for subscribing! bottom of page"
+    },
+    {
+      "id": "check-page-81a5708abe",
+      "url": "https://www.newyorkicorps.org/about-i-corps",
+      "page": "details",
+      "excerpt": "About NSF I-Corps | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. What is NY I-Corps The National Science Foundation’s Innovation Corps (I-Corps™) program uses experiential education to help researchers gain valuable insight into entrepreneurship, starting a business or industry requirements and challenges. I-Corps enables the transformation of invention to impact. The curriculum integrates scientific inquiry and industrial discovery in an inclusive, data-driven culture driven by rigor, relevance, and evidence. Through I-Corps training, researchers can reduce the time to translate a promising idea from the laboratory to the marketplace. I-Corps Programs at Partner and Affiliate Institutions Columbia University Partner Join a select group of entrepreneurs for a two-week virtual program designed to build your successful startup. Visit here Read More Rensselaer Polytechnic Institute Partner Teams start in the Spark program with research-based concepts and conduct interviews with potential customers as well as the business model canvas to understand the potential of launching a startup. Visit here Read More New York University Partner NYU faculty and researchers with research or an invention they are seeking to commercialize through a startup venture. Considering applying to I-Corps? Visit here Read More"
+    },
+    {
+      "id": "check-page-839c945a4f",
+      "url": "https://www.newyorkicorps.org/about-i-corps",
+      "page": "details",
+      "excerpt": "Visit here Clarkson University Read More Rockefeller University Affiliate Read More Site Rules: Icahn School of Medicine at Mount Sinai Affiliate The 12-week program for who are interested in learning how to develop a healthcare solution and build a commercial path that aims to impact the patient population."
+    },
+    {
+      "id": "check-page-1ed831631e",
+      "url": "https://www.newyorkicorps.org/about-i-corps",
+      "page": "details",
+      "excerpt": "Visit here Read More University at Albany Affiliate UAlbany offered a three-week I-Corps program training and support for customer discovery, to help transition participants' ideas, devices, processes and intellectual activities into the marketplace."
+    },
+    {
+      "id": "check-page-3f44a42db5",
+      "url": "https://www.newyorkicorps.org/about-us",
+      "page": "details",
+      "excerpt": "About Us | NY I-Corps top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. About the NY I-Corps Hub Deep technology teams from New York region institutions of higher learning were early adopters that participated in the original 2011-2012 national I-Corps cohorts at Stanford University led by Steve Blank. Centered around the blossoming New York City innovation ecosystem, a consortium of 25 leading research IHEs in the greater metropolitan area came together to establish the first competitively awarded NSF I-Corps Node . The NY I-Corps Node fostered the creation of most of the NSF I-Corps Sites in its area. In its latest iteration, NY I-Corps is now geographically focusing its efforts more deeply into its firmly-established local innovation ecosystem. Part of its mission is to include IHEs that have not traditionally participated in I-Corps and to embrace its location at the heart of a large group of major medical institutions. ​ The City University of New York (CUNY) is the hub's principal institution, with Columbia University, New York University, Rensselaer Polytechnic Institute and Clarkson University as partner institutions. The hub includes five initial affiliates: Icahn School of Medicine at Mount Sinai, Rockefeller University, Stevens Institute of Technology, Stony Brook University, University of Massachusetts Medical"
+    },
+    {
+      "id": "check-page-f1fd196482",
+      "url": "https://www.newyorkicorps.org/event-details/innovation-corps-i-corps-101-regional-and-national-commercialization-programs",
+      "page": "details",
+      "excerpt": "Innovation-Corps (I-Corps) 101: Regional and National Commercialization Programs | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Innovation-Corps (I-Corps) 101: Regional and National Commercialization Programs Tue, Nov 19 | Zoom Ready to transform your research into real-world impact? Join us for Innovation-Corps (I-Corps) 101, where we’ll dive into upcoming opportunities that help turn your ideas into thriving high tech ventures and to accelerate your journey from lab to market! Tickets are not on sale See other events Time & Location Nov 19, 2024, 1:00 PM – 2:00 PM Zoom Share this event © 2026 by NY I-Corps Hub. This material is based upon work supported by the National Science Foundation under grant number 2048498. Any opinions, findings, and conclusions or recommendations expressed in the material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation. Subscribe to receive updates from the NY I-Corps Hub I want to subscribe to the newsletter. Submit Thanks for subscribing! bottom of page"
+    },
+    {
+      "id": "check-page-c7acf4292f",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-1",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub Fri, Feb 24 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location Feb 24, 2023, 10:00 AM – 11:00 AM Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a $50,000 grant and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. RSVPs are required. I-Corps Info Sessions are an informal opportunity to meet the CUNY/NY"
+    },
+    {
+      "id": "check-page-a8e8570e05",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-1-1",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub (1) | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub (1) Thu, Jul 27 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location Jul 27, 2023, 11:00 AM – Jul 28, 2023, 12:00 PM Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a $50,000 grant and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. RSVPs are required. I-Corps Info Sessions are an informal"
+    },
+    {
+      "id": "check-page-db6da75ce1",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-1-2",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub (1) | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub (1) Fri, Nov 17 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location Nov 17, 2023, 11:00 AM – 12:00 PM EST Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a $50,000 grant and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. Show More Tickets Ticket type Virtual Attendee More info Zoom link in the"
+    },
+    {
+      "id": "check-page-a40e30f286",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub Thu, Jun 29 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location Jun 29, 2023, 11:00 AM – 12:00 PM Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a $50,000 grant and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. RSVPs are required. I-Corps Info Sessions are an informal opportunity to meet the CUNY/NY"
+    },
+    {
+      "id": "check-page-04e600e462",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2-1",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub (2) | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub (2) Thu, Aug 24 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location Aug 24, 2023, 11:00 AM – Aug 25, 2023, 12:00 PM Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a $50,000 grant and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. RSVPs are required. I-Corps Info Sessions are an informal"
+    },
+    {
+      "id": "check-page-be93240a4b",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-09-19-12-00",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub Mon, Sep 19 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location Sep 19, 2022, 12:00 PM – 1:00 PM Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a $50,000 grant and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. RSVPs are required. I-Corps Info Sessions are an informal opportunity to meet the CUNY/NY"
+    },
+    {
+      "id": "check-page-45b24b1a8e",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-10-14-10-00",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub Fri, Oct 14 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location Oct 14, 2022, 10:00 AM – 11:00 AM Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a $50,000 grant and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. RSVPs are required. I-Corps Info Sessions are an informal opportunity to meet the CUNY/NY"
+    },
+    {
+      "id": "check-page-2b76fe4edd",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-11-11-10-00",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub Fri, Nov 11 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location Nov 11, 2022, 10:00 AM – 11:00 AM Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a $50,000 grant and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. RSVPs are required. I-Corps Info Sessions are an informal opportunity to meet the CUNY/NY"
+    },
+    {
+      "id": "check-page-c35c5bd56f",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2022-12-09-10-00",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub Fri, Dec 09 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location Dec 09, 2022, 10:00 AM – 11:00 AM Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a $50,000 grant and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. RSVPs are required. I-Corps Info Sessions are an informal opportunity to meet the CUNY/NY"
+    },
+    {
+      "id": "check-page-81a70426ad",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2023-01-27-10-00",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub Fri, Jan 27 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location Jan 27, 2023, 10:00 AM – 11:00 AM Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a $50,000 grant and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. RSVPs are required. I-Corps Info Sessions are an informal opportunity to meet the CUNY/NY"
+    },
+    {
+      "id": "check-page-66968f2e27",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2023-03-17-10-00",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub Fri, Mar 17 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location Mar 17, 2023, 10:00 AM – 11:00 AM Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. $50,000 grant RSVPs are required. I-Corps Info Sessions are an informal opportunity to meet the CUNY/NY"
+    },
+    {
+      "id": "check-page-0dc4a5ecd1",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2024-01-25-11-00",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub Thu, Jan 25 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location Jan 25, 2024, 11:00 AM EST – Jan 26, 2024, 12:00 PM EST Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a $50,000 grant and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. Show More Tickets Ticket type Virtual Attendee Price $0.00 Sale"
+    },
+    {
+      "id": "check-page-42e4642c74",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2024-02-22-11-00",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub Thu, Feb 22 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location Feb 22, 2024, 11:00 AM – 12:00 PM EST Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a $50,000 grant and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. Show More Tickets Ticket type Virtual Attendee Price $0.00 Sale ended Share this event"
+    },
+    {
+      "id": "check-page-06f8959bbd",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2024-03-28-11-00",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub Thu, Mar 28 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location Mar 28, 2024, 11:00 AM – 12:00 PM EDT Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a $50,000 grant and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. Show More Tickets Ticket type Virtual Attendee Price $0.00 Sale ended Share this event"
+    },
+    {
+      "id": "check-page-0b476b7623",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2024-04-25-11-00",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub Thu, Apr 25 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location Apr 25, 2024, 11:00 AM – 12:00 PM EDT Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a $50,000 grant and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. Show More Tickets Ticket type Virtual Attendee Price $0.00 Sale ended Share this event"
+    },
+    {
+      "id": "check-page-6573d8367c",
+      "url": "https://www.newyorkicorps.org/event-details/upcoming-programs-informational-session-new-york-i-corps-hub-2024-05-23-11-00",
+      "page": "details",
+      "excerpt": "Upcoming Programs Informational Session: New York I-Corps Hub | NY I-Corps Hub top of page Home About Programs Get Involved Stories More Use tab to navigate through the menu items. Upcoming Programs Informational Session: New York I-Corps Hub Thu, May 23 | Zoom Join us for an overview of the NSF I-Corps regional and national program for university researchers and community innovators interested in bringing technological innovations to market Registration is closed See other events Time & Location May 23, 2024, 11:00 AM – 12:00 PM EDT Zoom About the event The U.S. National Science Foundation’s Innovation Corps (I-Corps™) program is an immersive, entrepreneurial training program that facilitates the transformation of invention to impact. This immersive, seven-week experiential training program prepares scientists and engineers to extend their focus beyond the university laboratory — accelerating the economic and societal benefits of NSF-funded and other basic research projects that are ready to move toward commercialization. Participating teams receive a $50,000 grant and gain real-world, hands-on, immersive learning about what it takes to successfully transfer knowledge into products and processes that benefit society. The NSF runs at least three cohorts a quarter, at Hubs around the country. Show More Tickets Ticket type Virtual Attendee Price $0.00 Sale ended Share this event"
+    }
+  ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "info@newyorkicorps.org",
+        "evidenceId": "check-email-afacb1c187"
+      }
+    ],
     "phones": [],
     "routes": [],
     "applicationUrl": [
@@ -27,8 +387,25 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12",
+        "evidenceId": "check-duration-7ef2d3e7ce"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-34a6c145fb"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

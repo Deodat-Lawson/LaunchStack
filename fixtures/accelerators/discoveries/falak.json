@@ -1,10 +1,18 @@
 {
   "programId": "falak",
-  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "checkedAt": "2026-11-16T23:23:28.000Z",
   "pages": [
     {
       "url": "http://flagship.falak.sa/",
       "page": "other",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/ar/alumni",
+      "page": "portfolio",
       "anchor": "",
       "fetched": false,
       "blocked": "fetch_failed",
@@ -48,6 +56,38 @@
       "anchor": "Falak Alumni",
       "fetched": true,
       "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/en/alumni?type=all",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/en/alumni?type=community_members",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/en/alumni?type=mentors",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/en/alumni?type=team_members",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
@@ -119,7 +159,7 @@
       "page": "portfolio",
       "anchor": "Portfolio",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
